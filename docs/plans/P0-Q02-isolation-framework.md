@@ -3,9 +3,11 @@
 **Status:** Approved (Opus, 2026-10-31) · **Thread:** 2 QA & Testing · **Depends on:** P0-Q01, P0-C01 · **Test plan:** [../test-plans/P0-Q02.md](../test-plans/P0-Q02.md)
 
 ## Goal
+
 From Phase 1 on, adding a tenant table means adding one registry entry, and CI then proves (PRODUCT.md §6.3) that Org B can never see Org A's rows through the DB or the API. In Phase 0 the framework exists and proves it can catch a leak.
 
 ## Design
+
 Package `packages/isolation-testing`, name `@careeros/isolation-testing`, depends on `@careeros/testing`.
 
 1. **Registry** `src/registry.ts`: a typed list of entries `{ table, schema (default "public"), seed(orgId, db) → inserted row id, api?: { list(orgSession), get(orgSession, id) } }`. Phase 0 ships it **empty** (exported constant), with a type that later phases fill.
@@ -18,13 +20,15 @@ Package `packages/isolation-testing`, name `@careeros/isolation-testing`, depend
    - `iso_leaky`: same columns, **no** RLS → DB check and coverage check must **fail** (assert the failure is reported, test passes).
    - `iso_unregistered`: has RLS but is not in the test registry → coverage check must report it.
    - A fake API that returns the row regardless of org → API check must fail; a correct fake → passes.
-   The schema is dropped after the run.
+     The schema is dropped after the run.
 
 ## Rules
+
 - All isolation checks run on the `careeros_app` connection. A test that would run reads as superuser must throw. Check at start: `select rolsuper, rolbypassrls from pg_roles where rolname = current_user` must be false/false, else fail with a clear message.
 - With the `missing_ok` form of `current_setting`, querying `iso_good` with no org set must return 0 rows. Self-test asserts exactly that.
 
 ## Acceptance criteria
+
 - `pnpm --filter @careeros/isolation-testing test:ci` passes in CI, including all negative self-tests.
 - The coverage check against the real `public` schema passes (no upstream table has `organization_id` yet) — this becomes a guard in Phase 1.
 - README in the package explains in ≤ 1 page how to register a new table.

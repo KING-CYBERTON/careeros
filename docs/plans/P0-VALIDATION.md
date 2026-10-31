@@ -4,13 +4,13 @@ Checked against the canonical Opus-Sonnet workflow and against upstream Reactive
 
 ## Result: OK to plan Phase 0. No blocking gaps.
 
-| Check | Result | Notes |
-|---|---|---|
-| §1 present and matches canonical workflow | ✅ | Matches. Project-specific additions (tenant isolation = Critical, no Teal copying, keep MIT notices, Claude API only, §1.6 QA checklist) are additions, not edits. |
-| No unfilled placeholders | ⚠️ minor | §11 "$X / month" is an open pricing decision (§15 Q4). Not needed until Phase 3. |
-| Every P0 feature has acceptance criteria | ⚠️ minor | Present for §8.1, §8.2, §8.3, multi-tenancy (§6.3). Missing for §8.4 AI (only metering rules), §8.7 Admin consoles, §8.8 Billing, feature flags, branding, custom domains. → Q1; Opus writes them in each phase spec. |
-| Roadmap has Phase 0 Setup and v1.0.0 gate with staging + production | ✅ | §13 / §13a. |
-| Open questions listed | ✅ | §15 (7 items). Q1 (name/domain) and Q3 (hosting) block the staging environment → E2. |
+| Check                                                               | Result   | Notes                                                                                                                                                                                                                 |
+| ------------------------------------------------------------------- | -------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| §1 present and matches canonical workflow                           | ✅       | Matches. Project-specific additions (tenant isolation = Critical, no Teal copying, keep MIT notices, Claude API only, §1.6 QA checklist) are additions, not edits.                                                    |
+| No unfilled placeholders                                            | ⚠️ minor | §11 "$X / month" is an open pricing decision (§15 Q4). Not needed until Phase 3.                                                                                                                                      |
+| Every P0 feature has acceptance criteria                            | ⚠️ minor | Present for §8.1, §8.2, §8.3, multi-tenancy (§6.3). Missing for §8.4 AI (only metering rules), §8.7 Admin consoles, §8.8 Billing, feature flags, branding, custom domains. → Q1; Opus writes them in each phase spec. |
+| Roadmap has Phase 0 Setup and v1.0.0 gate with staging + production | ✅       | §13 / §13a.                                                                                                                                                                                                           |
+| Open questions listed                                               | ✅       | §15 (7 items). Q1 (name/domain) and Q3 (hosting) block the staging environment → E2.                                                                                                                                  |
 
 ## Findings from inspecting upstream (affect later phases)
 
