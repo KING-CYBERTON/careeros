@@ -15,28 +15,30 @@
 
 ## Active tasks
 
-| Thread    | Task ID | Spec                                                                       | Test plan                                    | Status                                                                                                   | Branch / PR                                            |
-| --------- | ------- | -------------------------------------------------------------------------- | -------------------------------------------- | -------------------------------------------------------------------------------------------------------- | ------------------------------------------------------ |
-| 1 — Build | P0-T01  | [plans/P0-T01-repo-bootstrap.md](plans/P0-T01-repo-bootstrap.md)           | [test-plans/P0-T01.md](test-plans/P0-T01.md) | **Merged** · [review](reviews/P0-T01-review-1.md)                                                        | [#1](https://github.com/KING-CYBERTON/careeros/pull/1) |
-| 1 — Build | P0-T02  | [plans/P0-T02-agent-instructions.md](plans/P0-T02-agent-instructions.md)   | [test-plans/P0-T02.md](test-plans/P0-T02.md) | **Merged** · [review](reviews/P0-T02-review-1.md)                                                        | [#2](https://github.com/KING-CYBERTON/careeros/pull/2) |
-| 1 — Build | P0-T03  | [plans/P0-T03-local-baseline.md](plans/P0-T03-local-baseline.md)           | [test-plans/P0-T03.md](test-plans/P0-T03.md) | Opus reworking: baseline from CI runs (agent sandbox has no Docker and cannot run `turbo`/`tsrs`)        | —                                                      |
-| 2 — QA    | P0-Q01  | [plans/P0-Q01-test-harness.md](plans/P0-Q01-test-harness.md)               | [test-plans/P0-Q01.md](test-plans/P0-Q01.md) | **Merged** · [review](reviews/P0-Q01-review-1.md)                                                        | [#4](https://github.com/KING-CYBERTON/careeros/pull/4) |
-| 2 — QA    | P0-Q02  | [plans/P0-Q02-isolation-framework.md](plans/P0-Q02-isolation-framework.md) | [test-plans/P0-Q02.md](test-plans/P0-Q02.md) | **Merged** · [review](reviews/P0-Q02-review-1.md)                                                        | [#9](https://github.com/KING-CYBERTON/careeros/pull/9) |
-| 3 — CI/CD | P0-C01  | [plans/cicd/P0-C01-ci-workflow.md](plans/cicd/P0-C01-ci-workflow.md)       | [test-plans/P0-C01.md](test-plans/P0-C01.md) | **Merged** · [review](reviews/P0-C01-review-1.md)                                                        | [#3](https://github.com/KING-CYBERTON/careeros/pull/3) |
-| 3 — CI/CD | P0-C01b | [plans/cicd/P0-C01b-test-timeout.md](plans/cicd/P0-C01b-test-timeout.md)   | (acceptance in spec)                         | **Merged** · [review](reviews/P0-C01b-review-1.md)                                                       | [#8](https://github.com/KING-CYBERTON/careeros/pull/8) |
-| 3 — CI/CD | P0-C02  | [plans/cicd/P0-C02-image-publish.md](plans/cicd/P0-C02-image-publish.md)   | [test-plans/P0-C02.md](test-plans/P0-C02.md) | **Merged** · [review](reviews/P0-C02-review-1.md) · live image check waits on default branch = `develop` | [#6](https://github.com/KING-CYBERTON/careeros/pull/6) |
-| 3 — CI/CD | P0-C03  | [plans/cicd/P0-C03-staging.md](plans/cicd/P0-C03-staging.md)               | [test-plans/P0-C03.md](test-plans/P0-C03.md) | Approved · needs Q3 answer and runner on the VPS                                                         | —                                                      |
-| 3 — CI/CD | P0-C04  | [plans/cicd/P0-C04-repo-hygiene.md](plans/cicd/P0-C04-repo-hygiene.md)     | [test-plans/P0-C04.md](test-plans/P0-C04.md) | **Merged** · [review](reviews/P0-C04-review-1.md) · settings part is an owner action                     | [#7](https://github.com/KING-CYBERTON/careeros/pull/7) |
+| Thread    | Task ID | Spec                                                                         | Test plan                                    | Status                                                                                                   | Branch / PR                                              |
+| --------- | ------- | ---------------------------------------------------------------------------- | -------------------------------------------- | -------------------------------------------------------------------------------------------------------- | -------------------------------------------------------- |
+| 1 — Build | P0-T01  | [plans/P0-T01-repo-bootstrap.md](plans/P0-T01-repo-bootstrap.md)             | [test-plans/P0-T01.md](test-plans/P0-T01.md) | **Merged** · [review](reviews/P0-T01-review-1.md)                                                        | [#1](https://github.com/KING-CYBERTON/careeros/pull/1)   |
+| 1 — Build | P0-T02  | [plans/P0-T02-agent-instructions.md](plans/P0-T02-agent-instructions.md)     | [test-plans/P0-T02.md](test-plans/P0-T02.md) | **Merged** · [review](reviews/P0-T02-review-1.md)                                                        | [#2](https://github.com/KING-CYBERTON/careeros/pull/2)   |
+| 1 — Build | P0-T03  | [plans/P0-T03-local-baseline.md](plans/P0-T03-local-baseline.md)             | [test-plans/P0-T03.md](test-plans/P0-T03.md) | **Merged** · [review](reviews/P0-T03-review-1.md)                                                        | [#12](https://github.com/KING-CYBERTON/careeros/pull/12) |
+| 2 — QA    | P0-Q01  | [plans/P0-Q01-test-harness.md](plans/P0-Q01-test-harness.md)                 | [test-plans/P0-Q01.md](test-plans/P0-Q01.md) | **Merged** · [review](reviews/P0-Q01-review-1.md)                                                        | [#4](https://github.com/KING-CYBERTON/careeros/pull/4)   |
+| 2 — QA    | P0-Q02  | [plans/P0-Q02-isolation-framework.md](plans/P0-Q02-isolation-framework.md)   | [test-plans/P0-Q02.md](test-plans/P0-Q02.md) | **Merged** · [review](reviews/P0-Q02-review-1.md)                                                        | [#9](https://github.com/KING-CYBERTON/careeros/pull/9)   |
+| 2 — QA    | P0-Q03  | [plans/P0-Q03-e2e-tag-filter-flake.md](plans/P0-Q03-e2e-tag-filter-flake.md) | (acceptance in spec)                         | **Merged** · [review](reviews/P0-Q03-review-1.md)                                                        | [#11](https://github.com/KING-CYBERTON/careeros/pull/11) |
+| 3 — CI/CD | P0-C01  | [plans/cicd/P0-C01-ci-workflow.md](plans/cicd/P0-C01-ci-workflow.md)         | [test-plans/P0-C01.md](test-plans/P0-C01.md) | **Merged** · [review](reviews/P0-C01-review-1.md)                                                        | [#3](https://github.com/KING-CYBERTON/careeros/pull/3)   |
+| 3 — CI/CD | P0-C01b | [plans/cicd/P0-C01b-test-timeout.md](plans/cicd/P0-C01b-test-timeout.md)     | (acceptance in spec)                         | **Merged** · [review](reviews/P0-C01b-review-1.md)                                                       | [#8](https://github.com/KING-CYBERTON/careeros/pull/8)   |
+| 3 — CI/CD | P0-C02  | [plans/cicd/P0-C02-image-publish.md](plans/cicd/P0-C02-image-publish.md)     | [test-plans/P0-C02.md](test-plans/P0-C02.md) | **Merged** · [review](reviews/P0-C02-review-1.md) · live image check waits on default branch = `develop` | [#6](https://github.com/KING-CYBERTON/careeros/pull/6)   |
+| 3 — CI/CD | P0-C03  | [plans/cicd/P0-C03-staging.md](plans/cicd/P0-C03-staging.md)                 | [test-plans/P0-C03.md](test-plans/P0-C03.md) | Approved rev 2 (Cloudflare Tunnel) · needs Q4 answer, runner on the VPS and tunnel token                 | —                                                        |
+| 3 — CI/CD | P0-C04  | [plans/cicd/P0-C04-repo-hygiene.md](plans/cicd/P0-C04-repo-hygiene.md)       | [test-plans/P0-C04.md](test-plans/P0-C04.md) | **Merged** · [review](reviews/P0-C04-review-1.md) · settings part is an owner action                     | [#7](https://github.com/KING-CYBERTON/careeros/pull/7)   |
 
 ## Blockers
 
 - **Owner actions (Stephen)**, the session proxy blocks repo-settings writes: (1) default branch → `develop`; (2) branch protection on `develop` and `main` (require PR, checks `static`, `unit`, `e2e`, up to date, no force-push/deletion; `main` restricted to Opus release merges); (3) enable secret scanning, push protection and Dependabot alerts.
-- **Q3**: VPS reachability for staging: ports 80/443 open (Caddy) or Cloudflare Tunnel.
+- **Q3** answered (no inbound 80/443 → Cloudflare Tunnel). **Q4** open: is `ayopa.co.ke` DNS on Cloudflare?
 - **E1, E2** resolved (private repo; home-lab VPS `careeros-staging.ayopa.co.ke`).
 
 ## Watch list
 
-- `tests/e2e/specs/library-pagination.spec.ts:201` failed on #9 and #10 (docs-only): alert not visible in 20 s. Root-cause task [P0-Q03](plans/P0-Q03-e2e-tag-filter-flake.md) assigned to Thread 2.
+- `tests/e2e/specs/library-pagination.spec.ts:201`: root cause fixed in P0-Q03 (oRPC batching bypassed the test mock). Watch for a strict-mode "two alerts" failure; if seen, Opus specs a per-item batch response.
+- BASELINE.md lacks unit counts for 9 packages (log tail limit); Phase 1 adds a per-package JUnit summary step and refreshes the baseline.
 
 ## Planning docs
 
@@ -53,6 +55,8 @@
 - P0-C04 Repo hygiene — [#7](https://github.com/KING-CYBERTON/careeros/pull/7), `d4950da`
 - P0-C01b Test timeout — [#8](https://github.com/KING-CYBERTON/careeros/pull/8), `7cac561`
 - P0-Q02 Isolation framework — [#9](https://github.com/KING-CYBERTON/careeros/pull/9), `7f7cd01`
+- P0-Q03 e2e tag-filter fix — [#11](https://github.com/KING-CYBERTON/careeros/pull/11), `c3c61cb`
+- P0-T03 CI baseline — [#12](https://github.com/KING-CYBERTON/careeros/pull/12), `b287e83`
 
 All 2026-10-31.
 
