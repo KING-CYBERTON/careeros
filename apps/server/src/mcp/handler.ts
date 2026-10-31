@@ -1,5 +1,7 @@
 import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { randomUUID } from "node:crypto";
+// CAREEROS: MCP requests run inside an organization context (P1-T02)
+import { resolveOrgForAuthentication, withOrgContext } from "@careeros/tenancy";
 import { WebStandardStreamableHTTPServerTransport } from "@modelcontextprotocol/sdk/server/webStandardStreamableHttp.js";
 import { ORPCError } from "@orpc/server";
 import { consumeMcpRequestLimit, consumeMcpUserLimit } from "@reactive-resume/api/features/mcp/transport";
@@ -35,6 +37,9 @@ export async function handleMcp(request: Request, trustedClient = "unknown") {
 		await consumeMcpRequestLimit(trustedClient);
 		const authentication = await authenticateRequest(request);
 		await consumeMcpUserLimit(authentication.user.id);
+		// CAREEROS: no organization (none on the key or session, or not a member) means no access (P1-T02)
+		const organizationId = await resolveOrgForAuthentication(authentication);
+		if (!organizationId) return errorResponse(403, "No active organization");
 		const resHeaders = new Headers(responseHeaders);
 		server = createMcpServer(request, authentication, trustedClient, resHeaders);
 		transport = new WebStandardStreamableHTTPServerTransport({
@@ -42,8 +47,12 @@ export async function handleMcp(request: Request, trustedClient = "unknown") {
 			// Larger files use authenticated upload references rather than base64 in JSON-RPC.
 			maxRequestBodySize: 4 * 1024 * 1024,
 		});
-		await server.connect(transport);
-		const response = await transport.handleRequest(request);
+		const connectedServer = server;
+		const connectedTransport = transport;
+		const response = await withOrgContext(organizationId, async () => {
+			await connectedServer.connect(connectedTransport);
+			return connectedTransport.handleRequest(request);
+		});
 		const headers = new Headers(response.headers);
 		for (const [key, value] of resHeaders) headers.set(key, value);
 		return new Response(response.body, { status: response.status, statusText: response.statusText, headers });

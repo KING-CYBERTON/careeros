@@ -1,5 +1,7 @@
 import type { Locale } from "@reactive-resume/utils/locale";
 import type { User } from "better-auth";
+// CAREEROS: tenant context for every protected procedure (P1-T02)
+import { resolveOrgForAuthentication, withOrgContext } from "@careeros/tenancy";
 import { ORPCError, os } from "@orpc/server";
 import { eq } from "drizzle-orm";
 import { auth, verifyOAuthToken } from "@reactive-resume/auth/config";
@@ -13,6 +15,10 @@ export type RequestAuthentication = {
 	user: User;
 	method: "apiKey" | "bearer" | "session";
 	permissions: readonly RequestPermission[];
+	/** CAREEROS: the session's active organization; only set for session authentication (P1-T02). */
+	activeOrganizationId?: string | null | undefined;
+	/** CAREEROS: the verified API key's id; only set for API-key authentication (P1-T02). */
+	apiKeyId?: string | undefined;
 };
 
 interface ORPCContext {
@@ -68,7 +74,7 @@ async function getAuthenticationFromApiKey(apiKey: string): Promise<RequestAuthe
 			statements == null
 				? fullPermissions
 				: fullPermissions.filter((permission) => Array.isArray(apiPermissions) && apiPermissions.includes(permission));
-		return { user: activeUser, method: "apiKey", permissions };
+		return { user: activeUser, method: "apiKey", permissions, apiKeyId: result.key.id };
 	} catch {
 		return null;
 	}
@@ -100,7 +106,16 @@ export async function resolveAuthenticationFromRequestHeaders(headers: Headers):
 		const result = await auth.api.getSession({ headers: sessionHeaders, query: { disableCookieCache: true } });
 		if (!result?.user) return null;
 		const activeUser = await findActiveUser(result.user.id);
-		return activeUser ? { user: activeUser, method: "session", permissions: fullPermissions } : null;
+		return activeUser
+			? {
+					user: activeUser,
+					method: "session",
+					permissions: fullPermissions,
+					// CAREEROS: Better Auth's organization plugin stores the active organization on the session (P1-T02)
+					activeOrganizationId: (result as { session?: { activeOrganizationId?: string | null } }).session
+						?.activeOrganizationId,
+				}
+			: null;
 	} catch {
 		return null;
 	}
@@ -140,7 +155,12 @@ export function requiredPermission(route: { method?: string | undefined; operati
 	return "write";
 }
 
-export const protectedProcedure = publicProcedure
+/**
+ * Procedures that act on the signed-in user, not on an organization, and must work without an active organization:
+ * profile read/update, API-key list/create/delete and account deletion (all in `features/auth/router.ts`).
+ * Everything else uses `protectedProcedure`, which fails closed without an organization.
+ */
+export const protectedProcedureWithoutOrg = publicProcedure
 	.route({
 		spec: (operation) => ({ ...operation, security: [{ apiKey: [] }, { bearerAuth: [] }, { cookieAuth: [] }] }),
 	})
@@ -161,3 +181,10 @@ export const protectedProcedure = publicProcedure
 			},
 		});
 	});
+
+// CAREEROS: resolves the organization and runs the handler inside withOrgContext (P1-T02)
+export const protectedProcedure = protectedProcedureWithoutOrg.use(async ({ context, next }) => {
+	const organizationId = context.authentication ? await resolveOrgForAuthentication(context.authentication) : undefined;
+	if (!organizationId) throw new ORPCError("FORBIDDEN", { message: "No active organization" });
+	return withOrgContext(organizationId, () => Promise.resolve(next({ context: { ...context, organizationId } })));
+});

@@ -255,6 +255,9 @@ export const apikey = pg.pgTable(
 			.$onUpdate(() => /* @__PURE__ */ new Date()),
 		permissions: pg.text("permissions"),
 		metadata: pg.jsonb("metadata"),
+		// CAREEROS: organization the key acts in (P1-T02, phase plan D8). Nullable, global table, not RLS-scoped; no
+		// foreign key because organization.ts imports this file. Use is gated by a membership check.
+		organizationId: pg.text("organization_id"),
 	},
 	(t) => [
 		pg.index().on(t.referenceId),

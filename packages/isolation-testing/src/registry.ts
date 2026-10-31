@@ -38,6 +38,11 @@ export const tenancyAllowList: readonly AllowListEntry[] = [
 	{ table: "organization", reason: ORGANIZATION_PLUGIN_REASON },
 	{ table: "member", reason: ORGANIZATION_PLUGIN_REASON },
 	{ table: "invitation", reason: ORGANIZATION_PLUGIN_REASON },
+	{
+		table: "apikey",
+		reason:
+			"Global auth table by design (phase plan D8): Better Auth reads the key before any organization context exists; the nullable organization_id is checked against membership at use (P1-T02)",
+	},
 ];
 
 export const DEFAULT_SCHEMA = "public";

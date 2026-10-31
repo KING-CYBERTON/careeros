@@ -1,12 +1,16 @@
 import { AsyncLocalStorage } from "node:async_hooks";
 import { drizzle } from "drizzle-orm/node-postgres";
-import { Pool } from "pg";
+import { Pool, type PoolClient } from "pg";
 import { env } from "@reactive-resume/env/server";
 // CAREEROS: relations include the organization plugin tables (P1-T01)
 import { authOrganizationRelations } from "./schema/organization";
 
-const createDatabase = (pool: Pool) => drizzle({ client: pool, relations: authOrganizationRelations });
-const requestDatabase = new AsyncLocalStorage<{ pool: Pool; database: ReturnType<typeof createDatabase> }>();
+// CAREEROS: the scope store may hold a single checked-out client (withDatabaseClient) as well as a pool (P1-T02)
+const createDatabase = (pool: Pool | PoolClient) => drizzle({ client: pool, relations: authOrganizationRelations });
+const requestDatabase = new AsyncLocalStorage<{
+	pool: Pool | PoolClient;
+	database: ReturnType<typeof createDatabase>;
+}>();
 
 declare global {
 	var __pool: Pool | undefined;
@@ -15,7 +19,8 @@ declare global {
 
 export function getPool() {
 	const request = requestDatabase.getStore();
-	if (request) return request.pool;
+	// CAREEROS: inside withDatabaseClient this is the scoped client, so raw queries share the org context (P1-T02)
+	if (request) return request.pool as Pool;
 	if (!globalThis.__pool) {
 		const pool = new Pool({
 			connectionString: env.DATABASE_URL,
@@ -47,6 +52,15 @@ globalThis.__drizzle ??= createDatabase(getPool());
 /** Workers must create sockets inside a request and cannot reuse them in another request. */
 export function withDatabasePool<T>(pool: Pool, callback: () => T): T {
 	return requestDatabase.run({ pool, database: createDatabase(pool) }, callback);
+}
+
+/**
+ * CAREEROS: runs `callback` with the global `db` (including `db.transaction`) and `getPool()` bound to one checked-out
+ * client. `@careeros/tenancy` uses it so the session-level `app.current_org_id` setting applies to every query of a
+ * scope (P1-T02). The caller owns the client's checkout and release.
+ */
+export function withDatabaseClient<T>(client: PoolClient, callback: () => T): T {
+	return requestDatabase.run({ pool: client, database: createDatabase(client) }, callback);
 }
 
 export const db = new Proxy(globalThis.__drizzle, {
