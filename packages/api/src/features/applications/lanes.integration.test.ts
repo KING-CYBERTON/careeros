@@ -8,6 +8,7 @@ import { drizzle } from "drizzle-orm/node-postgres";
 import { Pool } from "pg";
 import * as tables from "@reactive-resume/db/schema";
 import { defaultResumeData } from "@reactive-resume/schema/resume/default";
+import { deleteAllUsers } from "../../test-support/delete-users";
 
 const fixture = vi.hoisted(() => ({
 	db: undefined as ReturnType<typeof drizzle> | undefined,
@@ -118,7 +119,8 @@ describe.skipIf(!databaseUrl)("application lanes: persisted owner and workflow i
 	});
 	beforeEach(async () => {
 		fixture.email.mockClear();
-		await getDb().delete(tables.user);
+		// CAREEROS: ordered, deadlock-retrying delete (P1-Q04); the unordered bulk delete deadlocked on username advisory locks.
+		await deleteAllUsers(getDb(), tables.user);
 		await getDb().delete(tables.releasedUsername);
 		await getDb()
 			.insert(tables.user)
