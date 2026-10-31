@@ -103,20 +103,23 @@ async function soleMemberOrganizationIds(executor: Executor, userId: string): Pr
 	return ids.filter((id) => !sharedIds.has(id));
 }
 
-/** Throws when the user owns an organization that has other members (ownership transfer UI is Phase 3). */
+/** Throws when the user is the last owner of an organization that has other members (ownership transfer UI is Phase 3). */
 export async function assertNoSharedOrganizationOwnership(userId: string, executor: Executor = db): Promise<void> {
-	const owned = await executor
+	const mine = await executor
 		.select({ organizationId: schema.member.organizationId, role: schema.member.role })
 		.from(schema.member)
 		.where(eq(schema.member.userId, userId));
-	const ownedIds = owned.filter((row) => row.role.split(",").includes("owner")).map((row) => row.organizationId);
+	const ownedIds = mine.filter((row) => row.role.split(",").includes("owner")).map((row) => row.organizationId);
 	if (ownedIds.length === 0) return;
 	const others = await executor
-		.select({ organizationId: schema.member.organizationId })
+		.select({ organizationId: schema.member.organizationId, role: schema.member.role })
 		.from(schema.member)
-		.where(and(inArray(schema.member.organizationId, ownedIds), ne(schema.member.userId, userId)))
-		.limit(1);
-	if (others.length > 0) throw new SharedOrganizationOwnerError();
+		.where(and(inArray(schema.member.organizationId, ownedIds), ne(schema.member.userId, userId)));
+	for (const organizationId of ownedIds) {
+		const members = others.filter((row) => row.organizationId === organizationId);
+		const anotherOwner = members.some((row) => row.role.split(",").includes("owner"));
+		if (members.length > 0 && !anotherOwner) throw new SharedOrganizationOwnerError();
+	}
 }
 
 export class SharedOrganizationOwnerError extends Error {

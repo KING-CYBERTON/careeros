@@ -141,6 +141,24 @@ describe.skipIf(!process.env.OAUTH_TEST_DATABASE_URL)("organizations and account
 		});
 	});
 
+	it("allows deleting an owner's account when another owner remains", async () => {
+		await withDatabasePool(pool, async () => {
+			const leaver = await createUser("co-leaver");
+			const coOwner = await createUser("co-owner");
+			const shared = await createOrganization("co-owned-org", [
+				{ userId: leaver.id, role: "owner" },
+				{ userId: coOwner.id, role: "owner" },
+			]);
+
+			await authService.deleteAccount({ userId: leaver.id });
+
+			expect(await db.select().from(schema.user).where(eq(schema.user.id, leaver.id))).toEqual([]);
+			expect(await db.select().from(schema.organization).where(eq(schema.organization.id, shared))).toHaveLength(1);
+			const remaining = await db.select().from(schema.member).where(eq(schema.member.organizationId, shared));
+			expect(remaining.map((row) => row.userId)).toEqual([coOwner.id]);
+		});
+	});
+
 	it("refuses to delete an account that owns an organization with other members", async () => {
 		await withDatabasePool(pool, async () => {
 			const owner = await createUser("blocked-owner");

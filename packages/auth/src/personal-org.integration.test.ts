@@ -225,6 +225,16 @@ describe.skipIf(!process.env.COVER_LETTER_TEST_DATABASE_URL)(
 			expect(left.rows).toEqual([]);
 		});
 
+		it("allows an owner to leave a shared organization that has another owner", async () => {
+			const { owner, org, members } = await sharedOrganization(["admin"]);
+			const second = members[0];
+			if (!second) throw new Error("missing member");
+			await expect(assertNoSharedOrganizationOwnership(owner.userId)).rejects.toThrow(/Transfer ownership first/);
+			await pool.query("UPDATE member SET role = 'owner' WHERE id = $1", [second.memberId]);
+			await expect(assertNoSharedOrganizationOwnership(owner.userId)).resolves.toBeUndefined();
+			expect((await pool.query("SELECT id FROM organization WHERE id = $1", [org.id])).rows).toHaveLength(1);
+		});
+
 		it("keeps a shared organization when a non-owner member's sole-member cleanup runs", async () => {
 			const { org, members } = await sharedOrganization(["member"]);
 			const member = members[0];
