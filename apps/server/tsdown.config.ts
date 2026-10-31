@@ -51,8 +51,9 @@ const packageNameOf = (id: string) =>
 		.join("/");
 
 // Matches subpath imports too, such as `react-reconciler/constants.js`.
+// CAREEROS: workspace packages under the @careeros/ scope are source-consumed too, so they must be bundled (P1-T02)
 const shouldBundle = (id: string) =>
-	id.startsWith("@reactive-resume/") || bundledInteropPackages.has(packageNameOf(id));
+	id.startsWith("@reactive-resume/") || id.startsWith("@careeros/") || bundledInteropPackages.has(packageNameOf(id));
 
 const shouldExternalizeThirdParty = (id: string) => {
 	if (shouldBundle(id)) return false;

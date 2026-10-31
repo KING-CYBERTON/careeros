@@ -9,7 +9,8 @@ import { applicationPipelineSchema } from "@reactive-resume/schema/applications/
 import { careerProfileDataSchema, careerWorkspaceSchema, discoverySourceSchema } from "@reactive-resume/schema/career";
 import { coverLetterSchema } from "@reactive-resume/schema/cover-letter/data";
 import { timezoneSchema } from "@reactive-resume/utils/timezone";
-import { protectedProcedure, publicProcedure } from "../../context";
+// CAREEROS: account-level procedures work without an active organization (P1-T02)
+import { protectedProcedure, protectedProcedureWithoutOrg, publicProcedure } from "../../context";
 import { applicationDto } from "../../dto/application";
 import {
 	savedItemSchema,
@@ -23,7 +24,7 @@ import { resumeDto } from "../../dto/resume";
 import { accountRateLimit } from "../../middleware/rate-limit";
 import { authService } from "./service";
 
-const accountProcedure = protectedProcedure.use(accountRateLimit).use(async ({ next }) => {
+const accountProcedure = protectedProcedureWithoutOrg.use(accountRateLimit).use(async ({ next }) => {
 	try {
 		return await next();
 	} catch (error) {
@@ -176,7 +177,7 @@ export const authRouter = {
 			.handler(() => authService.providers.list()),
 	},
 
-	createApiKey: protectedProcedure
+	createApiKey: protectedProcedureWithoutOrg
 		.route({
 			method: "POST",
 			path: "/auth/api-keys",
@@ -269,7 +270,7 @@ export const authRouter = {
 		)
 		.handler(({ context }) => authService.exportData({ userId: context.user.id })),
 
-	deleteAccount: protectedProcedure
+	deleteAccount: protectedProcedureWithoutOrg
 		.route({
 			spec: (operation) => ({ ...operation, security: [{ cookieAuth: [] }] }),
 			method: "DELETE",

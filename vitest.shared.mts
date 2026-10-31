@@ -12,6 +12,8 @@ type VitestProjectOptions = {
 	dirname: string;
 	environment?: VitestEnvironment;
 	plugins?: ViteUserConfig["plugins"];
+	/** CAREEROS: extra setup files run after the shared one (P1-T02). */
+	extraSetupFiles?: string[];
 };
 
 export const createVitestProjectConfig = ({
@@ -19,6 +21,7 @@ export const createVitestProjectConfig = ({
 	dirname,
 	environment = "node",
 	plugins = [],
+	extraSetupFiles = [],
 }: VitestProjectOptions) =>
 	defineConfig({
 		root: dirname,
@@ -43,7 +46,7 @@ export const createVitestProjectConfig = ({
 					},
 				},
 			},
-			setupFiles: [setupFile],
+			setupFiles: [setupFile, ...extraSetupFiles],
 			include: ["src/**/*.{test,spec}.?(c|m)[jt]s?(x)"],
 			exclude: ["node_modules", "dist", ".output", "coverage", "reports"],
 			pool: "threads",

@@ -1,5 +1,7 @@
 import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { randomUUID } from "node:crypto";
+// CAREEROS: MCP requests run inside an organization context (P1-T02)
+import { ORG_CONTEXT_REQUIRED, resolveOrgForAuthentication, withOrgContext } from "@careeros/tenancy";
 import { WebStandardStreamableHTTPServerTransport } from "@modelcontextprotocol/sdk/server/webStandardStreamableHttp.js";
 import { ORPCError } from "@orpc/server";
 import { consumeMcpRequestLimit, consumeMcpUserLimit } from "@reactive-resume/api/features/mcp/transport";
@@ -35,6 +37,10 @@ export async function handleMcp(request: Request, trustedClient = "unknown") {
 		await consumeMcpRequestLimit(trustedClient);
 		const authentication = await authenticateRequest(request);
 		await consumeMcpUserLimit(authentication.user.id);
+		// CAREEROS: no organization (none on the key or session, or not a member) means no access (P1-T02)
+		const organizationId = await resolveOrgForAuthentication(authentication);
+		// Enforcement is off until P1-T04 (see ORG_CONTEXT_REQUIRED); then the request runs without a scope.
+		if (!organizationId && ORG_CONTEXT_REQUIRED) return errorResponse(403, "No active organization");
 		const resHeaders = new Headers(responseHeaders);
 		server = createMcpServer(request, authentication, trustedClient, resHeaders);
 		transport = new WebStandardStreamableHTTPServerTransport({
@@ -42,8 +48,13 @@ export async function handleMcp(request: Request, trustedClient = "unknown") {
 			// Larger files use authenticated upload references rather than base64 in JSON-RPC.
 			maxRequestBodySize: 4 * 1024 * 1024,
 		});
-		await server.connect(transport);
-		const response = await transport.handleRequest(request);
+		const connectedServer = server;
+		const connectedTransport = transport;
+		const handle = async () => {
+			await connectedServer.connect(connectedTransport);
+			return connectedTransport.handleRequest(request);
+		};
+		const response = organizationId ? await withOrgContext(organizationId, handle) : await handle();
 		const headers = new Headers(response.headers);
 		for (const [key, value] of resHeaders) headers.set(key, value);
 		return new Response(response.body, { status: response.status, statusText: response.statusText, headers });
