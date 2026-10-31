@@ -1,0 +1,9 @@
+# Escalations to Stephen (Owner)
+
+Opus logs items here that only Stephen can decide: business, legal, pricing, spending money, irreversible destructive actions (PRODUCT.md §1.5.4), and blockers Opus cannot resolve.
+
+| E# | Date | Item | Why Owner is needed | Options | Decision |
+|---|---|---|---|---|---|
+| E1 | 2026-10-31 | Where the code lives | Visibility of commercial code; account ownership | (a) new private repo, upstream history pushed in, `upstream` remote kept · (b) public GitHub fork | **(a) private repo** — Stephen, 2026-10-31. Repo: `KING-CYBERTON/careeros` (empty, private). |
+| E2 | 2026-10-31 | Staging host + domain (PRODUCT.md §15 Q1, Q3) | Spending money; region choice | (a) **Recommended:** one Hetzner Cloud VPS, 4 vCPU / 8 GB, EU region (lowest cost, ~€8–15/mo) + a cheap domain on Cloudflare DNS (free plan) · (b) DigitalOcean droplet 4 GB/8 GB (~$48/mo, simpler UI) · (c) Stephen's existing server/domain. Production can be decided later (Phase 6). | **(c) Stephen's own home-lab VPS** — Stephen, 2026-10-31 (replaces the earlier DigitalOcean pick; no new spend). Staging host: `careeros-staging.ayopa.co.ke` (Stephen, 2026-10-31). |
+| E3 | 2026-10-31 | GitHub Actions minutes for a private repo | Possible spend | Private repos on GitHub Free get a limited monthly minute allowance; Phase 0 CI (unit + browser tests + image build) may use several hundred minutes/week. (a) **Recommended:** start on the free allowance, CI tuned to run e2e only on PRs to `develop`/`main` · (b) GitHub Pro/Team now. | Pending (no action needed until usage approaches the limit) |
