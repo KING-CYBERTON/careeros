@@ -25,6 +25,21 @@ export type RegistryEntry = {
 /** Every tenant table (one with an `organization_id` column) must be registered here. Empty in Phase 0. */
 export const isolationRegistry: readonly RegistryEntry[] = [];
 
+export type AllowListEntry = { table: string; schema?: string; reason: string };
+
+const ORGANIZATION_PLUGIN_REASON =
+	"Better Auth organization plugin; defines tenancy; access controlled by Better Auth membership checks (P1-T01)";
+
+/**
+ * Tables that carry an `organization_id` column but are not tenant-scoped data (they define tenancy), so they are
+ * exempt from the registry, RLS and policy requirements. Every entry needs a reason.
+ */
+export const tenancyAllowList: readonly AllowListEntry[] = [
+	{ table: "organization", reason: ORGANIZATION_PLUGIN_REASON },
+	{ table: "member", reason: ORGANIZATION_PLUGIN_REASON },
+	{ table: "invitation", reason: ORGANIZATION_PLUGIN_REASON },
+];
+
 export const DEFAULT_SCHEMA = "public";
 export const DEFAULT_ID_COLUMN = "id";
 

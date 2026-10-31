@@ -159,10 +159,50 @@ describe("coverage check", () => {
 		});
 	});
 
+	it("passes for an allow-listed table without RLS, and ignores it as unregistered", async () => {
+		await withFixture(async (schema) => {
+			const registry = [entryFor(schema, "iso_good"), entryFor(schema, "iso_nopolicy"), entryFor(schema, "iso_leaky")];
+			const allow = [{ table: "iso_unregistered", schema, reason: "fixture" }];
+			const result = await runCoverageCheck(pools.app, registry, schema, allow);
+			expect(result.failures.filter((f) => f.includes("iso_unregistered"))).toEqual([]);
+		});
+	});
+
+	it("fails a table that is both registered and allow-listed", async () => {
+		await withFixture(async (schema) => {
+			const registry = [entryFor(schema, "iso_good")];
+			const allow = [{ table: "iso_good", schema, reason: "fixture" }];
+			const result = await runCoverageCheck(pools.app, registry, schema, allow);
+			expect(result.failures).toContain(`${schema}.iso_good: is both in the isolation registry and on the allow-list`);
+		});
+	});
+
+	it("fails an allow-list entry with an empty reason", async () => {
+		await withFixture(async (schema) => {
+			const allow = [{ table: "iso_leaky", schema, reason: " " }];
+			const result = await runCoverageCheck(pools.app, [entryFor(schema, "iso_good")], schema, allow);
+			expect(result.failures).toContain(`${schema}.iso_leaky: allow-list entry has no reason`);
+		});
+	});
+
+	it("fails a registered table with RLS enabled but not forced", async () => {
+		await withFixture(async (schema) => {
+			const result = await runCoverageCheck(
+				pools.app,
+				[entryFor(schema, "iso_good"), entryFor(schema, "iso_nopolicy")],
+				schema,
+				[],
+			);
+			expect(result.failures).toContain(`${schema}.iso_nopolicy: FORCE ROW LEVEL SECURITY is not set`);
+			expect(result.failures.some((f) => f.startsWith(`${schema}.iso_good:`))).toBe(false);
+		});
+	});
+
 	it("passes when every tenant table is registered, protected and has a policy", async () => {
 		await withThrowawaySchema(pools.owner, async (schema) => {
 			await pools.owner.query(`CREATE TABLE "${schema}".iso_good (${columns})`);
 			await pools.owner.query(`ALTER TABLE "${schema}".iso_good ENABLE ROW LEVEL SECURITY`);
+			await pools.owner.query(`ALTER TABLE "${schema}".iso_good FORCE ROW LEVEL SECURITY`);
 			await pools.owner.query(
 				`CREATE POLICY p ON "${schema}".iso_good USING (organization_id = current_setting('app.current_org_id', true))`,
 			);

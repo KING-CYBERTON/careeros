@@ -22,7 +22,7 @@ import {
 	isAPIError,
 } from "better-auth/api";
 import { deleteSessionCookie, parseSetCookieHeader, setSessionCookie } from "better-auth/cookies";
-import { admin, anonymous, jwt, openAPI } from "better-auth/plugins";
+import { admin, anonymous, jwt, openAPI, organization } from "better-auth/plugins";
 import { genericOAuth } from "better-auth/plugins/generic-oauth";
 import { twoFactor } from "better-auth/plugins/two-factor";
 import { username } from "better-auth/plugins/username";
@@ -40,6 +40,8 @@ import { generateId, toUsername } from "@reactive-resume/utils/string";
 import { timezoneSchema } from "@reactive-resume/utils/timezone";
 import { isAllowedOAuthRedirectUri } from "@reactive-resume/utils/url-security.node";
 import { createGithubProfileMapper, createProfileMapper, isUsernameReserved } from "./oauth-profile";
+// CAREEROS: organization plugin options (P1-T01)
+import { organizationOptions } from "./organization";
 import { authRateLimitStorage } from "./rate-limit";
 import { getTrustedOrigins } from "./trusted-origins";
 
@@ -846,6 +848,8 @@ const getAuthConfig = () => {
 			openAPI({ disableDefaultReference: true }),
 			jwt({ disableSettingJwtHeader: true }),
 			admin(),
+			// CAREEROS: organizations, members, invitations and the session's active organization (P1-T01)
+			organization(organizationOptions),
 			passkey(),
 			genericOAuth({ config: authConfigs }),
 			twoFactor({ issuer: "Reactive Resume" }),
