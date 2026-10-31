@@ -86,7 +86,8 @@ In `.env` set, using fresh generated values:
 
 - `TUNNEL_TOKEN`: the token from step 3
 - `APP_URL`: `https://careeros-staging.ayopa.co.ke` (your real staging host)
-- `POSTGRES_PASSWORD`, and the same password inside `DATABASE_URL`
+- `POSTGRES_PASSWORD` (superuser; used only by the one-shot `db_bootstrap` service)
+- `CAREEROS_OWNER_PASSWORD` and `CAREEROS_APP_PASSWORD`, and the same values inside `DATABASE_MIGRATION_URL` (owner) and `DATABASE_URL` (app); see "Database roles" below
 - `AUTH_SECRET`, `ENCRYPTION_SECRET` (different values)
 - `S3_ACCESS_KEY_ID`, `S3_SECRET_ACCESS_KEY`
 - `IMAGE_REPOSITORY`: `ghcr.io/<owner>/<repo>` in lowercase (default is already correct for this repo)
@@ -126,6 +127,29 @@ docker compose -p careeros_staging -f compose.staging.yml logs --tail 100 cloudf
 `ps` must show no published host ports. The GitHub run log shows each deploy step.
 
 Runner trouble: `sudo ./svc.sh status` inside `/home/deploy/actions-runner`, and check the runner is **Idle** in GitHub settings.
+
+## Database roles
+
+The app does not connect as the PostgreSQL superuser. Two roles exist (P1-C01):
+
+| Role             | Used for                                                                            | Env var                  |
+| ---------------- | ----------------------------------------------------------------------------------- | ------------------------ |
+| `careeros_owner` | Runs migrations at app startup; owns schemas `public` and `drizzle` and all tables  | `DATABASE_MIGRATION_URL` |
+| `careeros_app`   | Runtime queries; no superuser, no `BYPASSRLS`, owns no table, cannot create objects | `DATABASE_URL`           |
+
+Row-level security (added from Phase 1b) only protects data when the app is not the table owner and cannot bypass RLS, which is why the split is required.
+
+How it works: the one-shot compose service `db_bootstrap` runs `bootstrap-roles.sql` as the superuser (`POSTGRES_PASSWORD`) on every `docker compose up`, before `app` starts (`app` waits for it with `service_completed_successfully`). The script is idempotent: it creates or normalises both roles with the passwords from `CAREEROS_OWNER_PASSWORD` / `CAREEROS_APP_PASSWORD`, moves ownership of every existing table and sequence in `public` and `drizzle` to `careeros_owner` (no `DROP`), and grants `careeros_app` data access only. So the first deploy after this change converts the existing staging database in place; no data is lost.
+
+To change a role password, edit it in `.env` (both the variable and the URL) and redeploy. To check the result on the server:
+
+```sh
+cd /opt/careeros/staging
+docker compose -p careeros_staging -f compose.staging.yml logs db_bootstrap
+docker compose -p careeros_staging -f compose.staging.yml exec postgres psql -U postgres -c "select rolname, rolsuper, rolbypassrls from pg_roles where rolname like 'careeros_%'"
+```
+
+The roles must be `rolsuper = f` and `rolbypassrls = f`. The same SQL is used in CI (`infra/db/bootstrap-roles.sh`).
 
 ## Rollback
 

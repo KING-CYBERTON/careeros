@@ -21,6 +21,31 @@ services:
       timeout: 10s
       retries: 3
 
+  # CAREEROS: P1-C01. One-shot, idempotent: creates/normalises careeros_owner and careeros_app (see README "Database roles").
+  db_bootstrap:
+    image: postgres:16
+    restart: "no"
+    networks:
+      - data_network
+    environment:
+      PGHOST: postgres
+      PGUSER: postgres
+      PGDATABASE: postgres
+      PGPASSWORD: ${POSTGRES_PASSWORD:?set POSTGRES_PASSWORD in .env}
+      CAREEROS_OWNER_PASSWORD: ${CAREEROS_OWNER_PASSWORD:?set CAREEROS_OWNER_PASSWORD in .env}
+      CAREEROS_APP_PASSWORD: ${CAREEROS_APP_PASSWORD:?set CAREEROS_APP_PASSWORD in .env}
+    volumes:
+      - ./bootstrap-roles.sql:/bootstrap/bootstrap-roles.sql:ro
+    entrypoint: >
+      /bin/sh -c "
+        PGOPTIONS=\"-c careeros.owner_password=$$CAREEROS_OWNER_PASSWORD -c careeros.app_password=$$CAREEROS_APP_PASSWORD\"
+        export PGOPTIONS
+        psql -v ON_ERROR_STOP=1 --quiet --file /bootstrap/bootstrap-roles.sql
+      "
+    depends_on:
+      postgres:
+        condition: service_healthy
+
   redis:
     image: redis:7
     restart: unless-stopped
@@ -84,6 +109,8 @@ services:
     depends_on:
       postgres:
         condition: service_healthy
+      db_bootstrap:
+        condition: service_completed_successfully
       redis:
         condition: service_healthy
       seaweedfs:
