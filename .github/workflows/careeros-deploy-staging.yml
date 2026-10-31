@@ -81,6 +81,7 @@ jobs:
           install -m 0644 infra/staging/.env.staging.example "$STAGING_DIR/.env.staging.example"
           install -m 0755 infra/staging/deploy.sh "$STAGING_DIR/deploy.sh"
           install -m 0755 infra/staging/rollback.sh "$STAGING_DIR/rollback.sh"
+          install -m 0755 infra/staging/mark-good.sh "$STAGING_DIR/mark-good.sh"
 
       - name: Deploy
         id: deploy
@@ -118,6 +119,13 @@ jobs:
         run: node tooling/deployment/smoke.mjs
         env:
           SMOKE_URL: ${{ vars.STAGING_URL }}
+
+      - name: Mark healthy
+        env:
+          IMAGE_TAG: ${{ steps.plan.outputs.tag }}
+        run: |
+          set -euo pipefail
+          "$STAGING_DIR/mark-good.sh" "$IMAGE_TAG"
 
       - name: Roll back to the last healthy version
         if: failure() && steps.deploy.outcome != 'skipped'

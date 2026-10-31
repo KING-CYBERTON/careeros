@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 # CAREEROS: P0-C03. Runs ON the staging server (via the self-hosted runner).
+# Does NOT record the tag as good; call mark-good.sh after verification.
 # Usage: [GHCR_USER=<user>] [IMAGE_REPOSITORY=ghcr.io/<owner>/<repo>] echo "$TOKEN" | ./deploy.sh <image-tag>
 # The GHCR read token (if any) is read from stdin and never echoed. Exits non-zero if the app is unhealthy.
 set -euo pipefail
@@ -69,12 +70,4 @@ if [[ "$status" != "healthy" ]]; then
 	exit 1
 fi
 
-# Healthy: record bookkeeping. current = last healthy tag, previous = the one before it.
-if [[ -s .current_tag ]]; then
-	current="$(cat .current_tag)"
-	if [[ "$current" != "$TAG" ]]; then
-		printf '%s\n' "$current" >.previous_tag
-	fi
-fi
-printf '%s\n' "$TAG" >.current_tag
-echo "deploy: $TAG is healthy."
+echo "deploy: $TAG is healthy. Run mark-good.sh $TAG once it is verified (health revision, smoke)."

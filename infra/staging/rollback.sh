@@ -25,4 +25,7 @@ fi
 
 tag="$(cat "$file")"
 echo "rollback: redeploying $tag"
-exec ./deploy.sh "$tag"
+./deploy.sh "$tag"
+if [[ "$mode" != "--last-good" ]]; then
+	./mark-good.sh "$tag"
+fi

@@ -137,7 +137,9 @@ Runner trouble: `sudo ./svc.sh status` inside `/home/deploy/actions-runner`, and
   ./rollback.sh
   ```
 
-  This redeploys the tag in `.previous_tag`. Tags are kept in `.current_tag` and `.previous_tag`.
+  This redeploys the tag in `.previous_tag` and records it as the current tag.
+
+- Three files drive this: `deploy.sh <tag>` only deploys and waits for health; `mark-good.sh <tag>` records a tag as verified (`.current_tag`, and the older one moves to `.previous_tag`); `rollback.sh` redeploys `.previous_tag` (or `.current_tag` with `--last-good`, which the workflow uses after a failed deploy). The workflow runs `mark-good.sh` only after the health revision check and smoke test pass. If you run `deploy.sh` by hand, run `./mark-good.sh <tag>` once you have verified it, otherwise rollback will not know about it.
 
 - Manual, from GitHub: run **careeros-deploy-staging** with an older `sha-<sha>` tag.
 
