@@ -1,7 +1,8 @@
 import type { TestPools } from "./index";
+import type pg from "pg";
 import { execFile } from "node:child_process";
 import { promisify } from "node:util";
-import { afterAll, beforeAll, describe, expect, it } from "vite-plus/test";
+import { afterAll, beforeAll, describe, expect, it, vi } from "vite-plus/test";
 import { APP_ROLE, createOrgIds, createPools, createTestSchema, getTestEnv, withOrgContext } from "./index";
 
 const run = promisify(execFile);
@@ -133,6 +134,23 @@ describe("database helpers", () => {
 		} finally {
 			await schema.drop();
 		}
+	});
+
+	it("rethrows the original error when ROLLBACK itself fails", async () => {
+		const original = new Error("original failure");
+		const release = vi.fn();
+		const query = vi.fn(async (sql: string) => {
+			if (sql === "ROLLBACK") throw new Error("rollback failed");
+			return { rows: [] };
+		});
+		const fakePool = { connect: async () => ({ query, release }) } as unknown as pg.Pool;
+		await expect(
+			withOrgContext(fakePool, "org", async () => {
+				throw original;
+			}),
+		).rejects.toBe(original);
+		expect(query).toHaveBeenCalledWith("ROLLBACK");
+		expect(release).toHaveBeenCalledWith(true);
 	});
 
 	it("commits when the callback succeeds", async () => {
