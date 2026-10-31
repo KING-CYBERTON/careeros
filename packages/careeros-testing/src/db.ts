@@ -48,7 +48,8 @@ export async function createTestSchema(owner: pg.Pool, prefix = "careeros_test")
 
 /**
  * Runs `callback` in a transaction on `pool` (use the app pool) with `app.current_org_id` set transaction-locally.
- * Commits on success; rolls back and rethrows if the callback fails.
+ * Commits on success; rolls back and rethrows if the callback fails. A failing ROLLBACK never masks the
+ * original error (the connection is then destroyed instead of being returned to the pool).
  */
 export async function withOrgContext<T>(
 	pool: pg.Pool,
@@ -56,6 +57,7 @@ export async function withOrgContext<T>(
 	callback: (client: pg.PoolClient) => Promise<T>,
 ): Promise<T> {
 	const client = await pool.connect();
+	let discard = false;
 	try {
 		await client.query("BEGIN");
 		await client.query("SELECT set_config('app.current_org_id', $1, true)", [orgId]);
@@ -63,9 +65,14 @@ export async function withOrgContext<T>(
 		await client.query("COMMIT");
 		return result;
 	} catch (error) {
-		await client.query("ROLLBACK");
+		try {
+			await client.query("ROLLBACK");
+		} catch {
+			// Keep the original error; the connection state is unknown, so do not reuse it.
+			discard = true;
+		}
 		throw error;
 	} finally {
-		client.release();
+		client.release(discard ? true : undefined);
 	}
 }
