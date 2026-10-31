@@ -132,11 +132,8 @@ jobs:
             echo "db:test-role not present yet; skipping"
           fi
 
-      # CAREEROS: upstream runs CI on 32-vCPU Blacksmith runners; standard 4-vCPU
-      # ubuntu-latest is slower, so large-account listing tests exceed Vitest's
-      # default 30 s timeout. Raise it here only; no upstream test/config edited.
       - name: Run unit tests (mobile excluded)
-        run: pnpm exec turbo run test:ci --concurrency=1 --filter=!mobile -- --testTimeout=120000
+        run: pnpm exec turbo run test:ci --concurrency=1 --filter=!mobile
 
   e2e:
     name: e2e
