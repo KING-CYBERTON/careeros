@@ -31,12 +31,15 @@
 
 ## Phase 1 tasks
 
-| Thread    | Task ID | Spec                                                           | Status                                                    | Branch / PR                                              |
-| --------- | ------- | -------------------------------------------------------------- | --------------------------------------------------------- | -------------------------------------------------------- |
-| 3 — CI/CD | P1-C01  | [plans/P1-C01-db-role-split.md](plans/P1-C01-db-role-split.md) | **Merged** · [review](reviews/P1-C01-review-1.md)         | [#16](https://github.com/KING-CYBERTON/careeros/pull/16) |
-| 1 — Build | P1-T01  | [plans/P1-T01-org-plugin.md](plans/P1-T01-org-plugin.md)       | **Merged** · [review](reviews/P1-T01-review-1.md)         | [#17](https://github.com/KING-CYBERTON/careeros/pull/17) |
-| 1 — Build | P1-T02  | [plans/P1-T02-tenancy-core.md](plans/P1-T02-tenancy-core.md)   | Approved · dispatched to Sonnet                           | `feature/P1-T02-tenancy-core`                            |
-| 1 — Build | P1-T03  | (spec after D6)                                                | Blocked on Stephen confirming D6 (personal org at signup) | —                                                        |
+| Thread    | Task ID | Spec                                                           | Status                                                                                           | Branch / PR                                              |
+| --------- | ------- | -------------------------------------------------------------- | ------------------------------------------------------------------------------------------------ | -------------------------------------------------------- |
+| 3 — CI/CD | P1-C01  | [plans/P1-C01-db-role-split.md](plans/P1-C01-db-role-split.md) | **Merged** · [review](reviews/P1-C01-review-1.md)                                                | [#16](https://github.com/KING-CYBERTON/careeros/pull/16) |
+| 1 — Build | P1-T01  | [plans/P1-T01-org-plugin.md](plans/P1-T01-org-plugin.md)       | **Merged** · [review](reviews/P1-T01-review-1.md)                                                | [#17](https://github.com/KING-CYBERTON/careeros/pull/17) |
+| 1 — Build | P1-T02  | [plans/P1-T02-tenancy-core.md](plans/P1-T02-tenancy-core.md)   | **Merged** · [review](reviews/P1-T02-review-1.md)                                                | [#19](https://github.com/KING-CYBERTON/careeros/pull/19) |
+| 2 — QA    | P1-Q01  | [plans/P1-Q01-tenancy-tests.md](plans/P1-Q01-tenancy-tests.md) | Approved · dispatched to Sonnet                                                                  | `feature/P1-Q01-tenancy-tests`                           |
+| 3 — CI/CD | P1-C02  | [plans/P1-C02-junit-summary.md](plans/P1-C02-junit-summary.md) | Approved · dispatched to Sonnet                                                                  | `feature/P1-C02-junit-summary`                           |
+| 3 — CI/CD | P1-C03  | (folded into P1-C01)                                           | Staging compose and `.env.staging.example` already split roles; verified at first staging deploy | —                                                        |
+| 1 — Build | P1-T03  | (spec after D6)                                                | Blocked on Stephen confirming D6 (personal org at signup)                                        | —                                                        |
 
 ## Blockers
 
