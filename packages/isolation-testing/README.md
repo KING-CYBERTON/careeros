@@ -27,7 +27,8 @@ Proves that Org B can never see Org A's rows. Adding a tenant table means adding
 ## What runs
 
 - **DB check** (`runDbIsolationCheck`): seeds one Org A row with the owner pool, then on the `careeros_app` pool verifies Org B sees 0 rows (all, and by id) and Org A sees exactly 1.
-- **Coverage check** (`runCoverageCheck`): every table in the schema with an `organization_id` column must be in the registry, have RLS enabled and have a policy. A forgotten registry entry fails CI.
+- **Coverage check** (`runCoverageCheck`): every table in the schema with an `organization_id` column must be in the registry, have RLS enabled **and forced** (`FORCE ROW LEVEL SECURITY`) and have a policy. A forgotten registry entry fails CI.
+- **Allow-list** (`tenancyAllowList` in `src/registry.ts`): tables that have an `organization_id` column but define tenancy instead of holding tenant data (`organization`, `member`, `invitation`, from the Better Auth organization plugin). They skip the registry, RLS and policy requirements. Each entry needs a non-empty `reason`; a table that is both registered and allow-listed fails.
 - **API check** (`runApiIsolationCheck`): Org B calling `get` with Org A's id must get 404 (not 403, not 200), and `list` must omit it.
 - **Runner** (`registerIsolationSuite`): one Vitest `describe` per registry entry.
 

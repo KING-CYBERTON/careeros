@@ -1,8 +1,8 @@
-import type { RegistryEntry } from "./registry";
+import type { AllowListEntry, RegistryEntry } from "./registry";
 import type { CheckResult } from "./result";
 import type pg from "pg";
 import { assertNonPrivilegedRole } from "./guard";
-import { DEFAULT_SCHEMA, entrySchema } from "./registry";
+import { DEFAULT_SCHEMA, entrySchema, tenancyAllowList } from "./registry";
 import { toResult } from "./result";
 
 type TenantTableRow = { table_name: string; rls_enabled: boolean; rls_forced: boolean; has_policy: boolean };
@@ -17,6 +17,7 @@ export async function runCoverageCheck(
 	db: pg.Pool,
 	registry: readonly RegistryEntry[],
 	schema: string = DEFAULT_SCHEMA,
+	allowList: readonly AllowListEntry[] = tenancyAllowList,
 ): Promise<CheckResult & { tenantTables: string[] }> {
 	await assertNonPrivilegedRole(db);
 	const { rows } = await db.query<TenantTableRow>(
@@ -35,13 +36,28 @@ export async function runCoverageCheck(
 	);
 
 	const registered = new Set(registry.filter((e) => entrySchema(e) === schema).map((e) => e.table));
+	const allowed = new Set(allowList.filter((e) => (e.schema ?? DEFAULT_SCHEMA) === schema).map((e) => e.table));
 	const failures: string[] = [];
+	for (const entry of allowList) {
+		if (entry.reason.trim() === "")
+			failures.push(`${entry.schema ?? DEFAULT_SCHEMA}.${entry.table}: allow-list entry has no reason`);
+	}
+	for (const table of allowed) {
+		if (registered.has(table))
+			failures.push(`${schema}.${table}: is both in the isolation registry and on the allow-list`);
+	}
 	for (const row of rows) {
 		const name = `${schema}.${row.table_name}`;
+		if (allowed.has(row.table_name)) continue;
 		if (!registered.has(row.table_name))
 			failures.push(`${name}: has organization_id but is not in the isolation registry`);
 		if (!row.rls_enabled) failures.push(`${name}: row level security is not enabled`);
 		if (!row.has_policy) failures.push(`${name}: has no row level security policy`);
+		if (registered.has(row.table_name) && !row.rls_forced)
+			failures.push(`${name}: FORCE ROW LEVEL SECURITY is not set`);
 	}
-	return { ...toResult(failures), tenantTables: rows.map((r) => r.table_name) };
+	return {
+		...toResult(failures),
+		tenantTables: rows.filter((r) => !allowed.has(r.table_name)).map((r) => r.table_name),
+	};
 }
