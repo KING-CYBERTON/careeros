@@ -76,6 +76,7 @@ jobs:
       # CAREEROS: used by P0-Q01 (owner and careeros_app connections); unused until it lands.
       CAREEROS_TEST_DATABASE_URL: postgresql://postgres:postgres@localhost:5432/postgres
       CAREEROS_TEST_APP_DATABASE_URL: postgresql://careeros_app:careeros_app@localhost:5432/postgres
+      CAREEROS_TEST_APP_ROLE_PASSWORD: careeros_app
     services:
       postgres:
         image: postgres:16
@@ -125,7 +126,7 @@ jobs:
       # CAREEROS: runs only once P0-Q01 adds the script, so this workflow can merge first.
       - name: Create test database roles (if present)
         run: |
-          if node -e "const p=require('./packages/testing/package.json'); process.exit(p.scripts && p.scripts['db:test-role'] ? 0 : 1)" 2>/dev/null; then
+          if node -e "const p=require('./packages/careeros-testing/package.json'); process.exit(p.scripts && p.scripts['db:test-role'] ? 0 : 1)" 2>/dev/null; then
             pnpm --filter @careeros/testing db:test-role
           else
             echo "db:test-role not present yet; skipping"
