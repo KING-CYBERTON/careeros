@@ -73,6 +73,8 @@
 - Docs sync 4 (P1 specs, C03 review) — [#15](https://github.com/KING-CYBERTON/careeros/pull/15), `60c05df`
 - P1-C01 Database role split — [#16](https://github.com/KING-CYBERTON/careeros/pull/16), `17d7b35`
 - P1-T01 Organization plugin — [#17](https://github.com/KING-CYBERTON/careeros/pull/17), `4305b64`
+- Docs sync 5 — [#18](https://github.com/KING-CYBERTON/careeros/pull/18), `c07c83c`
+- P1-T02 Tenancy core — [#19](https://github.com/KING-CYBERTON/careeros/pull/19), `a476784`
 
 All 2026-10-31.
 

@@ -59,3 +59,17 @@ H1 should make e2e pass. Run at least `tests/e2e/specs/auth.spec.ts` and one res
 ## Accepted deviations
 
 `resolveOrgForAuthentication` living in `@careeros/tenancy` is accepted. The shared `vitest.org.setup.ts` with `extraSetupFiles` is accepted.
+
+## Re-review (commit `6689134fe`)
+
+**Verdict: Approved. Merge after green careeros-ci.**
+
+- **C1 fixed.** The scope is closed before the reset and release. `db`, `getPool()` and a nested `withOrgContext` throw `scope_closed` from a closed scope, and none of them falls back to the global pool. The tests cover a timer, a generator resumed from a timer, and a generator resumed by the caller, which runs in the caller's context.
+- **H1 fixed.** `ORG_CONTEXT_REQUIRED = false` is tested in both states for oRPC and MCP. The comment that hands the flip to T04 is in place.
+- **M1 fixed.** `connect()` inside a scope now throws `connect_in_scope`.
+- **M2:** e2e could not run in the sandbox (no turbo, no browser download). CI is the gate.
+- Note for T04: flipping `ORG_CONTEXT_REQUIRED` must update the shared test helpers. They already mock it as `true`.
+
+## Re-review 2 (commit `464cf6313`)
+
+**H2 (High, found by CI e2e): fixed.** `apps/server/tsdown.config.ts` only bundled `@reactive-resume/*`, so the built server loaded `@careeros/tenancy` from TypeScript source and crashed on startup. `shouldBundle` now also matches `@careeros/`. The Vercel and Cloudflare builds use the same config. Verified locally: a clean tsdown build, the server starts, and `/api/health` returns 200. Still approved, merge after green CI.
