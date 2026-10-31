@@ -36,7 +36,7 @@
 
 ## Watch list
 
-- `tests/e2e/specs/library-pagination.spec.ts:201` failed once on #9 (alert not visible in 20 s), passed on rerun and on all other PRs. If it recurs, Opus writes a spec to make the wait robust (no skip).
+- `tests/e2e/specs/library-pagination.spec.ts:201` failed on #9 and #10 (docs-only): alert not visible in 20 s. Root-cause task [P0-Q03](plans/P0-Q03-e2e-tag-filter-flake.md) assigned to Thread 2.
 
 ## Planning docs
 
