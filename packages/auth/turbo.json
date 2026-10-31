@@ -1,4 +1,20 @@
 {
 	"extends": ["//"],
-	"tags": ["runtime:server", "role:infra"]
+	"tags": ["runtime:server", "role:infra"],
+	// CAREEROS: P1-C05. The organization and personal-org integration tests create disposable databases on a live
+	// Postgres, so a cached pass proves nothing about the current migrations: test:ci is never cached here.
+	// COVER_LETTER_TEST_DATABASE_URL is passed through explicitly; without it Turborepo strict env mode hid it from
+	// the task and those integration suites were skipped in CI.
+	"tasks": {
+		"test": {
+			"env": ["$TURBO_EXTENDS$", "COVER_LETTER_TEST_DATABASE_URL"]
+		},
+		"test:coverage": {
+			"env": ["$TURBO_EXTENDS$", "COVER_LETTER_TEST_DATABASE_URL"]
+		},
+		"test:ci": {
+			"cache": false,
+			"env": ["$TURBO_EXTENDS$", "COVER_LETTER_TEST_DATABASE_URL"]
+		}
+	}
 }

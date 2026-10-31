@@ -3,13 +3,16 @@ import { defineConfig, devices } from "@playwright/test";
 const port = Number.parseInt(process.env.PORT ?? "3000", 10);
 const baseURL = process.env.APP_URL ?? `http://localhost:${port}`;
 const isCI = process.env.CI === "true" || process.env.CI === "1";
+// CAREEROS: P1-C05. CI worker count comes from PLAYWRIGHT_WORKERS (default 1); an invalid value falls back to 1.
+const requestedWorkers = Number.parseInt(process.env.PLAYWRIGHT_WORKERS ?? "", 10);
+const ciWorkers = Number.isInteger(requestedWorkers) && requestedWorkers >= 1 ? requestedWorkers : 1;
 
 export default defineConfig({
 	testDir: "./tests/e2e/specs",
 	fullyParallel: true,
 	forbidOnly: isCI,
 	retries: 0,
-	workers: isCI ? 1 : undefined,
+	workers: isCI ? ciWorkers : undefined, // CAREEROS: P1-C05 (was `isCI ? 1 : undefined`)
 	timeout: 30_000,
 	expect: {
 		timeout: 10_000,

@@ -19,6 +19,43 @@ env:
   FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
 
 jobs:
+  # CAREEROS: P1-C05. Decides whether the heavy jobs run their steps. Plain git and bash, no third-party action.
+  changes:
+    name: changes
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    outputs:
+      code: ${{ steps.detect.outputs.code }}
+    steps:
+      - name: Check out source
+        uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+
+      - name: Detect docs-only change
+        id: detect
+        env:
+          EVENT_NAME: ${{ github.event_name }}
+          PR_BASE_SHA: ${{ github.event.pull_request.base.sha }}
+          PUSH_BEFORE_SHA: ${{ github.event.before }}
+        run: |
+          set -uo pipefail
+          # Anything unclear falls back to code=true so no code change ever skips tests.
+          fallback() { echo "$1; running the full checks"; echo "code=true" >> "$GITHUB_OUTPUT"; exit 0; }
+          case "$EVENT_NAME" in
+            pull_request) base="$PR_BASE_SHA" ;;
+            push) base="$PUSH_BEFORE_SHA" ;;
+            *) fallback "event $EVENT_NAME has no base" ;;
+          esac
+          if [ -z "$base" ] || [[ "$base" =~ ^0+$ ]]; then fallback "no usable base commit"; fi
+          git fetch --no-tags --depth=1 origin "$base" || fallback "could not fetch base $base"
+          # --no-renames lists both sides of a rename, so moving code into docs/ still counts as code.
+          git -c core.quotepath=off diff --name-only --no-renames "$base" HEAD > changed-files.txt || fallback "git diff failed"
+          echo "Changed files:"
+          cat changed-files.txt
+          result="$(bash tooling/ci/classify-changes.sh < changed-files.txt)" || fallback "classifier failed"
+          echo "$result" | tee -a "$GITHUB_OUTPUT"
+
   static:
     name: static
     runs-on: ubuntu-latest
@@ -38,6 +75,15 @@ jobs:
           node-version-file: ".nvmrc"
           cache: "pnpm"
 
+      # CAREEROS: P1-C05. Persist Turborepo's local cache across runs. Live-database test:ci tasks opt out in turbo.json.
+      - name: Restore and save Turbo cache
+        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        with:
+          path: .turbo/cache
+          key: ${{ runner.os }}-turbo-${{ github.job }}-${{ hashFiles('pnpm-lock.yaml', '.nvmrc') }}-${{ github.sha }}
+          restore-keys: |
+            ${{ runner.os }}-turbo-${{ github.job }}-${{ hashFiles('pnpm-lock.yaml', '.nvmrc') }}-
+
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
@@ -55,6 +101,7 @@ jobs:
 
   unit:
     name: unit
+    needs: changes
     runs-on: ubuntu-latest
     timeout-minutes: 30
     env:
@@ -92,39 +139,64 @@ jobs:
           --health-timeout 5s
           --health-retries 5
     steps:
+      # CAREEROS: P1-C05. The job still runs and reports success on a docs-only change, because branch protection
+      # requires it by name. Every other step is guarded by the same condition.
+      - name: Docs-only change
+        if: needs.changes.outputs.code != 'true'
+        run: echo "docs-only change, tests skipped"
+
       - name: Check out source
+        if: needs.changes.outputs.code == 'true'
         uses: actions/checkout@v7
         with:
           persist-credentials: false
 
       - name: Install pnpm
+        if: needs.changes.outputs.code == 'true'
         uses: pnpm/action-setup@v6
 
       - name: Set up Node.js
+        if: needs.changes.outputs.code == 'true'
         uses: actions/setup-node@v7
         with:
           node-version-file: ".nvmrc"
           cache: "pnpm"
 
+      # CAREEROS: P1-C05. Persist Turborepo's local cache across runs. Live-database test:ci tasks opt out in turbo.json.
+      - name: Restore and save Turbo cache
+        if: needs.changes.outputs.code == 'true'
+        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        with:
+          path: .turbo/cache
+          key: ${{ runner.os }}-turbo-${{ github.job }}-${{ hashFiles('pnpm-lock.yaml', '.nvmrc') }}-${{ github.sha }}
+          restore-keys: |
+            ${{ runner.os }}-turbo-${{ github.job }}-${{ hashFiles('pnpm-lock.yaml', '.nvmrc') }}-
+
       - name: Install dependencies
+        if: needs.changes.outputs.code == 'true'
         run: pnpm install --frozen-lockfile
 
       - name: Install PDF text extraction tools
+        if: needs.changes.outputs.code == 'true'
         run: sudo apt-get update && sudo apt-get install -y poppler-utils
 
       - name: Prepare test storage
+        if: needs.changes.outputs.code == 'true'
         run: mkdir -p "$LOCAL_STORAGE_PATH"
 
       - name: Migrate test database
+        if: needs.changes.outputs.code == 'true'
         run: pnpm db:migrate
 
       - name: Create and migrate OAuth test database
+        if: needs.changes.outputs.code == 'true'
         run: |
           psql "$DATABASE_URL" -c "CREATE DATABASE oauth_test"
           DATABASE_URL="$OAUTH_TEST_DATABASE_URL" pnpm db:migrate
 
       # CAREEROS: runs only once P0-Q01 adds the script, so this workflow can merge first.
       - name: Create test database roles (if present)
+        if: needs.changes.outputs.code == 'true'
         run: |
           if node -e "const p=require('./packages/careeros-testing/package.json'); process.exit(p.scripts && p.scripts['db:test-role'] ? 0 : 1)" 2>/dev/null; then
             pnpm --filter @careeros/testing db:test-role
@@ -133,16 +205,17 @@ jobs:
           fi
 
       - name: Run unit tests (mobile excluded)
-        run: pnpm exec turbo run test:ci --concurrency=1 --filter=!mobile
+        if: needs.changes.outputs.code == 'true'
+        run: pnpm exec turbo run test:ci --concurrency=3 --filter=!mobile
 
       # CAREEROS: P1-C02. Per-package counts on the run page. The script catches its own errors and exits 0.
       - name: Test summary
-        if: always()
+        if: ${{ always() && needs.changes.outputs.code == 'true' }}
         run: node tooling/ci/junit-summary.mjs
 
       # CAREEROS: P1-C02
       - name: Upload unit JUnit reports
-        if: always()
+        if: ${{ always() && needs.changes.outputs.code == 'true' }}
         uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
           name: unit-junit
@@ -154,7 +227,7 @@ jobs:
 
   e2e:
     name: e2e
-    needs: static
+    needs: [changes, static]
     runs-on: ubuntu-latest
     timeout-minutes: 40
     env:
@@ -193,44 +266,70 @@ jobs:
           --health-timeout 5s
           --health-retries 5
     steps:
+      # CAREEROS: P1-C05. The job still runs and reports success on a docs-only change, because branch protection
+      # requires it by name. Every other step is guarded by the same condition.
+      - name: Docs-only change
+        if: needs.changes.outputs.code != 'true'
+        run: echo "docs-only change, tests skipped"
+
       - name: Check out source
+        if: needs.changes.outputs.code == 'true'
         uses: actions/checkout@v7
         with:
           persist-credentials: false
 
       - name: Install pnpm
+        if: needs.changes.outputs.code == 'true'
         uses: pnpm/action-setup@v6
 
       - name: Set up Node.js
+        if: needs.changes.outputs.code == 'true'
         uses: actions/setup-node@v7
         with:
           node-version-file: ".nvmrc"
           cache: "pnpm"
 
+      # CAREEROS: P1-C05. Persist Turborepo's local cache across runs. Live-database test:ci tasks opt out in turbo.json.
+      - name: Restore and save Turbo cache
+        if: needs.changes.outputs.code == 'true'
+        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        with:
+          path: .turbo/cache
+          key: ${{ runner.os }}-turbo-${{ github.job }}-${{ hashFiles('pnpm-lock.yaml', '.nvmrc') }}-${{ github.sha }}
+          restore-keys: |
+            ${{ runner.os }}-turbo-${{ github.job }}-${{ hashFiles('pnpm-lock.yaml', '.nvmrc') }}-
+
       - name: Install dependencies
+        if: needs.changes.outputs.code == 'true'
         run: pnpm install --frozen-lockfile
 
       - name: Install PDF text extraction tools
+        if: needs.changes.outputs.code == 'true'
         run: sudo apt-get update && sudo apt-get install -y poppler-utils
 
       - name: Install Chromium and browser dependencies
+        if: needs.changes.outputs.code == 'true'
         timeout-minutes: 10
         run: pnpm exec playwright install --with-deps chromium
 
       - name: Prepare test storage
+        if: needs.changes.outputs.code == 'true'
         run: mkdir -p "$LOCAL_STORAGE_PATH"
 
       # CAREEROS: P1-C01. Run twice on purpose: the bootstrap must be idempotent.
       - name: Create database roles (careeros_owner, careeros_app)
+        if: needs.changes.outputs.code == 'true'
         run: |
           infra/db/bootstrap-roles.sh
           infra/db/bootstrap-roles.sh
 
       # CAREEROS: P1-C01. drizzle.config.ts reads only DATABASE_URL, so the migration URL is passed in for this step only.
       - name: Migrate test database (as careeros_owner)
+        if: needs.changes.outputs.code == 'true'
         run: DATABASE_URL="$DATABASE_MIGRATION_URL" pnpm db:migrate
 
       - name: Assert the app role is least-privilege
+        if: needs.changes.outputs.code == 'true'
         run: |
           set -euo pipefail
           row="$(psql "$DATABASE_URL" -v ON_ERROR_STOP=1 -Atc "select current_user, rolsuper, rolbypassrls from pg_roles where rolname = current_user")"
@@ -241,13 +340,15 @@ jobs:
           test "$tables" -gt 0 || { echo "no tables found in public after migration" >&2; exit 1; }
 
       - name: Build application
+        if: needs.changes.outputs.code == 'true'
         run: pnpm build
 
       - name: Run browser tests
-        run: pnpm exec playwright test --workers=1
+        if: needs.changes.outputs.code == 'true'
+        run: pnpm exec playwright test --workers=3
 
       - name: Upload browser test reports and traces
-        if: failure()
+        if: ${{ failure() && needs.changes.outputs.code == 'true' }}
         uses: actions/upload-artifact@v7
         with:
           name: playwright-report
