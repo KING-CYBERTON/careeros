@@ -20,3 +20,45 @@ This is a solid implementation. The skip rule for invited sign-ups needs both th
 ## Notes for P1-T04
 
 Users who signed up through an invitation and never accepted have no org. After T04 they reach only the allow-listed procedures and the "accept your invitation" notice. That is intended.
+
+## Re-review (commit `861956d`)
+
+**M1 fixed.** Deletion is now refused only when the user is the last owner of an org with other members. The tests cover both the allow and refuse cases. Q14 to Q18 are recorded. **Approved, merge after green careeros-ci.** The unit job may hit the unrelated cleanup deadlock that P1-Q04 fixes. If it does, check that the failure is in the lanes, career or documents cleanup `beforeEach` and not in T03 code.
+
+## Review 2: CI e2e on `861956d` (7 failures)
+
+T03 is the first change that gives every user an org, so request scopes are now real. That turns on the scope-outliving call sites listed in P1-T02 review C1.
+
+### H1 (High): agent and career-coach work after the request ends fails with `scope_closed`
+
+The assistant specs (3) and career-coach specs (3) fail. The server logs `[agent] Failed to persist step draft { name: 'TenancyError' }`. Here is why:
+
+- The agent stream (`agent/service.ts`, `onStepFinish` and the final persistence) keeps running after the oRPC handler returns.
+- Its callbacks were created inside the request's `withOrgContext`, so they inherit the scope, which is now closed.
+- The guard correctly refuses to use the released client.
+
+**Fix (Opus design, part of this PR because T03 is what activates it):**
+
+1. In `@careeros/tenancy`, add `captureOrgScope(): <T>(fn: () => Promise<T>) => Promise<T>`.
+   - When called inside an open scope, it records `currentOrgId()`. With no scope it records `undefined`.
+   - The returned runner exits the current tenancy store and the db request store, using `AsyncLocalStorage.exit` or a new exported `withoutDatabaseScope` helper next to `withDatabaseClient`.
+   - It then runs `fn` in a **fresh** `withOrgContext(orgId)`, or with no scope when nothing was recorded, which keeps `ORG_CONTEXT_REQUIRED = false` behaviour.
+   - Each call checks out its own client briefly. Never hold a client for the whole stream.
+2. Use it wherever work continues after the handler returns. Capture at handler start, and wrap each write.
+   - `agent/service.ts`: step-draft persistence, final message persistence, run status updates, and the run-timeout and cancellation paths that write to the DB.
+   - The career-coach paths that the career specs exercise. Trace them from the failing specs: "Thanks. I'll use your answer…" and "Story decision received.".
+   - Any other write that the failing specs show. List every call site in UPSTREAM_PATCHES (the "can outlive a scope" section) and mark each as fixed.
+3. Tests:
+   - A tenancy unit or integration test: a runner captured in scope A and invoked after A closed sees org A in a fresh scope, and so does a second invocation. Each invocation checks out and releases its own client.
+   - One with nothing captured runs unscoped.
+   - An api-level test that drives the agent step-persist path after the handler returned, if feasible with the existing agent test doubles.
+
+### M1 (Medium): concurrent queries on one scoped client
+
+The server logged `Calling client.query() when the client is already executing a query`. Inside a scope, `Promise.all` over `db` calls now shares one client. pg queues them, so this is correct today, but pg 9 removes the queueing.
+
+Don't change behaviour in this PR. Add a row to docs/questions.md (Q20) with the call sites you can identify from the log or a grep for `Promise.all` in protected handlers. Opus will plan the follow-up.
+
+### M2 (Medium): `organization.spec.ts:73`, invalid invitation shows the wrong state
+
+The `authPage` user is unverified, so the page probably renders "Verify your email first" before it checks the invitation. Check the invitation first. A missing, expired or foreign invitation shows "Invitation unavailable" whatever the verification state. Show the verify state only for a valid invitation addressed to this user. If Better Auth refuses to read the invitation for unverified users, handle that error as "unavailable" only when the invitation truly doesn't exist, and explain the choice. Then fix the spec if needed.

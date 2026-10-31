@@ -21,7 +21,7 @@ export function AcceptInvitationPage({ invitationId }: AcceptInvitationPageProps
 	const { session } = useRouteContext({ strict: false });
 	// A guest session cannot receive an invitation addressed to an email, so it signs in or registers first.
 	if (!session || session.user.isAnonymous) return <SignedOut invitationId={invitationId} />;
-	return <SignedIn invitationId={invitationId} email={session.user.email} emailVerified={session.user.emailVerified} />;
+	return <SignedIn invitationId={invitationId} email={session.user.email} />;
 }
 
 function SignedOut({ invitationId }: AcceptInvitationPageProps) {
@@ -50,9 +50,9 @@ function SignedOut({ invitationId }: AcceptInvitationPageProps) {
 	);
 }
 
-type SignedInProps = AcceptInvitationPageProps & { email: string; emailVerified: boolean };
+type SignedInProps = AcceptInvitationPageProps & { email: string };
 
-function SignedIn({ invitationId, email, emailVerified }: SignedInProps) {
+function SignedIn({ invitationId, email }: SignedInProps) {
 	const navigate = useNavigate();
 	const router = useRouter();
 	const queryClient = useQueryClient();
@@ -99,8 +99,10 @@ function SignedIn({ invitationId, email, emailVerified }: SignedInProps) {
 
 	if (error || !invitation) {
 		const code = (error as { code?: string } | null)?.code;
-		if (code?.includes("EMAIL_VERIFICATION") || (!emailVerified && code !== "INVITATION_NOT_FOUND"))
-			return <VerifyEmail email={email} invitationId={invitationId} />;
+		// The server reads the invitation first, and only a valid one addressed to this user reaches its verification
+		// check. So the verify state is shown for that error code alone; a missing, expired or foreign invitation
+		// is "unavailable" whatever the user's verification state.
+		if (code?.includes("EMAIL_VERIFICATION")) return <VerifyEmail email={email} invitationId={invitationId} />;
 		return <InvitationProblem code={code} />;
 	}
 

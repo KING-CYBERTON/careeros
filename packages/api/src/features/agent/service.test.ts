@@ -991,6 +991,13 @@ describe("agentService.messages.send", () => {
 			messages: [],
 		});
 
+		// P1-T03: the final write runs through the runner captured when the request started, because onFinish runs
+		// after the request's organization scope has closed.
+		const { captureOrgScope } = await import("@careeros/tenancy");
+		const runner = vi.mocked(captureOrgScope).mock.results.at(-1)?.value as ReturnType<typeof vi.fn> | undefined;
+		expect(runner).toBeDefined();
+		expect(runner).toHaveBeenCalled();
+
 		expect(messagesPersistenceMock.insertDraftAssistantMessage).not.toHaveBeenCalled();
 		expect(dbMock.insert).not.toHaveBeenCalled();
 		expect(messagesPersistenceMock.upsertAssistantUiMessage).toHaveBeenCalledWith(
