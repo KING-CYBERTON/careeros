@@ -1,7 +1,7 @@
 import type { Locale } from "@reactive-resume/utils/locale";
 import type { User } from "better-auth";
 // CAREEROS: tenant context for every protected procedure (P1-T02)
-import { resolveOrgForAuthentication, withOrgContext } from "@careeros/tenancy";
+import { ORG_CONTEXT_REQUIRED, resolveOrgForAuthentication, withOrgContext } from "@careeros/tenancy";
 import { ORPCError, os } from "@orpc/server";
 import { eq } from "drizzle-orm";
 import { auth, verifyOAuthToken } from "@reactive-resume/auth/config";
@@ -185,6 +185,11 @@ export const protectedProcedureWithoutOrg = publicProcedure
 // CAREEROS: resolves the organization and runs the handler inside withOrgContext (P1-T02)
 export const protectedProcedure = protectedProcedureWithoutOrg.use(async ({ context, next }) => {
 	const organizationId = context.authentication ? await resolveOrgForAuthentication(context.authentication) : undefined;
-	if (!organizationId) throw new ORPCError("FORBIDDEN", { message: "No active organization" });
-	return withOrgContext(organizationId, () => Promise.resolve(next({ context: { ...context, organizationId } })));
+	const nextContext = { ...context, organizationId: organizationId as string | undefined };
+	if (!organizationId) {
+		// CAREEROS: enforcement is off until P1-T04 (see ORG_CONTEXT_REQUIRED); then the handler runs without a scope.
+		if (ORG_CONTEXT_REQUIRED) throw new ORPCError("FORBIDDEN", { message: "No active organization" });
+		return next({ context: nextContext });
+	}
+	return withOrgContext(organizationId, () => Promise.resolve(next({ context: nextContext })));
 });

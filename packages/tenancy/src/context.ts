@@ -6,7 +6,7 @@ import { TenancyError } from "./errors";
 const ORG_ID_PATTERN = /^[A-Za-z0-9_-]{1,64}$/;
 const SETTING = "app.current_org_id";
 
-type OrgScope = { orgId: string; client: PoolClient };
+type OrgScope = { orgId: string; client: PoolClient; closed: boolean };
 const scopes = new AsyncLocalStorage<OrgScope>();
 
 /** The organization of the active `withOrgContext` scope, or `undefined` outside one. */
@@ -26,19 +26,24 @@ export async function withOrgContext<T>(orgId: string, fn: () => Promise<T>): Pr
 
 	const active = scopes.getStore();
 	if (active) {
+		// A continuation that outlived its scope must not borrow the released client.
+		if (active.closed) throw new TenancyError("scope_closed");
 		if (active.orgId !== orgId) throw new TenancyError("org_switch_in_scope");
 		return fn();
 	}
 
 	const client = await getPool().connect();
+	const scope: OrgScope = { orgId, client, closed: false };
 	let failure: Error | undefined;
 	try {
 		await client.query("select set_config($1, $2, false)", [SETTING, orgId]);
-		return await scopes.run({ orgId, client }, () => withDatabaseClient(client, fn));
+		return await scopes.run(scope, () => withDatabaseClient(client, fn, scope));
 	} catch (error) {
 		failure = error instanceof Error ? error : new Error(String(error));
 		throw error;
 	} finally {
+		// Close first: from here on any leftover continuation fails instead of using a client the pool may hand out.
+		scope.closed = true;
 		if (!failure) {
 			try {
 				await client.query("select set_config($1, '', false)", [SETTING]);

@@ -7,6 +7,7 @@ import { vi } from "vite-plus/test";
 export const TEST_ORGANIZATION_ID = "org_test";
 
 vi.mock("@careeros/tenancy", () => ({
+	ORG_CONTEXT_REQUIRED: true,
 	TenancyError: class TenancyError extends Error {},
 	currentOrgId: () => TEST_ORGANIZATION_ID,
 	resolveOrgForAuthentication: () => Promise.resolve(TEST_ORGANIZATION_ID),

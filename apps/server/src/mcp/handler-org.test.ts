@@ -7,6 +7,7 @@ const mocks = vi.hoisted(() => ({
 	resolveOrg: vi.fn(),
 	withOrg: vi.fn(),
 	inScope: false,
+	required: true,
 }));
 vi.mock("@reactive-resume/env/server", () => ({ env: { APP_URL: "https://resume.example" } }));
 vi.mock("@reactive-resume/api/context", () => ({ resolveAuthenticationFromRequestHeaders: mocks.authentication }));
@@ -16,6 +17,9 @@ vi.mock("@reactive-resume/api/features/mcp/transport", () => ({
 }));
 // Declared here, this mock replaces the shared one from vitest.org.setup.ts.
 vi.mock("@careeros/tenancy", () => ({
+	get ORG_CONTEXT_REQUIRED() {
+		return mocks.required;
+	},
 	resolveOrgForAuthentication: mocks.resolveOrg,
 	withOrgContext: mocks.withOrg,
 }));
@@ -31,6 +35,7 @@ beforeEach(() => {
 	mocks.limit.mockResolvedValue(undefined);
 	mocks.authentication.mockResolvedValue(authentication);
 	mocks.inScope = false;
+	mocks.required = true;
 	mocks.withOrg.mockImplementation(async (_org: string, fn: () => Promise<unknown>) => {
 		mocks.inScope = true;
 		try {
@@ -75,6 +80,14 @@ it("refuses the request with 403 when no organization resolves", async () => {
 	expect(await response.text()).toContain("No active organization");
 	expect(mocks.withOrg).not.toHaveBeenCalled();
 	expect(createServer).not.toHaveBeenCalled();
+});
+
+it("handles the request without a scope when no organization resolves and enforcement is off", async () => {
+	mocks.required = false;
+	mocks.resolveOrg.mockResolvedValue(undefined);
+	const response = await handleMcp(initialize(), "127.0.0.1");
+	expect(response.status).toBe(200);
+	expect(mocks.withOrg).not.toHaveBeenCalled();
 });
 
 it("conceals a failure raised inside the organization scope", async () => {

@@ -152,6 +152,107 @@ describe.skipIf(!configured)("tenancy core (real Postgres)", () => {
 		});
 	});
 
+	describe("continuations that outlive the scope", () => {
+		it("fails a timer that queries after its scope ended, without touching another org's scope", async () => {
+			let timerOutcome: Promise<unknown> | undefined;
+			let timerFired!: () => void;
+			const fired = new Promise<void>((resolve) => {
+				timerFired = resolve;
+			});
+			await tenancy.withOrgContext("org_a", async () => {
+				timerOutcome = new Promise((resolve) => {
+					setTimeout(() => {
+						settingViaDb().then(
+							(value) => resolve({ value }),
+							(error: unknown) => resolve({ error }),
+						);
+						timerFired();
+					}, 40);
+				});
+				return "done";
+			});
+			// Another org's scope is active (and likely holds the very same pooled client) when the timer fires.
+			const seenByOther = await tenancy.withOrgContext("org_b", async () => {
+				await fired;
+				await new Promise((resolve) => setTimeout(resolve, 20));
+				return settingViaDb();
+			});
+			const outcome = (await timerOutcome) as { value?: string | null; error?: { code?: string } };
+			expect(outcome.value).toBeUndefined();
+			expect(outcome.error?.code).toBe("scope_closed");
+			expect(seenByOther).toBe("org_b");
+		});
+
+		it("fails getPool() and a nested withOrgContext from a closed scope", async () => {
+			const outcome = new Promise<{ pool?: string | undefined; nested?: string | undefined }>((resolve) => {
+				void tenancy
+					.withOrgContext("org_a", async () => {
+						setTimeout(() => {
+							const result: { pool?: string | undefined; nested?: string | undefined } = {};
+							try {
+								void client.getPool().query("select 1");
+							} catch (error) {
+								result.pool = (error as { code?: string }).code;
+							}
+							tenancy
+								.withOrgContext("org_a", async () => "x")
+								.catch((error: { code?: string }) => {
+									result.nested = error.code;
+								})
+								.finally(() => resolve(result));
+						}, 20);
+					})
+					.catch(() => {});
+			});
+			await expect(outcome).resolves.toEqual({ pool: "scope_closed", nested: "scope_closed" });
+		});
+
+		it("fails an async generator created in a scope and resumed from a continuation of that scope later", async () => {
+			let generator!: AsyncGenerator<string | null>;
+			const outcome = new Promise<{ error?: { code?: string }; value?: unknown }>((resolve) => {
+				void tenancy.withOrgContext("org_a", async () => {
+					generator = (async function* () {
+						yield await settingViaDb();
+					})();
+					setTimeout(() => {
+						generator.next().then(
+							(value) => resolve({ value }),
+							(error: { code?: string }) => resolve({ error }),
+						);
+					}, 30);
+				});
+			});
+			const result = await outcome;
+			expect(result.value).toBeUndefined();
+			expect(result.error?.code).toBe("scope_closed");
+		});
+
+		it("does not let a generator resumed outside any scope see the org's context", async () => {
+			const generator = await tenancy.withOrgContext("org_a", async () =>
+				(async function* () {
+					yield await setting();
+				})(),
+			);
+			// Resumed by the caller, outside the scope: it runs on the global pool with no organization.
+			const first = await generator.next();
+			expect(first.value === null || first.value === "").toBe(true);
+		});
+	});
+
+	describe("getPool() inside a scope", () => {
+		it("refuses connect() with a clear error and still serves queries", async () => {
+			await tenancy.withOrgContext("org_a", async () => {
+				expect(() => client.getPool().connect()).toThrowError(/withOrgContext/);
+				try {
+					client.getPool().connect();
+				} catch (error) {
+					expect((error as { code?: string }).code).toBe("connect_in_scope");
+				}
+				expect(await setting()).toBe("org_a");
+			});
+		});
+	});
+
 	it.each(["", "a".repeat(65), "has space", "semi;colon", "quote'", "ünï", "a/b"])(
 		"rejects invalid org id %j",
 		async (orgId) => {

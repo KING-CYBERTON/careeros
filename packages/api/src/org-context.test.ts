@@ -7,6 +7,7 @@ const tenancy = vi.hoisted(() => ({
 	resolveOrgForAuthentication: vi.fn(),
 	withOrgContext: vi.fn(),
 	inScope: false,
+	required: true,
 }));
 
 vi.mock("@reactive-resume/auth/config", () => ({ auth: authMock, verifyOAuthToken: vi.fn() }));
@@ -15,6 +16,9 @@ vi.mock("@reactive-resume/db/schema", () => ({ user: { __table: "user" } }));
 vi.mock("drizzle-orm", () => ({ eq: () => "EQ" }));
 // Declared here, this mock replaces the shared one from vitest.org.setup.ts.
 vi.mock("@careeros/tenancy", () => ({
+	get ORG_CONTEXT_REQUIRED() {
+		return tenancy.required;
+	},
 	resolveOrgForAuthentication: tenancy.resolveOrgForAuthentication,
 	withOrgContext: tenancy.withOrgContext,
 }));
@@ -38,6 +42,7 @@ const reset = () => {
 	tenancy.resolveOrgForAuthentication.mockReset();
 	tenancy.withOrgContext.mockReset();
 	tenancy.inScope = false;
+	tenancy.required = true;
 	tenancy.withOrgContext.mockImplementation(async (_org: string, fn: () => Promise<unknown>) => {
 		tenancy.inScope = true;
 		try {
@@ -76,6 +81,33 @@ describe("protectedProcedure organization context", () => {
 		});
 		expect(handler).not.toHaveBeenCalled();
 		expect(tenancy.withOrgContext).not.toHaveBeenCalled();
+	});
+
+	it("runs the handler without a scope when no organization resolves and enforcement is off", async () => {
+		reset();
+		tenancy.required = false;
+		tenancy.resolveOrgForAuthentication.mockResolvedValue(undefined);
+		const call = client(
+			protectedProcedure.handler(({ context }) => ({
+				inScope: tenancy.inScope,
+				organizationId: (context as { organizationId?: string }).organizationId,
+			})),
+			authentication(),
+		);
+		await expect(call(undefined)).resolves.toEqual({ inScope: false, organizationId: undefined });
+		expect(tenancy.withOrgContext).not.toHaveBeenCalled();
+	});
+
+	it("still scopes the handler when an organization resolves and enforcement is off", async () => {
+		reset();
+		tenancy.required = false;
+		tenancy.resolveOrgForAuthentication.mockResolvedValue("org_a");
+		const call = client(
+			protectedProcedure.handler(() => tenancy.inScope),
+			authentication(),
+		);
+		await expect(call(undefined)).resolves.toBe(true);
+		expect(tenancy.withOrgContext).toHaveBeenCalledWith("org_a", expect.any(Function));
 	});
 
 	it("propagates handler errors out of the organization scope", async () => {
