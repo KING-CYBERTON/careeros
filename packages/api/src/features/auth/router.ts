@@ -22,6 +22,8 @@ import {
 } from "../../dto/career";
 import { resumeDto } from "../../dto/resume";
 import { accountRateLimit } from "../../middleware/rate-limit";
+// CAREEROS: API keys carry the creator's active organization (P1-T03)
+import { organizationForNewApiKey, setApiKeyOrganization } from "./api-key-org";
 import { authService } from "./service";
 
 const accountProcedure = protectedProcedureWithoutOrg.use(accountRateLimit).use(async ({ next }) => {
@@ -199,6 +201,8 @@ export const authRouter = {
 			if (context.authentication?.method !== "session")
 				throw new ORPCError("FORBIDDEN", { message: "Create API keys from Settings in a web browser." });
 			await assertRecentSignIn(context.reqHeaders);
+			// CAREEROS: membership-checked active organization, null without one (P1-T03)
+			const organizationId = await organizationForNewApiKey(context.authentication);
 			const result = await auth.api.createApiKey({
 				body: {
 					userId: context.user.id,
@@ -207,6 +211,8 @@ export const authRouter = {
 					permissions: { api: input.access === "read" ? ["read"] : ["read", "write", "delete"] },
 				},
 			});
+			// CAREEROS: store the organization on the new key (P1-T03)
+			if (organizationId) await setApiKeyOrganization(result.id, context.user.id, organizationId);
 			return { key: result.key };
 		}),
 

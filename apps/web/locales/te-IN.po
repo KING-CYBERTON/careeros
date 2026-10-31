@@ -89,6 +89,10 @@ msgstr "(ఐచ్ఛికం)"
 msgid "(required)"
 msgstr "(తప్పనిసరి)"
 
+#: src/features/organization/members-page.tsx
+msgid "(you)"
+msgstr ""
+
 #. placeholder {0}: applied.length
 #: src/features/resume/editor/proposals/proposals.ts
 msgid "{0, plural, =1 {Edit applied} other {# edits applied}}"
@@ -383,6 +387,12 @@ msgstr "{1}లో {0} అంటే మీ టైమ్ జోన్‌లో ({p
 msgid "{0} interview"
 msgstr "{0} ఇంటర్వ్యూ"
 
+#. placeholder {0}: invitation.inviterEmail
+#. placeholder {1}: getRoleLabel(invitation.role)
+#: src/features/auth/pages/accept-invitation.tsx
+msgid "{0} invited you to join as {1}."
+msgstr ""
+
 #. placeholder {0}: i18n.number(row.minutes)
 #. placeholder {0}: row.minutes
 #: src/features/career/workspace/prepare.tsx
@@ -449,11 +459,6 @@ msgstr "{0} జాబ్ పోస్టింగ్"
 #: src/features/assistant/conversation.tsx
 msgid "{0} returned “{1}”. Your message is kept."
 msgstr "{0} \"{1}\"ని తిరిగి ఇచ్చింది. మీ సందేశం ఉంచబడింది."
-
-#. placeholder {0}: done.length
-#: src/features/career/today.tsx
-msgid "{0} roles updated."
-msgstr ""
 
 #. placeholder {0}: selection.length
 #: src/features/career/today.tsx
@@ -1139,6 +1144,7 @@ msgstr "యాస రంగు"
 msgid "Accent is used for headings, icons and the header band. Body text stays near-black for print and ATS."
 msgstr "ముఖ్యాంశాలు, చిహ్నాలు మరియు హెడర్ బ్యాండ్ కోసం యాక్సెంట్ ఉపయోగించబడుతుంది. ప్రింట్ మరియు ATS కోసం బాడీ టెక్స్ట్ దాదాపు నలుపు రంగులో ఉంటుంది."
 
+#: src/features/auth/pages/accept-invitation.tsx
 #: src/features/career/workspace/apply.tsx
 #: src/features/homepage/write.tsx
 #: src/features/resume/editor/proposals/proposal-list.tsx
@@ -1148,6 +1154,10 @@ msgstr "అంగీకరించు"
 #: src/features/resume/editor/proposals/proposal-list.tsx
 msgid "Accept all"
 msgstr "అన్నింటినీ అంగీకరించండి"
+
+#: src/features/organization/no-organization-notice.tsx
+msgid "Accept your invitation"
+msgstr ""
 
 #: src/features/homepage/write.tsx
 msgid "Accepted"
@@ -1622,6 +1632,10 @@ msgstr "అప్పటికి మీకు స్పందన రాకపో
 msgid "Adjust fonts, colors, spacing and sections in the resume builder. Export your finished resume to PDF or Word, or share a link. The PDFs above are examples to help you compare designs."
 msgstr "CV బిల్డర్‌లో ఫాంట్‌లు, రంగులు, అంతరం మరియు విభాగాలను సర్దుబాటు చేయండి. మీ పూర్తయిన CVని PDF లేదా Microsoft Wordకి ఎగుమతి చేయండి లేదా లింక్‌ను భాగస్వామ్యం చేయండి. పైన ఉన్న PDF ఫైల్‌లు డిజైన్‌లను సరిపోల్చడంలో మీకు సహాయపడే ఉదాహరణలు."
 
+#: src/features/organization/roles.ts
+msgid "Admin"
+msgstr ""
+
 #: src/features/homepage/sections.tsx
 msgid "Ads"
 msgstr "ప్రకటనలు"
@@ -1851,6 +1865,10 @@ msgstr "ఎంట్రీకి తేదీలు లేవు"
 #: src/features/assistant/conversation.tsx
 msgid "an error"
 msgstr "ఒక లోపం"
+
+#: src/features/auth/pages/accept-invitation.tsx
+msgid "An invitation can only be accepted once your email address is verified."
+msgstr ""
 
 #: src/components/layout/error-screen.tsx
 msgid "An unexpected error stopped this page from loading. Try again, or go to the dashboard."
@@ -2640,6 +2658,7 @@ msgstr "సాఫ్ట్‌వేర్ మీ రెజ్యూమెను 
 #: src/features/career/workspace/fit.tsx
 #: src/features/career/workspace/preparation.tsx
 #: src/features/documents/new-document-dialog.tsx
+#: src/features/organization/members-page.tsx
 #: src/features/resume/builder/password-dialog.tsx
 #: src/features/resume/editor/check/job-match.tsx
 #: src/features/resume/editor/write/picture-settings.tsx
@@ -2649,6 +2668,11 @@ msgstr "సాఫ్ట్‌వేర్ మీ రెజ్యూమెను 
 #: src/hooks/use-confirm.tsx
 msgid "Cancel"
 msgstr "రద్దు చేయండి"
+
+#. placeholder {0}: invitation.email
+#: src/features/organization/members-page.tsx
+msgid "Cancel invitation for {0}"
+msgstr ""
 
 #: src/routes/dashboard/-components/app-shell.tsx
 #: src/routes/dashboard/career/route.tsx
@@ -3563,10 +3587,18 @@ msgstr "దరఖాస్తును జోడించలేకపోయా�
 msgid "Couldn't add the passkey. Try again."
 msgstr "పాస్‌కీని జోడించడం సాధ్యపడలేదు. మళ్లీ ప్రయత్నించండి."
 
+#: src/features/auth/pages/accept-invitation.tsx
+msgid "Couldn't answer the invitation. Try again."
+msgstr ""
+
 #: src/features/assistant/conversation.tsx
 #: src/features/career/coach-thread.tsx
 msgid "Couldn't attach the file. Try again."
 msgstr "ఫైల్‌ని అటాచ్ చేయడం సాధ్యపడలేదు. మళ్ళీ ప్రయత్నించండి."
+
+#: src/features/organization/members-page.tsx
+msgid "Couldn't cancel the invitation. Try again."
+msgstr ""
 
 #: src/routes/builder/letter/-components/design-panel.tsx
 msgid "Couldn't change the design. Try again."
@@ -3575,6 +3607,10 @@ msgstr "డిజైన్‌ని మార్చడం సాధ్యపడ�
 #: src/features/settings/account/profile.tsx
 msgid "Couldn't change the email. Try again."
 msgstr "ఇమెయిల్‌ను మార్చడం సాధ్యపడలేదు. మళ్లీ ప్రయత్నించండి."
+
+#: src/features/organization/members-page.tsx
+msgid "Couldn't change the role. Try again."
+msgstr ""
 
 #: src/features/career/workspace/prepare.tsx
 msgid "Couldn't change the schedule. Try again."
@@ -3771,6 +3807,10 @@ msgstr "పత్రాలను లోడ్ చేయడం సాధ్యప
 msgid "Couldn't load interviews. Retry"
 msgstr "ఇంటర్వ్యూలను లోడ్ చేయడం సాధ్యపడలేదు. మళ్లీ ప్రయత్నించండి"
 
+#: src/features/organization/members-page.tsx
+msgid "Couldn't load members"
+msgstr ""
+
 #: src/features/settings/ai/web-access.tsx
 msgid "Couldn't load or save web access settings. Try again."
 msgstr "వెబ్ యాక్సెస్ సెట్టింగ్‌లను లోడ్ చేయడం లేదా సేవ్ చేయడం సాధ్యపడలేదు. మళ్ళీ ప్రయత్నించండి."
@@ -3870,6 +3910,10 @@ msgstr "దాన్ని గుర్తుంచుకోవడం సాధ�
 #: src/features/career/today.tsx
 msgid "Couldn't remove it from Applications. Try again."
 msgstr "దరఖాస్తుల నుండి దాన్ని తీసివేయడం సాధ్యపడలేదు. మళ్ళీ ప్రయత్నించండి."
+
+#: src/features/organization/members-page.tsx
+msgid "Couldn't remove the member. Try again."
+msgstr ""
 
 #: src/features/settings/account/security.tsx
 msgid "Couldn't remove the passkey. Try again."
@@ -4004,9 +4048,14 @@ msgstr "సేవ్ చేయడం సాధ్యపడలేదు. మళ�
 msgid "Couldn't schedule the interview. Try again."
 msgstr "ఇంటర్వ్యూని షెడ్యూల్ చేయడం సాధ్యపడలేదు. మళ్ళీ ప్రయత్నించండి."
 
+#: src/features/auth/pages/accept-invitation.tsx
 #: src/features/settings/account/profile.tsx
 msgid "Couldn't send the email. Try again."
 msgstr "ఇమెయిల్ పంపడం సాధ్యపడలేదు. మళ్లీ ప్రయత్నించండి."
+
+#: src/features/organization/members-page.tsx
+msgid "Couldn't send the invitation. Try again."
+msgstr ""
 
 #. Fallback toast when requesting password reset email fails without backend message
 #: src/features/auth/pages/forgot-password.tsx
@@ -4062,6 +4111,10 @@ msgstr "కనెక్షన్‌లను మార్చడం సాధ్�
 #: src/features/assistant/assistant-panel.tsx
 msgid "Couldn't switch models. Try again."
 msgstr "మోడల్‌లను మార్చడం సాధ్యపడలేదు. మళ్ళీ ప్రయత్నించండి."
+
+#: src/features/organization/switcher.tsx
+msgid "Couldn't switch organization. Try again."
+msgstr ""
 
 #: src/features/career/workspace/practise.tsx
 msgid "Couldn't transcribe. Your recording is still here."
@@ -4251,6 +4304,10 @@ msgstr "ముందుగా రెజ్యూమేని సృష్టి�
 #: src/features/auth/components/guest-banner.tsx
 msgid "Create account"
 msgstr "ఖాతాను సృష్టించండి"
+
+#: src/features/auth/pages/accept-invitation.tsx
+msgid "Create an account"
+msgstr ""
 
 #: src/features/auth/pages/consent.tsx
 msgid "Create and change your documents and job applications, seeing each one it changes in full, and change your profile and username."
@@ -4446,6 +4503,10 @@ msgstr "ప్రియమైన నియామక బృందం,"
 #: src/features/homepage/prepare.tsx
 msgid "Debrief"
 msgstr "సమీక్ష"
+
+#: src/features/auth/pages/accept-invitation.tsx
+msgid "Decline"
+msgstr ""
 
 #: src/features/homepage/prepare.tsx
 msgid "Deep breath."
@@ -5220,6 +5281,7 @@ msgstr "ఇమెయిల్ (ఐచ్ఛికం)"
 #: src/features/auth/pages/forgot-password.tsx
 #: src/features/auth/pages/login.tsx
 #: src/features/auth/pages/register.tsx
+#: src/features/organization/members-page.tsx
 msgid "Email address"
 msgstr "ఇమెయిల్ చిరునామా"
 
@@ -5315,6 +5377,7 @@ msgstr "మూడు అక్షరాల కరెన్సీ కోడ్‌
 #: src/features/applications/components/detail/contacts.tsx
 #: src/features/auth/pages/forgot-password.tsx
 #: src/features/auth/pages/register.tsx
+#: src/features/organization/members-page.tsx
 #: src/features/settings/account/profile.tsx
 msgid "Enter a valid email address."
 msgstr "చెల్లుబాటు అయ్యే ఇమెయిల్ చిరునామాను నమోదు చేయండి."
@@ -6072,6 +6135,7 @@ msgstr "ఇంటికి వెళ్ళండి"
 
 #: src/components/layout/error-screen.tsx
 #: src/components/layout/not-found-screen.tsx
+#: src/features/auth/pages/accept-invitation.tsx
 #: src/routes/_home/-sections/header.tsx
 msgid "Go to dashboard"
 msgstr "డాష్‌బోర్డ్ కి వెళ్లండి"
@@ -6642,6 +6706,19 @@ msgstr "ఇంటర్వ్యూయర్"
 msgid "Interviews"
 msgstr "ఇంటర్వ్యూలు"
 
+#. placeholder {0}: parsed.data.email
+#: src/features/organization/members-page.tsx
+msgid "Invitation sent to {0}"
+msgstr ""
+
+#: src/features/auth/pages/accept-invitation.tsx
+msgid "Invitation unavailable"
+msgstr ""
+
+#: src/features/organization/members-page.tsx
+msgid "Invite someone"
+msgstr ""
+
 #: src/features/career/offers.tsx
 msgid "Is equity part of the offer?"
 msgstr "ఈక్విటీ ఆఫర్‌లో భాగమా?"
@@ -6814,6 +6891,11 @@ msgstr "జాన్ డో"
 #: src/features/auth/pages/register.tsx
 msgid "john.doe"
 msgstr "జాన్.డో"
+
+#. placeholder {0}: invitation.organizationName
+#: src/features/auth/pages/accept-invitation.tsx
+msgid "Join {0}"
+msgstr ""
 
 #: src/features/homepage/footer.tsx
 msgid "Join Discord"
@@ -7756,6 +7838,20 @@ msgstr "మొదటి ప్రత్యుత్తరానికి మధ�
 msgid "Medium"
 msgstr "మధ్యస్థం"
 
+#: src/features/organization/roles.ts
+msgid "Member"
+msgstr ""
+
+#: src/features/organization/members-page.tsx
+msgid "Members"
+msgstr ""
+
+#: src/features/organization/members-page.tsx
+#: src/features/settings/root.tsx
+#: src/routes/dashboard/settings/route.tsx
+msgid "Members & invites"
+msgstr ""
+
 #: src/features/homepage/prepare.tsx
 msgid "Mentor other designers"
 msgstr "ఇతర డిజైనర్లకు మెంటార్‌గా ఉండటం"
@@ -8374,6 +8470,10 @@ msgstr "బహిరంగ సమస్యలు లేవు"
 msgid "No other stage counts as {0}. Add one first, so its applications have somewhere to go."
 msgstr "{0}గా పరిగణించబడే మరో దశ లేదు. దానిలోని దరఖాస్తులను తరలించడానికి ముందుగా అలాంటి దశను జోడించండి."
 
+#: src/features/organization/members-page.tsx
+msgid "No pending invitations."
+msgstr ""
+
 #: src/features/resume/editor/check/issues.ts
 msgid "No phone number"
 msgstr "ఫోన్ నంబర్ లేదు"
@@ -8845,6 +8945,10 @@ msgstr "గుర్తించదగిన ఒకే ఒక విభాగ �
 msgid "Only one version so far. Every editing session adds one automatically."
 msgstr "ఇప్పటివరకు ఒక వెర్షన్ మాత్రమే. ప్రతి సవరణ సెషన్ స్వయంచాలకంగా జోడించబడుతుంది."
 
+#: src/features/organization/members-page.tsx
+msgid "Only owners and admins can manage members"
+msgstr ""
+
 #: src/features/settings/ai/providers.tsx
 msgid "Only providers that pass their test can be turned on."
 msgstr "వారి పరీక్షలో ఉత్తీర్ణులైన ప్రొవైడర్లు మాత్రమే ఆన్ చేయబడతారు."
@@ -9046,6 +9150,7 @@ msgstr "లేదా రెజ్యూమే PDFను అప్లోడ్ �
 msgid "Orange"
 msgstr "నారింజ"
 
+#: src/features/organization/switcher.tsx
 #: src/features/resume/editor/write/entries.tsx
 msgid "Organization"
 msgstr "ఆర్గనైజేషన్"
@@ -9096,6 +9201,10 @@ msgstr "ఇండెంట్ తగ్గించు"
 #: src/features/homepage/prepare.tsx
 msgid "Own and evolve a design system"
 msgstr "డిజైన్ సిస్టమ్‌ను సొంతం చేసుకుని అభివృద్ధి చేయడం"
+
+#: src/features/organization/roles.ts
+msgid "Owner"
+msgstr ""
 
 #: src/libs/resume/section.tsx
 #: src/routes/builder/$resumeId/-components/design-panel.tsx
@@ -9312,6 +9421,10 @@ msgstr "PDF, Word (DOCX), Markdown మరియు JSON. JSON ఎగుమతి
 #: src/features/documents/documents-page.tsx
 msgid "PDF, Word or JSON. We'll build a resume from it."
 msgstr "PDF, Word లేదా JSON. మేము దాని నుండి రెజ్యూమేని రూపొందిస్తాము."
+
+#: src/features/organization/members-page.tsx
+msgid "Pending invitations"
+msgstr ""
 
 #: src/features/homepage/sections.tsx
 msgid "People using it"
@@ -10322,6 +10435,7 @@ msgstr "రిమోట్"
 msgid "Remote, Hybrid, a city…"
 msgstr "రిమోట్, హైబ్రిడ్, ఒక నగరం…"
 
+#: src/features/organization/members-page.tsx
 #: src/features/resume/share/custom-domain-field.tsx
 #: src/features/settings/account/security.tsx
 msgid "Remove"
@@ -10360,6 +10474,14 @@ msgstr "{country}ని తీసివేయండి"
 msgid "Remove {label}…"
 msgstr "{label}ను తీసివేయండి…"
 
+#: src/features/organization/members-page.tsx
+msgid "Remove {name}"
+msgstr ""
+
+#: src/features/organization/members-page.tsx
+msgid "Remove {name}?"
+msgstr ""
+
 #: src/features/applications/components/application-detail-sheet.tsx
 msgid "Remove {value}"
 msgstr "{value}ని తీసివేయండి"
@@ -10379,6 +10501,10 @@ msgstr "ఫైల్‌ను తీసివేయండి"
 #. placeholder {0}: index + 1
 #: src/features/settings/account/application-profile.tsx
 msgid "Remove link {0}"
+msgstr ""
+
+#: src/features/organization/members-page.tsx
+msgid "Remove member"
 msgstr ""
 
 #: src/features/settings/account/security.tsx
@@ -10430,6 +10556,10 @@ msgstr ""
 
 #: src/features/career/workspace/answer-library.tsx
 msgid "Remove unavailable story reference"
+msgstr ""
+
+#: src/features/organization/members-page.tsx
+msgid "Removed {name}"
 msgstr ""
 
 #: src/features/career/coach.tsx
@@ -10863,6 +10993,7 @@ msgstr "ఇప్పుడే"
 #: src/features/applications/components/import-applications-sheet.tsx
 #: src/features/applications/components/interview-dialog.tsx
 #: src/features/applications/components/list-view.tsx
+#: src/features/organization/members-page.tsx
 #: src/features/resume/editor/check/job-match.tsx
 msgid "Role"
 msgstr "పదవి"
@@ -10879,6 +11010,10 @@ msgstr "పాత్ర {0}"
 #: src/features/applications/components/application-form-sheet.tsx
 msgid "Role / title"
 msgstr "పాత్ర / హోదా"
+
+#: src/features/organization/members-page.tsx
+msgid "Role of {name}"
+msgstr ""
 
 #. placeholder {0}: index + 1
 #: src/features/applications/components/interview-dialog.tsx
@@ -11496,6 +11631,10 @@ msgstr "సెమాంటిక్ CSS స్టైల్‌షీట్"
 msgid "Send"
 msgstr "పంపండి"
 
+#: src/features/organization/members-page.tsx
+msgid "Send invitation"
+msgstr ""
+
 #. Primary action button label on forgot-password form
 #: src/features/auth/pages/forgot-password.tsx
 msgid "Send reset link"
@@ -11508,6 +11647,10 @@ msgstr "పోర్ట్‌ఫోలియో రేపర్ కాకుం�
 #: src/features/assistant/tool-approvals.tsx
 msgid "Send this exact query to your web search provider?"
 msgstr "ఈ ప్రశ్నను యథాతథంగా మీ వెబ్ శోధన ప్రదాతకు పంపాలా?"
+
+#: src/features/auth/pages/accept-invitation.tsx
+msgid "Send verification email"
+msgstr ""
 
 #: src/routes/builder/letter/-components/write-panel.tsx
 msgid "Sender details copied into the letter"
@@ -11832,6 +11975,7 @@ msgstr "సైడ్‌బార్లు తరచుగా చివరిగ�
 
 #. Primary action button label on login form
 #: src/features/auth/components/guest-banner.tsx
+#: src/features/auth/pages/accept-invitation.tsx
 #: src/features/auth/pages/login.tsx
 #: src/features/homepage/footer.tsx
 msgid "Sign in"
@@ -11843,6 +11987,10 @@ msgstr "సైన్ ఇన్ చేయండి"
 #: src/features/auth/pages/register.tsx
 msgid "Sign in now"
 msgstr "ఇప్పుడు సైన్ ఇన్ చేయండి"
+
+#: src/features/auth/pages/accept-invitation.tsx
+msgid "Sign in or create an account with the email address that received the invitation to join."
+msgstr ""
 
 #. Title on the login page
 #: src/features/auth/pages/login.tsx
@@ -13126,9 +13274,17 @@ msgstr "మీరు దరఖాస్తు చేసినప్పుడు 
 msgid "They and their timelines are deleted permanently. This can't be undone."
 msgstr "అవి మరియు వాటి టైమ్‌లైన్‌లు శాశ్వతంగా తొలగించబడతాయి. దీన్ని రద్దు చేయడం సాధ్యం కాదు."
 
+#: src/features/organization/members-page.tsx
+msgid "They get an email with a link that is valid for 7 days."
+msgstr ""
+
 #: src/features/resume/editor/check/issues.ts
 msgid "They look for headings such as Experience, Education and Skills."
 msgstr "వారు అనుభవం, విద్య మరియు నైపుణ్యాలు వంటి శీర్షికల కోసం చూస్తారు."
+
+#: src/features/organization/members-page.tsx
+msgid "They lose access to this organization right away."
+msgstr ""
 
 #: src/features/homepage/prepare.tsx
 msgid "They’ve confirmed your interview for today"
@@ -13246,6 +13402,14 @@ msgstr "ఈ ఫైల్ చాలా వేర్వేరు ఫాంట్�
 #: src/features/ats-checker/messages.ts
 msgid "This file uses Type 3 fonts, which carry drawings instead of characters."
 msgstr "ఈ ఫైల్ Type 3 ఫాంట్‌లను ఉపయోగిస్తుంది, ఇవి అక్షరాలకు బదులు చిత్రాలను కలిగి ఉంటాయి."
+
+#: src/features/auth/pages/accept-invitation.tsx
+msgid "This invitation has expired, was canceled, or has already been answered. Ask the organization to send a new one."
+msgstr ""
+
+#: src/features/auth/pages/accept-invitation.tsx
+msgid "This invitation was sent to a different email address. Sign in with the address that received it."
+msgstr ""
 
 #: src/features/ats-checker/messages.ts
 msgid "This is a PDF Portfolio: the visible page is only a cover."
@@ -14043,6 +14207,10 @@ msgstr "నమూనాను ఉపయోగించండి"
 msgid "Use the standard heading"
 msgstr "ప్రామాణిక శీర్షికను ఉపయోగించండి"
 
+#: src/features/auth/pages/accept-invitation.tsx
+msgid "Use the verification link we emailed to {email}, or ask for a new one."
+msgstr ""
+
 #: src/features/career/workspace/apply.tsx
 msgid "Use these answers"
 msgstr "ఈ సమాధానాలను ఉపయోగించు"
@@ -14156,6 +14324,10 @@ msgstr "ధ్రువీకరించండి"
 #: src/features/auth/pages/verify-2fa.tsx
 msgid "Verify with a backup code"
 msgstr "బ్యాకప్ కోడ్‌తో ధ్రువీకరించండి"
+
+#: src/features/auth/pages/accept-invitation.tsx
+msgid "Verify your email first"
+msgstr ""
 
 #: src/features/career/schedule-sheet.tsx
 msgid "Verify your email in Settings first"
@@ -14304,6 +14476,10 @@ msgstr "మార్పును ఆమోదించడానికి మే�
 #: src/features/settings/account/profile.tsx
 msgid "We sent a new verification link to {0}."
 msgstr "మేము {0}కి కొత్త ధృవీకరణ లింక్‌ని పంపాము."
+
+#: src/features/auth/pages/accept-invitation.tsx
+msgid "We sent a verification link to {email}. Open it, then come back to this page."
+msgstr ""
 
 #: src/features/settings/ai/web-access.tsx
 msgid "Web access"
@@ -14786,6 +14962,10 @@ msgstr "మీరు సమాధానం ఇచ్చారు: {answer}"
 msgid "You applied to {0} before and didn't hear back."
 msgstr "మీరు ఇంతకు ముందు {0}కు దరఖాస్తు చేశారు, కానీ జవాబు రాలేదు."
 
+#: src/features/organization/no-organization-notice.tsx
+msgid "You aren't a member of any organization yet. Open the invitation link in the email you received to join one."
+msgstr ""
+
 #: src/features/auth/pages/login.tsx
 msgid "You can also sign in with your username."
 msgstr "మీ యూజర్‌నేమ్‌తో కూడా సైన్ ఇన్ చేయవచ్చు."
@@ -14814,6 +14994,10 @@ msgstr "కాపీ చేయడానికి మీ వద్ద ఇంక�
 msgid "You forgot this before, so it wasn't saved again."
 msgstr "మీరు దీన్ని ఇంతకుముందే మరచిపోయేలా చేశారు, కాబట్టి మళ్లీ సేవ్ చేయలేదు."
 
+#: src/features/organization/members-page.tsx
+msgid "You need to belong to an organization to manage its members."
+msgstr ""
+
 #: src/features/homepage/prepare.tsx
 msgid "You partnered with engineering. How you led the work isn’t described yet."
 msgstr "మీరు ఇంజనీరింగ్‌తో కలిసి పనిచేశారు. పనికి మీరు ఎలా నాయకత్వం వహించారో ఇంకా వివరించలేదు."
@@ -14841,6 +15025,10 @@ msgstr "మీరు దీన్ని ఎల్లప్పుడూ ‘ఈర
 #: src/features/homepage/tailor.tsx
 msgid "You’ll own our <0>design systems</0>, run <1>user research</1> with customers and hold a high bar for <2>accessibility</2>, working in a <3>cross-functional</3> team."
 msgstr "మీరు మా <0>డిజైన్ వ్యవస్థల</0> బాధ్యత తీసుకుని, కస్టమర్లతో <1>వినియోగదారు పరిశోధన</1> చేస్తారు మరియు <3>వివిధ విభాగాలు కలిసి పనిచేసే</3> బృందంలో పనిచేస్తూ <2>అందరికీ అందుబాటులో ఉండేలా చేయడంలో</2> ఉన్నత ప్రమాణాలను పాటిస్తారు."
+
+#: src/features/auth/pages/accept-invitation.tsx
+msgid "You're invited"
+msgstr ""
 
 #: src/features/career/workspace/shell.tsx
 msgid "You're looking at a saved version. It can't be edited."

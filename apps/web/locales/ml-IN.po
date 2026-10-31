@@ -89,6 +89,10 @@ msgstr "(ഐച്ഛികം)"
 msgid "(required)"
 msgstr "(നിർബന്ധം)"
 
+#: src/features/organization/members-page.tsx
+msgid "(you)"
+msgstr ""
+
 #. placeholder {0}: applied.length
 #: src/features/resume/editor/proposals/proposals.ts
 msgid "{0, plural, =1 {Edit applied} other {# edits applied}}"
@@ -383,6 +387,12 @@ msgstr "{1}-ലെ {0} എന്നത് നിങ്ങളുടെ സമയ�
 msgid "{0} interview"
 msgstr "{0} അഭിമുഖം"
 
+#. placeholder {0}: invitation.inviterEmail
+#. placeholder {1}: getRoleLabel(invitation.role)
+#: src/features/auth/pages/accept-invitation.tsx
+msgid "{0} invited you to join as {1}."
+msgstr ""
+
 #. placeholder {0}: i18n.number(row.minutes)
 #. placeholder {0}: row.minutes
 #: src/features/career/workspace/prepare.tsx
@@ -449,11 +459,6 @@ msgstr "{0} ജോലി പോസ്റ്റിംഗ്"
 #: src/features/assistant/conversation.tsx
 msgid "{0} returned “{1}”. Your message is kept."
 msgstr "{0} \"{1}\" തിരികെ നൽകി. നിങ്ങളുടെ സന്ദേശം സൂക്ഷിച്ചിരിക്കുന്നു."
-
-#. placeholder {0}: done.length
-#: src/features/career/today.tsx
-msgid "{0} roles updated."
-msgstr ""
 
 #. placeholder {0}: selection.length
 #: src/features/career/today.tsx
@@ -1139,6 +1144,7 @@ msgstr "ആക്സന്റ് നിറം"
 msgid "Accent is used for headings, icons and the header band. Body text stays near-black for print and ATS."
 msgstr "തലക്കെട്ടുകൾക്കും ഐക്കണുകൾക്കും ഹെഡർ ബാൻഡിനും ആക്സൻ്റ് ഉപയോഗിക്കുന്നു. ബോഡി ടെക്‌സ്‌റ്റ് പ്രിൻ്റ്, ATS എന്നിവയ്‌ക്ക് സമീപം കറുപ്പ് നിറമായിരിക്കും."
 
+#: src/features/auth/pages/accept-invitation.tsx
 #: src/features/career/workspace/apply.tsx
 #: src/features/homepage/write.tsx
 #: src/features/resume/editor/proposals/proposal-list.tsx
@@ -1148,6 +1154,10 @@ msgstr "സ്വീകരിക്കുക"
 #: src/features/resume/editor/proposals/proposal-list.tsx
 msgid "Accept all"
 msgstr "എല്ലാം സ്വീകരിക്കുക"
+
+#: src/features/organization/no-organization-notice.tsx
+msgid "Accept your invitation"
+msgstr ""
 
 #: src/features/homepage/write.tsx
 msgid "Accepted"
@@ -1622,6 +1632,10 @@ msgstr "അപ്പോഴേക്കും മറുപടി ലഭിച്�
 msgid "Adjust fonts, colors, spacing and sections in the resume builder. Export your finished resume to PDF or Word, or share a link. The PDFs above are examples to help you compare designs."
 msgstr "സിവി ബിൽഡറിൽ ഫോണ്ടുകൾ, നിറങ്ങൾ, സ്‌പെയ്‌സിംഗ്, സെക്ഷനുകൾ എന്നിവ ക്രമീകരിക്കുക. നിങ്ങളുടെ പൂർത്തിയാക്കിയ CV PDF അല്ലെങ്കിൽ Microsoft Word-ലേക്ക് കയറ്റുമതി ചെയ്യുക അല്ലെങ്കിൽ ഒരു ലിങ്ക് പങ്കിടുക. ഡിസൈനുകൾ താരതമ്യം ചെയ്യാൻ നിങ്ങളെ സഹായിക്കുന്ന ഉദാഹരണങ്ങളാണ് മുകളിലുള്ള PDF ഫയലുകൾ."
 
+#: src/features/organization/roles.ts
+msgid "Admin"
+msgstr ""
+
 #: src/features/homepage/sections.tsx
 msgid "Ads"
 msgstr "പരസ്യങ്ങൾ"
@@ -1851,6 +1865,10 @@ msgstr "ഒരു എൻട്രിക്ക് തീയതികളില്�
 #: src/features/assistant/conversation.tsx
 msgid "an error"
 msgstr "ഒരു പിശക്"
+
+#: src/features/auth/pages/accept-invitation.tsx
+msgid "An invitation can only be accepted once your email address is verified."
+msgstr ""
 
 #: src/components/layout/error-screen.tsx
 msgid "An unexpected error stopped this page from loading. Try again, or go to the dashboard."
@@ -2640,6 +2658,7 @@ msgstr "സോഫ്റ്റ്‌വെയറിന് നിങ്ങളു�
 #: src/features/career/workspace/fit.tsx
 #: src/features/career/workspace/preparation.tsx
 #: src/features/documents/new-document-dialog.tsx
+#: src/features/organization/members-page.tsx
 #: src/features/resume/builder/password-dialog.tsx
 #: src/features/resume/editor/check/job-match.tsx
 #: src/features/resume/editor/write/picture-settings.tsx
@@ -2649,6 +2668,11 @@ msgstr "സോഫ്റ്റ്‌വെയറിന് നിങ്ങളു�
 #: src/hooks/use-confirm.tsx
 msgid "Cancel"
 msgstr "റദ്ദാക്കുക"
+
+#. placeholder {0}: invitation.email
+#: src/features/organization/members-page.tsx
+msgid "Cancel invitation for {0}"
+msgstr ""
 
 #: src/routes/dashboard/-components/app-shell.tsx
 #: src/routes/dashboard/career/route.tsx
@@ -3563,10 +3587,18 @@ msgstr "അപേക്ഷ ചേർക്കാനായില്ല. വീണ
 msgid "Couldn't add the passkey. Try again."
 msgstr "പാസ്കീ ചേർക്കാനായില്ല. വീണ്ടും ശ്രമിക്കുക."
 
+#: src/features/auth/pages/accept-invitation.tsx
+msgid "Couldn't answer the invitation. Try again."
+msgstr ""
+
 #: src/features/assistant/conversation.tsx
 #: src/features/career/coach-thread.tsx
 msgid "Couldn't attach the file. Try again."
 msgstr "ഫയൽ അറ്റാച്ച് ചെയ്യാനായില്ല. വീണ്ടും ശ്രമിക്കുക."
+
+#: src/features/organization/members-page.tsx
+msgid "Couldn't cancel the invitation. Try again."
+msgstr ""
 
 #: src/routes/builder/letter/-components/design-panel.tsx
 msgid "Couldn't change the design. Try again."
@@ -3575,6 +3607,10 @@ msgstr "ഡിസൈൻ മാറ്റാൻ കഴിഞ്ഞില്ല. �
 #: src/features/settings/account/profile.tsx
 msgid "Couldn't change the email. Try again."
 msgstr "ഇമെയിൽ മാറ്റാൻ കഴിഞ്ഞില്ല. വീണ്ടും ശ്രമിക്കുക."
+
+#: src/features/organization/members-page.tsx
+msgid "Couldn't change the role. Try again."
+msgstr ""
 
 #: src/features/career/workspace/prepare.tsx
 msgid "Couldn't change the schedule. Try again."
@@ -3771,6 +3807,10 @@ msgstr "പ്രമാണങ്ങൾ ലോഡ് ചെയ്യാനായ�
 msgid "Couldn't load interviews. Retry"
 msgstr "അഭിമുഖങ്ങൾ ലോഡ് ചെയ്യാനായില്ല. വീണ്ടും ശ്രമിക്കുക"
 
+#: src/features/organization/members-page.tsx
+msgid "Couldn't load members"
+msgstr ""
+
 #: src/features/settings/ai/web-access.tsx
 msgid "Couldn't load or save web access settings. Try again."
 msgstr "വെബ് ആക്സസ് ക്രമീകരണങ്ങൾ ലോഡ് ചെയ്യാനോ സേവ് ചെയ്യാനോ ആയില്ല. വീണ്ടും ശ്രമിക്കുക."
@@ -3870,6 +3910,10 @@ msgstr "അത് ഓർമ്മിക്കാനായില്ല. വീണ
 #: src/features/career/today.tsx
 msgid "Couldn't remove it from Applications. Try again."
 msgstr "അപേക്ഷകളിൽ നിന്ന് നീക്കം ചെയ്യാനായില്ല. വീണ്ടും ശ്രമിക്കുക."
+
+#: src/features/organization/members-page.tsx
+msgid "Couldn't remove the member. Try again."
+msgstr ""
 
 #: src/features/settings/account/security.tsx
 msgid "Couldn't remove the passkey. Try again."
@@ -4004,9 +4048,14 @@ msgstr "സംരക്ഷിക്കാനായില്ല. വീണ്ട�
 msgid "Couldn't schedule the interview. Try again."
 msgstr "അഭിമുഖം ഷെഡ്യൂൾ ചെയ്യാനായില്ല. വീണ്ടും ശ്രമിക്കുക."
 
+#: src/features/auth/pages/accept-invitation.tsx
 #: src/features/settings/account/profile.tsx
 msgid "Couldn't send the email. Try again."
 msgstr "ഇമെയിൽ അയയ്ക്കാൻ കഴിഞ്ഞില്ല. വീണ്ടും ശ്രമിക്കുക."
+
+#: src/features/organization/members-page.tsx
+msgid "Couldn't send the invitation. Try again."
+msgstr ""
 
 #. Fallback toast when requesting password reset email fails without backend message
 #: src/features/auth/pages/forgot-password.tsx
@@ -4062,6 +4111,10 @@ msgstr "കണക്ഷനുകൾ മാറ്റാനായില്ല. വ
 #: src/features/assistant/assistant-panel.tsx
 msgid "Couldn't switch models. Try again."
 msgstr "മോഡലുകൾ മാറ്റാനായില്ല. വീണ്ടും ശ്രമിക്കുക."
+
+#: src/features/organization/switcher.tsx
+msgid "Couldn't switch organization. Try again."
+msgstr ""
 
 #: src/features/career/workspace/practise.tsx
 msgid "Couldn't transcribe. Your recording is still here."
@@ -4251,6 +4304,10 @@ msgstr "ആദ്യം ഒരു റെസ്യൂമെ സൃഷ്ടിക
 #: src/features/auth/components/guest-banner.tsx
 msgid "Create account"
 msgstr "അക്കൗണ്ട് സൃഷ്ടിക്കുക"
+
+#: src/features/auth/pages/accept-invitation.tsx
+msgid "Create an account"
+msgstr ""
 
 #: src/features/auth/pages/consent.tsx
 msgid "Create and change your documents and job applications, seeing each one it changes in full, and change your profile and username."
@@ -4446,6 +4503,10 @@ msgstr "പ്രിയ നിയമന ടീം,"
 #: src/features/homepage/prepare.tsx
 msgid "Debrief"
 msgstr "അവലോകനം"
+
+#: src/features/auth/pages/accept-invitation.tsx
+msgid "Decline"
+msgstr ""
 
 #: src/features/homepage/prepare.tsx
 msgid "Deep breath."
@@ -5220,6 +5281,7 @@ msgstr "ഇമെയിൽ (ഓപ്ഷണൽ)"
 #: src/features/auth/pages/forgot-password.tsx
 #: src/features/auth/pages/login.tsx
 #: src/features/auth/pages/register.tsx
+#: src/features/organization/members-page.tsx
 msgid "Email address"
 msgstr "ഇമെയിൽ വിലാസം"
 
@@ -5315,6 +5377,7 @@ msgstr "മൂന്ന് അക്ഷരങ്ങളുള്ള കറൻസ�
 #: src/features/applications/components/detail/contacts.tsx
 #: src/features/auth/pages/forgot-password.tsx
 #: src/features/auth/pages/register.tsx
+#: src/features/organization/members-page.tsx
 #: src/features/settings/account/profile.tsx
 msgid "Enter a valid email address."
 msgstr "സാധുവായ ഒരു ഇമെയിൽ വിലാസം നൽകുക."
@@ -6072,6 +6135,7 @@ msgstr "വീട്ടിലേക്ക് പോകൂ"
 
 #: src/components/layout/error-screen.tsx
 #: src/components/layout/not-found-screen.tsx
+#: src/features/auth/pages/accept-invitation.tsx
 #: src/routes/_home/-sections/header.tsx
 msgid "Go to dashboard"
 msgstr "ഡാഷ്ബോർഡിലേക്കു പോകുക"
@@ -6642,6 +6706,19 @@ msgstr "അഭിമുഖം നടത്തുന്നയാൾ"
 msgid "Interviews"
 msgstr "അഭിമുഖങ്ങൾ"
 
+#. placeholder {0}: parsed.data.email
+#: src/features/organization/members-page.tsx
+msgid "Invitation sent to {0}"
+msgstr ""
+
+#: src/features/auth/pages/accept-invitation.tsx
+msgid "Invitation unavailable"
+msgstr ""
+
+#: src/features/organization/members-page.tsx
+msgid "Invite someone"
+msgstr ""
+
 #: src/features/career/offers.tsx
 msgid "Is equity part of the offer?"
 msgstr "ഓഫറിൽ ഇക്വിറ്റി ഉൾപ്പെടുന്നുണ്ടോ?"
@@ -6814,6 +6891,11 @@ msgstr "ജോൺ ഡോ"
 #: src/features/auth/pages/register.tsx
 msgid "john.doe"
 msgstr "ജോൺ ഡോ"
+
+#. placeholder {0}: invitation.organizationName
+#: src/features/auth/pages/accept-invitation.tsx
+msgid "Join {0}"
+msgstr ""
 
 #: src/features/homepage/footer.tsx
 msgid "Join Discord"
@@ -7756,6 +7838,20 @@ msgstr "ആദ്യ മറുപടിക്ക് ഇടത്തരം"
 msgid "Medium"
 msgstr "ഇടത്തരം"
 
+#: src/features/organization/roles.ts
+msgid "Member"
+msgstr ""
+
+#: src/features/organization/members-page.tsx
+msgid "Members"
+msgstr ""
+
+#: src/features/organization/members-page.tsx
+#: src/features/settings/root.tsx
+#: src/routes/dashboard/settings/route.tsx
+msgid "Members & invites"
+msgstr ""
+
 #: src/features/homepage/prepare.tsx
 msgid "Mentor other designers"
 msgstr "മറ്റ് ഡിസൈനർമാരെ മെന്റർ ചെയ്യുക"
@@ -8374,6 +8470,10 @@ msgstr "തുറന്ന പ്രശ്നങ്ങളില്ല"
 msgid "No other stage counts as {0}. Add one first, so its applications have somewhere to go."
 msgstr "{0} ആയി കണക്കാക്കുന്ന മറ്റൊരു ഘട്ടമില്ല. അതിലെ അപേക്ഷകൾ നീക്കാൻ ആദ്യം അത്തരമൊരു ഘട്ടം ചേർക്കുക."
 
+#: src/features/organization/members-page.tsx
+msgid "No pending invitations."
+msgstr ""
+
 #: src/features/resume/editor/check/issues.ts
 msgid "No phone number"
 msgstr "ഫോൺ നമ്പർ ഇല്ല"
@@ -8845,6 +8945,10 @@ msgstr "തിരിച്ചറിയാവുന്ന ഒരു വിഭാ�
 msgid "Only one version so far. Every editing session adds one automatically."
 msgstr "ഇതുവരെ ഒരു പതിപ്പ് മാത്രം. ഓരോ എഡിറ്റിംഗ് സെഷനും ഒന്ന് സ്വയമേവ ചേർക്കുന്നു."
 
+#: src/features/organization/members-page.tsx
+msgid "Only owners and admins can manage members"
+msgstr ""
+
 #: src/features/settings/ai/providers.tsx
 msgid "Only providers that pass their test can be turned on."
 msgstr "അവരുടെ ടെസ്റ്റ് വിജയിക്കുന്ന ദാതാക്കൾക്ക് മാത്രമേ ഓണാക്കാൻ കഴിയൂ."
@@ -9046,6 +9150,7 @@ msgstr "അല്ലെങ്കിൽ ഒരു റെസ്യൂമേ PDF �
 msgid "Orange"
 msgstr "ഓറഞ്ച്"
 
+#: src/features/organization/switcher.tsx
 #: src/features/resume/editor/write/entries.tsx
 msgid "Organization"
 msgstr "സ്ഥാപനം"
@@ -9096,6 +9201,10 @@ msgstr "ഇൻഡന്റ് കുറയ്ക്കുക"
 #: src/features/homepage/prepare.tsx
 msgid "Own and evolve a design system"
 msgstr "ഒരു ഡിസൈൻ സിസ്റ്റം സ്വന്തമാക്കി വികസിപ്പിക്കുക"
+
+#: src/features/organization/roles.ts
+msgid "Owner"
+msgstr ""
 
 #: src/libs/resume/section.tsx
 #: src/routes/builder/$resumeId/-components/design-panel.tsx
@@ -9312,6 +9421,10 @@ msgstr "PDF, Word (DOCX), Markdown, JSON. JSON കയറ്റുമതി ന�
 #: src/features/documents/documents-page.tsx
 msgid "PDF, Word or JSON. We'll build a resume from it."
 msgstr "PDF, Word അല്ലെങ്കിൽ JSON. ഞങ്ങൾ അതിൽ നിന്ന് ഒരു റെസ്യൂമെ നിർമ്മിക്കും."
+
+#: src/features/organization/members-page.tsx
+msgid "Pending invitations"
+msgstr ""
 
 #: src/features/homepage/sections.tsx
 msgid "People using it"
@@ -10322,6 +10435,7 @@ msgstr "റിമോട്ട്"
 msgid "Remote, Hybrid, a city…"
 msgstr "റിമോട്ട്, ഹൈബ്രിഡ്, ഒരു നഗരം…"
 
+#: src/features/organization/members-page.tsx
 #: src/features/resume/share/custom-domain-field.tsx
 #: src/features/settings/account/security.tsx
 msgid "Remove"
@@ -10360,6 +10474,14 @@ msgstr "നീക്കം ചെയ്യുക {country}"
 msgid "Remove {label}…"
 msgstr "{label} നീക്കം ചെയ്യുക…"
 
+#: src/features/organization/members-page.tsx
+msgid "Remove {name}"
+msgstr ""
+
+#: src/features/organization/members-page.tsx
+msgid "Remove {name}?"
+msgstr ""
+
 #: src/features/applications/components/application-detail-sheet.tsx
 msgid "Remove {value}"
 msgstr "{value} നീക്കം ചെയ്യുക"
@@ -10379,6 +10501,10 @@ msgstr "ഫയൽ നീക്കംചെയ്യുക"
 #. placeholder {0}: index + 1
 #: src/features/settings/account/application-profile.tsx
 msgid "Remove link {0}"
+msgstr ""
+
+#: src/features/organization/members-page.tsx
+msgid "Remove member"
 msgstr ""
 
 #: src/features/settings/account/security.tsx
@@ -10430,6 +10556,10 @@ msgstr ""
 
 #: src/features/career/workspace/answer-library.tsx
 msgid "Remove unavailable story reference"
+msgstr ""
+
+#: src/features/organization/members-page.tsx
+msgid "Removed {name}"
 msgstr ""
 
 #: src/features/career/coach.tsx
@@ -10863,6 +10993,7 @@ msgstr "ഇപ്പോൾ"
 #: src/features/applications/components/import-applications-sheet.tsx
 #: src/features/applications/components/interview-dialog.tsx
 #: src/features/applications/components/list-view.tsx
+#: src/features/organization/members-page.tsx
 #: src/features/resume/editor/check/job-match.tsx
 msgid "Role"
 msgstr "തസ്തിക"
@@ -10879,6 +11010,10 @@ msgstr "റോൾ {0}"
 #: src/features/applications/components/application-form-sheet.tsx
 msgid "Role / title"
 msgstr "റോൾ / തലക്കെട്ട്"
+
+#: src/features/organization/members-page.tsx
+msgid "Role of {name}"
+msgstr ""
 
 #. placeholder {0}: index + 1
 #: src/features/applications/components/interview-dialog.tsx
@@ -11496,6 +11631,10 @@ msgstr "സെമാന്റിക് CSS സ്റ്റൈൽഷീറ്റ�
 msgid "Send"
 msgstr "അയക്കുക"
 
+#: src/features/organization/members-page.tsx
+msgid "Send invitation"
+msgstr ""
+
 #. Primary action button label on forgot-password form
 #: src/features/auth/pages/forgot-password.tsx
 msgid "Send reset link"
@@ -11508,6 +11647,10 @@ msgstr "ഒരു പോർട്ട്‌ഫോളിയോ റാപ്പറ�
 #: src/features/assistant/tool-approvals.tsx
 msgid "Send this exact query to your web search provider?"
 msgstr "ഇതേ തിരയൽ വാചകം നിങ്ങളുടെ വെബ് തിരയൽ ദാതാവിന് അയയ്ക്കണോ?"
+
+#: src/features/auth/pages/accept-invitation.tsx
+msgid "Send verification email"
+msgstr ""
 
 #: src/routes/builder/letter/-components/write-panel.tsx
 msgid "Sender details copied into the letter"
@@ -11832,6 +11975,7 @@ msgstr "സൈഡ്‌ബാറുകൾ പലപ്പോഴും അവസ�
 
 #. Primary action button label on login form
 #: src/features/auth/components/guest-banner.tsx
+#: src/features/auth/pages/accept-invitation.tsx
 #: src/features/auth/pages/login.tsx
 #: src/features/homepage/footer.tsx
 msgid "Sign in"
@@ -11843,6 +11987,10 @@ msgstr "സൈൻ ഇൻ"
 #: src/features/auth/pages/register.tsx
 msgid "Sign in now"
 msgstr "ഇപ്പോൾ സൈൻ ഇൻ ചെയ്യുക"
+
+#: src/features/auth/pages/accept-invitation.tsx
+msgid "Sign in or create an account with the email address that received the invitation to join."
+msgstr ""
 
 #. Title on the login page
 #: src/features/auth/pages/login.tsx
@@ -13126,9 +13274,17 @@ msgstr "നിങ്ങൾ അപേക്ഷിച്ചപ്പോൾ സേ�
 msgid "They and their timelines are deleted permanently. This can't be undone."
 msgstr "അവരും അവരുടെ ടൈംലൈനുകളും ശാശ്വതമായി ഇല്ലാതാക്കപ്പെടും. ഇത് പഴയപടിയാക്കാനാകില്ല."
 
+#: src/features/organization/members-page.tsx
+msgid "They get an email with a link that is valid for 7 days."
+msgstr ""
+
 #: src/features/resume/editor/check/issues.ts
 msgid "They look for headings such as Experience, Education and Skills."
 msgstr "അവർ അനുഭവം, വിദ്യാഭ്യാസം, കഴിവുകൾ തുടങ്ങിയ തലക്കെട്ടുകൾക്കായി നോക്കുന്നു."
+
+#: src/features/organization/members-page.tsx
+msgid "They lose access to this organization right away."
+msgstr ""
 
 #: src/features/homepage/prepare.tsx
 msgid "They’ve confirmed your interview for today"
@@ -13246,6 +13402,14 @@ msgstr "ഈ ഫയൽ ധാരാളം വ്യത്യസ്ത ഫോണ�
 #: src/features/ats-checker/messages.ts
 msgid "This file uses Type 3 fonts, which carry drawings instead of characters."
 msgstr "ഈ ഫയൽ Type 3 ഫോണ്ടുകൾ ഉപയോഗിക്കുന്നു, അവ അക്ഷരങ്ങൾക്ക് പകരം ഡ്രോയിംഗുകൾ വഹിക്കുന്നു."
+
+#: src/features/auth/pages/accept-invitation.tsx
+msgid "This invitation has expired, was canceled, or has already been answered. Ask the organization to send a new one."
+msgstr ""
+
+#: src/features/auth/pages/accept-invitation.tsx
+msgid "This invitation was sent to a different email address. Sign in with the address that received it."
+msgstr ""
 
 #: src/features/ats-checker/messages.ts
 msgid "This is a PDF Portfolio: the visible page is only a cover."
@@ -14043,6 +14207,10 @@ msgstr "സാമ്പിൾ ഉപയോഗിക്കുക"
 msgid "Use the standard heading"
 msgstr "സാധാരണ തലക്കെട്ട് ഉപയോഗിക്കുക"
 
+#: src/features/auth/pages/accept-invitation.tsx
+msgid "Use the verification link we emailed to {email}, or ask for a new one."
+msgstr ""
+
 #: src/features/career/workspace/apply.tsx
 msgid "Use these answers"
 msgstr "ഈ ഉത്തരങ്ങൾ ഉപയോഗിക്കുക"
@@ -14156,6 +14324,10 @@ msgstr "സ്ഥിരീകരിക്കുക"
 #: src/features/auth/pages/verify-2fa.tsx
 msgid "Verify with a backup code"
 msgstr "ഒരു ബാക്കപ്പ് കോഡ് ഉപയോഗിച്ച് സ്ഥിരീകരിക്കുക"
+
+#: src/features/auth/pages/accept-invitation.tsx
+msgid "Verify your email first"
+msgstr ""
 
 #: src/features/career/schedule-sheet.tsx
 msgid "Verify your email in Settings first"
@@ -14304,6 +14476,10 @@ msgstr "മാറ്റം അംഗീകരിക്കാൻ ഞങ്ങൾ 
 #: src/features/settings/account/profile.tsx
 msgid "We sent a new verification link to {0}."
 msgstr "{0}-ലേക്ക് ഞങ്ങൾ ഒരു പുതിയ സ്ഥിരീകരണ ലിങ്ക് അയച്ചു."
+
+#: src/features/auth/pages/accept-invitation.tsx
+msgid "We sent a verification link to {email}. Open it, then come back to this page."
+msgstr ""
 
 #: src/features/settings/ai/web-access.tsx
 msgid "Web access"
@@ -14786,6 +14962,10 @@ msgstr "നിങ്ങൾ ഉത്തരം നൽകി: {answer}"
 msgid "You applied to {0} before and didn't hear back."
 msgstr "നിങ്ങൾ മുമ്പ് {0} എന്ന സ്ഥാപനത്തിൽ അപേക്ഷിച്ചെങ്കിലും മറുപടി ലഭിച്ചില്ല."
 
+#: src/features/organization/no-organization-notice.tsx
+msgid "You aren't a member of any organization yet. Open the invitation link in the email you received to join one."
+msgstr ""
+
 #: src/features/auth/pages/login.tsx
 msgid "You can also sign in with your username."
 msgstr "നിങ്ങളുടെ യൂസർനെയിം ഉപയോഗിച്ചും സൈൻ ഇൻ ചെയ്യാം."
@@ -14814,6 +14994,10 @@ msgstr "നിങ്ങൾക്ക് ഇതുവരെ പകർത്താ�
 msgid "You forgot this before, so it wasn't saved again."
 msgstr "നിങ്ങൾ ഇത് മുമ്പ് മറന്നതിനാൽ, വീണ്ടും സേവ് ചെയ്തില്ല."
 
+#: src/features/organization/members-page.tsx
+msgid "You need to belong to an organization to manage its members."
+msgstr ""
+
 #: src/features/homepage/prepare.tsx
 msgid "You partnered with engineering. How you led the work isn’t described yet."
 msgstr "നിങ്ങൾ എഞ്ചിനീയറിംഗുമായി സഹകരിച്ചു. നിങ്ങൾ ആ ജോലി എങ്ങനെ നയിച്ചു എന്ന് ഇതുവരെ വിവരിച്ചിട്ടില്ല."
@@ -14841,6 +15025,10 @@ msgstr "ഇത് എല്ലായ്പ്പോഴും “ഇന്ന്�
 #: src/features/homepage/tailor.tsx
 msgid "You’ll own our <0>design systems</0>, run <1>user research</1> with customers and hold a high bar for <2>accessibility</2>, working in a <3>cross-functional</3> team."
 msgstr "നിങ്ങൾ ഞങ്ങളുടെ <0>ഡിസൈൻ സിസ്റ്റങ്ങളുടെ</0> ചുമതല വഹിക്കുകയും ഉപഭോക്താക്കളുമായി <1>ഉപയോക്തൃ ഗവേഷണം</1> നടത്തുകയും <3>വിവിധ വിഭാഗങ്ങൾ ചേർന്ന</3> ടീമിൽ പ്രവർത്തിച്ച് <2>പ്രവേശനക്ഷമതയുടെ</2> ഉയർന്ന നിലവാരം ഉറപ്പാക്കുകയും ചെയ്യും."
+
+#: src/features/auth/pages/accept-invitation.tsx
+msgid "You're invited"
+msgstr ""
 
 #: src/features/career/workspace/shell.tsx
 msgid "You're looking at a saved version. It can't be edited."

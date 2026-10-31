@@ -4,10 +4,17 @@ import { Trans } from "@lingui/react/macro";
 import { createFileRoute, Link, Outlet, useRouterState } from "@tanstack/react-router";
 import { Fragment } from "react";
 import { Icon } from "@reactive-resume/ui/components/icon";
+// CAREEROS: Members & invites entry for owners and admins (P1-T03)
+import { useCanManageMembers } from "@/features/organization/queries";
 import { popTransition } from "@/features/settings/root";
 
 type Page = {
-	to: "/dashboard/settings/account" | "/dashboard/settings/preferences" | "/dashboard/settings/ai";
+	// CAREEROS: members route added (P1-T03)
+	to:
+		| "/dashboard/settings/account"
+		| "/dashboard/settings/preferences"
+		| "/dashboard/settings/ai"
+		| "/dashboard/settings/members";
 	icon: IconName;
 	label: () => string;
 };
@@ -18,6 +25,9 @@ const SETTINGS_PAGES: Page[] = [
 	{ to: "/dashboard/settings/preferences", icon: "sliders-horizontal", label: () => t`Preferences` },
 	{ to: "/dashboard/settings/ai", icon: "sparkle", label: () => t`AI & developer` },
 ];
+
+// CAREEROS: shown to owners and admins only; the server enforces the same rule (P1-T03)
+const MEMBERS_PAGE: Page = { to: "/dashboard/settings/members", icon: "user-plus", label: () => t`Members & invites` };
 
 // The project's own links: where to read up, see the code, help translate, report a problem or donate.
 const getProjectLinks = () => [
@@ -33,6 +43,8 @@ export const Route = createFileRoute("/dashboard/settings")({ component: RouteCo
 function RouteComponent() {
 	const pathname = useRouterState({ select: (state) => state.location.pathname });
 	const isRoot = pathname.replace(/\/$/, "") === "/dashboard/settings";
+	// CAREEROS (P1-T03)
+	const pages = useCanManageMembers() ? [...SETTINGS_PAGES, MEMBERS_PAGE] : SETTINGS_PAGES;
 
 	return (
 		<div className="grid min-h-full content-start sm:h-svh sm:min-h-0 sm:grid-rows-[auto_minmax(0,1fr)] sm:overflow-hidden lg:grid-cols-[220px_minmax(0,1fr)] lg:grid-rows-1 lg:content-stretch">
@@ -41,7 +53,7 @@ function RouteComponent() {
 				className="flex flex-col gap-1 border-line [view-transition-name:settings-nav] max-lg:border-b max-sm:hidden lg:min-h-0 lg:overflow-y-auto lg:overscroll-contain lg:border-e lg:py-7 lg:ps-6 lg:pe-3"
 			>
 				<div className="flex gap-1 max-lg:overflow-x-auto max-lg:px-6 max-lg:py-2 lg:flex-col">
-					{SETTINGS_PAGES.map((page) => (
+					{pages.map((page) => (
 						<Link
 							key={page.to}
 							to={page.to}

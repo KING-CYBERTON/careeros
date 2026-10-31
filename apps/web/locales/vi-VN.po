@@ -89,6 +89,10 @@ msgstr "(không bắt buộc)"
 msgid "(required)"
 msgstr "(bắt buộc)"
 
+#: src/features/organization/members-page.tsx
+msgid "(you)"
+msgstr ""
+
 #. placeholder {0}: applied.length
 #: src/features/resume/editor/proposals/proposals.ts
 msgid "{0, plural, =1 {Edit applied} other {# edits applied}}"
@@ -383,6 +387,12 @@ msgstr "{0} tại {1} là {2} theo múi giờ của bạn ({preferredZone})."
 msgid "{0} interview"
 msgstr "Phỏng vấn {0}"
 
+#. placeholder {0}: invitation.inviterEmail
+#. placeholder {1}: getRoleLabel(invitation.role)
+#: src/features/auth/pages/accept-invitation.tsx
+msgid "{0} invited you to join as {1}."
+msgstr ""
+
 #. placeholder {0}: i18n.number(row.minutes)
 #. placeholder {0}: row.minutes
 #: src/features/career/workspace/prepare.tsx
@@ -449,11 +459,6 @@ msgstr "Tin tuyển dụng {0}"
 #: src/features/assistant/conversation.tsx
 msgid "{0} returned “{1}”. Your message is kept."
 msgstr "{0} trả về “{1}”. Tin nhắn của bạn được lưu giữ."
-
-#. placeholder {0}: done.length
-#: src/features/career/today.tsx
-msgid "{0} roles updated."
-msgstr ""
 
 #. placeholder {0}: selection.length
 #: src/features/career/today.tsx
@@ -1139,6 +1144,7 @@ msgstr "Màu nhấn"
 msgid "Accent is used for headings, icons and the header band. Body text stays near-black for print and ATS."
 msgstr "Giọng được sử dụng cho tiêu đề, biểu tượng và dải tiêu đề. Văn bản nội dung gần như đen khi in và ATS."
 
+#: src/features/auth/pages/accept-invitation.tsx
 #: src/features/career/workspace/apply.tsx
 #: src/features/homepage/write.tsx
 #: src/features/resume/editor/proposals/proposal-list.tsx
@@ -1148,6 +1154,10 @@ msgstr "Chấp nhận"
 #: src/features/resume/editor/proposals/proposal-list.tsx
 msgid "Accept all"
 msgstr "Chấp nhận tất cả"
+
+#: src/features/organization/no-organization-notice.tsx
+msgid "Accept your invitation"
+msgstr ""
 
 #: src/features/homepage/write.tsx
 msgid "Accepted"
@@ -1622,6 +1632,10 @@ msgstr "Thêm lời nhắc vào Hôm nay nếu đến lúc đó bạn vẫn chư
 msgid "Adjust fonts, colors, spacing and sections in the resume builder. Export your finished resume to PDF or Word, or share a link. The PDFs above are examples to help you compare designs."
 msgstr "Điều chỉnh phông chữ, màu sắc, khoảng cách và các phần trong trình tạo CV. Xuất CV đã hoàn thành của bạn sang PDF hoặc Microsoft Word hoặc chia sẻ liên kết. Các tệp PDF ở trên là ví dụ giúp bạn so sánh các thiết kế."
 
+#: src/features/organization/roles.ts
+msgid "Admin"
+msgstr ""
+
 #: src/features/homepage/sections.tsx
 msgid "Ads"
 msgstr "Quảng cáo"
@@ -1851,6 +1865,10 @@ msgstr "Một mục không có ngày tháng"
 #: src/features/assistant/conversation.tsx
 msgid "an error"
 msgstr "một lỗi"
+
+#: src/features/auth/pages/accept-invitation.tsx
+msgid "An invitation can only be accepted once your email address is verified."
+msgstr ""
 
 #: src/components/layout/error-screen.tsx
 msgid "An unexpected error stopped this page from loading. Try again, or go to the dashboard."
@@ -2640,6 +2658,7 @@ msgstr "Phần mềm có đọc được sơ yếu lý lịch của bạn không
 #: src/features/career/workspace/fit.tsx
 #: src/features/career/workspace/preparation.tsx
 #: src/features/documents/new-document-dialog.tsx
+#: src/features/organization/members-page.tsx
 #: src/features/resume/builder/password-dialog.tsx
 #: src/features/resume/editor/check/job-match.tsx
 #: src/features/resume/editor/write/picture-settings.tsx
@@ -2649,6 +2668,11 @@ msgstr "Phần mềm có đọc được sơ yếu lý lịch của bạn không
 #: src/hooks/use-confirm.tsx
 msgid "Cancel"
 msgstr "Hủy"
+
+#. placeholder {0}: invitation.email
+#: src/features/organization/members-page.tsx
+msgid "Cancel invitation for {0}"
+msgstr ""
 
 #: src/routes/dashboard/-components/app-shell.tsx
 #: src/routes/dashboard/career/route.tsx
@@ -3563,10 +3587,18 @@ msgstr "Không thể thêm hồ sơ ứng tuyển. Hãy thử lại."
 msgid "Couldn't add the passkey. Try again."
 msgstr "Không thể thêm mật mã. Hãy thử lại."
 
+#: src/features/auth/pages/accept-invitation.tsx
+msgid "Couldn't answer the invitation. Try again."
+msgstr ""
+
 #: src/features/assistant/conversation.tsx
 #: src/features/career/coach-thread.tsx
 msgid "Couldn't attach the file. Try again."
 msgstr "Không thể đính kèm tệp. Hãy thử lại."
+
+#: src/features/organization/members-page.tsx
+msgid "Couldn't cancel the invitation. Try again."
+msgstr ""
 
 #: src/routes/builder/letter/-components/design-panel.tsx
 msgid "Couldn't change the design. Try again."
@@ -3575,6 +3607,10 @@ msgstr "Không thể thay đổi thiết kế. Hãy thử lại."
 #: src/features/settings/account/profile.tsx
 msgid "Couldn't change the email. Try again."
 msgstr "Không thể thay đổi email. Hãy thử lại."
+
+#: src/features/organization/members-page.tsx
+msgid "Couldn't change the role. Try again."
+msgstr ""
 
 #: src/features/career/workspace/prepare.tsx
 msgid "Couldn't change the schedule. Try again."
@@ -3771,6 +3807,10 @@ msgstr "Không thể tải tài liệu"
 msgid "Couldn't load interviews. Retry"
 msgstr "Không thể tải các buổi phỏng vấn. Thử lại"
 
+#: src/features/organization/members-page.tsx
+msgid "Couldn't load members"
+msgstr ""
+
 #: src/features/settings/ai/web-access.tsx
 msgid "Couldn't load or save web access settings. Try again."
 msgstr "Không thể tải hoặc lưu cài đặt truy cập web. Hãy thử lại."
@@ -3870,6 +3910,10 @@ msgstr "Không thể ghi nhớ điều đó. Hãy thử lại."
 #: src/features/career/today.tsx
 msgid "Couldn't remove it from Applications. Try again."
 msgstr "Không thể xóa khỏi Hồ sơ ứng tuyển. Hãy thử lại."
+
+#: src/features/organization/members-page.tsx
+msgid "Couldn't remove the member. Try again."
+msgstr ""
 
 #: src/features/settings/account/security.tsx
 msgid "Couldn't remove the passkey. Try again."
@@ -4004,9 +4048,14 @@ msgstr "Không thể lưu. Hãy thử lại."
 msgid "Couldn't schedule the interview. Try again."
 msgstr "Không thể lên lịch phỏng vấn. Hãy thử lại."
 
+#: src/features/auth/pages/accept-invitation.tsx
 #: src/features/settings/account/profile.tsx
 msgid "Couldn't send the email. Try again."
 msgstr "Không thể gửi email. Hãy thử lại."
+
+#: src/features/organization/members-page.tsx
+msgid "Couldn't send the invitation. Try again."
+msgstr ""
 
 #. Fallback toast when requesting password reset email fails without backend message
 #: src/features/auth/pages/forgot-password.tsx
@@ -4062,6 +4111,10 @@ msgstr "Không thể chuyển kết nối. Hãy thử lại."
 #: src/features/assistant/assistant-panel.tsx
 msgid "Couldn't switch models. Try again."
 msgstr "Không thể chuyển đổi mô hình. Hãy thử lại."
+
+#: src/features/organization/switcher.tsx
+msgid "Couldn't switch organization. Try again."
+msgstr ""
 
 #: src/features/career/workspace/practise.tsx
 msgid "Couldn't transcribe. Your recording is still here."
@@ -4251,6 +4304,10 @@ msgstr "Trước tiên hãy tạo một bản lý lịch, sau đó hỏi về n�
 #: src/features/auth/components/guest-banner.tsx
 msgid "Create account"
 msgstr "Tạo tài khoản"
+
+#: src/features/auth/pages/accept-invitation.tsx
+msgid "Create an account"
+msgstr ""
 
 #: src/features/auth/pages/consent.tsx
 msgid "Create and change your documents and job applications, seeing each one it changes in full, and change your profile and username."
@@ -4446,6 +4503,10 @@ msgstr "Kính gửi đội ngũ tuyển dụng,"
 #: src/features/homepage/prepare.tsx
 msgid "Debrief"
 msgstr "Tổng kết"
+
+#: src/features/auth/pages/accept-invitation.tsx
+msgid "Decline"
+msgstr ""
 
 #: src/features/homepage/prepare.tsx
 msgid "Deep breath."
@@ -5220,6 +5281,7 @@ msgstr "Email (tùy chọn)"
 #: src/features/auth/pages/forgot-password.tsx
 #: src/features/auth/pages/login.tsx
 #: src/features/auth/pages/register.tsx
+#: src/features/organization/members-page.tsx
 msgid "Email address"
 msgstr "Địa chỉ email"
 
@@ -5315,6 +5377,7 @@ msgstr "Nhập mã tiền tệ gồm ba chữ cái."
 #: src/features/applications/components/detail/contacts.tsx
 #: src/features/auth/pages/forgot-password.tsx
 #: src/features/auth/pages/register.tsx
+#: src/features/organization/members-page.tsx
 #: src/features/settings/account/profile.tsx
 msgid "Enter a valid email address."
 msgstr "Nhập địa chỉ email hợp lệ."
@@ -6072,6 +6135,7 @@ msgstr "Về nhà"
 
 #: src/components/layout/error-screen.tsx
 #: src/components/layout/not-found-screen.tsx
+#: src/features/auth/pages/accept-invitation.tsx
 #: src/routes/_home/-sections/header.tsx
 msgid "Go to dashboard"
 msgstr "Đi đến bảng điều khiển"
@@ -6642,6 +6706,19 @@ msgstr "Người phỏng vấn"
 msgid "Interviews"
 msgstr "Phỏng vấn"
 
+#. placeholder {0}: parsed.data.email
+#: src/features/organization/members-page.tsx
+msgid "Invitation sent to {0}"
+msgstr ""
+
+#: src/features/auth/pages/accept-invitation.tsx
+msgid "Invitation unavailable"
+msgstr ""
+
+#: src/features/organization/members-page.tsx
+msgid "Invite someone"
+msgstr ""
+
 #: src/features/career/offers.tsx
 msgid "Is equity part of the offer?"
 msgstr "Cổ phần có nằm trong lời đề nghị không?"
@@ -6814,6 +6891,11 @@ msgstr "John Doe"
 #: src/features/auth/pages/register.tsx
 msgid "john.doe"
 msgstr "John Doe"
+
+#. placeholder {0}: invitation.organizationName
+#: src/features/auth/pages/accept-invitation.tsx
+msgid "Join {0}"
+msgstr ""
 
 #: src/features/homepage/footer.tsx
 msgid "Join Discord"
@@ -7756,6 +7838,20 @@ msgstr "trung bình đến câu trả lời đầu tiên"
 msgid "Medium"
 msgstr "Trung bình"
 
+#: src/features/organization/roles.ts
+msgid "Member"
+msgstr ""
+
+#: src/features/organization/members-page.tsx
+msgid "Members"
+msgstr ""
+
+#: src/features/organization/members-page.tsx
+#: src/features/settings/root.tsx
+#: src/routes/dashboard/settings/route.tsx
+msgid "Members & invites"
+msgstr ""
+
 #: src/features/homepage/prepare.tsx
 msgid "Mentor other designers"
 msgstr "Kèm cặp các nhà thiết kế khác"
@@ -8374,6 +8470,10 @@ msgstr "Không có vấn đề mở"
 msgid "No other stage counts as {0}. Add one first, so its applications have somewhere to go."
 msgstr "Không có giai đoạn nào khác được tính là {0}. Hãy thêm một giai đoạn như vậy trước để có nơi chuyển các đơn ứng tuyển."
 
+#: src/features/organization/members-page.tsx
+msgid "No pending invitations."
+msgstr ""
+
 #: src/features/resume/editor/check/issues.ts
 msgid "No phone number"
 msgstr "Không có số điện thoại"
@@ -8845,6 +8945,10 @@ msgstr "Chỉ tìm thấy một tiêu đề mục có thể nhận diện đư�
 msgid "Only one version so far. Every editing session adds one automatically."
 msgstr "Chỉ có một phiên bản cho đến nay. Mỗi phiên chỉnh sửa sẽ tự động thêm một phiên."
 
+#: src/features/organization/members-page.tsx
+msgid "Only owners and admins can manage members"
+msgstr ""
+
 #: src/features/settings/ai/providers.tsx
 msgid "Only providers that pass their test can be turned on."
 msgstr "Chỉ những nhà cung cấp vượt qua bài kiểm tra của họ mới có thể được bật."
@@ -9046,6 +9150,7 @@ msgstr "Hoặc tải lên PDF CV"
 msgid "Orange"
 msgstr "Cam"
 
+#: src/features/organization/switcher.tsx
 #: src/features/resume/editor/write/entries.tsx
 msgid "Organization"
 msgstr "Tổ chức"
@@ -9096,6 +9201,10 @@ msgstr "Giảm thụt lề"
 #: src/features/homepage/prepare.tsx
 msgid "Own and evolve a design system"
 msgstr "Phụ trách và phát triển hệ thống thiết kế"
+
+#: src/features/organization/roles.ts
+msgid "Owner"
+msgstr ""
 
 #: src/libs/resume/section.tsx
 #: src/routes/builder/$resumeId/-components/design-panel.tsx
@@ -9312,6 +9421,10 @@ msgstr "PDF, Word (DOCX), Markdown Và JSON. các JSON xuất khẩu nhập kh�
 #: src/features/documents/documents-page.tsx
 msgid "PDF, Word or JSON. We'll build a resume from it."
 msgstr "PDF, Word hoặc JSON. Chúng ta sẽ xây dựng một bản lý lịch từ đó."
+
+#: src/features/organization/members-page.tsx
+msgid "Pending invitations"
+msgstr ""
 
 #: src/features/homepage/sections.tsx
 msgid "People using it"
@@ -10322,6 +10435,7 @@ msgstr "Từ xa"
 msgid "Remote, Hybrid, a city…"
 msgstr "Từ xa, Kết hợp, một thành phố…"
 
+#: src/features/organization/members-page.tsx
 #: src/features/resume/share/custom-domain-field.tsx
 #: src/features/settings/account/security.tsx
 msgid "Remove"
@@ -10360,6 +10474,14 @@ msgstr "Xóa {country}"
 msgid "Remove {label}…"
 msgstr "Xóa {label}…"
 
+#: src/features/organization/members-page.tsx
+msgid "Remove {name}"
+msgstr ""
+
+#: src/features/organization/members-page.tsx
+msgid "Remove {name}?"
+msgstr ""
+
 #: src/features/applications/components/application-detail-sheet.tsx
 msgid "Remove {value}"
 msgstr "Xóa {value}"
@@ -10379,6 +10501,10 @@ msgstr "Xóa tệp"
 #. placeholder {0}: index + 1
 #: src/features/settings/account/application-profile.tsx
 msgid "Remove link {0}"
+msgstr ""
+
+#: src/features/organization/members-page.tsx
+msgid "Remove member"
 msgstr ""
 
 #: src/features/settings/account/security.tsx
@@ -10430,6 +10556,10 @@ msgstr ""
 
 #: src/features/career/workspace/answer-library.tsx
 msgid "Remove unavailable story reference"
+msgstr ""
+
+#: src/features/organization/members-page.tsx
+msgid "Removed {name}"
 msgstr ""
 
 #: src/features/career/coach.tsx
@@ -10863,6 +10993,7 @@ msgstr "Ngay bây giờ"
 #: src/features/applications/components/import-applications-sheet.tsx
 #: src/features/applications/components/interview-dialog.tsx
 #: src/features/applications/components/list-view.tsx
+#: src/features/organization/members-page.tsx
 #: src/features/resume/editor/check/job-match.tsx
 msgid "Role"
 msgstr "Vị trí"
@@ -10879,6 +11010,10 @@ msgstr "Vai trò {0}"
 #: src/features/applications/components/application-form-sheet.tsx
 msgid "Role / title"
 msgstr "Vai trò / chức danh"
+
+#: src/features/organization/members-page.tsx
+msgid "Role of {name}"
+msgstr ""
 
 #. placeholder {0}: index + 1
 #: src/features/applications/components/interview-dialog.tsx
@@ -11496,6 +11631,10 @@ msgstr "Bảng định kiểu CSS ngữ nghĩa"
 msgid "Send"
 msgstr "Gửi"
 
+#: src/features/organization/members-page.tsx
+msgid "Send invitation"
+msgstr ""
+
 #. Primary action button label on forgot-password form
 #: src/features/auth/pages/forgot-password.tsx
 msgid "Send reset link"
@@ -11508,6 +11647,10 @@ msgstr "Gửi trực tiếp sơ yếu lý lịch thay vì bọc nó trong một 
 #: src/features/assistant/tool-approvals.tsx
 msgid "Send this exact query to your web search provider?"
 msgstr "Gửi nguyên truy vấn này đến nhà cung cấp tìm kiếm web của bạn?"
+
+#: src/features/auth/pages/accept-invitation.tsx
+msgid "Send verification email"
+msgstr ""
 
 #: src/routes/builder/letter/-components/write-panel.tsx
 msgid "Sender details copied into the letter"
@@ -11832,6 +11975,7 @@ msgstr "Các thanh bên thường được đọc cuối cùng hoặc trộn và
 
 #. Primary action button label on login form
 #: src/features/auth/components/guest-banner.tsx
+#: src/features/auth/pages/accept-invitation.tsx
 #: src/features/auth/pages/login.tsx
 #: src/features/homepage/footer.tsx
 msgid "Sign in"
@@ -11843,6 +11987,10 @@ msgstr "Đăng nhập"
 #: src/features/auth/pages/register.tsx
 msgid "Sign in now"
 msgstr "Đăng nhập ngay"
+
+#: src/features/auth/pages/accept-invitation.tsx
+msgid "Sign in or create an account with the email address that received the invitation to join."
+msgstr ""
 
 #. Title on the login page
 #: src/features/auth/pages/login.tsx
@@ -13126,9 +13274,17 @@ msgstr "Đây là các câu trả lời được lưu khi bạn ứng tuyển."
 msgid "They and their timelines are deleted permanently. This can't be undone."
 msgstr "Họ và dòng thời gian của họ sẽ bị xóa vĩnh viễn. Không thể hoàn tác việc này."
 
+#: src/features/organization/members-page.tsx
+msgid "They get an email with a link that is valid for 7 days."
+msgstr ""
+
 #: src/features/resume/editor/check/issues.ts
 msgid "They look for headings such as Experience, Education and Skills."
 msgstr "Họ tìm kiếm các tiêu đề như Kinh nghiệm, Giáo dục và Kỹ năng."
+
+#: src/features/organization/members-page.tsx
+msgid "They lose access to this organization right away."
+msgstr ""
 
 #: src/features/homepage/prepare.tsx
 msgid "They’ve confirmed your interview for today"
@@ -13246,6 +13402,14 @@ msgstr "Tệp này sử dụng rất nhiều font khác nhau."
 #: src/features/ats-checker/messages.ts
 msgid "This file uses Type 3 fonts, which carry drawings instead of characters."
 msgstr "Tệp này sử dụng font Type 3, loại font chứa hình vẽ thay vì ký tự."
+
+#: src/features/auth/pages/accept-invitation.tsx
+msgid "This invitation has expired, was canceled, or has already been answered. Ask the organization to send a new one."
+msgstr ""
+
+#: src/features/auth/pages/accept-invitation.tsx
+msgid "This invitation was sent to a different email address. Sign in with the address that received it."
+msgstr ""
 
 #: src/features/ats-checker/messages.ts
 msgid "This is a PDF Portfolio: the visible page is only a cover."
@@ -14043,6 +14207,10 @@ msgstr "Dùng mẫu"
 msgid "Use the standard heading"
 msgstr "Sử dụng tiêu đề tiêu chuẩn"
 
+#: src/features/auth/pages/accept-invitation.tsx
+msgid "Use the verification link we emailed to {email}, or ask for a new one."
+msgstr ""
+
 #: src/features/career/workspace/apply.tsx
 msgid "Use these answers"
 msgstr "Dùng các câu trả lời này"
@@ -14156,6 +14324,10 @@ msgstr "Xác minh"
 #: src/features/auth/pages/verify-2fa.tsx
 msgid "Verify with a backup code"
 msgstr "Xác minh bằng mã dự phòng"
+
+#: src/features/auth/pages/accept-invitation.tsx
+msgid "Verify your email first"
+msgstr ""
 
 #: src/features/career/schedule-sheet.tsx
 msgid "Verify your email in Settings first"
@@ -14304,6 +14476,10 @@ msgstr "Chúng tôi đã gửi một liên kết đến {currentEmail} để ph�
 #: src/features/settings/account/profile.tsx
 msgid "We sent a new verification link to {0}."
 msgstr "Chúng tôi đã gửi liên kết xác minh mới tới {0}."
+
+#: src/features/auth/pages/accept-invitation.tsx
+msgid "We sent a verification link to {email}. Open it, then come back to this page."
+msgstr ""
 
 #: src/features/settings/ai/web-access.tsx
 msgid "Web access"
@@ -14786,6 +14962,10 @@ msgstr "Bạn đã trả lời: {answer}"
 msgid "You applied to {0} before and didn't hear back."
 msgstr "Bạn đã ứng tuyển vào {0} trước đây nhưng không nhận được phản hồi."
 
+#: src/features/organization/no-organization-notice.tsx
+msgid "You aren't a member of any organization yet. Open the invitation link in the email you received to join one."
+msgstr ""
+
 #: src/features/auth/pages/login.tsx
 msgid "You can also sign in with your username."
 msgstr "Bạn cũng có thể đăng nhập bằng tên người dùng của mình."
@@ -14814,6 +14994,10 @@ msgstr "Bạn chưa có sơ yếu lý lịch để sao chép. Nhập hoặc tạ
 msgid "You forgot this before, so it wasn't saved again."
 msgstr "Trước đây bạn đã cho quên điều này, nên nó không được lưu lại."
 
+#: src/features/organization/members-page.tsx
+msgid "You need to belong to an organization to manage its members."
+msgstr ""
+
 #: src/features/homepage/prepare.tsx
 msgid "You partnered with engineering. How you led the work isn’t described yet."
 msgstr "Bạn đã hợp tác với đội kỹ thuật. Cách bạn dẫn dắt công việc chưa được mô tả."
@@ -14841,6 +15025,10 @@ msgstr "Bạn sẽ luôn thấy nó trong Hôm nay. Email phụ thuộc vào c�
 #: src/features/homepage/tailor.tsx
 msgid "You’ll own our <0>design systems</0>, run <1>user research</1> with customers and hold a high bar for <2>accessibility</2>, working in a <3>cross-functional</3> team."
 msgstr "Bạn sẽ phụ trách <0>hệ thống thiết kế</0> của chúng tôi, thực hiện <1>nghiên cứu người dùng</1> với khách hàng và duy trì tiêu chuẩn cao về <2>khả năng tiếp cận</2>, làm việc trong một nhóm <3>đa chức năng</3>."
+
+#: src/features/auth/pages/accept-invitation.tsx
+msgid "You're invited"
+msgstr ""
 
 #: src/features/career/workspace/shell.tsx
 msgid "You're looking at a saved version. It can't be edited."

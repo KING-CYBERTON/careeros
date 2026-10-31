@@ -18,6 +18,9 @@ import { MobileTabIndicator } from "@/components/layout/mobile-tab-indicator";
 import { useDialogStore } from "@/dialogs/store";
 import { GuestBanner } from "@/features/auth/components/guest-banner";
 import { useCommandPaletteStore } from "@/features/command-palette/store";
+// CAREEROS: organization switcher and the no-organization notice (P1-T03)
+import { NoOrganizationNotice } from "@/features/organization/no-organization-notice";
+import { OrganizationSwitcher } from "@/features/organization/switcher";
 import { isEditableElementFocused } from "@/features/resume/builder/draft";
 import { UserDropdownMenu } from "@/features/user/dropdown-menu";
 import { orpc } from "@/libs/orpc/client";
@@ -112,6 +115,11 @@ export function AppShell({ children }: AppShellProps) {
 			{breakpoint !== "mobile" && (breakpoint === "tablet" ? <Rail /> : <Sidebar />)}
 			<main id="main-content" className="min-w-0">
 				<GuestBanner />
+				{/* CAREEROS (P1-T03): the sidebar carries the switcher on desktop; tablets and phones get it here */}
+				<NoOrganizationNotice />
+				{(breakpoint === "mobile" || breakpoint === "tablet") && (
+					<OrganizationSwitcher className="mx-4 mt-4 w-auto max-w-xs" />
+				)}
 				{children}
 			</main>
 			{tabs && <MobileTabs />}
@@ -148,6 +156,9 @@ function Sidebar() {
 				</span>
 				<Kbd>⌘K</Kbd>
 			</button>
+
+			{/* CAREEROS: shown only with two or more organizations (P1-T03) */}
+			<OrganizationSwitcher />
 
 			<nav aria-label={t`App`} className="grid gap-0.5">
 				{items.map((item) => (

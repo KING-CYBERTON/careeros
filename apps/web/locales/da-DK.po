@@ -89,6 +89,10 @@ msgstr "(valgfrit)"
 msgid "(required)"
 msgstr "(påkrævet)"
 
+#: src/features/organization/members-page.tsx
+msgid "(you)"
+msgstr ""
+
 #. placeholder {0}: applied.length
 #: src/features/resume/editor/proposals/proposals.ts
 msgid "{0, plural, =1 {Edit applied} other {# edits applied}}"
@@ -383,6 +387,12 @@ msgstr "{0} i {1} er {2} i din tidszone ({preferredZone})."
 msgid "{0} interview"
 msgstr "{0} samtale"
 
+#. placeholder {0}: invitation.inviterEmail
+#. placeholder {1}: getRoleLabel(invitation.role)
+#: src/features/auth/pages/accept-invitation.tsx
+msgid "{0} invited you to join as {1}."
+msgstr ""
+
 #. placeholder {0}: i18n.number(row.minutes)
 #. placeholder {0}: row.minutes
 #: src/features/career/workspace/prepare.tsx
@@ -449,11 +459,6 @@ msgstr "{0} jobopslag"
 #: src/features/assistant/conversation.tsx
 msgid "{0} returned “{1}”. Your message is kept."
 msgstr "{0} returnerede \"{1}\". Din besked gemmes."
-
-#. placeholder {0}: done.length
-#: src/features/career/today.tsx
-msgid "{0} roles updated."
-msgstr ""
 
 #. placeholder {0}: selection.length
 #: src/features/career/today.tsx
@@ -1139,6 +1144,7 @@ msgstr "Accentfarve"
 msgid "Accent is used for headings, icons and the header band. Body text stays near-black for print and ATS."
 msgstr "Accent bruges til overskrifter, ikoner og hovedbåndet. Brødtekst forbliver næsten sort til print og ATS."
 
+#: src/features/auth/pages/accept-invitation.tsx
 #: src/features/career/workspace/apply.tsx
 #: src/features/homepage/write.tsx
 #: src/features/resume/editor/proposals/proposal-list.tsx
@@ -1148,6 +1154,10 @@ msgstr "Acceptere"
 #: src/features/resume/editor/proposals/proposal-list.tsx
 msgid "Accept all"
 msgstr "Accepter alle"
+
+#: src/features/organization/no-organization-notice.tsx
+msgid "Accept your invitation"
+msgstr ""
 
 #: src/features/homepage/write.tsx
 msgid "Accepted"
@@ -1622,6 +1632,10 @@ msgstr "Tilføjer en påmindelse under I dag, hvis du ikke har fået svar inden 
 msgid "Adjust fonts, colors, spacing and sections in the resume builder. Export your finished resume to PDF or Word, or share a link. The PDFs above are examples to help you compare designs."
 msgstr "Juster skrifttyper, farver, mellemrum og sektioner i CV-byggeren. Eksporter dit færdige CV til PDF eller Microsoft Word, eller del et link. PDF-filerne ovenfor er eksempler, der hjælper dig med at sammenligne designs."
 
+#: src/features/organization/roles.ts
+msgid "Admin"
+msgstr ""
+
 #: src/features/homepage/sections.tsx
 msgid "Ads"
 msgstr "Annoncer"
@@ -1851,6 +1865,10 @@ msgstr "En post har ingen datoer"
 #: src/features/assistant/conversation.tsx
 msgid "an error"
 msgstr "en fejl"
+
+#: src/features/auth/pages/accept-invitation.tsx
+msgid "An invitation can only be accepted once your email address is verified."
+msgstr ""
 
 #: src/components/layout/error-screen.tsx
 msgid "An unexpected error stopped this page from loading. Try again, or go to the dashboard."
@@ -2640,6 +2658,7 @@ msgstr "Kan software læse dit cv?"
 #: src/features/career/workspace/fit.tsx
 #: src/features/career/workspace/preparation.tsx
 #: src/features/documents/new-document-dialog.tsx
+#: src/features/organization/members-page.tsx
 #: src/features/resume/builder/password-dialog.tsx
 #: src/features/resume/editor/check/job-match.tsx
 #: src/features/resume/editor/write/picture-settings.tsx
@@ -2649,6 +2668,11 @@ msgstr "Kan software læse dit cv?"
 #: src/hooks/use-confirm.tsx
 msgid "Cancel"
 msgstr "Annuller"
+
+#. placeholder {0}: invitation.email
+#: src/features/organization/members-page.tsx
+msgid "Cancel invitation for {0}"
+msgstr ""
 
 #: src/routes/dashboard/-components/app-shell.tsx
 #: src/routes/dashboard/career/route.tsx
@@ -3563,10 +3587,18 @@ msgstr "Kunne ikke tilføje ansøgningen. Prøv igen."
 msgid "Couldn't add the passkey. Try again."
 msgstr "Adgangsnøglen kunne ikke tilføjes. Prøv igen."
 
+#: src/features/auth/pages/accept-invitation.tsx
+msgid "Couldn't answer the invitation. Try again."
+msgstr ""
+
 #: src/features/assistant/conversation.tsx
 #: src/features/career/coach-thread.tsx
 msgid "Couldn't attach the file. Try again."
 msgstr "Kunne ikke vedhæfte filen. Prøv igen."
+
+#: src/features/organization/members-page.tsx
+msgid "Couldn't cancel the invitation. Try again."
+msgstr ""
 
 #: src/routes/builder/letter/-components/design-panel.tsx
 msgid "Couldn't change the design. Try again."
@@ -3575,6 +3607,10 @@ msgstr "Designet kunne ikke ændres. Prøv igen."
 #: src/features/settings/account/profile.tsx
 msgid "Couldn't change the email. Try again."
 msgstr "E-mailen kunne ikke ændres. Prøv igen."
+
+#: src/features/organization/members-page.tsx
+msgid "Couldn't change the role. Try again."
+msgstr ""
 
 #: src/features/career/workspace/prepare.tsx
 msgid "Couldn't change the schedule. Try again."
@@ -3771,6 +3807,10 @@ msgstr "Dokumenter kunne ikke indlæses"
 msgid "Couldn't load interviews. Retry"
 msgstr "Kunne ikke indlæse interviews. Prøv igen"
 
+#: src/features/organization/members-page.tsx
+msgid "Couldn't load members"
+msgstr ""
+
 #: src/features/settings/ai/web-access.tsx
 msgid "Couldn't load or save web access settings. Try again."
 msgstr "Kunne ikke indlæse eller gemme indstillinger for webadgang. Prøv igen."
@@ -3870,6 +3910,10 @@ msgstr "Kunne ikke huske det. Prøv igen."
 #: src/features/career/today.tsx
 msgid "Couldn't remove it from Applications. Try again."
 msgstr "Kunne ikke fjerne den fra Ansøgninger. Prøv igen."
+
+#: src/features/organization/members-page.tsx
+msgid "Couldn't remove the member. Try again."
+msgstr ""
 
 #: src/features/settings/account/security.tsx
 msgid "Couldn't remove the passkey. Try again."
@@ -4004,9 +4048,14 @@ msgstr "Kunne ikke gemme. Prøv igen."
 msgid "Couldn't schedule the interview. Try again."
 msgstr "Kunne ikke planlægge interviewet. Prøv igen."
 
+#: src/features/auth/pages/accept-invitation.tsx
 #: src/features/settings/account/profile.tsx
 msgid "Couldn't send the email. Try again."
 msgstr "Kunne ikke sende e-mailen. Prøv igen."
+
+#: src/features/organization/members-page.tsx
+msgid "Couldn't send the invitation. Try again."
+msgstr ""
 
 #. Fallback toast when requesting password reset email fails without backend message
 #: src/features/auth/pages/forgot-password.tsx
@@ -4062,6 +4111,10 @@ msgstr "Kunne ikke skifte forbindelse. Prøv igen."
 #: src/features/assistant/assistant-panel.tsx
 msgid "Couldn't switch models. Try again."
 msgstr "Kunne ikke skifte model. Prøv igen."
+
+#: src/features/organization/switcher.tsx
+msgid "Couldn't switch organization. Try again."
+msgstr ""
 
 #: src/features/career/workspace/practise.tsx
 msgid "Couldn't transcribe. Your recording is still here."
@@ -4251,6 +4304,10 @@ msgstr "Lav først et CV, og spørg derefter om det."
 #: src/features/auth/components/guest-banner.tsx
 msgid "Create account"
 msgstr "Opret konto"
+
+#: src/features/auth/pages/accept-invitation.tsx
+msgid "Create an account"
+msgstr ""
 
 #: src/features/auth/pages/consent.tsx
 msgid "Create and change your documents and job applications, seeing each one it changes in full, and change your profile and username."
@@ -4446,6 +4503,10 @@ msgstr "Kære ansættelsesteam,"
 #: src/features/homepage/prepare.tsx
 msgid "Debrief"
 msgstr "Opsamling"
+
+#: src/features/auth/pages/accept-invitation.tsx
+msgid "Decline"
+msgstr ""
 
 #: src/features/homepage/prepare.tsx
 msgid "Deep breath."
@@ -5220,6 +5281,7 @@ msgstr "E-mail (valgfrit)"
 #: src/features/auth/pages/forgot-password.tsx
 #: src/features/auth/pages/login.tsx
 #: src/features/auth/pages/register.tsx
+#: src/features/organization/members-page.tsx
 msgid "Email address"
 msgstr "E-mailadresse"
 
@@ -5315,6 +5377,7 @@ msgstr "Indtast en valutakode på tre bogstaver."
 #: src/features/applications/components/detail/contacts.tsx
 #: src/features/auth/pages/forgot-password.tsx
 #: src/features/auth/pages/register.tsx
+#: src/features/organization/members-page.tsx
 #: src/features/settings/account/profile.tsx
 msgid "Enter a valid email address."
 msgstr "Indtast en gyldig e-mailadresse."
@@ -6072,6 +6135,7 @@ msgstr "Gå hjem"
 
 #: src/components/layout/error-screen.tsx
 #: src/components/layout/not-found-screen.tsx
+#: src/features/auth/pages/accept-invitation.tsx
 #: src/routes/_home/-sections/header.tsx
 msgid "Go to dashboard"
 msgstr "Gå til dashboard"
@@ -6642,6 +6706,19 @@ msgstr "Interviewer"
 msgid "Interviews"
 msgstr "Jobsamtaler"
 
+#. placeholder {0}: parsed.data.email
+#: src/features/organization/members-page.tsx
+msgid "Invitation sent to {0}"
+msgstr ""
+
+#: src/features/auth/pages/accept-invitation.tsx
+msgid "Invitation unavailable"
+msgstr ""
+
+#: src/features/organization/members-page.tsx
+msgid "Invite someone"
+msgstr ""
+
 #: src/features/career/offers.tsx
 msgid "Is equity part of the offer?"
 msgstr "Indgår aktier i tilbuddet?"
@@ -6814,6 +6891,11 @@ msgstr "John Doe"
 #: src/features/auth/pages/register.tsx
 msgid "john.doe"
 msgstr "John.doe"
+
+#. placeholder {0}: invitation.organizationName
+#: src/features/auth/pages/accept-invitation.tsx
+msgid "Join {0}"
+msgstr ""
 
 #: src/features/homepage/footer.tsx
 msgid "Join Discord"
@@ -7756,6 +7838,20 @@ msgstr "median til første svar"
 msgid "Medium"
 msgstr "Medium"
 
+#: src/features/organization/roles.ts
+msgid "Member"
+msgstr ""
+
+#: src/features/organization/members-page.tsx
+msgid "Members"
+msgstr ""
+
+#: src/features/organization/members-page.tsx
+#: src/features/settings/root.tsx
+#: src/routes/dashboard/settings/route.tsx
+msgid "Members & invites"
+msgstr ""
+
 #: src/features/homepage/prepare.tsx
 msgid "Mentor other designers"
 msgstr "Være mentor for andre designere"
@@ -8374,6 +8470,10 @@ msgstr "Ingen åbne problemer"
 msgid "No other stage counts as {0}. Add one first, so its applications have somewhere to go."
 msgstr "Ingen anden fase tæller som {0}. Tilføj først en, så ansøgningerne har et sted at blive flyttet til."
 
+#: src/features/organization/members-page.tsx
+msgid "No pending invitations."
+msgstr ""
+
 #: src/features/resume/editor/check/issues.ts
 msgid "No phone number"
 msgstr "Intet telefonnummer"
@@ -8845,6 +8945,10 @@ msgstr "Der blev kun fundet én genkendelig afsnitsoverskrift."
 msgid "Only one version so far. Every editing session adds one automatically."
 msgstr "Kun én version indtil videre. Hver redigeringssession tilføjer en automatisk."
 
+#: src/features/organization/members-page.tsx
+msgid "Only owners and admins can manage members"
+msgstr ""
+
 #: src/features/settings/ai/providers.tsx
 msgid "Only providers that pass their test can be turned on."
 msgstr "Kun udbydere, der består deres test, kan slås til."
@@ -9046,6 +9150,7 @@ msgstr "Eller upload et CV som PDF"
 msgid "Orange"
 msgstr "Orange"
 
+#: src/features/organization/switcher.tsx
 #: src/features/resume/editor/write/entries.tsx
 msgid "Organization"
 msgstr "Organisation"
@@ -9096,6 +9201,10 @@ msgstr "Formindsk indrykning"
 #: src/features/homepage/prepare.tsx
 msgid "Own and evolve a design system"
 msgstr "Eje og videreudvikle et designsystem"
+
+#: src/features/organization/roles.ts
+msgid "Owner"
+msgstr ""
 
 #: src/libs/resume/section.tsx
 #: src/routes/builder/$resumeId/-components/design-panel.tsx
@@ -9312,6 +9421,10 @@ msgstr "PDF, Word (DOCX), Markdown og JSON. JSON-eksporten importerer tilbage ti
 #: src/features/documents/documents-page.tsx
 msgid "PDF, Word or JSON. We'll build a resume from it."
 msgstr "PDF, Word eller JSON. Vi bygger et CV ud fra det."
+
+#: src/features/organization/members-page.tsx
+msgid "Pending invitations"
+msgstr ""
 
 #: src/features/homepage/sections.tsx
 msgid "People using it"
@@ -10322,6 +10435,7 @@ msgstr "Fjernarbejde"
 msgid "Remote, Hybrid, a city…"
 msgstr "Remote, hybrid, en by…"
 
+#: src/features/organization/members-page.tsx
 #: src/features/resume/share/custom-domain-field.tsx
 #: src/features/settings/account/security.tsx
 msgid "Remove"
@@ -10360,6 +10474,14 @@ msgstr "Fjern {country}"
 msgid "Remove {label}…"
 msgstr "Fjern {label}…"
 
+#: src/features/organization/members-page.tsx
+msgid "Remove {name}"
+msgstr ""
+
+#: src/features/organization/members-page.tsx
+msgid "Remove {name}?"
+msgstr ""
+
 #: src/features/applications/components/application-detail-sheet.tsx
 msgid "Remove {value}"
 msgstr "Fjern {value}"
@@ -10379,6 +10501,10 @@ msgstr "Fjern fil"
 #. placeholder {0}: index + 1
 #: src/features/settings/account/application-profile.tsx
 msgid "Remove link {0}"
+msgstr ""
+
+#: src/features/organization/members-page.tsx
+msgid "Remove member"
 msgstr ""
 
 #: src/features/settings/account/security.tsx
@@ -10430,6 +10556,10 @@ msgstr ""
 
 #: src/features/career/workspace/answer-library.tsx
 msgid "Remove unavailable story reference"
+msgstr ""
+
+#: src/features/organization/members-page.tsx
+msgid "Removed {name}"
 msgstr ""
 
 #: src/features/career/coach.tsx
@@ -10863,6 +10993,7 @@ msgstr "Lige nu"
 #: src/features/applications/components/import-applications-sheet.tsx
 #: src/features/applications/components/interview-dialog.tsx
 #: src/features/applications/components/list-view.tsx
+#: src/features/organization/members-page.tsx
 #: src/features/resume/editor/check/job-match.tsx
 msgid "Role"
 msgstr "Stilling"
@@ -10879,6 +11010,10 @@ msgstr "Rolle {0}"
 #: src/features/applications/components/application-form-sheet.tsx
 msgid "Role / title"
 msgstr "Rolle / titel"
+
+#: src/features/organization/members-page.tsx
+msgid "Role of {name}"
+msgstr ""
 
 #. placeholder {0}: index + 1
 #: src/features/applications/components/interview-dialog.tsx
@@ -11496,6 +11631,10 @@ msgstr "Semantisk CSS-stilark"
 msgid "Send"
 msgstr "Sende"
 
+#: src/features/organization/members-page.tsx
+msgid "Send invitation"
+msgstr ""
+
 #. Primary action button label on forgot-password form
 #: src/features/auth/pages/forgot-password.tsx
 msgid "Send reset link"
@@ -11508,6 +11647,10 @@ msgstr "Send selve CV'et frem for en portfolio-indpakning."
 #: src/features/assistant/tool-approvals.tsx
 msgid "Send this exact query to your web search provider?"
 msgstr "Send præcis denne forespørgsel til din udbyder af websøgning?"
+
+#: src/features/auth/pages/accept-invitation.tsx
+msgid "Send verification email"
+msgstr ""
 
 #: src/routes/builder/letter/-components/write-panel.tsx
 msgid "Sender details copied into the letter"
@@ -11832,6 +11975,7 @@ msgstr "Sidebjælker læses ofte sidst eller blandes ind i hovedspalten."
 
 #. Primary action button label on login form
 #: src/features/auth/components/guest-banner.tsx
+#: src/features/auth/pages/accept-invitation.tsx
 #: src/features/auth/pages/login.tsx
 #: src/features/homepage/footer.tsx
 msgid "Sign in"
@@ -11843,6 +11987,10 @@ msgstr "Log ind"
 #: src/features/auth/pages/register.tsx
 msgid "Sign in now"
 msgstr "Log ind nu"
+
+#: src/features/auth/pages/accept-invitation.tsx
+msgid "Sign in or create an account with the email address that received the invitation to join."
+msgstr ""
 
 #. Title on the login page
 #: src/features/auth/pages/login.tsx
@@ -13126,9 +13274,17 @@ msgstr "Det er de svar, der blev gemt, da du ansøgte."
 msgid "They and their timelines are deleted permanently. This can't be undone."
 msgstr "De og deres tidslinjer slettes permanent. Dette kan ikke fortrydes."
 
+#: src/features/organization/members-page.tsx
+msgid "They get an email with a link that is valid for 7 days."
+msgstr ""
+
 #: src/features/resume/editor/check/issues.ts
 msgid "They look for headings such as Experience, Education and Skills."
 msgstr "De leder efter overskrifter som Erfaring, Uddannelse og Færdigheder."
+
+#: src/features/organization/members-page.tsx
+msgid "They lose access to this organization right away."
+msgstr ""
 
 #: src/features/homepage/prepare.tsx
 msgid "They’ve confirmed your interview for today"
@@ -13246,6 +13402,14 @@ msgstr "Denne fil bruger mange forskellige skrifttyper."
 #: src/features/ats-checker/messages.ts
 msgid "This file uses Type 3 fonts, which carry drawings instead of characters."
 msgstr "Denne fil bruger Type 3-skrifttyper, som indeholder tegninger i stedet for tegn."
+
+#: src/features/auth/pages/accept-invitation.tsx
+msgid "This invitation has expired, was canceled, or has already been answered. Ask the organization to send a new one."
+msgstr ""
+
+#: src/features/auth/pages/accept-invitation.tsx
+msgid "This invitation was sent to a different email address. Sign in with the address that received it."
+msgstr ""
 
 #: src/features/ats-checker/messages.ts
 msgid "This is a PDF Portfolio: the visible page is only a cover."
@@ -14043,6 +14207,10 @@ msgstr "Brug eksempel"
 msgid "Use the standard heading"
 msgstr "Brug standardoverskriften"
 
+#: src/features/auth/pages/accept-invitation.tsx
+msgid "Use the verification link we emailed to {email}, or ask for a new one."
+msgstr ""
+
 #: src/features/career/workspace/apply.tsx
 msgid "Use these answers"
 msgstr "Brug disse svar"
@@ -14156,6 +14324,10 @@ msgstr "Verificér"
 #: src/features/auth/pages/verify-2fa.tsx
 msgid "Verify with a backup code"
 msgstr "Bekræft med en backup-kode"
+
+#: src/features/auth/pages/accept-invitation.tsx
+msgid "Verify your email first"
+msgstr ""
 
 #: src/features/career/schedule-sheet.tsx
 msgid "Verify your email in Settings first"
@@ -14304,6 +14476,10 @@ msgstr "Vi har sendt et link til {currentEmail} for at godkende ændringen. Åbn
 #: src/features/settings/account/profile.tsx
 msgid "We sent a new verification link to {0}."
 msgstr "Vi sendte et nyt bekræftelseslink til {0}."
+
+#: src/features/auth/pages/accept-invitation.tsx
+msgid "We sent a verification link to {email}. Open it, then come back to this page."
+msgstr ""
 
 #: src/features/settings/ai/web-access.tsx
 msgid "Web access"
@@ -14786,6 +14962,10 @@ msgstr "Du svarede: {answer}"
 msgid "You applied to {0} before and didn't hear back."
 msgstr "Du har tidligere søgt hos {0} uden at få svar."
 
+#: src/features/organization/no-organization-notice.tsx
+msgid "You aren't a member of any organization yet. Open the invitation link in the email you received to join one."
+msgstr ""
+
 #: src/features/auth/pages/login.tsx
 msgid "You can also sign in with your username."
 msgstr "Du kan også logge ind med dit brugernavn."
@@ -14814,6 +14994,10 @@ msgstr "Du har ikke et cv at kopiere endnu. Importer eller opret først et CV, o
 msgid "You forgot this before, so it wasn't saved again."
 msgstr "Du har glemt dette før, så det blev ikke gemt igen."
 
+#: src/features/organization/members-page.tsx
+msgid "You need to belong to an organization to manage its members."
+msgstr ""
+
 #: src/features/homepage/prepare.tsx
 msgid "You partnered with engineering. How you led the work isn’t described yet."
 msgstr "Du samarbejdede med udviklerne. Hvordan du ledte arbejdet, er ikke beskrevet endnu."
@@ -14841,6 +15025,10 @@ msgstr "Du kan altid se den under I dag. E-mail afhænger af din servers mailops
 #: src/features/homepage/tailor.tsx
 msgid "You’ll own our <0>design systems</0>, run <1>user research</1> with customers and hold a high bar for <2>accessibility</2>, working in a <3>cross-functional</3> team."
 msgstr "Du får ansvaret for vores <0>designsystemer</0>, gennemfører <1>brugerundersøgelser</1> med kunder og stiller høje krav til <2>tilgængelighed</2> i et <3>tværfagligt</3> team."
+
+#: src/features/auth/pages/accept-invitation.tsx
+msgid "You're invited"
+msgstr ""
 
 #: src/features/career/workspace/shell.tsx
 msgid "You're looking at a saved version. It can't be edited."

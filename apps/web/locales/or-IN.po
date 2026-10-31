@@ -89,6 +89,10 @@ msgstr "(ଇଚ୍ଛାଧୀନ)"
 msgid "(required)"
 msgstr "(ଆବଶ୍ୟକ)"
 
+#: src/features/organization/members-page.tsx
+msgid "(you)"
+msgstr ""
+
 #. placeholder {0}: applied.length
 #: src/features/resume/editor/proposals/proposals.ts
 msgid "{0, plural, =1 {Edit applied} other {# edits applied}}"
@@ -383,6 +387,12 @@ msgstr "{1}ରେ {0} ଆପଣଙ୍କ ସମୟ ଅଞ୍ଚଳରେ ({prefe
 msgid "{0} interview"
 msgstr "{0} ସାକ୍ଷାତକାର |"
 
+#. placeholder {0}: invitation.inviterEmail
+#. placeholder {1}: getRoleLabel(invitation.role)
+#: src/features/auth/pages/accept-invitation.tsx
+msgid "{0} invited you to join as {1}."
+msgstr ""
+
 #. placeholder {0}: i18n.number(row.minutes)
 #. placeholder {0}: row.minutes
 #: src/features/career/workspace/prepare.tsx
@@ -449,11 +459,6 @@ msgstr "{0} ଚାକିରି ପୋଷ୍ଟିଂ |"
 #: src/features/assistant/conversation.tsx
 msgid "{0} returned “{1}”. Your message is kept."
 msgstr "{0} “{1}” ଫେରସ୍ତ କଲା | ତୁମର ବାର୍ତ୍ତା ରଖାଯାଇଛି |"
-
-#. placeholder {0}: done.length
-#: src/features/career/today.tsx
-msgid "{0} roles updated."
-msgstr ""
 
 #. placeholder {0}: selection.length
 #: src/features/career/today.tsx
@@ -1139,6 +1144,7 @@ msgstr "ଉଚ୍ଚାରଣ ରଙ୍ଗ |"
 msgid "Accent is used for headings, icons and the header band. Body text stays near-black for print and ATS."
 msgstr "ଶିରୋନାମା, ଆଇକନ୍ ଏବଂ ହେଡର୍ ବ୍ୟାଣ୍ଡ ପାଇଁ Accent ବ୍ୟବହୃତ ହୁଏ | ମୁଦ୍ରଣ ଏବଂ ATS ପାଇଁ ଶରୀର ପାଠ୍ୟ କଳା-କଳା ପାଖରେ ରହିଥାଏ |"
 
+#: src/features/auth/pages/accept-invitation.tsx
 #: src/features/career/workspace/apply.tsx
 #: src/features/homepage/write.tsx
 #: src/features/resume/editor/proposals/proposal-list.tsx
@@ -1148,6 +1154,10 @@ msgstr "ଗ୍ରହଣ କରନ୍ତୁ"
 #: src/features/resume/editor/proposals/proposal-list.tsx
 msgid "Accept all"
 msgstr "ସମସ୍ତ ଗ୍ରହଣ କରନ୍ତୁ |"
+
+#: src/features/organization/no-organization-notice.tsx
+msgid "Accept your invitation"
+msgstr ""
 
 #: src/features/homepage/write.tsx
 msgid "Accepted"
@@ -1622,6 +1632,10 @@ msgstr "ସେତେବେଳ ସୁଦ୍ଧା ଉତ୍ତର ନ ପାଇ�
 msgid "Adjust fonts, colors, spacing and sections in the resume builder. Export your finished resume to PDF or Word, or share a link. The PDFs above are examples to help you compare designs."
 msgstr "CV ବିଲଡରରେ ଫଣ୍ଟ, ରଙ୍ଗ, ବ୍ୟବଧାନ ଏବଂ ବିଭାଗଗୁଡିକ ଆଡଜଷ୍ଟ କରନ୍ତୁ | ଆପଣଙ୍କର ସମାପ୍ତ CV କୁ PDF କିମ୍ବା Microsoft Wordକୁ ରପ୍ତାନି କରନ୍ତୁ, କିମ୍ବା ଏକ ଲିଙ୍କ୍ ଅଂଶୀଦାର କରନ୍ତୁ | ଡିଜାଇନ୍ ତୁଳନା କରିବାରେ ସାହାଯ୍ୟ କରିବାକୁ ଉପରୋକ୍ତ PDF ଫାଇଲଗୁଡ଼ିକ ହେଉଛି ଉଦାହରଣ |"
 
+#: src/features/organization/roles.ts
+msgid "Admin"
+msgstr ""
+
 #: src/features/homepage/sections.tsx
 msgid "Ads"
 msgstr "ବିଜ୍ଞାପନଗୁଡିକ |"
@@ -1851,6 +1865,10 @@ msgstr "ଏକ ପ୍ରବେଶର କ dates ଣସି ତାରିଖ ନା�
 #: src/features/assistant/conversation.tsx
 msgid "an error"
 msgstr "ଏକ ତ୍ରୁଟି |"
+
+#: src/features/auth/pages/accept-invitation.tsx
+msgid "An invitation can only be accepted once your email address is verified."
+msgstr ""
 
 #: src/components/layout/error-screen.tsx
 msgid "An unexpected error stopped this page from loading. Try again, or go to the dashboard."
@@ -2640,6 +2658,7 @@ msgstr "ସଫ୍ଟୱେର୍ ତୁମର ରେଜୁମ୍ ପ read ି �
 #: src/features/career/workspace/fit.tsx
 #: src/features/career/workspace/preparation.tsx
 #: src/features/documents/new-document-dialog.tsx
+#: src/features/organization/members-page.tsx
 #: src/features/resume/builder/password-dialog.tsx
 #: src/features/resume/editor/check/job-match.tsx
 #: src/features/resume/editor/write/picture-settings.tsx
@@ -2649,6 +2668,11 @@ msgstr "ସଫ୍ଟୱେର୍ ତୁମର ରେଜୁମ୍ ପ read ି �
 #: src/hooks/use-confirm.tsx
 msgid "Cancel"
 msgstr "ବାତିଲ୍ କରନ୍ତୁ"
+
+#. placeholder {0}: invitation.email
+#: src/features/organization/members-page.tsx
+msgid "Cancel invitation for {0}"
+msgstr ""
 
 #: src/routes/dashboard/-components/app-shell.tsx
 #: src/routes/dashboard/career/route.tsx
@@ -3563,10 +3587,18 @@ msgstr "ଆବେଦନ ଯୋଡି ପାରିଲା ନାହିଁ। ପ�
 msgid "Couldn't add the passkey. Try again."
 msgstr "ପାସ୍କି ଯୋଡି ପାରିଲା ନାହିଁ | ପୁନର୍ବାର ଚେଷ୍ଟା କରନ୍ତୁ |"
 
+#: src/features/auth/pages/accept-invitation.tsx
+msgid "Couldn't answer the invitation. Try again."
+msgstr ""
+
 #: src/features/assistant/conversation.tsx
 #: src/features/career/coach-thread.tsx
 msgid "Couldn't attach the file. Try again."
 msgstr "ଫାଇଲ୍ ସଂଲଗ୍ନ କରିପାରିଲା ନାହିଁ। ପୁଣି ଚେଷ୍ଟା କରନ୍ତୁ।"
+
+#: src/features/organization/members-page.tsx
+msgid "Couldn't cancel the invitation. Try again."
+msgstr ""
 
 #: src/routes/builder/letter/-components/design-panel.tsx
 msgid "Couldn't change the design. Try again."
@@ -3575,6 +3607,10 @@ msgstr "ଡିଜାଇନ୍ ପରିବର୍ତ୍ତନ କରିପାର�
 #: src/features/settings/account/profile.tsx
 msgid "Couldn't change the email. Try again."
 msgstr "ଇମେଲ୍ ପରିବର୍ତ୍ତନ କରିପାରିଲା ନାହିଁ | ପୁନର୍ବାର ଚେଷ୍ଟା କରନ୍ତୁ |"
+
+#: src/features/organization/members-page.tsx
+msgid "Couldn't change the role. Try again."
+msgstr ""
 
 #: src/features/career/workspace/prepare.tsx
 msgid "Couldn't change the schedule. Try again."
@@ -3771,6 +3807,10 @@ msgstr "ଦଲିଲ ଲୋଡ୍ କରିହେଲା ନାହିଁ"
 msgid "Couldn't load interviews. Retry"
 msgstr "ସାକ୍ଷାତକାରଗୁଡ଼ିକ ଲୋଡ୍ କରିହେଲା ନାହିଁ। ପୁନଃଚେଷ୍ଟା କରନ୍ତୁ"
 
+#: src/features/organization/members-page.tsx
+msgid "Couldn't load members"
+msgstr ""
+
 #: src/features/settings/ai/web-access.tsx
 msgid "Couldn't load or save web access settings. Try again."
 msgstr "ୱେବ୍ ଆକସେସ୍ ସେଟିଂସ ଲୋଡ୍ କିମ୍ବା ସେଭ୍ କରିହେଲା ନାହିଁ। ପୁଣି ଚେଷ୍ଟା କରନ୍ତୁ।"
@@ -3870,6 +3910,10 @@ msgstr "ତାହା ମନେ ରଖିହେଲା ନାହିଁ। ପୁ�
 #: src/features/career/today.tsx
 msgid "Couldn't remove it from Applications. Try again."
 msgstr "ଏହାକୁ ଆବେଦନଗୁଡ଼ିକରୁ ହଟାଇହେଲା ନାହିଁ। ପୁଣି ଚେଷ୍ଟା କରନ୍ତୁ।"
+
+#: src/features/organization/members-page.tsx
+msgid "Couldn't remove the member. Try again."
+msgstr ""
 
 #: src/features/settings/account/security.tsx
 msgid "Couldn't remove the passkey. Try again."
@@ -4004,9 +4048,14 @@ msgstr "ସଞ୍ଚୟ କରିପାରିଲା ନାହିଁ ପୁନର
 msgid "Couldn't schedule the interview. Try again."
 msgstr "ସାକ୍ଷାତକାର ସମୟ ନିର୍ଦ୍ଧାରଣ କରିହେଲା ନାହିଁ। ପୁଣି ଚେଷ୍ଟା କରନ୍ତୁ।"
 
+#: src/features/auth/pages/accept-invitation.tsx
 #: src/features/settings/account/profile.tsx
 msgid "Couldn't send the email. Try again."
 msgstr "ଇମେଲ୍ ପଠାଇ ପାରିଲା ନାହିଁ | ପୁନର୍ବାର ଚେଷ୍ଟା କରନ୍ତୁ |"
+
+#: src/features/organization/members-page.tsx
+msgid "Couldn't send the invitation. Try again."
+msgstr ""
 
 #. Fallback toast when requesting password reset email fails without backend message
 #: src/features/auth/pages/forgot-password.tsx
@@ -4062,6 +4111,10 @@ msgstr "ସଂଯୋଗ ବଦଳାଇହେଲା ନାହିଁ। ପୁଣ
 #: src/features/assistant/assistant-panel.tsx
 msgid "Couldn't switch models. Try again."
 msgstr "ମଡେଲ୍ ବଦଳାଇହେଲା ନାହିଁ। ପୁଣି ଚେଷ୍ଟା କରନ୍ତୁ।"
+
+#: src/features/organization/switcher.tsx
+msgid "Couldn't switch organization. Try again."
+msgstr ""
 
 #: src/features/career/workspace/practise.tsx
 msgid "Couldn't transcribe. Your recording is still here."
@@ -4251,6 +4304,10 @@ msgstr "ପ୍ରଥମେ ଏକ ରେଜୁମ୍ ସୃଷ୍ଟି କର�
 #: src/features/auth/components/guest-banner.tsx
 msgid "Create account"
 msgstr "ଆକାଉଣ୍ଟ ତିଆରି କରନ୍ତୁ"
+
+#: src/features/auth/pages/accept-invitation.tsx
+msgid "Create an account"
+msgstr ""
 
 #: src/features/auth/pages/consent.tsx
 msgid "Create and change your documents and job applications, seeing each one it changes in full, and change your profile and username."
@@ -4446,6 +4503,10 @@ msgstr "ପ୍ରିୟ ନିଯୁକ୍ତି ଦଳ,"
 #: src/features/homepage/prepare.tsx
 msgid "Debrief"
 msgstr "ସମୀକ୍ଷା"
+
+#: src/features/auth/pages/accept-invitation.tsx
+msgid "Decline"
+msgstr ""
 
 #: src/features/homepage/prepare.tsx
 msgid "Deep breath."
@@ -5220,6 +5281,7 @@ msgstr "ଇମେଲ୍ (ବ al କଳ୍ପିକ)"
 #: src/features/auth/pages/forgot-password.tsx
 #: src/features/auth/pages/login.tsx
 #: src/features/auth/pages/register.tsx
+#: src/features/organization/members-page.tsx
 msgid "Email address"
 msgstr "ଇମେଲ୍ ଠିକଣା"
 
@@ -5315,6 +5377,7 @@ msgstr "ତିନି ଅକ୍ଷରର ମୁଦ୍ରା କୋଡ୍ ଦି�
 #: src/features/applications/components/detail/contacts.tsx
 #: src/features/auth/pages/forgot-password.tsx
 #: src/features/auth/pages/register.tsx
+#: src/features/organization/members-page.tsx
 #: src/features/settings/account/profile.tsx
 msgid "Enter a valid email address."
 msgstr "ଏକ ବ valid ଧ ଇମେଲ୍ ଠିକଣା ପ୍ରବେଶ କରନ୍ତୁ |"
@@ -6072,6 +6135,7 @@ msgstr "ଘରକୁ ଯାଆନ୍ତୁ"
 
 #: src/components/layout/error-screen.tsx
 #: src/components/layout/not-found-screen.tsx
+#: src/features/auth/pages/accept-invitation.tsx
 #: src/routes/_home/-sections/header.tsx
 msgid "Go to dashboard"
 msgstr "ଡ୍ୟାଶବୋର୍ଡକୁ ଯାଆନ୍ତୁ"
@@ -6643,6 +6707,19 @@ msgstr "ସାକ୍ଷାତକାର"
 msgid "Interviews"
 msgstr "ସାକ୍ଷାତକାର"
 
+#. placeholder {0}: parsed.data.email
+#: src/features/organization/members-page.tsx
+msgid "Invitation sent to {0}"
+msgstr ""
+
+#: src/features/auth/pages/accept-invitation.tsx
+msgid "Invitation unavailable"
+msgstr ""
+
+#: src/features/organization/members-page.tsx
+msgid "Invite someone"
+msgstr ""
+
 #: src/features/career/offers.tsx
 msgid "Is equity part of the offer?"
 msgstr "ଇକ୍ୱିଟି ଅଫରର ଅଂଶ କି?"
@@ -6815,6 +6892,11 @@ msgstr "John Doe"
 #: src/features/auth/pages/register.tsx
 msgid "john.doe"
 msgstr "john.doe"
+
+#. placeholder {0}: invitation.organizationName
+#: src/features/auth/pages/accept-invitation.tsx
+msgid "Join {0}"
+msgstr ""
 
 #: src/features/homepage/footer.tsx
 msgid "Join Discord"
@@ -7757,6 +7839,20 @@ msgstr "ପ୍ରଥମ ଉତ୍ତର ଦେବାକୁ ମଧ୍ୟମ"
 msgid "Medium"
 msgstr "ମଧ୍ୟମ"
 
+#: src/features/organization/roles.ts
+msgid "Member"
+msgstr ""
+
+#: src/features/organization/members-page.tsx
+msgid "Members"
+msgstr ""
+
+#: src/features/organization/members-page.tsx
+#: src/features/settings/root.tsx
+#: src/routes/dashboard/settings/route.tsx
+msgid "Members & invites"
+msgstr ""
+
 #: src/features/homepage/prepare.tsx
 msgid "Mentor other designers"
 msgstr "ଅନ୍ୟ ଡିଜାଇନରଙ୍କୁ ମେଣ୍ଟର କରିବା"
@@ -8375,6 +8471,10 @@ msgstr "କ open ଣସି ଖୋଲା ପ୍ରସଙ୍ଗ ନାହିଁ |"
 msgid "No other stage counts as {0}. Add one first, so its applications have somewhere to go."
 msgstr "{0} ଭାବେ ଗଣାଯାଉଥିବା ଅନ୍ୟ ପର୍ଯ୍ୟାୟ ନାହିଁ। ଏଥିରେ ଥିବା ଆବେଦନଗୁଡ଼ିକୁ ଘୁଞ୍ଚାଇବା ପାଇଁ ପ୍ରଥମେ ସେପରି ଏକ ପର୍ଯ୍ୟାୟ ଯୋଡ଼ନ୍ତୁ।"
 
+#: src/features/organization/members-page.tsx
+msgid "No pending invitations."
+msgstr ""
+
 #: src/features/resume/editor/check/issues.ts
 msgid "No phone number"
 msgstr "କ phone ଣସି ଫୋନ୍ ନମ୍ବର ନାହିଁ |"
@@ -8846,6 +8946,10 @@ msgstr "କେବଳ ଗୋଟିଏ ଚିହ୍ନଟଯୋଗ୍ୟ ବିଭ
 msgid "Only one version so far. Every editing session adds one automatically."
 msgstr "ବର୍ତ୍ତମାନ ପର୍ଯ୍ୟନ୍ତ କେବଳ ଗୋଟିଏ ସଂସ୍କରଣ | ପ୍ରତ୍ୟେକ ଏଡିଟିଂ ଅଧିବେଶନ ସ୍ୱୟଂଚାଳିତ ଭାବରେ ଗୋଟିଏ ଯୋଗ କରେ |"
 
+#: src/features/organization/members-page.tsx
+msgid "Only owners and admins can manage members"
+msgstr ""
+
 #: src/features/settings/ai/providers.tsx
 msgid "Only providers that pass their test can be turned on."
 msgstr "କେବଳ ପ୍ରଦାନକାରୀ ଯେଉଁମାନେ ସେମାନଙ୍କର ପରୀକ୍ଷାରେ ଉତ୍ତୀର୍ଣ୍ଣ ହୋଇପାରିବେ |"
@@ -9048,6 +9152,7 @@ msgstr "କିମ୍ବା ଏକ ରେଜୁମେ PDF ଅପଲୋଡ୍ କ�
 msgid "Orange"
 msgstr "କମଳା"
 
+#: src/features/organization/switcher.tsx
 #: src/features/resume/editor/write/entries.tsx
 msgid "Organization"
 msgstr "ସଂଗଠନ"
@@ -9098,6 +9203,10 @@ msgstr "ଇଣ୍ଡେଣ୍ଟ କମାନ୍ତୁ"
 #: src/features/homepage/prepare.tsx
 msgid "Own and evolve a design system"
 msgstr "ଏକ ଡିଜାଇନ୍ ସିଷ୍ଟମ୍‌ର ଦାୟିତ୍ୱ ନେଇ ଏହାକୁ ବିକଶିତ କରିବା"
+
+#: src/features/organization/roles.ts
+msgid "Owner"
+msgstr ""
 
 #: src/libs/resume/section.tsx
 #: src/routes/builder/$resumeId/-components/design-panel.tsx
@@ -9314,6 +9423,10 @@ msgstr "PDF, Word (DOCX), Markdown ଏବଂ JSON | JSON ରପ୍ତାନି �
 #: src/features/documents/documents-page.tsx
 msgid "PDF, Word or JSON. We'll build a resume from it."
 msgstr "PDF, Word କିମ୍ବା JSON | ଆମେ ଏଥିରୁ ଏକ ରେଜୁମ୍ ନିର୍ମାଣ କରିବୁ |"
+
+#: src/features/organization/members-page.tsx
+msgid "Pending invitations"
+msgstr ""
 
 #: src/features/homepage/sections.tsx
 msgid "People using it"
@@ -10324,6 +10437,7 @@ msgstr "ରିମୋଟ୍"
 msgid "Remote, Hybrid, a city…"
 msgstr "ରିମୋଟ୍, ହାଇବ୍ରିଡ୍, ଏକ ସହର…"
 
+#: src/features/organization/members-page.tsx
 #: src/features/resume/share/custom-domain-field.tsx
 #: src/features/settings/account/security.tsx
 msgid "Remove"
@@ -10362,6 +10476,14 @@ msgstr "{country} ହଟାନ୍ତୁ"
 msgid "Remove {label}…"
 msgstr "{label} କାଢ଼ନ୍ତୁ…"
 
+#: src/features/organization/members-page.tsx
+msgid "Remove {name}"
+msgstr ""
+
+#: src/features/organization/members-page.tsx
+msgid "Remove {name}?"
+msgstr ""
+
 #: src/features/applications/components/application-detail-sheet.tsx
 msgid "Remove {value}"
 msgstr "{value} ଅପସାରଣ କରନ୍ତୁ |"
@@ -10381,6 +10503,10 @@ msgstr "ଫାଇଲ୍ ହଟାନ୍ତୁ"
 #. placeholder {0}: index + 1
 #: src/features/settings/account/application-profile.tsx
 msgid "Remove link {0}"
+msgstr ""
+
+#: src/features/organization/members-page.tsx
+msgid "Remove member"
 msgstr ""
 
 #: src/features/settings/account/security.tsx
@@ -10432,6 +10558,10 @@ msgstr ""
 
 #: src/features/career/workspace/answer-library.tsx
 msgid "Remove unavailable story reference"
+msgstr ""
+
+#: src/features/organization/members-page.tsx
+msgid "Removed {name}"
 msgstr ""
 
 #: src/features/career/coach.tsx
@@ -10865,6 +10995,7 @@ msgstr "ଏହି ମୁହୂର୍ତ୍ତରେ"
 #: src/features/applications/components/import-applications-sheet.tsx
 #: src/features/applications/components/interview-dialog.tsx
 #: src/features/applications/components/list-view.tsx
+#: src/features/organization/members-page.tsx
 #: src/features/resume/editor/check/job-match.tsx
 msgid "Role"
 msgstr "ପଦବୀ"
@@ -10881,6 +11012,10 @@ msgstr "ଭୂମିକା {0} |"
 #: src/features/applications/components/application-form-sheet.tsx
 msgid "Role / title"
 msgstr "ଭୂମିକା / ଆଖ୍ୟା"
+
+#: src/features/organization/members-page.tsx
+msgid "Role of {name}"
+msgstr ""
 
 #. placeholder {0}: index + 1
 #: src/features/applications/components/interview-dialog.tsx
@@ -11498,6 +11633,10 @@ msgstr "ଅର୍ଥଗତ CSS ଷ୍ଟାଇଲସିଟ୍"
 msgid "Send"
 msgstr "ପଠାନ୍ତୁ |"
 
+#: src/features/organization/members-page.tsx
+msgid "Send invitation"
+msgstr ""
+
 #. Primary action button label on forgot-password form
 #: src/features/auth/pages/forgot-password.tsx
 msgid "Send reset link"
@@ -11510,6 +11649,10 @@ msgstr "ଏକ ପୋର୍ଟଫୋଲିଓ ରାପର୍ ପରିବର୍
 #: src/features/assistant/tool-approvals.tsx
 msgid "Send this exact query to your web search provider?"
 msgstr "ଏହି ଏକେ ସନ୍ଧାନ ପ୍ରଶ୍ନ ଆପଣଙ୍କ ୱେବ୍ ସନ୍ଧାନ ପ୍ରଦାନକାରୀଙ୍କୁ ପଠାଇବେ?"
+
+#: src/features/auth/pages/accept-invitation.tsx
+msgid "Send verification email"
+msgstr ""
 
 #: src/routes/builder/letter/-components/write-panel.tsx
 msgid "Sender details copied into the letter"
@@ -11834,6 +11977,7 @@ msgstr "ସାଇଡ୍ ବାର୍ ଗୁଡିକ ପ୍ରାୟତ last ଶ
 
 #. Primary action button label on login form
 #: src/features/auth/components/guest-banner.tsx
+#: src/features/auth/pages/accept-invitation.tsx
 #: src/features/auth/pages/login.tsx
 #: src/features/homepage/footer.tsx
 msgid "Sign in"
@@ -11845,6 +11989,10 @@ msgstr "ସାଇନ୍ ଇନ୍ କରନ୍ତୁ"
 #: src/features/auth/pages/register.tsx
 msgid "Sign in now"
 msgstr "ଏବେ ସାଇନ୍ ଇନ୍ କରନ୍ତୁ"
+
+#: src/features/auth/pages/accept-invitation.tsx
+msgid "Sign in or create an account with the email address that received the invitation to join."
+msgstr ""
 
 #. Title on the login page
 #: src/features/auth/pages/login.tsx
@@ -13128,9 +13276,17 @@ msgstr "ଆପଣ ଆବେଦନ କରିବା ସମୟରେ ସେଭ୍ �
 msgid "They and their timelines are deleted permanently. This can't be undone."
 msgstr "ସେଗୁଡ଼ିକ ଏବଂ ସେମାନଙ୍କର ସମୟସୀମା ସବୁଦିନ ପାଇଁ ବିଲୋପ ହୋଇଯାଏ | ଏହାକୁ ପୂର୍ବବତ୍ କରାଯାଇପାରିବ ନାହିଁ |"
 
+#: src/features/organization/members-page.tsx
+msgid "They get an email with a link that is valid for 7 days."
+msgstr ""
+
 #: src/features/resume/editor/check/issues.ts
 msgid "They look for headings such as Experience, Education and Skills."
 msgstr "ସେମାନେ ଅଭିଜ୍ଞତା, ଶିକ୍ଷା ଏବଂ ଦକ୍ଷତା ପରି ହେଡିଙ୍ଗ୍ ଖୋଜନ୍ତି |"
+
+#: src/features/organization/members-page.tsx
+msgid "They lose access to this organization right away."
+msgstr ""
 
 #: src/features/homepage/prepare.tsx
 msgid "They’ve confirmed your interview for today"
@@ -13248,6 +13404,14 @@ msgstr "ଏହି ଫାଇଲ୍ ଅନେକ ଭିନ୍ନ ଫଣ୍ଟ ବ�
 #: src/features/ats-checker/messages.ts
 msgid "This file uses Type 3 fonts, which carry drawings instead of characters."
 msgstr "ଏହି ଫାଇଲ୍ Type 3 ଫଣ୍ଟ ବ୍ୟବହାର କରେ, ଯାହା ଅକ୍ଷର ପରିବର୍ତ୍ତେ ଚିତ୍ର ବହନ କରେ।"
+
+#: src/features/auth/pages/accept-invitation.tsx
+msgid "This invitation has expired, was canceled, or has already been answered. Ask the organization to send a new one."
+msgstr ""
+
+#: src/features/auth/pages/accept-invitation.tsx
+msgid "This invitation was sent to a different email address. Sign in with the address that received it."
+msgstr ""
 
 #: src/features/ats-checker/messages.ts
 msgid "This is a PDF Portfolio: the visible page is only a cover."
@@ -14046,6 +14210,10 @@ msgstr "ନମୁନା ବ୍ୟବହାର କରନ୍ତୁ |"
 msgid "Use the standard heading"
 msgstr "ମାନକ ହେଡିଙ୍ଗ୍ ବ୍ୟବହାର କରନ୍ତୁ |"
 
+#: src/features/auth/pages/accept-invitation.tsx
+msgid "Use the verification link we emailed to {email}, or ask for a new one."
+msgstr ""
+
 #: src/features/career/workspace/apply.tsx
 msgid "Use these answers"
 msgstr "ଏହି ଉତ୍ତରଗୁଡ଼ିକ ବ୍ୟବହାର କରନ୍ତୁ"
@@ -14159,6 +14327,10 @@ msgstr "ସତ୍ୟାପନ କରନ୍ତୁ"
 #: src/features/auth/pages/verify-2fa.tsx
 msgid "Verify with a backup code"
 msgstr "ବ୍ୟାକଅପ୍ କୋଡ୍ ସହ ସତ୍ୟାପନ କରନ୍ତୁ"
+
+#: src/features/auth/pages/accept-invitation.tsx
+msgid "Verify your email first"
+msgstr ""
 
 #: src/features/career/schedule-sheet.tsx
 msgid "Verify your email in Settings first"
@@ -14307,6 +14479,10 @@ msgstr "ପରିବର୍ତ୍ତନ ଅନୁମୋଦନ କରିବାକ�
 #: src/features/settings/account/profile.tsx
 msgid "We sent a new verification link to {0}."
 msgstr "ଆମେ {0} କୁ ଏକ ନୂତନ ଯାଞ୍ଚ ଲିଙ୍କ୍ ପଠାଇଲୁ |"
+
+#: src/features/auth/pages/accept-invitation.tsx
+msgid "We sent a verification link to {email}. Open it, then come back to this page."
+msgstr ""
 
 #: src/features/settings/ai/web-access.tsx
 msgid "Web access"
@@ -14789,6 +14965,10 @@ msgstr "ଆପଣ ଉତ୍ତର ଦେଇଛନ୍ତି: {answer} |"
 msgid "You applied to {0} before and didn't hear back."
 msgstr "ଆପଣ ପୂର୍ବରୁ {0} ରେ ଆବେଦନ କରିଥିଲେ କିନ୍ତୁ କୌଣସି ଉତ୍ତର ପାଇନଥିଲେ।"
 
+#: src/features/organization/no-organization-notice.tsx
+msgid "You aren't a member of any organization yet. Open the invitation link in the email you received to join one."
+msgstr ""
+
 #: src/features/auth/pages/login.tsx
 msgid "You can also sign in with your username."
 msgstr "ଆପଣ ନିଜ ୟୁଜରନେମ୍ ସହିତ ମଧ୍ୟ ସାଇନ୍ ଇନ୍ କରିପାରିବେ।"
@@ -14817,6 +14997,10 @@ msgstr "ଏପର୍ଯ୍ୟନ୍ତ କପି କରିବାକୁ ଆପଣ
 msgid "You forgot this before, so it wasn't saved again."
 msgstr "ଆପଣ ଏହାକୁ ପୂର୍ବରୁ ଭୁଲାଇ ଦେଇଥିଲେ, ତେଣୁ ଏହା ପୁଣି ସେଭ୍ ହେଲା ନାହିଁ।"
 
+#: src/features/organization/members-page.tsx
+msgid "You need to belong to an organization to manage its members."
+msgstr ""
+
 #: src/features/homepage/prepare.tsx
 msgid "You partnered with engineering. How you led the work isn’t described yet."
 msgstr "ଆପଣ ଇଞ୍ଜିନିୟରିଂ ସହ ମିଶି କାମ କଲେ। ଆପଣ କାମର ନେତୃତ୍ୱ କିପରି ନେଲେ ତାହା ଏପର୍ଯ୍ୟନ୍ତ ବର୍ଣ୍ଣନା କରାଯାଇନାହିଁ।"
@@ -14844,6 +15028,10 @@ msgstr "ଆପଣ ଏହାକୁ ସର୍ବଦା “ଆଜି”ରେ ଦ�
 #: src/features/homepage/tailor.tsx
 msgid "You’ll own our <0>design systems</0>, run <1>user research</1> with customers and hold a high bar for <2>accessibility</2>, working in a <3>cross-functional</3> team."
 msgstr "ଆପଣ ଆମର <0>ଡିଜାଇନ୍ ପ୍ରଣାଳୀର</0> ଦାୟିତ୍ୱ ନେବେ, ଗ୍ରାହକଙ୍କ ସହ <1>ବ୍ୟବହାରକାରୀ ଗବେଷଣା</1> କରିବେ ଏବଂ <3>ବିଭିନ୍ନ ବିଭାଗର ମିଳିତ</3> ଦଳରେ କାମ କରି <2>ସୁଗମତାର</2> ଉଚ୍ଚ ମାନ ରଖିବେ।"
+
+#: src/features/auth/pages/accept-invitation.tsx
+msgid "You're invited"
+msgstr ""
 
 #: src/features/career/workspace/shell.tsx
 msgid "You're looking at a saved version. It can't be edited."

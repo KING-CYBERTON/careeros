@@ -43,6 +43,10 @@ describe.skipIf(!process.env.OAUTH_TEST_DATABASE_URL)("account wrapper ownership
 			"resume_slug_redirect",
 			"released_username",
 			"storage_cleanup_job",
+			// CAREEROS: sign-up and session hooks read and write the organization tables (P1-T03)
+			"organization",
+			"member",
+			"invitation",
 		]) {
 			await admin.query(`CREATE TABLE ${schemaName}."${table}" (LIKE public."${table}" INCLUDING ALL)`);
 		}

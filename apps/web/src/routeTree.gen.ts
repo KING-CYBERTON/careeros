@@ -35,6 +35,7 @@ import { Route as DashboardCareerRouteRouteImport } from "./routes/dashboard/car
 import { Route as DashboardCoverLettersRouteImport } from "./routes/dashboard/cover-letters";
 import { Route as DashboardSettingsRouteRouteImport } from "./routes/dashboard/settings/route";
 import { Route as DashboardTrashRouteImport } from "./routes/dashboard/trash";
+import { Route as AuthAcceptInvitationInvitationIdRouteImport } from "./routes/auth/accept-invitation.$invitationId";
 import { Route as BuilderResumeIdIndexRouteImport } from "./routes/builder/$resumeId/index";
 import { Route as BuilderLetterCoverLetterIdRouteImport } from "./routes/builder/letter/$coverLetterId";
 import { Route as DashboardApplicationsIndexRouteImport } from "./routes/dashboard/applications/index";
@@ -48,6 +49,7 @@ import { Route as DashboardSettingsAiRouteImport } from "./routes/dashboard/sett
 import { Route as DashboardSettingsApiKeysRouteImport } from "./routes/dashboard/settings/api-keys";
 import { Route as DashboardSettingsIntegrationsRouteRouteImport } from "./routes/dashboard/settings/integrations/route";
 import { Route as DashboardSettingsJobSearchRouteImport } from "./routes/dashboard/settings/job-search";
+import { Route as DashboardSettingsMembersRouteImport } from "./routes/dashboard/settings/members";
 import { Route as DashboardSettingsPreferencesRouteImport } from "./routes/dashboard/settings/preferences";
 import { Route as DashboardSettingsProfileRouteImport } from "./routes/dashboard/settings/profile";
 import { Route as DashboardApplicationsApplicationIdChar123TabChar125RouteImport } from "./routes/dashboard/applications/$applicationId.{-$tab}";
@@ -186,6 +188,12 @@ const DashboardTrashRoute = DashboardTrashRouteImport.update({
   path: "/trash",
   getParentRoute: () => DashboardRouteRoute,
 } as any);
+const AuthAcceptInvitationInvitationIdRoute =
+  AuthAcceptInvitationInvitationIdRouteImport.update({
+    id: "/accept-invitation/$invitationId",
+    path: "/accept-invitation/$invitationId",
+    getParentRoute: () => AuthRouteRoute,
+  } as any);
 const BuilderResumeIdIndexRoute = BuilderResumeIdIndexRouteImport.update({
   id: "/",
   path: "/",
@@ -256,6 +264,12 @@ const DashboardSettingsJobSearchRoute =
   DashboardSettingsJobSearchRouteImport.update({
     id: "/job-search",
     path: "/job-search",
+    getParentRoute: () => DashboardSettingsRouteRoute,
+  } as any);
+const DashboardSettingsMembersRoute =
+  DashboardSettingsMembersRouteImport.update({
+    id: "/members",
+    path: "/members",
     getParentRoute: () => DashboardSettingsRouteRoute,
   } as any);
 const DashboardSettingsPreferencesRoute =
@@ -335,12 +349,14 @@ export interface FileRoutesByFullPath {
   "/dashboard/": typeof DashboardIndexRoute;
   "/dashboard/career/knowledge": typeof DashboardCareerKnowledgeRouteRouteWithChildren;
   "/dashboard/settings/integrations": typeof DashboardSettingsIntegrationsRouteRoute;
+  "/auth/accept-invitation/$invitationId": typeof AuthAcceptInvitationInvitationIdRoute;
   "/builder/letter/$coverLetterId": typeof BuilderLetterCoverLetterIdRoute;
   "/dashboard/career/offers": typeof DashboardCareerOffersRoute;
   "/dashboard/settings/account": typeof DashboardSettingsAccountRoute;
   "/dashboard/settings/ai": typeof DashboardSettingsAiRoute;
   "/dashboard/settings/api-keys": typeof DashboardSettingsApiKeysRoute;
   "/dashboard/settings/job-search": typeof DashboardSettingsJobSearchRoute;
+  "/dashboard/settings/members": typeof DashboardSettingsMembersRoute;
   "/dashboard/settings/preferences": typeof DashboardSettingsPreferencesRoute;
   "/dashboard/settings/profile": typeof DashboardSettingsProfileRoute;
   "/builder/$resumeId/": typeof BuilderResumeIdIndexRoute;
@@ -377,12 +393,14 @@ export interface FileRoutesByTo {
   "/dashboard": typeof DashboardIndexRoute;
   "/dashboard/career/knowledge": typeof DashboardCareerKnowledgeRouteRouteWithChildren;
   "/dashboard/settings/integrations": typeof DashboardSettingsIntegrationsRouteRoute;
+  "/auth/accept-invitation/$invitationId": typeof AuthAcceptInvitationInvitationIdRoute;
   "/builder/letter/$coverLetterId": typeof BuilderLetterCoverLetterIdRoute;
   "/dashboard/career/offers": typeof DashboardCareerOffersRoute;
   "/dashboard/settings/account": typeof DashboardSettingsAccountRoute;
   "/dashboard/settings/ai": typeof DashboardSettingsAiRoute;
   "/dashboard/settings/api-keys": typeof DashboardSettingsApiKeysRoute;
   "/dashboard/settings/job-search": typeof DashboardSettingsJobSearchRoute;
+  "/dashboard/settings/members": typeof DashboardSettingsMembersRoute;
   "/dashboard/settings/preferences": typeof DashboardSettingsPreferencesRoute;
   "/dashboard/settings/profile": typeof DashboardSettingsProfileRoute;
   "/builder/$resumeId": typeof BuilderResumeIdIndexRoute;
@@ -427,12 +445,14 @@ export interface FileRoutesById {
   "/dashboard/": typeof DashboardIndexRoute;
   "/dashboard/career/knowledge": typeof DashboardCareerKnowledgeRouteRouteWithChildren;
   "/dashboard/settings/integrations": typeof DashboardSettingsIntegrationsRouteRoute;
+  "/auth/accept-invitation/$invitationId": typeof AuthAcceptInvitationInvitationIdRoute;
   "/builder/letter/$coverLetterId": typeof BuilderLetterCoverLetterIdRoute;
   "/dashboard/career/offers": typeof DashboardCareerOffersRoute;
   "/dashboard/settings/account": typeof DashboardSettingsAccountRoute;
   "/dashboard/settings/ai": typeof DashboardSettingsAiRoute;
   "/dashboard/settings/api-keys": typeof DashboardSettingsApiKeysRoute;
   "/dashboard/settings/job-search": typeof DashboardSettingsJobSearchRoute;
+  "/dashboard/settings/members": typeof DashboardSettingsMembersRoute;
   "/dashboard/settings/preferences": typeof DashboardSettingsPreferencesRoute;
   "/dashboard/settings/profile": typeof DashboardSettingsProfileRoute;
   "/builder/$resumeId/": typeof BuilderResumeIdIndexRoute;
@@ -477,12 +497,14 @@ export interface FileRouteTypes {
     | "/dashboard/"
     | "/dashboard/career/knowledge"
     | "/dashboard/settings/integrations"
+    | "/auth/accept-invitation/$invitationId"
     | "/builder/letter/$coverLetterId"
     | "/dashboard/career/offers"
     | "/dashboard/settings/account"
     | "/dashboard/settings/ai"
     | "/dashboard/settings/api-keys"
     | "/dashboard/settings/job-search"
+    | "/dashboard/settings/members"
     | "/dashboard/settings/preferences"
     | "/dashboard/settings/profile"
     | "/builder/$resumeId/"
@@ -519,12 +541,14 @@ export interface FileRouteTypes {
     | "/dashboard"
     | "/dashboard/career/knowledge"
     | "/dashboard/settings/integrations"
+    | "/auth/accept-invitation/$invitationId"
     | "/builder/letter/$coverLetterId"
     | "/dashboard/career/offers"
     | "/dashboard/settings/account"
     | "/dashboard/settings/ai"
     | "/dashboard/settings/api-keys"
     | "/dashboard/settings/job-search"
+    | "/dashboard/settings/members"
     | "/dashboard/settings/preferences"
     | "/dashboard/settings/profile"
     | "/builder/$resumeId"
@@ -568,12 +592,14 @@ export interface FileRouteTypes {
     | "/dashboard/"
     | "/dashboard/career/knowledge"
     | "/dashboard/settings/integrations"
+    | "/auth/accept-invitation/$invitationId"
     | "/builder/letter/$coverLetterId"
     | "/dashboard/career/offers"
     | "/dashboard/settings/account"
     | "/dashboard/settings/ai"
     | "/dashboard/settings/api-keys"
     | "/dashboard/settings/job-search"
+    | "/dashboard/settings/members"
     | "/dashboard/settings/preferences"
     | "/dashboard/settings/profile"
     | "/builder/$resumeId/"
@@ -782,6 +808,13 @@ declare module "@tanstack/react-router" {
       preLoaderRoute: typeof DashboardTrashRouteImport;
       parentRoute: typeof DashboardRouteRoute;
     };
+    "/auth/accept-invitation/$invitationId": {
+      id: "/auth/accept-invitation/$invitationId";
+      path: "/accept-invitation/$invitationId";
+      fullPath: "/auth/accept-invitation/$invitationId";
+      preLoaderRoute: typeof AuthAcceptInvitationInvitationIdRouteImport;
+      parentRoute: typeof AuthRouteRoute;
+    };
     "/builder/$resumeId/": {
       id: "/builder/$resumeId/";
       path: "/";
@@ -871,6 +904,13 @@ declare module "@tanstack/react-router" {
       path: "/job-search";
       fullPath: "/dashboard/settings/job-search";
       preLoaderRoute: typeof DashboardSettingsJobSearchRouteImport;
+      parentRoute: typeof DashboardSettingsRouteRoute;
+    };
+    "/dashboard/settings/members": {
+      id: "/dashboard/settings/members";
+      path: "/members";
+      fullPath: "/dashboard/settings/members";
+      preLoaderRoute: typeof DashboardSettingsMembersRouteImport;
       parentRoute: typeof DashboardSettingsRouteRoute;
     };
     "/dashboard/settings/preferences": {
@@ -975,6 +1015,7 @@ interface AuthRouteRouteChildren {
   AuthVerify2faRoute: typeof AuthVerify2faRoute;
   AuthVerify2faBackupRoute: typeof AuthVerify2faBackupRoute;
   AuthIndexRoute: typeof AuthIndexRoute;
+  AuthAcceptInvitationInvitationIdRoute: typeof AuthAcceptInvitationInvitationIdRoute;
 }
 
 const AuthRouteRouteChildren: AuthRouteRouteChildren = {
@@ -988,6 +1029,7 @@ const AuthRouteRouteChildren: AuthRouteRouteChildren = {
   AuthVerify2faRoute: AuthVerify2faRoute,
   AuthVerify2faBackupRoute: AuthVerify2faBackupRoute,
   AuthIndexRoute: AuthIndexRoute,
+  AuthAcceptInvitationInvitationIdRoute: AuthAcceptInvitationInvitationIdRoute,
 };
 
 const AuthRouteRouteWithChildren = AuthRouteRoute._addFileChildren(
@@ -1039,6 +1081,7 @@ interface DashboardSettingsRouteRouteChildren {
   DashboardSettingsAiRoute: typeof DashboardSettingsAiRoute;
   DashboardSettingsApiKeysRoute: typeof DashboardSettingsApiKeysRoute;
   DashboardSettingsJobSearchRoute: typeof DashboardSettingsJobSearchRoute;
+  DashboardSettingsMembersRoute: typeof DashboardSettingsMembersRoute;
   DashboardSettingsPreferencesRoute: typeof DashboardSettingsPreferencesRoute;
   DashboardSettingsProfileRoute: typeof DashboardSettingsProfileRoute;
   DashboardSettingsIndexRoute: typeof DashboardSettingsIndexRoute;
@@ -1053,6 +1096,7 @@ const DashboardSettingsRouteRouteChildren: DashboardSettingsRouteRouteChildren =
     DashboardSettingsAiRoute: DashboardSettingsAiRoute,
     DashboardSettingsApiKeysRoute: DashboardSettingsApiKeysRoute,
     DashboardSettingsJobSearchRoute: DashboardSettingsJobSearchRoute,
+    DashboardSettingsMembersRoute: DashboardSettingsMembersRoute,
     DashboardSettingsPreferencesRoute: DashboardSettingsPreferencesRoute,
     DashboardSettingsProfileRoute: DashboardSettingsProfileRoute,
     DashboardSettingsIndexRoute: DashboardSettingsIndexRoute,

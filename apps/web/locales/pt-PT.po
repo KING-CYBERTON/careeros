@@ -89,6 +89,10 @@ msgstr "(opcional)"
 msgid "(required)"
 msgstr "(obrigatório)"
 
+#: src/features/organization/members-page.tsx
+msgid "(you)"
+msgstr ""
+
 #. placeholder {0}: applied.length
 #: src/features/resume/editor/proposals/proposals.ts
 msgid "{0, plural, =1 {Edit applied} other {# edits applied}}"
@@ -383,6 +387,12 @@ msgstr "{0} em {1} corresponde a {2} no seu fuso horário ({preferredZone})."
 msgid "{0} interview"
 msgstr "Entrevista {0}"
 
+#. placeholder {0}: invitation.inviterEmail
+#. placeholder {1}: getRoleLabel(invitation.role)
+#: src/features/auth/pages/accept-invitation.tsx
+msgid "{0} invited you to join as {1}."
+msgstr ""
+
 #. placeholder {0}: i18n.number(row.minutes)
 #. placeholder {0}: row.minutes
 #: src/features/career/workspace/prepare.tsx
@@ -449,11 +459,6 @@ msgstr "Anúncio de emprego {0}"
 #: src/features/assistant/conversation.tsx
 msgid "{0} returned “{1}”. Your message is kept."
 msgstr "{0} retornou “{1}”. A sua mensagem é mantida."
-
-#. placeholder {0}: done.length
-#: src/features/career/today.tsx
-msgid "{0} roles updated."
-msgstr ""
 
 #. placeholder {0}: selection.length
 #: src/features/career/today.tsx
@@ -1139,6 +1144,7 @@ msgstr "Cor de destaque"
 msgid "Accent is used for headings, icons and the header band. Body text stays near-black for print and ATS."
 msgstr "O acento é utilizado para títulos, ícones e faixa de cabeçalho. O corpo do texto permanece quase preto para impressão e ATS."
 
+#: src/features/auth/pages/accept-invitation.tsx
 #: src/features/career/workspace/apply.tsx
 #: src/features/homepage/write.tsx
 #: src/features/resume/editor/proposals/proposal-list.tsx
@@ -1148,6 +1154,10 @@ msgstr "Aceitar"
 #: src/features/resume/editor/proposals/proposal-list.tsx
 msgid "Accept all"
 msgstr "Aceitar tudo"
+
+#: src/features/organization/no-organization-notice.tsx
+msgid "Accept your invitation"
+msgstr ""
 
 #: src/features/homepage/write.tsx
 msgid "Accepted"
@@ -1622,6 +1632,10 @@ msgstr "Adiciona um lembrete a Hoje se não tiver resposta até lá."
 msgid "Adjust fonts, colors, spacing and sections in the resume builder. Export your finished resume to PDF or Word, or share a link. The PDFs above are examples to help you compare designs."
 msgstr "Ajuste tipos de letra, cores, espaçamento e secções no construtor de currículos. Exporte o seu currículo finalizado para PDF ou Microsoft Word ou partilhe um link. Os ficheiros PDF acima são exemplos para o ajudar a comparar designs."
 
+#: src/features/organization/roles.ts
+msgid "Admin"
+msgstr ""
+
 #: src/features/homepage/sections.tsx
 msgid "Ads"
 msgstr "Anúncios"
@@ -1851,6 +1865,10 @@ msgstr "Uma entrada não tem datas"
 #: src/features/assistant/conversation.tsx
 msgid "an error"
 msgstr "um erro"
+
+#: src/features/auth/pages/accept-invitation.tsx
+msgid "An invitation can only be accepted once your email address is verified."
+msgstr ""
 
 #: src/components/layout/error-screen.tsx
 msgid "An unexpected error stopped this page from loading. Try again, or go to the dashboard."
@@ -2640,6 +2658,7 @@ msgstr "O software pode ler o seu currículo?"
 #: src/features/career/workspace/fit.tsx
 #: src/features/career/workspace/preparation.tsx
 #: src/features/documents/new-document-dialog.tsx
+#: src/features/organization/members-page.tsx
 #: src/features/resume/builder/password-dialog.tsx
 #: src/features/resume/editor/check/job-match.tsx
 #: src/features/resume/editor/write/picture-settings.tsx
@@ -2649,6 +2668,11 @@ msgstr "O software pode ler o seu currículo?"
 #: src/hooks/use-confirm.tsx
 msgid "Cancel"
 msgstr "Cancelar"
+
+#. placeholder {0}: invitation.email
+#: src/features/organization/members-page.tsx
+msgid "Cancel invitation for {0}"
+msgstr ""
 
 #: src/routes/dashboard/-components/app-shell.tsx
 #: src/routes/dashboard/career/route.tsx
@@ -3563,10 +3587,18 @@ msgstr "Não foi possível adicionar a candidatura. Tente novamente."
 msgid "Couldn't add the passkey. Try again."
 msgstr "Não foi possível adicionar a chave de acesso. Tente novamente."
 
+#: src/features/auth/pages/accept-invitation.tsx
+msgid "Couldn't answer the invitation. Try again."
+msgstr ""
+
 #: src/features/assistant/conversation.tsx
 #: src/features/career/coach-thread.tsx
 msgid "Couldn't attach the file. Try again."
 msgstr "Não foi possível anexar o ficheiro. Tente novamente."
+
+#: src/features/organization/members-page.tsx
+msgid "Couldn't cancel the invitation. Try again."
+msgstr ""
 
 #: src/routes/builder/letter/-components/design-panel.tsx
 msgid "Couldn't change the design. Try again."
@@ -3575,6 +3607,10 @@ msgstr "Não foi possível alterar o design. Tente novamente."
 #: src/features/settings/account/profile.tsx
 msgid "Couldn't change the email. Try again."
 msgstr "Não foi possível alterar o e-mail. Tente novamente."
+
+#: src/features/organization/members-page.tsx
+msgid "Couldn't change the role. Try again."
+msgstr ""
 
 #: src/features/career/workspace/prepare.tsx
 msgid "Couldn't change the schedule. Try again."
@@ -3771,6 +3807,10 @@ msgstr "Não foi possível carregar os documentos"
 msgid "Couldn't load interviews. Retry"
 msgstr "Não foi possível carregar as entrevistas. Tentar novamente"
 
+#: src/features/organization/members-page.tsx
+msgid "Couldn't load members"
+msgstr ""
+
 #: src/features/settings/ai/web-access.tsx
 msgid "Couldn't load or save web access settings. Try again."
 msgstr "Não foi possível carregar ou guardar as definições de acesso à Web. Tente novamente."
@@ -3870,6 +3910,10 @@ msgstr "Não foi possível memorizar isso. Tente novamente."
 #: src/features/career/today.tsx
 msgid "Couldn't remove it from Applications. Try again."
 msgstr "Não foi possível removê-la das Candidaturas. Tente novamente."
+
+#: src/features/organization/members-page.tsx
+msgid "Couldn't remove the member. Try again."
+msgstr ""
 
 #: src/features/settings/account/security.tsx
 msgid "Couldn't remove the passkey. Try again."
@@ -4004,9 +4048,14 @@ msgstr "Não foi possível guardar. Tente novamente."
 msgid "Couldn't schedule the interview. Try again."
 msgstr "Não foi possível agendar a entrevista. Tente novamente."
 
+#: src/features/auth/pages/accept-invitation.tsx
 #: src/features/settings/account/profile.tsx
 msgid "Couldn't send the email. Try again."
 msgstr "Não foi possível enviar o e-mail. Tente novamente."
+
+#: src/features/organization/members-page.tsx
+msgid "Couldn't send the invitation. Try again."
+msgstr ""
 
 #. Fallback toast when requesting password reset email fails without backend message
 #: src/features/auth/pages/forgot-password.tsx
@@ -4062,6 +4111,10 @@ msgstr "Não foi possível mudar de ligação. Tente novamente."
 #: src/features/assistant/assistant-panel.tsx
 msgid "Couldn't switch models. Try again."
 msgstr "Não foi possível trocar de modelo. Tente novamente."
+
+#: src/features/organization/switcher.tsx
+msgid "Couldn't switch organization. Try again."
+msgstr ""
 
 #: src/features/career/workspace/practise.tsx
 msgid "Couldn't transcribe. Your recording is still here."
@@ -4251,6 +4304,10 @@ msgstr "Crie primeiro um currículo e depois pergunte sobre ele."
 #: src/features/auth/components/guest-banner.tsx
 msgid "Create account"
 msgstr "Criar conta"
+
+#: src/features/auth/pages/accept-invitation.tsx
+msgid "Create an account"
+msgstr ""
 
 #: src/features/auth/pages/consent.tsx
 msgid "Create and change your documents and job applications, seeing each one it changes in full, and change your profile and username."
@@ -4446,6 +4503,10 @@ msgstr "Estimada equipa de contratação,"
 #: src/features/homepage/prepare.tsx
 msgid "Debrief"
 msgstr "Balanço"
+
+#: src/features/auth/pages/accept-invitation.tsx
+msgid "Decline"
+msgstr ""
 
 #: src/features/homepage/prepare.tsx
 msgid "Deep breath."
@@ -5220,6 +5281,7 @@ msgstr "Email (opcional)"
 #: src/features/auth/pages/forgot-password.tsx
 #: src/features/auth/pages/login.tsx
 #: src/features/auth/pages/register.tsx
+#: src/features/organization/members-page.tsx
 msgid "Email address"
 msgstr "Endereço de email"
 
@@ -5315,6 +5377,7 @@ msgstr "Introduza um código de moeda com três letras."
 #: src/features/applications/components/detail/contacts.tsx
 #: src/features/auth/pages/forgot-password.tsx
 #: src/features/auth/pages/register.tsx
+#: src/features/organization/members-page.tsx
 #: src/features/settings/account/profile.tsx
 msgid "Enter a valid email address."
 msgstr "Introduza um endereço de email válido."
@@ -6072,6 +6135,7 @@ msgstr "Ir para casa"
 
 #: src/components/layout/error-screen.tsx
 #: src/components/layout/not-found-screen.tsx
+#: src/features/auth/pages/accept-invitation.tsx
 #: src/routes/_home/-sections/header.tsx
 msgid "Go to dashboard"
 msgstr "Ir para o dashboard"
@@ -6642,6 +6706,19 @@ msgstr "Entrevistador"
 msgid "Interviews"
 msgstr "Entrevistas"
 
+#. placeholder {0}: parsed.data.email
+#: src/features/organization/members-page.tsx
+msgid "Invitation sent to {0}"
+msgstr ""
+
+#: src/features/auth/pages/accept-invitation.tsx
+msgid "Invitation unavailable"
+msgstr ""
+
+#: src/features/organization/members-page.tsx
+msgid "Invite someone"
+msgstr ""
+
 #: src/features/career/offers.tsx
 msgid "Is equity part of the offer?"
 msgstr "A participação no capital faz parte da oferta?"
@@ -6814,6 +6891,11 @@ msgstr "John Doe"
 #: src/features/auth/pages/register.tsx
 msgid "john.doe"
 msgstr "john.doe"
+
+#. placeholder {0}: invitation.organizationName
+#: src/features/auth/pages/accept-invitation.tsx
+msgid "Join {0}"
+msgstr ""
 
 #: src/features/homepage/footer.tsx
 msgid "Join Discord"
@@ -7756,6 +7838,20 @@ msgstr "mediana para a primeira resposta"
 msgid "Medium"
 msgstr "Médio"
 
+#: src/features/organization/roles.ts
+msgid "Member"
+msgstr ""
+
+#: src/features/organization/members-page.tsx
+msgid "Members"
+msgstr ""
+
+#: src/features/organization/members-page.tsx
+#: src/features/settings/root.tsx
+#: src/routes/dashboard/settings/route.tsx
+msgid "Members & invites"
+msgstr ""
+
 #: src/features/homepage/prepare.tsx
 msgid "Mentor other designers"
 msgstr "Orientar outros designers"
@@ -8374,6 +8470,10 @@ msgstr "Não há problemas em aberto"
 msgid "No other stage counts as {0}. Add one first, so its applications have somewhere to go."
 msgstr "Nenhuma outra fase conta como {0}. Adicione uma primeiro para poder mover as candidaturas desta fase."
 
+#: src/features/organization/members-page.tsx
+msgid "No pending invitations."
+msgstr ""
+
 #: src/features/resume/editor/check/issues.ts
 msgid "No phone number"
 msgstr "Sem número de telefone"
@@ -8845,6 +8945,10 @@ msgstr "Foi encontrado apenas um título de secção reconhecível."
 msgid "Only one version so far. Every editing session adds one automatically."
 msgstr "Apenas uma versão até ao momento. Cada sessão de edição adiciona uma automaticamente."
 
+#: src/features/organization/members-page.tsx
+msgid "Only owners and admins can manage members"
+msgstr ""
+
 #: src/features/settings/ai/providers.tsx
 msgid "Only providers that pass their test can be turned on."
 msgstr "Apenas os fornecedores que passarem no teste podem ser ativados."
@@ -9046,6 +9150,7 @@ msgstr "Ou carregue um PDF do currículo"
 msgid "Orange"
 msgstr "Laranja"
 
+#: src/features/organization/switcher.tsx
 #: src/features/resume/editor/write/entries.tsx
 msgid "Organization"
 msgstr "Organização"
@@ -9096,6 +9201,10 @@ msgstr "Diminuir avanço"
 #: src/features/homepage/prepare.tsx
 msgid "Own and evolve a design system"
 msgstr "Gerir e evoluir um design system"
+
+#: src/features/organization/roles.ts
+msgid "Owner"
+msgstr ""
 
 #: src/libs/resume/section.tsx
 #: src/routes/builder/$resumeId/-components/design-panel.tsx
@@ -9312,6 +9421,10 @@ msgstr "PDF, Word (DOCX), Markdown e JSON. A exportação do JSON é importada d
 #: src/features/documents/documents-page.tsx
 msgid "PDF, Word or JSON. We'll build a resume from it."
 msgstr "PDF, Word ou JSON. Vamos construir um currículo a partir dele."
+
+#: src/features/organization/members-page.tsx
+msgid "Pending invitations"
+msgstr ""
 
 #: src/features/homepage/sections.tsx
 msgid "People using it"
@@ -10322,6 +10435,7 @@ msgstr "Remoto"
 msgid "Remote, Hybrid, a city…"
 msgstr "Remoto, híbrido, uma cidade…"
 
+#: src/features/organization/members-page.tsx
 #: src/features/resume/share/custom-domain-field.tsx
 #: src/features/settings/account/security.tsx
 msgid "Remove"
@@ -10360,6 +10474,14 @@ msgstr "Remover {country}"
 msgid "Remove {label}…"
 msgstr "Remover {label}…"
 
+#: src/features/organization/members-page.tsx
+msgid "Remove {name}"
+msgstr ""
+
+#: src/features/organization/members-page.tsx
+msgid "Remove {name}?"
+msgstr ""
+
 #: src/features/applications/components/application-detail-sheet.tsx
 msgid "Remove {value}"
 msgstr "Remover {value}"
@@ -10379,6 +10501,10 @@ msgstr "Remover ficheiro"
 #. placeholder {0}: index + 1
 #: src/features/settings/account/application-profile.tsx
 msgid "Remove link {0}"
+msgstr ""
+
+#: src/features/organization/members-page.tsx
+msgid "Remove member"
 msgstr ""
 
 #: src/features/settings/account/security.tsx
@@ -10430,6 +10556,10 @@ msgstr ""
 
 #: src/features/career/workspace/answer-library.tsx
 msgid "Remove unavailable story reference"
+msgstr ""
+
+#: src/features/organization/members-page.tsx
+msgid "Removed {name}"
 msgstr ""
 
 #: src/features/career/coach.tsx
@@ -10863,6 +10993,7 @@ msgstr "Agora mesmo"
 #: src/features/applications/components/import-applications-sheet.tsx
 #: src/features/applications/components/interview-dialog.tsx
 #: src/features/applications/components/list-view.tsx
+#: src/features/organization/members-page.tsx
 #: src/features/resume/editor/check/job-match.tsx
 msgid "Role"
 msgstr "Cargo"
@@ -10879,6 +11010,10 @@ msgstr "Função {0}"
 #: src/features/applications/components/application-form-sheet.tsx
 msgid "Role / title"
 msgstr "Função/título"
+
+#: src/features/organization/members-page.tsx
+msgid "Role of {name}"
+msgstr ""
 
 #. placeholder {0}: index + 1
 #: src/features/applications/components/interview-dialog.tsx
@@ -11496,6 +11631,10 @@ msgstr "Folha de estilo CSS semântica"
 msgid "Send"
 msgstr "Enviar"
 
+#: src/features/organization/members-page.tsx
+msgid "Send invitation"
+msgstr ""
+
 #. Primary action button label on forgot-password form
 #: src/features/auth/pages/forgot-password.tsx
 msgid "Send reset link"
@@ -11508,6 +11647,10 @@ msgstr "Envie o próprio currículo, em vez de um invólucro de portefólio."
 #: src/features/assistant/tool-approvals.tsx
 msgid "Send this exact query to your web search provider?"
 msgstr "Enviar esta consulta exata ao seu fornecedor de pesquisa na web?"
+
+#: src/features/auth/pages/accept-invitation.tsx
+msgid "Send verification email"
+msgstr ""
 
 #: src/routes/builder/letter/-components/write-panel.tsx
 msgid "Sender details copied into the letter"
@@ -11832,6 +11975,7 @@ msgstr "As barras laterais são geralmente lidas por último ou misturadas na co
 
 #. Primary action button label on login form
 #: src/features/auth/components/guest-banner.tsx
+#: src/features/auth/pages/accept-invitation.tsx
 #: src/features/auth/pages/login.tsx
 #: src/features/homepage/footer.tsx
 msgid "Sign in"
@@ -11843,6 +11987,10 @@ msgstr "Iniciar sessão"
 #: src/features/auth/pages/register.tsx
 msgid "Sign in now"
 msgstr "Inicie sessão agora"
+
+#: src/features/auth/pages/accept-invitation.tsx
+msgid "Sign in or create an account with the email address that received the invitation to join."
+msgstr ""
 
 #. Title on the login page
 #: src/features/auth/pages/login.tsx
@@ -13126,9 +13274,17 @@ msgstr "Estas são as respostas guardadas quando se candidatou."
 msgid "They and their timelines are deleted permanently. This can't be undone."
 msgstr "Eles e os seus cronogramas são eliminados permanentemente. Isso não pode ser desfeito."
 
+#: src/features/organization/members-page.tsx
+msgid "They get an email with a link that is valid for 7 days."
+msgstr ""
+
 #: src/features/resume/editor/check/issues.ts
 msgid "They look for headings such as Experience, Education and Skills."
 msgstr "Procuram títulos como Experiência, Educação e Competências."
+
+#: src/features/organization/members-page.tsx
+msgid "They lose access to this organization right away."
+msgstr ""
 
 #: src/features/homepage/prepare.tsx
 msgid "They’ve confirmed your interview for today"
@@ -13246,6 +13402,14 @@ msgstr "Este ficheiro usa muitas fontes diferentes."
 #: src/features/ats-checker/messages.ts
 msgid "This file uses Type 3 fonts, which carry drawings instead of characters."
 msgstr "Este ficheiro usa fontes Type 3, que transportam desenhos em vez de caracteres."
+
+#: src/features/auth/pages/accept-invitation.tsx
+msgid "This invitation has expired, was canceled, or has already been answered. Ask the organization to send a new one."
+msgstr ""
+
+#: src/features/auth/pages/accept-invitation.tsx
+msgid "This invitation was sent to a different email address. Sign in with the address that received it."
+msgstr ""
 
 #: src/features/ats-checker/messages.ts
 msgid "This is a PDF Portfolio: the visible page is only a cover."
@@ -14043,6 +14207,10 @@ msgstr "Usar amostra"
 msgid "Use the standard heading"
 msgstr "Utilize o título padrão"
 
+#: src/features/auth/pages/accept-invitation.tsx
+msgid "Use the verification link we emailed to {email}, or ask for a new one."
+msgstr ""
+
 #: src/features/career/workspace/apply.tsx
 msgid "Use these answers"
 msgstr "Usar estas respostas"
@@ -14156,6 +14324,10 @@ msgstr "Verificar"
 #: src/features/auth/pages/verify-2fa.tsx
 msgid "Verify with a backup code"
 msgstr "Verificar com um código de backup"
+
+#: src/features/auth/pages/accept-invitation.tsx
+msgid "Verify your email first"
+msgstr ""
 
 #: src/features/career/schedule-sheet.tsx
 msgid "Verify your email in Settings first"
@@ -14304,6 +14476,10 @@ msgstr "Enviámos uma ligação para {currentEmail} para aprovar a alteração. 
 #: src/features/settings/account/profile.tsx
 msgid "We sent a new verification link to {0}."
 msgstr "Enviámos um novo link de verificação para {0}."
+
+#: src/features/auth/pages/accept-invitation.tsx
+msgid "We sent a verification link to {email}. Open it, then come back to this page."
+msgstr ""
 
 #: src/features/settings/ai/web-access.tsx
 msgid "Web access"
@@ -14786,6 +14962,10 @@ msgstr "Respondeu: {answer}"
 msgid "You applied to {0} before and didn't hear back."
 msgstr "Já se candidatou a {0} e não recebeu resposta."
 
+#: src/features/organization/no-organization-notice.tsx
+msgid "You aren't a member of any organization yet. Open the invitation link in the email you received to join one."
+msgstr ""
+
 #: src/features/auth/pages/login.tsx
 msgid "You can also sign in with your username."
 msgstr "Também pode iniciar sessão com o seu nome de utilizador."
@@ -14814,6 +14994,10 @@ msgstr "Ainda não tem um currículo para copiar. Importe ou crie um currículo 
 msgid "You forgot this before, so it wasn't saved again."
 msgstr "Já tinha mandado esquecer isto, por isso não foi guardado novamente."
 
+#: src/features/organization/members-page.tsx
+msgid "You need to belong to an organization to manage its members."
+msgstr ""
+
 #: src/features/homepage/prepare.tsx
 msgid "You partnered with engineering. How you led the work isn’t described yet."
 msgstr "Trabalhou em parceria com a engenharia. Ainda não está descrito como liderou o trabalho."
@@ -14841,6 +15025,10 @@ msgstr "Aparece sempre em Hoje. O email depende da configuração de correio do 
 #: src/features/homepage/tailor.tsx
 msgid "You’ll own our <0>design systems</0>, run <1>user research</1> with customers and hold a high bar for <2>accessibility</2>, working in a <3>cross-functional</3> team."
 msgstr "Será responsável pelos nossos <0>sistemas de design</0>, conduzirá <1>investigação com utilizadores</1> entre os clientes e manterá padrões elevados de <2>acessibilidade</2> numa equipa <3>multidisciplinar</3>."
+
+#: src/features/auth/pages/accept-invitation.tsx
+msgid "You're invited"
+msgstr ""
 
 #: src/features/career/workspace/shell.tsx
 msgid "You're looking at a saved version. It can't be edited."

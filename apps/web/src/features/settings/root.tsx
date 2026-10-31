@@ -10,6 +10,8 @@ import { Icon } from "@reactive-resume/ui/components/icon";
 import { getInitials } from "@reactive-resume/utils/string";
 import { SignOutButton } from "./account/page";
 import { PageHeader } from "@/components/layout/page-header";
+// CAREEROS: Members & invites row for owners and admins (P1-T03)
+import { useCanManageMembers } from "@/features/organization/queries";
 import { useTheme } from "@/features/theme/provider";
 import { orpc } from "@/libs/orpc/client";
 import { themeMap } from "@/libs/theme";
@@ -43,6 +45,8 @@ export function SettingsRoot() {
 	const { theme } = useTheme();
 	const { data: providers } = useQuery(orpc.aiProviders.list.queryOptions());
 	const provider = providers?.find((entry) => entry.enabled && entry.testStatus === "success");
+	// CAREEROS (P1-T03)
+	const canManageMembers = useCanManageMembers();
 
 	return (
 		<div className="grid gap-4">
@@ -77,6 +81,12 @@ export function SettingsRoot() {
 						value={provider?.label ?? <Trans>Not set up</Trans>}
 					/>
 				</Link>
+				{/* CAREEROS: owners and admins manage members (P1-T03) */}
+				{canManageMembers && (
+					<Link to="/dashboard/settings/members" viewTransition={pushTransition} className={rowClass}>
+						<Row icon="user-plus" label={<Trans>Members & invites</Trans>} />
+					</Link>
+				)}
 			</nav>
 
 			<a
