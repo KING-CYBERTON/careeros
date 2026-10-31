@@ -2,9 +2,10 @@ import { AsyncLocalStorage } from "node:async_hooks";
 import { drizzle } from "drizzle-orm/node-postgres";
 import { Pool } from "pg";
 import { env } from "@reactive-resume/env/server";
-import { authRelations } from "./schema/auth";
+// CAREEROS: relations include the organization plugin tables (P1-T01)
+import { authOrganizationRelations } from "./schema/organization";
 
-const createDatabase = (pool: Pool) => drizzle({ client: pool, relations: authRelations });
+const createDatabase = (pool: Pool) => drizzle({ client: pool, relations: authOrganizationRelations });
 const requestDatabase = new AsyncLocalStorage<{ pool: Pool; database: ReturnType<typeof createDatabase> }>();
 
 declare global {

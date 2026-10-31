@@ -7,6 +7,7 @@ import {
 	adminClient,
 	anonymousClient,
 	inferAdditionalFields,
+	organizationClient,
 	twoFactorClient,
 	usernameClient,
 } from "better-auth/client/plugins";
@@ -27,6 +28,8 @@ export const authClient = createAuthClient({
 		passkeyClient(),
 		usernameClient(),
 		anonymousClient(),
+		// CAREEROS: organization plugin client (P1-T01)
+		organizationClient(),
 		twoFactorClient({
 			onTwoFactorRedirect() {
 				// Redirect to 2FA verification page

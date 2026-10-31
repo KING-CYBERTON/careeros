@@ -67,6 +67,8 @@ export const session = pg.pgTable(
 		ipAddress: pg.text("ip_address"),
 		userAgent: pg.text("user_agent"),
 		impersonatedBy: pg.text("impersonated_by"),
+		// CAREEROS: active organization set by the Better Auth organization plugin (P1-T01)
+		activeOrganizationId: pg.text("active_organization_id"),
 		userId: pg
 			.text("user_id")
 			.notNull()

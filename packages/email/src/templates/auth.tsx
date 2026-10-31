@@ -189,3 +189,24 @@ export function VerifyEmailChange({ url, previousEmail, newEmail }: VerifyEmailC
 		/>
 	);
 }
+
+// CAREEROS: organization invitation email for the Better Auth organization plugin (P1-T01)
+interface InvitationEmailProps {
+	url: string;
+	organizationName: string;
+	inviterName: string;
+}
+
+export function InvitationEmail({ url, organizationName, inviterName }: InvitationEmailProps) {
+	return (
+		<AuthEmailLayout
+			preview={`Join ${organizationName} on ${appName}`}
+			heading="You have been invited"
+			intro={`${inviterName} invited you to join ${organizationName} on ${appName}.`}
+			details="The invitation expires in 7 days."
+			actionLabel="Accept invitation"
+			actionUrl={url}
+			outro="If you were not expecting this invitation, you can safely ignore this email."
+		/>
+	);
+}
