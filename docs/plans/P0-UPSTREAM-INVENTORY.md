@@ -1,0 +1,62 @@
+# Upstream inventory and gap analysis (answers Q2)
+
+**Status:** Approved (Opus, 2026-10-31) · Base: Reactive Resume v6.0.10 (`a69e483`) · Input to the Phase 1 to 5 plans.
+
+## 1. Facts about upstream that change our plans
+
+| # | Fact (where) | Consequence for CareerOS |
+|---|---|---|
+| F1 | **All primary keys and `user_id` columns are `text`**, not uuid (`packages/db/src/schema/*.ts`). Better Auth ids are text too. | `organization_id` must be **`text`** to match Better Auth's organization plugin. The RLS policy in PRODUCT.md §6.1 must compare as text: `organization_id = current_setting('app.current_org_id', true)`, with no `::uuid` cast. The `true` (missing_ok) form returns NULL when unset, so unset context returns 0 rows instead of an error. **This deviates from PRODUCT.md §6.1/§6.2 wording ("UUID"). Opus decision: it is a technical detail, not a business change, so no escalation.** P0-Q02 self-tests should use text ids. |
+| F2 | Every upstream table is **user-scoped** (`user_id` FK, cascade delete). There is no org concept anywhere. 37 tables. | Phase 1 adds `organization_id` to every user-owned table. Auth tables stay global (`user`, `session`, `account`, `verification`, `passkey`, `twoFactor`, `apikey`, `jwks`, all `oauth_*`). `session` gains `active_organization_id` via the Better Auth plugin. |
+| F3 | Contacts, interview activity and the stage timeline are **jsonb columns on `application`** (`contacts`, `activity`), not separate tables. | No new contact or interview tables are needed for v1. They inherit isolation from `application`. The JobSync "Job Timeline" (P1) may be satisfied by `activity`. Phase 4 will verify. |
+| F4 | The server runs **migrations at boot** (`apps/server/src/startup/checks.ts`) and supports `DATABASE_MIGRATION_URL`. | Phase 1: `DATABASE_MIGRATION_URL` = table owner; `DATABASE_URL` = `careeros_app` (NOSUPERUSER, NOBYPASSRLS). Apply FORCE ROW LEVEL SECURITY so the owner cannot bypass RLS by accident. |
+| F5 | **AI is bring-your-own-key per user** (`ai_provider` table: encrypted key, model and base URL per user). The `ai` SDK supports Anthropic. | CareerOS needs a **platform-provided Claude key** with org-level metering and quotas (§8.4). Org BYO-key becomes a variant of the same table, scoped by org instead of user. This is a large Phase 3 item. |
+| F6 | **Job discovery exists but uses web search** (`packages/api/src/features/career/jobs.ts`, `searchJobPostings`) through a user-configured web-access connection. Schedules (`career_schedule`, kinds `discovery`, `prepare`, `follow-up`) run in an in-process scheduler (`apps/server/src/startup/career-scheduler.ts`). There are no Greenhouse, Lever or Ashby API fetchers. | Phase 4 **extends** discovery: add ATS public board fetchers as a new source type beside web search, plus local pre-scoring and a top-N AI cap. Reuse `career_opportunity` as the review queue. Do not build a second scheduler. Check whether the in-process scheduler is safe with more than one app node (it holds a lease on `career_job`). |
+| F7 | **Follow-ups and reminders exist**: `application.follow_up_at`, `careerNotification`, and `follow-up` schedules with optional email. | The coaching layer (§8.3) builds on these. The remaining gaps are weekly goals, target role/date/salary, the progress ring, "Next Step" rules and org stage checklists. |
+| F8 | **Custom domains exist, per user, for public resume pages only** (`custom_domain`: user_id, hostname, verification token; a Traefik HTTP provider). | Org custom domains for the whole app (§7) are new. Phase 2 can reuse the verification-token pattern and the hostname-validation endpoint idea, but org domains need Cloudflare for SaaS or Caddy on-demand TLS as PRODUCT.md says. User resume domains stay as they are. |
+| F9 | **Job posting import exists** (`packages/api/src/features/applications/posting.ts`), including JSON-LD `JobPosting` parsing and a "Save job" dialog. | The browser extension (§8.2) can POST page HTML or JSON-LD to the existing posting reader, so the server-side extraction is mostly done. The extension, its auth and branding are new. |
+| F10 | Cover letters with versions, resume versions, public sharing with password and stats, OAuth provider, MCP and passkeys are all present. | §4.1 is confirmed. Each of these tables needs org scoping. Public share links must resolve the org from the host (Phase 2). |
+| F11 | `apps/mobile` (Expo) shares packages with web. | We don't change it. Turbo boundaries already keep it apart. It will break at Phase 1 if the shared API contract changes, so it stays out of CI (P0-C01). Long-term options: remove it at an upstream-sync point (Phase 6) or leave it unmaintained. Opus will decide at Phase 6. |
+| F12 | No Stripe, M-Pesa, plans, quotas, audit log, org admin, super admin, org SSO or feature flags (only env `FLAG_*` switches). | §4.4 is fully new, as planned. |
+
+## 2. PRODUCT.md §4 feature-by-feature
+
+Legend: **Have** = present upstream and needs only org scoping · **Extend** = partly present · **Build** = new.
+
+| PRODUCT.md feature | Pri | Status | Phase | Notes |
+|---|---|---|---|---|
+| Resume editor, templates, export/import, PDF | base | Have | 1 | Org-scope `resume`, `resume_version`, statistics and redirects |
+| Cover letters with versions | base | Have | 1 | |
+| Application tracker (list, board, lanes, contacts, interviews, follow-ups) | base | Have | 1 | `application`, `application_lane`, `application_pipeline`, `application_profile` |
+| AI assistant (agent threads, proposals) | base | Have | 1, 3 | Metering added in Phase 3 |
+| Public resume links | base | Have | 1, 2 | Host-based org resolution |
+| 2FA, passkeys, SSO providers, i18n | base | Have | — | Org SSO (SAML/OIDC) is P1 |
+| REST API + MCP | base | Have | 1 | Tenancy middleware must cover `/api/openapi`, `/api/rpc` and MCP routes |
+| Automated job discovery (ATS APIs, pre-score, top-N AI) | P0 | Extend | 4 | F6 |
+| Question bank | P1 | Extend | 4 | `career_answer` (question, answer, scope, employer) is close to a question bank. Add tags and skill filter. |
+| Job timeline | P1 | Extend | 4 | `application.activity` |
+| Company pages and watchlist | P1 | Build | 4 | |
+| Tasks and activity timer | P2 | Build | later | |
+| Goals dashboard and coaching layer | P0 | Extend | 5 | F7 |
+| Browser extension (Job Clipper) | P0 | Extend | 5 | F9: server side mostly exists |
+| Email templates per stage | P1 | Build | 5 | |
+| Broader job feed (Adzuna, regional boards) | P1 | Build | 5 | Depends on permissions or partnerships (§15 Q5) |
+| Career content hub | P2 | Build | later | |
+| Multi-tenancy, roles, invites, RLS | P0 | Build | 1 | F1, F2, F4 |
+| White-label branding | P0 | Build | 2 | |
+| Custom domains + SSL (org) | P0 | Extend | 2 | F8 |
+| Billing: Stripe + M-Pesa | P0 | Build | 3 | |
+| AI metering, quotas, platform key, org BYO-key | P0 | Extend | 3 | F5 |
+| Super admin and org admin consoles | P0 | Build | 3 | |
+| Feature flags per plan/org | P0 | Build | 3 | |
+| Audit log | P1 | Build | 3 | |
+
+## 3. Effect on the roadmap
+- **Phase 1 gets bigger:** 30+ tables need `organization_id`, a backfill for existing rows and RLS. It also needs tenancy middleware across three API surfaces plus MCP, and has to handle the in-process scheduler and background jobs, which must carry org context. Keep the 2 to 3 week estimate but split Phase 1 into 1a (org model, roles, invites, middleware, role split) and 1b (table migrations and RLS in batches, with the isolation registry growing each batch).
+- **Phases 4 and 5 get smaller:** discovery, reminders, posting import and the question bank are extensions. That likely saves about 1 to 2 weeks overall.
+- **Phase 3 grows** because of F5, the switch from user BYO-key to a platform key with metering.
+- Net: the ~3 to 4 month estimate holds.
+
+## 4. Follow-ups
+- Q2 → Answered by this document.
+- F1 (text ids) is recorded as an Opus technical decision. The Phase 1 spec must state it explicitly, and PRODUCT.md §6 should get a note at Phase 1 kickoff. PRODUCT.md belongs to Stephen, so that edit goes in Stephen's next review rather than being made silently.
