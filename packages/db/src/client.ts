@@ -105,6 +105,15 @@ export function withDatabaseClient<T>(
 	return requestDatabase.run({ pool: client, database: createDatabase(client), scope }, callback);
 }
 
+/**
+ * CAREEROS (P1-T03): runs `callback` outside any `withDatabaseClient` scope, so `db` and `getPool()` use the global
+ * pool again. Used by `captureOrgScope` for work that outlives the request that started it. A test pool bound with
+ * `withDatabasePool` is left in place.
+ */
+export function withoutDatabaseScope<T>(callback: () => T): T {
+	return requestDatabase.getStore()?.scope ? requestDatabase.exit(callback) : callback();
+}
+
 export const db = new Proxy(globalThis.__drizzle, {
 	get(target, property) {
 		const request = requestDatabase.getStore();

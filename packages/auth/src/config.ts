@@ -42,6 +42,13 @@ import { isAllowedOAuthRedirectUri } from "@reactive-resume/utils/url-security.n
 import { createGithubProfileMapper, createProfileMapper, isUsernameReserved } from "./oauth-profile";
 // CAREEROS: organization plugin options (P1-T01)
 import { organizationOptions } from "./organization";
+// CAREEROS: personal organization at signup, default active organization, owner-only role changes (P1-T03)
+import { organizationRules } from "./organization-rules";
+import {
+	createPersonalOrganization,
+	deleteSoleMemberOrganizations,
+	withDefaultActiveOrganization,
+} from "./personal-org";
 import { authRateLimitStorage } from "./rate-limit";
 import { getTrustedOrigins } from "./trusted-origins";
 
@@ -538,6 +545,22 @@ const getAuthConfig = () => {
 						const username = `guest-${generateId().slice(-12)}`;
 						return { data: { ...data, username, displayUsername: username } };
 					},
+					// CAREEROS: every user gets a personal organization unless signing up through an invitation (P1-T03, D6)
+					after: async (user, context) => {
+						await createPersonalOrganization(user, context);
+					},
+				},
+				// CAREEROS: a deleted user (a linked guest) takes the organizations only they belonged to with them (P1-T03)
+				delete: {
+					before: async (user) => {
+						await deleteSoleMemberOrganizations(user.id);
+					},
+				},
+			},
+			session: {
+				create: {
+					// CAREEROS: a session without an active organization gets the user's oldest membership (P1-T03)
+					before: (session) => withDefaultActiveOrganization(session),
 				},
 			},
 		},
@@ -850,6 +873,8 @@ const getAuthConfig = () => {
 			admin(),
 			// CAREEROS: organizations, members, invitations and the session's active organization (P1-T01)
 			organization(organizationOptions),
+			// CAREEROS: owner-only role changes (P1-T03)
+			organizationRules,
 			passkey(),
 			genericOAuth({ config: authConfigs }),
 			twoFactor({ issuer: "Reactive Resume" }),

@@ -3,6 +3,12 @@ import { ORPCError } from "@orpc/client";
 import { symmetricDecrypt } from "better-auth/crypto";
 import { and, eq } from "drizzle-orm";
 import { auth, isCustomOAuthProviderEnabled } from "@reactive-resume/auth/config";
+// CAREEROS: organization cleanup on account deletion (P1-T03)
+import {
+	assertNoSharedOrganizationOwnership,
+	deleteSoleMemberOrganizations,
+	SharedOrganizationOwnerError,
+} from "@reactive-resume/auth/personal-org";
 import { db } from "@reactive-resume/db/client";
 import * as schema from "@reactive-resume/db/schema";
 import { env } from "@reactive-resume/env/server";
@@ -110,6 +116,15 @@ export const authService = {
 	},
 
 	deleteAccount: async (input: { userId: string }): Promise<void> => {
+		// CAREEROS: refuse before any irreversible step while the user owns an organization that has other members (P1-T03)
+		try {
+			await assertNoSharedOrganizationOwnership(input.userId);
+		} catch (error) {
+			if (error instanceof SharedOrganizationOwnerError)
+				throw new ORPCError("PRECONDITION_FAILED", { message: error.message });
+			throw error;
+		}
+
 		const appleAccounts = await db
 			.select({ refreshToken: schema.account.refreshToken, accessToken: schema.account.accessToken })
 			.from(schema.account)
@@ -133,7 +148,11 @@ export const authService = {
 		try {
 			// A database trigger enqueues one account-prefix cleanup row in this same delete transaction, so storage
 			// failures cannot leave files without a durable retry target. The row has no user FK and survives deletion.
-			await db.delete(schema.user).where(eq(schema.user.id, input.userId));
+			// CAREEROS: organizations only this user belongs to go with the account, in the same transaction (P1-T03)
+			await db.transaction(async (tx) => {
+				await deleteSoleMemberOrganizations(input.userId, tx);
+				await tx.delete(schema.user).where(eq(schema.user.id, input.userId));
+			});
 		} catch (err) {
 			console.error("Failed to delete user record:", err);
 

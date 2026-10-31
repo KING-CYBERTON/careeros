@@ -9,6 +9,8 @@ export const TEST_ORGANIZATION_ID = "org_test";
 vi.mock("@careeros/tenancy", () => ({
 	ORG_CONTEXT_REQUIRED: true,
 	TenancyError: class TenancyError extends Error {},
+	// A runner that executes at once; tests read `captureOrgScope.mock.results` to see which work it wrapped.
+	captureOrgScope: vi.fn(() => vi.fn(<T>(fn: () => Promise<T>) => fn())),
 	currentOrgId: () => TEST_ORGANIZATION_ID,
 	resolveOrgForAuthentication: () => Promise.resolve(TEST_ORGANIZATION_ID),
 	resolveOrgForRequest: () => Promise.resolve(TEST_ORGANIZATION_ID),

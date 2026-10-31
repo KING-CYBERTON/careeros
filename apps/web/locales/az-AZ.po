@@ -89,6 +89,10 @@ msgstr "(istəyə bağlı)"
 msgid "(required)"
 msgstr "(məcburi)"
 
+#: src/features/organization/members-page.tsx
+msgid "(you)"
+msgstr ""
+
 #. placeholder {0}: applied.length
 #: src/features/resume/editor/proposals/proposals.ts
 msgid "{0, plural, =1 {Edit applied} other {# edits applied}}"
@@ -383,6 +387,12 @@ msgstr "{1} vaxtı ilə {0} sizin saat qurşağınızda ({preferredZone}) {2} de
 msgid "{0} interview"
 msgstr "{0} müsahibəsi"
 
+#. placeholder {0}: invitation.inviterEmail
+#. placeholder {1}: getRoleLabel(invitation.role)
+#: src/features/auth/pages/accept-invitation.tsx
+msgid "{0} invited you to join as {1}."
+msgstr ""
+
 #. placeholder {0}: i18n.number(row.minutes)
 #. placeholder {0}: row.minutes
 #: src/features/career/workspace/prepare.tsx
@@ -449,11 +459,6 @@ msgstr "{0} iş elanı"
 #: src/features/assistant/conversation.tsx
 msgid "{0} returned “{1}”. Your message is kept."
 msgstr "{0} “{1}” qaytardı. Mesajınız saxlanılır."
-
-#. placeholder {0}: done.length
-#: src/features/career/today.tsx
-msgid "{0} roles updated."
-msgstr ""
 
 #. placeholder {0}: selection.length
 #: src/features/career/today.tsx
@@ -1139,6 +1144,7 @@ msgstr "Vurğu rəngi"
 msgid "Accent is used for headings, icons and the header band. Body text stays near-black for print and ATS."
 msgstr "Vurğu başlıqlar, nişanlar və başlıq bandı üçün istifadə olunur. Əsas mətn çap və ATS üçün qaraya yaxın qalır."
 
+#: src/features/auth/pages/accept-invitation.tsx
 #: src/features/career/workspace/apply.tsx
 #: src/features/homepage/write.tsx
 #: src/features/resume/editor/proposals/proposal-list.tsx
@@ -1148,6 +1154,10 @@ msgstr "Qəbul edin"
 #: src/features/resume/editor/proposals/proposal-list.tsx
 msgid "Accept all"
 msgstr "Hamısını qəbul et"
+
+#: src/features/organization/no-organization-notice.tsx
+msgid "Accept your invitation"
+msgstr ""
 
 #: src/features/homepage/write.tsx
 msgid "Accepted"
@@ -1622,6 +1632,10 @@ msgstr "O vaxta qədər cavab almasanız, Bu gün bölməsinə xatırlatma əlav
 msgid "Adjust fonts, colors, spacing and sections in the resume builder. Export your finished resume to PDF or Word, or share a link. The PDFs above are examples to help you compare designs."
 msgstr "CV qurucusunda şriftləri, rəngləri, boşluqları və bölmələri tənzimləyin. Hazır CV-nizi PDF və ya Microsoft Word-ə ixrac edin və ya linki paylaşın. Yuxarıdakı PDF faylları dizaynları müqayisə etməyə kömək edəcək nümunələrdir."
 
+#: src/features/organization/roles.ts
+msgid "Admin"
+msgstr ""
+
 #: src/features/homepage/sections.tsx
 msgid "Ads"
 msgstr "Reklamlar"
@@ -1851,6 +1865,10 @@ msgstr "Girişin tarixi yoxdur"
 #: src/features/assistant/conversation.tsx
 msgid "an error"
 msgstr "səhv"
+
+#: src/features/auth/pages/accept-invitation.tsx
+msgid "An invitation can only be accepted once your email address is verified."
+msgstr ""
 
 #: src/components/layout/error-screen.tsx
 msgid "An unexpected error stopped this page from loading. Try again, or go to the dashboard."
@@ -2640,6 +2658,7 @@ msgstr "Proqram sizin CV-nizi oxuya bilərmi?"
 #: src/features/career/workspace/fit.tsx
 #: src/features/career/workspace/preparation.tsx
 #: src/features/documents/new-document-dialog.tsx
+#: src/features/organization/members-page.tsx
 #: src/features/resume/builder/password-dialog.tsx
 #: src/features/resume/editor/check/job-match.tsx
 #: src/features/resume/editor/write/picture-settings.tsx
@@ -2649,6 +2668,11 @@ msgstr "Proqram sizin CV-nizi oxuya bilərmi?"
 #: src/hooks/use-confirm.tsx
 msgid "Cancel"
 msgstr "Ləğv et"
+
+#. placeholder {0}: invitation.email
+#: src/features/organization/members-page.tsx
+msgid "Cancel invitation for {0}"
+msgstr ""
 
 #: src/routes/dashboard/-components/app-shell.tsx
 #: src/routes/dashboard/career/route.tsx
@@ -3563,10 +3587,18 @@ msgstr "Müraciət əlavə edilə bilmədi. Yenidən cəhd edin."
 msgid "Couldn't add the passkey. Try again."
 msgstr "Keçid açarını əlavə etmək mümkün olmadı. Yenidən cəhd edin."
 
+#: src/features/auth/pages/accept-invitation.tsx
+msgid "Couldn't answer the invitation. Try again."
+msgstr ""
+
 #: src/features/assistant/conversation.tsx
 #: src/features/career/coach-thread.tsx
 msgid "Couldn't attach the file. Try again."
 msgstr "Faylı əlavə etmək mümkün olmadı. Yenidən cəhd edin."
+
+#: src/features/organization/members-page.tsx
+msgid "Couldn't cancel the invitation. Try again."
+msgstr ""
 
 #: src/routes/builder/letter/-components/design-panel.tsx
 msgid "Couldn't change the design. Try again."
@@ -3575,6 +3607,10 @@ msgstr "Dizaynı dəyişmək mümkün olmadı. Yenidən cəhd edin."
 #: src/features/settings/account/profile.tsx
 msgid "Couldn't change the email. Try again."
 msgstr "E-poçtu dəyişmək mümkün olmadı. Yenidən cəhd edin."
+
+#: src/features/organization/members-page.tsx
+msgid "Couldn't change the role. Try again."
+msgstr ""
 
 #: src/features/career/workspace/prepare.tsx
 msgid "Couldn't change the schedule. Try again."
@@ -3771,6 +3807,10 @@ msgstr "Sənədləri yükləmək mümkün olmadı"
 msgid "Couldn't load interviews. Retry"
 msgstr "Müsahibələri yükləmək mümkün olmadı. Yenidən cəhd et"
 
+#: src/features/organization/members-page.tsx
+msgid "Couldn't load members"
+msgstr ""
+
 #: src/features/settings/ai/web-access.tsx
 msgid "Couldn't load or save web access settings. Try again."
 msgstr "Veb girişi parametrlərini yükləmək və ya saxlamaq mümkün olmadı. Yenidən cəhd edin."
@@ -3870,6 +3910,10 @@ msgstr "Bunu yadda saxlamaq mümkün olmadı. Yenidən cəhd edin."
 #: src/features/career/today.tsx
 msgid "Couldn't remove it from Applications. Try again."
 msgstr "Onu Müraciətlərdən silmək mümkün olmadı. Yenidən cəhd edin."
+
+#: src/features/organization/members-page.tsx
+msgid "Couldn't remove the member. Try again."
+msgstr ""
 
 #: src/features/settings/account/security.tsx
 msgid "Couldn't remove the passkey. Try again."
@@ -4004,9 +4048,14 @@ msgstr "Yadda saxlamaq mümkün olmadı. Yenidən cəhd edin."
 msgid "Couldn't schedule the interview. Try again."
 msgstr "Müsahibəni təyin etmək mümkün olmadı. Yenidən cəhd edin."
 
+#: src/features/auth/pages/accept-invitation.tsx
 #: src/features/settings/account/profile.tsx
 msgid "Couldn't send the email. Try again."
 msgstr "E-poçtu göndərmək mümkün olmadı. Yenidən cəhd edin."
+
+#: src/features/organization/members-page.tsx
+msgid "Couldn't send the invitation. Try again."
+msgstr ""
 
 #. Fallback toast when requesting password reset email fails without backend message
 #: src/features/auth/pages/forgot-password.tsx
@@ -4062,6 +4111,10 @@ msgstr "Bağlantıları dəyişmək mümkün olmadı. Yenidən cəhd edin."
 #: src/features/assistant/assistant-panel.tsx
 msgid "Couldn't switch models. Try again."
 msgstr "Modelləri dəyişmək mümkün olmadı. Yenidən cəhd edin."
+
+#: src/features/organization/switcher.tsx
+msgid "Couldn't switch organization. Try again."
+msgstr ""
 
 #: src/features/career/workspace/practise.tsx
 msgid "Couldn't transcribe. Your recording is still here."
@@ -4251,6 +4304,10 @@ msgstr "Əvvəlcə rezyume yaradın, sonra bu barədə soruşun."
 #: src/features/auth/components/guest-banner.tsx
 msgid "Create account"
 msgstr "Hesab yarat"
+
+#: src/features/auth/pages/accept-invitation.tsx
+msgid "Create an account"
+msgstr ""
 
 #: src/features/auth/pages/consent.tsx
 msgid "Create and change your documents and job applications, seeing each one it changes in full, and change your profile and username."
@@ -4446,6 +4503,10 @@ msgstr "Hörmətli işə qəbul komandası,"
 #: src/features/homepage/prepare.tsx
 msgid "Debrief"
 msgstr "Təhlil"
+
+#: src/features/auth/pages/accept-invitation.tsx
+msgid "Decline"
+msgstr ""
 
 #: src/features/homepage/prepare.tsx
 msgid "Deep breath."
@@ -5220,6 +5281,7 @@ msgstr "E-poçt (isteğe bağlı)"
 #: src/features/auth/pages/forgot-password.tsx
 #: src/features/auth/pages/login.tsx
 #: src/features/auth/pages/register.tsx
+#: src/features/organization/members-page.tsx
 msgid "Email address"
 msgstr "E‑poçt ünvanı"
 
@@ -5315,6 +5377,7 @@ msgstr "Üç əlifba simvolundan ibarət valyuta kodunu daxil edin."
 #: src/features/applications/components/detail/contacts.tsx
 #: src/features/auth/pages/forgot-password.tsx
 #: src/features/auth/pages/register.tsx
+#: src/features/organization/members-page.tsx
 #: src/features/settings/account/profile.tsx
 msgid "Enter a valid email address."
 msgstr "Etibarlı e-poçt ünvanı daxil edin."
@@ -6072,6 +6135,7 @@ msgstr "Evə get"
 
 #: src/components/layout/error-screen.tsx
 #: src/components/layout/not-found-screen.tsx
+#: src/features/auth/pages/accept-invitation.tsx
 #: src/routes/_home/-sections/header.tsx
 msgid "Go to dashboard"
 msgstr "İdarə panelinə keç"
@@ -6642,6 +6706,19 @@ msgstr "Müsahib"
 msgid "Interviews"
 msgstr "Müsahibələr"
 
+#. placeholder {0}: parsed.data.email
+#: src/features/organization/members-page.tsx
+msgid "Invitation sent to {0}"
+msgstr ""
+
+#: src/features/auth/pages/accept-invitation.tsx
+msgid "Invitation unavailable"
+msgstr ""
+
+#: src/features/organization/members-page.tsx
+msgid "Invite someone"
+msgstr ""
+
 #: src/features/career/offers.tsx
 msgid "Is equity part of the offer?"
 msgstr "Pay təklifin bir hissəsidirmi?"
@@ -6814,6 +6891,11 @@ msgstr "Con Do"
 #: src/features/auth/pages/register.tsx
 msgid "john.doe"
 msgstr "Con Doe"
+
+#. placeholder {0}: invitation.organizationName
+#: src/features/auth/pages/accept-invitation.tsx
+msgid "Join {0}"
+msgstr ""
 
 #: src/features/homepage/footer.tsx
 msgid "Join Discord"
@@ -7756,6 +7838,20 @@ msgstr "ilk cavab üçün median"
 msgid "Medium"
 msgstr "Orta"
 
+#: src/features/organization/roles.ts
+msgid "Member"
+msgstr ""
+
+#: src/features/organization/members-page.tsx
+msgid "Members"
+msgstr ""
+
+#: src/features/organization/members-page.tsx
+#: src/features/settings/root.tsx
+#: src/routes/dashboard/settings/route.tsx
+msgid "Members & invites"
+msgstr ""
+
 #: src/features/homepage/prepare.tsx
 msgid "Mentor other designers"
 msgstr "Digər dizaynerlərə mentorluq etmək"
@@ -8374,6 +8470,10 @@ msgstr "Açıq problem yoxdur"
 msgid "No other stage counts as {0}. Add one first, so its applications have somewhere to go."
 msgstr "Başqa heç bir mərhələ {0} hesab olunmur. Müraciətlərin köçürüləcəyi yer olsun deyə əvvəlcə birini əlavə edin."
 
+#: src/features/organization/members-page.tsx
+msgid "No pending invitations."
+msgstr ""
+
 #: src/features/resume/editor/check/issues.ts
 msgid "No phone number"
 msgstr "Telefon nömrəsi yoxdur"
@@ -8845,6 +8945,10 @@ msgstr "Yalnız bir tanına bilən bölmə başlığı tapıldı."
 msgid "Only one version so far. Every editing session adds one automatically."
 msgstr "İndiyə qədər yalnız bir versiya. Hər redaktə sessiyası avtomatik olaraq birini əlavə edir."
 
+#: src/features/organization/members-page.tsx
+msgid "Only owners and admins can manage members"
+msgstr ""
+
 #: src/features/settings/ai/providers.tsx
 msgid "Only providers that pass their test can be turned on."
 msgstr "Yalnız testdən keçən provayderlər işə salına bilər."
@@ -9046,6 +9150,7 @@ msgstr "Və ya CV PDF-i yükləyin"
 msgid "Orange"
 msgstr "Narıncı"
 
+#: src/features/organization/switcher.tsx
 #: src/features/resume/editor/write/entries.tsx
 msgid "Organization"
 msgstr "Təşkilat"
@@ -9096,6 +9201,10 @@ msgstr "Abzası azalt"
 #: src/features/homepage/prepare.tsx
 msgid "Own and evolve a design system"
 msgstr "Dizayn sisteminə sahiblik etmək və onu inkişaf etdirmək"
+
+#: src/features/organization/roles.ts
+msgid "Owner"
+msgstr ""
 
 #: src/libs/resume/section.tsx
 #: src/routes/builder/$resumeId/-components/design-panel.tsx
@@ -9312,6 +9421,10 @@ msgstr "PDF, Word (DOCX), Markdown və JSON. JSON ixracı istənilən Reactive R
 #: src/features/documents/documents-page.tsx
 msgid "PDF, Word or JSON. We'll build a resume from it."
 msgstr "PDF, Word və ya JSON. Biz ondan rezyume hazırlayacağıq."
+
+#: src/features/organization/members-page.tsx
+msgid "Pending invitations"
+msgstr ""
 
 #: src/features/homepage/sections.tsx
 msgid "People using it"
@@ -10322,6 +10435,7 @@ msgstr "Uzaqdan"
 msgid "Remote, Hybrid, a city…"
 msgstr "Uzaqdan, Hibrid, şəhər…"
 
+#: src/features/organization/members-page.tsx
 #: src/features/resume/share/custom-domain-field.tsx
 #: src/features/settings/account/security.tsx
 msgid "Remove"
@@ -10360,6 +10474,14 @@ msgstr "{country} silin"
 msgid "Remove {label}…"
 msgstr "{label} sil…"
 
+#: src/features/organization/members-page.tsx
+msgid "Remove {name}"
+msgstr ""
+
+#: src/features/organization/members-page.tsx
+msgid "Remove {name}?"
+msgstr ""
+
 #: src/features/applications/components/application-detail-sheet.tsx
 msgid "Remove {value}"
 msgstr "{value} çıxarın"
@@ -10379,6 +10501,10 @@ msgstr "Faylı sil"
 #. placeholder {0}: index + 1
 #: src/features/settings/account/application-profile.tsx
 msgid "Remove link {0}"
+msgstr ""
+
+#: src/features/organization/members-page.tsx
+msgid "Remove member"
 msgstr ""
 
 #: src/features/settings/account/security.tsx
@@ -10430,6 +10556,10 @@ msgstr ""
 
 #: src/features/career/workspace/answer-library.tsx
 msgid "Remove unavailable story reference"
+msgstr ""
+
+#: src/features/organization/members-page.tsx
+msgid "Removed {name}"
 msgstr ""
 
 #: src/features/career/coach.tsx
@@ -10863,6 +10993,7 @@ msgstr "Elə indi"
 #: src/features/applications/components/import-applications-sheet.tsx
 #: src/features/applications/components/interview-dialog.tsx
 #: src/features/applications/components/list-view.tsx
+#: src/features/organization/members-page.tsx
 #: src/features/resume/editor/check/job-match.tsx
 msgid "Role"
 msgstr "Vəzifə"
@@ -10879,6 +11010,10 @@ msgstr "Rol {0}"
 #: src/features/applications/components/application-form-sheet.tsx
 msgid "Role / title"
 msgstr "Rol / titul"
+
+#: src/features/organization/members-page.tsx
+msgid "Role of {name}"
+msgstr ""
 
 #. placeholder {0}: index + 1
 #: src/features/applications/components/interview-dialog.tsx
@@ -11496,6 +11631,10 @@ msgstr "Semantik CSS stil cədvəli"
 msgid "Send"
 msgstr "Göndər"
 
+#: src/features/organization/members-page.tsx
+msgid "Send invitation"
+msgstr ""
+
 #. Primary action button label on forgot-password form
 #: src/features/auth/pages/forgot-password.tsx
 msgid "Send reset link"
@@ -11508,6 +11647,10 @@ msgstr "Portfolio örtüyü əvəzinə birbaşa CV-ni göndərin."
 #: src/features/assistant/tool-approvals.tsx
 msgid "Send this exact query to your web search provider?"
 msgstr "Məhz bu sorğu veb axtarış provayderinizə göndərilsin?"
+
+#: src/features/auth/pages/accept-invitation.tsx
+msgid "Send verification email"
+msgstr ""
 
 #: src/routes/builder/letter/-components/write-panel.tsx
 msgid "Sender details copied into the letter"
@@ -11832,6 +11975,7 @@ msgstr "Yan panellər tez-tez sonuncu oxunur və ya əsas sütuna qarışdırıl
 
 #. Primary action button label on login form
 #: src/features/auth/components/guest-banner.tsx
+#: src/features/auth/pages/accept-invitation.tsx
 #: src/features/auth/pages/login.tsx
 #: src/features/homepage/footer.tsx
 msgid "Sign in"
@@ -11843,6 +11987,10 @@ msgstr "Daxil ol"
 #: src/features/auth/pages/register.tsx
 msgid "Sign in now"
 msgstr "İndi daxil olun"
+
+#: src/features/auth/pages/accept-invitation.tsx
+msgid "Sign in or create an account with the email address that received the invitation to join."
+msgstr ""
 
 #. Title on the login page
 #: src/features/auth/pages/login.tsx
@@ -13126,9 +13274,17 @@ msgstr "Bunlar müraciət edərkən saxlanılmış cavablardır."
 msgid "They and their timelines are deleted permanently. This can't be undone."
 msgstr "Onlar və vaxt qrafikləri həmişəlik silinir. Bu geri qaytarıla bilməz."
 
+#: src/features/organization/members-page.tsx
+msgid "They get an email with a link that is valid for 7 days."
+msgstr ""
+
 #: src/features/resume/editor/check/issues.ts
 msgid "They look for headings such as Experience, Education and Skills."
 msgstr "Təcrübə, Təhsil və Bacarıqlar kimi başlıqları axtarırlar."
+
+#: src/features/organization/members-page.tsx
+msgid "They lose access to this organization right away."
+msgstr ""
 
 #: src/features/homepage/prepare.tsx
 msgid "They’ve confirmed your interview for today"
@@ -13246,6 +13402,14 @@ msgstr "Bu fayl çoxlu müxtəlif şrift istifadə edir."
 #: src/features/ats-checker/messages.ts
 msgid "This file uses Type 3 fonts, which carry drawings instead of characters."
 msgstr "Bu fayl simvollar əvəzinə şəkillər daşıyan Type 3 şriftlərindən istifadə edir."
+
+#: src/features/auth/pages/accept-invitation.tsx
+msgid "This invitation has expired, was canceled, or has already been answered. Ask the organization to send a new one."
+msgstr ""
+
+#: src/features/auth/pages/accept-invitation.tsx
+msgid "This invitation was sent to a different email address. Sign in with the address that received it."
+msgstr ""
 
 #: src/features/ats-checker/messages.ts
 msgid "This is a PDF Portfolio: the visible page is only a cover."
@@ -14043,6 +14207,10 @@ msgstr "Nümunədən istifadə edin"
 msgid "Use the standard heading"
 msgstr "Standart başlıqdan istifadə edin"
 
+#: src/features/auth/pages/accept-invitation.tsx
+msgid "Use the verification link we emailed to {email}, or ask for a new one."
+msgstr ""
+
 #: src/features/career/workspace/apply.tsx
 msgid "Use these answers"
 msgstr "Bu cavablardan istifadə et"
@@ -14156,6 +14324,10 @@ msgstr "Təsdiqlə"
 #: src/features/auth/pages/verify-2fa.tsx
 msgid "Verify with a backup code"
 msgstr "Ehtiyat kod ilə təsdiqlə"
+
+#: src/features/auth/pages/accept-invitation.tsx
+msgid "Verify your email first"
+msgstr ""
 
 #: src/features/career/schedule-sheet.tsx
 msgid "Verify your email in Settings first"
@@ -14304,6 +14476,10 @@ msgstr "Dəyişikliyi təsdiqləmək üçün {currentEmail} ünvanına keçid g�
 #: src/features/settings/account/profile.tsx
 msgid "We sent a new verification link to {0}."
 msgstr "{0}-a yeni doğrulama linki göndərdik."
+
+#: src/features/auth/pages/accept-invitation.tsx
+msgid "We sent a verification link to {email}. Open it, then come back to this page."
+msgstr ""
 
 #: src/features/settings/ai/web-access.tsx
 msgid "Web access"
@@ -14786,6 +14962,10 @@ msgstr "Cavab verdiniz: {answer}"
 msgid "You applied to {0} before and didn't hear back."
 msgstr "Daha əvvəl {0} şirkətinə müraciət etmisiniz və cavab almamısınız."
 
+#: src/features/organization/no-organization-notice.tsx
+msgid "You aren't a member of any organization yet. Open the invitation link in the email you received to join one."
+msgstr ""
+
 #: src/features/auth/pages/login.tsx
 msgid "You can also sign in with your username."
 msgstr "İstifadəçi adınızla da daxil ola bilərsiniz."
@@ -14814,6 +14994,10 @@ msgstr "Hələ kopyalamaq üçün CV-niz yoxdur. Əvvəlcə CV-ni idxal edin və
 msgid "You forgot this before, so it wasn't saved again."
 msgstr "Bunu əvvəllər unutmusunuz, ona görə də yenidən saxlanılmadı."
 
+#: src/features/organization/members-page.tsx
+msgid "You need to belong to an organization to manage its members."
+msgstr ""
+
 #: src/features/homepage/prepare.tsx
 msgid "You partnered with engineering. How you led the work isn’t described yet."
 msgstr "Mühəndislərlə əməkdaşlıq etmisiniz. İşə necə rəhbərlik etdiyiniz hələ təsvir olunmayıb."
@@ -14841,6 +15025,10 @@ msgstr "Onu həmişə Bu gün bölməsində görəcəksiniz. E-poçt serverinizi
 #: src/features/homepage/tailor.tsx
 msgid "You’ll own our <0>design systems</0>, run <1>user research</1> with customers and hold a high bar for <2>accessibility</2>, working in a <3>cross-functional</3> team."
 msgstr "<0>Dizayn sistemlərimizə</0> cavabdeh olacaq, müştərilərlə <1>istifadəçi araşdırması</1> aparacaq və <2>əlçatanlıq</2> üzrə yüksək standartları qoruyaraq <3>müxtəlif ixtisaslardan ibarət</3> komandada işləyəcəksiniz."
+
+#: src/features/auth/pages/accept-invitation.tsx
+msgid "You're invited"
+msgstr ""
 
 #: src/features/career/workspace/shell.tsx
 msgid "You're looking at a saved version. It can't be edited."

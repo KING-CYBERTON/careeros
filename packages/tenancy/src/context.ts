@@ -1,6 +1,6 @@
 import type { PoolClient } from "pg";
 import { AsyncLocalStorage } from "node:async_hooks";
-import { getPool, withDatabaseClient } from "@reactive-resume/db/client";
+import { getPool, withDatabaseClient, withoutDatabaseScope } from "@reactive-resume/db/client";
 import { TenancyError } from "./errors";
 
 const ORG_ID_PATTERN = /^[A-Za-z0-9_-]{1,64}$/;
@@ -54,4 +54,16 @@ export async function withOrgContext<T>(orgId: string, fn: () => Promise<T>): Pr
 		// A defined argument makes pg destroy the connection (never reused with an unknown org setting).
 		client.release(failure);
 	}
+}
+
+/**
+ * For work that continues after the request handler returned (agent streams, timers, callbacks). Call it at the start
+ * of the handler, inside the scope: it records the current organization. The returned runner leaves the (possibly
+ * closed) request scope and runs `fn` in a fresh `withOrgContext` for the recorded organization, with its own briefly
+ * held client. It can be called any number of times. Captured outside a scope, it runs `fn` unscoped.
+ */
+export function captureOrgScope(): <T>(fn: () => Promise<T>) => Promise<T> {
+	const orgId = currentOrgId();
+	return <T>(fn: () => Promise<T>) =>
+		scopes.exit(() => withoutDatabaseScope(() => (orgId ? withOrgContext(orgId, fn) : fn())));
 }

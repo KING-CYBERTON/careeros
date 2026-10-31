@@ -4,7 +4,7 @@
  * same PR that adds the first RLS policy and the D7 backfill. A code constant, not an environment variable.
  */
 export const ORG_CONTEXT_REQUIRED = false;
-export { currentOrgId, withOrgContext } from "./context";
+export { captureOrgScope, currentOrgId, withOrgContext } from "./context";
 export { TenancyError, type TenancyErrorCode } from "./errors";
 export {
 	resolveOrgForAuthentication,

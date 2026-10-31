@@ -227,6 +227,54 @@ describe.skipIf(!configured)("tenancy core (real Postgres)", () => {
 			expect(result.error?.code).toBe("scope_closed");
 		});
 
+		describe("captureOrgScope", () => {
+			it("runs later work in a fresh scope of the captured organization, once per call, each on its own client", async () => {
+				const runner = await tenancy.withOrgContext("org_a", async () => tenancy.captureOrgScope());
+				// The original scope is closed by now.
+				const seen = async () => ({ org: tenancy.currentOrgId(), setting: await settingViaDb(), pid: await pid() });
+				const first = await runner(seen);
+				const second = await runner(seen);
+				expect(first).toMatchObject({ org: "org_a", setting: "org_a" });
+				expect(second).toMatchObject({ org: "org_a", setting: "org_a" });
+				// The client is released and the setting cleared after each call.
+				expect(await setting()).toBe("");
+				expect(tenancy.currentOrgId()).toBeUndefined();
+			});
+
+			it("works from a continuation created in the closed scope", async () => {
+				const outcome = new Promise<{ setting?: string | null; error?: { code?: string } }>((resolve) => {
+					void tenancy.withOrgContext("org_a", async () => {
+						const runner = tenancy.captureOrgScope();
+						setTimeout(() => {
+							runner(settingViaDb).then(
+								(value) => resolve({ setting: value }),
+								(error: { code?: string }) => resolve({ error }),
+							);
+						}, 30);
+					});
+				});
+				expect(await outcome).toEqual({ setting: "org_a" });
+			});
+
+			it("also works while the original scope is still open, without holding its client", async () => {
+				await tenancy.withOrgContext("org_a", async () => {
+					const outer = await pid();
+					const runner = tenancy.captureOrgScope();
+					const inner = await runner(async () => ({ org: tenancy.currentOrgId(), pid: await pid() }));
+					expect(inner.org).toBe("org_a");
+					expect(inner.pid).not.toBe(outer);
+					expect(await pid()).toBe(outer);
+				});
+			});
+
+			it("runs unscoped when nothing was captured", async () => {
+				const runner = tenancy.captureOrgScope();
+				const seen = await runner(async () => ({ org: tenancy.currentOrgId(), setting: await setting() }));
+				expect(seen.org).toBeUndefined();
+				expect(seen.setting === null || seen.setting === "").toBe(true);
+			});
+		});
+
 		it("does not let a generator resumed outside any scope see the org's context", async () => {
 			const generator = await tenancy.withOrgContext("org_a", async () =>
 				(async function* () {

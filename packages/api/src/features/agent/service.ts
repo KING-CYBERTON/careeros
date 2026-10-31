@@ -8,6 +8,8 @@ import type {
 } from "@reactive-resume/ai/tools/agent-tool-contracts";
 import type { WorkspaceTab } from "@reactive-resume/schema/career";
 import type { FilePart, ImagePart, ModelMessage, TextPart, UIMessage, UIMessageChunk } from "ai";
+// CAREEROS: agent work that outlives the request runs in a fresh organization scope (P1-T03)
+import { captureOrgScope } from "@careeros/tenancy";
 import { ORPCError } from "@orpc/client";
 import { streamToEventIterator } from "@orpc/server";
 import {
@@ -784,6 +786,8 @@ function createAgent(input: {
 	/** Whether web search is available: through the connection, or the server's SearXNG without one. */
 	search: boolean;
 	signal: AbortSignal;
+	/** CAREEROS: runs a tool's database work in a fresh organization scope; tools run after the request ended. */
+	inScope: ReturnType<typeof captureOrgScope>;
 }) {
 	// One greppable JSON line per tool execution.
 	const timedToolHandler =
@@ -879,6 +883,13 @@ function createAgent(input: {
 	});
 
 	if (input.career) Object.assign(tools, buildCareerTools({ userId: input.userId, ...input.career }));
+	// CAREEROS: the model calls tools while the response streams, after the request's organization scope closed.
+	for (const agentTool of Object.values(tools)) {
+		const execute = agentTool.execute as ((...args: unknown[]) => unknown) | undefined;
+		if (execute)
+			agentTool.execute = ((...args: unknown[]) =>
+				input.inScope(() => Promise.resolve().then(() => execute(...args)))) as never;
+	}
 	const instructionsText = input.career
 		? buildCareerInstructions(input.career)
 		: buildAgentInstructions({
@@ -1139,6 +1150,8 @@ export const agentService = {
 	messages: {
 		send: async (input: SendMessageInput) => {
 			assertAgentEnvironment();
+			// CAREEROS: captured inside the request scope; wraps every write that runs while the reply streams (P1-T03)
+			const inScope = captureOrgScope();
 
 			const thread = await getThread({
 				id: input.threadId,
@@ -1404,6 +1417,7 @@ export const agentService = {
 					connection,
 					search,
 					signal: controller.signal,
+					inScope,
 					provider: {
 						provider: runnableProvider.provider,
 						model: runnableProvider.model,
@@ -1446,13 +1460,15 @@ export const agentService = {
 									model: runnableProvider.model,
 								},
 							};
-							const upserted = await upsertAssistantUiMessage({
-								userId: input.userId,
-								threadId: input.threadId,
-								...(draftRowId ? { rowId: draftRowId } : {}),
-								message: draftUiMessage,
-								status: "streaming",
-							});
+							const upserted = await inScope(() =>
+								upsertAssistantUiMessage({
+									userId: input.userId,
+									threadId: input.threadId,
+									...(draftRowId ? { rowId: draftRowId } : {}),
+									message: draftUiMessage,
+									status: "streaming",
+								}),
+							);
 							draftRowId = upserted.rowId;
 						} catch (error) {
 							console.error("[agent] Failed to persist step draft", {
@@ -1490,27 +1506,31 @@ export const agentService = {
 												parts: [...responseMessage.parts, { type: "text", text: AGENT_TIMEOUT_MESSAGE }],
 											};
 										}
-										await upsertAssistantUiMessage({
-											userId: input.userId,
-											threadId: input.threadId,
-											...(draftRowId ? { rowId: draftRowId } : {}),
-											// A continuation reuses the message; the SDK replaces primitive
-											// metadata, so prior-run usage must be summed back in.
-											message: withAccumulatedUsageMetadata(draftUiMessage, responseMessage),
-											status: isAborted || outcome.status !== "completed" ? "canceled" : "completed",
-										});
+										await inScope(() =>
+											upsertAssistantUiMessage({
+												userId: input.userId,
+												threadId: input.threadId,
+												...(draftRowId ? { rowId: draftRowId } : {}),
+												// A continuation reuses the message; the SDK replaces primitive
+												// metadata, so prior-run usage must be summed back in.
+												message: withAccumulatedUsageMetadata(draftUiMessage, responseMessage),
+												status: isAborted || outcome.status !== "completed" ? "canceled" : "completed",
+											}),
+										);
 									} catch (error) {
 										persistError = error;
 										throw error;
 									} finally {
-										await cleanupActiveRun({
-											threadId: input.threadId,
-											userId: input.userId,
-											runId,
-											streamId,
-											primaryError: persistError,
-											preserveClaimForReaper: !!persistError,
-										});
+										await inScope(() =>
+											cleanupActiveRun({
+												threadId: input.threadId,
+												userId: input.userId,
+												runId,
+												streamId,
+												primaryError: persistError,
+												preserveClaimForReaper: !!persistError,
+											}),
+										);
 									}
 								},
 								onError: (error) => {
