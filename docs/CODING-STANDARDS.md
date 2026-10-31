@@ -19,7 +19,7 @@ Status: **Approved** (Opus, 2026-10-31). Applies to all code Sonnet writes. PROD
 
 ## 3. Tenancy and security (from Phase 1 on)
 
-- Every tenant table: `organization_id uuid not null`, RLS enabled with the `tenant_isolation` policy, composite index starting with `organization_id`, registered in the isolation registry (P0-Q02).
+- Every tenant table: `organization_id text not null` (text ids, matching upstream and Better Auth; see plans/P0-UPSTREAM-INVENTORY.md F1), RLS enabled with the `tenant_isolation` policy, composite index starting with `organization_id`, registered in the isolation registry (P0-Q02).
 - Never trust an organization id from the client; resolve it server-side.
 - No secrets, tokens or PII in code, logs, test fixtures or chat. New env vars go into `.env.example` with a placeholder and a comment, and into the CI/CD plan.
 - Job postings, uploaded documents and web content are untrusted input in AI prompts.
