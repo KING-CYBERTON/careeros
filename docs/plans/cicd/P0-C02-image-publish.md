@@ -3,6 +3,7 @@
 **Status:** Approved (Opus, 2026-10-31) · **Thread:** 3 CI/CD · **Depends on:** P0-C01 · **Test plan:** [../../test-plans/P0-C02.md](../../test-plans/P0-C02.md)
 
 ## File: `.github/workflows/careeros-image.yml`
+
 - Triggers: `workflow_run` of `careeros-ci` with `types: [completed]` on branch `develop` (run only if `conclusion == success` and the event was `push`); `push` of tags `v*`; `workflow_dispatch`.
 - Check out the exact `head_sha` of the triggering run (not the branch tip).
 - Permissions: `contents: read`, `packages: write`, `id-token: write`, `attestations: write`.
@@ -14,6 +15,7 @@
 - Package visibility stays private (inherits repo).
 
 ## Acceptance criteria
+
 - After a merge to `develop`, `ghcr.io/<owner>/<repo>:sha-<sha>` and `:develop` exist.
 - `docker run` of that image with a disposable Postgres returns 200 on `/api/health` and the response contains the same SHA.
 - Failed CI on develop produces no image.

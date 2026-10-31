@@ -3,9 +3,11 @@
 **Status:** Approved (Opus, 2026-10-31) · **Thread:** 3 CI/CD · **Depends on:** P0-T01 · **Test plan:** [../../test-plans/P0-C01.md](../../test-plans/P0-C01.md)
 
 ## Goal
+
 One required CI workflow that gates every PR to `develop` and `main` and runs the upstream checks that matter for CareerOS.
 
 ## File: `.github/workflows/careeros-ci.yml`
+
 - `name: careeros-ci`. Triggers: `pull_request` (branches `develop`, `main`), `push` (branches `develop`, `main`), `workflow_dispatch`.
 - `permissions: contents: read`. Concurrency group per workflow + ref; cancel in progress for PRs only.
 - Use the same action major versions upstream `ci.yml` uses (checkout, pnpm/action-setup, setup-node with `.nvmrc` and pnpm cache). Runner: `ubuntu-latest` only (no Blacksmith, no Vercel remote cache).
@@ -16,10 +18,12 @@ One required CI workflow that gates every PR to `develop` and `main` and runs th
 - Timeouts: static 15 min, unit 30 min, e2e 40 min.
 
 ## Settings (done by Sonnet with `gh` CLI if it has admin rights, else listed in the PR for Opus/Stephen)
+
 - Disable upstream workflows: `ci.yml`, `docker-publish.yml`, `autofix.yml`, `issue-maintenance.yml`, `mobile-forme-build.yml`, `mobile-ota-update.yml`, `mobile-release.yml` (`gh workflow disable`).
 - Add a row to `docs/UPSTREAM_PATCHES.md`: "Actions settings · P0-C01 · upstream workflows disabled, files unchanged · None".
 
 ## Acceptance criteria
+
 - PR for this task shows `careeros-ci` with jobs `static`, `unit`, `e2e` all green.
 - Upstream workflows show as disabled; none ran on the PR.
 - Filter excludes `mobile` (visible in logs).
