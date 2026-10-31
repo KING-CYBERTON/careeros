@@ -9,7 +9,7 @@
 
 ## Phase 0 exit criteria (PRODUCT.md §13)
 
-- [ ] Upstream app runs in staging (P0-C03, waits on Q3 and the VPS runner)
+- [ ] Upstream app runs in staging (P0-C03 merged; waits on Stephen: VPS runbook and default branch = `develop`)
 - [x] CI green on `develop` (all PRs since C01b green on static, unit, e2e)
 - [x] All three threads operational (T01, Q01, C01 each completed the §1.3 loop)
 
