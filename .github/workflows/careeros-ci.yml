@@ -135,6 +135,23 @@ jobs:
       - name: Run unit tests (mobile excluded)
         run: pnpm exec turbo run test:ci --concurrency=1 --filter=!mobile
 
+      # CAREEROS: P1-C02. Per-package counts on the run page. The script catches its own errors and exits 0.
+      - name: Test summary
+        if: always()
+        run: node tooling/ci/junit-summary.mjs
+
+      # CAREEROS: P1-C02
+      - name: Upload unit JUnit reports
+        if: always()
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: unit-junit
+          path: |
+            packages/*/reports/**/*.xml
+            apps/*/reports/**/*.xml
+          if-no-files-found: ignore
+          retention-days: 14
+
   e2e:
     name: e2e
     needs: static
