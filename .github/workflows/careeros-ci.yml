@@ -178,7 +178,16 @@ jobs:
 
       - name: Install PDF text extraction tools
         if: needs.changes.outputs.code == 'true'
-        run: sudo apt-get update && sudo apt-get install -y poppler-utils
+        timeout-minutes: 5
+        run: |
+          for attempt in 1 2 3; do
+            if sudo apt-get update -o Acquire::Retries=3 && sudo apt-get install -y --no-install-recommends -o Acquire::Retries=3 poppler-utils; then
+              exit 0
+            fi
+            echo "apt attempt $attempt failed" >&2
+            sleep 5
+          done
+          exit 1
 
       - name: Prepare test storage
         if: needs.changes.outputs.code == 'true'
@@ -206,7 +215,7 @@ jobs:
 
       - name: Run unit tests (mobile excluded)
         if: needs.changes.outputs.code == 'true'
-        run: pnpm exec turbo run test:ci --concurrency=3 --filter=!mobile
+        run: pnpm exec turbo run test:ci --concurrency=2 --filter=!mobile
 
       # CAREEROS: P1-C02. Per-package counts on the run page. The script catches its own errors and exits 0.
       - name: Test summary
@@ -305,7 +314,16 @@ jobs:
 
       - name: Install PDF text extraction tools
         if: needs.changes.outputs.code == 'true'
-        run: sudo apt-get update && sudo apt-get install -y poppler-utils
+        timeout-minutes: 5
+        run: |
+          for attempt in 1 2 3; do
+            if sudo apt-get update -o Acquire::Retries=3 && sudo apt-get install -y --no-install-recommends -o Acquire::Retries=3 poppler-utils; then
+              exit 0
+            fi
+            echo "apt attempt $attempt failed" >&2
+            sleep 5
+          done
+          exit 1
 
       - name: Install Chromium and browser dependencies
         if: needs.changes.outputs.code == 'true'
