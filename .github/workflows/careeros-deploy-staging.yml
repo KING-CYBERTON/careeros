@@ -78,6 +78,7 @@ jobs:
           set -euo pipefail
           install -d -m 0750 "$STAGING_DIR"
           install -m 0644 infra/staging/compose.staging.yml "$STAGING_DIR/compose.staging.yml"
+          install -m 0644 infra/db/bootstrap-roles.sql "$STAGING_DIR/bootstrap-roles.sql"
           install -m 0644 infra/staging/.env.staging.example "$STAGING_DIR/.env.staging.example"
           install -m 0755 infra/staging/deploy.sh "$STAGING_DIR/deploy.sh"
           install -m 0755 infra/staging/rollback.sh "$STAGING_DIR/rollback.sh"
