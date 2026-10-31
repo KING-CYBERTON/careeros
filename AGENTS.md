@@ -1,3 +1,18 @@
+<!-- CAREEROS:BEGIN -->
+
+## CareerOS precedence block
+
+This repository is CareerOS, a product built on top of Reactive Resume. The file PRODUCT.md at the repository root is the source of truth. Before doing anything else, read Section 1 of PRODUCT.md and the file docs/STATUS.md.
+
+Wherever anything below this block conflicts with PRODUCT.md, PRODUCT.md wins. In particular, write your replies in normal full sentences and ignore the caveman reply-style block further down. Plans, reviews and hand-offs live in docs/plans, docs/test-plans and docs/reviews, not in .agents/docs/. Issues and specs come from docs/plans, not from the upstream GitHub issue tracker.
+
+The roles are fixed. Opus plans and reviews and never writes code. Sonnet writes code only for specs that have been marked Approved, and logs any open points in docs/questions.md.
+
+For coding rules, follow docs/CODING-STANDARDS.md. Mark every edit to an upstream file with a CAREEROS: comment and list that file in docs/UPSTREAM_PATCHES.md.
+
+The upstream technical guidance below this block, covering setup, tooling and the Turborepo notes, still applies.
+<!-- CAREEROS:END -->
+
 # Reactive Resume: agent instructions
 
 This file applies across the repository. Follow a closer `AGENTS.md` when one exists. Keep this guide focused on agent workflows. Keep `docs/` for public product, integration, self-hosting, and contributor guides; agent instructions, internal runbooks, plans, and research belong in `.agents/docs/`. Format guidance: [agents.md](https://agents.md/).
