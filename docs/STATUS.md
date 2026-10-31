@@ -2,7 +2,7 @@
 
 > Written by Opus after every plan, review and merge. Every thread reads this file first.
 
-**Current phase:** 0 — Setup
+**Current phase:** 0 — Setup (exit waits on owner actions) · 1 — Multi-tenancy in progress
 **Current version:** none yet (first tag will be `0.0.1` at Phase 0 exit)
 **Base:** Reactive Resume v6.0.10, upstream commit `a69e48318aab3c1c3ea57d2c0467710ef0d8342f` (2026-10-31)
 **Last updated:** 2026-10-31 by Opus (Thread 1)
@@ -29,9 +29,19 @@
 | 3 — CI/CD | P0-C03  | [plans/cicd/P0-C03-staging.md](plans/cicd/P0-C03-staging.md)                 | [test-plans/P0-C03.md](test-plans/P0-C03.md) | Approved rev 2 (Cloudflare Tunnel) · **Merged** · [review](reviews/P0-C03-review-1.md) · live once Stephen completes the runbook and sets the default branch | —                                                        |
 | 3 — CI/CD | P0-C04  | [plans/cicd/P0-C04-repo-hygiene.md](plans/cicd/P0-C04-repo-hygiene.md)       | [test-plans/P0-C04.md](test-plans/P0-C04.md) | **Merged** · [review](reviews/P0-C04-review-1.md) · settings part is an owner action                                                                         | [#7](https://github.com/KING-CYBERTON/careeros/pull/7)   |
 
+## Phase 1 tasks
+
+| Thread    | Task ID | Spec                                                           | Status                                                    | Branch / PR                                              |
+| --------- | ------- | -------------------------------------------------------------- | --------------------------------------------------------- | -------------------------------------------------------- |
+| 3 — CI/CD | P1-C01  | [plans/P1-C01-db-role-split.md](plans/P1-C01-db-role-split.md) | **Merged** · [review](reviews/P1-C01-review-1.md)         | [#16](https://github.com/KING-CYBERTON/careeros/pull/16) |
+| 1 — Build | P1-T01  | [plans/P1-T01-org-plugin.md](plans/P1-T01-org-plugin.md)       | **Merged** · [review](reviews/P1-T01-review-1.md)         | [#17](https://github.com/KING-CYBERTON/careeros/pull/17) |
+| 1 — Build | P1-T02  | [plans/P1-T02-tenancy-core.md](plans/P1-T02-tenancy-core.md)   | Approved · dispatched to Sonnet                           | `feature/P1-T02-tenancy-core`                            |
+| 1 — Build | P1-T03  | (spec after D6)                                                | Blocked on Stephen confirming D6 (personal org at signup) | —                                                        |
+
 ## Blockers
 
 - **Owner actions (Stephen)**, the session proxy blocks repo-settings writes: (1) default branch → `develop`; (2) branch protection on `develop` and `main` (require PR, checks `static`, `unit`, `e2e`, up to date, no force-push/deletion; `main` restricted to Opus release merges); (3) enable secret scanning, push protection and Dependabot alerts.
+- **D6** (interim personal org at signup) needs Stephen's OK before P1-T03.
 - **Q3** answered (no inbound 80/443 → Cloudflare Tunnel). **Q4** answered (DNS on Cloudflare).
 - **E1, E2** resolved (private repo; home-lab VPS `careeros-staging.ayopa.co.ke`).
 
@@ -59,6 +69,10 @@
 - P0-Q03 e2e tag-filter fix — [#11](https://github.com/KING-CYBERTON/careeros/pull/11), `c3c61cb`
 - P0-T03 CI baseline — [#12](https://github.com/KING-CYBERTON/careeros/pull/12), `b287e83`
 - P0-C03 Staging — [#13](https://github.com/KING-CYBERTON/careeros/pull/13), `6035783`
+- Phase 1 plan — [#14](https://github.com/KING-CYBERTON/careeros/pull/14), `a87a399`
+- Docs sync 4 (P1 specs, C03 review) — [#15](https://github.com/KING-CYBERTON/careeros/pull/15), `60c05df`
+- P1-C01 Database role split — [#16](https://github.com/KING-CYBERTON/careeros/pull/16), `17d7b35`
+- P1-T01 Organization plugin — [#17](https://github.com/KING-CYBERTON/careeros/pull/17), `4305b64`
 
 All 2026-10-31.
 
