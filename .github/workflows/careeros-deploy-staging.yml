@@ -1,0 +1,135 @@
+# CAREEROS: P0-C03 — deploy the published image to staging on the self-hosted runner, health check, smoke, auto-rollback.
+name: careeros-deploy-staging
+
+on:
+  workflow_run:
+    workflows: [careeros-image]
+    types: [completed]
+    branches: [develop]
+  workflow_dispatch:
+    inputs:
+      image_tag:
+        description: "Image tag to deploy (e.g. sha-<40-char commit>); use an older tag to roll back"
+        required: true
+        type: string
+
+permissions:
+  contents: read
+  packages: read
+
+# One staging deploy at a time; never cancel one that is running.
+concurrency:
+  group: careeros-deploy-staging
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    name: deploy to staging
+    runs-on: [self-hosted, staging]
+    environment: staging
+    timeout-minutes: 30
+    if: >-
+      github.event_name != 'workflow_run' ||
+      (github.event.workflow_run.conclusion == 'success' &&
+      github.event.workflow_run.head_branch == 'develop')
+    env:
+      STAGING_URL: ${{ vars.STAGING_URL }}
+      STAGING_HOST: ${{ vars.STAGING_HOST }}
+      STAGING_DIR: /opt/careeros/staging
+
+    steps:
+      - name: Resolve image tag
+        id: plan
+        env:
+          EVENT_NAME: ${{ github.event_name }}
+          INPUT_TAG: ${{ inputs.image_tag }}
+          RUN_SHA: ${{ github.event.workflow_run.head_sha }}
+          REPOSITORY: ${{ github.repository }}
+        run: |
+          set -euo pipefail
+          if [[ -z "${STAGING_URL:-}" || -z "${STAGING_HOST:-}" ]]; then
+            echo "::error::Set the STAGING_URL and STAGING_HOST variables on the GitHub 'staging' environment."
+            exit 1
+          fi
+          if [[ "$EVENT_NAME" == "workflow_run" ]]; then
+            tag="sha-$RUN_SHA"
+          else
+            tag="$INPUT_TAG"
+          fi
+          if [[ ! "$tag" =~ ^[A-Za-z0-9_][A-Za-z0-9_.-]{0,127}$ ]]; then
+            echo "::error::Invalid image tag."
+            exit 1
+          fi
+          {
+            echo "tag=$tag"
+            echo "image=ghcr.io/${REPOSITORY,,}"
+            echo "ref=${RUN_SHA:-$GITHUB_SHA}"
+          } >> "$GITHUB_OUTPUT"
+          echo "Deploying $tag to https://$STAGING_HOST" >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Check out source
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: ${{ steps.plan.outputs.ref }}
+          persist-credentials: false
+
+      - name: Sync infra files to the server
+        run: |
+          set -euo pipefail
+          install -d -m 0750 "$STAGING_DIR"
+          install -m 0644 infra/staging/compose.staging.yml "$STAGING_DIR/compose.staging.yml"
+          install -m 0644 infra/staging/.env.staging.example "$STAGING_DIR/.env.staging.example"
+          install -m 0755 infra/staging/deploy.sh "$STAGING_DIR/deploy.sh"
+          install -m 0755 infra/staging/rollback.sh "$STAGING_DIR/rollback.sh"
+          install -m 0755 infra/staging/mark-good.sh "$STAGING_DIR/mark-good.sh"
+
+      - name: Deploy
+        id: deploy
+        env:
+          IMAGE_REPOSITORY: ${{ steps.plan.outputs.image }}
+          GHCR_USER: ${{ github.actor }}
+          GHCR_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          IMAGE_TAG: ${{ steps.plan.outputs.tag }}
+        run: |
+          set -euo pipefail
+          printf '%s' "$GHCR_TOKEN" | "$STAGING_DIR/deploy.sh" "$IMAGE_TAG"
+
+      - name: Health check
+        env:
+          IMAGE_TAG: ${{ steps.plan.outputs.tag }}
+        run: |
+          set -euo pipefail
+          body="$(curl --fail --silent --show-error --retry 10 --retry-delay 6 --retry-all-errors --max-time 20 "$STAGING_URL/api/health")"
+          echo "$body"
+          if [[ "$IMAGE_TAG" == sha-* ]]; then
+            expected="${IMAGE_TAG#sha-}"
+            if ! grep -q "\"revision\":\"$expected\"" <<<"$body"; then
+              echo "::error::/api/health does not report revision $expected."
+              exit 1
+            fi
+          fi
+
+      - name: Set up Node.js (for the smoke test)
+        uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version-file: ".nvmrc"
+
+      # Smoke runs without AI settings: the AI section of smoke.mjs is skipped unless SMOKE_AI_* are set.
+      - name: Smoke test
+        run: node tooling/deployment/smoke.mjs
+        env:
+          SMOKE_URL: ${{ vars.STAGING_URL }}
+
+      - name: Mark healthy
+        env:
+          IMAGE_TAG: ${{ steps.plan.outputs.tag }}
+        run: |
+          set -euo pipefail
+          "$STAGING_DIR/mark-good.sh" "$IMAGE_TAG"
+
+      - name: Roll back to the last healthy version
+        if: failure() && steps.deploy.outcome != 'skipped'
+        run: |
+          set -euo pipefail
+          echo "::warning::Deploy failed; redeploying the last healthy tag."
+          "$STAGING_DIR/rollback.sh" --last-good
