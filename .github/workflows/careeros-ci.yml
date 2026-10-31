@@ -143,7 +143,13 @@ jobs:
     env:
       APP_URL: http://localhost:3000
       PORT: "3000"
-      DATABASE_URL: postgresql://postgres:postgres@localhost:5432/postgres
+      # CAREEROS: P1-C01 role split. The app runs as careeros_app; migrations run as careeros_owner.
+      # Passwords are public, disposable CI-only values (same as the unit job's careeros_app fixture).
+      DATABASE_URL: postgresql://careeros_app:careeros_app@localhost:5432/postgres
+      DATABASE_MIGRATION_URL: postgresql://careeros_owner:careeros_owner@localhost:5432/postgres
+      SUPERUSER_URL: postgresql://postgres:postgres@localhost:5432/postgres
+      CAREEROS_OWNER_PASSWORD: careeros_owner
+      CAREEROS_APP_PASSWORD: careeros_app
       AUTH_SECRET: isolated-ci-auth-secret-32-characters
       ENCRYPTION_SECRET: isolated-ci-encryption-secret-32-characters
       FLAG_DISABLE_SIGNUPS: "false"
@@ -197,8 +203,25 @@ jobs:
       - name: Prepare test storage
         run: mkdir -p "$LOCAL_STORAGE_PATH"
 
-      - name: Migrate test database
-        run: pnpm db:migrate
+      # CAREEROS: P1-C01. Run twice on purpose: the bootstrap must be idempotent.
+      - name: Create database roles (careeros_owner, careeros_app)
+        run: |
+          infra/db/bootstrap-roles.sh
+          infra/db/bootstrap-roles.sh
+
+      # CAREEROS: P1-C01. drizzle.config.ts reads only DATABASE_URL, so the migration URL is passed in for this step only.
+      - name: Migrate test database (as careeros_owner)
+        run: DATABASE_URL="$DATABASE_MIGRATION_URL" pnpm db:migrate
+
+      - name: Assert the app role is least-privilege
+        run: |
+          set -euo pipefail
+          row="$(psql "$DATABASE_URL" -v ON_ERROR_STOP=1 -Atc "select current_user, rolsuper, rolbypassrls from pg_roles where rolname = current_user")"
+          test "$row" = "careeros_app|f|f" || { echo "unexpected app role state: $row" >&2; exit 1; }
+          owned="$(psql "$DATABASE_URL" -v ON_ERROR_STOP=1 -Atc "select count(*) from pg_tables where schemaname = 'public' and tableowner = 'careeros_app'")"
+          test "$owned" = "0" || { echo "careeros_app owns $owned table(s) in public" >&2; exit 1; }
+          tables="$(psql "$DATABASE_URL" -v ON_ERROR_STOP=1 -Atc "select count(*) from pg_tables where schemaname = 'public'")"
+          test "$tables" -gt 0 || { echo "no tables found in public after migration" >&2; exit 1; }
 
       - name: Build application
         run: pnpm build

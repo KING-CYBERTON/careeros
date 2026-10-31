@@ -1,6 +1,6 @@
 # Phase 1 — Multi-tenancy: Phase Plan
 
-**Status:** Draft (Opus, 2026-10-31) · task specs follow per sub-phase · **Exit tag:** `0.1.0` · **Estimate:** 2 to 3 weeks
+**Status:** Approved (Opus, 2026-10-31), except D6 which waits on Stephen · specs: [P1-T01](P1-T01-org-plugin.md), [P1-T02](P1-T02-tenancy-core.md), [P1-C01](P1-C01-db-role-split.md); the rest follow per sub-phase · **Exit tag:** `0.1.0` · **Estimate:** 2 to 3 weeks
 
 ## Goal
 
