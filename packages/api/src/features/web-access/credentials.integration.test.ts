@@ -59,6 +59,13 @@ describe.skipIf(!process.env.INTEGRATIONS_TEST_DATABASE_URL)("integration creden
 				.filter((statement) => !owned || owned.test(statement.trim()));
 			await pool.query(statements.join("\n").replaceAll('"public".', ""));
 		}
+		// CAREEROS (P1-T09): the credentials table is keyed by organization; the fixture's organization is the one the
+		// shared tenancy test mock puts every call in. No foreign key: this schema has no organization table.
+		await pool.query(
+			`ALTER TABLE web_access_credentials ADD COLUMN organization_id text NOT NULL DEFAULT 'org_test';
+			 ALTER TABLE web_access_credentials DROP CONSTRAINT web_access_credentials_pkey;
+			 ALTER TABLE web_access_credentials ADD PRIMARY KEY (organization_id, user_id)`,
+		);
 		web = (await import("./credentials")).webAccessService;
 		ai = (await import("../ai-providers/service")).aiProvidersService;
 	});

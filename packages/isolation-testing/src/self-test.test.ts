@@ -248,6 +248,9 @@ describe("coverage check", () => {
 			"career_workspace",
 			"career_transcript",
 			"career_answer",
+			"custom_domain",
+			"web_access_credentials",
+			"storage_cleanup_job",
 		]);
 	});
 });

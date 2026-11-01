@@ -10,6 +10,10 @@ export type StorageCleanupStatus = (typeof STORAGE_CLEANUP_STATUSES)[number];
  * then removed only after the storage prefix is verified empty. There is deliberately no user foreign key: deleting an
  * account must not cascade away the erasure targets that account still needs. `claimToken` fences late acknowledgments
  * from a worker whose lease expired.
+ *
+ * CAREEROS (P1-T09): `organizationId` puts the table under row-level security, and it is deliberately NOT a foreign
+ * key to `organization` (like `ownerId`): deleting an organization or an account must not cancel its erasure work.
+ * Rows whose owner no longer exists carry the sentinel organization `careeros_orphan` and are processed like any other.
  */
 export const storageCleanupJob = pg.pgTable(
 	"storage_cleanup_job",
@@ -19,6 +23,8 @@ export const storageCleanupJob = pg.pgTable(
 			.notNull()
 			.primaryKey()
 			.$defaultFn(() => generateId()),
+		// CAREEROS: tenant column, no foreign key on purpose (see above).
+		organizationId: pg.text("organization_id").notNull(),
 		ownerId: pg.text("owner_id").notNull(),
 		storageKey: pg.text("storage_key").notNull(),
 		status: pg.text("status").$type<StorageCleanupStatus>().notNull().default("pending"),
@@ -34,10 +40,16 @@ export const storageCleanupJob = pg.pgTable(
 			.$onUpdate(() => /* @__PURE__ */ new Date()),
 	},
 	(t) => [
-		pg.unique("storage_cleanup_job_owner_key_unique").on(t.ownerId, t.storageKey),
+		// CAREEROS: organization-led key (P1-T09, D11).
+		pg.unique("storage_cleanup_job_owner_key_unique").on(t.organizationId, t.ownerId, t.storageKey),
 		pg
 			.index("storage_cleanup_job_due_index")
 			.on(t.status, t.nextAttemptAt)
+			.where(sql`${t.status} = 'pending'`),
+		// CAREEROS: organization-led twin of the due index, for the per-organization claim (P1-T09).
+		pg
+			.index("storage_cleanup_job_org_due_index")
+			.on(t.organizationId, t.status, t.nextAttemptAt)
 			.where(sql`${t.status} = 'pending'`),
 	],
 );

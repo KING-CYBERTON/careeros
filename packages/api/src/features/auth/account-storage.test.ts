@@ -11,6 +11,9 @@ import { authService } from "./service";
 const settings = vi.hoisted(() => ({ STORAGE_BACKEND: "local", LOCAL_STORAGE_PATH: "" }));
 vi.mock("@reactive-resume/env/server", () => ({ env: settings }));
 vi.mock("@reactive-resume/auth/config", () => ({ auth: { $context: { secretConfig: "fixture" } } }));
+// CAREEROS (P1-T09): real organization scope, as in production (account deletion has none), so the cleanup job the
+// delete trigger files under the sentinel organization is processed through withOrgContext.
+vi.mock("@careeros/tenancy", async (importOriginal) => importOriginal());
 vi.mock("../applications/lanes", () => ({ applicationLaneService: {} }));
 vi.mock("../career/service", () => ({ careerService: {} }));
 vi.mock("../cover-letters/service", () => ({ coverLetterService: {} }));
