@@ -37,3 +37,10 @@ T07 (#33) merges first. Then T09 merges develop:
 - remove the career tables from `pendingTenantTables`;
 - add the Q64 test;
 - re-run the suites.
+
+## Re-review (Opus, 2026-11-01)
+
+- H1 is accepted with a deviation. A partial unique index cannot be deferred, so the function now swaps atomically: it requires the current org and a claim row for (org, user, hostname), un-verifies the other claimants, verifies the keeper, and raises unless the keeper ends up verified. A call with no claim raises and changes nothing, and a test covers that. DNS proof is still enforced in `customDomainService.verify`, which is the only caller. A server bug could misuse the function before or after this change, so the deviation adds no new exposure, and it narrows the call to the caller's own org and claim.
+- Develop (T07) is merged in, the snapshot is re-chained, the career tables are removed from the pending list, and the Q64 test has been added.
+- Traefik: no infra file pins `custom-domain-<userId>` router names. The routers are generated dynamically from the provider endpoint.
+- Verdict: approve, subject to fully green CI.
