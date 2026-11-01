@@ -224,7 +224,7 @@ describe("coverage check", () => {
 		expect(result.tenantTables.sort()).toEqual(isolationRegistry.map((entry) => entry.table).sort());
 	});
 
-	it("registers the resume tables (P1-T04) and the cover letter tables (P1-T05); later batches add theirs", () => {
+	it("registers the resume (P1-T04), cover letter (P1-T05) and remaining (P1-T09) tables; later batches add theirs", () => {
 		expect(isolationRegistry.map((entry) => entry.table)).toEqual([
 			"resume",
 			"resume_version",
@@ -233,6 +233,9 @@ describe("coverage check", () => {
 			"resume_statistics_daily",
 			"cover_letter",
 			"cover_letter_version",
+			"custom_domain",
+			"web_access_credentials",
+			"storage_cleanup_job",
 		]);
 	});
 });

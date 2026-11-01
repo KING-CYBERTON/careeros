@@ -1,6 +1,6 @@
 import { afterAll, beforeAll, describe, expect, it } from "vite-plus/test";
 import { createOrgIds, createPools, type TestPools } from "@careeros/testing";
-import { isolationRegistry, registerIsolationSuite, runCoverageCheck } from "./index";
+import { isolationRegistry, registerIsolationSuite, runCoverageCheck, runUnclassifiedTablesCheck } from "./index";
 
 // P1-T04: the real registry (the five resume tables) against the migrated public schema, as `careeros_app`.
 // Skipped only when the CAREEROS_TEST_* variables are absent; CI sets them.
@@ -22,10 +22,12 @@ describe.skipIf(!configured)("the isolation registry on the migrated schema", ()
 		// Deleting the organizations cascades their tenant rows; the seeded users are removed with their resumes.
 		await pools?.owner.query(`DELETE FROM organization WHERE id = ANY($1::text[])`, [[orgA, orgB]]);
 		await pools?.owner.query(`DELETE FROM "user" WHERE id LIKE 'iso-user-%'`);
+		// storage_cleanup_job has no foreign key to organization (erasure work outlives it), so it is removed by hand.
+		await pools?.owner.query(`DELETE FROM storage_cleanup_job WHERE organization_id = ANY($1::text[])`, [[orgA, orgB]]);
 		await pools?.close();
 	});
 
-	it("registers the five resume tables and the two cover letter tables", () => {
+	it("registers the resume, cover letter, custom domain, web access and storage cleanup tables", () => {
 		expect(isolationRegistry.map((entry) => entry.table)).toEqual([
 			"resume",
 			"resume_version",
@@ -34,6 +36,9 @@ describe.skipIf(!configured)("the isolation registry on the migrated schema", ()
 			"resume_statistics_daily",
 			"cover_letter",
 			"cover_letter_version",
+			"custom_domain",
+			"web_access_credentials",
+			"storage_cleanup_job",
 		]);
 	});
 
@@ -41,6 +46,20 @@ describe.skipIf(!configured)("the isolation registry on the migrated schema", ()
 		const result = await runCoverageCheck(pools.app, isolationRegistry);
 		expect(result.failures).toEqual([]);
 		expect(result.tenantTables).toEqual(expect.arrayContaining(isolationRegistry.map((entry) => entry.table)));
+	});
+
+	// P1-T09: every public table is registered, globally allowed, or pending a named ticket. A new table with no
+	// decision fails here.
+	it("classifies every table in public: registered, global or pending", async () => {
+		const result = await runUnclassifiedTablesCheck(pools.app, isolationRegistry);
+		expect(result.failures).toEqual([]);
+	});
+
+	it("fails a table nobody classified", async () => {
+		const result = await runUnclassifiedTablesCheck(pools.app, isolationRegistry.slice(1));
+		expect(result.failures).toContain(
+			"public.resume: is not in the isolation registry, the global allow-list or the pending set",
+		);
 	});
 
 	// One describe per table: Org B sees none of Org A's rows and Org A sees its own, as careeros_app.

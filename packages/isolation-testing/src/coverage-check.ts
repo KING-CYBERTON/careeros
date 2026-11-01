@@ -2,7 +2,7 @@ import type { AllowListEntry, RegistryEntry } from "./registry";
 import type { CheckResult } from "./result";
 import type pg from "pg";
 import { assertNonPrivilegedRole } from "./guard";
-import { DEFAULT_SCHEMA, entrySchema, tenancyAllowList } from "./registry";
+import { DEFAULT_SCHEMA, entrySchema, globalTables, pendingTenantTables, tenancyAllowList } from "./registry";
 import { toResult } from "./result";
 
 type TenantTableRow = { table_name: string; rls_enabled: boolean; rls_forced: boolean; has_policy: boolean };
@@ -60,4 +60,42 @@ export async function runCoverageCheck(
 		...toResult(failures),
 		tenantTables: rows.filter((r) => !allowed.has(r.table_name)).map((r) => r.table_name),
 	};
+}
+
+/**
+ * CAREEROS (P1-T09): every ordinary table in `schema` must be classified: in the registry, on the tenancy allow-list,
+ * on the global allow-list, or in the pending set. A table nobody decided about fails, which is how a new table
+ * without a tenancy decision fails CI. A table that is both registered and pending also fails (the ticket forgot to
+ * remove it from the pending set), and every entry needs a reason.
+ */
+export async function runUnclassifiedTablesCheck(
+	db: pg.Pool,
+	registry: readonly RegistryEntry[],
+	schema: string = DEFAULT_SCHEMA,
+	classified: readonly AllowListEntry[] = [...tenancyAllowList, ...globalTables],
+	pending: readonly AllowListEntry[] = pendingTenantTables,
+): Promise<CheckResult> {
+	await assertNonPrivilegedRole(db);
+	const { rows } = await db.query<{ table_name: string }>(
+		`SELECT c.relname AS table_name FROM pg_class c JOIN pg_namespace n ON n.oid = c.relnamespace
+		  WHERE n.nspname = $1 AND c.relkind IN ('r', 'p') ORDER BY c.relname`,
+		[schema],
+	);
+	const inSchema = (e: { schema?: string | undefined }) => (e.schema ?? DEFAULT_SCHEMA) === schema;
+	const registered = new Set(registry.filter(inSchema).map((e) => e.table));
+	const global = new Set(classified.filter(inSchema).map((e) => e.table));
+	const pendingSet = new Set(pending.filter(inSchema).map((e) => e.table));
+	const failures: string[] = [];
+	for (const entry of [...classified, ...pending]) {
+		if (entry.reason.trim() === "") failures.push(`${schema}.${entry.table}: list entry has no reason`);
+	}
+	for (const table of pendingSet) {
+		if (registered.has(table) || global.has(table))
+			failures.push(`${schema}.${table}: is pending but already registered or global; remove it from the pending set`);
+	}
+	for (const { table_name: table } of rows) {
+		if (!registered.has(table) && !global.has(table) && !pendingSet.has(table))
+			failures.push(`${schema}.${table}: is not in the isolation registry, the global allow-list or the pending set`);
+	}
+	return toResult(failures);
 }
