@@ -2,7 +2,7 @@ import type { E2EAccount } from "./data";
 import type { SeedIds } from "@careeros/testing/cross-org-inventory";
 import type { APIRequestContext, APIResponse, PlaywrightWorkerArgs } from "@playwright/test";
 import { startAiStub } from "./ai-stub";
-import { createInviteeAccount, deleteE2EOrganizations } from "./careeros-org";
+import { createInviteeAccount, deleteE2EOrganizations, markEmailVerified } from "./careeros-org";
 import { deleteE2EUser } from "./db";
 import { withSeedPool } from "./seed-db";
 
@@ -27,6 +27,21 @@ export type TwoOrgs = {
 	/** Organization B's API key, and a request context that sends only that key. */
 	bApiKey: string;
 	bKeyed: APIRequestContext;
+	/** Organization A's API key, and a request context that sends only that key (the MCP control call). */
+	aApiKey: string;
+	aKeyed: APIRequestContext;
+	/** P1-Q10: Organization A's second member (role `member`) and one pending invitation to an address nobody here controls. */
+	authOrg: {
+		orgSlug: string;
+		orgName: string;
+		ownerMemberId: string;
+		memberId: string;
+		memberUserId: string;
+		memberEmail: string;
+		invitationId: string;
+		invitationEmail: string;
+		bMemberId: string;
+	};
 	/** A request context with neither cookie nor key. */
 	anonymous: APIRequestContext;
 	ids: SeedIds;
@@ -126,18 +141,30 @@ export async function createTwoOrgs(playwright: Playwright, baseURL: string, own
 	};
 	// B's name must not contain A's marker, or B's own profile would read as a leak.
 	const accountB = createInviteeAccount({ ...accountA, username: `xorgb${tag}` });
+	// P1-Q10: Organization A's second member. The marker stays in the address and name so any echo is detected.
+	const accountA2: E2EAccount = {
+		...owner,
+		name: `Xorga${tag} Member`,
+		email: `xorga${tag}_m@example.test`,
+		username: `xorga${tag}_m`,
+	};
 	const stub = await startAiStub();
 	let a: Party | undefined;
 	let b: Party | undefined;
 	let bKeyed: APIRequestContext | undefined;
+	let aKeyed: APIRequestContext | undefined;
+	let a2: Party | undefined;
 	let anonymous: APIRequestContext | undefined;
 	const dispose = async () => {
 		await bKeyed?.dispose();
+		await aKeyed?.dispose();
+		await a2?.session.dispose();
 		await anonymous?.dispose();
 		await a?.session.dispose();
 		await b?.session.dispose();
 		await stub.close();
-		await deleteE2EOrganizations([accountA, accountB]);
+		await deleteE2EOrganizations([accountA, accountA2, accountB]);
+		await deleteE2EUser(accountA2);
 		await deleteE2EUser(accountA);
 		await deleteE2EUser(accountB);
 	};
@@ -159,10 +186,11 @@ export async function createTwoOrgs(playwright: Playwright, baseURL: string, own
 		anonymous = open;
 
 		// Organization A's own API key (so the key routes have an id to attack).
-		await expectOk(
+		const aCreated = await json<{ key: string }>(
 			await a.session.post(api("/auth/api-keys"), { data: { name: text("key"), expiresIn: null, access: "full" } }),
 			"A's API key",
 		);
+		aKeyed = await playwright.request.newContext({ baseURL, extraHTTPHeaders: { "x-api-key": aCreated.key } });
 		const aKeys = await json<{ apiKeys: { id: string }[] }>(await a.session.get(api("/auth/api-keys")), "A's API keys");
 		const apiKey = aKeys.apiKeys[0]?.id;
 		if (!apiKey) throw new Error("A's API key has no id");
@@ -359,6 +387,59 @@ export async function createTwoOrgs(playwright: Playwright, baseURL: string, own
 
 		const extra = await seedRowsWithoutEndpoint(a, tag);
 
+		// P1-Q10: a second member (A2, role member) and a pending invitation in Organization A.
+		a2 = await signUp(playwright, baseURL, accountA2);
+		await markEmailVerified(accountA2);
+		const memberInvite = await json<{ id: string }>(
+			await a.session.post("/api/auth/organization/invite-member", {
+				data: { email: accountA2.email, role: "member", organizationId: a.organizationId },
+			}),
+			"A2's invitation",
+		);
+		await expectOk(
+			await a2.session.post("/api/auth/organization/accept-invitation", { data: { invitationId: memberInvite.id } }),
+			"A2 joining Organization A",
+		);
+		const invitationEmail = `xorga${tag}_inv@example.test`;
+		const pending = await json<{ id: string }>(
+			await a.session.post("/api/auth/organization/invite-member", {
+				data: { email: invitationEmail, role: "member", organizationId: a.organizationId },
+			}),
+			"the pending invitation",
+		);
+		const members = await json<{ members: { id: string; userId: string; role: string }[] }>(
+			await a.session.get(`/api/auth/organization/list-members?organizationId=${a.organizationId}`),
+			"A's members",
+		);
+		const ownerUserId = a.userId;
+		const memberUserId = a2.userId;
+		const ownerMemberId = members.members.find((item) => item.userId === ownerUserId)?.id ?? "";
+		const memberId = members.members.find((item) => item.userId === memberUserId)?.id ?? "";
+		const bUserId = b.userId;
+		const bMembers = await json<{ members: { id: string; userId: string }[] }>(
+			await b.session.get(`/api/auth/organization/list-members?organizationId=${b.organizationId}`),
+			"B's members",
+		);
+		const bMemberId = bMembers.members.find((item) => item.userId === bUserId)?.id ?? "";
+		const fullOrg = await json<{ name: string; slug: string }>(
+			await a.session.get(`/api/auth/organization/get-full-organization?organizationId=${a.organizationId}`),
+			"A's organization",
+		);
+		const authOrg = {
+			orgSlug: fullOrg.slug,
+			orgName: fullOrg.name,
+			ownerMemberId,
+			memberId,
+			memberUserId: a2.userId,
+			memberEmail: accountA2.email,
+			invitationId: pending.id,
+			invitationEmail,
+			bMemberId,
+		};
+		const emptyAuth = Object.entries(authOrg).filter(([, value]) => !value);
+		if (emptyAuth.length > 0)
+			throw new Error(`Seeding left these organization fields empty: ${emptyAuth.map(([name]) => name).join(", ")}`);
+
 		const ids: SeedIds = {
 			resume,
 			resumeVersion: resumeVersion ?? "",
@@ -392,11 +473,23 @@ export async function createTwoOrgs(playwright: Playwright, baseURL: string, own
 			b,
 			bApiKey: created.key,
 			bKeyed: keyed,
+			aApiKey: aCreated.key,
+			aKeyed,
+			authOrg,
 			anonymous: open,
 			ids,
 			aResume: { username: accountA.username, slug, name: text("resume") },
 			markers: [`xorga${tag}`],
-			foreignIds: [...new Set(Object.values(ids)), a.organizationId, a.userId],
+			foreignIds: [
+				...new Set(Object.values(ids)),
+				a.organizationId,
+				a.userId,
+				a2.userId,
+				authOrg.orgSlug,
+				authOrg.ownerMemberId,
+				authOrg.memberId,
+				authOrg.invitationId,
+			],
 			dispose,
 		};
 	} catch (error) {
