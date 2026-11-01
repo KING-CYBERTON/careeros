@@ -25,7 +25,14 @@ vi.mock("@reactive-resume/env/server", () => ({
 	env: mocks.env,
 }));
 
-const { handleWebApp } = await import("./web");
+const { handleWebApp, isProfilePath, isPublicResumePath } = await import("./web");
+
+// CAREEROS: /licenses is an app page, never a username's primary resume (P2-T08).
+it("keeps /licenses out of the resume address space", () => {
+	expect(isProfilePath("/licenses")).toBe(false);
+	expect(isPublicResumePath("/licenses/anything")).toBe(false);
+	expect(isProfilePath("/tess")).toBe(true);
+});
 
 describe("web app fallback classification", () => {
 	beforeEach(() => {

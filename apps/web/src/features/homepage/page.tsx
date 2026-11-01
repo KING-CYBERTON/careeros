@@ -2,7 +2,7 @@
 import { t } from "@lingui/core/macro";
 import { Trans } from "@lingui/react/macro";
 import { Link } from "@tanstack/react-router";
-import { Button } from "@reactive-resume/ui/components/button";
+import { buttonVariants } from "@reactive-resume/ui/components/button";
 import { LandingBackground } from "./background";
 import { LandingFooter } from "./footer";
 import { getBrand } from "@/libs/brand";
@@ -25,13 +25,14 @@ export function Homepage() {
 				<p className="text-lg text-pretty text-ink-2 sm:text-xl">
 					<Trans>Your career workspace</Trans>
 				</p>
+				{/* Plain links styled as buttons, so they keep the link role for assistive tech and tests. */}
 				<div className="flex flex-wrap items-center justify-center gap-3">
-					<Button size="lg" nativeButton={false} render={<Link to="/auth/login" />}>
+					<Link to="/auth/login" className={buttonVariants({ size: "lg" })}>
 						<Trans>Sign in</Trans>
-					</Button>
-					<Button size="lg" variant="secondary" nativeButton={false} render={<Link to="/auth/register" />}>
+					</Link>
+					<Link to="/auth/register" className={buttonVariants({ size: "lg", variant: "secondary" })}>
 						<Trans>Create account</Trans>
-					</Button>
+					</Link>
 				</div>
 			</main>
 			<LandingFooter />
