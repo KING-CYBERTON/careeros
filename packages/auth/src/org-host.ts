@@ -1,8 +1,7 @@
-import { resolveHost, withOrgContext } from "@careeros/tenancy";
+import { resolveHost } from "@careeros/tenancy";
 import { APIError } from "better-auth/api";
-import { eq } from "drizzle-orm";
+import { sql } from "drizzle-orm";
 import { db } from "@reactive-resume/db/client";
-import { organizationSettings } from "@reactive-resume/db/schema";
 import { isInvitedSignUp } from "./personal-org";
 
 // CAREEROS (P2-T03, phase plan D6): sign-up on an organization host. `config.ts` calls `guardOrgHostSignUp` before a
@@ -14,16 +13,15 @@ export const ORG_SIGNUP_CLOSED_MESSAGE =
 type NewUser = { id?: string; email: string };
 type HookContext = { body?: unknown; request?: Request | undefined } | null | undefined;
 
-/** Whether the organization lets anyone sign up. Read inside the organization's own scope (settings are tenant data). */
-function hasOpenSignup(organizationId: string): Promise<boolean> {
-	return withOrgContext(organizationId, async () => {
-		const [row] = await db
-			.select({ openSignup: organizationSettings.openSignup })
-			.from(organizationSettings)
-			.where(eq(organizationSettings.organizationId, organizationId))
-			.limit(1);
-		return row?.openSignup === true;
-	});
+/**
+ * CAREEROS (P2-T06, Q94): whether the organization lets anyone sign up. The person signing up is not a member, so no
+ * organization scope is opened for them: a definer function answers one boolean for the host's organization.
+ */
+async function hasOpenSignup(organizationId: string): Promise<boolean> {
+	const { rows } = await db.execute<{ open: boolean | null }>(
+		sql`select careeros_org_open_signup(${organizationId}::text) as open`,
+	);
+	return rows[0]?.open === true;
 }
 
 /**

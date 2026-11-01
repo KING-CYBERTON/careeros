@@ -20,6 +20,9 @@ beforeEach(() => {
 		"ORG_HOST_PATTERN",
 		"TRUST_FORWARDED_HOST",
 		"APP_ALIAS_URL",
+		"CF_SAAS_API_TOKEN",
+		"CF_ZONE_ID",
+		"CF_SAAS_CNAME_TARGET",
 	])
 		vi.stubEnv(name, undefined);
 });
@@ -230,5 +233,42 @@ describe("organization host configuration", () => {
 		vi.stubEnv("APP_URL", "https://careeros.example.com");
 		vi.stubEnv("ORG_HOST_PATTERN", "{slug}-careeros.example.com");
 		expect((await import("./server")).env.ORG_HOST_PATTERN).toBe("{slug}-careeros.example.com");
+	});
+});
+
+// CAREEROS (P2-T06)
+describe("Cloudflare for SaaS configuration", () => {
+	it("is off by default", async () => {
+		const { env } = await import("./server");
+		expect([env.CF_SAAS_API_TOKEN, env.CF_ZONE_ID, env.CF_SAAS_CNAME_TARGET]).toEqual([
+			undefined,
+			undefined,
+			undefined,
+		]);
+	});
+
+	it("treats empty values as unset and accepts a zone id and a target host", async () => {
+		vi.stubEnv("CF_SAAS_API_TOKEN", "");
+		vi.stubEnv("CF_ZONE_ID", "");
+		expect((await import("./server")).env.CF_ZONE_ID).toBeUndefined();
+		vi.resetModules();
+		vi.stubEnv("CF_SAAS_API_TOKEN", "token-value");
+		vi.stubEnv("CF_ZONE_ID", "0123456789ABCDEF0123456789abcdef");
+		vi.stubEnv("CF_SAAS_CNAME_TARGET", "Customers.Example.com");
+		const { env } = await import("./server");
+		expect(env).toMatchObject({
+			CF_SAAS_API_TOKEN: "token-value",
+			CF_ZONE_ID: "0123456789ABCDEF0123456789abcdef",
+			CF_SAAS_CNAME_TARGET: "customers.example.com",
+		});
+	});
+
+	it.each([
+		["CF_ZONE_ID", "not-a-zone"],
+		["CF_SAAS_CNAME_TARGET", "https://customers.example.com"],
+	])("rejects an invalid %s", async (name, value) => {
+		vi.stubEnv(name, value);
+		vi.spyOn(console, "error").mockImplementation(() => {});
+		await expect(import("./server")).rejects.toThrow("Invalid environment variables");
 	});
 });

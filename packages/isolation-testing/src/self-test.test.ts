@@ -259,6 +259,7 @@ describe("coverage check", () => {
 			"storage_cleanup_job",
 			"organization_branding",
 			"organization_settings",
+			"organization_domain",
 		]);
 	});
 });

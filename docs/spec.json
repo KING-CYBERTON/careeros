@@ -66840,6 +66840,1382 @@
 				]
 			}
 		},
+		"/organization/domains": {
+			"get": {
+				"operationId": "listOrganizationDomains",
+				"summary": "List the organization's custom domains",
+				"description": "Returns the current organization's custom domains with their status and the DNS records each needs. Only an owner or admin can do this. Requires authentication.",
+				"tags": [
+					"Organization"
+				],
+				"parameters": [],
+				"responses": {
+					"200": {
+						"description": "OK",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "array",
+									"items": {
+										"type": "object",
+										"properties": {
+											"id": {
+												"type": "string"
+											},
+											"hostname": {
+												"type": "string",
+												"description": "The domain, as DNS knows it (lower case ASCII)."
+											},
+											"status": {
+												"enum": [
+													"pending",
+													"verified",
+													"active",
+													"failed",
+													"removing"
+												],
+												"type": "string",
+												"description": "pending: waiting for the TXT record. verified: the TXT record matched and the certificate is being issued. active: the organization is served on this domain. failed: see failureReason. removing: being deleted."
+											},
+											"records": {
+												"type": "array",
+												"items": {
+													"type": "object",
+													"properties": {
+														"type": {
+															"enum": [
+																"TXT",
+																"CNAME"
+															],
+															"type": "string"
+														},
+														"name": {
+															"type": "string",
+															"description": "The record's full host name."
+														},
+														"value": {
+															"type": "string"
+														}
+													},
+													"required": [
+														"type",
+														"name",
+														"value"
+													]
+												},
+												"description": "The DNS records to create: a TXT record that proves ownership and a CNAME to the Cloudflare target."
+											},
+											"cfSslStatus": {
+												"anyOf": [
+													{
+														"type": "string"
+													},
+													{
+														"type": "null"
+													}
+												],
+												"description": "The certificate's status as the CDN reports it, when it has said."
+											},
+											"failureReason": {
+												"anyOf": [
+													{
+														"type": "string"
+													},
+													{
+														"type": "null"
+													}
+												],
+												"description": "A short code such as verification_timeout, txt_missing or cloudflare_rejected."
+											},
+											"lastCheckedAt": {
+												"anyOf": [
+													{
+														"type": "string",
+														"format": "date-time",
+														"x-native-type": "date"
+													},
+													{
+														"type": "null"
+													}
+												]
+											},
+											"verifiedAt": {
+												"anyOf": [
+													{
+														"type": "string",
+														"format": "date-time",
+														"x-native-type": "date"
+													},
+													{
+														"type": "null"
+													}
+												]
+											},
+											"createdAt": {
+												"type": "string",
+												"format": "date-time",
+												"x-native-type": "date"
+											}
+										},
+										"required": [
+											"id",
+											"hostname",
+											"status",
+											"records",
+											"cfSslStatus",
+											"failureReason",
+											"lastCheckedAt",
+											"verifiedAt",
+											"createdAt"
+										]
+									}
+								}
+							}
+						}
+					},
+					"403": {
+						"description": "403",
+						"content": {
+							"application/json": {
+								"schema": {
+									"oneOf": [
+										{
+											"type": "object",
+											"properties": {
+												"defined": {
+													"const": true
+												},
+												"code": {
+													"const": "FORBIDDEN"
+												},
+												"status": {
+													"const": 403
+												},
+												"message": {
+													"type": "string",
+													"default": "Only an owner or admin of the organization can do this."
+												},
+												"data": {}
+											},
+											"required": [
+												"defined",
+												"code",
+												"status",
+												"message"
+											]
+										},
+										{
+											"type": "object",
+											"properties": {
+												"defined": {
+													"const": false
+												},
+												"code": {
+													"type": "string"
+												},
+												"status": {
+													"type": "number"
+												},
+												"message": {
+													"type": "string"
+												},
+												"data": {}
+											},
+											"required": [
+												"defined",
+												"code",
+												"status",
+												"message"
+											]
+										}
+									]
+								}
+							}
+						}
+					},
+					"default": {
+						"description": "Structured API error. See status and code; do not branch on message text.",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"required": [
+										"defined",
+										"code",
+										"status",
+										"message"
+									],
+									"properties": {
+										"defined": {
+											"type": "boolean"
+										},
+										"code": {
+											"type": "string"
+										},
+										"status": {
+											"type": "integer"
+										},
+										"message": {
+											"type": "string"
+										},
+										"data": {}
+									}
+								}
+							}
+						}
+					}
+				},
+				"security": [
+					{
+						"apiKey": []
+					},
+					{
+						"bearerAuth": []
+					},
+					{
+						"cookieAuth": []
+					}
+				],
+				"x-codeSamples": [
+					{
+						"lang": "bash",
+						"label": "cURL",
+						"source": "curl \"https://careeros.example/api/openapi/organization/domains\" --header \"x-api-key: <api-key>\""
+					}
+				]
+			},
+			"post": {
+				"operationId": "addOrganizationDomain",
+				"summary": "Add a custom domain to the organization",
+				"description": "Adds a domain such as careers.example.com and returns the DNS records to create. The domain serves the organization once the TXT record is found and the certificate is issued. At most 5 per organization; a name another organization or account already uses is refused. Only an owner or admin can do this. Requires authentication.",
+				"tags": [
+					"Organization"
+				],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"type": "object",
+								"properties": {
+									"hostname": {
+										"type": "string",
+										"minLength": 1,
+										"maxLength": 260,
+										"description": "A domain such as careers.example.com."
+									}
+								},
+								"required": [
+									"hostname"
+								]
+							}
+						}
+					}
+				},
+				"responses": {
+					"200": {
+						"description": "OK",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"id": {
+											"type": "string"
+										},
+										"hostname": {
+											"type": "string",
+											"description": "The domain, as DNS knows it (lower case ASCII)."
+										},
+										"status": {
+											"enum": [
+												"pending",
+												"verified",
+												"active",
+												"failed",
+												"removing"
+											],
+											"type": "string",
+											"description": "pending: waiting for the TXT record. verified: the TXT record matched and the certificate is being issued. active: the organization is served on this domain. failed: see failureReason. removing: being deleted."
+										},
+										"records": {
+											"type": "array",
+											"items": {
+												"type": "object",
+												"properties": {
+													"type": {
+														"enum": [
+															"TXT",
+															"CNAME"
+														],
+														"type": "string"
+													},
+													"name": {
+														"type": "string",
+														"description": "The record's full host name."
+													},
+													"value": {
+														"type": "string"
+													}
+												},
+												"required": [
+													"type",
+													"name",
+													"value"
+												]
+											},
+											"description": "The DNS records to create: a TXT record that proves ownership and a CNAME to the Cloudflare target."
+										},
+										"cfSslStatus": {
+											"anyOf": [
+												{
+													"type": "string"
+												},
+												{
+													"type": "null"
+												}
+											],
+											"description": "The certificate's status as the CDN reports it, when it has said."
+										},
+										"failureReason": {
+											"anyOf": [
+												{
+													"type": "string"
+												},
+												{
+													"type": "null"
+												}
+											],
+											"description": "A short code such as verification_timeout, txt_missing or cloudflare_rejected."
+										},
+										"lastCheckedAt": {
+											"anyOf": [
+												{
+													"type": "string",
+													"format": "date-time",
+													"x-native-type": "date"
+												},
+												{
+													"type": "null"
+												}
+											]
+										},
+										"verifiedAt": {
+											"anyOf": [
+												{
+													"type": "string",
+													"format": "date-time",
+													"x-native-type": "date"
+												},
+												{
+													"type": "null"
+												}
+											]
+										},
+										"createdAt": {
+											"type": "string",
+											"format": "date-time",
+											"x-native-type": "date"
+										}
+									},
+									"required": [
+										"id",
+										"hostname",
+										"status",
+										"records",
+										"cfSslStatus",
+										"failureReason",
+										"lastCheckedAt",
+										"verifiedAt",
+										"createdAt"
+									]
+								}
+							}
+						}
+					},
+					"400": {
+						"description": "400",
+						"content": {
+							"application/json": {
+								"schema": {
+									"oneOf": [
+										{
+											"type": "object",
+											"properties": {
+												"defined": {
+													"const": true
+												},
+												"code": {
+													"const": "BAD_REQUEST"
+												},
+												"status": {
+													"const": 400
+												},
+												"message": {
+													"type": "string",
+													"default": "That domain can't be used."
+												},
+												"data": {}
+											},
+											"required": [
+												"defined",
+												"code",
+												"status",
+												"message"
+											]
+										},
+										{
+											"type": "object",
+											"properties": {
+												"defined": {
+													"const": false
+												},
+												"code": {
+													"type": "string"
+												},
+												"status": {
+													"type": "number"
+												},
+												"message": {
+													"type": "string"
+												},
+												"data": {}
+											},
+											"required": [
+												"defined",
+												"code",
+												"status",
+												"message"
+											]
+										}
+									]
+								}
+							}
+						}
+					},
+					"403": {
+						"description": "403",
+						"content": {
+							"application/json": {
+								"schema": {
+									"oneOf": [
+										{
+											"type": "object",
+											"properties": {
+												"defined": {
+													"const": true
+												},
+												"code": {
+													"const": "FORBIDDEN"
+												},
+												"status": {
+													"const": 403
+												},
+												"message": {
+													"type": "string",
+													"default": "Only an owner or admin of the organization can do this."
+												},
+												"data": {}
+											},
+											"required": [
+												"defined",
+												"code",
+												"status",
+												"message"
+											]
+										},
+										{
+											"type": "object",
+											"properties": {
+												"defined": {
+													"const": false
+												},
+												"code": {
+													"type": "string"
+												},
+												"status": {
+													"type": "number"
+												},
+												"message": {
+													"type": "string"
+												},
+												"data": {}
+											},
+											"required": [
+												"defined",
+												"code",
+												"status",
+												"message"
+											]
+										}
+									]
+								}
+							}
+						}
+					},
+					"409": {
+						"description": "409",
+						"content": {
+							"application/json": {
+								"schema": {
+									"oneOf": [
+										{
+											"type": "object",
+											"properties": {
+												"defined": {
+													"const": true
+												},
+												"code": {
+													"const": "CONFLICT"
+												},
+												"status": {
+													"const": 409
+												},
+												"message": {
+													"type": "string",
+													"default": "That domain isn't available, or the organization has 5 domains."
+												},
+												"data": {}
+											},
+											"required": [
+												"defined",
+												"code",
+												"status",
+												"message"
+											]
+										},
+										{
+											"type": "object",
+											"properties": {
+												"defined": {
+													"const": false
+												},
+												"code": {
+													"type": "string"
+												},
+												"status": {
+													"type": "number"
+												},
+												"message": {
+													"type": "string"
+												},
+												"data": {}
+											},
+											"required": [
+												"defined",
+												"code",
+												"status",
+												"message"
+											]
+										}
+									]
+								}
+							}
+						}
+					},
+					"412": {
+						"description": "412",
+						"content": {
+							"application/json": {
+								"schema": {
+									"oneOf": [
+										{
+											"type": "object",
+											"properties": {
+												"defined": {
+													"const": true
+												},
+												"code": {
+													"const": "PRECONDITION_FAILED"
+												},
+												"status": {
+													"const": 412
+												},
+												"message": {
+													"type": "string",
+													"default": "Custom domains for organizations aren't set up on this server."
+												},
+												"data": {}
+											},
+											"required": [
+												"defined",
+												"code",
+												"status",
+												"message"
+											]
+										},
+										{
+											"type": "object",
+											"properties": {
+												"defined": {
+													"const": false
+												},
+												"code": {
+													"type": "string"
+												},
+												"status": {
+													"type": "number"
+												},
+												"message": {
+													"type": "string"
+												},
+												"data": {}
+											},
+											"required": [
+												"defined",
+												"code",
+												"status",
+												"message"
+											]
+										}
+									]
+								}
+							}
+						}
+					},
+					"default": {
+						"description": "Structured API error. See status and code; do not branch on message text.",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"required": [
+										"defined",
+										"code",
+										"status",
+										"message"
+									],
+									"properties": {
+										"defined": {
+											"type": "boolean"
+										},
+										"code": {
+											"type": "string"
+										},
+										"status": {
+											"type": "integer"
+										},
+										"message": {
+											"type": "string"
+										},
+										"data": {}
+									}
+								}
+							}
+						}
+					}
+				},
+				"security": [
+					{
+						"apiKey": []
+					},
+					{
+						"bearerAuth": []
+					},
+					{
+						"cookieAuth": []
+					}
+				],
+				"x-codeSamples": [
+					{
+						"lang": "bash",
+						"label": "cURL",
+						"source": "curl --request POST \"https://careeros.example/api/openapi/organization/domains\" --header \"x-api-key: <api-key>\" --header \"Content-Type: application/json\" --data '{\n  \"hostname\": \"<string>\"\n}'"
+					}
+				]
+			}
+		},
+		"/organization/domains/{id}/recheck": {
+			"post": {
+				"operationId": "recheckOrganizationDomain",
+				"summary": "Check a custom domain now",
+				"description": "Checks the domain's DNS and certificate now instead of waiting for the next scheduled check. At most once a minute per domain. Only an owner or admin can do this. Requires authentication.",
+				"tags": [
+					"Organization"
+				],
+				"parameters": [
+					{
+						"name": "id",
+						"in": "path",
+						"required": true,
+						"schema": {
+							"type": "string",
+							"minLength": 1,
+							"maxLength": 100,
+							"description": "The domain's id."
+						}
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "OK",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"id": {
+											"type": "string"
+										},
+										"hostname": {
+											"type": "string",
+											"description": "The domain, as DNS knows it (lower case ASCII)."
+										},
+										"status": {
+											"enum": [
+												"pending",
+												"verified",
+												"active",
+												"failed",
+												"removing"
+											],
+											"type": "string",
+											"description": "pending: waiting for the TXT record. verified: the TXT record matched and the certificate is being issued. active: the organization is served on this domain. failed: see failureReason. removing: being deleted."
+										},
+										"records": {
+											"type": "array",
+											"items": {
+												"type": "object",
+												"properties": {
+													"type": {
+														"enum": [
+															"TXT",
+															"CNAME"
+														],
+														"type": "string"
+													},
+													"name": {
+														"type": "string",
+														"description": "The record's full host name."
+													},
+													"value": {
+														"type": "string"
+													}
+												},
+												"required": [
+													"type",
+													"name",
+													"value"
+												]
+											},
+											"description": "The DNS records to create: a TXT record that proves ownership and a CNAME to the Cloudflare target."
+										},
+										"cfSslStatus": {
+											"anyOf": [
+												{
+													"type": "string"
+												},
+												{
+													"type": "null"
+												}
+											],
+											"description": "The certificate's status as the CDN reports it, when it has said."
+										},
+										"failureReason": {
+											"anyOf": [
+												{
+													"type": "string"
+												},
+												{
+													"type": "null"
+												}
+											],
+											"description": "A short code such as verification_timeout, txt_missing or cloudflare_rejected."
+										},
+										"lastCheckedAt": {
+											"anyOf": [
+												{
+													"type": "string",
+													"format": "date-time",
+													"x-native-type": "date"
+												},
+												{
+													"type": "null"
+												}
+											]
+										},
+										"verifiedAt": {
+											"anyOf": [
+												{
+													"type": "string",
+													"format": "date-time",
+													"x-native-type": "date"
+												},
+												{
+													"type": "null"
+												}
+											]
+										},
+										"createdAt": {
+											"type": "string",
+											"format": "date-time",
+											"x-native-type": "date"
+										}
+									},
+									"required": [
+										"id",
+										"hostname",
+										"status",
+										"records",
+										"cfSslStatus",
+										"failureReason",
+										"lastCheckedAt",
+										"verifiedAt",
+										"createdAt"
+									]
+								}
+							}
+						}
+					},
+					"403": {
+						"description": "403",
+						"content": {
+							"application/json": {
+								"schema": {
+									"oneOf": [
+										{
+											"type": "object",
+											"properties": {
+												"defined": {
+													"const": true
+												},
+												"code": {
+													"const": "FORBIDDEN"
+												},
+												"status": {
+													"const": 403
+												},
+												"message": {
+													"type": "string",
+													"default": "Only an owner or admin of the organization can do this."
+												},
+												"data": {}
+											},
+											"required": [
+												"defined",
+												"code",
+												"status",
+												"message"
+											]
+										},
+										{
+											"type": "object",
+											"properties": {
+												"defined": {
+													"const": false
+												},
+												"code": {
+													"type": "string"
+												},
+												"status": {
+													"type": "number"
+												},
+												"message": {
+													"type": "string"
+												},
+												"data": {}
+											},
+											"required": [
+												"defined",
+												"code",
+												"status",
+												"message"
+											]
+										}
+									]
+								}
+							}
+						}
+					},
+					"404": {
+						"description": "404",
+						"content": {
+							"application/json": {
+								"schema": {
+									"oneOf": [
+										{
+											"type": "object",
+											"properties": {
+												"defined": {
+													"const": true
+												},
+												"code": {
+													"const": "NOT_FOUND"
+												},
+												"status": {
+													"const": 404
+												},
+												"message": {
+													"type": "string",
+													"default": "No such domain."
+												},
+												"data": {}
+											},
+											"required": [
+												"defined",
+												"code",
+												"status",
+												"message"
+											]
+										},
+										{
+											"type": "object",
+											"properties": {
+												"defined": {
+													"const": false
+												},
+												"code": {
+													"type": "string"
+												},
+												"status": {
+													"type": "number"
+												},
+												"message": {
+													"type": "string"
+												},
+												"data": {}
+											},
+											"required": [
+												"defined",
+												"code",
+												"status",
+												"message"
+											]
+										}
+									]
+								}
+							}
+						}
+					},
+					"409": {
+						"description": "409",
+						"content": {
+							"application/json": {
+								"schema": {
+									"oneOf": [
+										{
+											"type": "object",
+											"properties": {
+												"defined": {
+													"const": true
+												},
+												"code": {
+													"const": "CONFLICT"
+												},
+												"status": {
+													"const": 409
+												},
+												"message": {
+													"type": "string",
+													"default": "The domain failed or is being removed."
+												},
+												"data": {}
+											},
+											"required": [
+												"defined",
+												"code",
+												"status",
+												"message"
+											]
+										},
+										{
+											"type": "object",
+											"properties": {
+												"defined": {
+													"const": false
+												},
+												"code": {
+													"type": "string"
+												},
+												"status": {
+													"type": "number"
+												},
+												"message": {
+													"type": "string"
+												},
+												"data": {}
+											},
+											"required": [
+												"defined",
+												"code",
+												"status",
+												"message"
+											]
+										}
+									]
+								}
+							}
+						}
+					},
+					"412": {
+						"description": "412",
+						"content": {
+							"application/json": {
+								"schema": {
+									"oneOf": [
+										{
+											"type": "object",
+											"properties": {
+												"defined": {
+													"const": true
+												},
+												"code": {
+													"const": "PRECONDITION_FAILED"
+												},
+												"status": {
+													"const": 412
+												},
+												"message": {
+													"type": "string",
+													"default": "Custom domains for organizations aren't set up on this server."
+												},
+												"data": {}
+											},
+											"required": [
+												"defined",
+												"code",
+												"status",
+												"message"
+											]
+										},
+										{
+											"type": "object",
+											"properties": {
+												"defined": {
+													"const": false
+												},
+												"code": {
+													"type": "string"
+												},
+												"status": {
+													"type": "number"
+												},
+												"message": {
+													"type": "string"
+												},
+												"data": {}
+											},
+											"required": [
+												"defined",
+												"code",
+												"status",
+												"message"
+											]
+										}
+									]
+								}
+							}
+						}
+					},
+					"429": {
+						"description": "429",
+						"content": {
+							"application/json": {
+								"schema": {
+									"oneOf": [
+										{
+											"type": "object",
+											"properties": {
+												"defined": {
+													"const": true
+												},
+												"code": {
+													"const": "TOO_MANY_REQUESTS"
+												},
+												"status": {
+													"const": 429
+												},
+												"message": {
+													"type": "string",
+													"default": "This domain was checked a moment ago."
+												},
+												"data": {}
+											},
+											"required": [
+												"defined",
+												"code",
+												"status",
+												"message"
+											]
+										},
+										{
+											"type": "object",
+											"properties": {
+												"defined": {
+													"const": false
+												},
+												"code": {
+													"type": "string"
+												},
+												"status": {
+													"type": "number"
+												},
+												"message": {
+													"type": "string"
+												},
+												"data": {}
+											},
+											"required": [
+												"defined",
+												"code",
+												"status",
+												"message"
+											]
+										}
+									]
+								}
+							}
+						}
+					},
+					"default": {
+						"description": "Structured API error. See status and code; do not branch on message text.",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"required": [
+										"defined",
+										"code",
+										"status",
+										"message"
+									],
+									"properties": {
+										"defined": {
+											"type": "boolean"
+										},
+										"code": {
+											"type": "string"
+										},
+										"status": {
+											"type": "integer"
+										},
+										"message": {
+											"type": "string"
+										},
+										"data": {}
+									}
+								}
+							}
+						}
+					}
+				},
+				"security": [
+					{
+						"apiKey": []
+					},
+					{
+						"bearerAuth": []
+					},
+					{
+						"cookieAuth": []
+					}
+				],
+				"x-codeSamples": [
+					{
+						"lang": "bash",
+						"label": "cURL",
+						"source": "curl --request POST \"https://careeros.example/api/openapi/organization/domains/<id>/recheck\" --header \"x-api-key: <api-key>\""
+					}
+				]
+			}
+		},
+		"/organization/domains/{id}": {
+			"delete": {
+				"operationId": "removeOrganizationDomain",
+				"summary": "Remove a custom domain",
+				"description": "Stops the domain serving the organization at once, then deletes it at the CDN. Only an owner or admin can do this. Requires authentication.",
+				"tags": [
+					"Organization"
+				],
+				"parameters": [
+					{
+						"name": "id",
+						"in": "path",
+						"required": true,
+						"schema": {
+							"type": "string",
+							"minLength": 1,
+							"maxLength": 100,
+							"description": "The domain's id."
+						}
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "OK"
+					},
+					"403": {
+						"description": "403",
+						"content": {
+							"application/json": {
+								"schema": {
+									"oneOf": [
+										{
+											"type": "object",
+											"properties": {
+												"defined": {
+													"const": true
+												},
+												"code": {
+													"const": "FORBIDDEN"
+												},
+												"status": {
+													"const": 403
+												},
+												"message": {
+													"type": "string",
+													"default": "Only an owner or admin of the organization can do this."
+												},
+												"data": {}
+											},
+											"required": [
+												"defined",
+												"code",
+												"status",
+												"message"
+											]
+										},
+										{
+											"type": "object",
+											"properties": {
+												"defined": {
+													"const": false
+												},
+												"code": {
+													"type": "string"
+												},
+												"status": {
+													"type": "number"
+												},
+												"message": {
+													"type": "string"
+												},
+												"data": {}
+											},
+											"required": [
+												"defined",
+												"code",
+												"status",
+												"message"
+											]
+										}
+									]
+								}
+							}
+						}
+					},
+					"404": {
+						"description": "404",
+						"content": {
+							"application/json": {
+								"schema": {
+									"oneOf": [
+										{
+											"type": "object",
+											"properties": {
+												"defined": {
+													"const": true
+												},
+												"code": {
+													"const": "NOT_FOUND"
+												},
+												"status": {
+													"const": 404
+												},
+												"message": {
+													"type": "string",
+													"default": "No such domain."
+												},
+												"data": {}
+											},
+											"required": [
+												"defined",
+												"code",
+												"status",
+												"message"
+											]
+										},
+										{
+											"type": "object",
+											"properties": {
+												"defined": {
+													"const": false
+												},
+												"code": {
+													"type": "string"
+												},
+												"status": {
+													"type": "number"
+												},
+												"message": {
+													"type": "string"
+												},
+												"data": {}
+											},
+											"required": [
+												"defined",
+												"code",
+												"status",
+												"message"
+											]
+										}
+									]
+								}
+							}
+						}
+					},
+					"default": {
+						"description": "Structured API error. See status and code; do not branch on message text.",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"required": [
+										"defined",
+										"code",
+										"status",
+										"message"
+									],
+									"properties": {
+										"defined": {
+											"type": "boolean"
+										},
+										"code": {
+											"type": "string"
+										},
+										"status": {
+											"type": "integer"
+										},
+										"message": {
+											"type": "string"
+										},
+										"data": {}
+									}
+								}
+							}
+						}
+					}
+				},
+				"security": [
+					{
+						"apiKey": []
+					},
+					{
+						"bearerAuth": []
+					},
+					{
+						"cookieAuth": []
+					}
+				],
+				"x-codeSamples": [
+					{
+						"lang": "bash",
+						"label": "cURL",
+						"source": "curl --request DELETE \"https://careeros.example/api/openapi/organization/domains/<id>\" --header \"x-api-key: <api-key>\""
+					}
+				]
+			}
+		},
 		"/resumes/tags": {
 			"get": {
 				"operationId": "listResumeTags",

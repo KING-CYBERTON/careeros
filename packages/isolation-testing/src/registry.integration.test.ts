@@ -62,6 +62,7 @@ describe.skipIf(!configured)("the isolation registry on the migrated schema", ()
 			"storage_cleanup_job",
 			"organization_branding",
 			"organization_settings",
+			"organization_domain",
 		]);
 	});
 

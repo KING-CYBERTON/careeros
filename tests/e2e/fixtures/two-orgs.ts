@@ -96,6 +96,8 @@ async function seedRowsWithoutEndpoint(a: Party, tag: string) {
 		opportunity: `xorga-opportunity-${tag}`,
 		notification: `xorga-notice-${tag}`,
 		transcript: `xorga-voice-${tag}`,
+		// CAREEROS (P2-T06): an organization custom domain. The e2e server has no Cloudflare settings, so no endpoint can add one.
+		orgDomain: `xorga-domain-${tag}`,
 	};
 	await withSeedPool(async (pool) => {
 		await pool.query(
@@ -120,6 +122,11 @@ async function seedRowsWithoutEndpoint(a: Party, tag: string) {
 			`insert into career_transcript (id, organization_id, user_id, original, edited, model)
 			 values ($1, $2, $3, $4, $4, 'stub')`,
 			[ids.transcript, a.organizationId, a.userId, `Xorga${tag} transcript`],
+		);
+		await pool.query(
+			`insert into organization_domain (id, organization_id, hostname, verification_token, created_by)
+			 values ($1, $2, $3, $4, $5)`,
+			[ids.orgDomain, a.organizationId, `xorga-${tag}.orgdomains.example.test`, `xorga${tag}domaintoken`, a.userId],
 		);
 		// Custom domains are switched off on the e2e server (no 412-free endpoint), so the row goes in directly.
 		await pool.query(
@@ -462,6 +469,7 @@ export async function createTwoOrgs(playwright: Playwright, baseURL: string, own
 			savedItem: offer.id,
 			transcript: extra.transcript,
 			apiKey,
+			orgDomain: extra.orgDomain,
 		};
 		const missing = Object.entries(ids).filter(([, value]) => !value);
 		if (missing.length > 0)
@@ -532,6 +540,8 @@ export function snapshotPaths(ids: SeedIds, username: string, slug: string): str
 		"/integrations/web-access",
 		"/auth/api-keys",
 		"/documents",
+		// CAREEROS (P2-T06)
+		"/organization/domains",
 	];
 }
 

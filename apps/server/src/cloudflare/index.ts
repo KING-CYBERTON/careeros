@@ -17,6 +17,7 @@ import { configureAgentStreamLifetime } from "@reactive-resume/api/features/agen
 // CAREEROS (P2-T05): expired sign-in handoffs go in the same scheduled pass
 import { purgeExpiredHandoffs } from "@reactive-resume/api/features/auth-handoff";
 import { runCareerJobs } from "@reactive-resume/api/features/career/jobs";
+import { runOrgDomainJobs } from "@reactive-resume/api/features/org-domain";
 import { configureStorageService, getStorageService, isPublicUploadOwner } from "@reactive-resume/api/features/storage";
 import { reportStorageCleanupSummary, runStorageCleanup } from "@reactive-resume/api/features/storage/cleanup";
 import { initializeAuth } from "@reactive-resume/auth/config";
@@ -225,15 +226,18 @@ export default {
 		const { pool, store, run } = createInvocation(bindings, ctx);
 		ctx.waitUntil(
 			run(async () => {
-				const [career, cleanup, handoffs] = await Promise.allSettled([
+				const [career, cleanup, handoffs, orgDomains] = await Promise.allSettled([
 					runCareerJobs(),
 					runStorageCleanup({ limit: 100 }),
 					// CAREEROS (P2-T05)
 					purgeExpiredHandoffs(),
+					// CAREEROS (P2-T06)
+					runOrgDomainJobs(),
 				]);
 				if (cleanup.status === "fulfilled") reportStorageCleanupSummary(cleanup.value);
 				else console.error("[storage-cleanup] Scheduled work failed. Pending jobs will retry on a later tick.");
 				if (handoffs.status === "rejected") console.error("[handoff] Purging expired handoffs failed.");
+				if (orgDomains.status === "rejected") console.error("[org-domain] Scheduled work failed.");
 				if (career.status === "rejected")
 					console.error("[career] Scheduled work failed. Eligible jobs will retry on a later tick.");
 			}).finally(() => closePool(pool, store)),

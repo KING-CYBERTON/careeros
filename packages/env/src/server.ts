@@ -120,6 +120,24 @@ export const env = createEnv({
 		// CAREEROS (P2-T03): read the organization host from X-Forwarded-Host instead of Host. Off by default: the
 		// staging tunnel sets Host correctly. Only turn it on behind a proxy that overwrites X-Forwarded-Host.
 		TRUST_FORWARDED_HOST: z.stringbool().default(false),
+		// CAREEROS (P2-T06): Cloudflare for SaaS, for organization custom domains. All three are needed; with any of
+		// them unset the feature reports "not configured" and nothing calls Cloudflare. The token is never logged.
+		CF_SAAS_API_TOKEN: z.string().trim().min(1).optional(),
+		CF_ZONE_ID: z
+			.string()
+			.trim()
+			.regex(/^[a-f0-9]{32}$/i, "Use the 32-character Cloudflare zone id")
+			.optional(),
+		// The Cloudflare for SaaS fallback target, as a host name. Organizations point their CNAME at it.
+		CF_SAAS_CNAME_TARGET: z
+			.string()
+			.trim()
+			.toLowerCase()
+			.regex(
+				/^(?=.{1,253}$)([a-z0-9]([a-z0-9-]{0,61}[a-z0-9])?\.)+[a-z]{2,63}$/,
+				"Use a host name such as customers.example.com",
+			)
+			.optional(),
 		// Sent by Traefik's HTTP provider to read the custom domains' routers; at least 32 characters.
 		CUSTOM_DOMAIN_PROVIDER_SECRET: z.string().min(32).optional(),
 		// OlaCV API token: with FLAG_OLACV_SUGGESTION, Share checks which .cv names are free before suggesting one.

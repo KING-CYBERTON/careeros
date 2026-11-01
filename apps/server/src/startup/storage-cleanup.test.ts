@@ -8,11 +8,19 @@ vi.mock("@reactive-resume/api/features/storage/cleanup", () => ({
 	reportStorageCleanupSummary: report,
 }));
 
+// CAREEROS (P2-T06): organization domain checks run in the same pass
+const orgDomains = vi.hoisted(() => vi.fn<() => Promise<unknown>>());
+vi.mock("@reactive-resume/api/features/org-domain", async (importOriginal) => ({
+	...(await importOriginal<typeof import("@reactive-resume/api/features/org-domain")>()),
+	runOrgDomainJobs: orgDomains,
+}));
+
 const purge = vi.hoisted(() => vi.fn<() => Promise<number>>());
 vi.mock("@reactive-resume/api/features/auth-handoff", () => ({ purgeExpiredHandoffs: purge }));
 
 beforeEach(() => {
 	purge.mockReset().mockResolvedValue(0);
+	orgDomains.mockReset().mockResolvedValue({ checked: 0, failed: 0, cleaned: 0 });
 	vi.useFakeTimers();
 	run.mockReset().mockResolvedValue({ completed: 0, missing: 0, failed: 0, partial: 0, abandoned: 0 });
 	report.mockReset();
@@ -66,6 +74,23 @@ it("logs a failed tick without exposing cleanup payloads, then retries later", a
 		expect(JSON.stringify(log.mock.calls)).not.toContain("private storage key");
 		await vi.advanceTimersByTimeAsync(60_000);
 		expect(run).toHaveBeenCalledTimes(2);
+	} finally {
+		await scheduler.stop();
+	}
+});
+
+// CAREEROS (P2-T06)
+it("runs the organization domain checks each tick and logs a failure without stopping the scheduler", async () => {
+	const log = vi.spyOn(console, "error").mockImplementation(() => {});
+	orgDomains.mockRejectedValueOnce(new Error("private cloudflare detail"));
+	const scheduler = startStorageCleanupScheduler();
+	try {
+		await vi.advanceTimersByTimeAsync(0);
+		expect(orgDomains).toHaveBeenCalledTimes(1);
+		expect(log).toHaveBeenCalledWith("[org-domain] Scheduled work failed.");
+		expect(JSON.stringify(log.mock.calls)).not.toContain("private cloudflare detail");
+		await vi.advanceTimersByTimeAsync(60_000);
+		expect(orgDomains).toHaveBeenCalledTimes(2);
 	} finally {
 		await scheduler.stop();
 	}

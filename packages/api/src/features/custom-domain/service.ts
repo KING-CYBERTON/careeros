@@ -48,6 +48,15 @@ export function normalizeHostname(input: string): string | null {
 	return ascii;
 }
 
+// CAREEROS (P2-T06): the `careeros_custom_domain_guard` trigger raises this when an organization holds the hostname.
+function orgHoldsHostname(error: unknown): boolean {
+	for (let current: unknown = error, depth = 0; current instanceof Error && depth < 5; depth++) {
+		if (current.message.includes("careeros_org_domain:hostname_taken")) return true;
+		current = current.cause;
+	}
+	return false;
+}
+
 const lookup = <T>(query: Promise<T[]>) => query.catch(() => [] as T[]);
 
 const txtValue = (token: string) => `rx-verify=${token}`;
@@ -144,7 +153,16 @@ export const customDomainService = {
 			// CAREEROS: the tenant column comes from the request's organization, never from the client (P1-T09)
 			.values({ organizationId: requireOrgId(), userId, ...values })
 			.onConflictDoUpdate({ target: [schema.customDomain.organizationId, schema.customDomain.userId], set: values })
-			.returning();
+			.returning()
+			// CAREEROS (P2-T06, D7): a trigger refuses a hostname an organization already holds as its custom domain.
+			.catch((error: unknown) => {
+				if (orgHoldsHostname(error))
+					throw new ORPCError("CONFLICT", {
+						message: "That domain isn't available.",
+						data: { code: "DOMAIN_UNAVAILABLE" },
+					});
+				throw error;
+			});
 		if (!domain) throw new ORPCError("INTERNAL_SERVER_ERROR");
 		return toStatus(domain);
 	},
