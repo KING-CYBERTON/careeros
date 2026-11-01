@@ -1,3 +1,5 @@
+// CAREEROS (P2-T05): expired sign-in handoffs go in the same scheduled pass
+import { purgeExpiredHandoffs } from "@reactive-resume/api/features/auth-handoff";
 import { reportStorageCleanupSummary, runStorageCleanup } from "@reactive-resume/api/features/storage/cleanup";
 
 /** Retries durable post-delete storage cleanup. PostgreSQL leases jobs so server instances don't duplicate work. */
@@ -10,6 +12,8 @@ export function startStorageCleanupScheduler() {
 		inFlight = Promise.resolve()
 			.then(() => runStorageCleanup({ limit: 200 }))
 			.then(reportStorageCleanupSummary)
+			// CAREEROS (P2-T05): a failed purge is retried on the next tick and must not stop storage cleanup.
+			.then(() => purgeExpiredHandoffs().catch(() => console.error("[handoff] Purging expired handoffs failed.")))
 			.then(() => undefined)
 			.catch(() => {
 				console.error("[storage-cleanup] Scheduled work failed. Pending jobs will retry on a later tick.");

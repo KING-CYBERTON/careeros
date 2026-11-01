@@ -559,6 +559,11 @@ export const tenancyAllowList: readonly AllowListEntry[] = [
 		reason:
 			"Global auth table by design (phase plan D8): Better Auth reads the key before any organization context exists; the nullable organization_id is checked against membership at use (P1-T02)",
 	},
+	{
+		table: "auth_handoff",
+		reason:
+			"P2-T05: pre-authentication, platform-global like Better Auth's verification table (same class: global, no tenant data, no row level security). It carries organization_id only to name the organization a sign-in is for, so it sits on this list, not the globalTables one, which is for tables without that column. It is read and written before any session or organization context exists and holds only hashes and ten-minute rows",
+	},
 ];
 
 export const DEFAULT_SCHEMA = "public";

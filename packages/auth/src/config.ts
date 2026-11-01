@@ -40,6 +40,8 @@ import { rateLimitConfig } from "@reactive-resume/utils/rate-limit";
 import { generateId, toUsername } from "@reactive-resume/utils/string";
 import { timezoneSchema } from "@reactive-resume/utils/timezone";
 import { isAllowedOAuthRedirectUri } from "@reactive-resume/utils/url-security.node";
+// CAREEROS: the session operations of the sign-in handoff (P2-T05)
+import { handoffSession } from "./handoff-session";
 import { createGithubProfileMapper, createProfileMapper, isUsernameReserved } from "./oauth-profile";
 // CAREEROS: invite-only organization hosts (P2-T03)
 import { guardOrgHostSignUp } from "./org-host";
@@ -816,6 +818,8 @@ const getAuthConfig = () => {
 			organization(organizationOptions),
 			// CAREEROS: owner-only role changes (P1-T03)
 			organizationRules,
+			// CAREEROS (P2-T05): server-only session endpoints for the social and OIDC handoff to an organization host
+			handoffSession,
 			passkey(),
 			genericOAuth({ config: authConfigs }),
 			twoFactor({ issuer: PLATFORM_DEFAULT_APP_NAME }),

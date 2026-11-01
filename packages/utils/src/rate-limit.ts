@@ -39,6 +39,13 @@ export const rateLimitConfig = {
 			maxRequests: 1000,
 		},
 	},
+	// CAREEROS (P2-T05): the sign-in handoff between a platform host and an organization host, per client address.
+	// `issue` follows the auth limits above (the global Better Auth budget).
+	handoff: {
+		begin: { maxRequests: 10, window: 60 * 1000 },
+		redeem: { maxRequests: 20, window: 60 * 1000 },
+		issue: { maxRequests: 60, window: 60 * 1000 },
+	},
 	orpc: {
 		resumePassword: { maxRequests: 5, window: 10 * 60 * 1000 },
 		pdfExport: { maxRequests: 5, window: 60 * 1000 },
