@@ -60,7 +60,7 @@
 - [x] Every tenant table has `organization_id`, FORCE RLS and the tenant policy; the unclassified-tables check has an empty pending list
 - [x] Cross-org ID fuzz passes (P1-Q03)
 - [ ] Opus security sign-off review: [done](reviews/P1-EXIT-security-review-1.md), no Critical or High; conditional on P1-Q10 (auth organization endpoint fuzz)
-- [ ] BASELINE refresh from a develop run (P1-C02 summary)
+- [x] BASELINE refreshed from develop run 41320943973 ([BASELINE.md](BASELINE.md#phase-1-exit-refresh-p1-c02): 3426 unit tests, 63 e2e)
 - [ ] Staging verified with the database role split (waits on Stephen: VPS runbook, default branch = `develop`)
 
 ## Blockers
@@ -74,7 +74,6 @@
 ## Watch list
 
 - `tests/e2e/specs/library-pagination.spec.ts:201`: root cause fixed in P0-Q03 (oRPC batching bypassed the test mock). Watch for a strict-mode "two alerts" failure; if seen, Opus specs a per-item batch response.
-- BASELINE.md lacks unit counts for 9 packages; P1-C02's JUnit summary now prints them. Refresh BASELINE from a develop run.
 - `assistant.spec.ts:118` (reaccept "CPACC") failed once and passed on re-run (T05 era); root-cause if it recurs.
 - Follow-ups: drop the old `careeros_due_storage_cleanup` overload in the first Phase 1b follow-on migration (Q74); make `bindGlobalPoolForTesting` throw in production (Q75); plan Q20 (`Promise.all` on one org-scoped client); Q03 F1/F2 (custom-domain routes and MCP control call in the fuzz).
 - e2e specs doing raw SQL on tenant tables must use `withSeedPool` (P1-Q07); careeros_app sees nothing without an org context.

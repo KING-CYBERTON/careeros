@@ -83,3 +83,53 @@ b. **Runner size.** Upstream CI runs on 32-vCPU Blacksmith runners (four package
 c. **Watch-list entry.** `tests/e2e/specs/library-pagination.spec.ts:201` ("bounds tag filters from chips and URLs and clears a first-load filter failure") is on the STATUS.md watch list as timing-sensitive. It passed in this run in 16.4s (test 46 of 60).
 
 Other observations: the e2e log contains `[WebServer]` stack traces and a `WebAccessError ... (unsafe-url)` message while the tests that exercise those failure paths ran; all 60 tests still passed. The `unit` and `e2e` jobs also print `No locally installed turbo found` warnings (global turbo 2.11.10 is used for `test:ci`).
+
+## Phase 1 exit refresh (P1-C02)
+
+These numbers come from one green push run on `develop`. Nothing was re-run locally.
+
+- **Run:** [careeros-ci run 41320943973](https://github.com/KING-CYBERTON/careeros/actions/runs/41320943973), commit `0794338` (P1-Q09, #39), 2026-11-01.
+- **Layout:** since P1-C05, unit tests run in three shards (`pdf`, `api`, `rest`) behind a `unit` gate job.
+- **Source of the counts:** the JUnit artifacts can't be downloaded from this environment, so the counts below are read from each package's Vitest summary in the job logs.
+
+| Job                                          | Duration                              | Result                                                          |
+| -------------------------------------------- | ------------------------------------- | --------------------------------------------------------------- |
+| changes                                      | 31s                                   | success                                                         |
+| static (lint, format, boundaries, typecheck) | 1m 24s                                | success                                                         |
+| unit (pdf)                                   | 2m 9s                                 | success                                                         |
+| unit (api)                                   | 3m 33s                                | success                                                         |
+| unit (rest)                                  | 5m 23s                                | success                                                         |
+| e2e (`playwright test --workers=1`)          | 7m 52s                                | success: 63 passed, 0 failed, 0 flaky (Playwright reports 5.2m) |
+| **Wall clock**                               | **9m 18s** (15:23:02 to 15:32:20 UTC) | down from about 12 min at P0-T03                                |
+
+The e2e count includes the cross-org fuzz. It covers 157 id-taking operations and 106 MCP tools, with 64 skips that each have a reason.
+
+### Unit tests per package
+
+23 packages, 426 test files, **3426 tests passed** (P0-T03 baseline: 2499 tests across 12 listed packages). Skipped tests: none reported.
+
+| Package                       | Test files | Tests passed | Failed | Skipped | Duration (vitest) |
+| ----------------------------- | ---------- | ------------ | ------ | ------- | ----------------- |
+| `@reactive-resume/utils`      | 8          | 132          | 0      | 0       | 2.24s             |
+| `@careeros/testing`           | 2          | 16           | 0      | 0       | 2.02s             |
+| `@reactive-resume/ui`         | 8          | 14           | 0      | 0       | 14.92s            |
+| `@reactive-resume/schema`     | 16         | 145          | 0      | 0       | 5.04s             |
+| `@reactive-resume/fonts`      | 1          | 9            | 0      | 0       | 631ms             |
+| `@careeros/isolation-testing` | 2          | 57           | 0      | 0       | 955ms             |
+| `@reactive-resume/resume`     | 24         | 230          | 0      | 0       | 8.81s             |
+| `@reactive-resume/import`     | 7          | 76           | 0      | 0       | 4.65s             |
+| `@reactive-resume/ai`         | 2          | 8            | 0      | 0       | 937ms             |
+| `@reactive-resume/docx`       | 7          | 21           | 0      | 0       | 3.75s             |
+| `@reactive-resume/odt`        | 1          | 22           | 0      | 0       | 785ms             |
+| `@reactive-resume/tooling`    | 12         | 116          | 0      | 0       | 11.22s            |
+| `@reactive-resume/env`        | 2          | 52           | 0      | 0       | 916ms             |
+| `@reactive-resume/db`         | 9          | 10           | 0      | 0       | 12.68s            |
+| `@reactive-resume/email`      | 1          | 3            | 0      | 0       | 717ms             |
+| `@careeros/tenancy`           | 2          | 45           | 0      | 0       | 3.67s             |
+| `@reactive-resume/auth`       | 12         | 76           | 0      | 0       | 17.05s            |
+| `@reactive-resume/mcp`        | 5          | 24           | 0      | 0       | 11.68s            |
+| `web`                         | 103        | 534          | 0      | 0       | 117.25s           |
+| `server`                      | 30         | 219          | 0      | 0       | 24.77s            |
+| `dsh-plugin-reactive-resume`  | 3          | 6            | 0      | 0       | 802ms             |
+| `@reactive-resume/pdf`        | 70         | 457          | 0      | 0       | 79.13s            |
+| `@reactive-resume/api`        | 99         | 1154         | 0      | 0       | 109.41s           |
