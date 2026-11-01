@@ -46,3 +46,9 @@ and production build. The runner still uses zero retries, so parallelism cannot 
 
 Visual regression, PDF/DOCX rasterization parity, thumbnail resolution, and import-fixture reproduction are
 intentionally outside the PR gate to keep it fast.
+
+<!-- CAREEROS: P1-Q07 -->
+
+## Raw database seeding
+
+Specs that insert or poll tenant rows directly (cover letters, career opportunities, AI reports) use `tests/e2e/fixtures/seed-db.ts`. It connects as the owner role, because the application role is subject to row level security. The URL is `E2E_SEED_DATABASE_URL`, else `DATABASE_MIGRATION_URL`, else `DATABASE_URL` (fine for single-role local setups). Test-only; never use it in application code.
