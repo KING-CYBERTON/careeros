@@ -83,3 +83,8 @@ All the tests above pass with the database configured and nothing skipped. Lint,
 ## Out of scope
 
 The settings UI (T07); per-org email domains; apex-domain flattening guidance beyond showing the records; wildcard custom domains.
+
+## Amendment (review of #53, 2026-11-01)
+
+- **Claims prove nothing (Q121).** Uniqueness across `organization_domain` and `custom_domain` applies only to rows that prove control: organization domains in `verified`, `active` or `removing`, and `custom_domain` rows with `verified_at`. Unverified claims to one hostname may coexist across organizations and users. At the verify transition, under the hostname advisory lock, the first to verify wins: a late organization claimant becomes `failed` with reason `hostname_taken`; a late personal proof is refused. A proven or active name still blocks new claims.
+- **One rule, whatever the write path (Q124).** A BEFORE INSERT OR UPDATE OF hostname, status trigger on `organization_domain` enforces that rule under the same lock, so a direct INSERT as `careeros_app` cannot skip it.

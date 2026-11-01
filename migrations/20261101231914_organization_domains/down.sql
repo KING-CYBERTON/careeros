@@ -10,8 +10,10 @@ DO $$ BEGIN
 	END IF;
 END $$;
 DROP TRIGGER IF EXISTS "careeros_custom_domain_guard" ON "custom_domain";
+DROP TRIGGER IF EXISTS "careeros_organization_domain_guard" ON "organization_domain";
 DROP TRIGGER IF EXISTS "careeros_org_domain_cf_cleanup" ON "organization_domain";
 DROP FUNCTION IF EXISTS public.careeros_custom_domain_guard();
+DROP FUNCTION IF EXISTS public.careeros_organization_domain_guard();
 DROP FUNCTION IF EXISTS public.careeros_org_domain_cf_cleanup_enqueue();
 DROP FUNCTION IF EXISTS public.careeros_claim_org_domain(text, text, text, text, text, text[], text, text);
 DROP FUNCTION IF EXISTS public.careeros_org_for_custom_host(text);

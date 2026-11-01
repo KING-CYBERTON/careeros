@@ -40,7 +40,8 @@ type Failure =
 	| "cloudflare_rejected"
 	| "cloudflare_moved"
 	| "cloudflare_deleted"
-	| "txt_missing";
+	| "txt_missing"
+	| "hostname_taken";
 
 const HOSTNAME_FAILED = new Set(["blocked", "deleted", "pending_deletion"]);
 const SSL_FAILED = new Set(["deleted", "pending_deletion", "expired"]);
@@ -265,7 +266,9 @@ export async function checkDomain(
 				txtMissingCount: 0,
 				failureReason: null,
 			});
-			if (verified) await progressVerified(orgId, verified, deps);
+			// CAREEROS (Q121): the guard trigger turns a proof that lost the race into `failed` / `hostname_taken`: first to
+			// verify wins. Only a row that really is verified goes on to Cloudflare.
+			if (verified?.status === "verified") await progressVerified(orgId, verified, deps);
 		}
 	} else if (row.status === "verified") {
 		await progressVerified(orgId, row, deps);

@@ -61,7 +61,11 @@ function errorText(error: unknown): string {
 function claimFailure(error: unknown): ORPCError<string, unknown> | undefined {
 	const text = errorText(error);
 	// The message never says who holds a taken name: the same answer for another organization and for a personal domain.
-	if (text.includes("careeros_org_domain:hostname_taken") || text.includes("organization_domain_hostname_key"))
+	if (
+		text.includes("careeros_org_domain:hostname_taken") ||
+		text.includes("organization_domain_org_hostname_key") ||
+		text.includes("organization_domain_proven_hostname_key")
+	)
 		return new ORPCError("CONFLICT", { message: "That domain isn't available.", data: { code: "DOMAIN_UNAVAILABLE" } });
 	if (text.includes("careeros_org_domain:reserved_host") || text.includes("careeros_org_domain:invalid_hostname"))
 		return new ORPCError("BAD_REQUEST", {

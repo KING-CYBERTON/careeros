@@ -175,40 +175,53 @@ export const customDomainService = {
 
 		const valid = await dnsPointsHere(domain.hostname, domain.verificationToken);
 		const now = new Date();
-		const updated = await db.transaction(async (tx) => {
-			const [current] = await tx
-				.select()
-				.from(schema.customDomain)
-				.where(
-					and(
-						eq(schema.customDomain.userId, userId),
-						eq(schema.customDomain.hostname, domain.hostname),
-						eq(schema.customDomain.verificationToken, domain.verificationToken),
-					),
-				)
-				.for("update");
-			if (!current)
-				throw new ORPCError("CONFLICT", { message: "The domain changed during verification. Verify it again." });
-			const failingSince = current.failingSince ?? now;
-			// CAREEROS: other claimants live in other organizations, which row-level security hides, while the verified
-			// hostname index is global. A definer function un-verifies them, for the current organization only (P1-T09).
-			if (valid)
-				await tx.execute(sql`select careeros_release_domain_claims(${domain.hostname}, ${requireOrgId()}, ${userId})`);
-			const [row] = await tx
-				.update(schema.customDomain)
-				.set(
-					valid
-						? { verifiedAt: current.verifiedAt ?? now, lastCheckedAt: now, failingSince: null }
-						: {
-								lastCheckedAt: now,
-								failingSince,
-								...(now.getTime() - failingSince.getTime() > GRACE_MS ? { verifiedAt: null } : {}),
-							},
-				)
-				.where(eq(schema.customDomain.userId, userId))
-				.returning();
-			return row;
-		});
+		// CAREEROS (P2-T06, Q121): the first to prove a hostname wins. The custom_domain guard trigger refuses a proof for
+		// a name an organization has already proven.
+		const updated = await db
+			.transaction(async (tx) => {
+				const [current] = await tx
+					.select()
+					.from(schema.customDomain)
+					.where(
+						and(
+							eq(schema.customDomain.userId, userId),
+							eq(schema.customDomain.hostname, domain.hostname),
+							eq(schema.customDomain.verificationToken, domain.verificationToken),
+						),
+					)
+					.for("update");
+				if (!current)
+					throw new ORPCError("CONFLICT", { message: "The domain changed during verification. Verify it again." });
+				const failingSince = current.failingSince ?? now;
+				// CAREEROS: other claimants live in other organizations, which row-level security hides, while the verified
+				// hostname index is global. A definer function un-verifies them, for the current organization only (P1-T09).
+				if (valid)
+					await tx.execute(
+						sql`select careeros_release_domain_claims(${domain.hostname}, ${requireOrgId()}, ${userId})`,
+					);
+				const [row] = await tx
+					.update(schema.customDomain)
+					.set(
+						valid
+							? { verifiedAt: current.verifiedAt ?? now, lastCheckedAt: now, failingSince: null }
+							: {
+									lastCheckedAt: now,
+									failingSince,
+									...(now.getTime() - failingSince.getTime() > GRACE_MS ? { verifiedAt: null } : {}),
+								},
+					)
+					.where(eq(schema.customDomain.userId, userId))
+					.returning();
+				return row;
+			})
+			.catch((error: unknown) => {
+				if (orgHoldsHostname(error))
+					throw new ORPCError("CONFLICT", {
+						message: "That domain isn't available.",
+						data: { code: "DOMAIN_UNAVAILABLE" },
+					});
+				throw error;
+			});
 		if (!updated) throw new ORPCError("NOT_FOUND");
 		return toStatus(updated);
 	},

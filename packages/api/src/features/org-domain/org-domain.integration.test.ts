@@ -285,64 +285,137 @@ describe.skipIf(!configured)("organization custom domains (real Postgres)", () =
 			expect(await rowByHost("steal.example.test")).toBeUndefined();
 		});
 
-		it("answers the same way for a name another organization holds and for a name a personal domain holds", async () => {
-			await add(host("taken"));
+		const personalClaim = async (organizationId: string, userId: string, hostname: string, verified = false) => {
+			await owner.query(
+				`INSERT INTO "user" (id, name, email, username, display_username) VALUES ($1, $1, $1 || '@x.test', $1, $1) ON CONFLICT DO NOTHING`,
+				[userId],
+			);
+			await owner.query(
+				`INSERT INTO custom_domain (organization_id, user_id, hostname, verification_token, verified_at) VALUES ($1, $2, $3, 't', ${verified ? "now()" : "NULL"})`,
+				[organizationId, userId, hostname],
+			);
+		};
+		const unavailable = {
+			code: "CONFLICT",
+			message: "That domain isn't available.",
+			data: { code: "DOMAIN_UNAVAILABLE" },
+		};
+
+		it("answers the same way for a name another organization has proven and for a name a personal domain has verified", async () => {
+			await activate(host("taken"));
 			const otherOrg = await add(host("taken"), asUser(B.owner, B.org)).catch((error: unknown) => error);
-			await owner.query(
-				`INSERT INTO "user" (id, name, email, username, display_username) VALUES ('p1','p','p@x.test','p1','p1') ON CONFLICT DO NOTHING`,
-			);
-			await owner.query(
-				`INSERT INTO custom_domain (organization_id, user_id, hostname, verification_token) VALUES ($1, 'p1', $2, 't')`,
-				[B.org, host("personal")],
-			);
+			await personalClaim(B.org, `p1-${run}`, host("personal"), true);
 			const personal = await add(host("personal"), asUser(B.owner, B.org)).catch((error: unknown) => error);
-			for (const error of [otherOrg, personal])
-				expect(error).toMatchObject({
-					code: "CONFLICT",
-					message: "That domain isn't available.",
-					data: { code: "DOMAIN_UNAVAILABLE" },
-				});
+			for (const error of [otherOrg, personal]) expect(error).toMatchObject(unavailable);
 			// B did not get a row, and A still has its own.
 			expect((await rowByHost(host("taken")))?.organization_id).toBe(A.org);
 			expect(await rowByHost(host("personal"))).toBeUndefined();
 			await expect(add(host("taken"))).rejects.toMatchObject({ data: { code: "DOMAIN_EXISTS" } });
 		});
 
-		it("refuses a name an organization holds when an account adds it as a personal custom domain", async () => {
-			await add(host("reverse"));
-			await expect(
-				inApp(async () => {
-					const client = await app.connect();
-					try {
-						await client.query(`SELECT set_config('app.current_org_id', $1, false)`, [B.org]);
-						await client.query(
-							`INSERT INTO custom_domain (organization_id, user_id, hostname, verification_token) VALUES ($1, 'p1', $2, 't2')`,
-							[B.org, host("reverse")],
-						);
-					} finally {
-						await client.query(`SELECT set_config('app.current_org_id', '', false)`);
-						client.release();
-					}
-				}),
-			).rejects.toThrow(/hostname_taken/);
-			// The upstream service maps the trigger's error to a clean CONFLICT.
-			await expect(
-				inApp(() => tenancy.withOrgContext(B.org, () => customDomain.customDomainService.set("p1", host("reverse")))),
-			).rejects.toMatchObject({ code: "CONFLICT", data: { code: "DOMAIN_UNAVAILABLE" } });
-			// Changing an existing row's hostname to a held name is refused too, and unrelated updates still work.
-			await inApp(() =>
-				tenancy.withOrgContext(B.org, async () => {
-					const client = await app.connect();
-					client.release();
-				}),
+		it("refuses a personal custom domain for a name an organization has proven, but not before (Q121)", async () => {
+			const user = `p2-${run}`;
+			await owner.query(
+				`INSERT INTO "user" (id, name, email, username, display_username) VALUES ($1, $1, $1 || '@x.test', $1, $1) ON CONFLICT DO NOTHING`,
+				[user],
 			);
+			// A pending organization claim blocks nobody: the personal claim is accepted.
+			await add(host("reverse"));
+			await expect(personalClaim(B.org, user, host("reverse"))).resolves.toBeUndefined();
+			await owner.query(`DELETE FROM custom_domain WHERE user_id = $1`, [user]);
+			// Once the organization has proven control (active), a new personal claim is refused, directly and through the service.
+			await activate(host("proven"));
+			await expect(personalClaim(B.org, user, host("proven"))).rejects.toThrow(/hostname_taken/);
 			await expect(
-				owner.query(`UPDATE custom_domain SET hostname = $1 WHERE user_id = 'p1'`, [host("reverse")]),
+				inApp(() => tenancy.withOrgContext(B.org, () => customDomain.customDomainService.set(user, host("proven")))),
+			).rejects.toMatchObject({ code: "CONFLICT", data: { code: "DOMAIN_UNAVAILABLE" } });
+			// Moving an existing claim onto a proven name, or verifying one, is refused too; unrelated updates still work.
+			await personalClaim(B.org, user, host("elsewhere"));
+			await expect(
+				owner.query(`UPDATE custom_domain SET hostname = $1 WHERE user_id = $2`, [host("proven"), user]),
 			).rejects.toThrow(/hostname_taken/);
 			await expect(
-				owner.query(`UPDATE custom_domain SET verified_at = now() WHERE user_id = 'p1'`),
+				owner.query(`UPDATE custom_domain SET verified_at = now() WHERE user_id = $1`, [user]),
 			).resolves.toBeDefined();
-			await owner.query(`DELETE FROM custom_domain WHERE user_id = 'p1'`);
+			await owner.query(`DELETE FROM custom_domain WHERE user_id = $1`, [user]);
+		});
+
+		it("lets unverified claims coexist, across organizations and with personal domains, in either order (Q121)", async () => {
+			const user = `p3-${run}`;
+			await add(host("shared"));
+			await expect(add(host("shared"), asUser(B.owner, B.org))).resolves.toMatchObject({ status: "pending" });
+			await personalClaim(B.org, user, host("shared"));
+			// The reverse: a personal claim first, then an organization claim.
+			await personalClaim(A.org, user, host("shared2"));
+			await expect(add(host("shared2"))).resolves.toMatchObject({ status: "pending" });
+			expect(
+				(await owner.query(`SELECT count(*)::int AS n FROM organization_domain WHERE hostname = $1`, [host("shared")]))
+					.rows[0].n,
+			).toBe(2);
+			await owner.query(`DELETE FROM custom_domain WHERE user_id = $1`, [user]);
+		});
+
+		it("fails the late claimant when a second organization proves a name the first already proved (first to verify wins)", async () => {
+			const first = (await add(host("late"))).id;
+			const second = (await add(host("late"), asUser(B.owner, B.org))).id;
+			txtAnswers.set(host("late"), "proved");
+			await runJobs();
+			const rows = [await row(first), await row(second)];
+			expect(rows.filter((r) => r?.status === "verified" || r?.status === "active")).toHaveLength(1);
+			const lost = rows.find((r) => r?.status === "failed");
+			expect(lost).toMatchObject({ status: "failed", failure_reason: "hostname_taken" });
+			// The loser never reached Cloudflare and never resolves.
+			expect(fake.requests.filter((r) => r.method === "POST")).toHaveLength(1);
+			expect(await resolvesTo(host("late"))).toBeUndefined();
+		});
+
+		it("fails an organization that verifies a name a personal domain has already verified", async () => {
+			const id = (await add(host("perfirst"))).id;
+			await personalClaim(B.org, `p4-${run}`, host("perfirst"), true);
+			txtAnswers.set(host("perfirst"), "proved");
+			await runJobs();
+			expect(await row(id)).toMatchObject({ status: "failed", failure_reason: "hostname_taken" });
+			await owner.query(`DELETE FROM custom_domain WHERE user_id = $1`, [`p4-${run}`]);
+		});
+
+		it("refuses a direct INSERT as the app role when a proven owner exists, whatever the write path (Q124)", async () => {
+			await activate(host("direct"));
+			const insert = async (org: string, hostname: string, status: string) => {
+				const client = await app.connect();
+				try {
+					await client.query(`SELECT set_config('app.current_org_id', $1, false)`, [org]);
+					return await client.query(
+						`INSERT INTO organization_domain (id, organization_id, hostname, status, verification_token) VALUES ($1, $2, $3, $4, 't')`,
+						[randomUUID(), org, hostname, status],
+					);
+				} finally {
+					await client.query(`SELECT set_config('app.current_org_id', '', false)`);
+					client.release();
+				}
+			};
+			await expect(insert(B.org, host("direct"), "pending")).rejects.toThrow(/hostname_taken/);
+			await expect(insert(B.org, host("direct"), "verified")).rejects.toThrow(/hostname_taken/);
+			expect(await insert(B.org, host("direct-free"), "pending")).toMatchObject({ rowCount: 1 });
+			// A verified personal domain blocks the same direct insert.
+			await personalClaim(A.org, `p5-${run}`, host("direct2"), true);
+			await expect(insert(B.org, host("direct2"), "pending")).rejects.toThrow(/hostname_taken/);
+			await owner.query(`DELETE FROM custom_domain WHERE user_id = $1`, [`p5-${run}`]);
+		});
+
+		it("turns a direct UPDATE into a proven status into failed / hostname_taken when a proven owner exists (Q124)", async () => {
+			// B claims first (pending); A then proves and activates. B's later direct update must lose.
+			const loser = (await add(host("upd"), asUser(B.owner, B.org))).id;
+			await owner.query(`UPDATE organization_domain SET last_checked_at = now() WHERE id = $1`, [loser]);
+			await activate(host("upd"));
+			const client = await app.connect();
+			try {
+				await client.query(`SELECT set_config('app.current_org_id', $1, false)`, [B.org]);
+				await client.query(`UPDATE organization_domain SET status = 'active' WHERE id = $1`, [loser]);
+			} finally {
+				await client.query(`SELECT set_config('app.current_org_id', '', false)`);
+				client.release();
+			}
+			expect(await row(loser)).toMatchObject({ status: "failed", failure_reason: "hostname_taken" });
 		});
 
 		it("caps an organization at five domains, in the service and in the database", async () => {
@@ -415,39 +488,86 @@ describe.skipIf(!configured)("organization custom domains (real Postgres)", () =
 			return state;
 		};
 
-		it("lets exactly one of two organizations claim a name when both are in flight", async () => {
+		const setStatus = (client: PoolClient, id: string, status: string) =>
+			client.query(`UPDATE organization_domain SET status = $2 WHERE id = $1 RETURNING status, failure_reason`, [
+				id,
+				status,
+			]);
+
+		it("lets both organizations claim a name when both are in flight: claims prove nothing (Q121)", async () => {
 			const a = await open(A.org);
 			const b = await open(B.org);
 			try {
 				await a.query("BEGIN");
 				await b.query("BEGIN");
 				await claim(a, A.org, host("race1"));
+				// The second claim waits for the first transaction (the hostname lock), then succeeds.
 				const second = claim(b, B.org, host("race1"));
-				const state = settled(second);
-				// The second claim waits for the first transaction (it holds the hostname lock).
 				await new Promise((resolve) => setTimeout(resolve, 300));
-				expect(state.done).toBe(false);
 				await a.query("COMMIT");
-				await expect(second).rejects.toThrow(/hostname_taken/);
-				await b.query("ROLLBACK");
+				await second;
+				await b.query("COMMIT");
 			} finally {
 				await close(a);
 				await close(b);
 			}
-			expect((await rowByHost(host("race1")))?.organization_id).toBe(A.org);
+			expect(
+				(await owner.query(`SELECT count(*)::int AS n FROM organization_domain WHERE hostname = $1`, [host("race1")]))
+					.rows[0].n,
+			).toBe(2);
 		});
 
-		it("lets exactly one win when an organization claim races a personal custom domain", async () => {
+		it("lets exactly one of two pending organizations win when both verify at the same time", async () => {
+			const idA = (await add(host("race2"))).id;
+			const idB = (await add(host("race2"), asUser(B.owner, B.org))).id;
 			const a = await open(A.org);
 			const b = await open(B.org);
 			try {
 				await a.query("BEGIN");
 				await b.query("BEGIN");
-				await claim(a, A.org, host("race2"));
-				const personal = b.query(
-					`INSERT INTO custom_domain (organization_id, user_id, hostname, verification_token) VALUES ($1, $2, $3, 't')`,
-					[B.org, B.owner, host("race2")],
-				);
+				expect((await setStatus(a, idA, "verified")).rows[0]).toMatchObject({ status: "verified" });
+				const second = setStatus(b, idB, "verified");
+				const state = settled(second);
+				// The second proof waits for the first transaction (it holds the hostname lock), then loses.
+				await new Promise((resolve) => setTimeout(resolve, 300));
+				expect(state.done).toBe(false);
+				await a.query("COMMIT");
+				expect((await second).rows[0]).toMatchObject({ status: "failed", failure_reason: "hostname_taken" });
+				await b.query("COMMIT");
+			} finally {
+				await close(a);
+				await close(b);
+			}
+			expect(await row(idA)).toMatchObject({ status: "verified" });
+			expect(await row(idB)).toMatchObject({ status: "failed", failure_reason: "hostname_taken" });
+			// And with many in flight through the status machine itself, still exactly one.
+			const ids = [(await add(host("race2b"))).id, (await add(host("race2b"), asUser(B.owner, B.org))).id];
+			txtAnswers.set(host("race2b"), "proved");
+			await Promise.all([runJobs(), runJobs()]);
+			const statuses = (await Promise.all(ids.map(row))).map((r) => r?.status);
+			expect(statuses.filter((status) => status === "failed")).toHaveLength(1);
+			expect(statuses.filter((status) => status === "verified" || status === "active")).toHaveLength(1);
+		});
+
+		it("lets exactly one win when an organization proof races a personal proof, in either order", async () => {
+			const user = `p6-${run}`;
+			await owner.query(
+				`INSERT INTO "user" (id, name, email, username, display_username) VALUES ($1, $1, $1 || '@x.test', $1, $1) ON CONFLICT DO NOTHING`,
+				[user],
+			);
+			const id = (await add(host("race3"))).id;
+			await owner.query(
+				`INSERT INTO custom_domain (organization_id, user_id, hostname, verification_token) VALUES ($1, $2, $3, 't')`,
+				[B.org, user, host("race3")],
+			);
+			// Organization first; the personal proof waits, then is refused.
+			const a = await open(A.org);
+			const b = await open(B.org);
+			try {
+				await a.query("BEGIN");
+				await b.query("BEGIN");
+				await setStatus(a, id, "verified");
+				const personal = b.query(`UPDATE custom_domain SET verified_at = now() WHERE user_id = $1`, [user]);
 				const state = settled(personal);
 				await new Promise((resolve) => setTimeout(resolve, 300));
 				expect(state.done).toBe(false);
@@ -458,53 +578,62 @@ describe.skipIf(!configured)("organization custom domains (real Postgres)", () =
 				await close(a);
 				await close(b);
 			}
-			// And the other way round: the personal claim goes first and the organization is refused.
+			// Personal first; the organization proof waits, then fails into hostname_taken.
+			const id2 = (await add(host("race4"))).id;
+			await owner.query(`UPDATE custom_domain SET hostname = $1, verified_at = NULL WHERE user_id = $2`, [
+				host("race4"),
+				user,
+			]);
 			const a2 = await open(A.org);
 			const b2 = await open(B.org);
 			try {
 				await b2.query("BEGIN");
 				await a2.query("BEGIN");
-				await b2.query(
-					`INSERT INTO custom_domain (organization_id, user_id, hostname, verification_token) VALUES ($1, $2, $3, 't')`,
-					[B.org, B.owner, host("race3")],
-				);
-				const orgClaim = claim(a2, A.org, host("race3"));
-				const state = settled(orgClaim);
+				await b2.query(`UPDATE custom_domain SET verified_at = now() WHERE user_id = $1`, [user]);
+				const orgProof = setStatus(a2, id2, "verified");
+				const state = settled(orgProof);
 				await new Promise((resolve) => setTimeout(resolve, 300));
 				expect(state.done).toBe(false);
 				await b2.query("COMMIT");
-				await expect(orgClaim).rejects.toThrow(/hostname_taken/);
-				await a2.query("ROLLBACK");
+				expect((await orgProof).rows[0]).toMatchObject({ status: "failed", failure_reason: "hostname_taken" });
+				await a2.query("COMMIT");
 			} finally {
 				await close(a2);
 				await close(b2);
-				await owner.query(`DELETE FROM custom_domain WHERE hostname = ANY($1::text[])`, [[host("race3")]]);
+				await owner.query(`DELETE FROM custom_domain WHERE user_id = $1`, [user]);
 			}
-			expect(await rowByHost(host("race3"))).toBeUndefined();
 		});
 
-		it("lets exactly one of many parallel claims succeed through the service", async () => {
+		it("accepts one claim per organization from many parallel adds through the service", async () => {
 			const attempts = await Promise.allSettled([
-				add(host("race4"), asUser(A.admin, A.org)),
-				add(host("race4"), asUser(B.owner, B.org)),
-				add(host("race4"), asUser(A.owner, A.org)),
-				add(host("race4"), asUser(B.owner, B.org)),
+				add(host("race5"), asUser(A.admin, A.org)),
+				add(host("race5"), asUser(B.owner, B.org)),
+				add(host("race5"), asUser(A.owner, A.org)),
+				add(host("race5"), asUser(B.owner, B.org)),
 			]);
-			expect(attempts.filter((attempt) => attempt.status === "fulfilled")).toHaveLength(1);
+			expect(attempts.filter((attempt) => attempt.status === "fulfilled")).toHaveLength(2);
 			expect(
-				await owner.query(`SELECT count(*)::int AS n FROM organization_domain WHERE hostname = $1`, [host("race4")]),
-			).toMatchObject({
-				rows: [{ n: 1 }],
-			});
+				await owner.query(`SELECT count(*)::int AS n FROM organization_domain WHERE hostname = $1`, [host("race5")]),
+			).toMatchObject({ rows: [{ n: 2 }] });
 		});
 
-		it("keeps the global unique index as a backstop for direct inserts", async () => {
-			await expect(
-				owner.query(
-					`INSERT INTO organization_domain (id, organization_id, hostname, verification_token) VALUES ($1, $2, $3, 't')`,
-					[randomUUID(), B.org, host("race1")],
-				),
-			).rejects.toMatchObject({ code: "23505" });
+		it("keeps the partial unique index as a backstop for proven names, even with the trigger off", async () => {
+			const idA = (await add(host("race6"))).id;
+			const idB = (await add(host("race6"), asUser(B.owner, B.org))).id;
+			await owner.query(`UPDATE organization_domain SET status = 'verified' WHERE id = $1`, [idA]);
+			const client = await owner.connect();
+			try {
+				await client.query("BEGIN");
+				await client.query(`ALTER TABLE organization_domain DISABLE TRIGGER careeros_organization_domain_guard`);
+				await expect(
+					client.query(`UPDATE organization_domain SET status = 'verified' WHERE id = $1`, [idB]),
+				).rejects.toMatchObject({
+					code: "23505",
+				});
+			} finally {
+				await client.query("ROLLBACK");
+				client.release();
+			}
 		});
 	});
 

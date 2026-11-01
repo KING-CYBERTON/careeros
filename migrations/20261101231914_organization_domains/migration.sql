@@ -24,7 +24,9 @@ CREATE TABLE "organization_domain_cf_cleanup" (
 	"created_at" timestamp with time zone DEFAULT now() NOT NULL
 );
 --> statement-breakpoint
-CREATE UNIQUE INDEX "organization_domain_hostname_key" ON "organization_domain" ("hostname");--> statement-breakpoint
+CREATE INDEX "organization_domain_hostname_idx" ON "organization_domain" ("hostname");--> statement-breakpoint
+CREATE UNIQUE INDEX "organization_domain_org_hostname_key" ON "organization_domain" ("organization_id","hostname");--> statement-breakpoint
+CREATE UNIQUE INDEX "organization_domain_proven_hostname_key" ON "organization_domain" ("hostname") WHERE "status" in ('verified', 'active', 'removing');--> statement-breakpoint
 CREATE INDEX "organization_domain_org_created_idx" ON "organization_domain" ("organization_id","created_at");--> statement-breakpoint
 CREATE INDEX "organization_domain_status_checked_idx" ON "organization_domain" ("status","last_checked_at");--> statement-breakpoint
 ALTER TABLE "organization_domain" ADD CONSTRAINT "organization_domain_organization_id_organization_id_fkey" FOREIGN KEY ("organization_id") REFERENCES "organization"("id") ON DELETE CASCADE;--> statement-breakpoint
@@ -44,12 +46,13 @@ CREATE POLICY "tenant_isolation" ON "organization_domain"
 	WITH CHECK ("organization_id" = current_setting('app.current_org_id', true));--> statement-breakpoint
 DROP POLICY IF EXISTS "owner_access" ON "organization_domain";--> statement-breakpoint
 CREATE POLICY "owner_access" ON "organization_domain" TO CURRENT_USER USING (true) WITH CHECK (true);--> statement-breakpoint
--- 2. Claim a hostname for an organization (D7). One hostname has one owner across BOTH kinds of custom domain: the
--- organization_domain unique index covers organization against organization, and this function adds the per-user
--- custom_domain table (invisible under row-level security, so only a definer function can look) and the platform's own
--- hosts. It runs as the owner and acts only for the caller's own organization (app.current_org_id must equal org_id).
--- Two locks make concurrent claims safe: one on the hostname (the custom_domain trigger below takes the same one) and
--- one on the organization (the cap of five). Failures carry a stable message for the service to map:
+-- 2. Claim a hostname for an organization (D7, Q121). Claiming proves nothing, so unverified claims never block anyone:
+-- several organizations and users may hold the same pending claim. A hostname is exclusive only once a claimant has
+-- PROVEN control: an organization domain that is verified, active or removing, or a verified custom_domain row. The
+-- rule lives in the organization_domain guard trigger (section 2a), so it holds whatever the write path; this function
+-- adds the checks a trigger cannot (the caller's organization, the shape of the name, the platform's own hosts, the
+-- cap of five). It runs as the owner and acts only for the caller's own organization (app.current_org_id must equal
+-- org_id). Failures carry a stable message for the service to map:
 -- careeros_org_domain:{invalid_hostname|reserved_host|hostname_taken|domain_limit}. The message never says who holds
 -- a hostname that is taken.
 CREATE OR REPLACE FUNCTION public.careeros_claim_org_domain(
@@ -86,10 +89,8 @@ BEGIN
 			RAISE EXCEPTION 'careeros_org_domain:reserved_host';
 		END IF;
 	END IF;
-	IF EXISTS (SELECT 1 FROM public.organization_domain WHERE hostname = h)
-		OR EXISTS (SELECT 1 FROM public.custom_domain WHERE hostname = h) THEN
-		RAISE EXCEPTION 'careeros_org_domain:hostname_taken';
-	END IF;
+	-- A hostname that a proven owner holds, or this organization already claimed, cannot be claimed (the guard trigger
+	-- refuses the first; the unique index refuses the second).
 	IF (SELECT count(*) FROM public.organization_domain WHERE organization_id = org_id) >= 5 THEN
 		RAISE EXCEPTION 'careeros_org_domain:domain_limit';
 	END IF;
@@ -98,24 +99,74 @@ BEGIN
 	RETURN domain_id;
 END
 $$;--> statement-breakpoint
--- 3. The reverse check (D7): the upstream per-user custom_domain table refuses a hostname that an organization holds.
--- A trigger, so every way of writing a hostname is covered, and it takes the same hostname lock as the claim above, so
--- the two kinds of claim cannot both succeed for one name.
+-- 2a. The guard on organization_domain (Q121, Q124): the single place the cross-table rule lives, so a direct INSERT
+-- as careeros_app (which keeps INSERT) cannot skip it. Proven owners: this table in verified, active or removing, and
+-- custom_domain rows with verified_at set. Runs under the same per-hostname advisory lock as the custom_domain trigger,
+-- so a proof on one side and a claim or proof on the other are serialized: the first to prove wins.
+--   - INSERT of any row while another proven owner exists: refused (hostname_taken). An active domain blocks claims.
+--   - UPDATE that moves a row INTO a proven status (the verify transition) while another proven owner exists: the row
+--     becomes failed with reason hostname_taken instead (the late claimant loses; no error, so the status machine's
+--     compare-and-set still succeeds and the row ends in a final state).
+CREATE OR REPLACE FUNCTION public.careeros_organization_domain_guard() RETURNS trigger
+LANGUAGE plpgsql SECURITY DEFINER SET search_path = pg_catalog, public AS $$
+DECLARE
+	proven boolean := NEW.status IN ('verified', 'active', 'removing');
+	was_proven boolean := TG_OP = 'UPDATE' AND OLD.status IN ('verified', 'active', 'removing')
+		AND OLD.hostname IS NOT DISTINCT FROM NEW.hostname;
+	other boolean;
+BEGIN
+	IF TG_OP = 'UPDATE' AND NEW.hostname IS NOT DISTINCT FROM OLD.hostname AND NEW.status IS NOT DISTINCT FROM OLD.status THEN
+		RETURN NEW;
+	END IF;
+	IF TG_OP = 'UPDATE' AND NOT proven AND NEW.hostname IS NOT DISTINCT FROM OLD.hostname THEN
+		RETURN NEW; -- leaving a proven status, or moving between unproven ones, claims nothing
+	END IF;
+	IF was_proven THEN
+		RETURN NEW; -- verified -> active -> removing: the same proven owner
+	END IF;
+	PERFORM pg_advisory_xact_lock(hashtext(lower(NEW.hostname)));
+	SELECT EXISTS (
+		SELECT 1 FROM public.organization_domain d
+		WHERE d.hostname = NEW.hostname AND d.id <> NEW.id AND d.status IN ('verified', 'active', 'removing')
+	) OR EXISTS (
+		SELECT 1 FROM public.custom_domain c WHERE c.hostname = NEW.hostname AND c.verified_at IS NOT NULL
+	) INTO other;
+	IF NOT other THEN
+		RETURN NEW;
+	END IF;
+	IF TG_OP = 'INSERT' THEN
+		RAISE EXCEPTION 'careeros_org_domain:hostname_taken';
+	END IF;
+	NEW.status := 'failed';
+	NEW.failure_reason := 'hostname_taken';
+	RETURN NEW;
+END
+$$;--> statement-breakpoint
+DROP TRIGGER IF EXISTS "careeros_organization_domain_guard" ON "organization_domain";--> statement-breakpoint
+CREATE TRIGGER "careeros_organization_domain_guard" BEFORE INSERT OR UPDATE OF "hostname", "status" ON "organization_domain"
+	FOR EACH ROW EXECUTE FUNCTION public.careeros_organization_domain_guard();--> statement-breakpoint
+-- 3. The reverse check (D7, Q121): the upstream per-user custom_domain table. A row that is verified (on insert, when
+-- verified_at or the hostname changes) must not coexist with a proven organization domain: the first to prove wins, so
+-- a late personal proof is refused with hostname_taken. An unverified personal claim is never refused here unless an
+-- organization already PROVED the name (an active domain blocks new claims). Same hostname lock as section 2a.
 CREATE OR REPLACE FUNCTION public.careeros_custom_domain_guard() RETURNS trigger
 LANGUAGE plpgsql SECURITY DEFINER SET search_path = pg_catalog, public AS $$
 BEGIN
-	IF TG_OP = 'UPDATE' AND NEW.hostname IS NOT DISTINCT FROM OLD.hostname THEN
+	IF TG_OP = 'UPDATE' AND NEW.hostname IS NOT DISTINCT FROM OLD.hostname
+		AND (NEW.verified_at IS NULL OR OLD.verified_at IS NOT NULL) THEN
 		RETURN NEW;
 	END IF;
 	PERFORM pg_advisory_xact_lock(hashtext(lower(NEW.hostname)));
-	IF EXISTS (SELECT 1 FROM public.organization_domain WHERE hostname = lower(NEW.hostname)) THEN
+	IF EXISTS (
+		SELECT 1 FROM public.organization_domain WHERE hostname = lower(NEW.hostname) AND status IN ('verified', 'active', 'removing')
+	) THEN
 		RAISE EXCEPTION 'careeros_org_domain:hostname_taken';
 	END IF;
 	RETURN NEW;
 END
 $$;--> statement-breakpoint
 DROP TRIGGER IF EXISTS "careeros_custom_domain_guard" ON "custom_domain";--> statement-breakpoint
-CREATE TRIGGER "careeros_custom_domain_guard" BEFORE INSERT OR UPDATE OF "hostname" ON "custom_domain"
+CREATE TRIGGER "careeros_custom_domain_guard" BEFORE INSERT OR UPDATE OF "hostname", "verified_at" ON "custom_domain"
 	FOR EACH ROW EXECUTE FUNCTION public.careeros_custom_domain_guard();--> statement-breakpoint
 -- 4. Host lookup (T03's customDomainOrg hook). Only an ACTIVE domain resolves: pending, verified, failed and removing
 -- answer no row. Returns the organization id and slug, nothing else.
@@ -168,6 +219,7 @@ CREATE TRIGGER "careeros_org_domain_cf_cleanup" AFTER DELETE ON "organization_do
 DO $$ BEGIN
 	REVOKE ALL ON FUNCTION public.careeros_claim_org_domain(text, text, text, text, text, text[], text, text) FROM PUBLIC;
 	REVOKE ALL ON FUNCTION public.careeros_custom_domain_guard() FROM PUBLIC;
+	REVOKE ALL ON FUNCTION public.careeros_organization_domain_guard() FROM PUBLIC;
 	REVOKE ALL ON FUNCTION public.careeros_org_for_custom_host(text) FROM PUBLIC;
 	REVOKE ALL ON FUNCTION public.careeros_org_domain_is_registered(text) FROM PUBLIC;
 	REVOKE ALL ON FUNCTION public.careeros_org_open_signup(text) FROM PUBLIC;

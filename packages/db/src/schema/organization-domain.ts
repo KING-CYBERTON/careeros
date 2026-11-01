@@ -22,8 +22,9 @@ const statusList = sql.raw(ORGANIZATION_DOMAIN_STATUSES.map((status) => `'${stat
 
 /**
  * CAREEROS (P2-T06): a domain an organization serves the product on, such as `careers.acme.com`. Tenant-scoped with
- * row level security. The hostname is unique across ALL organizations (a global index, which row level security does
- * not hide), and `careeros_claim_org_domain` makes it unique against the per-user `custom_domain` table as well.
+ * row level security. Unverified claims to one hostname may coexist, across organizations and users. A hostname that
+ * has been PROVEN (`verified`, `active` or `removing`) has exactly one owner across this table and the verified rows of
+ * the per-user `custom_domain` table: a global partial unique index, plus a trigger for the cross-table rule.
  */
 export const organizationDomain = pg.pgTable(
 	"organization_domain",
@@ -51,7 +52,15 @@ export const organizationDomain = pg.pgTable(
 		createdBy: pg.text("created_by").references(() => user.id, { onDelete: "set null" }),
 	},
 	(t) => [
-		pg.uniqueIndex("organization_domain_hostname_key").on(t.hostname),
+		// Several organizations may hold the same UNVERIFIED claim; the first to prove control wins (Q121). Only proven
+		// rows are unique. The cross-table rule (against verified custom_domain rows) is the
+		// careeros_organization_domain_guard trigger.
+		pg.index("organization_domain_hostname_idx").on(t.hostname),
+		pg.uniqueIndex("organization_domain_org_hostname_key").on(t.organizationId, t.hostname),
+		pg
+			.uniqueIndex("organization_domain_proven_hostname_key")
+			.on(t.hostname)
+			.where(sql`${t.status} in ('verified', 'active', 'removing')`),
 		pg.index("organization_domain_org_created_idx").on(t.organizationId, t.createdAt),
 		pg.index("organization_domain_status_checked_idx").on(t.status, t.lastCheckedAt),
 		pg.check("organization_domain_status_check", sql`${t.status} in (${statusList})`),
