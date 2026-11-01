@@ -9,7 +9,7 @@ import type {
 import type { WorkspaceTab } from "@reactive-resume/schema/career";
 import type { FilePart, ImagePart, ModelMessage, TextPart, UIMessage, UIMessageChunk } from "ai";
 // CAREEROS: agent work that outlives the request runs in a fresh organization scope (P1-T03)
-import { captureOrgScope } from "@careeros/tenancy";
+import { captureOrgScope, requireOrgId } from "@careeros/tenancy";
 import { ORPCError } from "@orpc/client";
 import { streamToEventIterator } from "@orpc/server";
 import {
@@ -495,6 +495,8 @@ async function persistMessage(input: {
 	const [message] = await db
 		.insert(schema.agentMessage)
 		.values({
+			// CAREEROS (P1-T08): tenant column
+			organizationId: requireOrgId(),
 			userId: input.userId,
 			threadId: input.threadId,
 			role: input.message.role,
@@ -1015,6 +1017,8 @@ export const agentService = {
 			const [thread] = await db
 				.insert(schema.agentThread)
 				.values({
+					// CAREEROS (P1-T08): tenant column; the provider, document and application were read inside this organization
+					organizationId: requireOrgId(),
 					userId: input.userId,
 					aiProviderId: provider.id,
 					scope,
@@ -1726,6 +1730,8 @@ export const agentService = {
 						.insert(schema.agentAttachment)
 						.values({
 							id,
+							// CAREEROS (P1-T08): tenant column
+							organizationId: requireOrgId(),
 							userId: input.userId,
 							threadId: input.threadId,
 							storageKey: key,

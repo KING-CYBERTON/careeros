@@ -119,9 +119,19 @@ export const careerSchedule = pg.pgTable(
 		nextRunAt: pg.timestamp("next_run_at", { withTimezone: true }).notNull(),
 		lastQueuedAt: pg.timestamp("last_queued_at", { withTimezone: true }),
 		intervalDays: pg.integer("interval_days"),
-		aiProviderId: pg.text("ai_provider_id").references(() => aiProvider.id, { onDelete: "set null" }),
+		// CAREEROS (P1-T08, Q48): the provider must belong to the schedule's organization (composite foreign key below).
+		aiProviderId: pg.text("ai_provider_id"),
 	},
-	(t) => [pg.index().on(t.enabled, t.nextRunAt)],
+	(t) => [
+		pg.index().on(t.enabled, t.nextRunAt),
+		pg
+			.foreignKey({
+				name: "career_schedule_org_ai_provider_fkey",
+				columns: [t.organizationId, t.aiProviderId],
+				foreignColumns: [aiProvider.organizationId, aiProvider.id],
+			})
+			.onDelete("set null"),
+	],
 );
 export const careerJob = pg.pgTable(
 	"career_job",

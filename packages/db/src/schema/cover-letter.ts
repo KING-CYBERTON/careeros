@@ -56,6 +56,8 @@ export const coverLetter = pg.pgTable(
 		pg.index().on(table.userId, table.updatedAt.desc(), table.id.desc()),
 		// CAREEROS: organization-led twin of the list index above (P1-T05).
 		pg.index().on(table.organizationId, table.userId, table.updatedAt.desc(), table.id.desc()),
+		// CAREEROS (P1-T08): target of the assistant's composite foreign keys (same organization as the thread).
+		pg.unique("cover_letter_organization_id_id_unique").on(table.organizationId, table.id),
 		// Finds letters past Trash retention without scanning every letter.
 		pg
 			.index()

@@ -1,6 +1,8 @@
 import type { AIProvider } from "@reactive-resume/ai/types";
 import type { DbOrTx } from "@reactive-resume/db/client";
 import { createHmac } from "node:crypto";
+// CAREEROS: saved connections belong to an organization; writers set it from the active scope (P1-T08)
+import { requireOrgId } from "@careeros/tenancy";
 import { ORPCError } from "@orpc/client";
 import { and, asc, desc, eq, isNull, ne, sql } from "drizzle-orm";
 import { aiProviderSchema } from "@reactive-resume/ai/types";
@@ -66,7 +68,7 @@ function toResponse(row: AiProviderRecord): AiProviderResponse {
 	const provider = aiProviderSchema.parse(row.provider);
 
 	return {
-		managed: row.id === serverProviderId(row.userId),
+		managed: row.id === serverProviderId(row.organizationId, row.userId),
 		id: row.id,
 		label: row.label,
 		provider,
@@ -95,7 +97,7 @@ function normalizeBaseUrl(input: { provider: AIProvider; baseURL?: string | null
 }
 
 async function getOwnedProvider(input: { id: string; userId: string }) {
-	if (input.id === serverProviderId(input.userId)) throw new ORPCError("NOT_FOUND");
+	if (input.id === serverProviderId(requireOrgId(), input.userId)) throw new ORPCError("NOT_FOUND");
 	const [provider] = await db
 		.select()
 		.from(schema.aiProvider)
@@ -107,7 +109,8 @@ async function getOwnedProvider(input: { id: string; userId: string }) {
 	return provider;
 }
 
-const serverProviderId = (userId: string) => `server-ai:${userId}`;
+// CAREEROS (P1-T08): the server-managed connection is per organization, because ids are unique across all of them.
+const serverProviderId = (organizationId: string, userId: string) => `server-ai:${organizationId}:${userId}`;
 
 /**
  * How a connection is picked when nobody chose one: the default, then the most recently used, then the oldest. Lists
@@ -130,7 +133,9 @@ function assertPersonalProvidersAllowed() {
 async function serverProvider(userId: string) {
 	if (!env.AI_PROVIDER || !env.AI_MODEL) return null;
 	const apiKey = env.AI_API_KEY ?? "";
+	const organizationId = requireOrgId();
 	const values = {
+		organizationId,
 		userId,
 		label: "Server AI",
 		provider: env.AI_PROVIDER,
@@ -146,7 +151,7 @@ async function serverProvider(userId: string) {
 	};
 	const [row] = await db
 		.insert(schema.aiProvider)
-		.values({ id: serverProviderId(userId), ...values })
+		.values({ id: serverProviderId(organizationId, userId), ...values })
 		.onConflictDoUpdate({ target: schema.aiProvider.id, set: values })
 		.returning();
 	if (!row) throw new Error("SERVER_AI_PROVIDER_UNAVAILABLE");
@@ -171,7 +176,12 @@ export const aiProvidersService = {
 		const providers = await db
 			.select()
 			.from(schema.aiProvider)
-			.where(and(eq(schema.aiProvider.userId, input.userId), ne(schema.aiProvider.id, serverProviderId(input.userId))))
+			.where(
+				and(
+					eq(schema.aiProvider.userId, input.userId),
+					ne(schema.aiProvider.id, serverProviderId(requireOrgId(), input.userId)),
+				),
+			)
 			.orderBy(...automaticOrder);
 
 		return providers.map(toResponse);
@@ -179,7 +189,7 @@ export const aiProvidersService = {
 
 	/** Checks availability of an already captured recipient without resolving new settings or credentials. */
 	assertAvailable: async (input: { id: string; userId: string }, reader: DbOrTx) => {
-		if (input.id === serverProviderId(input.userId)) {
+		if (input.id === serverProviderId(requireOrgId(), input.userId)) {
 			if (!env.AI_PROVIDER || !env.AI_MODEL)
 				throw new ORPCError("BAD_REQUEST", { message: "AI is no longer configured on this server." });
 			return;
@@ -224,7 +234,7 @@ export const aiProvidersService = {
 					eq(schema.aiProvider.userId, input.userId),
 					eq(schema.aiProvider.enabled, true),
 					eq(schema.aiProvider.testStatus, "success"),
-					ne(schema.aiProvider.id, serverProviderId(input.userId)),
+					ne(schema.aiProvider.id, serverProviderId(requireOrgId(), input.userId)),
 				),
 			)
 			.orderBy(...automaticOrder)
@@ -247,6 +257,8 @@ export const aiProvidersService = {
 		const [provider] = await db
 			.insert(schema.aiProvider)
 			.values({
+				// CAREEROS (P1-T08): tenant column
+				organizationId: requireOrgId(),
 				userId: input.userId,
 				label: input.label.trim(),
 				provider: input.provider,
@@ -402,7 +414,13 @@ export const aiProvidersService = {
 			await tx
 				.update(schema.aiProvider)
 				.set({ isDefault: false })
-				.where(and(eq(schema.aiProvider.userId, input.userId), eq(schema.aiProvider.isDefault, true)));
+				.where(
+					and(
+						eq(schema.aiProvider.organizationId, requireOrgId()),
+						eq(schema.aiProvider.userId, input.userId),
+						eq(schema.aiProvider.isDefault, true),
+					),
+				);
 			return tx
 				.update(schema.aiProvider)
 				.set({ isDefault: true })
