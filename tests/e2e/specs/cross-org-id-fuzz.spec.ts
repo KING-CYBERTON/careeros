@@ -240,6 +240,35 @@ test("an id from another organization never reads, changes or links Organization
 				failures.push(`${label}: succeeded for A's ids: ${JSON.stringify(body).slice(0, 200)}`);
 		});
 
+		// P1-Q10 (Q03 review F2), control: the same kind of call as A, with A's own ids and A's key, returns A's data.
+		// Without this, a tool whose arguments are merely malformed would pass step 5 as "refused" and the scanner could
+		// never be shown to see a leak. The first read-only id-taking tool that answers is enough.
+		const mcpAs = async (key: string, method: string, params: unknown) => {
+			const response = await orgs.aKeyed.post("/mcp", {
+				headers: { "content-type": "application/json", accept: "application/json, text/event-stream" },
+				data: { jsonrpc: "2.0", id: 2, method, params },
+				failOnStatusCode: false,
+				timeout: 20_000,
+			});
+			return { key, status: response.status(), text: await response.text() };
+		};
+		const readOnly = mcpPlans.filter(({ tool }) => /(^|_)(get|read|list)(_|$)/.test(tool.name)).slice(0, 15);
+		let controlTool: string | undefined;
+		for (const { tool, args } of readOnly) {
+			const answer = await mcpAs(tool.name, "tools/call", { name: tool.name, arguments: args });
+			const result = (parse(answer.text) as { result?: { isError?: boolean } }).result;
+			if (
+				answer.status === 200 &&
+				result &&
+				!result.isError &&
+				findLeaks(answer.text, orgs.markers, orgs.foreignIds, []).length > 0
+			) {
+				controlTool = tool.name;
+				break;
+			}
+		}
+		expect(controlTool, "an id-taking MCP tool called as A with A's own id must return A's data").toBeDefined();
+
 		// 6. Public routes still work without a session, and B cannot list them.
 		const publicAfter = await orgs.anonymous.get(publicPage);
 		expect(publicAfter.status(), "Organization A's public resume page after the run").toBe(200);
