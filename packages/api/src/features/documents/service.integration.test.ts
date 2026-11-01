@@ -264,6 +264,7 @@ describe.skipIf(!databaseUrl)("Trash batch operations", () => {
 			});
 		await getDb().insert(tables.application).values({
 			id: "submitted",
+			organizationId: TEST_ORGANIZATION_ID,
 			userId: "alice",
 			company: "Orbital",
 			role: "Engineer",
@@ -274,6 +275,7 @@ describe.skipIf(!databaseUrl)("Trash batch operations", () => {
 		});
 		await getDb().insert(tables.application).values({
 			id: "active-job",
+			organizationId: TEST_ORGANIZATION_ID,
 			userId: "alice",
 			company: "Lumen",
 			role: "Designer",

@@ -163,7 +163,8 @@ describe.skipIf(!process.env.COVER_LETTER_TEST_DATABASE_URL)("database migration
 						await pool.query(await readFile(path.join(migrationsFolder, v6Migration, "rollback.sql"), "utf8"));
 						expect((await pool.query("SELECT id,lane_id FROM application ORDER BY id")).rows).toEqual(laneReferences);
 						await pool.query(
-							`INSERT INTO application (id,user_id,company,role,status) VALUES ('v5-writer','owner','Fixture','Role','rejected')`,
+							// CAREEROS (P1-T06): applications need an organization now; the owner's was backfilled by the tenant migrations.
+							`INSERT INTO application (id,organization_id,user_id,company,role,status) VALUES ('v5-writer',(SELECT organization_id FROM member WHERE user_id='owner' LIMIT 1),'owner','Fixture','Role','rejected')`,
 						);
 						expect((await pool.query("SELECT status FROM application WHERE id='rejected'")).rows[0].status).toBe(
 							"rejected",

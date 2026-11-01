@@ -25,7 +25,7 @@ describe.skipIf(!configured)("the isolation registry on the migrated schema", ()
 		await pools?.close();
 	});
 
-	it("registers the five resume tables and the two cover letter tables", () => {
+	it("registers the resume, cover letter and application tables", () => {
 		expect(isolationRegistry.map((entry) => entry.table)).toEqual([
 			"resume",
 			"resume_version",
@@ -34,6 +34,10 @@ describe.skipIf(!configured)("the isolation registry on the migrated schema", ()
 			"resume_statistics_daily",
 			"cover_letter",
 			"cover_letter_version",
+			"application",
+			"application_lane",
+			"application_pipeline",
+			"application_profile",
 		]);
 	});
 

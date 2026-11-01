@@ -3,6 +3,8 @@ import type { CareerSource } from "@reactive-resume/schema/career";
 import type z from "zod";
 import { createHash } from "node:crypto";
 import { isDeepStrictEqual } from "node:util";
+// CAREEROS: tenant column for application inserts, and the per-organization pipeline (P1-T06)
+import { requireOrgId } from "@careeros/tenancy";
 import { ORPCError } from "@orpc/client";
 import { and, desc, eq, inArray, isNull, or, sql } from "drizzle-orm";
 import { db } from "@reactive-resume/db/client";
@@ -181,7 +183,10 @@ async function pipelineRevision(userId: string, reader: DbOrTx) {
 	const [pipeline] = await reader
 		.select({ revision: tables.applicationPipeline.revision })
 		.from(tables.applicationPipeline)
-		.where(eq(tables.applicationPipeline.userId, userId));
+		// CAREEROS (P1-T06, D11): the pipeline of the current organization
+		.where(
+			and(eq(tables.applicationPipeline.organizationId, requireOrgId()), eq(tables.applicationPipeline.userId, userId)),
+		);
 	return pipeline?.revision ?? 0;
 }
 
@@ -1160,6 +1165,8 @@ export const careerService = {
 			const { values } = await applicationTransitionValues(tx, userId, { status: "saved" });
 			await tx.insert(tables.application).values({
 				id: applicationId,
+				// CAREEROS: tenant column (P1-T06)
+				organizationId: requireOrgId(),
 				userId,
 				company: opportunity.company || new URL(opportunity.url).hostname.replace(/^www\./, ""),
 				role: opportunity.role,

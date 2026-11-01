@@ -247,6 +247,7 @@ describe.skipIf(!databaseUrl)("career knowledge, context and data lifecycle", ()
 			.values([
 				{
 					id: "alice-app",
+					organizationId: TEST_ORGANIZATION_ID,
 					userId: "alice",
 					company: "ACME",
 					role: "Reliability engineer",
@@ -257,6 +258,7 @@ describe.skipIf(!databaseUrl)("career knowledge, context and data lifecycle", ()
 				},
 				{
 					id: "alice-other",
+					organizationId: TEST_ORGANIZATION_ID,
 					userId: "alice",
 					company: "NOVA",
 					role: "Engineering mentor",
@@ -264,7 +266,14 @@ describe.skipIf(!databaseUrl)("career knowledge, context and data lifecycle", ()
 					sentResumeVersionId: "sent-nova",
 					activity: [{ ...round, id: "nova-round", notes: "Mentorship discussion" }],
 				},
-				{ id: "bob-app", userId: "bob", company: "Other", role: "Designer", resumeId: "bob-resume" },
+				{
+					id: "bob-app",
+					organizationId: TEST_ORGANIZATION_ID,
+					userId: "bob",
+					company: "Other",
+					role: "Designer",
+					resumeId: "bob-resume",
+				},
 			]);
 		await thread("alice-shared", "alice", null);
 		await thread("alice-private", "alice", "alice-app");
@@ -1886,9 +1895,14 @@ describe.skipIf(!databaseUrl)("career knowledge, context and data lifecycle", ()
 			expectedRevision: null,
 		});
 		// This fixture application already has a sent document; use a fresh Saved application for a real submission.
-		await getDb()
-			.insert(tables.application)
-			.values({ id: "profile-submit", userId: "alice", company: "Fiction", role: "Engineer", status: "saved" });
+		await getDb().insert(tables.application).values({
+			id: "profile-submit",
+			organizationId: TEST_ORGANIZATION_ID,
+			userId: "alice",
+			company: "Fiction",
+			role: "Engineer",
+			status: "saved",
+		});
 		const answers = [{ id: "phone", question: "Phone", answer: "PHONE SENT EXPLICITLY", factIds: [] }];
 		await service.submitApplication("alice", "profile-submit", answers, []);
 		const sent = (await service.savedItems({ userId: "alice", applicationId: "profile-submit" })).filter(

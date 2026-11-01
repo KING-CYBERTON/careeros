@@ -1,5 +1,8 @@
 import type { careerScheduleInputSchema } from "@reactive-resume/schema/career";
+import type { AnyPgColumn } from "drizzle-orm/pg-core";
 import type z from "zod";
+// CAREEROS: the scheduler runs each application's work in that application's organization (P1-T06)
+import { withOrgContext } from "@careeros/tenancy";
 import { ORPCError } from "@orpc/client";
 import { and, asc, desc, eq, inArray, isNull, lte, notInArray, or, sql } from "drizzle-orm";
 import { db } from "@reactive-resume/db/client";
@@ -26,6 +29,22 @@ import {
 	prepareRunAt,
 } from "./scheduling";
 import { careerService, requireCareerApplication } from "./service";
+
+/**
+ * CAREEROS (P1-T06): the scheduler has no organization, and row-level security hides every application from it. Career
+ * tables join the tenant boundary in P1-T07 (which replaces this with the per-organization list pattern); until then
+ * two definer functions answer one small fact about one application that a schedule names by id and owner: whether it
+ * is still open, and which organization it belongs to. Neither returns row data.
+ */
+const applicationIsOpen = (applicationId: AnyPgColumn, ownerId: AnyPgColumn) =>
+	sql`${applicationId} is null or careeros_application_is_open(${applicationId}, ${ownerId})`;
+
+async function applicationOrganization(applicationId: string, ownerId: string): Promise<string | null> {
+	const { rows } = await db.execute<{ organization_id: string | null }>(
+		sql`select careeros_application_org(${applicationId}, ${ownerId}) as organization_id`,
+	);
+	return rows[0]?.organization_id ?? null;
+}
 
 const CAREER_URL = "/dashboard/career";
 const workspaceUrl = (applicationId: string | null, tab?: string) =>
@@ -249,7 +268,7 @@ async function enqueue() {
 			.where(
 				and(
 					eq(tables.careerSchedule.enabled, true),
-					sql`(${tables.careerSchedule.applicationId} is null or exists (select 1 from application a where a.id = ${tables.careerSchedule.applicationId} and a.user_id = ${tables.careerSchedule.userId} and a.status <> 'closed'))`,
+					sql`(${applicationIsOpen(tables.careerSchedule.applicationId, tables.careerSchedule.userId)})`,
 					lte(tables.careerSchedule.nextRunAt, now),
 					or(
 						isNull(tables.careerSchedule.lastQueuedAt),
@@ -360,7 +379,17 @@ function claim(servedUsers: ReadonlySet<string>) {
 	});
 }
 
+/** CAREEROS (P1-T06): a job for an application runs inside that application's organization. */
 async function execute(job: typeof tables.careerJob.$inferSelect) {
+	const [owner] = await db
+		.select({ applicationId: tables.careerSchedule.applicationId })
+		.from(tables.careerSchedule)
+		.where(and(eq(tables.careerSchedule.id, job.scheduleId), eq(tables.careerSchedule.userId, job.userId)));
+	const organizationId = owner?.applicationId ? await applicationOrganization(owner.applicationId, job.userId) : null;
+	return organizationId ? withOrgContext(organizationId, () => executeJob(job)) : executeJob(job);
+}
+
+async function executeJob(job: typeof tables.careerJob.$inferSelect) {
 	const [schedule] = await db
 		.select()
 		.from(tables.careerSchedule)
@@ -549,7 +578,7 @@ async function sendPendingEmail() {
 					and(
 						eq(tables.careerJob.status, "completed"),
 						eq(tables.careerSchedule.email, true),
-						sql`(${tables.careerNotification.applicationId} is null or exists (select 1 from application a where a.id = ${tables.careerNotification.applicationId} and a.user_id = ${tables.careerNotification.userId} and a.status <> 'closed'))`,
+						sql`(${applicationIsOpen(tables.careerNotification.applicationId, tables.careerNotification.userId)})`,
 						eq(tables.careerSchedule.enabled, true),
 						isNull(tables.careerNotification.emailedAt),
 						or(
@@ -570,35 +599,42 @@ async function sendPendingEmail() {
 			return row.notification;
 		});
 		if (!notification) break;
-		const owner = await db.transaction(async (tx) => {
-			const [owner] = await tx
-				.select({
-					email: tables.user.email,
-					verified: tables.user.emailVerified,
-					banned: tables.user.banned,
-					banExpires: tables.user.banExpires,
-				})
-				.from(tables.user)
-				.where(eq(tables.user.id, notification.userId))
-				.for("no key update");
-			if (!owner) return null;
-			if (notification.applicationId) {
-				const [application] = await tx
-					.select({ status: tables.application.status })
-					.from(tables.application)
-					.where(
-						and(
-							eq(tables.application.id, notification.applicationId),
-							eq(tables.application.userId, notification.userId),
-						),
-					)
-					.for("update");
-				if (!application || application.status === "closed") return null;
-			}
+		// CAREEROS (P1-T06): the check of the notification's application runs inside that application's organization.
+		const organizationId = notification.applicationId
+			? await applicationOrganization(notification.applicationId, notification.userId)
+			: null;
+		if (notification.applicationId && !organizationId) continue;
+		const checkOwner = () =>
+			db.transaction(async (tx) => {
+				const [owner] = await tx
+					.select({
+						email: tables.user.email,
+						verified: tables.user.emailVerified,
+						banned: tables.user.banned,
+						banExpires: tables.user.banExpires,
+					})
+					.from(tables.user)
+					.where(eq(tables.user.id, notification.userId))
+					.for("no key update");
+				if (!owner) return null;
+				if (notification.applicationId) {
+					const [application] = await tx
+						.select({ status: tables.application.status })
+						.from(tables.application)
+						.where(
+							and(
+								eq(tables.application.id, notification.applicationId),
+								eq(tables.application.userId, notification.userId),
+							),
+						)
+						.for("update");
+					if (!application || application.status === "closed") return null;
+				}
 
-			const banned = owner.banned && (!owner.banExpires || owner.banExpires > new Date());
-			return owner.verified && !banned ? owner : null;
-		});
+				const banned = owner.banned && (!owner.banExpires || owner.banExpires > new Date());
+				return owner.verified && !banned ? owner : null;
+			});
+		const owner = await (organizationId ? withOrgContext(organizationId, checkOwner) : checkOwner());
 		if (!owner) continue;
 		// The short claim/check transactions are committed before external I/O. Closing an application must
 		// never wait for SMTP; a delivery already handed to the mail transport cannot be recalled.

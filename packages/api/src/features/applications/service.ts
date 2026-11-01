@@ -7,6 +7,8 @@ import type {
 	ApplicationTimelineEntry,
 	InterviewDetails,
 } from "@reactive-resume/schema/applications/data";
+// CAREEROS: tenant column for application inserts (P1-T06)
+import { requireOrgId } from "@careeros/tenancy";
 import { ORPCError } from "@orpc/client";
 import { and, arrayContains, count, desc, eq, inArray, isNull, sql } from "drizzle-orm";
 import { db } from "@reactive-resume/db/client";
@@ -391,8 +393,11 @@ async function withDocumentFiles<T>(
 	}
 }
 
-const stripUserId = <T extends { userId: string; activity?: ApplicationTimelineEntry[] }>(row: T) => {
-	const { userId: _userId, ...rest } = row;
+// CAREEROS (P1-T06): the tenant column is not part of the API surface either.
+const stripUserId = <T extends { userId: string; organizationId?: string; activity?: ApplicationTimelineEntry[] }>(
+	row: T,
+) => {
+	const { userId: _userId, organizationId: _organizationId, ...rest } = row;
 	return rest.activity ? { ...rest, activity: sortTimeline(rest.activity) } : rest;
 };
 
@@ -578,7 +583,8 @@ export const applicationService = {
 				);
 				const [row] = await tx
 					.insert(schema.application)
-					.values({ id, userId, ...fields, ...uploadedFields, ...values })
+					// CAREEROS: tenant column (P1-T06)
+					.values({ id, organizationId: requireOrgId(), userId, ...fields, ...uploadedFields, ...values })
 					.returning();
 				if (row) await recordSentResume(row, tx);
 				return id;
@@ -616,7 +622,14 @@ export const applicationService = {
 					stageEnteredAt ? atFromDateString(stageEnteredAt) : new Date(),
 					pipeline,
 				);
-				values.push({ id: generateId(), userId: input.userId, ...fields, ...transition.values });
+				// CAREEROS: tenant column (P1-T06)
+				values.push({
+					id: generateId(),
+					organizationId: requireOrgId(),
+					userId: input.userId,
+					...fields,
+					...transition.values,
+				});
 			}
 			const rows = await tx.insert(schema.application).values(values).returning();
 			for (const row of rows) await recordSentResume(row, tx);
