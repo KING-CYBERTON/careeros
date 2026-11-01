@@ -37,6 +37,8 @@ import { handleAppleAppSiteAssociation, handleAndroidAssetLinks } from "./app-li
 import { handleAuth, handleOAuth } from "./auth";
 import { handleCareerJobs } from "./career-jobs";
 import { handleCustomDomain, handleTraefikProvider } from "./custom-domain";
+// CAREEROS: social and OIDC sign-in on organization hosts through a one-time handoff (P2-T05)
+import { handleHandoffBegin, handleHandoffIssue, handleHandoffRedeem, handleHandoffRequest } from "./handoff";
 import { handleHealth } from "./health";
 // CAREEROS: the request host decides the organization (P2-T03)
 import { hostMiddleware, type HostVariables } from "./host";
@@ -125,10 +127,19 @@ export function createApp(options: AppOptions = {}) {
 	app.use("/api/rpc/*", limitBody(160 * 1024 * 1024));
 	app.use("/api/auth/*", limitBody(1024 * 1024));
 	app.use("/api/storage/stage", limitBody(64 * 1024));
+	// CAREEROS (P2-T05): the handoff bodies are two short strings
+	app.use("/api/careeros/handoff/*", limitBody(8 * 1024));
 
 	app.post("/api/storage/stage", (c) => prepareStagedBody(c.req.raw));
 	app.all("/api/rpc/*", (c) => withStagedBody(c.req.raw, (request) => handleRpc(request, client(c), c.get("host"))));
 	app.all("/api/openapi/*", (c) => handleOpenApi(c.req.raw, client(c), c.get("host")));
+	// CAREEROS (P2-T05): `begin` and `redeem` run on an organization host, `request` and `issue` on the platform host
+	app.post("/api/careeros/handoff/begin", (c) => handleHandoffBegin(c.req.raw, c.get("host"), client(c)));
+	app.get("/api/careeros/handoff/request/:id", (c) =>
+		handleHandoffRequest(c.get("host"), c.req.param("id"), client(c)),
+	);
+	app.get("/api/careeros/handoff/issue", (c) => handleHandoffIssue(c.req.raw, c.get("host"), client(c)));
+	app.post("/api/careeros/handoff/redeem", (c) => handleHandoffRedeem(c.req.raw, c.get("host"), client(c)));
 	app.get("/api/auth/oauth", (c) => handleOAuth(c.req.raw));
 	app.all("/api/auth/*", (c) => handleAuth(c.req.raw, client(c)));
 	app.get("/api/health", () => handleHealth());

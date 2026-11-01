@@ -8,7 +8,11 @@ vi.mock("@reactive-resume/api/features/storage/cleanup", () => ({
 	reportStorageCleanupSummary: report,
 }));
 
+const purge = vi.hoisted(() => vi.fn<() => Promise<number>>());
+vi.mock("@reactive-resume/api/features/auth-handoff", () => ({ purgeExpiredHandoffs: purge }));
+
 beforeEach(() => {
+	purge.mockReset().mockResolvedValue(0);
 	vi.useFakeTimers();
 	run.mockReset().mockResolvedValue({ completed: 0, missing: 0, failed: 0, partial: 0, abandoned: 0 });
 	report.mockReset();

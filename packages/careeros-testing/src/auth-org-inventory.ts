@@ -215,3 +215,120 @@ export function checkAuthOrgInventory(endpoints: AuthOrgEndpoint[]): string[] {
 			problems.push(`attacks name an unknown endpoint: ${key}`);
 	return problems;
 }
+
+// CAREEROS (P2-T05): the sign-in handoff endpoints. They live outside `/api/auth/organization/*`, so the published
+// schema does not list them; the inventory is written down here instead, and the e2e fuzz and a unit test both read it.
+// User B calls every one on the PLATFORM host with Organization A's identifiers. `begin` and `redeem` are organization
+// host endpoints and `request` and `issue` are platform ones, so each answers a fixed refusal here, and none of the
+// answers may carry anything of A's.
+
+export const HANDOFF_ENDPOINTS = [
+	"POST /api/careeros/handoff/begin",
+	"GET /api/careeros/handoff/request/:id",
+	"GET /api/careeros/handoff/issue",
+	"POST /api/careeros/handoff/redeem",
+] as const;
+
+/** Better Auth endpoints registered without a path (`auth.api` only); a guessed HTTP path must answer 404. */
+export const HANDOFF_SERVER_ONLY_GUESSES = [
+	"/api/auth/careeros-handoff-create-session",
+	"/api/auth/careeros-handoff-end-session",
+	"/api/auth/careeros/handoff/create-session",
+	"/api/auth/careeros/handoff/end-session",
+	"/api/auth/careeros/handoff/redeem",
+	"/api/auth/careeros/handoff/issue",
+] as const;
+
+export type HandoffAttack = {
+	/** One of `HANDOFF_ENDPOINTS`, or a server-only guess. */
+	key: string;
+	label: string;
+	method: "GET" | "POST";
+	path: string;
+	body?: Record<string, unknown>;
+	/** The only acceptable answers: a status, and for a redirect the exact `Location`. */
+	expect: { status: number; location?: string };
+};
+
+export type HandoffSeed = { orgId: string; orgSlug: string; ownerUserId: string; invitationId: string };
+
+const ISSUE_REFUSAL = "/auth/error?error=handoff_failed";
+
+/** Every attack on the handoff endpoints with Organization A's identifiers, plus the server-only path guesses. */
+export function handoffAttacks(seed: HandoffSeed): HandoffAttack[] {
+	const identifiers = [seed.orgId, seed.orgSlug, seed.ownerUserId, seed.invitationId];
+	const attacks: HandoffAttack[] = [];
+	for (const id of identifiers) {
+		attacks.push(
+			{
+				key: "GET /api/careeros/handoff/request/:id",
+				label: `request id ${id}`,
+				method: "GET",
+				path: `/api/careeros/handoff/request/${encodeURIComponent(id)}`,
+				expect: { status: 404 },
+			},
+			{
+				key: "GET /api/careeros/handoff/issue",
+				label: `issue request ${id}`,
+				method: "GET",
+				path: `/api/careeros/handoff/issue?request=${encodeURIComponent(id)}`,
+				expect: { status: 302, location: ISSUE_REFUSAL },
+			},
+			{
+				key: "POST /api/careeros/handoff/redeem",
+				label: `redeem request ${id}`,
+				method: "POST",
+				path: "/api/careeros/handoff/redeem",
+				body: { request: id, token: id },
+				expect: { status: 400 },
+			},
+		);
+	}
+	attacks.push(
+		{
+			key: "POST /api/careeros/handoff/begin",
+			label: "begin naming A's organization, slug and origin",
+			method: "POST",
+			path: "/api/careeros/handoff/begin",
+			body: {
+				provider: "google",
+				organizationId: seed.orgId,
+				organizationSlug: seed.orgSlug,
+				targetOrigin: `https://${seed.orgSlug}.example.test`,
+				returnTo: "/dashboard",
+			},
+			// The platform host is not an organization host, and A's identifiers do not make it one.
+			expect: { status: 404 },
+		},
+		...HANDOFF_SERVER_ONLY_GUESSES.map((path): HandoffAttack => ({
+			key: `server-only ${path}`,
+			label: `guessed path ${path}`,
+			method: "POST",
+			path,
+			body: { userId: seed.ownerUserId, organizationId: seed.orgId, token: seed.orgId },
+			expect: { status: 404 },
+		})),
+	);
+	return attacks;
+}
+
+/** Problems with one answer to a handoff attack; an empty array means it was refused as expected. */
+export function checkHandoffAnswer(
+	attack: HandoffAttack,
+	answer: { status: number; location?: string | null | undefined },
+): string[] {
+	const problems: string[] = [];
+	if (answer.status !== attack.expect.status)
+		problems.push(`${attack.key} (${attack.label}): expected ${attack.expect.status}, got ${answer.status}`);
+	else if (attack.expect.location !== undefined && answer.location !== attack.expect.location)
+		problems.push(
+			`${attack.key} (${attack.label}): expected a redirect to ${attack.expect.location}, got ${answer.location}`,
+		);
+	return problems;
+}
+
+/** Every handoff endpoint has at least one attack. */
+export function checkHandoffInventory(seed: HandoffSeed): string[] {
+	const attacked = new Set(handoffAttacks(seed).map((attack) => attack.key));
+	return HANDOFF_ENDPOINTS.filter((key) => !attacked.has(key)).map((key) => `${key} has no attack`);
+}

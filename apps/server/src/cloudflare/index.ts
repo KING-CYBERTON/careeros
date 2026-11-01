@@ -14,6 +14,8 @@ import wasm from "@formepdf/core/pkg-web/forme_bg.wasm";
 import { init } from "@formepdf/core/worker";
 import { Pool } from "pg";
 import { configureAgentStreamLifetime } from "@reactive-resume/api/features/agent/streams";
+// CAREEROS (P2-T05): expired sign-in handoffs go in the same scheduled pass
+import { purgeExpiredHandoffs } from "@reactive-resume/api/features/auth-handoff";
 import { runCareerJobs } from "@reactive-resume/api/features/career/jobs";
 import { configureStorageService, getStorageService, isPublicUploadOwner } from "@reactive-resume/api/features/storage";
 import { reportStorageCleanupSummary, runStorageCleanup } from "@reactive-resume/api/features/storage/cleanup";
@@ -223,9 +225,15 @@ export default {
 		const { pool, store, run } = createInvocation(bindings, ctx);
 		ctx.waitUntil(
 			run(async () => {
-				const [career, cleanup] = await Promise.allSettled([runCareerJobs(), runStorageCleanup({ limit: 100 })]);
+				const [career, cleanup, handoffs] = await Promise.allSettled([
+					runCareerJobs(),
+					runStorageCleanup({ limit: 100 }),
+					// CAREEROS (P2-T05)
+					purgeExpiredHandoffs(),
+				]);
 				if (cleanup.status === "fulfilled") reportStorageCleanupSummary(cleanup.value);
 				else console.error("[storage-cleanup] Scheduled work failed. Pending jobs will retry on a later tick.");
+				if (handoffs.status === "rejected") console.error("[handoff] Purging expired handoffs failed.");
 				if (career.status === "rejected")
 					console.error("[career] Scheduled work failed. Eligible jobs will retry on a later tick.");
 			}).finally(() => closePool(pool, store)),
