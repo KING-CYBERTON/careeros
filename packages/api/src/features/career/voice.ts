@@ -3,6 +3,8 @@ import { createGroq } from "@ai-sdk/groq";
 import { createMistral } from "@ai-sdk/mistral";
 import { createOpenAI } from "@ai-sdk/openai";
 import { createXai } from "@ai-sdk/xai";
+// CAREEROS: tenant column for transcript inserts (P1-T07)
+import { requireOrgId } from "@careeros/tenancy";
 import { ORPCError } from "@orpc/client";
 import { createGateway, generateSpeech, transcribe } from "ai";
 import { and, eq, isNull, desc } from "drizzle-orm";
@@ -61,7 +63,7 @@ export const careerVoiceRouter = {
 	transcripts: protectedProcedure
 		.route({ method: "GET", path: "/career/voice/transcripts", tags: ["Career"], operationId: "listCareerTranscripts" })
 		.input(z.object({ applicationId: z.string().nullable().default(null) }))
-		.output(z.array(createSelectSchema(careerTranscript)))
+		.output(z.array(createSelectSchema(careerTranscript).omit({ organizationId: true })))
 		.handler(async ({ context, input }) => {
 			await requireCareerApplication({ userId: context.user.id, applicationId: input.applicationId });
 			return db
@@ -115,6 +117,8 @@ export const careerVoiceRouter = {
 				const [row] = await db
 					.insert(careerTranscript)
 					.values({
+						// CAREEROS: tenant column (P1-T07)
+						organizationId: requireOrgId(),
 						userId: context.user.id,
 						applicationId: input.applicationId,
 						original: text,

@@ -13,12 +13,22 @@ import { generateId } from "@reactive-resume/utils/string";
 import { aiProvider } from "./agent";
 import { application } from "./applications";
 import { user } from "./auth";
+import { organization } from "./organization";
 
+// CAREEROS (P1-T07, D4/D11): every career table carries the tenant column. Row-level security keys on
+// `organization_id`; writers set it from `requireOrgId()`, and the keys and indexes that led with `user_id` now lead
+// with the organization.
+const tenant = () =>
+	pg
+		.text("organization_id")
+		.notNull()
+		.references(() => organization.id, { onDelete: "cascade" });
 const owned = () => ({
 	id: pg
 		.text("id")
 		.primaryKey()
 		.$defaultFn(() => generateId()),
+	organizationId: tenant(),
 	userId: pg
 		.text("user_id")
 		.notNull()
@@ -32,18 +42,24 @@ const owned = () => ({
 });
 const applicationId = () => pg.text("application_id").references(() => application.id, { onDelete: "cascade" });
 
-export const careerProfile = pg.pgTable("career_profile", {
-	userId: pg
-		.text("user_id")
-		.primaryKey()
-		.references(() => user.id, { onDelete: "cascade" }),
-	data: pg.jsonb("data").notNull().$type<CareerProfileData>(),
-	updatedAt: pg
-		.timestamp("updated_at", { withTimezone: true })
-		.notNull()
-		.defaultNow()
-		.$onUpdate(() => new Date()),
-});
+// CAREEROS (P1-T07, D11): one profile per (organization, user).
+export const careerProfile = pg.pgTable(
+	"career_profile",
+	{
+		organizationId: tenant(),
+		userId: pg
+			.text("user_id")
+			.notNull()
+			.references(() => user.id, { onDelete: "cascade" }),
+		data: pg.jsonb("data").notNull().$type<CareerProfileData>(),
+		updatedAt: pg
+			.timestamp("updated_at", { withTimezone: true })
+			.notNull()
+			.defaultNow()
+			.$onUpdate(() => new Date()),
+	},
+	(t) => [pg.primaryKey({ columns: [t.organizationId, t.userId] })],
+);
 export const careerFact = pg.pgTable(
 	"career_fact",
 	{
@@ -56,7 +72,10 @@ export const careerFact = pg.pgTable(
 		status: pg.text("status").notNull().default("active"),
 		revisions: pg.jsonb("revisions").notNull().$type<Array<{ text: string; at: string }>>().default([]),
 	},
-	(t) => [pg.index().on(t.userId, t.applicationId, t.status), pg.uniqueIndex().on(t.userId, t.sourceKey)],
+	(t) => [
+		pg.index().on(t.organizationId, t.userId, t.applicationId, t.status),
+		pg.uniqueIndex().on(t.organizationId, t.userId, t.sourceKey),
+	],
 );
 export const careerStory = pg.pgTable(
 	"career_story",
@@ -65,7 +84,7 @@ export const careerStory = pg.pgTable(
 		applicationId: applicationId(),
 		data: pg.jsonb("data").notNull().$type<CareerStoryData>(),
 	},
-	(t) => [pg.index().on(t.userId, t.applicationId)],
+	(t) => [pg.index().on(t.organizationId, t.userId, t.applicationId)],
 );
 export const careerArtifact = pg.pgTable(
 	"career_artifact",
@@ -80,7 +99,7 @@ export const careerArtifact = pg.pgTable(
 		jobId: pg.text("job_id").references(() => careerJob.id, { onDelete: "set null" }),
 		inputVersion: pg.text("input_version").notNull(),
 	},
-	(t) => [pg.index().on(t.userId, t.applicationId, t.createdAt), pg.uniqueIndex().on(t.jobId)],
+	(t) => [pg.index().on(t.organizationId, t.userId, t.applicationId, t.createdAt), pg.uniqueIndex().on(t.jobId)],
 );
 export const careerSchedule = pg.pgTable(
 	"career_schedule",
@@ -134,7 +153,10 @@ export const careerNotification = pg.pgTable(
 		emailedAt: pg.timestamp("emailed_at", { withTimezone: true }),
 		emailAttemptedAt: pg.timestamp("email_attempted_at", { withTimezone: true }),
 	},
-	(t) => [pg.uniqueIndex().on(t.userId, t.key), pg.index().on(t.userId, t.createdAt)],
+	(t) => [
+		pg.uniqueIndex().on(t.organizationId, t.userId, t.key),
+		pg.index().on(t.organizationId, t.userId, t.createdAt),
+	],
 );
 
 export const careerOpportunity = pg.pgTable(
@@ -157,26 +179,42 @@ export const careerOpportunity = pg.pgTable(
 		/** Set when tracked in Applications; a tracked role never returns in later runs. */
 		trackedApplicationId: pg.text("tracked_application_id").references(() => application.id, { onDelete: "set null" }),
 	},
-	(t) => [pg.uniqueIndex().on(t.userId, t.url)],
+	(t) => [pg.uniqueIndex().on(t.organizationId, t.userId, t.url)],
 );
 
-/** One application's live workspace state: answers, checklist ticks, questions to ask. */
-export const careerWorkspace = pg.pgTable("career_workspace", {
-	applicationId: pg
-		.text("application_id")
-		.primaryKey()
-		.references(() => application.id, { onDelete: "cascade" }),
-	userId: pg
-		.text("user_id")
-		.notNull()
-		.references(() => user.id, { onDelete: "cascade" }),
-	data: pg.jsonb("data").notNull().$type<CareerWorkspace>(),
-	updatedAt: pg
-		.timestamp("updated_at", { withTimezone: true })
-		.notNull()
-		.defaultNow()
-		.$onUpdate(() => new Date()),
-});
+/**
+ * One application's live workspace state: answers, checklist ticks, questions to ask.
+ * CAREEROS (P1-T07, D11): still keyed by `application_id`. Its organization must equal its application's, which the
+ * composite foreign key `(organization_id, application_id) -> application(organization_id, id)` enforces (ON UPDATE
+ * CASCADE keeps it in step when the guest move changes the application's organization).
+ */
+export const careerWorkspace = pg.pgTable(
+	"career_workspace",
+	{
+		applicationId: pg.text("application_id").primaryKey(),
+		organizationId: tenant(),
+		userId: pg
+			.text("user_id")
+			.notNull()
+			.references(() => user.id, { onDelete: "cascade" }),
+		data: pg.jsonb("data").notNull().$type<CareerWorkspace>(),
+		updatedAt: pg
+			.timestamp("updated_at", { withTimezone: true })
+			.notNull()
+			.defaultNow()
+			.$onUpdate(() => new Date()),
+	},
+	(t) => [
+		pg
+			.foreignKey({
+				name: "career_workspace_org_application_fkey",
+				columns: [t.organizationId, t.applicationId],
+				foreignColumns: [application.organizationId, application.id],
+			})
+			.onDelete("cascade")
+			.onUpdate("cascade"),
+	],
+);
 
 export const careerTranscript = pg.pgTable(
 	"career_transcript",
@@ -187,7 +225,7 @@ export const careerTranscript = pg.pgTable(
 		edited: pg.text("edited").notNull(),
 		model: pg.text("model").notNull(),
 	},
-	(t) => [pg.index().on(t.userId, t.applicationId)],
+	(t) => [pg.index().on(t.organizationId, t.userId, t.applicationId)],
 );
 
 /** Explicitly reviewed reusable wording, independent of editable workspaces and submitted artifacts. */
@@ -210,5 +248,5 @@ export const careerAnswer = pg.pgTable(
 		/** Normalized question plus scope target, hashed by the owning service. */
 		duplicateKey: pg.text("duplicate_key").notNull(),
 	},
-	(t) => [pg.uniqueIndex().on(t.userId, t.duplicateKey)],
+	(t) => [pg.uniqueIndex().on(t.organizationId, t.userId, t.duplicateKey)],
 );

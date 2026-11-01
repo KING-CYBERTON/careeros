@@ -1024,6 +1024,7 @@ describe.skipIf(!databaseUrl)("career knowledge, context and data lifecycle", ()
 		await getDb()
 			.insert(tables.careerSchedule)
 			.values({
+				organizationId: TEST_ORGANIZATION_ID,
 				id: "alice-schedule",
 				userId: "alice",
 				kind: "discovery",
@@ -1033,6 +1034,7 @@ describe.skipIf(!databaseUrl)("career knowledge, context and data lifecycle", ()
 		await getDb()
 			.insert(tables.careerJob)
 			.values({
+				organizationId: TEST_ORGANIZATION_ID,
 				id: "alice-job",
 				userId: "alice",
 				scheduleId: "alice-schedule",
@@ -1040,14 +1042,21 @@ describe.skipIf(!databaseUrl)("career knowledge, context and data lifecycle", ()
 			});
 		await getDb()
 			.insert(tables.careerNotification)
-			.values({ userId: "alice", key: "fixture-notification", notice: { type: "briefing-paused" } });
+			.values({
+				organizationId: TEST_ORGANIZATION_ID,
+				userId: "alice",
+				key: "fixture-notification",
+				notice: { type: "briefing-paused" },
+			});
 		await getDb().insert(tables.careerOpportunity).values({
+			organizationId: TEST_ORGANIZATION_ID,
 			userId: "alice",
 			role: "Mentor",
 			url: "https://example.test/jobs/mentor",
 			snippet: "Synthetic posting",
 		});
 		await getDb().insert(tables.careerTranscript).values({
+			organizationId: TEST_ORGANIZATION_ID,
 			userId: "alice",
 			original: "I mentored a colleague",
 			edited: "I mentored two colleagues",
@@ -1101,6 +1110,7 @@ describe.skipIf(!databaseUrl)("career knowledge, context and data lifecycle", ()
 	});
 	it("tracks a role once even when two tabs track it with one database connection", async () => {
 		await getDb().insert(tables.careerOpportunity).values({
+			organizationId: TEST_ORGANIZATION_ID,
 			id: "track-me",
 			userId: "alice",
 			url: "https://example.test/jobs/track",
@@ -1285,6 +1295,7 @@ describe.skipIf(!databaseUrl)("career knowledge, context and data lifecycle", ()
 		await getDb()
 			.insert(tables.careerArtifact)
 			.values({
+				organizationId: TEST_ORGANIZATION_ID,
 				userId: "alice",
 				applicationId: "alice-app",
 				title: "Later generated draft",
@@ -1456,6 +1467,7 @@ describe.skipIf(!databaseUrl)("career knowledge, context and data lifecycle", ()
 		await getDb()
 			.insert(tables.careerSchedule)
 			.values({
+				organizationId: TEST_ORGANIZATION_ID,
 				id: "pause-me",
 				userId: "alice",
 				applicationId: "alice-app",
@@ -1494,6 +1506,7 @@ describe.skipIf(!databaseUrl)("career knowledge, context and data lifecycle", ()
 			.insert(tables.careerFact)
 			.values(
 				Array.from({ length: 205 }, (_, index) => ({
+					organizationId: TEST_ORGANIZATION_ID,
 					userId: "alice",
 					text: `Fact ${index}: ${"evidence ".repeat(180)}`,
 					category: "accomplishment",
@@ -1507,7 +1520,13 @@ describe.skipIf(!databaseUrl)("career knowledge, context and data lifecycle", ()
 		if (!supporting) throw new Error("Expected facts.");
 		await getDb()
 			.insert(tables.careerStory)
-			.values(Array.from({ length: 105 }, () => ({ userId: "alice", data: story([supporting.id]) })));
+			.values(
+				Array.from({ length: 105 }, () => ({
+					organizationId: TEST_ORGANIZATION_ID,
+					userId: "alice",
+					data: story([supporting.id]),
+				})),
+			);
 		expect(await service.stories({ userId: "alice" })).toHaveLength(105);
 		const { buildCareerTools } = await import("./tools");
 		const tools = buildCareerTools({
@@ -1546,6 +1565,7 @@ describe.skipIf(!databaseUrl)("career knowledge, context and data lifecycle", ()
 			.values(
 				supportingIds.map((id) => ({
 					id,
+					organizationId: TEST_ORGANIZATION_ID,
 					userId: "alice",
 					text: `Proof ${id}: ${"\n".repeat(1400)}`,
 					category: "accomplishment",
@@ -1570,6 +1590,7 @@ describe.skipIf(!databaseUrl)("career knowledge, context and data lifecycle", ()
 			.insert(tables.careerStory)
 			.values(
 				Array.from({ length: 50 }, (_, index) => ({
+					organizationId: TEST_ORGANIZATION_ID,
 					userId: "alice",
 					data: { ...story(supportingIds), title: `Recent optional story ${index}` },
 				})),
@@ -1749,6 +1770,7 @@ describe.skipIf(!databaseUrl)("career knowledge, context and data lifecycle", ()
 			await getDb()
 				.insert(tables.careerSchedule)
 				.values({
+					organizationId: TEST_ORGANIZATION_ID,
 					id: "contended-schedule",
 					userId: "alice",
 					applicationId: "alice-app",
@@ -1761,6 +1783,7 @@ describe.skipIf(!databaseUrl)("career knowledge, context and data lifecycle", ()
 			await getDb()
 				.insert(tables.careerJob)
 				.values({
+					organizationId: TEST_ORGANIZATION_ID,
 					id: "contended-job",
 					userId: "alice",
 					scheduleId: "contended-schedule",

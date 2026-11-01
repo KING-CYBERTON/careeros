@@ -25,9 +25,12 @@ export async function installSchemaLocalGuestMove(client: Pick<Pool, "query">, s
 		["20261101072723_cover_letters_rls", "careeros_move_guest_cover_letters"],
 		// CAREEROS (P1-T06): applications, lanes, the pipeline and the profile
 		["20261101080505_applications_rls", "careeros_move_guest_applications"],
-		// CAREEROS (P1-T06): the career scheduler asks these two about an application it names
-		["20261101080505_applications_rls", "careeros_application_is_open"],
-		["20261101080505_applications_rls", "careeros_application_org"],
+		// CAREEROS (P1-T07): saved answers and the career rows that follow the guest's applications
+		["20261101083119_career_rls", "careeros_move_guest_career"],
+		// CAREEROS (P1-T07): the career scheduler's organization and job lists
+		["20261101083119_career_rls", "careeros_due_career_jobs"],
+		["20261101083119_career_rls", "careeros_orgs_with_due_career_schedules"],
+		["20261101083119_career_rls", "careeros_orgs_with_career_upkeep"],
 	] as const;
 	for (const [folder, name] of sources) {
 		const migration = await readFile(new URL(`../../../migrations/${folder}/migration.sql`, import.meta.url), "utf8");

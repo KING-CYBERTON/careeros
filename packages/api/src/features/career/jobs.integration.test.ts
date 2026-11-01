@@ -107,7 +107,7 @@ describe.skipIf(!databaseUrl)("durable career scheduling", () => {
 			const file = new URL(`${directory}/migration.sql`, migrations);
 			if (existsSync(file)) await pool.query((await readFile(file, "utf8")).replaceAll('"public".', ""));
 		}
-		// CAREEROS (P1-T06): the scheduler asks definer functions about applications; this schema needs its own copies.
+		// CAREEROS (P1-T06): the scheduler asks definer functions for organization and job lists; this schema needs its own copies.
 		await installSchemaLocalGuestMove(pool, schemaName);
 		await ensureTestOrganization(pool);
 		({ careerJobs: jobs, runCareerJobs: run } = await import("./jobs"));
@@ -342,6 +342,7 @@ describe.skipIf(!databaseUrl)("durable career scheduling", () => {
 			await interviewApplication(new Date("2030-10-08T10:00:00Z"));
 			const unrelated = await schedule("alice-app");
 			await getDb().insert(tables.careerSchedule).values({
+				organizationId: TEST_ORGANIZATION_ID,
 				id: "interview-preparation",
 				userId: "alice",
 				applicationId: "alice-app",
@@ -357,12 +358,14 @@ describe.skipIf(!databaseUrl)("durable career scheduling", () => {
 				.insert(tables.careerJob)
 				.values([
 					{
+						organizationId: TEST_ORGANIZATION_ID,
 						userId: "alice",
 						scheduleId: "interview-preparation",
 						dueAt: expired(),
 						status: "queued",
 					},
 					{
+						organizationId: TEST_ORGANIZATION_ID,
 						userId: "alice",
 						scheduleId: "interview-preparation",
 						dueAt: due(),
@@ -473,6 +476,7 @@ describe.skipIf(!databaseUrl)("durable career scheduling", () => {
 			.insert(tables.careerJob)
 			.values([
 				{
+					organizationId: TEST_ORGANIZATION_ID,
 					id: "recoverable-job",
 					userId: "alice",
 					scheduleId: recoveredSchedule.id,
@@ -483,6 +487,7 @@ describe.skipIf(!databaseUrl)("durable career scheduling", () => {
 					leaseUntil: expired(),
 				},
 				{
+					organizationId: TEST_ORGANIZATION_ID,
 					id: "exhausted-job",
 					userId: "alice",
 					scheduleId: exhaustedSchedule.id,
@@ -576,7 +581,13 @@ describe.skipIf(!databaseUrl)("durable career scheduling", () => {
 		await expect(jobs.dismissOpportunity("bob", role.id)).rejects.toMatchObject({ code: "NOT_FOUND" });
 		const [second] = await getDb()
 			.insert(tables.careerOpportunity)
-			.values({ userId: "alice", url: "https://example.test/jobs/43", role: "Engineer", snippet: "" })
+			.values({
+				organizationId: TEST_ORGANIZATION_ID,
+				userId: "alice",
+				url: "https://example.test/jobs/43",
+				role: "Engineer",
+				snippet: "",
+			})
 			.returning();
 		if (!second) throw new Error("Expected role");
 		const results = await Promise.allSettled([
@@ -587,7 +598,13 @@ describe.skipIf(!databaseUrl)("durable career scheduling", () => {
 		await expect(careers.trackOpportunity("alice", second.id)).rejects.toMatchObject({ code: "CONFLICT" });
 		const [third] = await getDb()
 			.insert(tables.careerOpportunity)
-			.values({ userId: "alice", url: "https://example.test/jobs/44", role: "Engineer", snippet: "" })
+			.values({
+				organizationId: TEST_ORGANIZATION_ID,
+				userId: "alice",
+				url: "https://example.test/jobs/44",
+				role: "Engineer",
+				snippet: "",
+			})
 			.returning();
 		if (!third) throw new Error("Expected role");
 		await Promise.allSettled([jobs.dismissOpportunity("alice", third.id), careers.trackOpportunity("alice", third.id)]);
@@ -632,6 +649,7 @@ describe.skipIf(!databaseUrl)("durable career scheduling", () => {
 		await getDb()
 			.insert(tables.careerProfile)
 			.values({
+				organizationId: TEST_ORGANIZATION_ID,
 				userId: "alice",
 				data: (await import("@reactive-resume/schema/career")).careerProfileDataSchema.parse({
 					targetRoles: ["Reliability engineer"],
@@ -678,14 +696,27 @@ describe.skipIf(!databaseUrl)("durable career scheduling", () => {
 		await getDb()
 			.insert(tables.careerNotification)
 			.values([
-				{ userId: "alice", key: "read-old", notice: { type: "schedule-failed", reason: "failed" }, readAt: old },
 				{
+					organizationId: TEST_ORGANIZATION_ID,
+					userId: "alice",
+					key: "read-old",
+					notice: { type: "schedule-failed", reason: "failed" },
+					readAt: old,
+				},
+				{
+					organizationId: TEST_ORGANIZATION_ID,
 					userId: "alice",
 					key: "read-recent",
 					notice: { type: "schedule-failed", reason: "failed" },
 					readAt: new Date(Date.now() - 89 * day),
 				},
-				{ userId: "alice", key: "unread-old", notice: { type: "schedule-failed", reason: "failed" }, createdAt: old },
+				{
+					organizationId: TEST_ORGANIZATION_ID,
+					userId: "alice",
+					key: "unread-old",
+					notice: { type: "schedule-failed", reason: "failed" },
+					createdAt: old,
+				},
 			]);
 		await run();
 		const keys = (await getDb().select({ key: tables.careerNotification.key }).from(tables.careerNotification)).map(

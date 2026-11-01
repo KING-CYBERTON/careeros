@@ -224,7 +224,7 @@ describe("coverage check", () => {
 		expect(result.tenantTables.sort()).toEqual(isolationRegistry.map((entry) => entry.table).sort());
 	});
 
-	it("registers the resume (P1-T04), cover letter (P1-T05) and application (P1-T06) tables; later batches add theirs", () => {
+	it("registers the resume (P1-T04), cover letter (P1-T05) application (P1-T06) and career (P1-T07) tables; later batches add theirs", () => {
 		expect(isolationRegistry.map((entry) => entry.table)).toEqual([
 			"resume",
 			"resume_version",
@@ -237,6 +237,17 @@ describe("coverage check", () => {
 			"application_lane",
 			"application_pipeline",
 			"application_profile",
+			"career_profile",
+			"career_fact",
+			"career_story",
+			"career_artifact",
+			"career_schedule",
+			"career_job",
+			"career_notification",
+			"career_opportunity",
+			"career_workspace",
+			"career_transcript",
+			"career_answer",
 		]);
 	});
 });
