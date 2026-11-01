@@ -1,6 +1,7 @@
 import { writeFile } from "node:fs/promises";
-import { Pool } from "pg";
 import { startAiStub } from "../fixtures/ai-stub";
+// CAREEROS: career_opportunity gets RLS in P1-T07, so seed it through the owner role (P1-Q07)
+import { createSeedPool } from "../fixtures/seed-db";
 import { expect, test } from "../fixtures/test";
 
 let stub: Awaited<ReturnType<typeof startAiStub>>;
@@ -156,12 +157,10 @@ test("target roles stay drafts until reviewed; manual setup needs no AI", async 
 test("discovery explains unknowns and bulk partial failures keep only failed roles selected", async ({
 	authPage: page,
 }, testInfo) => {
-	const databaseUrl = process.env.DATABASE_URL;
-	if (!databaseUrl) throw new Error("Disposable E2E DATABASE_URL is required");
 	const profile = await page.request.get("/api/openapi/auth/profile");
 	await expect(profile).toBeOK();
 	const owner = (await profile.json()).id;
-	const pool = new Pool({ connectionString: databaseUrl });
+	const pool = createSeedPool(); // CAREEROS: owner-role pool (P1-Q07)
 	await expect(
 		await page.request.put("/api/openapi/career/profile", {
 			data: { targetRoles: ["Platform engineer"], locations: ["Berlin"] },

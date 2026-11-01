@@ -1,4 +1,5 @@
-import { Pool } from "pg";
+// CAREEROS: ai_content_report gets RLS in P1-T08, so read it through the owner role (P1-Q07)
+import { createSeedPool } from "../fixtures/seed-db";
 import { expect, test } from "../fixtures/test";
 
 test("stores a private AI report, exports it, and deletes it only after account confirmation", async ({
@@ -39,7 +40,7 @@ test("stores a private AI report, exports it, and deletes it only after account 
 	await dialog.getByRole("textbox").fill("delete");
 	await dialog.getByRole("button", { name: "Delete account", exact: true }).click();
 	await page.waitForURL("/");
-	const pool = new Pool({ connectionString: process.env.DATABASE_URL });
+	const pool = createSeedPool(); // CAREEROS: owner-role pool (P1-Q07)
 	try {
 		const reports = await pool.query("select id from ai_content_report where user_id = $1", [data.user.id]);
 		expect(reports.rows).toEqual([]);

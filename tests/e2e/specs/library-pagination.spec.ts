@@ -1,5 +1,7 @@
 import type { Page } from "@playwright/test";
-import { Pool } from "pg";
+import type { Pool } from "pg";
+// CAREEROS: raw seeding goes through the owner role so RLS does not hide or reject rows (P1-Q07)
+import { createSeedPool } from "../fixtures/seed-db";
 import { expect, test } from "../fixtures/test";
 
 async function seedLetters(page: Page, pool: Pool) {
@@ -12,8 +14,8 @@ async function seedLetters(page: Page, pool: Pool) {
 	const ownerId = rows[0]?.user_id;
 	if (!ownerId) throw new Error("Missing fictional letter owner");
 	await pool.query(
-		`insert into cover_letter (id, user_id, name, style, tags, trashed_at)
-		 select $1 || '-' || state.trashed || '-' || n, user_id,
+		`insert into cover_letter (id, user_id, organization_id, name, style, tags, trashed_at)
+		 select $1 || '-' || state.trashed || '-' || n, user_id, organization_id,
 		   (case when state.trashed then 'Archived' else 'Fictional Letter' end) || ' ' ||
 		   (case when n % 2 = 0 then 'Eight' else 'Nine' end) || ' ' || lpad(n::text, 5, '0'),
 		   style, array['design'], case when state.trashed then now() else null end
@@ -28,7 +30,7 @@ test("keeps delayed search results inert and recovers failed and overlong search
 	authPage: page,
 }, testInfo) => {
 	test.setTimeout(90_000);
-	const pool = new Pool({ connectionString: process.env.DATABASE_URL });
+	const pool = createSeedPool(); // CAREEROS: owner-role pool (P1-Q07)
 	let release = () => {};
 	try {
 		const ownerId = await seedLetters(page, pool);
@@ -148,7 +150,7 @@ test("keeps delayed search results inert and recovers failed and overlong search
 test("keeps retained Trash rows unavailable until their requested page arrives", async ({
 	authPage: page,
 }, testInfo) => {
-	const pool = new Pool({ connectionString: process.env.DATABASE_URL });
+	const pool = createSeedPool(); // CAREEROS: owner-role pool (P1-Q07)
 	let release = () => {};
 	try {
 		const ownerId = await seedLetters(page, pool);
@@ -199,7 +201,7 @@ test("keeps retained Trash rows unavailable until their requested page arrives",
 });
 
 test("bounds tag filters from chips and URLs and clears a first-load filter failure", async ({ authPage: page }) => {
-	const pool = new Pool({ connectionString: process.env.DATABASE_URL });
+	const pool = createSeedPool(); // CAREEROS: owner-role pool (P1-Q07)
 	const badResponses: string[] = [];
 	page.on("response", (response) => {
 		if (response.url().includes("/api/rpc/documents/") && response.status() === 400) badResponses.push(response.url());
