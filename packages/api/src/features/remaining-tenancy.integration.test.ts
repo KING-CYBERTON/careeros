@@ -1,6 +1,7 @@
 import { randomUUID } from "node:crypto";
 import { afterAll, beforeAll, describe, expect, it, vi } from "vite-plus/test";
 import { withOrgContext } from "@careeros/tenancy";
+import { createIsolatedTestDatabase, type IsolatedTestDatabase } from "@careeros/testing";
 import { sql } from "drizzle-orm";
 import { Pool } from "pg";
 import { db, withDatabasePool } from "@reactive-resume/db/client";
@@ -43,14 +44,17 @@ describe.skipIf(!configured)("remaining tables and tenant isolation", () => {
 	const hostA = `a-${run}.example.test`;
 	let owner: Pool;
 	let app: Pool;
+	// CAREEROS (P1-Q08): its own database, so no other file's cleanup, purge or migration replay can touch these rows.
+	let database: IsolatedTestDatabase;
 	const inApp = <T>(fn: () => T) => withDatabasePool(app, fn);
 	const count = async (sql: string, params: unknown[] = []) =>
 		Number((await owner.query<{ n: string }>(sql, params)).rows[0]?.n);
 	const store = new Map<string, "ok" | "fail">();
 
 	beforeAll(async () => {
-		owner = new Pool({ connectionString: process.env.CAREEROS_TEST_DATABASE_URL });
-		app = new Pool({ connectionString: process.env.CAREEROS_TEST_APP_DATABASE_URL });
+		database = await createIsolatedTestDatabase("rem_tenancy");
+		owner = new Pool({ connectionString: database.ownerUrl });
+		app = new Pool({ connectionString: database.appUrl });
 		for (const [org, user] of [
 			[ids.orgA, ids.userA],
 			[ids.orgB, ids.userB],
@@ -83,12 +87,10 @@ describe.skipIf(!configured)("remaining tables and tenant isolation", () => {
 	});
 
 	afterAll(async () => {
-		await owner?.query(`DELETE FROM organization WHERE id = ANY($1::text[])`, [[ids.orgA, ids.orgB, ids.orgBad]]);
-		await owner?.query(`DELETE FROM storage_cleanup_job WHERE id LIKE $1`, [`%${run}%`]);
-		await owner?.query(`DELETE FROM "user" WHERE id LIKE $1`, [`%${run}%`]);
 		await owner?.query(`DROP ROLE IF EXISTS "${ids.role}"`);
 		await owner?.end();
 		await app?.end();
+		await database?.drop();
 	});
 
 	it("hides all three tables from careeros_app without an organization context", async () => {
@@ -284,7 +286,9 @@ describe.skipIf(!configured)("remaining tables and tenant isolation", () => {
 		const job = (tag: string) => `uploads/${tag}-${run}`;
 		const insertJob = (org: string, owner_: string, tag: string) =>
 			owner.query(
-				`INSERT INTO storage_cleanup_job (id, organization_id, owner_id, storage_key) VALUES ($1, $2, $3, $4)`,
+				// P1-Q08: due a minute ago. With the default `now()` a job inserted a moment before the worker's JS
+				// `new Date()` can still be "in the future" (millisecond against microsecond precision), so it is skipped.
+				`INSERT INTO storage_cleanup_job (id, organization_id, owner_id, storage_key, next_attempt_at) VALUES ($1, $2, $3, $4, now() - interval '1 minute')`,
 				[`job-${tag}-${run}`, org, owner_, job(tag)],
 			);
 		const exists = async (tag: string) =>

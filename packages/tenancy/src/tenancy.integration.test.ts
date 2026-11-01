@@ -1,5 +1,5 @@
 import { randomUUID } from "node:crypto";
-import { afterAll, beforeAll, describe, expect, it } from "vite-plus/test";
+import { afterAll, beforeAll, describe, expect, it, vi } from "vite-plus/test";
 import { createPools, createTestSchema, getTestEnv, type TestPools, type TestSchema } from "@careeros/testing";
 
 // Real PostgreSQL through the `careeros_app` role (no BYPASSRLS). Skipped only when the CAREEROS_TEST_* variables are
@@ -29,6 +29,17 @@ describe.skipIf(!configured)("tenancy core (real Postgres)", () => {
 		const result = await client.db.execute<{ pid: number }>(sql`select pg_backend_pid() as pid`);
 		return result.rows[0]?.pid;
 	};
+
+	// P1-Q08: `release(error)` ends the client without waiting, so its server backend can outlive the call by a few
+	// milliseconds. Wait for it to leave; the assertion itself is unchanged and still fails if the connection stays.
+	const expectBackendGone = (backendPid: number | undefined) =>
+		vi.waitFor(
+			async () => {
+				const { rows } = await pools.owner.query("select 1 from pg_stat_activity where pid = $1", [backendPid]);
+				expect(rows).toHaveLength(0);
+			},
+			{ timeout: 5_000, interval: 25 },
+		);
 
 	beforeAll(async () => {
 		const env = getTestEnv();
@@ -81,8 +92,7 @@ describe.skipIf(!configured)("tenancy core (real Postgres)", () => {
 		// A destroyed client is replaced by a fresh connection, which has no setting at all.
 		expect(await setting()).toBeNull();
 		// The destroyed connection is gone from the server.
-		const { rows } = await pools.owner.query("select 1 from pg_stat_activity where pid = $1", [failedPid]);
-		expect(rows).toHaveLength(0);
+		await expectBackendGone(failedPid);
 	});
 
 	it("keeps the pool usable and returns a healthy client after success", async () => {
@@ -103,8 +113,7 @@ describe.skipIf(!configured)("tenancy core (real Postgres)", () => {
 				.query("select 1/0")
 				.catch(() => {});
 		});
-		const { rows } = await pools.owner.query("select 1 from pg_stat_activity where pid = $1", [leakedPid]);
-		expect(rows).toHaveLength(0);
+		await expectBackendGone(leakedPid);
 		expect(await setting()).toBeNull();
 	});
 

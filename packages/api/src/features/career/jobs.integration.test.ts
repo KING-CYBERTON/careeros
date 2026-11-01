@@ -1,13 +1,11 @@
-import { randomUUID } from "node:crypto";
-import { existsSync } from "node:fs";
-import { readdir, readFile } from "node:fs/promises";
 import { afterAll, afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vite-plus/test";
+import { createIsolatedTestDatabase, type IsolatedTestDatabase } from "@careeros/testing";
 import { eq } from "drizzle-orm";
 import { drizzle } from "drizzle-orm/node-postgres";
 import { Pool } from "pg";
 import * as tables from "@reactive-resume/db/schema";
 import { careerScheduleInputSchema } from "@reactive-resume/schema/career";
-import { ensureTestOrganization, installSchemaLocalGuestMove, TEST_ORGANIZATION_ID } from "../../test-organization";
+import { ensureTestOrganization, TEST_ORGANIZATION_ID } from "../../test-organization";
 
 const fixture = vi.hoisted(() => ({
 	db: undefined as ReturnType<typeof drizzle> | undefined,
@@ -58,7 +56,7 @@ function getDb() {
 	return fixture.db;
 }
 
-const databaseUrl = process.env.INTEGRATIONS_TEST_DATABASE_URL ?? process.env.COVER_LETTER_TEST_DATABASE_URL;
+const configured = Boolean(process.env.CAREEROS_TEST_DATABASE_URL && process.env.CAREEROS_TEST_APP_DATABASE_URL);
 const results = [
 	{
 		title: "Reliability engineer",
@@ -83,40 +81,25 @@ const posting = {
 	company: "",
 };
 
-describe.skipIf(!databaseUrl)("durable career scheduling", () => {
+describe.skipIf(!configured)("durable career scheduling", () => {
 	let jobs: typeof import("./jobs").careerJobs;
 	let run: typeof import("./jobs").runCareerJobs;
-	let admin: Pool;
 	let pool: Pool;
-	const schemaName = `career_jobs_test_${randomUUID().replaceAll("-", "")}`;
+	// CAREEROS (P1-Q08): its own database, migrated like production. It used to replay the migrations into a schema of
+	// the shared database, which rewrote `public` functions other files were using.
+	let database: IsolatedTestDatabase;
 
 	beforeAll(async () => {
-		admin = new Pool({ connectionString: databaseUrl });
-		await admin.query(`CREATE SCHEMA ${schemaName}`);
-		pool = new Pool({
-			connectionString: databaseUrl,
-			options: `-c search_path=${schemaName} -c statement_timeout=10000`,
-		});
+		database = await createIsolatedTestDatabase("career_jobs");
+		pool = new Pool({ connectionString: database.ownerUrl, options: "-c statement_timeout=10000" });
 		fixture.db = drizzle({ client: pool });
-		const migrations = new URL("../../../../../migrations/", import.meta.url);
-		const directories = (await readdir(migrations, { withFileTypes: true }))
-			.filter((entry) => entry.isDirectory() && /^\d+_/.test(entry.name))
-			.map((entry) => entry.name)
-			.sort();
-		for (const directory of directories) {
-			const file = new URL(`${directory}/migration.sql`, migrations);
-			if (existsSync(file)) await pool.query((await readFile(file, "utf8")).replaceAll('"public".', ""));
-		}
-		// CAREEROS (P1-T06): the scheduler asks definer functions for organization and job lists; this schema needs its own copies.
-		await installSchemaLocalGuestMove(pool, schemaName);
 		await ensureTestOrganization(pool);
 		({ careerJobs: jobs, runCareerJobs: run } = await import("./jobs"));
-	}, 30_000);
+	}, 60_000);
 
 	afterAll(async () => {
 		await pool?.end();
-		await admin?.query(`DROP SCHEMA IF EXISTS ${schemaName} CASCADE`);
-		await admin?.end();
+		await database?.drop();
 	});
 
 	beforeEach(async () => {
