@@ -14,18 +14,7 @@ import { applicationsRouter } from "./router";
 // This suite needs the real organization scope, not the fixed one from vitest.org.setup.ts.
 vi.mock("@careeros/tenancy", async (importOriginal) => importOriginal());
 
-// The scheduler tick below runs against the shared test database: no Trash purge, and a recorded briefing writer.
-const generated = vi.hoisted(() => ({ calls: [] as { applicationId: string }[] }));
-vi.mock("../career/generate", () => ({
-	generateCareer: vi.fn(async (input: { applicationId: string }) => {
-		generated.calls.push({ applicationId: input.applicationId });
-		return { item: null, answer: null };
-	}),
-}));
-vi.mock("../documents/service", async (importOriginal) => {
-	const actual = await importOriginal<typeof import("../documents/service")>();
-	return { documentsService: { ...actual.documentsService, purgeExpiredTrash: vi.fn(async () => undefined) } };
-});
+// CAREEROS (P1-T07): the background paths (scheduler) moved to career-tenancy.integration.test.ts.
 
 // P1-T06: application tenancy through the real routers, as the `careeros_app` role (NOBYPASSRLS), against the migrated
 // public schema. Skipped only when the CAREEROS_TEST_* variables are absent; CI sets them.
@@ -55,8 +44,6 @@ describe.skipIf(!configured)("applications, lanes, pipelines, profiles and tenan
 		resumeAB: `app-res-ab-${run}`,
 		resumeABInB: `app-res-ab-b-${run}`,
 		letterABInB: `app-letter-ab-b-${run}`,
-		role: `t06_noexec_${run}`,
-		schedule: `app-sched-${run}`,
 		interview: `app-interview-${run}`,
 	};
 	let owner: Pool;
@@ -188,18 +175,15 @@ describe.skipIf(!configured)("applications, lanes, pipelines, profiles and tenan
 			`INSERT INTO cover_letter (id, name, style, user_id, organization_id) VALUES ($1, 'AB letter in B', $2, $3, $4)`,
 			[ids.letterABInB, style, ids.userAB, ids.orgB],
 		);
-		await owner.query(`CREATE ROLE "${ids.role}" NOLOGIN`);
 	}, 30_000);
 
 	afterAll(async () => {
-		await owner?.query(`DELETE FROM career_schedule WHERE id = $1`, [ids.schedule]);
 		await owner?.query(`DELETE FROM organization WHERE id = ANY($1::text[])`, [
 			[ids.orgA, ids.orgB, ids.orgG, ids.orgT],
 		]);
 		await owner?.query(`DELETE FROM "user" WHERE id = ANY($1::text[]) OR id LIKE 'iso-user-%'`, [
 			[ids.userA, ids.userB, ids.userAB, ids.guest, ids.guest2, ids.guest3, ids.target],
 		]);
-		await owner?.query(`DROP ROLE IF EXISTS "${ids.role}"`);
 		await owner?.end();
 		await app?.end();
 	});
@@ -694,59 +678,6 @@ describe.skipIf(!configured)("applications, lanes, pipelines, profiles and tenan
 				body: { message: expect.stringContaining("exceeds 40 active lanes") },
 			});
 			expect(await rowCount(`SELECT count(*) AS n FROM application WHERE user_id = $1`, [ids.guest3])).toBe(1);
-		});
-	});
-
-	describe("background paths", () => {
-		it("answers one fact about one application to careeros_app, and refuses a role without EXECUTE", async () => {
-			const org = await app.query(`SELECT careeros_application_org($1, $2) AS org`, [ids.appA, ids.userA]);
-			expect(org.rows).toEqual([{ org: ids.orgA }]);
-			// Naming the wrong owner finds nothing.
-			expect((await app.query(`SELECT careeros_application_org($1, $2) AS org`, [ids.appA, ids.userB])).rows).toEqual([
-				{ org: null },
-			]);
-			expect(
-				(await app.query(`SELECT careeros_application_is_open($1, $2) AS open`, [ids.appA, ids.userA])).rows,
-			).toEqual([{ open: true }]);
-			expect(
-				(await app.query(`SELECT careeros_application_is_open($1, $2) AS open`, [ids.appA, ids.userB])).rows,
-			).toEqual([{ open: false }]);
-
-			const client = await owner.connect();
-			try {
-				await client.query(`SET ROLE "${ids.role}"`);
-				for (const sql of [
-					`SELECT careeros_application_org('${ids.appA}', '${ids.userA}')`,
-					`SELECT careeros_application_is_open('${ids.appA}', '${ids.userA}')`,
-					`SELECT careeros_move_guest_applications('a', 'b', 'c')`,
-				])
-					await expect(client.query(sql), sql).rejects.toMatchObject({ code: "42501" });
-			} finally {
-				await client.query("RESET ROLE").catch(() => undefined);
-				client.release();
-			}
-		});
-
-		it("runs a scheduled briefing for an application inside the application's organization", async () => {
-			const { runCareerJobs } = await import("../career/jobs");
-			await owner.query(
-				`INSERT INTO career_schedule (id, user_id, application_id, interview_id, kind, lead, enabled, next_run_at) VALUES ($1, $2, $3, $4, 'prepare', '24h', true, '1999-01-01')`,
-				[ids.schedule, ids.userA, ids.appA, ids.interview],
-			);
-			// The tick has no organization of its own; a closed application is skipped, an open one runs.
-			await owner.query(`UPDATE application SET status = 'closed' WHERE id = $1`, [ids.appA]);
-			await inApp(() => runCareerJobs());
-			expect(generated.calls.filter((call) => call.applicationId === ids.appA)).toEqual([]);
-			expect(await rowCount(`SELECT count(*) AS n FROM career_job WHERE schedule_id = $1`, [ids.schedule])).toBe(0);
-
-			await owner.query(`UPDATE application SET status = 'interview', lane_id = $2 WHERE id = $1`, [
-				ids.appA,
-				ids.laneA,
-			]);
-			await inApp(() => runCareerJobs());
-			expect(generated.calls.filter((call) => call.applicationId === ids.appA)).toEqual([{ applicationId: ids.appA }]);
-			const job = await owner.query(`SELECT status FROM career_job WHERE schedule_id = $1`, [ids.schedule]);
-			expect(job.rows).toEqual([{ status: "completed" }]);
 		});
 	});
 });

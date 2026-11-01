@@ -249,18 +249,24 @@ export async function linkAnonymousAccount({
 			throw error;
 		}
 
-		const sourceAnswers = await tx.select().from(schema.careerAnswer).where(eq(schema.careerAnswer.userId, fromUserId));
-		const targetAnswers = await tx.select().from(schema.careerAnswer).where(eq(schema.careerAnswer.userId, toUserId));
-		if (sourceAnswers.some((answer) => targetAnswers.some((target) => target.duplicateKey === answer.duplicateKey)))
-			throw new APIError("CONFLICT", {
-				message:
-					"Both accounts have duplicate saved application answers. Export and delete one copy before linking, so neither is silently overwritten.",
-			});
-		// Preserve wording. Knowledge currently stays with the guest, so missing references require review after linking.
-		await tx
-			.update(schema.careerAnswer)
-			.set({ userId: toUserId, updatedAt: schema.careerAnswer.updatedAt })
-			.where(eq(schema.careerAnswer.userId, fromUserId));
+		// CAREEROS (P1-T07): saved application answers, and the career rows that belong to the guest's applications (facts,
+		// stories, saved items, transcripts, schedules and their jobs, notifications, workspaces, tracked roles), belong
+		// to an organization too. The same narrow definer function pattern moves them into the account's oldest
+		// organization, after the applications they follow. The same saved answer on both sides is a conflict (SQLSTATE
+		// CR004) so neither is silently overwritten. Knowledge not tied to an application stays with the guest, as before.
+		try {
+			await tx.execute(
+				sql`select careeros_move_guest_career(${fromUserId}, ${toUserId}, ${targetMembership?.organizationId ?? null})`,
+			);
+		} catch (error) {
+			const code = ((error as { code?: string; cause?: { code?: string } }).cause ?? (error as { code?: string })).code;
+			if (code === "CR004")
+				throw new APIError("CONFLICT", {
+					message:
+						"Both accounts have duplicate saved application answers. Export and delete one copy before linking, so neither is silently overwritten.",
+				});
+			throw error;
+		}
 
 		// Ownership updates lock document rows, so guest saves cannot add uncopied references during copying.
 		const hook = accountLinkHook;

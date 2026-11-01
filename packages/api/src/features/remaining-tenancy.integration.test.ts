@@ -265,6 +265,21 @@ describe.skipIf(!configured)("remaining tables and tenant isolation", () => {
 		});
 	});
 
+	describe("scheduled career discovery (review 1 Q64)", () => {
+		it("resolves the user's saved web key inside the job's organization context, and not outside one", async () => {
+			const { webAccessService } = await import("./web-access/credentials");
+			// The scheduler (P1-T07) runs each job inside withOrgContext(job organization); that is the path discover() uses.
+			await inApp(() => withOrgContext(ids.orgB, () => webAccessService.save(ids.userB, "exa", "scheduled-key")));
+			const inJobOrg = await inApp(() => withOrgContext(ids.orgB, () => webAccessService.resolve(ids.userB)));
+			expect(inJobOrg).toMatchObject({ provider: "exa", apiKey: "scheduled-key" });
+			// Another organization's job for the same user does not see it; neither does code with no organization.
+			expect(
+				await inApp(() => withOrgContext(ids.orgBad.replace(/ /g, "-"), () => webAccessService.resolve(ids.userB))),
+			).toBeNull();
+			expect(await inApp(() => webAccessService.resolve(ids.userB))).toBeNull();
+		});
+	});
+
 	describe("storage cleanup", () => {
 		const job = (tag: string) => `uploads/${tag}-${run}`;
 		const insertJob = (org: string, owner_: string, tag: string) =>

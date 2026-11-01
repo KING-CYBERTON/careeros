@@ -3,7 +3,7 @@ import type { CareerSource } from "@reactive-resume/schema/career";
 import type z from "zod";
 import { createHash } from "node:crypto";
 import { isDeepStrictEqual } from "node:util";
-// CAREEROS: tenant column for application inserts, and the per-organization pipeline (P1-T06)
+// CAREEROS: tenant column for inserts, and the per-organization pipeline and profile (P1-T06, P1-T07)
 import { requireOrgId } from "@careeros/tenancy";
 import { ORPCError } from "@orpc/client";
 import { and, desc, eq, inArray, isNull, or, sql } from "drizzle-orm";
@@ -37,6 +37,9 @@ type StoryInput = z.infer<typeof careerStoryInputSchema>;
 const hash = (text: string) => createHash("sha256").update(text).digest("hex");
 const visible = (column: typeof tables.careerFact.applicationId, applicationId?: string | null) =>
 	applicationId ? or(isNull(column), eq(column, applicationId)) : isNull(column);
+// CAREEROS (P1-T07, D11): the career profile is per (organization, user), so every read and upsert names both.
+const ownProfile = (userId: string) =>
+	and(eq(tables.careerProfile.organizationId, requireOrgId()), eq(tables.careerProfile.userId, userId));
 const ownedFact = (id: string, userId: string) =>
 	and(eq(tables.careerFact.id, id), eq(tables.careerFact.userId, userId));
 
@@ -242,7 +245,7 @@ function knowledgeSignature(
 
 async function knowledgeVersion(input: Owned, reader: DbOrTx = db) {
 	const [[profile], facts, stories, [owner]] = await Promise.all([
-		reader.select().from(tables.careerProfile).where(eq(tables.careerProfile.userId, input.userId)),
+		reader.select().from(tables.careerProfile).where(ownProfile(input.userId)),
 		reader
 			.select()
 			.from(tables.careerFact)
@@ -323,7 +326,7 @@ export const careerService = {
 		return row?.at ?? null;
 	},
 	profile: async (userId: string) => {
-		const [row] = await db.select().from(tables.careerProfile).where(eq(tables.careerProfile.userId, userId));
+		const [row] = await db.select().from(tables.careerProfile).where(ownProfile(userId));
 		return careerProfileDataSchema.parse(row?.data ?? {});
 	},
 	/** Only untouched UTC accounts adopt a device country. Share the save lock so explicit choices always win. */
@@ -333,7 +336,10 @@ export const careerService = {
 			const [row] = await tx
 				.select({ data: tables.careerProfile.data, timezone: tables.user.timezone })
 				.from(tables.user)
-				.leftJoin(tables.careerProfile, eq(tables.careerProfile.userId, tables.user.id))
+				.leftJoin(
+					tables.careerProfile,
+					and(eq(tables.careerProfile.userId, tables.user.id), eq(tables.careerProfile.organizationId, requireOrgId())),
+				)
 				.where(eq(tables.user.id, userId));
 			const data = careerProfileDataSchema.parse(row?.data ?? {});
 			const country = countryForTimeZone(deviceTimeZone);
@@ -341,8 +347,11 @@ export const careerService = {
 			data.searchRegions = [country];
 			await tx
 				.insert(tables.careerProfile)
-				.values({ userId, data })
-				.onConflictDoUpdate({ target: tables.careerProfile.userId, set: { data, updatedAt: new Date() } });
+				.values({ organizationId: requireOrgId(), userId, data })
+				.onConflictDoUpdate({
+					target: [tables.careerProfile.organizationId, tables.careerProfile.userId],
+					set: { data, updatedAt: new Date() },
+				});
 			return data;
 		}),
 	saveProfile: (userId: string, input: CareerProfileData) =>
@@ -351,12 +360,15 @@ export const careerService = {
 			const [row] = await tx
 				.select({ data: tables.careerProfile.data })
 				.from(tables.careerProfile)
-				.where(eq(tables.careerProfile.userId, userId));
+				.where(ownProfile(userId));
 			const data = mergeCareerProfile(careerProfileDataSchema.parse(row?.data ?? {}), input);
 			await tx
 				.insert(tables.careerProfile)
-				.values({ userId, data })
-				.onConflictDoUpdate({ target: tables.careerProfile.userId, set: { data, updatedAt: new Date() } });
+				.values({ organizationId: requireOrgId(), userId, data })
+				.onConflictDoUpdate({
+					target: [tables.careerProfile.organizationId, tables.careerProfile.userId],
+					set: { data, updatedAt: new Date() },
+				});
 			return data;
 		}),
 	/** Facts the coach can use for an application (or shared ones). `all` lists every scope, for Knowledge. */
@@ -395,7 +407,7 @@ export const careerService = {
 		return db.transaction(async (tx) => {
 			await lockUser(tx, userId);
 			if (automatic) {
-				const [profile] = await tx.select().from(tables.careerProfile).where(eq(tables.careerProfile.userId, userId));
+				const [profile] = await tx.select().from(tables.careerProfile).where(ownProfile(userId));
 				if (careerProfileDataSchema.parse(profile?.data ?? {}).memoryMode !== "auto") return null;
 			}
 			const [suppressed] = await tx
@@ -418,7 +430,8 @@ export const careerService = {
 			// A forgotten source key remains a content-free tombstone; retries cannot recreate the fact.
 			const [fact] = await tx
 				.insert(tables.careerFact)
-				.values({ userId, ...input, sourceKey })
+				// CAREEROS: tenant column (P1-T07)
+				.values({ organizationId: requireOrgId(), userId, ...input, sourceKey })
 				.onConflictDoNothing()
 				.returning();
 			return fact ?? null;
@@ -505,7 +518,7 @@ export const careerService = {
 						.returning()
 				: await tx
 						.insert(tables.careerStory)
-						.values({ userId, ...values })
+						.values({ organizationId: requireOrgId(), userId, ...values })
 						.returning();
 			if (!row) throw new ORPCError("NOT_FOUND");
 			return row;
@@ -792,7 +805,7 @@ export const careerService = {
 				});
 			const [row] = await tx
 				.insert(tables.careerArtifact)
-				.values({ ...values, jobId: input.jobId ?? null })
+				.values({ ...values, organizationId: requireOrgId(), jobId: input.jobId ?? null })
 				.onConflictDoNothing()
 				.returning();
 			return row ?? null;
@@ -902,6 +915,7 @@ export const careerService = {
 				}
 				if (change.type === "offer" && data.offer)
 					await tx.insert(tables.careerArtifact).values({
+						organizationId: requireOrgId(),
 						userId,
 						applicationId: application.id,
 						interviewId: null,
@@ -971,7 +985,7 @@ export const careerService = {
 			});
 			await tx
 				.insert(tables.careerWorkspace)
-				.values({ applicationId, userId, data })
+				.values({ organizationId: requireOrgId(), applicationId, userId, data })
 				.onConflictDoUpdate({ target: tables.careerWorkspace.applicationId, set: { data, updatedAt: new Date() } });
 			return data;
 		});
@@ -1080,11 +1094,12 @@ export const careerService = {
 			const data = { ...current, answers: parsed };
 			await tx
 				.insert(tables.careerWorkspace)
-				.values({ applicationId, userId, data })
+				.values({ organizationId: requireOrgId(), applicationId, userId, data })
 				.onConflictDoUpdate({ target: tables.careerWorkspace.applicationId, set: { data, updatedAt: at } });
 			const sent = parsed.filter((answer) => answer.answer.trim());
 			if (sent.length)
 				await tx.insert(tables.careerArtifact).values({
+					organizationId: requireOrgId(),
 					userId,
 					applicationId,
 					interviewId: null,
@@ -1136,6 +1151,7 @@ export const careerService = {
 					message: "These answers changed after submission and cannot be recorded as sent.",
 				});
 			await tx.insert(tables.careerArtifact).values({
+				organizationId: requireOrgId(),
 				userId,
 				applicationId,
 				interviewId: null,
@@ -1159,7 +1175,7 @@ export const careerService = {
 			if (opportunity.trackedApplicationId) return { applicationId: opportunity.trackedApplicationId };
 			if (opportunity.dismissedAt)
 				throw new ORPCError("CONFLICT", { message: "This role was dismissed. Refresh the review queue." });
-			const [profile] = await tx.select().from(tables.careerProfile).where(eq(tables.careerProfile.userId, userId));
+			const [profile] = await tx.select().from(tables.careerProfile).where(ownProfile(userId));
 			const { matches } = matchPosting(opportunity, careerProfileDataSchema.parse(profile?.data ?? {}));
 			const applicationId = generateId();
 			const { values } = await applicationTransitionValues(tx, userId, { status: "saved" });
@@ -1233,21 +1249,25 @@ export const careerService = {
 			db.select().from(tables.careerWorkspace).where(eq(tables.careerWorkspace.userId, userId)),
 			db.select().from(tables.careerAnswer).where(eq(tables.careerAnswer.userId, userId)),
 		]);
+		// CAREEROS (P1-T07): the account export covers the active organization only (T06 review), and the tenant column
+		// is not part of it.
+		const untenanted = <T extends { organizationId: string }>(rows: T[]) =>
+			rows.map(({ organizationId: _organizationId, ...row }) => row);
 		return {
 			profile,
-			facts,
-			stories,
-			artifacts,
-			schedules,
-			notifications: notifications.map((row) => ({ ...row, ...noticeText(row.notice) })),
+			facts: untenanted(facts),
+			stories: untenanted(stories),
+			artifacts: untenanted(artifacts),
+			schedules: untenanted(schedules),
+			notifications: untenanted(notifications).map((row) => ({ ...row, ...noticeText(row.notice) })),
 			threads,
 			messages,
 			attachments,
-			opportunities,
-			jobs,
-			transcripts,
-			workspaces,
-			reviewedAnswers,
+			opportunities: untenanted(opportunities),
+			jobs: untenanted(jobs),
+			transcripts: untenanted(transcripts),
+			workspaces: untenanted(workspaces),
+			reviewedAnswers: untenanted(reviewedAnswers),
 		};
 	},
 };

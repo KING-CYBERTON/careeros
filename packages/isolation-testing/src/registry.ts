@@ -86,6 +86,39 @@ async function seedLane(orgId: string, db: pg.Pool): Promise<{ userId: string; l
 	return { userId, laneId };
 }
 
+/** CAREEROS (P1-T07): a fresh owner (user) in `orgId`, inserted by the owner pool. */
+async function seedUser(orgId: string, db: pg.Pool): Promise<string> {
+	await ensureOrganization(db, orgId);
+	const userId = `iso-user-${randomUUID()}`;
+	await db.query(
+		`INSERT INTO "user" (id, name, email, username, display_username) VALUES ($1, 'Isolation user', $1 || '@example.test', $1, $1)`,
+		[userId],
+	);
+	return userId;
+}
+
+/** CAREEROS (P1-T07): an application (and its owner) in `orgId`, for the career tables that point at one. */
+async function seedApplication(orgId: string, db: pg.Pool): Promise<{ userId: string; applicationId: string }> {
+	const { userId } = await seedPipeline(orgId, db);
+	const applicationId = `iso-application-${randomUUID()}`;
+	await db.query(
+		`INSERT INTO application (id, organization_id, user_id, company, role) VALUES ($1, $2, $3, 'Isolation Co', 'Engineer')`,
+		[applicationId, orgId, userId],
+	);
+	return { userId, applicationId };
+}
+
+/** CAREEROS (P1-T07): a discovery schedule (no application) in `orgId`. */
+async function seedSchedule(orgId: string, db: pg.Pool): Promise<{ userId: string; scheduleId: string }> {
+	const userId = await seedUser(orgId, db);
+	const scheduleId = `iso-schedule-${randomUUID()}`;
+	await db.query(
+		`INSERT INTO career_schedule (id, organization_id, user_id, kind, query, next_run_at) VALUES ($1, $2, $3, 'discovery', 'engineer', now())`,
+		[scheduleId, orgId, userId],
+	);
+	return { userId, scheduleId };
+}
+
 /** CAREEROS (P1-T09): a user in `orgId`, inserted by the owner pool. */
 async function seedUserIn(orgId: string, db: pg.Pool): Promise<string> {
 	await ensureOrganization(db, orgId);
@@ -99,7 +132,7 @@ async function seedUserIn(orgId: string, db: pg.Pool): Promise<string> {
 
 /**
  * Every tenant table (one with an `organization_id` column) must be registered here. The five resume tables are
- * registered by P1-T04, the two cover letter tables by P1-T05 and the four application tables by P1-T06. The route
+ * registered by P1-T04, the two cover letter tables by P1-T05 and the four application tables by P1-T06 and the eleven career tables by P1-T07. The route
  * groups' API checks are attached by `packages/api` (it needs the router), which runs `runApiIsolationCheck` with this
  * entry's seed.
  */
@@ -223,6 +256,134 @@ export const isolationRegistry: readonly RegistryEntry[] = [
 			return userId;
 		},
 	},
+	// CAREEROS (P1-T07): the eleven career tables. The profile is keyed (organization, user), so its id column is
+	// `user_id`; the workspace is keyed by `application_id`. Every seed uses a fresh user.
+	{
+		table: "career_profile",
+		idColumn: "user_id",
+		seed: async (orgId, db) => {
+			const userId = await seedUser(orgId, db);
+			await db.query(`INSERT INTO career_profile (organization_id, user_id, data) VALUES ($1, $2, '{}')`, [
+				orgId,
+				userId,
+			]);
+			return userId;
+		},
+	},
+	{
+		table: "career_fact",
+		seed: async (orgId, db) => {
+			const userId = await seedUser(orgId, db);
+			const id = `iso-fact-${randomUUID()}`;
+			await db.query(
+				`INSERT INTO career_fact (id, organization_id, user_id, text, category, source, source_key) VALUES ($1, $2, $3, 'Isolation fact', 'skill', '{}', $1)`,
+				[id, orgId, userId],
+			);
+			return id;
+		},
+	},
+	{
+		table: "career_story",
+		seed: async (orgId, db) => {
+			const userId = await seedUser(orgId, db);
+			const id = `iso-story-${randomUUID()}`;
+			await db.query(`INSERT INTO career_story (id, organization_id, user_id, data) VALUES ($1, $2, $3, '{}')`, [
+				id,
+				orgId,
+				userId,
+			]);
+			return id;
+		},
+	},
+	{
+		table: "career_artifact",
+		seed: async (orgId, db) => {
+			const userId = await seedUser(orgId, db);
+			const id = `iso-artifact-${randomUUID()}`;
+			await db.query(
+				`INSERT INTO career_artifact (id, organization_id, user_id, title, data, evidence, input_version) VALUES ($1, $2, $3, 'Isolation item', '{}', '{"factIds":[],"storyIds":[]}', 'v1')`,
+				[id, orgId, userId],
+			);
+			return id;
+		},
+	},
+	{
+		table: "career_schedule",
+		seed: async (orgId, db) => (await seedSchedule(orgId, db)).scheduleId,
+	},
+	{
+		table: "career_job",
+		seed: async (orgId, db) => {
+			const { userId, scheduleId } = await seedSchedule(orgId, db);
+			const id = `iso-job-${randomUUID()}`;
+			await db.query(
+				`INSERT INTO career_job (id, organization_id, user_id, schedule_id, due_at) VALUES ($1, $2, $3, $4, now())`,
+				[id, orgId, userId, scheduleId],
+			);
+			return id;
+		},
+	},
+	{
+		table: "career_notification",
+		seed: async (orgId, db) => {
+			const userId = await seedUser(orgId, db);
+			const id = `iso-notification-${randomUUID()}`;
+			await db.query(
+				`INSERT INTO career_notification (id, organization_id, user_id, key, notice) VALUES ($1, $2, $3, $1, '{"type":"email-failed"}')`,
+				[id, orgId, userId],
+			);
+			return id;
+		},
+	},
+	{
+		table: "career_opportunity",
+		seed: async (orgId, db) => {
+			const userId = await seedUser(orgId, db);
+			const id = `iso-opportunity-${randomUUID()}`;
+			await db.query(
+				`INSERT INTO career_opportunity (id, organization_id, user_id, url, snippet) VALUES ($1, $2, $3, 'https://example.test/' || $1, 'Isolation role')`,
+				[id, orgId, userId],
+			);
+			return id;
+		},
+	},
+	{
+		table: "career_workspace",
+		idColumn: "application_id",
+		seed: async (orgId, db) => {
+			const { userId, applicationId } = await seedApplication(orgId, db);
+			await db.query(
+				`INSERT INTO career_workspace (application_id, organization_id, user_id, data) VALUES ($1, $2, $3, '{}')`,
+				[applicationId, orgId, userId],
+			);
+			return applicationId;
+		},
+	},
+	{
+		table: "career_transcript",
+		seed: async (orgId, db) => {
+			const userId = await seedUser(orgId, db);
+			const id = `iso-transcript-${randomUUID()}`;
+			await db.query(
+				`INSERT INTO career_transcript (id, organization_id, user_id, original, edited, model) VALUES ($1, $2, $3, 'a', 'a', 'm')`,
+				[id, orgId, userId],
+			);
+			return id;
+		},
+	},
+	{
+		table: "career_answer",
+		seed: async (orgId, db) => {
+			const userId = await seedUser(orgId, db);
+			const id = `iso-answer-${randomUUID()}`;
+			await db.query(
+				`INSERT INTO career_answer (id, organization_id, user_id, question, answer, source, scope, employer, fact_ids, story_ids, evidence, reviewed_at, duplicate_key)
+				 VALUES ($1, $2, $3, 'q', 'a', 'manual', 'reusable', '', '[]', '[]', '[]', now(), $1)`,
+				[id, orgId, userId],
+			);
+			return id;
+		},
+	},
 	// CAREEROS (P1-T09): the three remaining tenant tables. custom_domain and web_access_credentials have a composite
 	// key and no id column, so they are looked up by user_id (unique within one seeded row).
 	{
@@ -331,22 +492,10 @@ export const globalTables: readonly AllowListEntry[] = [
  * (a table that is both registered and pending fails the check).
  */
 export const pendingTenantTables: readonly AllowListEntry[] = [
-	// TODO(P1-T07): career.
-	...[
-		"career_profile",
-		"career_fact",
-		"career_story",
-		"career_artifact",
-		"career_schedule",
-		"career_job",
-		"career_notification",
-		"career_opportunity",
-		"career_workspace",
-		"career_transcript",
-		"career_answer",
-	].map((table) => ({ table, reason: "Pending P1-T07 (career)" })),
-	// TODO(P1-T08): agent and AI.
-	...["ai_providers", "agent_threads", "agent_messages", "agent_attachments", "agent_actions", "ai_content_report"].map(
-		(table) => ({ table, reason: "Pending P1-T08 (agent and AI)" }),
-	),
-];
+	"ai_providers",
+	"agent_threads",
+	"agent_messages",
+	"agent_attachments",
+	"agent_actions",
+	"ai_content_report",
+].map((table) => ({ table, reason: "Pending P1-T08 (agent and AI)" }));

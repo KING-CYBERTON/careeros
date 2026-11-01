@@ -4,6 +4,8 @@ import type { reuseAnswerInputSchema } from "@reactive-resume/schema/application
 import type z from "zod";
 import { createHash } from "node:crypto";
 import { isDeepStrictEqual } from "node:util";
+// CAREEROS: tenant column for saved answers, and per-organization duplicate keys (P1-T07, D11)
+import { requireOrgId } from "@careeros/tenancy";
 import { ORPCError } from "@orpc/client";
 import { and, desc, eq } from "drizzle-orm";
 import { db } from "@reactive-resume/db/client";
@@ -57,7 +59,7 @@ export const reviewedAnswers = {
 		const rows = await db
 			.select()
 			.from(tables.careerAnswer)
-			.where(eq(tables.careerAnswer.userId, userId))
+			.where(and(eq(tables.careerAnswer.organizationId, requireOrgId()), eq(tables.careerAnswer.userId, userId)))
 			.orderBy(desc(tables.careerAnswer.reviewedAt));
 		const current = await knowledge(db, userId);
 		return rows.map((row) => {
@@ -120,7 +122,13 @@ export const reviewedAnswers = {
 			const [duplicate] = await tx
 				.select()
 				.from(tables.careerAnswer)
-				.where(and(eq(tables.careerAnswer.userId, userId), eq(tables.careerAnswer.duplicateKey, duplicateKey)));
+				.where(
+					and(
+						eq(tables.careerAnswer.organizationId, requireOrgId()),
+						eq(tables.careerAnswer.userId, userId),
+						eq(tables.careerAnswer.duplicateKey, duplicateKey),
+					),
+				);
 			if (duplicate && duplicate.id !== input.id)
 				throw new ORPCError("CONFLICT", {
 					message: "An answer for this question and scope already exists. Edit that saved answer instead.",
@@ -144,7 +152,7 @@ export const reviewedAnswers = {
 				? await tx.update(tables.careerAnswer).set(values).where(eq(tables.careerAnswer.id, existing.id)).returning()
 				: await tx
 						.insert(tables.careerAnswer)
-						.values({ ...values, userId })
+						.values({ ...values, organizationId: requireOrgId(), userId })
 						.returning();
 			if (!row) throw new ORPCError("NOT_FOUND");
 			return row;

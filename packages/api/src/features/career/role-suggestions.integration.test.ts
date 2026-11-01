@@ -95,6 +95,7 @@ describe.skipIf(!databaseUrl)("reviewed target role suggestions", () => {
 			.insert(tables.careerFact)
 			.values([
 				{
+					organizationId: TEST_ORGANIZATION_ID,
 					id: "private",
 					userId: "alice",
 					applicationId: "alice-app",
@@ -104,6 +105,7 @@ describe.skipIf(!databaseUrl)("reviewed target role suggestions", () => {
 					sourceKey: "p",
 				},
 				{
+					organizationId: TEST_ORGANIZATION_ID,
 					id: "active",
 					userId: "alice",
 					text: "I maintain reliable services.",
@@ -112,6 +114,7 @@ describe.skipIf(!databaseUrl)("reviewed target role suggestions", () => {
 					sourceKey: "a",
 				},
 				{
+					organizationId: TEST_ORGANIZATION_ID,
 					id: "excluded",
 					userId: "alice",
 					status: "excluded",
@@ -121,6 +124,7 @@ describe.skipIf(!databaseUrl)("reviewed target role suggestions", () => {
 					sourceKey: "e",
 				},
 				{
+					organizationId: TEST_ORGANIZATION_ID,
 					id: "forgotten",
 					userId: "alice",
 					status: "forgotten",
@@ -130,6 +134,7 @@ describe.skipIf(!databaseUrl)("reviewed target role suggestions", () => {
 					sourceKey: "f",
 				},
 				{
+					organizationId: TEST_ORGANIZATION_ID,
 					id: "foreign",
 					userId: "bob",
 					text: "BOB-PRIVATE",
@@ -239,6 +244,7 @@ describe.skipIf(!databaseUrl)("reviewed target role suggestions", () => {
 		await getDb()
 			.insert(tables.careerFact)
 			.values({
+				organizationId: TEST_ORGANIZATION_ID,
 				userId: "alice",
 				text: "Old claim",
 				category: "experience",
