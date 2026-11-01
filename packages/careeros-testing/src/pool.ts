@@ -1,4 +1,4 @@
-// CAREEROS: test-only helper for the auth integration suites. Not imported by runtime code.
+// CAREEROS: test-only helper shared by the auth and db integration suites. Not imported by runtime code.
 import type { Pool } from "pg";
 
 const ADMIN_SHUTDOWN = "57P01";

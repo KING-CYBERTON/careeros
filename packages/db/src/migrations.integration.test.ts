@@ -4,6 +4,7 @@ import { tmpdir } from "node:os";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { describe, expect, it } from "vite-plus/test";
+import { guardTestPool } from "@careeros/testing";
 import { is } from "drizzle-orm";
 import { drizzle } from "drizzle-orm/node-postgres";
 import { migrate } from "drizzle-orm/node-postgres/migrator";
@@ -31,6 +32,7 @@ describe.skipIf(!process.env.COVER_LETTER_TEST_DATABASE_URL)("database migration
 				const url = new URL(databaseUrl);
 				url.pathname = `/${databaseName}`;
 				const pool = new Pool({ connectionString: url.toString(), max: 1 });
+				const guarded = guardTestPool(pool);
 				const db = drizzle({ client: pool });
 				const data = {
 					basics: { name: "Migration fixture" },
@@ -181,7 +183,7 @@ describe.skipIf(!process.env.COVER_LETTER_TEST_DATABASE_URL)("database migration
 						);
 					}
 				} finally {
-					await pool.end();
+					await guarded.close();
 					await admin.query(`DROP DATABASE "${databaseName}"`);
 				}
 			}

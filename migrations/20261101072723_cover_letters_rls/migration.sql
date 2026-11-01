@@ -99,9 +99,20 @@ BEGIN
 		WHERE user_id = from_user;
 END
 $$;--> statement-breakpoint
+-- 5. Scheduled Trash purge: the scheduler has no organization, and row-level security hides every row from it. This
+-- returns only the ids of organizations that hold trashed resumes or cover letters older than the cutoff (never row
+-- data), so the purge can then run once per organization inside withOrgContext. Review 1 H1.
+CREATE OR REPLACE FUNCTION public.careeros_orgs_with_expired_trash(cutoff timestamptz) RETURNS SETOF text
+LANGUAGE sql STABLE SECURITY DEFINER SET search_path = pg_catalog, public AS $$
+	SELECT r.organization_id FROM public.resume r WHERE r.trashed_at < $1
+	UNION
+	SELECT c.organization_id FROM public.cover_letter c WHERE c.trashed_at < $1
+$$;--> statement-breakpoint
 DO $$ BEGIN
 	REVOKE ALL ON FUNCTION public.careeros_move_guest_cover_letters(text, text, text) FROM PUBLIC;
+	REVOKE ALL ON FUNCTION public.careeros_orgs_with_expired_trash(timestamptz) FROM PUBLIC;
 	IF EXISTS (SELECT 1 FROM pg_roles WHERE rolname = 'careeros_app') THEN
 		GRANT EXECUTE ON FUNCTION public.careeros_move_guest_cover_letters(text, text, text) TO careeros_app;
+		GRANT EXECUTE ON FUNCTION public.careeros_orgs_with_expired_trash(timestamptz) TO careeros_app;
 	END IF;
 END $$;

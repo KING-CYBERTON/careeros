@@ -1,6 +1,7 @@
 -- CAREEROS P1-T05 down migration. Not run by drizzle (it only reads migration.sql); run it by hand as the owner role.
 -- Drops the function, policies, indexes and columns of the two cover letter tables. Organizations the up migration may
 -- have backfilled (same marker as P1-T04) are left for P1-T04's down migration, which owns that marker.
+DROP FUNCTION IF EXISTS public.careeros_orgs_with_expired_trash(timestamptz);
 DROP FUNCTION IF EXISTS public.careeros_move_guest_cover_letters(text, text, text);
 DROP POLICY IF EXISTS "owner_access" ON "cover_letter";
 DROP POLICY IF EXISTS "tenant_isolation" ON "cover_letter";

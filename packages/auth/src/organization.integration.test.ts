@@ -1,11 +1,11 @@
 import { randomUUID } from "node:crypto";
 import { fileURLToPath } from "node:url";
 import { afterAll, beforeAll, describe, expect, it, vi } from "vite-plus/test";
+import { guardTestPool } from "@careeros/testing";
 import { drizzle } from "drizzle-orm/node-postgres";
 import { migrate } from "drizzle-orm/node-postgres/migrator";
 import { Pool } from "pg";
 import { authOrganizationRelations } from "@reactive-resume/db/schema";
-import { guardTestPool } from "./integration-test-pool";
 
 const fixture = vi.hoisted(() => ({
 	db: undefined as unknown,

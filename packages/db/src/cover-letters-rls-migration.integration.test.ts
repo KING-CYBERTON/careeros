@@ -4,6 +4,7 @@ import { tmpdir } from "node:os";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { describe, expect, it } from "vite-plus/test";
+import { guardTestPool } from "@careeros/testing";
 import { drizzle } from "drizzle-orm/node-postgres";
 import { migrate } from "drizzle-orm/node-postgres/migrator";
 import { Pool } from "pg";
@@ -25,6 +26,7 @@ describe.skipIf(!process.env.COVER_LETTER_TEST_DATABASE_URL)("cover letter tenan
 		const baselineFolder = await mkdtemp(path.join(tmpdir(), "careeros-t05-migrations-"));
 		const databaseName = `migration_t05_${randomUUID().replaceAll("-", "")}`;
 		let pool: Pool | undefined;
+		let closePool: (() => Promise<void>) | undefined;
 		try {
 			for (const name of await readdir(migrationsFolder)) {
 				if (name < FOLDER) await symlink(path.join(migrationsFolder, name), path.join(baselineFolder, name));
@@ -33,6 +35,7 @@ describe.skipIf(!process.env.COVER_LETTER_TEST_DATABASE_URL)("cover letter tenan
 			const url = new URL(databaseUrl);
 			url.pathname = `/${databaseName}`;
 			pool = new Pool({ connectionString: url.toString(), max: 1 });
+			closePool = guardTestPool(pool).close;
 			await migrate(drizzle({ client: pool }), { migrationsFolder: baselineFolder });
 			const q = async <T extends Record<string, unknown>>(sql: string, params: unknown[] = []) =>
 				(await (pool as Pool).query<T>(sql, params)).rows;
@@ -144,7 +147,11 @@ describe.skipIf(!process.env.COVER_LETTER_TEST_DATABASE_URL)("cover letter tenan
 					TABLES,
 				]),
 			).toEqual([]);
-			expect(await q(`SELECT proname FROM pg_proc WHERE proname = 'careeros_move_guest_cover_letters'`)).toEqual([]);
+			expect(
+				await q(
+					`SELECT proname FROM pg_proc WHERE proname IN ('careeros_move_guest_cover_letters', 'careeros_orgs_with_expired_trash')`,
+				),
+			).toEqual([]);
 			expect(await q(`SELECT indexname FROM pg_indexes WHERE indexname LIKE 'cover_letter%organization_id%'`)).toEqual(
 				[],
 			);
@@ -165,7 +172,7 @@ describe.skipIf(!process.env.COVER_LETTER_TEST_DATABASE_URL)("cover letter tenan
 			await q(migration);
 			expect((await snapshot()).rows).toEqual(first.rows);
 		} finally {
-			await pool?.end().catch(() => undefined);
+			await closePool?.().catch(() => undefined);
 			await admin.query(`DROP DATABASE IF EXISTS "${databaseName}" WITH (FORCE)`).catch(() => undefined);
 			await admin.end();
 			await rm(baselineFolder, { recursive: true, force: true });
