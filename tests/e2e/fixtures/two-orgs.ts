@@ -1,5 +1,5 @@
-import type { SeedIds } from "./cross-org-inventory";
 import type { E2EAccount } from "./data";
+import type { SeedIds } from "@careeros/testing/cross-org-inventory";
 import type { APIRequestContext, APIResponse, PlaywrightWorkerArgs } from "@playwright/test";
 import { startAiStub } from "./ai-stub";
 import { createInviteeAccount, deleteE2EOrganizations } from "./careeros-org";

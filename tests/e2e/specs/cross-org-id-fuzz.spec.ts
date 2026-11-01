@@ -1,5 +1,5 @@
-import type { BuiltRequest, McpTool, OpenApiDocument, Operation } from "../fixtures/cross-org-inventory";
 import type { TwoOrgs } from "../fixtures/two-orgs";
+import type { BuiltRequest, McpTool, OpenApiDocument, Operation } from "@careeros/testing/cross-org-inventory";
 import type { APIRequestContext } from "@playwright/test";
 import {
 	buildMcpArguments,
@@ -11,7 +11,7 @@ import {
 	NO_TENANT_ID,
 	OVERRIDES,
 	readOperations,
-} from "../fixtures/cross-org-inventory";
+} from "@careeros/testing/cross-org-inventory";
 import { expect, test } from "../fixtures/test";
 import { createTwoOrgs, snapshotOrgA } from "../fixtures/two-orgs";
 

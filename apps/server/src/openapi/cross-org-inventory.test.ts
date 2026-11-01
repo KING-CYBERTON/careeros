@@ -1,5 +1,4 @@
 import { describe, expect, it, vi } from "vite-plus/test";
-import { isProcedure } from "@orpc/server";
 // CAREEROS: P1-Q03. The e2e fuzz keeps its inventory logic in a plain module; this test proves it against the router object.
 import {
 	buildRequest,
@@ -10,7 +9,8 @@ import {
 	type OpenApiDocument,
 	type SeedIds,
 	ID_KINDS,
-} from "../../../../tests/e2e/fixtures/cross-org-inventory";
+} from "@careeros/testing/cross-org-inventory";
+import { isProcedure } from "@orpc/server";
 
 vi.mock("@reactive-resume/auth/config", () => ({ auth: {}, verifyOAuthToken: vi.fn() }));
 
