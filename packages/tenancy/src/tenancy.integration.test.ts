@@ -35,7 +35,7 @@ describe.skipIf(!configured)("tenancy core (real Postgres)", () => {
 		pools = createPools(env);
 		schema = await createTestSchema(pools.owner, "tenancy_test");
 		await pools.owner.query(
-			`create table "${schema.name}"."member" (id text primary key, organization_id text not null, user_id text not null)`,
+			`create table "${schema.name}"."member" (id text primary key, organization_id text not null, user_id text not null, created_at timestamptz not null default now())`,
 		);
 		const url = new URL(env.appUrl);
 		url.searchParams.set("options", `-c search_path=${schema.name},public`);
@@ -396,6 +396,63 @@ describe.skipIf(!configured)("tenancy core (real Postgres)", () => {
 					session: { userId, activeOrganizationId: memberOrg },
 				}),
 			).resolves.toBeUndefined();
+		});
+
+		describe("resolveOrgForAuthentication fallback (P1-T04 review 1, M1)", () => {
+			const userA = `user_${randomUUID()}`;
+			const userB = `user_${randomUUID()}`;
+			const noMembership = `user_${randomUUID()}`;
+			const orgA = `org_${randomUUID()}`;
+			const orgB = `org_${randomUUID()}`;
+			const orgA2 = `org_${randomUUID()}`;
+
+			beforeAll(async () => {
+				const insert = async (org: string, user: string, createdAt: string) =>
+					pools.owner.query(
+						`insert into "${schema.name}"."member" (id, organization_id, user_id, created_at) values ($1, $2, $3, $4)`,
+						[randomUUID(), org, user, createdAt],
+					);
+				await insert(orgA, userA, "2026-01-01T00:00:00Z");
+				await insert(orgA2, userA, "2026-02-01T00:00:00Z");
+				await insert(orgB, userB, "2026-01-01T00:00:00Z");
+			});
+
+			it("resolves a bearer token to the owner's oldest membership, never another user's", async () => {
+				await expect(tenancy.resolveOrgForAuthentication({ method: "bearer", user: { id: userA } })).resolves.toBe(
+					orgA,
+				);
+				await expect(tenancy.resolveOrgForAuthentication({ method: "bearer", user: { id: userB } })).resolves.toBe(
+					orgB,
+				);
+			});
+
+			it("refuses a bearer token whose user has no membership", async () => {
+				await expect(
+					tenancy.resolveOrgForAuthentication({ method: "bearer", user: { id: noMembership } }),
+				).resolves.toBeUndefined();
+			});
+
+			it("resolves an API key without an organization to the owner's oldest membership, or none", async () => {
+				await expect(
+					tenancy.resolveOrgForAuthentication({ method: "apiKey", apiKeyId: "missing_key", user: { id: userA } }),
+				).resolves.toBe(orgA);
+				await expect(
+					tenancy.resolveOrgForAuthentication({
+						method: "apiKey",
+						apiKeyId: "missing_key",
+						user: { id: noMembership },
+					}),
+				).resolves.toBeUndefined();
+				await expect(
+					tenancy.resolveOrgForAuthentication({ method: "apiKey", user: { id: userA } }),
+				).resolves.toBeUndefined();
+			});
+
+			it("does not fall back for sessions", async () => {
+				await expect(
+					tenancy.resolveOrgForAuthentication({ method: "session", user: { id: userA }, activeOrganizationId: null }),
+				).resolves.toBeUndefined();
+			});
 		});
 	});
 });

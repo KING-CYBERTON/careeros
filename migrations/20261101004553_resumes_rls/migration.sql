@@ -7,7 +7,8 @@
 INSERT INTO "organization" ("id", "name", "slug", "metadata")
 SELECT
 	'bf_' || md5(u."id"),
-	left(coalesce(nullif(btrim(u."name"), ''), nullif(btrim(u."username"), ''), 'My') || '''s workspace', 100),
+	CASE WHEN coalesce(nullif(btrim(u."name"), ''), nullif(btrim(u."username"), '')) IS NULL THEN 'Personal workspace'
+		ELSE left(coalesce(nullif(btrim(u."name"), ''), nullif(btrim(u."username"), '')) || '''s workspace', 100) END,
 	'u-' || right(md5(u."id"), 16),
 	'{"careeros_backfill":true}'
 FROM "user" u
@@ -26,6 +27,13 @@ SET "active_organization_id" = (
 )
 WHERE s."active_organization_id" IS NULL
 	AND EXISTS (SELECT 1 FROM "member" m WHERE m."user_id" = s."user_id");--> statement-breakpoint
+-- Keys created before P1-T03 have no organization; they get the owner's oldest membership (the sign-in hook's rule), so
+-- existing API keys keep working. Review 1 M1. Keys of users with no membership stay NULL and fail closed.
+UPDATE "apikey" k
+SET "organization_id" = (
+	SELECT m."organization_id" FROM "member" m WHERE m."user_id" = k."reference_id" ORDER BY m."created_at", m."id" LIMIT 1
+)
+WHERE k."organization_id" IS NULL;--> statement-breakpoint
 -- 2. organization_id: nullable first, backfilled, then NOT NULL with its foreign key.
 ALTER TABLE "resume" ADD COLUMN IF NOT EXISTS "organization_id" text;--> statement-breakpoint
 ALTER TABLE "resume_version" ADD COLUMN IF NOT EXISTS "organization_id" text;--> statement-breakpoint

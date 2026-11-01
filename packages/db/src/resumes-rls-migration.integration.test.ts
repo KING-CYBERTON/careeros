@@ -1,4 +1,4 @@
-import { randomUUID } from "node:crypto";
+import { createHash, randomUUID } from "node:crypto";
 import { mkdtemp, readFile, readdir, rm, symlink } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import path from "node:path";
@@ -13,6 +13,7 @@ import { Pool } from "pg";
 // migration; runs it a second time; then runs the down migration. Needs CREATE DATABASE permission; owns and deletes
 // one disposable database, never the supplied one.
 const migrationsFolder = fileURLToPath(new URL("../../../migrations", import.meta.url));
+const md5Of = (value: string) => createHash("md5").update(value).digest("hex");
 const FOLDER = "20261101004553_resumes_rls";
 const TABLES = ["resume", "resume_version", "resume_slug_redirect", "resume_statistics", "resume_statistics_daily"];
 
@@ -42,6 +43,7 @@ describe.skipIf(!process.env.COVER_LETTER_TEST_DATABASE_URL)("resume tenancy mig
 					id,
 				]);
 			}
+			await q(`INSERT INTO "user" (id,name,email,username,display_username) VALUES ('u4',' ','u4@x.test','  ','  ')`);
 			await q(`INSERT INTO organization (id,name,slug) VALUES ('existing','Existing','existing')`);
 			await q(`INSERT INTO member (id,organization_id,user_id,role) VALUES ('m3','existing','u3','member')`);
 			for (const [id, userId] of [
@@ -55,6 +57,11 @@ describe.skipIf(!process.env.COVER_LETTER_TEST_DATABASE_URL)("resume tenancy mig
 			}
 			await q(
 				`INSERT INTO session (id,token,user_id,expires_at,active_organization_id) VALUES ('s3b','s3b','u3',now() + interval '1 day','existing')`,
+			);
+			// API keys: k1 has no organization (gets u3's), k2 already has one (kept), k3 belongs to a user without a membership
+			// until the backfill gives them one.
+			await q(
+				`INSERT INTO apikey (id,key,reference_id,organization_id) VALUES ('k1','k1','u3',NULL),('k2','k2','u3','other'),('k3','k3','u1',NULL)`,
 			);
 			await q(`INSERT INTO resume (id,name,slug,data,user_id) VALUES
 				('r1','R1','r1','{}','u1'),('r2','R2','r2','{}','u1'),('r3','R3','r3','{}','u2'),('r4','R4','r4','{}','u3')`);
@@ -83,7 +90,14 @@ describe.skipIf(!process.env.COVER_LETTER_TEST_DATABASE_URL)("resume tenancy mig
 
 			// Every user has exactly one organization; the existing membership is untouched.
 			const backfilled = first.organizations.filter((o) => o.metadata === '{"careeros_backfill":true}');
-			expect(backfilled).toHaveLength(2);
+			expect(backfilled).toHaveLength(3);
+			expect(backfilled.find((o) => o.id === `bf_${md5Of("u4")}`)?.name).toBe("Personal workspace");
+			const keys = await q(`SELECT id, organization_id FROM apikey ORDER BY id`);
+			expect(keys).toEqual([
+				{ id: "k1", organization_id: "existing" },
+				{ id: "k2", organization_id: "other" },
+				{ id: "k3", organization_id: first.members.find((m) => m.user_id === "u1")?.organization_id },
+			]);
 			expect(first.members.filter((m) => m.user_id === "u3")).toEqual([
 				{ id: "m3", organization_id: "existing", user_id: "u3", role: "member" },
 			]);
