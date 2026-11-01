@@ -3,7 +3,9 @@
 // organization behaviour itself (`mcp/handler-org.test.ts`) declare their own `vi.mock("@careeros/tenancy")`.
 import { vi } from "vite-plus/test";
 
-vi.mock("@careeros/tenancy", () => ({
+// P2-T03: the real module underneath, so exports added later (hostTrustedOrigins, bustHostCache, ...) cannot go missing.
+vi.mock("@careeros/tenancy", async (importOriginal) => ({
+	...(await importOriginal<typeof import("@careeros/tenancy")>()),
 	ORG_CONTEXT_REQUIRED: true,
 	requireOrgId: () => "org_test",
 	currentOrgId: () => "org_test",

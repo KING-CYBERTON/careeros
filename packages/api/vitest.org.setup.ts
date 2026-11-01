@@ -6,7 +6,9 @@ import { vi } from "vite-plus/test";
 
 export const TEST_ORGANIZATION_ID = "org_test";
 
-vi.mock("@careeros/tenancy", () => ({
+// P2-T03: the real module underneath, so exports added later (hostTrustedOrigins, bustHostCache, ...) cannot go missing.
+vi.mock("@careeros/tenancy", async (importOriginal) => ({
+	...(await importOriginal<typeof import("@careeros/tenancy")>()),
 	ORG_CONTEXT_REQUIRED: true,
 	TenancyError: class TenancyError extends Error {},
 	// A runner that executes at once; tests read `captureOrgScope.mock.results` to see which work it wrapped.
