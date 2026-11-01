@@ -14,3 +14,23 @@ export {
 	type ResolveOrgInput,
 	type SessionOrgSource,
 } from "./resolve";
+export {
+	bustHostCache,
+	createHostResolver,
+	currentHost,
+	hostTrustedOrigins,
+	lookupOrgBySlug,
+	matchOrgHost,
+	normalizeHostname,
+	parseHost,
+	parseOrgHostPattern,
+	platformHostsFromEnv,
+	resolveHost,
+	runWithHost,
+	setHostResolverForTesting,
+	type HostContext,
+	type HostOrg,
+	type HostResolver,
+	type HostResolverConfig,
+	type OrgHostPattern,
+} from "./host";

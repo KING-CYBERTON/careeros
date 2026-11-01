@@ -17,6 +17,9 @@ beforeEach(() => {
 		"REDIS_URL",
 		"WEB_FONT_BASE_URL",
 		"STORAGE_HEALTHCHECK_TIMEOUT_MS",
+		"ORG_HOST_PATTERN",
+		"TRUST_FORWARDED_HOST",
+		"APP_ALIAS_URL",
 	])
 		vi.stubEnv(name, undefined);
 });
@@ -182,5 +185,50 @@ describe("redis url userinfo", () => {
 			expect.any(String),
 			expect.arrayContaining([expect.objectContaining({ code: "invalid_format", format: "url" })]),
 		);
+	});
+});
+
+// CAREEROS (P2-T03)
+describe("organization host configuration", () => {
+	it("is off by default and does not trust X-Forwarded-Host", async () => {
+		const { env } = await import("./server");
+		expect(env.ORG_HOST_PATTERN).toBeUndefined();
+		expect(env.TRUST_FORWARDED_HOST).toBe(false);
+	});
+
+	it.each(["{slug}-careeros.ayopa.co.ke", "{SLUG}.Example.com"])("accepts %s", async (value) => {
+		vi.stubEnv("ORG_HOST_PATTERN", value);
+		vi.stubEnv("TRUST_FORWARDED_HOST", "true");
+		const { env } = await import("./server");
+		expect(env.ORG_HOST_PATTERN).toBe(value.toLowerCase());
+		expect(env.TRUST_FORWARDED_HOST).toBe(true);
+	});
+
+	it.each(["example.com", "{slug}.{slug}.example.com", "{slug}.example.com:3000", "{slug}/x.example.com"])(
+		"rejects %s",
+		async (value) => {
+			vi.stubEnv("ORG_HOST_PATTERN", value);
+			vi.spyOn(console, "error").mockImplementation(() => {});
+			await expect(import("./server")).rejects.toThrow(/Invalid environment variables|Use a host name/);
+		},
+	);
+
+	it("rejects a pattern the platform host matches", async () => {
+		vi.stubEnv("APP_URL", "https://app.example.com");
+		vi.stubEnv("ORG_HOST_PATTERN", "{slug}.example.com");
+		await expect(import("./server")).rejects.toThrow("must not match the host of APP_URL");
+	});
+
+	it("rejects a pattern the alias host matches", async () => {
+		vi.stubEnv("APP_URL", "https://careeros.test");
+		vi.stubEnv("APP_ALIAS_URL", "https://app.example.com");
+		vi.stubEnv("ORG_HOST_PATTERN", "{slug}.example.com");
+		await expect(import("./server")).rejects.toThrow("must not match the host of APP_URL");
+	});
+
+	it("accepts a pattern the platform host does not match", async () => {
+		vi.stubEnv("APP_URL", "https://careeros.example.com");
+		vi.stubEnv("ORG_HOST_PATTERN", "{slug}-careeros.example.com");
+		expect((await import("./server")).env.ORG_HOST_PATTERN).toBe("{slug}-careeros.example.com");
 	});
 });
