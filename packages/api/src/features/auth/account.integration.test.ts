@@ -53,6 +53,13 @@ describe.skipIf(!process.env.OAUTH_TEST_DATABASE_URL)("account wrapper ownership
 			"career_story",
 			"career_transcript",
 			"career_workspace",
+			// CAREEROS (P1-T08): the assistant and AI tables; the guest move reads them
+			"ai_providers",
+			"agent_threads",
+			"agent_messages",
+			"agent_attachments",
+			"agent_actions",
+			"ai_content_report",
 			"resume_slug_redirect",
 			"released_username",
 			"storage_cleanup_job",

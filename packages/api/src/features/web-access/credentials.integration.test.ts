@@ -59,6 +59,10 @@ describe.skipIf(!process.env.INTEGRATIONS_TEST_DATABASE_URL)("integration creden
 				.filter((statement) => !owned || owned.test(statement.trim()));
 			await pool.query(statements.join("\n").replaceAll('"public".', ""));
 		}
+		// CAREEROS (P1-T08): the AI tables carry the tenant column; this fixture's rows all belong to the mocked organization.
+		await pool.query(
+			"ALTER TABLE ai_providers ADD COLUMN organization_id text NOT NULL DEFAULT 'org_test'; ALTER TABLE agent_threads ADD COLUMN organization_id text NOT NULL DEFAULT 'org_test'",
+		);
 		web = (await import("./credentials")).webAccessService;
 		ai = (await import("../ai-providers/service")).aiProvidersService;
 	});

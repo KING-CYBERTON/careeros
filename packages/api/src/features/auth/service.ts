@@ -109,10 +109,10 @@ export const authService = {
 			applications: applications.map(
 				({ userId: _userId, organizationId: _organizationId, ...application }) => application,
 			),
-			aiContentReports: await db
-				.select()
-				.from(schema.aiContentReport)
-				.where(eq(schema.aiContentReport.userId, input.userId)),
+			// CAREEROS (P1-T08): the active organization's reports; the tenant column is not part of the export
+			aiContentReports: (
+				await db.select().from(schema.aiContentReport).where(eq(schema.aiContentReport.userId, input.userId))
+			).map(({ organizationId: _organizationId, ...report }) => report),
 			career: await careerService.exportData(input.userId),
 			applicationProfile: await applicationProfileService.get(input.userId),
 		};

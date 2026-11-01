@@ -348,7 +348,7 @@ describe.skipIf(!databaseUrl)("role recipient approval through router, PostgreSQ
 			});
 			let disclosed = (await client().providers.list({}))[0];
 			assert(disclosed);
-			expect(disclosed.id).toBe("server-ai:alice");
+			expect(disclosed.id).toBe("server-ai:org_test:alice");
 			expect((await client().providers.list({}))[0]?.recipientVersion).toBe(disclosed.recipientVersion);
 			await expect(client().career.suggestTargetRoles(input(disclosed))).resolves.toMatchObject({
 				suggestions: [{ role: "Engineer" }],

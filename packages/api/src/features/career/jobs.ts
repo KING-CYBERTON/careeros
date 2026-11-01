@@ -116,8 +116,9 @@ export const careerJobs = {
 				throw new ORPCError("BAD_REQUEST", { message: "Choose a tested AI provider for scheduled preparation." });
 			await aiProvidersService.getRunnableById({ userId, id: input.aiProviderId });
 		} else if (input.aiProviderId) {
-			// Any other schedule may name a connection too; it still has to be one of the account's own.
-			// TODO(P1-T08): ai_provider joins the tenant boundary in T08; until then only its user_id ownership is checked.
+			// Any other schedule may name a connection too; it still has to be one of the account's own, in this organization
+			// (CAREEROS P1-T08: row-level security limits the lookup to the active organization, and the database refuses a
+			// provider of another organization through career_schedule_org_ai_provider_fkey).
 			const [provider] = await db
 				.select({ id: tables.aiProvider.id })
 				.from(tables.aiProvider)

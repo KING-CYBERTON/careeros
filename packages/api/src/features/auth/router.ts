@@ -248,7 +248,8 @@ export const authRouter = {
 				coverLetters: z.array(coverLetterSchema),
 				applications: z.array(applicationDto.getById.output),
 				applicationPipeline: applicationPipelineSchema,
-				aiContentReports: z.array(createSelectSchema(schema.aiContentReport)),
+				// CAREEROS (P1-T08): the tenant column is not part of the export
+				aiContentReports: z.array(createSelectSchema(schema.aiContentReport).omit({ organizationId: true })),
 				career: z.object({
 					profile: careerProfileDataSchema,
 					reviewedAnswers: z.array(reviewedAnswerSchema),
@@ -257,14 +258,14 @@ export const authRouter = {
 					artifacts: z.array(savedItemSchema),
 					schedules: z.array(careerScheduleSchema),
 					notifications: z.array(careerNotificationSchema),
-					threads: z.array(createSelectSchema(schema.agentThread)),
+					threads: z.array(createSelectSchema(schema.agentThread).omit({ organizationId: true })),
 					messages: z.array(
 						createSelectSchema(schema.agentMessage, {
 							// Preserve historical SDK/tool message fields in their original export form.
 							uiMessage: z.record(z.string(), z.unknown()),
-						}),
+						}).omit({ organizationId: true }),
 					),
-					attachments: z.array(createSelectSchema(schema.agentAttachment)),
+					attachments: z.array(createSelectSchema(schema.agentAttachment).omit({ organizationId: true })),
 					// CAREEROS (P1-T07): the tenant column is not part of the export
 					opportunities: z.array(
 						createSelectSchema(schema.careerOpportunity, { discoverySource: discoverySourceSchema.nullable() }).omit({

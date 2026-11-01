@@ -119,9 +119,32 @@ async function seedSchedule(orgId: string, db: pg.Pool): Promise<{ userId: strin
 	return { userId, scheduleId };
 }
 
+/** CAREEROS (P1-T08): a conversation (and its owner) in `orgId`, for the assistant tables that point at one. */
+async function seedThread(orgId: string, db: pg.Pool): Promise<{ userId: string; threadId: string }> {
+	const userId = await seedUser(orgId, db);
+	const threadId = `iso-thread-${randomUUID()}`;
+	await db.query(
+		`INSERT INTO agent_threads (id, organization_id, user_id, title) VALUES ($1, $2, $3, 'Isolation chat')`,
+		[threadId, orgId, userId],
+	);
+	return { userId, threadId };
+}
+
+/** CAREEROS (P1-T08): a saved AI connection (and its owner) in `orgId`. The key columns hold placeholders. */
+async function seedProvider(orgId: string, db: pg.Pool): Promise<{ userId: string; providerId: string }> {
+	const userId = await seedUser(orgId, db);
+	const providerId = `iso-provider-${randomUUID()}`;
+	await db.query(
+		`INSERT INTO ai_providers (id, organization_id, user_id, label, provider, model, encrypted_api_key, api_key_salt, api_key_hash, api_key_preview)
+		 VALUES ($1, $2, $3, 'Isolation provider', 'openai', 'model', 'x', 'x', 'x', 'x')`,
+		[providerId, orgId, userId],
+	);
+	return { userId, providerId };
+}
+
 /**
  * Every tenant table (one with an `organization_id` column) must be registered here. The five resume tables are
- * registered by P1-T04, the two cover letter tables by P1-T05 and the four application tables by P1-T06 and the eleven career tables by P1-T07. The route
+ * registered by P1-T04, the two cover letter tables by P1-T05 and the four application tables by P1-T06 the eleven career tables by P1-T07 and the six assistant and AI tables by P1-T08. The route
  * groups' API checks are attached by `packages/api` (it needs the router), which runs `runApiIsolationCheck` with this
  * entry's seed.
  */
@@ -368,6 +391,63 @@ export const isolationRegistry: readonly RegistryEntry[] = [
 			await db.query(
 				`INSERT INTO career_answer (id, organization_id, user_id, question, answer, source, scope, employer, fact_ids, story_ids, evidence, reviewed_at, duplicate_key)
 				 VALUES ($1, $2, $3, 'q', 'a', 'manual', 'reusable', '', '[]', '[]', '[]', now(), $1)`,
+				[id, orgId, userId],
+			);
+			return id;
+		},
+	},
+	// CAREEROS (P1-T08): the assistant and AI tables.
+	{
+		table: "ai_providers",
+		seed: async (orgId, db) => (await seedProvider(orgId, db)).providerId,
+	},
+	{
+		table: "agent_threads",
+		seed: async (orgId, db) => (await seedThread(orgId, db)).threadId,
+	},
+	{
+		table: "agent_messages",
+		seed: async (orgId, db) => {
+			const { userId, threadId } = await seedThread(orgId, db);
+			const id = `iso-message-${randomUUID()}`;
+			await db.query(
+				`INSERT INTO agent_messages (id, organization_id, user_id, thread_id, role, sequence, ui_message) VALUES ($1, $2, $3, $4, 'user', 0, '{}')`,
+				[id, orgId, userId, threadId],
+			);
+			return id;
+		},
+	},
+	{
+		table: "agent_attachments",
+		seed: async (orgId, db) => {
+			const { userId, threadId } = await seedThread(orgId, db);
+			const id = `iso-attachment-${randomUUID()}`;
+			await db.query(
+				`INSERT INTO agent_attachments (id, organization_id, user_id, thread_id, storage_key, filename, media_type, size) VALUES ($1, $2, $3, $4, $1, 'isolation.txt', 'text/plain', 1)`,
+				[id, orgId, userId, threadId],
+			);
+			return id;
+		},
+	},
+	{
+		table: "agent_actions",
+		seed: async (orgId, db) => {
+			const { userId, threadId } = await seedThread(orgId, db);
+			const id = `iso-action-${randomUUID()}`;
+			await db.query(
+				`INSERT INTO agent_actions (id, organization_id, user_id, thread_id, kind, title, operations, base_updated_at, applied_updated_at) VALUES ($1, $2, $3, $4, 'resume_patch', 'Isolation edit', '[]', now(), now())`,
+				[id, orgId, userId, threadId],
+			);
+			return id;
+		},
+	},
+	{
+		table: "ai_content_report",
+		seed: async (orgId, db) => {
+			const userId = await seedUser(orgId, db);
+			const id = `iso-report-${randomUUID()}`;
+			await db.query(
+				`INSERT INTO ai_content_report (id, organization_id, user_id, source, reason, content, note) VALUES ($1, $2, $3, 'other', 'other', 'Isolation report', '')`,
 				[id, orgId, userId],
 			);
 			return id;

@@ -38,6 +38,7 @@ it("stores submitted content under authenticated account, never a supplied owner
 		} as never),
 	).resolves.toEqual({ id: "report-1" });
 	expect(database.values).toHaveBeenCalledWith({
+		organizationId: "org_test",
 		userId: "owner",
 		source: "assistant",
 		reason: "dangerous",

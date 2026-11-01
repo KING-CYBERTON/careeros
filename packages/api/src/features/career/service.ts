@@ -1260,9 +1260,10 @@ export const careerService = {
 			artifacts: untenanted(artifacts),
 			schedules: untenanted(schedules),
 			notifications: untenanted(notifications).map((row) => ({ ...row, ...noticeText(row.notice) })),
-			threads,
-			messages,
-			attachments,
+			// CAREEROS (P1-T08): the tenant column is not part of the export
+			threads: untenanted(threads),
+			messages: untenanted(messages),
+			attachments: untenanted(attachments),
 			opportunities: untenanted(opportunities),
 			jobs: untenanted(jobs),
 			transcripts: untenanted(transcripts),
