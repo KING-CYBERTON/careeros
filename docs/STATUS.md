@@ -66,7 +66,7 @@
 
 ## Blockers
 
-- **Owner actions (Stephen)**, the session proxy blocks repo-settings writes: (1) default branch → `develop`; (2) branch protection on `develop` and `main` (require PR, checks `static`, `unit`, `e2e`, up to date, no force-push/deletion; `main` restricted to Opus release merges); (3) enable secret scanning, push protection and Dependabot alerts.
+- **Owner actions (Stephen)**, the session proxy blocks repo-settings writes: (1) default branch → `develop`; (2) branch protection on `develop` and `main` (require PR, checks `static`, `unit`, `e2e`, up to date, no force-push/deletion; `main` restricted to Opus release merges); (3) enable secret scanning, push protection and Dependabot alerts; (4) for Phase 2, enable Cloudflare for SaaS on `ayopa.co.ke` and add a scoped API token (SSL and Certificates: Edit) as the `CF_SAAS_API_TOKEN` repository and staging secret; P2-C01 will spell out the DNS and tunnel routing for `<slug>-careeros` hosts (a DNS wildcard must be a whole label, so this means either a `*.ayopa.co.ke` route filtered by the app or one DNS record per org).
 - **D6** confirmed by Stephen (personal org at signup).
 - Please leave merging to Opus: PRs merge only after a clean review and green CI.
 - **Q3** answered (no inbound 80/443 → Cloudflare Tunnel). **Q4** answered (DNS on Cloudflare).
@@ -81,7 +81,7 @@
 
 ## Planning docs
 
-- [plans/P2-PHASE-PLAN.md](plans/P2-PHASE-PLAN.md) (Phase 2 white-label approved except D2 host naming and D3 custom-domain TLS, both escalated to Stephen)
+- [plans/P2-PHASE-PLAN.md](plans/P2-PHASE-PLAN.md) (Phase 2 white-label approved; D2 and D3 decided by Stephen: `<slug>-careeros.ayopa.co.ke` staging hosts and Cloudflare for SaaS)
 - [plans/P1-PHASE-PLAN.md](plans/P1-PHASE-PLAN.md) (Phase 1 approved except D6; first specs P1-T01, P1-T02, P1-C01)
 - [plans/P0-VALIDATION.md](plans/P0-VALIDATION.md) · [plans/P0-UPSTREAM-INVENTORY.md](plans/P0-UPSTREAM-INVENTORY.md) (Q2 answered; Phase 1 split into 1a/1b)
 
