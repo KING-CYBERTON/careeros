@@ -152,3 +152,14 @@ export function accentTokens(primary: string): { light: AccentTokens; dark: Acce
 		},
 	};
 }
+
+// CAREEROS (P2-T04): one mail address with no display name. Mirrors the CHECK on `organization_branding.email_reply_to`:
+// exactly one "@", and no whitespace, control character, angle bracket, comma or semicolon, so it cannot carry a second
+// address or a header.
+// eslint-disable-next-line no-control-regex -- header injection guard.
+const SINGLE_EMAIL = /^[^@\s\u0000-\u001f\u007f<>,;]+@[^@\s\u0000-\u001f\u007f<>,;]+$/;
+
+/** True for a single bare mail address, at most 254 characters. */
+export function isSingleEmailAddress(value: unknown): value is string {
+	return typeof value === "string" && value.length <= 254 && SINGLE_EMAIL.test(value);
+}

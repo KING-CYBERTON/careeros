@@ -32,6 +32,7 @@ import { createLocalJWKSet, jwtVerify } from "jose";
 import { createElement } from "react";
 import { db } from "@reactive-resume/db/client";
 import * as schema from "@reactive-resume/db/schema";
+import { resetPasswordSubject, verifyEmailChangeSubject, verifyEmailSubject } from "@reactive-resume/email/subjects";
 import { ResetPasswordEmail, VerifyEmail, VerifyEmailChange } from "@reactive-resume/email/templates/auth";
 import { sendEmail } from "@reactive-resume/email/transport";
 import { env } from "@reactive-resume/env/server";
@@ -40,6 +41,8 @@ import { rateLimitConfig } from "@reactive-resume/utils/rate-limit";
 import { generateId, toUsername } from "@reactive-resume/utils/string";
 import { timezoneSchema } from "@reactive-resume/utils/timezone";
 import { isAllowedOAuthRedirectUri } from "@reactive-resume/utils/url-security.node";
+// CAREEROS: branded emails (P2-T04)
+import { buildEmailContext, withLinkOrigin } from "./email-brand";
 import { createGithubProfileMapper, createProfileMapper, isUsernameReserved } from "./oauth-profile";
 // CAREEROS: invite-only organization hosts (P2-T03)
 import { guardOrgHostSignUp } from "./org-host";
@@ -673,11 +676,15 @@ const getAuthConfig = () => {
 			maxPasswordLength: 64,
 			requireEmailVerification: false,
 			disableSignUp: env.FLAG_DISABLE_SIGNUPS || env.FLAG_DISABLE_EMAIL_AUTH,
-			sendResetPassword: async ({ user, url }) => {
+			// CAREEROS (P2-T04): branded by the request's host organization, and linked to that host (email-brand.ts).
+			sendResetPassword: async ({ user, url }, request) => {
+				const mail = await buildEmailContext({ source: "request", request });
 				await sendEmail({
 					to: user.email,
-					subject: "Reset your password",
-					react: createElement(ResetPasswordEmail, { url }),
+					subject: resetPasswordSubject(mail.brand),
+					react: createElement(ResetPasswordEmail, { url: withLinkOrigin(url, mail.linkOrigin), brand: mail.brand }),
+					fromName: mail.fromName,
+					replyTo: mail.replyTo,
 				});
 			},
 			revokeSessionsOnPasswordReset: true,
@@ -713,11 +720,15 @@ const getAuthConfig = () => {
 		emailVerification: {
 			sendOnSignUp: true,
 			autoSignInAfterVerification: true,
-			sendVerificationEmail: async ({ user, url }) => {
+			// CAREEROS (P2-T04): see sendResetPassword.
+			sendVerificationEmail: async ({ user, url }, request) => {
+				const mail = await buildEmailContext({ source: "request", request });
 				await sendEmail({
 					to: user.email,
-					subject: "Verify your email",
-					react: createElement(VerifyEmail, { url }),
+					subject: verifyEmailSubject(mail.brand),
+					react: createElement(VerifyEmail, { url: withLinkOrigin(url, mail.linkOrigin), brand: mail.brand }),
+					fromName: mail.fromName,
+					replyTo: mail.replyTo,
 				});
 			},
 		},
@@ -728,11 +739,20 @@ const getAuthConfig = () => {
 				// Better Auth's two-step change: the current address approves first, then the new address gets its own
 				// verification link. Sending this step to the new address would let anyone holding a session move the
 				// account to an address they control without the owner's approval.
-				sendChangeEmailConfirmation: async ({ user, newEmail, url }) => {
+				// CAREEROS (P2-T04): see sendResetPassword.
+				sendChangeEmailConfirmation: async ({ user, newEmail, url }, request) => {
+					const mail = await buildEmailContext({ source: "request", request });
 					await sendEmail({
 						to: user.email,
-						subject: "Approve your email change",
-						react: createElement(VerifyEmailChange, { url, previousEmail: user.email, newEmail }),
+						subject: verifyEmailChangeSubject(mail.brand),
+						react: createElement(VerifyEmailChange, {
+							url: withLinkOrigin(url, mail.linkOrigin),
+							previousEmail: user.email,
+							newEmail,
+							brand: mail.brand,
+						}),
+						fromName: mail.fromName,
+						replyTo: mail.replyTo,
 					});
 				},
 			},

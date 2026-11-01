@@ -6,6 +6,7 @@ import { Pool } from "pg";
 import * as tables from "@reactive-resume/db/schema";
 import { careerScheduleInputSchema } from "@reactive-resume/schema/career";
 import { ensureTestOrganization, TEST_ORGANIZATION_ID } from "../../test-organization";
+import { bustPublicBranding } from "../branding/cache";
 
 const fixture = vi.hoisted(() => ({
 	db: undefined as ReturnType<typeof drizzle> | undefined,
@@ -672,6 +673,33 @@ describe.skipIf(!configured)("durable career scheduling", () => {
 		expect(fixture.email).toHaveBeenCalledOnce();
 		await run();
 		expect(fixture.email).toHaveBeenCalledOnce();
+	});
+
+	// P2-T04: the notification's own organization decides the brand, sender name and reply-to.
+	it("sends the career notification in the brand of the row's organization", async () => {
+		await pool.query(
+			// The test setup truncates "user" with CASCADE, which also empties organization_branding: upsert.
+			`INSERT INTO organization_branding (organization_id, app_name, email_from_name, email_reply_to)
+			 VALUES ($1, 'Acme Careers', 'Acme Team', 'help@acme.example')
+			 ON CONFLICT (organization_id) DO UPDATE SET app_name = excluded.app_name,
+			   email_from_name = excluded.email_from_name, email_reply_to = excluded.email_reply_to`,
+			[TEST_ORGANIZATION_ID],
+		);
+		// A direct SQL change does not go through branding.update, which busts the 60 s cache.
+		bustPublicBranding(TEST_ORGANIZATION_ID);
+		const saved = await schedule();
+		await getDb().update(tables.careerSchedule).set({ email: true }).where(eq(tables.careerSchedule.id, saved.id));
+		await run();
+		expect(fixture.email).toHaveBeenCalledOnce();
+		expect(fixture.email.mock.calls[0]?.[0]).toMatchObject({
+			text: "You have a career update in Acme Careers.",
+			fromName: "Acme Team",
+			replyTo: "help@acme.example",
+		});
+		// The link stays on this application, whatever the brand.
+		expect(new URL(fixture.email.mock.calls[0]?.[0].url ?? "").origin).toBe(new URL(process.env.APP_URL ?? "").origin);
+		await pool.query(`DELETE FROM organization_branding WHERE organization_id = $1`, [TEST_ORGANIZATION_ID]);
+		bustPublicBranding(TEST_ORGANIZATION_ID);
 	});
 
 	it("deletes notifications read more than 90 days ago and keeps unread and recently read ones", async () => {
