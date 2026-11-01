@@ -59,6 +59,10 @@ describe.skipIf(!process.env.INTEGRATIONS_TEST_DATABASE_URL)("integration creden
 				.filter((statement) => !owned || owned.test(statement.trim()));
 			await pool.query(statements.join("\n").replaceAll('"public".', ""));
 		}
+		// CAREEROS (P1-T08): the AI tables carry the tenant column; this fixture's rows all belong to the mocked organization.
+		await pool.query(
+			"ALTER TABLE ai_providers ADD COLUMN organization_id text NOT NULL DEFAULT 'org_test'; ALTER TABLE agent_threads ADD COLUMN organization_id text NOT NULL DEFAULT 'org_test'",
+		);
 		// CAREEROS (P1-T09): the credentials table is keyed by organization; the fixture's organization is the one the
 		// shared tenancy test mock puts every call in. No foreign key: this schema has no organization table.
 		await pool.query(

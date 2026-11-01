@@ -128,6 +128,7 @@ describe.skipIf(!databaseUrl)("career knowledge, context and data lifecycle", ()
 			.insert(tables.agentThread)
 			.values({
 				id,
+				organizationId: TEST_ORGANIZATION_ID,
 				userId,
 				applicationId,
 				scope: applicationId ? "application" : "career",
@@ -283,6 +284,7 @@ describe.skipIf(!databaseUrl)("career knowledge, context and data lifecycle", ()
 			.values([
 				{
 					id: "alice-message",
+					organizationId: TEST_ORGANIZATION_ID,
 					userId: "alice",
 					threadId: "alice-shared",
 					role: "user",
@@ -294,6 +296,7 @@ describe.skipIf(!databaseUrl)("career knowledge, context and data lifecycle", ()
 				},
 				{
 					id: "private-message",
+					organizationId: TEST_ORGANIZATION_ID,
 					userId: "alice",
 					threadId: "alice-private",
 					role: "user",
@@ -302,6 +305,7 @@ describe.skipIf(!databaseUrl)("career knowledge, context and data lifecycle", ()
 				},
 				{
 					id: "bob-message",
+					organizationId: TEST_ORGANIZATION_ID,
 					userId: "bob",
 					threadId: "bob-private",
 					role: "user",
@@ -1012,6 +1016,7 @@ describe.skipIf(!databaseUrl)("career knowledge, context and data lifecycle", ()
 		await service.saveWorkspace("alice", "alice-app", { message: "Thanks for applying." }, { message: "" });
 		await getDb().insert(tables.aiProvider).values({
 			id: "alice-provider",
+			organizationId: TEST_ORGANIZATION_ID,
 			userId: "alice",
 			label: "Fixture",
 			provider: "openai",
@@ -1063,6 +1068,7 @@ describe.skipIf(!databaseUrl)("career knowledge, context and data lifecycle", ()
 			model: "fixture-transcription",
 		});
 		await getDb().insert(tables.agentAttachment).values({
+			organizationId: TEST_ORGANIZATION_ID,
 			userId: "alice",
 			threadId: "alice-shared",
 			messageId: "alice-message",

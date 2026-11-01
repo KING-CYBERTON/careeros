@@ -80,8 +80,8 @@ describe.skipIf(!process.env.COVER_LETTER_TEST_DATABASE_URL)("cover-letter owned
 			`ALTER TABLE cover_letter ADD COLUMN organization_id text NOT NULL; ALTER TABLE cover_letter_version ADD COLUMN organization_id text NOT NULL;`,
 		);
 		await fixture.pool
-			.query(`CREATE TABLE agent_threads (id text PRIMARY KEY, user_id text, working_resume_id text, cover_letter_id text, edits_accepted integer DEFAULT 0, updated_at timestamptz DEFAULT now());
-		CREATE TABLE agent_messages (id text PRIMARY KEY, user_id text, thread_id text, role text DEFAULT 'assistant', status text DEFAULT 'streaming', sequence integer DEFAULT 0, error text, ui_message jsonb, created_at timestamptz DEFAULT now(), updated_at timestamptz DEFAULT now());`);
+			.query(`CREATE TABLE agent_threads (id text PRIMARY KEY, user_id text, organization_id text, working_resume_id text, cover_letter_id text, edits_accepted integer DEFAULT 0, updated_at timestamptz DEFAULT now());
+		CREATE TABLE agent_messages (id text PRIMARY KEY, user_id text, organization_id text, thread_id text, role text DEFAULT 'assistant', status text DEFAULT 'streaming', sequence integer DEFAULT 0, error text, ui_message jsonb, created_at timestamptz DEFAULT now(), updated_at timestamptz DEFAULT now());`);
 		service = (await import("./service")).coverLetterService;
 	});
 	afterAll(async () => {

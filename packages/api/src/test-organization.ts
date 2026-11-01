@@ -31,6 +31,8 @@ export async function installSchemaLocalGuestMove(client: Pick<Pool, "query">, s
 		["20261101083119_career_rls", "careeros_due_career_jobs"],
 		["20261101083119_career_rls", "careeros_orgs_with_due_career_schedules"],
 		["20261101083119_career_rls", "careeros_orgs_with_career_upkeep"],
+		// CAREEROS (P1-T08): saved AI connections, assistant conversations and content reports
+		["20261101085357_agent_ai_rls", "careeros_move_guest_agent"],
 		// CAREEROS (P1-T09): the remaining tables' functions, including the account-delete trigger function, whose
 		// schema-local copy would otherwise stay the pre-T09 one (the migration replaces only the public copy).
 		["20261101083301_remaining_rls", "careeros_public_domain_owner", "custom_domain"],

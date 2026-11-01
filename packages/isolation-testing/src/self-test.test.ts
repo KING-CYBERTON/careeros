@@ -224,7 +224,7 @@ describe("coverage check", () => {
 		expect(result.tenantTables.sort()).toEqual(isolationRegistry.map((entry) => entry.table).sort());
 	});
 
-	it("registers the resume (P1-T04), cover letter (P1-T05) application (P1-T06) and career (P1-T07) tables; later batches add theirs", () => {
+	it("registers the resume (P1-T04), cover letter (P1-T05) application (P1-T06) career (P1-T07) and assistant and AI (P1-T08) tables; later batches add theirs", () => {
 		expect(isolationRegistry.map((entry) => entry.table)).toEqual([
 			"resume",
 			"resume_version",
@@ -248,6 +248,12 @@ describe("coverage check", () => {
 			"career_workspace",
 			"career_transcript",
 			"career_answer",
+			"ai_providers",
+			"agent_threads",
+			"agent_messages",
+			"agent_attachments",
+			"agent_actions",
+			"ai_content_report",
 			"custom_domain",
 			"web_access_credentials",
 			"storage_cleanup_job",

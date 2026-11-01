@@ -27,7 +27,7 @@ describe.skipIf(!configured)("the isolation registry on the migrated schema", ()
 		await pools?.close();
 	});
 
-	it("registers the resume, cover letter, application and career tables", () => {
+	it("registers the resume, cover letter, application, career and assistant tables", () => {
 		expect(isolationRegistry.map((entry) => entry.table)).toEqual([
 			"resume",
 			"resume_version",
@@ -51,6 +51,12 @@ describe.skipIf(!configured)("the isolation registry on the migrated schema", ()
 			"career_workspace",
 			"career_transcript",
 			"career_answer",
+			"ai_providers",
+			"agent_threads",
+			"agent_messages",
+			"agent_attachments",
+			"agent_actions",
+			"ai_content_report",
 			"custom_domain",
 			"web_access_credentials",
 			"storage_cleanup_job",

@@ -128,7 +128,7 @@ describe("aiProvidersService", () => {
 				{ type: "eq", left: "ai_provider.user_id", right: "user-1" },
 				{ type: "eq", left: "ai_provider.enabled", right: true },
 				{ type: "eq", left: "ai_provider.test_status", right: "success" },
-				{ type: "ne", left: "ai_provider.id", right: "server-ai:user-1" },
+				{ type: "ne", left: "ai_provider.id", right: "server-ai:org_test:user-1" },
 			],
 		});
 		expect(queryState.orderByArgs).toEqual([

@@ -268,6 +268,14 @@ export async function linkAnonymousAccount({
 			throw error;
 		}
 
+		// CAREEROS (P1-T08): saved AI connections, assistant conversations (with their messages, attachments and actions) and
+		// content reports belong to an organization too. The same narrow definer function pattern moves them into the
+		// account's oldest organization, after the documents and applications they point at. The guest's default
+		// connection yields to the target's, and the server-managed connection is re-pointed to the target's own.
+		await tx.execute(
+			sql`select careeros_move_guest_agent(${fromUserId}, ${toUserId}, ${targetMembership?.organizationId ?? null})`,
+		);
+
 		// Ownership updates lock document rows, so guest saves cannot add uncopied references during copying.
 		const hook = accountLinkHook;
 		if (!hook) return;

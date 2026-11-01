@@ -1,4 +1,6 @@
 import type { UIMessage } from "ai";
+// CAREEROS: the boot-time reaper works one organization at a time (P1-T08, D9)
+import { withOrgContext } from "@careeros/tenancy";
 import { and, eq, isNotNull, isNull, sql } from "drizzle-orm";
 import { db } from "@reactive-resume/db/client";
 import * as schema from "@reactive-resume/db/schema";
@@ -189,7 +191,19 @@ export async function reapStaleAgentRun(
 	}
 }
 
-export async function reapStaleAgentRunsAtBoot(database: AgentRunReaperDb = db) {
+/**
+ * CAREEROS (P1-T08, D9): at boot there is no organization, and row-level security hides every conversation from the
+ * server. The definer function `careeros_orgs_with_active_agent_runs` answers with organization ids only; each one is
+ * then reaped inside `withOrgContext`. A failure in one organization is logged and does not stop the others.
+ */
+async function organizationsWithActiveRuns(database: AgentRunReaperDb & Pick<typeof db, "execute">) {
+	const { rows } = await database.execute<{ organization_id: string }>(
+		sql`select careeros_orgs_with_active_agent_runs() as organization_id`,
+	);
+	return rows.map((row) => row.organization_id);
+}
+
+async function reapStaleAgentRunsInOrganization(database: AgentRunReaperDb) {
 	const threads = await database
 		.select({
 			id: schema.agentThread.id,
@@ -207,5 +221,15 @@ export async function reapStaleAgentRunsAtBoot(database: AgentRunReaperDb = db) 
 			{ threadId: thread.id, userId: thread.userId, runId: thread.activeRunId, streamId: thread.activeStreamId },
 			database,
 		);
+	}
+}
+
+export async function reapStaleAgentRunsAtBoot(database: AgentRunReaperDb & Pick<typeof db, "execute"> = db) {
+	for (const organizationId of new Set(await organizationsWithActiveRuns(database))) {
+		try {
+			await withOrgContext(organizationId, () => reapStaleAgentRunsInOrganization(database));
+		} catch (error) {
+			console.error(`[agent] Failed to reap stale runs for organization ${organizationId}`, error);
+		}
 	}
 }

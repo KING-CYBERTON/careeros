@@ -180,6 +180,7 @@ describe.skipIf(!databaseUrl)("durable career scheduling", () => {
 			});
 		await getDb().insert(tables.aiProvider).values({
 			id: "preparation-provider",
+			organizationId: TEST_ORGANIZATION_ID,
 			userId: "alice",
 			label: "Synthetic provider",
 			provider: "openai",

@@ -59,6 +59,8 @@ export const resume = pg.pgTable(
 	},
 	(t) => [
 		pg.index().on(t.organizationId, t.userId, t.updatedAt.desc()),
+		// CAREEROS (P1-T08): target of the assistant's composite foreign keys (same organization as the thread).
+		pg.unique("resume_organization_id_id_unique").on(t.organizationId, t.id),
 		pg.unique().on(t.slug, t.userId),
 		pg.index().on(t.createdAt.asc()),
 		pg.index().on(t.userId, t.updatedAt.desc()),

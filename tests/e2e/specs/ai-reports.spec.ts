@@ -1,4 +1,4 @@
-// CAREEROS: ai_content_report gets RLS in P1-T08, so read it through the owner role (P1-Q07)
+// CAREEROS: ai_content_report has row-level security (P1-T08), so read it through the owner role (P1-Q07)
 import { createSeedPool } from "../fixtures/seed-db";
 import { expect, test } from "../fixtures/test";
 
