@@ -1,22 +1,37 @@
+import { brandSlug, PLATFORM_DEFAULT_APP_NAME } from "@reactive-resume/utils/brand";
 import { prepareMcpDiscovery } from "./discovery";
 import { MCP_TOOL_NAME as T } from "./mcp-tool-names";
 import { PROMPT_META } from "./prompts";
 
 const RESUME_ID_ARGUMENT = [{ name: "id", description: "Resume ID.", required: true }] as const;
 
+export type McpBrandOptions = {
+	/** The product name; the platform default when absent (CAREEROS, P2-T08). */
+	appName?: string | undefined;
+	/** The deployment's origin, for the website and icon links. Both are left out when absent. */
+	appUrl?: string | undefined;
+};
+
 /** Shared server identity for both the live MCP server and the static server card. */
-export function buildMcpServerInfo(version: string) {
+export function buildMcpServerInfo(
+	version: string,
+	{ appName = PLATFORM_DEFAULT_APP_NAME, appUrl }: McpBrandOptions = {},
+) {
+	const origin = appUrl?.replace(/\/+$/, "");
 	return {
-		name: "reactive-resume",
+		name: brandSlug(appName),
 		version,
-		title: "Reactive Resume",
-		websiteUrl: "https://rxresu.me",
-		description:
-			"Reactive Resume is a free and open-source resume builder. Use this MCP server to interact with your resume using an LLM of your choice.",
-		icons: [
-			{ src: "https://rxresu.me/icon/light.svg", mimeType: "image/svg+xml", theme: "light" as const },
-			{ src: "https://rxresu.me/icon/dark.svg", mimeType: "image/svg+xml", theme: "dark" as const },
-		],
+		title: appName,
+		...(origin ? { websiteUrl: origin } : {}),
+		description: `${appName} is a career workspace. Use this MCP server to interact with your resumes, cover letters and applications using an LLM of your choice.`,
+		...(origin
+			? {
+					icons: [
+						{ src: `${origin}/icon/light.svg`, mimeType: "image/svg+xml", theme: "light" as const },
+						{ src: `${origin}/icon/dark.svg`, mimeType: "image/svg+xml", theme: "dark" as const },
+					],
+				}
+			: {}),
 	};
 }
 
@@ -27,7 +42,7 @@ export function buildMcpServerInfo(version: string) {
  * Some registries only surface the `resources` array in their UI, not `resourceTemplates`.
  * The parameterized resume URI is therefore duplicated here so discovery matches the live template.
  */
-export function buildMcpServerCard(appVersion: string) {
+export function buildMcpServerCard(appVersion: string, brand: McpBrandOptions = {}) {
 	const tools = prepareMcpDiscovery().tools.map(({ execution: _execution, ...tool }) => tool);
 
 	const prompts = Object.entries(PROMPT_META).map(([name, meta]) => ({
@@ -86,7 +101,7 @@ export function buildMcpServerCard(appVersion: string) {
 				},
 			},
 		},
-		serverInfo: buildMcpServerInfo(appVersion),
+		serverInfo: buildMcpServerInfo(appVersion, brand),
 		tools,
 		prompts,
 		resources,

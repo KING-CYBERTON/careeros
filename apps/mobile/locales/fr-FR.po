@@ -412,11 +412,6 @@ msgstr "{0} offre d’emploi"
 msgid "{0} returned “{1}”. Your message is kept."
 msgstr "{0} a renvoyé « {1} ». Votre message est conservé."
 
-#. placeholder {0}: done.length
-#: src/features/career/today.tsx
-msgid "{0} roles updated."
-msgstr ""
-
 #. placeholder {0}: selectedIds.length
 #. placeholder {0}: selection.length
 #: src/features/applications/list-screen.tsx
@@ -497,14 +492,6 @@ msgstr "{company} · {tabName}"
 #: src/features/documents/queries.ts
 msgid "{completed, plural, one {# document updated} other {# documents updated}}"
 msgstr "{completed, plural, one {# document mis à jour} other {# documents mis à jour}}"
-
-#: src/features/share/custom-domain.tsx
-msgid "{cost} a year"
-msgstr "{cost} par an"
-
-#: src/features/share/custom-domain.tsx
-msgid "{cost} the first year"
-msgstr "{cost} la première année"
 
 #: src/features/write/section-sheet.tsx
 msgid "{count, plural, one {# column} other {# columns}}"
@@ -755,8 +742,8 @@ msgid "24 hours before"
 msgstr "24 heures avant"
 
 #: src/features/letters/share.tsx
-msgid "A backup of this letter. Imports back into Reactive Resume as a letter."
-msgstr "Une sauvegarde de cette lettre. Réimporte dans Reactive Resume sous forme de lettre."
+msgid "A backup of this letter. Imports back into {appName} as a letter."
+msgstr ""
 
 #: src/features/check/issues.ts
 msgid "A city and country let roles be matched to where you are."
@@ -1781,10 +1768,6 @@ msgstr "Demandez à l'assistant de le travailler"
 msgid "Ask the coach"
 msgstr "Demander au coach"
 
-#: src/features/share/download.tsx
-msgid "Ask the community. Remove personal details before posting."
-msgstr "Demandez à la communauté. Retirez vos informations personnelles avant de publier."
-
 #: src/features/ai/error.ts
 msgid "Ask your server administrator to enable credential encryption or configure a shared connection."
 msgstr "Demandez à votre administrateur d’activer le chiffrement des identifiants ou de configurer une connexion partagée."
@@ -1869,10 +1852,6 @@ msgstr "Automatiquement"
 #: src/features/history/history.tsx
 msgid "Autosaves are grouped by session and kept for 90 days. Named versions are kept until you delete them. Restoring saves the current state first."
 msgstr "Les sauvegardes automatiques sont regroupées par session et conservées pendant 90 jours. Les versions nommées sont conservées jusqu'à ce que vous les supprimiez. La restauration enregistre d'abord l'état actuel."
-
-#: src/features/share/custom-domain.tsx
-msgid "Available"
-msgstr "Disponible"
 
 #: src/features/ats-checker/messages.ts
 msgid "Avoid heavy letter-spacing effects, then re-export."
@@ -2097,10 +2076,6 @@ msgstr "Liste à puces"
 #: src/features/letters/design-presets.ts
 msgid "Burgundy"
 msgstr "Bordeaux"
-
-#: app/(tabs)/settings/index.tsx
-msgid "by <0>Amruth Pillai</0>"
-msgstr "par <0>Amruth Pillai</0>"
 
 #: src/features/applications-board/views.tsx
 msgid "Calendar"
@@ -2567,10 +2542,6 @@ msgstr "Clôturées : {closed}"
 msgid "Coach"
 msgstr "Coach"
 
-#: src/features/share/custom-domain.tsx
-msgid "Code copied"
-msgstr "Code copié"
-
 #: src/features/design/design-pane.tsx
 #: src/features/letters/design.tsx
 msgid "Color"
@@ -2641,8 +2612,8 @@ msgid "Complete {0} before saving."
 msgstr "Complétez {0} avant d’enregistrer."
 
 #: src/features/share/download.tsx
-msgid "Complete data backup. Imports back into Reactive Resume or JSON Resume tools."
-msgstr "Sauvegarde complète des données. Réimporte dans les outils Reactive Resume ou JSON Resume."
+msgid "Complete data backup. Imports back into {appName} or JSON Resume tools."
+msgstr ""
 
 #: src/features/ats-checker/messages.ts
 msgid "Compress or remove large images to keep uploads quick."
@@ -2677,10 +2648,6 @@ msgstr "Se connecter"
 #: src/features/share/custom-domain.tsx
 msgid "Connect {0}"
 msgstr "Connecter {0}"
-
-#: src/features/share/custom-domain.tsx
-msgid "Connect {domain}"
-msgstr "Connecter {domain}"
 
 #: src/features/ai/web-access.tsx
 msgid "Connect a service"
@@ -2845,10 +2812,6 @@ msgstr "Copier un curriculum vitae pour un emploi"
 #: src/features/workspace/tabs/apply.tsx
 msgid "Copy answers"
 msgstr "Copier les réponses"
-
-#: src/features/share/custom-domain.tsx
-msgid "Copy code"
-msgstr "Copier le code"
 
 #: src/features/document-menu/index.tsx
 msgid "Copy created"
@@ -3090,7 +3053,6 @@ msgstr "Impossible de la marquer comme envoyée. Réessayez."
 #: app/(tabs)/settings/index.tsx
 #: src/auth/auth-header.tsx
 #: src/features/settings/api-keys.tsx
-#: src/features/share/download.tsx
 msgid "Couldn't open the browser. Try again."
 msgstr "Impossible d'ouvrir le navigateur. Réessayez."
 
@@ -3897,10 +3859,6 @@ msgstr "Ne pas envoyer l’offre de {0}"
 msgid "Don't share"
 msgstr "Ne pas partager"
 
-#: app/(tabs)/settings/index.tsx
-msgid "Donate on Open Collective"
-msgstr "Faire un don sur Open Collective"
-
 #: app/(tabs)/settings/preferences.tsx
 #: src/features/applications/list-screen.tsx
 #: src/features/career/today.tsx
@@ -4303,8 +4261,8 @@ msgid "Enter terms yourself. No AI request is made. Leave unknown amounts blank.
 msgstr "Saisissez les conditions vous-même. Aucune requête n’est envoyée à l’IA. Laissez les montants inconnus vides."
 
 #: app/(auth)/server.tsx
-msgid "Enter the address you open Reactive Resume at in a browser. The app checks it's a Reactive Resume server that allows app sign-in before you continue."
-msgstr "Saisissez l'adresse à laquelle vous ouvrez Reactive Resume dans un navigateur. L'application vérifie qu'il s'agit d'un serveur Reactive Resume qui autorise la connexion à l'application avant de continuer."
+msgid "Enter the address you open {appName} at in a browser. The app checks it's a {appName} server that allows app sign-in before you continue."
+msgstr ""
 
 #: src/features/letters/write.tsx
 msgid "Enter your details below. Choosing a resume replaces them and links its design."
@@ -4681,12 +4639,12 @@ msgstr ""
 
 #: src/api/ai-consent.ts
 #: src/features/career/schedule-sheet.tsx
-msgid "Found posting links are read by Reactive Resume and the sites being read."
+msgid "Found posting links are read by {appName} and the sites being read."
 msgstr ""
 
 #: src/api/ai-consent.ts
 #: src/features/career/schedule-sheet.tsx
-msgid "Found posting links are read by Reactive Resume and, when needed, {reader} and the sites being read. The reader may charge."
+msgid "Found posting links are read by {appName} and, when needed, {reader} and the sites being read. The reader may charge."
 msgstr ""
 
 #: src/features/design/style-groups.tsx
@@ -4753,10 +4711,6 @@ msgstr "« Obtenir un retour » envoie la question, votre réponse, cette anno
 #: src/features/career/today.tsx
 msgid "Get new roles here every morning"
 msgstr "Recevez ici de nouveaux postes chaque matin"
-
-#: src/features/share/download.tsx
-msgid "Get resume feedback on Discord"
-msgstr "Obtenir des avis sur votre CV sur Discord"
 
 #: src/features/letters/write.tsx
 msgid "Getting long. Try “Shorter”, or cut the least specific paragraph."
@@ -5343,10 +5297,6 @@ msgstr "Pipeline de recherche d'emploi"
 #: src/features/search/search-screen.tsx
 msgid "Jobs"
 msgstr "Emplois"
-
-#: app/(tabs)/settings/index.tsx
-msgid "Join the Discord"
-msgstr "Rejoindre le Discord"
 
 #: src/features/letters/share.tsx
 #: src/features/share/download.tsx
@@ -6123,10 +6073,6 @@ msgstr "Correspondant au CV"
 msgid "Matching your facts"
 msgstr "Rapprochement de vos faits"
 
-#: src/features/share/custom-domain.tsx
-msgid "May be available"
-msgstr "Peut-être disponible"
-
 #: src/features/search/search-screen.tsx
 msgid "MCP"
 msgstr "MCP"
@@ -6164,10 +6110,6 @@ msgstr "Salaire de base minimum"
 #: src/features/career/offers.tsx
 msgid "Minimum salary cannot be compared in these terms."
 msgstr "Le salaire minimum ne peut pas être comparé en ces termes."
-
-#: app/(tabs)/settings/index.tsx
-msgid "MIT License"
-msgstr "Licence MIT"
 
 #: src/features/workspace/tabs/debrief.tsx
 msgid "Mixed"
@@ -6711,10 +6653,6 @@ msgstr "Aucune photo. La plupart des ATS ignorent les photos ; certaines région
 msgid "No postings found. Try different keywords."
 msgstr "Aucune offre d'emploi trouvée. Essayez différents mots-clés."
 
-#: src/auth/messages.ts
-msgid "No Reactive Resume server answered at this address. Check the spelling, or ask your administrator whether the server allows app sign-in."
-msgstr "Aucun serveur Reactive Resume n'a répondu à cette adresse. Vérifiez l'orthographe ou demandez à votre administrateur si le serveur autorise la connexion à l'application."
-
 #: src/features/check/job-match.tsx
 msgid "No recognizable terms in this posting."
 msgstr "Aucun terme reconnaissable dans cette offre d'emploi."
@@ -6738,6 +6676,10 @@ msgstr "Aucun résultat"
 #: src/features/letters/write.tsx
 msgid "No resume"
 msgstr "Pas de CV"
+
+#: src/auth/messages.ts
+msgid "No server answered at this address. Check the spelling, or ask your administrator whether the server allows app sign-in."
+msgstr ""
 
 #: src/features/ats-checker/messages.ts
 msgid "No skills section was found."
@@ -7460,20 +7402,20 @@ msgid "PDF check canceled. Retry when ready."
 msgstr "Vérification PDF annulée. Réessayez quand vous êtes prêt."
 
 #: src/features/application-detail/sections.tsx
-msgid "PDF only · up to 10 MB each. Linking a Reactive Resume enables AI match scoring and tailoring."
-msgstr "PDF uniquement · 10 Mo maximum par fichier. Lier un document Reactive Resume permet l’évaluation de la correspondance et l’adaptation par IA."
+msgid "PDF only · up to 10 MB each. Linking a resume enables AI match scoring and tailoring."
+msgstr ""
 
 #: src/features/design/advanced.tsx
 msgid "PDF styles support a subset of CSS. Rotation, dashed and dotted borders, and some layout properties are ignored."
 msgstr "Les styles PDF prennent en charge un sous-ensemble de CSS. La rotation, les bordures en pointillés et en pointillés et certaines propriétés de mise en page sont ignorées."
 
 #: src/features/documents/new-document.tsx
-msgid "PDF uses your AI provider when one is ready. Turn off the AI switch to read its text layer on your server. Word (.docx) needs an AI provider. Current and v4 Reactive Resume JSON, cover letters, JSON Resume and LinkedIn exports (.zip) are supported. Up to 10 MB."
-msgstr "Le PDF utilise votre fournisseur d’IA s’il est prêt. Désactivez l’IA pour lire la couche de texte sur votre serveur. Word (.docx) nécessite un fournisseur d’IA. Formats pris en charge : JSON Reactive Resume actuel et v4, lettres de motivation, JSON Resume et exports LinkedIn (.zip). 10 Mo maximum."
+msgid "PDF uses your AI provider when one is ready. Turn off the AI switch to read its text layer on your server. Word (.docx) needs an AI provider. Current and v4 JSON, cover letters, JSON Resume and LinkedIn exports (.zip) are supported. Up to 10 MB."
+msgstr ""
 
 #: src/features/documents/new-document.tsx
-msgid "PDF, Word, Reactive Resume, JSON Resume or LinkedIn export."
-msgstr "Exportation PDF, Word, Reactive Resume, JSON Resume ou LinkedIn."
+msgid "PDF, Word, JSON, JSON Resume or LinkedIn export."
+msgstr ""
 
 #: src/features/career/offer-entry.tsx
 #: src/features/career/offers.tsx
@@ -7823,6 +7765,10 @@ msgstr ""
 msgid "Private. Only you can see it."
 msgstr "Privé. Vous seul pouvez le voir."
 
+#: app/(tabs)/settings/licences.tsx
+msgid "Product"
+msgstr ""
+
 #: src/features/design/style-groups.tsx
 #: src/features/letters/design-presets.ts
 msgid "Professional"
@@ -7987,10 +7933,6 @@ msgstr "Réexportez avec les polices intégrées, et vérifiez que le texte se c
 #: src/features/ats-checker/messages.ts
 msgid "Re-export with fonts embedded, then open the file and check that the text copies out cleanly."
 msgstr "Réexportez avec les polices intégrées, puis ouvrez le fichier et vérifiez que le texte se copie proprement."
-
-#: src/auth/auth-header.tsx
-msgid "Reactive Resume"
-msgstr "Reactive Resume"
 
 #: src/features/workspace/tabs/prepare.tsx
 msgid "Read briefing"
@@ -8211,10 +8153,6 @@ msgstr "Actualiser le briefing 24 heures avant"
 #: src/features/workspace/tabs/prepare.tsx
 msgid "Refresh the briefing on the morning of"
 msgstr "Actualiser le briefing le matin même"
-
-#: src/features/share/custom-domain.tsx
-msgid "Register at OlaCV"
-msgstr "Enregistrer chez OlaCV"
 
 #: src/features/workspace/tabs/prepare.tsx
 msgid "Rehearse aloud"
@@ -8469,10 +8407,6 @@ msgstr "Rapport"
 msgid "Report AI content"
 msgstr "Signaler le contenu de l'IA"
 
-#: app/(tabs)/settings/index.tsx
-msgid "Report an issue"
-msgstr "Signaler un problème"
-
 #: src/features/ai/report-content.tsx
 msgid "Report received by your server operator. Thank you."
 msgstr "Rapport reçu par votre opérateur de serveur. Merci."
@@ -8572,10 +8506,6 @@ msgstr "curriculum vitae + lettre"
 #: src/features/document-menu/index.tsx
 msgid "Resume details"
 msgstr "détails du curriculum vitae"
-
-#: app/(tabs)/settings/index.tsx
-msgid "Resume feedback, product help, and community ideas."
-msgstr "Avis sur votre CV, aide sur le produit et idées de la communauté."
 
 #: src/features/application-detail/sections.tsx
 #: src/features/workspace/tabs/apply.tsx
@@ -9453,10 +9383,6 @@ msgstr "Configurez la recherche web dans Paramètres pour trouver des postes."
 msgid "Settings"
 msgstr "Paramètres"
 
-#: app/(tabs)/settings/ai-mcp.tsx
-msgid "Setup guide"
-msgstr "Guide de configuration"
-
 #: src/features/ai/report-content.tsx
 msgid "Sexual content"
 msgstr "Contenu sexuel"
@@ -9537,8 +9463,8 @@ msgid "Shorter"
 msgstr "Plus court"
 
 #: src/features/share/web-page.tsx
-msgid "Show “Made with Reactive Resume”"
-msgstr "Afficher « Réalisé avec Reactive Resume »"
+msgid "Show “Made with {appName}”"
+msgstr ""
 
 #. placeholder {0}: Math.min(remaining, COLUMN_PAGE_SIZE)
 #: src/features/applications-board/board-screen.tsx
@@ -9902,10 +9828,6 @@ msgstr "Origine"
 #: src/features/career/facts.tsx
 msgid "Source and correction history"
 msgstr "Historique des sources et des corrections"
-
-#: app/(tabs)/settings/index.tsx
-msgid "Source code on GitHub"
-msgstr "Code source sur GitHub"
 
 #: src/features/workspace/answer-library.tsx
 msgid "Source employer"
@@ -12258,8 +12180,8 @@ msgid "your Knowledge"
 msgstr "vos Connaissances"
 
 #: app/(tabs)/settings/preferences.tsx
-msgid "Your language is saved. Restart Reactive Resume to apply the new left-to-right or right-to-left layout."
-msgstr "Votre langue est enregistrée. Redémarrez Reactive Resume pour appliquer la nouvelle disposition de gauche à droite ou de droite à gauche."
+msgid "Your language is saved. Restart the app to apply the new left-to-right or right-to-left layout."
+msgstr ""
 
 #: src/features/ats-checker/messages.ts
 msgid "Your lines are packed very tightly."
@@ -12276,10 +12198,6 @@ msgstr "votre message"
 #: src/features/write/outline.tsx
 msgid "Your name"
 msgstr "Votre nom"
-
-#: src/features/share/custom-domain.tsx
-msgid "Your name as your address, from OlaCV, the .cv registry. Code {CODE} takes 50% off the first year."
-msgstr "Votre nom comme adresse, chez OlaCV, le registre des domaines .cv. Le code {CODE} donne 50 % de réduction sur la première année."
 
 #: src/features/check/issues.ts
 msgid "Your name is missing"

@@ -21,7 +21,8 @@ vi.mock("@/features/resume/export/use-resume-export", () => ({
 	sanitizeFileName: (value: string) => value,
 }));
 
-it("offers peer feedback only after a successful export and clears it for a new format or failure", async () => {
+// CAREEROS: the upstream community feedback and donation prompts are gone (P2-T08); a successful export shows neither.
+it("never shows community or donation prompts, after a successful export or a failure", async () => {
 	i18n.load("en", {});
 	i18n.activate("en");
 	const file = new Blob(["fictional resume"]);
@@ -32,24 +33,20 @@ it("offers peer feedback only after a successful export and clears it for a new 
 			<DownloadTab onReview={() => undefined} />
 		</I18nProvider>,
 	);
-	const invite = () => screen.queryByRole("link", { name: "Get resume feedback on Discord" });
-	expect(invite()).toBeNull();
+	const prompts = () => [
+		screen.queryByRole("link", { name: /Discord/ }),
+		screen.queryByRole("link", { name: "Donate" }),
+	];
+	expect(prompts()).toEqual([null, null]);
 	fireEvent.click(screen.getByRole("button", { name: "Download PDF" }));
-	expect(invite()).toBeNull();
 	finish(file);
-	const link = await screen.findByRole("link", { name: "Get resume feedback on Discord" });
-	expect(link.getAttribute("href")).toBe("https://discord.gg/9kAqrGcwn5");
-	expect(mocks.download).toHaveBeenCalledWith(file, "resume.pdf");
-	expect(screen.getByRole("link", { name: "Donate" })).toBeTruthy();
+	await vi.waitFor(() => expect(mocks.download).toHaveBeenCalledWith(file, "resume.pdf"));
+	expect(prompts()).toEqual([null, null]);
 
 	fireEvent.click(screen.getByRole("radio", { name: /Word/ }));
-	expect(invite()).toBeNull();
 	mocks.generate.mockRejectedValueOnce(new Error("Export unavailable"));
 	fireEvent.click(screen.getByRole("button", { name: "Download Word" }));
 	await screen.findByRole("alert");
-	expect(invite()).toBeNull();
-	expect(mocks.download).toHaveBeenCalledTimes(1);
-	mocks.generate.mockResolvedValueOnce(file);
-	fireEvent.click(screen.getByRole("button", { name: "Download PDF instead" }));
-	expect(await screen.findByRole("link", { name: "Get resume feedback on Discord" })).toBeTruthy();
+	expect(prompts()).toEqual([null, null]);
+	expect(screen.queryByText(/Reactive Resume/)).toBeNull();
 });

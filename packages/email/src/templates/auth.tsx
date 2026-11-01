@@ -16,14 +16,19 @@ import {
 	Tailwind,
 	Text,
 } from "react-email";
+import { PLATFORM_DEFAULT_APP_NAME } from "@reactive-resume/utils/brand";
 
 // ponytail: server dev consumes this source through tsx, which emits React.createElement here.
 void React;
 
-const appName = "Reactive Resume";
-const logoUrl = "https://rxresu.me/icon/dark.svg";
+// CAREEROS: every template takes the product name (and an absolute logo URL, when the brand has one) as optional
+// props and falls back to the platform default (P2-T08). Callers pass the org brand once P2-T02 lands.
+type EmailBrandProps = {
+	appName?: string | undefined;
+	logoUrl?: string | undefined;
+};
 
-interface AuthEmailLayoutProps {
+interface AuthEmailLayoutProps extends EmailBrandProps {
 	preview: string;
 	heading: string;
 	intro: string;
@@ -33,7 +38,17 @@ interface AuthEmailLayoutProps {
 	outro: string;
 }
 
-function AuthEmailLayout({ preview, heading, intro, details, actionLabel, actionUrl, outro }: AuthEmailLayoutProps) {
+function AuthEmailLayout({
+	preview,
+	heading,
+	intro,
+	details,
+	actionLabel,
+	actionUrl,
+	outro,
+	appName = PLATFORM_DEFAULT_APP_NAME,
+	logoUrl,
+}: AuthEmailLayoutProps) {
 	return (
 		<Html lang="en">
 			<Tailwind
@@ -74,7 +89,11 @@ function AuthEmailLayout({ preview, heading, intro, details, actionLabel, action
 					<Preview>{preview}</Preview>
 					<Container className="mx-auto w-full max-w-xl bg-zinc-900 p-6 text-zinc-50">
 						<Section>
-							<Img src={logoUrl} alt={appName} width="48" height="48" className="block" />
+							{logoUrl ? (
+								<Img src={logoUrl} alt={appName} width="48" height="48" className="block" />
+							) : (
+								<Text className="font-heading m-0 text-base font-medium tracking-tight">{appName}</Text>
+							)}
 						</Section>
 
 						<Section className="mt-6">
@@ -111,21 +130,7 @@ function AuthEmailLayout({ preview, heading, intro, details, actionLabel, action
 
 							<Hr className="my-10 border-zinc-700" />
 
-							<Text className="mt-8 text-xs leading-1 opacity-40">By the community, for the community.</Text>
-							<Text className="text-xs leading-1 opacity-40">
-								A passion project by{" "}
-								<Link
-									target="_blank"
-									rel="noopener noreferrer"
-									href="https://amruthpillai.com"
-									className="text-inherit underline underline-offset-2"
-								>
-									Amruth Pillai
-								</Link>
-								.
-							</Text>
-
-							<Text className="font-heading mt-8 text-base font-medium tracking-tight opacity-80">Reactive Resume</Text>
+							<Text className="font-heading mt-8 text-base font-medium tracking-tight opacity-80">{appName}</Text>
 						</Section>
 					</Container>
 				</Body>
@@ -134,31 +139,35 @@ function AuthEmailLayout({ preview, heading, intro, details, actionLabel, action
 	);
 }
 
-interface ResetPasswordEmailProps {
+interface ResetPasswordEmailProps extends EmailBrandProps {
 	url: string;
 }
 
-export function ResetPasswordEmail({ url }: ResetPasswordEmailProps) {
+export function ResetPasswordEmail({ url, appName = PLATFORM_DEFAULT_APP_NAME, logoUrl }: ResetPasswordEmailProps) {
 	return (
 		<AuthEmailLayout
+			appName={appName}
+			logoUrl={logoUrl}
 			preview={`Reset your ${appName} password`}
 			heading="Reset your password"
 			intro={`We received a request to reset your ${appName} password.`}
 			details="If this was not you, you can ignore this message and your password will remain unchanged."
 			actionLabel="Create new password"
 			actionUrl={url}
-			outro="For security, only use links from emails sent by Reactive Resume."
+			outro={`For security, only use links from emails sent by ${appName}.`}
 		/>
 	);
 }
 
-interface VerifyEmailProps {
+interface VerifyEmailProps extends EmailBrandProps {
 	url: string;
 }
 
-export function VerifyEmail({ url }: VerifyEmailProps) {
+export function VerifyEmail({ url, appName = PLATFORM_DEFAULT_APP_NAME, logoUrl }: VerifyEmailProps) {
 	return (
 		<AuthEmailLayout
+			appName={appName}
+			logoUrl={logoUrl}
 			preview={`Verify your email for ${appName}`}
 			heading="Verify your email"
 			intro={`Thanks for signing up for ${appName}. Verify your email address to continue.`}
@@ -170,15 +179,23 @@ export function VerifyEmail({ url }: VerifyEmailProps) {
 	);
 }
 
-interface VerifyEmailChangeProps {
+interface VerifyEmailChangeProps extends EmailBrandProps {
 	url: string;
 	previousEmail: string;
 	newEmail: string;
 }
 
-export function VerifyEmailChange({ url, previousEmail, newEmail }: VerifyEmailChangeProps) {
+export function VerifyEmailChange({
+	url,
+	previousEmail,
+	newEmail,
+	appName = PLATFORM_DEFAULT_APP_NAME,
+	logoUrl,
+}: VerifyEmailChangeProps) {
 	return (
 		<AuthEmailLayout
+			appName={appName}
+			logoUrl={logoUrl}
 			preview={`Approve changing your ${appName} email address`}
 			heading="Approve email change"
 			intro={`Someone asked to change your ${appName} email from ${previousEmail} to ${newEmail}.`}
@@ -191,15 +208,23 @@ export function VerifyEmailChange({ url, previousEmail, newEmail }: VerifyEmailC
 }
 
 // CAREEROS: organization invitation email for the Better Auth organization plugin (P1-T01)
-interface InvitationEmailProps {
+interface InvitationEmailProps extends EmailBrandProps {
 	url: string;
 	organizationName: string;
 	inviterName: string;
 }
 
-export function InvitationEmail({ url, organizationName, inviterName }: InvitationEmailProps) {
+export function InvitationEmail({
+	url,
+	organizationName,
+	inviterName,
+	appName = PLATFORM_DEFAULT_APP_NAME,
+	logoUrl,
+}: InvitationEmailProps) {
 	return (
 		<AuthEmailLayout
+			appName={appName}
+			logoUrl={logoUrl}
 			preview={`Join ${organizationName} on ${appName}`}
 			heading="You have been invited"
 			intro={`${inviterName} invited you to join ${organizationName} on ${appName}.`}

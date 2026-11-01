@@ -23,6 +23,7 @@ import { NoOrganizationNotice } from "@/features/organization/no-organization-no
 import { OrganizationSwitcher } from "@/features/organization/switcher";
 import { isEditableElementFocused } from "@/features/resume/builder/draft";
 import { UserDropdownMenu } from "@/features/user/dropdown-menu";
+import { getBrand } from "@/libs/brand";
 import { orpc } from "@/libs/orpc/client";
 
 type NavItem = {
@@ -140,7 +141,7 @@ function Sidebar() {
 		>
 			<Link to="/" className="flex h-9 items-center gap-2.5 px-1.5">
 				<BrandIcon variant="icon" alt="" className="size-6 shrink-0" />
-				<span className="text-sm font-semibold">Reactive Resume</span>
+				<span className="text-sm font-semibold">{getBrand().appName}</span>
 			</Link>
 
 			<button
@@ -236,7 +237,7 @@ function Rail() {
 			aria-label={t`App navigation`}
 			className="sticky top-0 flex h-svh flex-col items-center gap-2 border-e border-line bg-surface py-3 [view-transition-name:app-nav]"
 		>
-			<Link to="/" aria-label="Reactive Resume" className="mb-1 grid size-8 place-items-center rounded-md">
+			<Link to="/" aria-label={getBrand().appName} className="mb-1 grid size-8 place-items-center rounded-md">
 				<BrandIcon variant="icon" alt="" className="size-6" />
 			</Link>
 			<RailTip label={t`Search`} icon="magnifying-glass">

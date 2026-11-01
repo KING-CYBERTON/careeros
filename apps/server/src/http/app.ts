@@ -23,7 +23,6 @@ import {
 	handleWellKnownFallback,
 } from "../openapi/metadata";
 import { handleRpc } from "../rpc/handler";
-import { handleAgentSkillArchive, handleAgentSkillsIndex } from "../static/agent-skills";
 // CAREEROS: organization logo and favicon (P2-T01)
 import { handleBrandingAssetRequest } from "../static/branding";
 import { handleResumeCard } from "../static/resume-card";
@@ -152,8 +151,7 @@ export function createApp(options: AppOptions = {}) {
 	app.get("/.well-known/integrations.json", () => handleIntegrations());
 	// Hono answers HEAD by running the GET route and dropping the body, headers kept.
 	app.get("/.well-known/api-catalog", () => handleApiCatalog());
-	app.get("/.well-known/agent-skills/index.json", () => handleAgentSkillsIndex());
-	app.get("/.well-known/agent-skills/:filename", (c) => handleAgentSkillArchive(c.req.param("filename")));
+	// CAREEROS: the upstream agent-skills plugin is no longer served; /.well-known/agent-skills/* falls through to the 404 (P2-T08).
 	app.get("/.well-known/mcp/server-card.json", () => handleMcpServerCard());
 	app.on("GET", ["/.well-known/ard.json", "/.well-known/ai-catalog.json"], () => handleAgentCatalog());
 	app.get("/.well-known/oauth-authorization-server/*", (c) => handleOAuthAuthorizationServer(c.req.raw));

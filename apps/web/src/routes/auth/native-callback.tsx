@@ -2,6 +2,7 @@ import { Trans } from "@lingui/react/macro";
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect } from "react";
 import { androidCallbackIntent } from "@/features/auth/native-callback";
+import { getBrand } from "@/libs/brand";
 
 export const Route = createFileRoute("/auth/native-callback")({
 	component: NativeCallbackPage,
@@ -15,6 +16,7 @@ function openApp() {
 }
 
 function NativeCallbackPage() {
+	const { appName } = getBrand();
 	useEffect(() => {
 		const params = new URLSearchParams(window.location.search);
 		if (/Android/i.test(navigator.userAgent) && params.has("state") && (params.has("code") || params.has("error")))
@@ -24,7 +26,7 @@ function NativeCallbackPage() {
 	return (
 		<div className="space-y-4 text-center">
 			<h1 className="text-[30px] leading-9">
-				<Trans>Open the Reactive Resume app</Trans>
+				<Trans>Open the {appName} app</Trans>
 			</h1>
 			<p className="text-muted-foreground text-sm">
 				<Trans>If the app did not open, try again on a device where it is installed.</Trans>

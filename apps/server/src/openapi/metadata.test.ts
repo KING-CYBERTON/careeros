@@ -110,7 +110,7 @@ describe("handleAgentCatalog", () => {
 		expect(catalog.entries).toHaveLength(1);
 		const [entry] = catalog.entries;
 		expect(entry).toMatchObject({
-			identifier: "urn:air:rxresu.me:mcp:reactive-resume",
+			identifier: "urn:air:rxresu.me:mcp:careeros",
 			type: "application/mcp-server-card+json",
 			url: "https://rxresu.me/.well-known/mcp/server-card.json",
 		});

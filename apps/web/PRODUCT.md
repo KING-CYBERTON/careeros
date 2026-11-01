@@ -1,4 +1,4 @@
-# Reactive Resume: Web Product
+# CareerOS: Web Product
 
 <!-- impeccable:product-schema 1 -->
 
@@ -16,7 +16,9 @@ Help people turn their experience into professional application documents and ma
 
 ## Positioning
 
-Reactive Resume is a free, open-source resume builder with privacy and data ownership as durable commitments. Users can run the application on their own infrastructure. Document editing, reviewable AI assistance, and application tracking belong to the same workflow.
+<!-- CAREEROS: product name is the platform default; see packages/utils/src/brand.ts (P2-T08). -->
+
+CareerOS is a career workspace with privacy and data ownership as durable commitments. Users can run the application on their own infrastructure. Document editing, reviewable AI assistance, and application tracking belong to the same workflow.
 
 ## Operating Context
 
@@ -36,7 +38,7 @@ Reactive Resume is a free, open-source resume builder with privacy and data owne
 
 ## Brand Commitments
 
-Keep the Reactive Resume name and existing brand assets. The incumbent visual system is documented in the inherited `../../DESIGN.md`; product setup does not replace that system. Resume templates retain their own identities independently of app styling.
+Take the product name from the brand source (`getBrand()`), never hard-code it. The incumbent visual system is documented in the inherited `../../DESIGN.md`; product setup does not replace that system. Resume templates retain their own identities independently of app styling.
 
 ## Evidence on Hand
 

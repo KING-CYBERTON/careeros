@@ -412,11 +412,6 @@ msgstr "Pracovná ponuka {0}"
 msgid "{0} returned “{1}”. Your message is kept."
 msgstr "{0} vrátilo „{1}“. Vaša správa je uložená."
 
-#. placeholder {0}: done.length
-#: src/features/career/today.tsx
-msgid "{0} roles updated."
-msgstr ""
-
 #. placeholder {0}: selectedIds.length
 #. placeholder {0}: selection.length
 #: src/features/applications/list-screen.tsx
@@ -497,14 +492,6 @@ msgstr "{company} · {tabName}"
 #: src/features/documents/queries.ts
 msgid "{completed, plural, one {# document updated} other {# documents updated}}"
 msgstr "{completed, plural, one {# dokument aktualizovaný} few {# dokumenty aktualizované} other {# dokumentov aktualizovaných}}"
-
-#: src/features/share/custom-domain.tsx
-msgid "{cost} a year"
-msgstr "{cost} ročne"
-
-#: src/features/share/custom-domain.tsx
-msgid "{cost} the first year"
-msgstr "{cost} za prvý rok"
 
 #: src/features/write/section-sheet.tsx
 msgid "{count, plural, one {# column} other {# columns}}"
@@ -755,8 +742,8 @@ msgid "24 hours before"
 msgstr "24 hodín vopred"
 
 #: src/features/letters/share.tsx
-msgid "A backup of this letter. Imports back into Reactive Resume as a letter."
-msgstr "Záloha tohto listu. Importuje sa späť do Reactive Resume ako list."
+msgid "A backup of this letter. Imports back into {appName} as a letter."
+msgstr ""
 
 #: src/features/check/issues.ts
 msgid "A city and country let roles be matched to where you are."
@@ -1781,10 +1768,6 @@ msgstr "Požiadajte asistenta, aby to zapracoval"
 msgid "Ask the coach"
 msgstr "Opýtať sa kouča"
 
-#: src/features/share/download.tsx
-msgid "Ask the community. Remove personal details before posting."
-msgstr "Opýtajte sa komunity. Pred uverejnením odstráňte osobné údaje."
-
 #: src/features/ai/error.ts
 msgid "Ask your server administrator to enable credential encryption or configure a shared connection."
 msgstr "Požiadajte správcu servera, aby povolil šifrovanie poverení alebo nakonfiguroval zdieľané pripojenie."
@@ -1869,10 +1852,6 @@ msgstr "Automaticky"
 #: src/features/history/history.tsx
 msgid "Autosaves are grouped by session and kept for 90 days. Named versions are kept until you delete them. Restoring saves the current state first."
 msgstr "Automatické ukladania sú zoskupené podľa relácie a uchovávané 90 dní. Pomenované verzie sa uchovajú, kým ich neodstránite. Obnovením sa najprv uloží aktuálny stav."
-
-#: src/features/share/custom-domain.tsx
-msgid "Available"
-msgstr "Voľná"
 
 #: src/features/ats-checker/messages.ts
 msgid "Avoid heavy letter-spacing effects, then re-export."
@@ -2097,10 +2076,6 @@ msgstr "Zoznam s odrážkami"
 #: src/features/letters/design-presets.ts
 msgid "Burgundy"
 msgstr "Bordová"
-
-#: app/(tabs)/settings/index.tsx
-msgid "by <0>Amruth Pillai</0>"
-msgstr "od <0>Amruth Pillai</0>"
 
 #: src/features/applications-board/views.tsx
 msgid "Calendar"
@@ -2567,10 +2542,6 @@ msgstr "Zatvorené: {closed}"
 msgid "Coach"
 msgstr "Kouč"
 
-#: src/features/share/custom-domain.tsx
-msgid "Code copied"
-msgstr "Kód bol skopírovaný"
-
 #: src/features/design/design-pane.tsx
 #: src/features/letters/design.tsx
 msgid "Color"
@@ -2641,8 +2612,8 @@ msgid "Complete {0} before saving."
 msgstr "Pred uložením vyplňte {0}."
 
 #: src/features/share/download.tsx
-msgid "Complete data backup. Imports back into Reactive Resume or JSON Resume tools."
-msgstr "Kompletná záloha dát. Importuje späť do nástrojov Reactive Resume alebo JSON Resume."
+msgid "Complete data backup. Imports back into {appName} or JSON Resume tools."
+msgstr ""
 
 #: src/features/ats-checker/messages.ts
 msgid "Compress or remove large images to keep uploads quick."
@@ -2677,10 +2648,6 @@ msgstr "Pripojiť"
 #: src/features/share/custom-domain.tsx
 msgid "Connect {0}"
 msgstr "Pripojiť {0}"
-
-#: src/features/share/custom-domain.tsx
-msgid "Connect {domain}"
-msgstr "Pripojiť {domain}"
 
 #: src/features/ai/web-access.tsx
 msgid "Connect a service"
@@ -2845,10 +2812,6 @@ msgstr "Skopírujte životopis pre prácu"
 #: src/features/workspace/tabs/apply.tsx
 msgid "Copy answers"
 msgstr "Kopírovať odpovede"
-
-#: src/features/share/custom-domain.tsx
-msgid "Copy code"
-msgstr "Kopírovať kód"
 
 #: src/features/document-menu/index.tsx
 msgid "Copy created"
@@ -3090,7 +3053,6 @@ msgstr "Nepodarilo sa označiť ako odoslané. Skúste to znova."
 #: app/(tabs)/settings/index.tsx
 #: src/auth/auth-header.tsx
 #: src/features/settings/api-keys.tsx
-#: src/features/share/download.tsx
 msgid "Couldn't open the browser. Try again."
 msgstr "Prehliadač sa nepodarilo otvoriť. Skúste to znova."
 
@@ -3897,10 +3859,6 @@ msgstr "Neposielať pracovný inzerát od {0}"
 msgid "Don't share"
 msgstr "Nezdieľajte"
 
-#: app/(tabs)/settings/index.tsx
-msgid "Donate on Open Collective"
-msgstr "Prispieť cez Open Collective"
-
 #: app/(tabs)/settings/preferences.tsx
 #: src/features/applications/list-screen.tsx
 #: src/features/career/today.tsx
@@ -4303,8 +4261,8 @@ msgid "Enter terms yourself. No AI request is made. Leave unknown amounts blank.
 msgstr "Zadajte podmienky sami. Žiadna požiadavka na AI sa neodošle. Neznáme sumy nechajte prázdne."
 
 #: app/(auth)/server.tsx
-msgid "Enter the address you open Reactive Resume at in a browser. The app checks it's a Reactive Resume server that allows app sign-in before you continue."
-msgstr "Zadajte adresu, na ktorej otvárate Reactive Resume v prehliadači. Aplikácia pred pokračovaním skontroluje, či ide o server Reactive Resume, ktorý umožňuje prihlásenie do aplikácie."
+msgid "Enter the address you open {appName} at in a browser. The app checks it's a {appName} server that allows app sign-in before you continue."
+msgstr ""
 
 #: src/features/letters/write.tsx
 msgid "Enter your details below. Choosing a resume replaces them and links its design."
@@ -4681,12 +4639,12 @@ msgstr ""
 
 #: src/api/ai-consent.ts
 #: src/features/career/schedule-sheet.tsx
-msgid "Found posting links are read by Reactive Resume and the sites being read."
+msgid "Found posting links are read by {appName} and the sites being read."
 msgstr ""
 
 #: src/api/ai-consent.ts
 #: src/features/career/schedule-sheet.tsx
-msgid "Found posting links are read by Reactive Resume and, when needed, {reader} and the sites being read. The reader may charge."
+msgid "Found posting links are read by {appName} and, when needed, {reader} and the sites being read. The reader may charge."
 msgstr ""
 
 #: src/features/design/style-groups.tsx
@@ -4753,10 +4711,6 @@ msgstr "„Získať spätnú väzbu“ odošle otázku, vašu odpoveď, tento in
 #: src/features/career/today.tsx
 msgid "Get new roles here every morning"
 msgstr "Dostávajte sem nové pozície každé ráno"
-
-#: src/features/share/download.tsx
-msgid "Get resume feedback on Discord"
-msgstr "Získajte spätnú väzbu na životopis na Discorde"
 
 #: src/features/letters/write.tsx
 msgid "Getting long. Try “Shorter”, or cut the least specific paragraph."
@@ -5343,10 +5297,6 @@ msgstr "Proces hľadania práce"
 #: src/features/search/search-screen.tsx
 msgid "Jobs"
 msgstr "Pracovné miesta"
-
-#: app/(tabs)/settings/index.tsx
-msgid "Join the Discord"
-msgstr "Pridajte sa na Discord"
 
 #: src/features/letters/share.tsx
 #: src/features/share/download.tsx
@@ -6123,10 +6073,6 @@ msgstr "Zhoda so životopisom"
 msgid "Matching your facts"
 msgstr "Porovnávame vaše fakty"
 
-#: src/features/share/custom-domain.tsx
-msgid "May be available"
-msgstr "Môže byť voľná"
-
 #: src/features/search/search-screen.tsx
 msgid "MCP"
 msgstr "MCP"
@@ -6164,10 +6110,6 @@ msgstr "Minimálny základný plat"
 #: src/features/career/offers.tsx
 msgid "Minimum salary cannot be compared in these terms."
 msgstr "Minimálna mzda sa v týchto podmienkach nedá porovnávať."
-
-#: app/(tabs)/settings/index.tsx
-msgid "MIT License"
-msgstr "Licencia MIT"
 
 #: src/features/workspace/tabs/debrief.tsx
 msgid "Mixed"
@@ -6711,10 +6653,6 @@ msgstr "Žiadna fotka. Väčšina ATS ignoruje fotografie; niektoré regióny ho
 msgid "No postings found. Try different keywords."
 msgstr "Nenašli sa žiadne pracovné ponuky. Skúste iné kľúčové slová."
 
-#: src/auth/messages.ts
-msgid "No Reactive Resume server answered at this address. Check the spelling, or ask your administrator whether the server allows app sign-in."
-msgstr "Na tejto adrese neodpovedal žiadny server Reactive Resume. Skontrolujte pravopis alebo sa opýtajte správcu, či server povoľuje prihlásenie do aplikácie."
-
 #: src/features/check/job-match.tsx
 msgid "No recognizable terms in this posting."
 msgstr "V tomto inzeráte nie sú žiadne rozpoznateľné výrazy."
@@ -6738,6 +6676,10 @@ msgstr "Žiadne výsledky"
 #: src/features/letters/write.tsx
 msgid "No resume"
 msgstr "Žiadne resumé"
+
+#: src/auth/messages.ts
+msgid "No server answered at this address. Check the spelling, or ask your administrator whether the server allows app sign-in."
+msgstr ""
 
 #: src/features/ats-checker/messages.ts
 msgid "No skills section was found."
@@ -7460,20 +7402,20 @@ msgid "PDF check canceled. Retry when ready."
 msgstr "Kontrola PDF bola zrušená. Skúste to znova, keď budete pripravení."
 
 #: src/features/application-detail/sections.tsx
-msgid "PDF only · up to 10 MB each. Linking a Reactive Resume enables AI match scoring and tailoring."
-msgstr "Iba PDF · najviac 10 MB na súbor. Prepojenie dokumentu Reactive Resume umožní AI vyhodnotiť zhodu s prácou a prispôsobiť obsah."
+msgid "PDF only · up to 10 MB each. Linking a resume enables AI match scoring and tailoring."
+msgstr ""
 
 #: src/features/design/advanced.tsx
 msgid "PDF styles support a subset of CSS. Rotation, dashed and dotted borders, and some layout properties are ignored."
 msgstr "Štýly PDF podporujú podmnožinu CSS. Otočenie, prerušované a bodkované okraje a niektoré vlastnosti rozloženia sú ignorované."
 
 #: src/features/documents/new-document.tsx
-msgid "PDF uses your AI provider when one is ready. Turn off the AI switch to read its text layer on your server. Word (.docx) needs an AI provider. Current and v4 Reactive Resume JSON, cover letters, JSON Resume and LinkedIn exports (.zip) are supported. Up to 10 MB."
-msgstr "PDF používa vášho poskytovateľa AI, keď je pripravený. Vypnite prepínač AI, aby ste si prečítali jeho textovú vrstvu na serveri. Word (.docx) potrebuje poskytovateľa AI. Sú podporované exporty Current a v4 Reactive Resume JSON, sprievodné listy, JSON Resume a LinkedIn (.zip). Až 10 MB."
+msgid "PDF uses your AI provider when one is ready. Turn off the AI switch to read its text layer on your server. Word (.docx) needs an AI provider. Current and v4 JSON, cover letters, JSON Resume and LinkedIn exports (.zip) are supported. Up to 10 MB."
+msgstr ""
 
 #: src/features/documents/new-document.tsx
-msgid "PDF, Word, Reactive Resume, JSON Resume or LinkedIn export."
-msgstr "Export PDF, Word, Reactive Resume, JSON Resume alebo LinkedIn."
+msgid "PDF, Word, JSON, JSON Resume or LinkedIn export."
+msgstr ""
 
 #: src/features/career/offer-entry.tsx
 #: src/features/career/offers.tsx
@@ -7823,6 +7765,10 @@ msgstr ""
 msgid "Private. Only you can see it."
 msgstr "Súkromné. Vidíte to len vy."
 
+#: app/(tabs)/settings/licences.tsx
+msgid "Product"
+msgstr ""
+
 #: src/features/design/style-groups.tsx
 #: src/features/letters/design-presets.ts
 msgid "Professional"
@@ -7987,10 +7933,6 @@ msgstr "Exportujte znova s vloženými písmami a overte, že sa text čisto sko
 #: src/features/ats-checker/messages.ts
 msgid "Re-export with fonts embedded, then open the file and check that the text copies out cleanly."
 msgstr "Exportujte znova s vloženými písmami, potom otvorte súbor a overte, že sa text čisto skopíruje."
-
-#: src/auth/auth-header.tsx
-msgid "Reactive Resume"
-msgstr "Reactive Resume"
 
 #: src/features/workspace/tabs/prepare.tsx
 msgid "Read briefing"
@@ -8211,10 +8153,6 @@ msgstr "Obnoviť brífing 24 hodín vopred"
 #: src/features/workspace/tabs/prepare.tsx
 msgid "Refresh the briefing on the morning of"
 msgstr "Obnoviť brífing ráno v deň pohovoru"
-
-#: src/features/share/custom-domain.tsx
-msgid "Register at OlaCV"
-msgstr "Zaregistrovať na OlaCV"
 
 #: src/features/workspace/tabs/prepare.tsx
 msgid "Rehearse aloud"
@@ -8469,10 +8407,6 @@ msgstr "Správa"
 msgid "Report AI content"
 msgstr "Nahlásiť obsah AI"
 
-#: app/(tabs)/settings/index.tsx
-msgid "Report an issue"
-msgstr "Nahlásiť problém"
-
 #: src/features/ai/report-content.tsx
 msgid "Report received by your server operator. Thank you."
 msgstr "Hlásenie prijaté operátorom vášho servera. dakujem."
@@ -8572,10 +8506,6 @@ msgstr "resumé + list"
 #: src/features/document-menu/index.tsx
 msgid "Resume details"
 msgstr "podrobnosti o životopise"
-
-#: app/(tabs)/settings/index.tsx
-msgid "Resume feedback, product help, and community ideas."
-msgstr "Spätná väzba na životopis, pomoc s produktom a nápady komunity."
 
 #: src/features/application-detail/sections.tsx
 #: src/features/workspace/tabs/apply.tsx
@@ -9453,10 +9383,6 @@ msgstr "Nastavte webové vyhľadávanie v Nastaveniach na hľadanie pozícií."
 msgid "Settings"
 msgstr "Nastavenia"
 
-#: app/(tabs)/settings/ai-mcp.tsx
-msgid "Setup guide"
-msgstr "Sprievodca nastavením"
-
 #: src/features/ai/report-content.tsx
 msgid "Sexual content"
 msgstr "Sexuálny obsah"
@@ -9537,8 +9463,8 @@ msgid "Shorter"
 msgstr "Kratšie"
 
 #: src/features/share/web-page.tsx
-msgid "Show “Made with Reactive Resume”"
-msgstr "Zobraziť „Vytvorené pomocou Reactive Resume“"
+msgid "Show “Made with {appName}”"
+msgstr ""
 
 #. placeholder {0}: Math.min(remaining, COLUMN_PAGE_SIZE)
 #: src/features/applications-board/board-screen.tsx
@@ -9902,10 +9828,6 @@ msgstr "Zdroj"
 #: src/features/career/facts.tsx
 msgid "Source and correction history"
 msgstr "História zdroja a opráv"
-
-#: app/(tabs)/settings/index.tsx
-msgid "Source code on GitHub"
-msgstr "Zdrojový kód na GitHube"
 
 #: src/features/workspace/answer-library.tsx
 msgid "Source employer"
@@ -12258,8 +12180,8 @@ msgid "your Knowledge"
 msgstr "vaše Znalosti"
 
 #: app/(tabs)/settings/preferences.tsx
-msgid "Your language is saved. Restart Reactive Resume to apply the new left-to-right or right-to-left layout."
-msgstr "Váš jazyk je uložený. Reštartujte Reactive Resume, aby ste použili nové rozloženie zľava doprava alebo sprava doľava."
+msgid "Your language is saved. Restart the app to apply the new left-to-right or right-to-left layout."
+msgstr ""
 
 #: src/features/ats-checker/messages.ts
 msgid "Your lines are packed very tightly."
@@ -12276,10 +12198,6 @@ msgstr "vaša správa"
 #: src/features/write/outline.tsx
 msgid "Your name"
 msgstr "Tvoje meno"
-
-#: src/features/share/custom-domain.tsx
-msgid "Your name as your address, from OlaCV, the .cv registry. Code {CODE} takes 50% off the first year."
-msgstr "Vaše meno ako vaša adresa od OlaCV, registra domén .cv. S kódom {CODE} získate zľavu 50 % na prvý rok."
 
 #: src/features/check/issues.ts
 msgid "Your name is missing"

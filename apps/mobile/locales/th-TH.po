@@ -412,11 +412,6 @@ msgstr "ลงประกาศรับสมัครงาน {0}"
 msgid "{0} returned “{1}”. Your message is kept."
 msgstr "{0} ส่งคืน “{1}” ข้อความของคุณถูกเก็บไว้"
 
-#. placeholder {0}: done.length
-#: src/features/career/today.tsx
-msgid "{0} roles updated."
-msgstr ""
-
 #. placeholder {0}: selectedIds.length
 #. placeholder {0}: selection.length
 #: src/features/applications/list-screen.tsx
@@ -497,14 +492,6 @@ msgstr "{company} · {tabName}"
 #: src/features/documents/queries.ts
 msgid "{completed, plural, one {# document updated} other {# documents updated}}"
 msgstr "{completed, plural, one {อัปเดตเอกสาร # ฉบับแล้ว} other {อัปเดตเอกสาร # ฉบับแล้ว}}"
-
-#: src/features/share/custom-domain.tsx
-msgid "{cost} a year"
-msgstr "{cost} ต่อปี"
-
-#: src/features/share/custom-domain.tsx
-msgid "{cost} the first year"
-msgstr "{cost} สำหรับปีแรก"
 
 #: src/features/write/section-sheet.tsx
 msgid "{count, plural, one {# column} other {# columns}}"
@@ -755,8 +742,8 @@ msgid "24 hours before"
 msgstr "24 ชั่วโมงก่อน"
 
 #: src/features/letters/share.tsx
-msgid "A backup of this letter. Imports back into Reactive Resume as a letter."
-msgstr "ข้อมูลสำรองของจดหมายฉบับนี้ นำเข้ากลับเข้าไปใน Reactive Resume ในรูปแบบตัวอักษร"
+msgid "A backup of this letter. Imports back into {appName} as a letter."
+msgstr ""
 
 #: src/features/check/issues.ts
 msgid "A city and country let roles be matched to where you are."
@@ -1781,10 +1768,6 @@ msgstr "ขอให้ผู้ช่วยทำงาน"
 msgid "Ask the coach"
 msgstr "ถามโค้ช"
 
-#: src/features/share/download.tsx
-msgid "Ask the community. Remove personal details before posting."
-msgstr "ถามชุมชน ลบข้อมูลส่วนตัวก่อนโพสต์"
-
 #: src/features/ai/error.ts
 msgid "Ask your server administrator to enable credential encryption or configure a shared connection."
 msgstr "ขอให้ผู้ดูแลระบบเซิร์ฟเวอร์ของคุณเปิดใช้งานการเข้ารหัสข้อมูลประจำตัวหรือกำหนดค่าการเชื่อมต่อที่ใช้ร่วมกัน"
@@ -1869,10 +1852,6 @@ msgstr "อัตโนมัติ"
 #: src/features/history/history.tsx
 msgid "Autosaves are grouped by session and kept for 90 days. Named versions are kept until you delete them. Restoring saves the current state first."
 msgstr "การบันทึกอัตโนมัติจะถูกจัดกลุ่มตามเซสชันและเก็บไว้เป็นเวลา 90 วัน เวอร์ชันที่มีชื่อจะถูกเก็บไว้จนกว่าคุณจะลบออก การคืนค่าจะบันทึกสถานะปัจจุบันก่อน"
-
-#: src/features/share/custom-domain.tsx
-msgid "Available"
-msgstr "ว่าง"
 
 #: src/features/ats-checker/messages.ts
 msgid "Avoid heavy letter-spacing effects, then re-export."
@@ -2097,10 +2076,6 @@ msgstr "รายการหัวข้อย่อย"
 #: src/features/letters/design-presets.ts
 msgid "Burgundy"
 msgstr "เบอร์กันดี"
-
-#: app/(tabs)/settings/index.tsx
-msgid "by <0>Amruth Pillai</0>"
-msgstr "โดย <0>Amruth Pillai</0>"
 
 #: src/features/applications-board/views.tsx
 msgid "Calendar"
@@ -2567,10 +2542,6 @@ msgstr "ปิด: {closed}"
 msgid "Coach"
 msgstr "โค้ช"
 
-#: src/features/share/custom-domain.tsx
-msgid "Code copied"
-msgstr "คัดลอกโค้ดแล้ว"
-
 #: src/features/design/design-pane.tsx
 #: src/features/letters/design.tsx
 msgid "Color"
@@ -2641,8 +2612,8 @@ msgid "Complete {0} before saving."
 msgstr "กรอก {0} ให้ครบก่อนบันทึก"
 
 #: src/features/share/download.tsx
-msgid "Complete data backup. Imports back into Reactive Resume or JSON Resume tools."
-msgstr "สำรองข้อมูลให้สมบูรณ์ นำเข้ากลับไปยังเครื่องมือ Reactive Resume หรือ JSON Resume"
+msgid "Complete data backup. Imports back into {appName} or JSON Resume tools."
+msgstr ""
 
 #: src/features/ats-checker/messages.ts
 msgid "Compress or remove large images to keep uploads quick."
@@ -2677,10 +2648,6 @@ msgstr "เชื่อมต่อ"
 #: src/features/share/custom-domain.tsx
 msgid "Connect {0}"
 msgstr "เชื่อมต่อ {0}"
-
-#: src/features/share/custom-domain.tsx
-msgid "Connect {domain}"
-msgstr "เชื่อมต่อ {domain}"
 
 #: src/features/ai/web-access.tsx
 msgid "Connect a service"
@@ -2845,10 +2812,6 @@ msgstr "คัดลอกเรซูเม่สำหรับงาน"
 #: src/features/workspace/tabs/apply.tsx
 msgid "Copy answers"
 msgstr "คัดลอกคำตอบ"
-
-#: src/features/share/custom-domain.tsx
-msgid "Copy code"
-msgstr "คัดลอกโค้ด"
 
 #: src/features/document-menu/index.tsx
 msgid "Copy created"
@@ -3090,7 +3053,6 @@ msgstr "ทำเครื่องหมายว่าสมัครแล้
 #: app/(tabs)/settings/index.tsx
 #: src/auth/auth-header.tsx
 #: src/features/settings/api-keys.tsx
-#: src/features/share/download.tsx
 msgid "Couldn't open the browser. Try again."
 msgstr "ไม่สามารถเปิดเบราว์เซอร์ได้ ลองอีกครั้ง"
 
@@ -3897,10 +3859,6 @@ msgstr "อย่าส่งประกาศรับสมัครงาน
 msgid "Don't share"
 msgstr "อย่าแชร์"
 
-#: app/(tabs)/settings/index.tsx
-msgid "Donate on Open Collective"
-msgstr "บริจาคผ่าน Open Collective"
-
 #: app/(tabs)/settings/preferences.tsx
 #: src/features/applications/list-screen.tsx
 #: src/features/career/today.tsx
@@ -4303,8 +4261,8 @@ msgid "Enter terms yourself. No AI request is made. Leave unknown amounts blank.
 msgstr "กรอกเงื่อนไขด้วยตัวเอง ไม่มีการส่งคำขอไปยัง AI เว้นจำนวนเงินที่ยังไม่ทราบไว้"
 
 #: app/(auth)/server.tsx
-msgid "Enter the address you open Reactive Resume at in a browser. The app checks it's a Reactive Resume server that allows app sign-in before you continue."
-msgstr "ป้อนที่อยู่ที่คุณเปิด Reactive Resume ในเบราว์เซอร์ แอปตรวจสอบว่าเป็นเซิร์ฟเวอร์ Reactive Resume ที่อนุญาตให้ลงชื่อเข้าใช้แอปก่อนดำเนินการต่อ"
+msgid "Enter the address you open {appName} at in a browser. The app checks it's a {appName} server that allows app sign-in before you continue."
+msgstr ""
 
 #: src/features/letters/write.tsx
 msgid "Enter your details below. Choosing a resume replaces them and links its design."
@@ -4681,12 +4639,12 @@ msgstr ""
 
 #: src/api/ai-consent.ts
 #: src/features/career/schedule-sheet.tsx
-msgid "Found posting links are read by Reactive Resume and the sites being read."
+msgid "Found posting links are read by {appName} and the sites being read."
 msgstr ""
 
 #: src/api/ai-consent.ts
 #: src/features/career/schedule-sheet.tsx
-msgid "Found posting links are read by Reactive Resume and, when needed, {reader} and the sites being read. The reader may charge."
+msgid "Found posting links are read by {appName} and, when needed, {reader} and the sites being read. The reader may charge."
 msgstr ""
 
 #: src/features/design/style-groups.tsx
@@ -4753,10 +4711,6 @@ msgstr "“รับคำติชม” จะส่งคำถาม คำ�
 #: src/features/career/today.tsx
 msgid "Get new roles here every morning"
 msgstr "รับตำแหน่งงานใหม่ที่นี่ทุกเช้า"
-
-#: src/features/share/download.tsx
-msgid "Get resume feedback on Discord"
-msgstr "รับคำติชมประวัติย่อบน Discord"
 
 #: src/features/letters/write.tsx
 msgid "Getting long. Try “Shorter”, or cut the least specific paragraph."
@@ -5343,10 +5297,6 @@ msgstr "ไปป์ไลน์ค้นหางาน"
 #: src/features/search/search-screen.tsx
 msgid "Jobs"
 msgstr "งาน"
-
-#: app/(tabs)/settings/index.tsx
-msgid "Join the Discord"
-msgstr "เข้าร่วม Discord"
 
 #: src/features/letters/share.tsx
 #: src/features/share/download.tsx
@@ -6123,10 +6073,6 @@ msgstr "การจับคู่ประวัติย่อ"
 msgid "Matching your facts"
 msgstr "กำลังจับคู่ข้อเท็จจริงของคุณ"
 
-#: src/features/share/custom-domain.tsx
-msgid "May be available"
-msgstr "อาจยังว่าง"
-
 #: src/features/search/search-screen.tsx
 msgid "MCP"
 msgstr "MCP"
@@ -6164,10 +6110,6 @@ msgstr "เงินเดือนพื้นฐานขั้นต่ำ"
 #: src/features/career/offers.tsx
 msgid "Minimum salary cannot be compared in these terms."
 msgstr "เงินเดือนขั้นต่ำไม่สามารถเปรียบเทียบได้ในข้อกำหนดเหล่านี้"
-
-#: app/(tabs)/settings/index.tsx
-msgid "MIT License"
-msgstr "ใบอนุญาต MIT"
 
 #: src/features/workspace/tabs/debrief.tsx
 msgid "Mixed"
@@ -6711,10 +6653,6 @@ msgstr "ไม่มีรูปถ่าย ATS ส่วนใหญ่ไม�
 msgid "No postings found. Try different keywords."
 msgstr "ไม่พบประกาศรับสมัครงาน ลองใช้คำหลักอื่น"
 
-#: src/auth/messages.ts
-msgid "No Reactive Resume server answered at this address. Check the spelling, or ask your administrator whether the server allows app sign-in."
-msgstr "ไม่มีเซิร์ฟเวอร์ Reactive Resume ตอบตามที่อยู่นี้ ตรวจสอบการสะกดหรือถามผู้ดูแลระบบของคุณว่าเซิร์ฟเวอร์อนุญาตให้ลงชื่อเข้าใช้แอปหรือไม่"
-
 #: src/features/check/job-match.tsx
 msgid "No recognizable terms in this posting."
 msgstr "ไม่มีคำศัพท์ที่สามารถจดจำได้ในการลงประกาศรับสมัครงานนี้"
@@ -6738,6 +6676,10 @@ msgstr "ไม่มีผลลัพธ์"
 #: src/features/letters/write.tsx
 msgid "No resume"
 msgstr "ไม่มีเรซูเม่"
+
+#: src/auth/messages.ts
+msgid "No server answered at this address. Check the spelling, or ask your administrator whether the server allows app sign-in."
+msgstr ""
 
 #: src/features/ats-checker/messages.ts
 msgid "No skills section was found."
@@ -7460,20 +7402,20 @@ msgid "PDF check canceled. Retry when ready."
 msgstr "การตรวจสอบ PDF ถูกยกเลิก ลองอีกครั้งเมื่อพร้อม"
 
 #: src/features/application-detail/sections.tsx
-msgid "PDF only · up to 10 MB each. Linking a Reactive Resume enables AI match scoring and tailoring."
-msgstr "PDF เท่านั้น · ไฟล์ละไม่เกิน 10 MB การเชื่อมโยงประวัติย่อใน Reactive Resume จะเปิดใช้การให้คะแนนความเหมาะสมและปรับแต่งด้วย AI"
+msgid "PDF only · up to 10 MB each. Linking a resume enables AI match scoring and tailoring."
+msgstr ""
 
 #: src/features/design/advanced.tsx
 msgid "PDF styles support a subset of CSS. Rotation, dashed and dotted borders, and some layout properties are ignored."
 msgstr "สไตล์ PDF รองรับชุดย่อยของ CSS การหมุน เส้นประ และเส้นประ และคุณสมบัติเค้าโครงบางอย่างจะถูกละเว้น"
 
 #: src/features/documents/new-document.tsx
-msgid "PDF uses your AI provider when one is ready. Turn off the AI switch to read its text layer on your server. Word (.docx) needs an AI provider. Current and v4 Reactive Resume JSON, cover letters, JSON Resume and LinkedIn exports (.zip) are supported. Up to 10 MB."
-msgstr "PDF ใช้ผู้ให้บริการ AI ของคุณเมื่อพร้อม ปิดสวิตช์ AI เพื่ออ่านเลเยอร์ข้อความบนเซิร์ฟเวอร์ของคุณ Word (.docx) ต้องการผู้ให้บริการ AI รองรับการส่งออก Reactive Resume JSON ปัจจุบันและ v4, จดหมายสมัครงาน, การส่งออก JSON Resume และ LinkedIn (.zip) สูงสุด 10 เมกะไบต์"
+msgid "PDF uses your AI provider when one is ready. Turn off the AI switch to read its text layer on your server. Word (.docx) needs an AI provider. Current and v4 JSON, cover letters, JSON Resume and LinkedIn exports (.zip) are supported. Up to 10 MB."
+msgstr ""
 
 #: src/features/documents/new-document.tsx
-msgid "PDF, Word, Reactive Resume, JSON Resume or LinkedIn export."
-msgstr "การส่งออก PDF, Word, Reactive Resume, JSON Resume หรือ LinkedIn"
+msgid "PDF, Word, JSON, JSON Resume or LinkedIn export."
+msgstr ""
 
 #: src/features/career/offer-entry.tsx
 #: src/features/career/offers.tsx
@@ -7823,6 +7765,10 @@ msgstr ""
 msgid "Private. Only you can see it."
 msgstr "ส่วนตัว. มีเพียงคุณเท่านั้นที่สามารถเห็นได้"
 
+#: app/(tabs)/settings/licences.tsx
+msgid "Product"
+msgstr ""
+
 #: src/features/design/style-groups.tsx
 #: src/features/letters/design-presets.ts
 msgid "Professional"
@@ -7987,10 +7933,6 @@ msgstr "ส่งออกใหม่พร้อมฝังฟอนต์ �
 #: src/features/ats-checker/messages.ts
 msgid "Re-export with fonts embedded, then open the file and check that the text copies out cleanly."
 msgstr "ส่งออกใหม่พร้อมฝังฟอนต์ แล้วเปิดไฟล์ตรวจสอบว่าคัดลอกข้อความออกมาได้อย่างถูกต้อง"
-
-#: src/auth/auth-header.tsx
-msgid "Reactive Resume"
-msgstr "Reactive Resume"
 
 #: src/features/workspace/tabs/prepare.tsx
 msgid "Read briefing"
@@ -8211,10 +8153,6 @@ msgstr "รีเฟรชสรุปย่อ 24 ชั่วโมงก่�
 #: src/features/workspace/tabs/prepare.tsx
 msgid "Refresh the briefing on the morning of"
 msgstr "รีเฟรชสรุปย่อในเช้าวันสัมภาษณ์"
-
-#: src/features/share/custom-domain.tsx
-msgid "Register at OlaCV"
-msgstr "จดทะเบียนที่ OlaCV"
 
 #: src/features/workspace/tabs/prepare.tsx
 msgid "Rehearse aloud"
@@ -8469,10 +8407,6 @@ msgstr "รายงาน"
 msgid "Report AI content"
 msgstr "รายงานเนื้อหา AI"
 
-#: app/(tabs)/settings/index.tsx
-msgid "Report an issue"
-msgstr "แจ้งปัญหา"
-
 #: src/features/ai/report-content.tsx
 msgid "Report received by your server operator. Thank you."
 msgstr "รายงานที่ได้รับจากผู้ให้บริการเซิร์ฟเวอร์ของคุณ ขอบคุณ"
@@ -8572,10 +8506,6 @@ msgstr "ประวัติย่อ + จดหมาย"
 #: src/features/document-menu/index.tsx
 msgid "Resume details"
 msgstr "รายละเอียดประวัติย่อ"
-
-#: app/(tabs)/settings/index.tsx
-msgid "Resume feedback, product help, and community ideas."
-msgstr "คำติชมประวัติย่อ ความช่วยเหลือเกี่ยวกับผลิตภัณฑ์ และไอเดียจากชุมชน"
 
 #: src/features/application-detail/sections.tsx
 #: src/features/workspace/tabs/apply.tsx
@@ -9453,10 +9383,6 @@ msgstr "ตั้งค่าการค้นหาเว็บในการ
 msgid "Settings"
 msgstr "การตั้งค่า"
 
-#: app/(tabs)/settings/ai-mcp.tsx
-msgid "Setup guide"
-msgstr "คู่มือการตั้งค่า"
-
 #: src/features/ai/report-content.tsx
 msgid "Sexual content"
 msgstr "เนื้อหาเกี่ยวกับเรื่องเพศ"
@@ -9537,8 +9463,8 @@ msgid "Shorter"
 msgstr "สั้นลง"
 
 #: src/features/share/web-page.tsx
-msgid "Show “Made with Reactive Resume”"
-msgstr "แสดง “สร้างด้วย Reactive Resume”"
+msgid "Show “Made with {appName}”"
+msgstr ""
 
 #. placeholder {0}: Math.min(remaining, COLUMN_PAGE_SIZE)
 #: src/features/applications-board/board-screen.tsx
@@ -9902,10 +9828,6 @@ msgstr "แหล่งที่มา"
 #: src/features/career/facts.tsx
 msgid "Source and correction history"
 msgstr "แหล่งที่มาและประวัติการแก้ไข"
-
-#: app/(tabs)/settings/index.tsx
-msgid "Source code on GitHub"
-msgstr "ซอร์สโค้ดบน GitHub"
 
 #: src/features/workspace/answer-library.tsx
 msgid "Source employer"
@@ -12258,8 +12180,8 @@ msgid "your Knowledge"
 msgstr "คลังความรู้ของคุณ"
 
 #: app/(tabs)/settings/preferences.tsx
-msgid "Your language is saved. Restart Reactive Resume to apply the new left-to-right or right-to-left layout."
-msgstr "บันทึกภาษาของคุณแล้ว รีสตาร์ท Reactive Resume เพื่อใช้เค้าโครงซ้ายไปขวาหรือขวาไปซ้ายใหม่"
+msgid "Your language is saved. Restart the app to apply the new left-to-right or right-to-left layout."
+msgstr ""
 
 #: src/features/ats-checker/messages.ts
 msgid "Your lines are packed very tightly."
@@ -12276,10 +12198,6 @@ msgstr "ข้อความของคุณ"
 #: src/features/write/outline.tsx
 msgid "Your name"
 msgstr "ชื่อของคุณ"
-
-#: src/features/share/custom-domain.tsx
-msgid "Your name as your address, from OlaCV, the .cv registry. Code {CODE} takes 50% off the first year."
-msgstr "ใช้ชื่อของคุณเป็นที่อยู่ จาก OlaCV ผู้ดูแลทะเบียนโดเมน .cv โค้ด {CODE} ลด 50% สำหรับปีแรก"
 
 #: src/features/check/issues.ts
 msgid "Your name is missing"

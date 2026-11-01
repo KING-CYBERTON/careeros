@@ -73,10 +73,6 @@ msgstr "»{value}« se začne po današnjem dnevu. Preverite leto ali ga označi
 msgid "“{written}” added to Skills"
 msgstr "»{written}« dodan v spretnosti"
 
-#: src/features/homepage/prepare.tsx
-msgid "“How did you measure the onboarding redesign?”"
-msgstr "»Kako ste merili prenovo uvajanja?«"
-
 #: src/features/applications/components/import-applications-sheet.tsx
 msgid "(no header)"
 msgstr "(brez glave)"
@@ -393,10 +389,8 @@ msgstr "{0} intervju"
 msgid "{0} invited you to join as {1}."
 msgstr ""
 
-#. placeholder {0}: i18n.number(row.minutes)
 #. placeholder {0}: row.minutes
 #: src/features/career/workspace/prepare.tsx
-#: src/features/homepage/prepare.tsx
 msgid "{0} min"
 msgstr "{0} min"
 
@@ -516,6 +510,10 @@ msgstr "{0}. Težava rešena."
 msgid "{accepted} of {0} applied"
 msgstr "Uporabljen je {accepted} od {0}"
 
+#: src/routes/_home/-sections/header.tsx
+msgid "{appName} - Go to homepage"
+msgstr ""
+
 #: src/routes/builder/$resumeId/-components/page-canvas.tsx
 msgid "{authored, plural, =1 {Fit to one page} other {Fit to # pages}}"
 msgstr "{authored, plural, =1 {Prilagodi na eno stran} two {Prilagodi na # strani} few {Prilagodi na # strani} other {Prilagodi na # strani}}"
@@ -543,14 +541,6 @@ msgstr "Samo {company}"
 #: src/features/career/coach-chat.tsx
 msgid "{connection} didn't respond."
 msgstr "Ni odziva: {connection}."
-
-#: src/features/resume/share/cv-domain-card.tsx
-msgid "{cost} a year"
-msgstr "{cost} na leto"
-
-#: src/features/resume/share/cv-domain-card.tsx
-msgid "{cost} the first year"
-msgstr "{cost} za prvo leto"
 
 #: src/features/resume/editor/write/section-row.tsx
 msgid "{count, plural, one {# entry} other {# entries}}"
@@ -613,10 +603,6 @@ msgstr "Opravljeno: {done} od {count}"
 #: src/features/career/workspace/prepare.tsx
 msgid "{doneMinutes} of {total} min"
 msgstr "{doneMinutes} od {total} min"
-
-#: src/features/homepage/prepare.tsx
-msgid "{earlier} · typed"
-msgstr "{earlier} · vtipkano"
 
 #: src/features/resume/editor/write/write-panel.tsx
 msgid "{entries, plural, one {# entry} other {# entries}}"
@@ -731,10 +717,6 @@ msgstr "{name} uporablja en stolpec"
 msgid "{names} come last in the text. Most systems still find them; some don't."
 msgstr "{names} je zadnji v besedilu. Večina sistemov jih še vedno najde; nekateri ne."
 
-#: src/features/homepage/prepare.tsx
-msgid "{now} · typed"
-msgstr "{now} · vtipkano"
-
 #: src/features/resume/editor/check/check-panel.tsx
 msgid "{open, plural, one {# thing to review.} other {# things to review.}}"
 msgstr "{open, plural, one {# stvar za pregled.} other {# stvari za pregled.}}"
@@ -792,14 +774,6 @@ msgstr "{size} tč"
 msgid "{skipped, plural, one {# row had no company or role and was skipped.} other {# rows had no company or role and were skipped.}}"
 msgstr "{skipped, plural, one {# vrstica ni imela podjetja ali vloge in je bila preskočena.} two {# vrstici nista imeli podjetja ali vloge in sta bili preskočeni.} few {# vrstice niso imele podjetja ali vloge in so bile preskočene.} other {# vrstic ni imelo podjetja ali vloge in so bile preskočene.}}"
 
-#: src/components/input/github-stars-button.tsx
-msgid "{starCount, plural, one {Star us on GitHub, currently # star (opens in new tab)} other {Star us on GitHub, currently # stars (opens in new tab)}}"
-msgstr "{starCount, plural, one {Dodajte nam zvezdico na GitHubu, trenutno # zvezdica (odpre se v novem zavihku)} two {Dodajte nam zvezdico na GitHubu, trenutno # zvezdici (odpre se v novem zavihku)} few {Dodajte nam zvezdico na GitHubu, trenutno # zvezdice (odpre se v novem zavihku)} other {Dodajte nam zvezdico na GitHubu, trenutno # zvezdic (odpre se v novem zavihku)}}"
-
-#: src/features/homepage/header.tsx
-msgid "{stars, plural, one {Star Reactive Resume on GitHub, # star} other {Star Reactive Resume on GitHub, # stars}}"
-msgstr "{stars, plural, one {Dodajte zvezdico Reactive Resume na GitHubu, # zvezdica} two {Dodajte zvezdico Reactive Resume na GitHubu, # zvezdici} few {Dodajte zvezdico Reactive Resume na GitHubu, # zvezdice} other {Dodajte zvezdico Reactive Resume na GitHubu, # zvezdic}}"
-
 #: src/features/documents/page-navigation.tsx
 msgid "{start}–{end} of {total}"
 msgstr ""
@@ -815,14 +789,6 @@ msgstr "{summary}. Odpre se v Kariera → Ponudbe."
 #: src/features/career/workspace/fit.tsx
 msgid "{supported} supported · {partial} partly · {missing} missing"
 msgstr "Podprto: {supported} · delno: {partial} · manjka: {missing}"
-
-#: src/features/homepage/design.tsx
-msgid "{templateCount} free resume templates."
-msgstr "{templateCount} brezplačnih predlog za življenjepis."
-
-#: src/features/homepage/prepare.tsx
-msgid "{time} · Video call · 45 min"
-msgstr "{time} · Videoklic · 45 min"
 
 #: src/features/resume/editor/write/section-row.tsx
 msgid "{title} cleared"
@@ -891,10 +857,6 @@ msgstr "/ leto"
 msgid "+{extra} more"
 msgstr "+{extra} več"
 
-#: src/features/homepage/hero.tsx
-msgid "+13 pts activation"
-msgstr "Aktivacija +13 točk"
-
 #: src/features/resume/editor/check/check-panel.tsx
 msgid "<0>Nothing to fix.</0> Every check passes."
 msgstr "<0>Nič za popraviti.</0> Vsako preverjanje je uspešno."
@@ -902,11 +864,6 @@ msgstr "<0>Nič za popraviti.</0> Vsako preverjanje je uspešno."
 #: src/features/career/offers.tsx
 msgid "<0>Totals aren't added up on purpose.</0> Bonus and equity depend on conditions, and equity value is uncertain for both. Read the original offer documents before comparing totals."
 msgstr "<0>Skupni zneski namenoma niso sešteti.</0> Bonus in lastniški delež sta odvisna od pogojev, vrednost deleža pa je pri obeh negotova. Pred primerjavo skupnih zneskov preberite izvirne dokumente ponudb."
-
-#: src/features/homepage/check.tsx
-#: src/features/homepage/sheet.tsx
-msgid "06/2017 – 2021"
-msgstr "06/2017 – 2021"
 
 #: src/features/resume/editor/write/section-row.tsx
 msgid "1 column, inline"
@@ -933,59 +890,26 @@ msgstr "2 uri prej"
 msgid "2–3 sentences reads best"
 msgstr "2–3 stavki se najbolje berejo"
 
-#: src/features/homepage/check.tsx
-#: src/features/homepage/sheet.tsx
-msgid "2013 – 2017"
-msgstr "2013 – 2017"
-
-#: src/features/homepage/check.tsx
-#: src/features/homepage/sheet.tsx
-#: src/features/homepage/write.tsx
-msgid "2017 – 2021"
-msgstr "2017 – 2021"
-
-#: src/features/homepage/check.tsx
-#: src/features/homepage/sheet.tsx
-#: src/features/homepage/write.tsx
-msgid "2021 – Present"
-msgstr "2021 – danes"
-
 #: src/features/career/schedule-sheet.tsx
 #: src/features/career/today.tsx
 msgid "24 hours before"
 msgstr "24 ur prej"
 
-#: src/features/homepage/prepare.tsx
-msgid "3 supported · 1 partly · 1 missing"
-msgstr "Podprto: 3 · delno: 1 · manjka: 1"
-
 #: src/features/settings/ai/api-keys.tsx
 msgid "30 days"
 msgstr "30 dni"
 
-#: src/features/homepage/hero.tsx
-msgid "40% faster reviews"
-msgstr "40 % hitrejši pregledi"
-
-#: src/features/homepage/faq.tsx
-msgid "9 short answers to what people ask before they start. Anything else, ask on <0>Discord</0>."
-msgstr "9 kratkih odgovorov na vprašanja, ki jih ljudje zastavijo pred začetkom. Za vse drugo vprašajte na <0>Discordu</0>."
-
 #: src/features/settings/ai/api-keys.tsx
 msgid "90 days"
 msgstr "90 dni"
-
-#: src/features/homepage/remember.tsx
-msgid "A"
-msgstr "D"
 
 #: src/features/resume/editor/proposals/proposal-list.tsx
 msgid "A accepts and R rejects the focused edit. ↑ and ↓ move between edits."
 msgstr "A sprejme in R zavrne fokusirano urejanje. ↑ in ↓ premikate med urejanji."
 
 #: src/routes/builder/letter/-components/download-sheet.tsx
-msgid "A backup of this letter. Imports back into Reactive Resume as a letter."
-msgstr "Varnostna kopija tega pisma. Uvozi nazaj v Reactive Resume kot pismo."
+msgid "A backup of this letter. Imports back into {appName} as a letter."
+msgstr ""
 
 #: src/features/resume/editor/check/issues.ts
 msgid "A city and country let roles be matched to where you are."
@@ -1023,10 +947,6 @@ msgstr "Dejstvo se je spremenilo. Preglejte to zgodbo."
 msgid "A fact you've since forgotten"
 msgstr "Dejstvo, ki ste ga medtem pozabili"
 
-#: src/features/homepage/prepare.tsx
-msgid "A focused 30-minute plan"
-msgstr "Osredotočen 30-minutni načrt"
-
 #: src/features/career/workspace/prepare.tsx
 msgid "A focused plan for this round"
 msgstr "Osredotočen načrt za ta krog"
@@ -1035,15 +955,6 @@ msgstr "Osredotočen načrt za ta krog"
 msgid "A font is referenced but not embedded."
 msgstr "Pisava je navedena, vendar ni vdelana."
 
-#: src/features/homepage/sections.tsx
-msgid "A free and open-source resume builder"
-msgstr "Brezplačen in odprtokoden graditelj življenjepisov"
-
-#. Hero headline, line 1 of 4: A free, open-source / resume builder / and / career manager.
-#: src/features/homepage/hero.tsx
-msgid "A free, open-source"
-msgstr "Brezplačno odprtokodno orodje"
-
 #: src/features/ats-checker/messages.ts
 msgid "A full-height gap splits this page into two columns."
 msgstr "Vrzel čez celotno višino to stran deli na dva stolpca."
@@ -1051,10 +962,6 @@ msgstr "Vrzel čez celotno višino to stran deli na dva stolpca."
 #: src/features/ats-checker/messages.ts
 msgid "A gap is not a problem. Add a one-line explanation if you want to; many strong resumes simply do not."
 msgstr "Vrzel ni težava. Če želite, dodajte enovrstično pojasnilo; mnogi dobri življenjepisi tega preprosto ne storijo."
-
-#: src/features/homepage/prepare.tsx
-msgid "A high bar for accessibility"
-msgstr "Visoka merila za dostopnost"
 
 #: src/features/resume/editor/check/issues.ts
 msgid "A link isn't a full address"
@@ -1100,10 +1007,6 @@ msgstr "Shranjena ponudba"
 msgid "A second opinion on your wording"
 msgstr "Drugo mnenje o tvojem besedilu"
 
-#: src/features/homepage/sections.tsx
-msgid "A second pair of eyes."
-msgstr "Še en par oči."
-
 #: src/features/applications/next-step.ts
 msgid "A short follow-up is usually fine now"
 msgstr "Kratek nadaljnji pregled je zdaj običajno v redu"
@@ -1112,10 +1015,6 @@ msgstr "Kratek nadaljnji pregled je zdaj običajno v redu"
 msgid "A story you've since deleted"
 msgstr "Zgodba, ki ste jo medtem izbrisali"
 
-#: src/features/homepage/prepare.tsx
-msgid "A strong match, with one question to resolve"
-msgstr "Močno ujemanje z enim odprtim vprašanjem"
-
 #: src/features/career/workspace/prepare.tsx
 msgid "A timed plan, your opening, the stories to bring and questions to ask. It becomes your checklist 10 minutes before the call."
 msgstr "Časovno razporejen načrt, vaš uvod, zgodbe, ki jih pripravite, in vprašanja, ki jih zastavite. 10 minut pred klicem postane vaš kontrolni seznam."
@@ -1123,10 +1022,6 @@ msgstr "Časovno razporejen načrt, vaš uvod, zgodbe, ki jih pripravite, in vpr
 #: src/features/ats-checker/messages.ts
 msgid "A web address is written without https://."
 msgstr "Spletni naslov je zapisan brez https://."
-
-#: src/features/homepage/footer.tsx
-msgid "About"
-msgstr "O tej aplikaciji"
 
 #: src/features/career/workspace/practise.tsx
 msgid "About 90 seconds when spoken"
@@ -1146,7 +1041,6 @@ msgstr "Naglas se uporablja za naslove, ikone in pas glave. Telo besedila ostane
 
 #: src/features/auth/pages/accept-invitation.tsx
 #: src/features/career/workspace/apply.tsx
-#: src/features/homepage/write.tsx
 #: src/features/resume/editor/proposals/proposal-list.tsx
 msgid "Accept"
 msgstr "Sprejmi"
@@ -1158,10 +1052,6 @@ msgstr "Sprejmi vse"
 #: src/features/organization/no-organization-notice.tsx
 msgid "Accept your invitation"
 msgstr ""
-
-#: src/features/homepage/write.tsx
-msgid "Accepted"
-msgstr "Sprejeto"
 
 #: src/features/applications/stages.ts
 msgid "Accepted another offer"
@@ -1183,12 +1073,6 @@ msgstr "Dostop je omogočen"
 msgid "Access your account through the API, including reading, changing and deleting your documents and job applications."
 msgstr "Dostopajte do svojega računa prek API, vključno z branjem, spreminjanjem in brisanjem vaših dokumentov in prošenj za delo."
 
-#: src/features/homepage/check.tsx
-#: src/features/homepage/hero.tsx
-#: src/features/homepage/sheet.tsx
-msgid "Accessibility"
-msgstr "Dostopnost"
-
 #: src/features/career/knowledge/facts.tsx
 msgid "Accomplishment"
 msgstr "Dosežek"
@@ -1202,25 +1086,12 @@ msgid "Account"
 msgstr "Račun"
 
 #: src/features/career/knowledge/stories.tsx
-#: src/features/homepage/remember.tsx
 msgid "Action"
 msgstr "Dejanje"
 
 #: src/features/settings/ai/api-keys.tsx
 msgid "Actions"
 msgstr "Dejanja"
-
-#: src/features/homepage/remember.tsx
-msgid "Activation rose from 31% to 44% in one quarter, measured across new teams."
-msgstr "Aktivacija se je v enem četrtletju dvignila z 31 % na 44 %, merjeno pri novih ekipah."
-
-#: src/features/homepage/remember.tsx
-msgid "Activation rose from 31% to 44% in one quarter."
-msgstr "Aktivacija se je v enem četrtletju dvignila z 31 % na 44 %."
-
-#: src/features/homepage/remember.tsx
-msgid "Activation rose from 31%…"
-msgstr "Aktivacija se je dvignila z 31 %…"
 
 #: src/features/settings/ai/web-access.tsx
 msgid "Active"
@@ -1636,10 +1507,6 @@ msgstr "Prilagodite pisave, barve, razmike in razdelke v graditelju življenjepi
 msgid "Admin"
 msgstr ""
 
-#: src/features/homepage/sections.tsx
-msgid "Ads"
-msgstr "Oglasi"
-
 #: src/routes/builder/$resumeId/-components/design-panel.tsx
 msgid "Advanced"
 msgstr "Napredno"
@@ -1659,10 +1526,6 @@ msgstr "Po vedenjskem intervjuju"
 #: src/features/career/workspace/debrief.tsx
 msgid "After the interview"
 msgstr "Po intervjuju"
-
-#: src/features/homepage/prepare.tsx
-msgid "After the interview · Today"
-msgstr "Po intervjuju · Danes"
 
 #: src/features/career/workspace/debrief.tsx
 msgid "After the onsite"
@@ -1752,11 +1615,6 @@ msgstr ""
 msgid "Albanian"
 msgstr "Albanščina"
 
-#: src/features/homepage/check.tsx
-#: src/features/homepage/sheet.tsx
-msgid "Alex Morgan"
-msgstr "Alex Morgan"
-
 #: src/features/resume/editor/write/rich-text-editor-field.tsx
 msgid "Align center"
 msgstr "Poravnaj na sredino"
@@ -1842,10 +1700,6 @@ msgstr "Prenesite tudi spremno pismo {0}"
 msgid "Also email {0}"
 msgstr "Pošlji tudi e-pošto na {0}"
 
-#: src/features/homepage/sections.tsx
-msgid "Also on mobile"
-msgstr "Tudi na mobilnih napravah"
-
 #: src/features/resume/editor/design/style-groups.tsx
 msgid "Also shows the icons on skills, profiles and interests."
 msgstr "Prikazuje tudi ikone veščin, profilov in zanimanj."
@@ -1874,20 +1728,10 @@ msgstr ""
 msgid "An unexpected error stopped this page from loading. Try again, or go to the dashboard."
 msgstr "Nepričakovana napaka je preprečila nalaganje te strani. Poskusite znova ali pojdite na nadzorno ploščo."
 
-#. Hero headline, line 3 of 4: A free, open-source / resume builder / and / career manager.
-#: src/features/homepage/hero.tsx
-msgctxt "hero headline"
-msgid "and"
-msgstr "in"
-
 #. placeholder {0}: others.length
 #: src/features/applications/components/detail/contacts.tsx
 msgid "and {0} more"
 msgstr "in {0} več"
-
-#: src/features/homepage/sections.tsx
-msgid "and counting"
-msgstr "in štetje"
 
 #: src/features/resume/share/address-field.tsx
 msgid "Another of your resumes uses this address."
@@ -1899,7 +1743,6 @@ msgstr "Ta naslov že uporablja drug življenjepis. Izberite drugega."
 
 #: src/features/career/workspace/answer-library.tsx
 #: src/features/career/workspace/apply.tsx
-#: src/features/homepage/remember.tsx
 msgid "Answer"
 msgstr "Odgovor"
 
@@ -2035,7 +1878,6 @@ msgid "Application added"
 msgstr "Prijava dodana"
 
 #: src/features/career/workspace/answer-library.tsx
-#: src/features/homepage/remember.tsx
 msgid "Application answer"
 msgstr "Odgovor v prijavi"
 
@@ -2092,10 +1934,6 @@ msgstr ""
 msgid "application summaries"
 msgstr "povzetki prijav"
 
-#: src/features/homepage/prepare.tsx
-msgid "Application tabs"
-msgstr "Zavihki prijave"
-
 #: src/features/applications/components/application-form-sheet.tsx
 #: src/features/career/workspace/messages.tsx
 msgid "Application updated"
@@ -2130,14 +1968,10 @@ msgstr "Prijave za izvoz"
 
 #: src/features/applications/components/application-detail-sheet.tsx
 #: src/features/applications/stages.ts
-#: src/features/homepage/prepare.tsx
-#: src/features/homepage/sections.tsx
-#: src/features/homepage/tailor.tsx
 msgid "Applied"
 msgstr "Prijavljeno"
 
 #: src/features/career/workspace/messages.tsx
-#: src/features/homepage/prepare.tsx
 #: src/features/resume/editor/proposals/proposal-list.tsx
 msgctxt "A proposed change has been applied"
 msgid "Applied"
@@ -2162,17 +1996,8 @@ msgid "Applied. The application is updated."
 msgstr "Uporabljeno. Prijava je posodobljena."
 
 #: src/features/career/shared.tsx
-#: src/features/homepage/prepare.tsx
 msgid "Apply"
 msgstr "Prijava"
-
-#: src/features/homepage/remember.tsx
-msgid "Apply · Describe a product improvement you led."
-msgstr "Prijava · Opišite izboljšavo izdelka, ki ste jo vodili."
-
-#: src/features/homepage/prepare.tsx
-msgid "Apply 1 change"
-msgstr "Uveljavi 1 spremembo"
 
 #: src/libs/locale.ts
 msgid "Arabic"
@@ -2248,10 +2073,6 @@ msgstr "Prosite pomočnika, naj ga obdela"
 msgid "Ask the coach"
 msgstr "Vprašajte svetovalca"
 
-#: src/features/resume/share/download-tab.tsx
-msgid "Ask the community. Remove personal details before posting."
-msgstr "Vprašajte skupnost. Pred objavo odstranite osebne podatke."
-
 #: src/features/settings/ai/web-access.tsx
 msgid "Ask your server administrator to enable credential encryption or configure a shared web connection."
 msgstr "Prosite skrbnika strežnika, da omogoči šifriranje poverilnic ali konfigurira skupno spletno povezavo."
@@ -2259,14 +2080,6 @@ msgstr "Prosite skrbnika strežnika, da omogoči šifriranje poverilnic ali konf
 #: src/features/assistant/conversation.tsx
 msgid "Ask, or describe a change…"
 msgstr "Vprašajte ali opišite spremembo ..."
-
-#: src/features/homepage/faq.tsx
-msgid "Asked and <0>answered.</0>"
-msgstr "Vprašano in <0>odgovorjeno.</0>"
-
-#: src/features/homepage/prepare.tsx
-msgid "Asks for an example of your onboarding work."
-msgstr "Prosi za primer vašega dela pri uvajanju uporabnikov."
 
 #: src/features/resume/editor/write/picture-settings.tsx
 msgid "Aspect ratio"
@@ -2276,13 +2089,8 @@ msgstr "Razmerje stranic"
 #: src/features/assistant/assistant-panel.tsx
 #: src/features/assistant/conversation.tsx
 #: src/features/command-palette/pages/resumes.tsx
-#: src/features/homepage/write.tsx
 msgid "Assistant"
 msgstr "Pomočnik"
-
-#: src/features/homepage/sections.tsx
-msgid "Assistant (your key)"
-msgstr "Pomočnik (vaš ključ)"
 
 #: src/features/command-palette/pages/resumes.tsx
 msgid "Assistant conversations"
@@ -2292,23 +2100,9 @@ msgstr "Pogovori s pomočnikom"
 msgid "Assistant."
 msgstr "Pomočnik."
 
-#: src/features/homepage/prepare.tsx
-msgid "At Northwind Labs I led research for our onboarding redesign. I interviewed 14 customers, found three drop-off points, and we shipped a shorter setup. Activation rose from 31% to 44%."
-msgstr "V podjetju Northwind Labs sem vodil raziskavo za prenovo uvajanja. Opravil sem intervjuje s 14 strankami, odkril tri točke osipa in uvedli smo krajšo nastavitev. Aktivacija se je dvignila z 31 % na 44 %."
-
-#: src/features/homepage/remember.tsx
-msgid "At Northwind Labs, most new teams stalled before they finished setup."
-msgstr "V podjetju Northwind Labs je večina novih ekip obtičala, preden je dokončala nastavitev."
-
 #: src/features/command-palette/pages/navigation.tsx
-#: src/features/homepage/footer.tsx
-#: src/features/homepage/sections.tsx
 msgid "ATS checker"
 msgstr "Kontrolnik ATS"
-
-#: src/features/homepage/check.tsx
-msgid "ATS readability"
-msgstr "ATS berljivost"
 
 #: src/features/resume/editor/design/template-group.tsx
 msgid "ATS-safe"
@@ -2357,10 +2151,6 @@ msgstr "samodejno shranjeno"
 msgid "Autosaves are grouped by session and kept for 90 days. Named versions are kept until you delete them. Restoring saves the current state first."
 msgstr "Samodejno shranjevanje je razvrščeno po seji in se hrani 90 dni. Poimenovane različice se hranijo, dokler jih ne izbrišete. Obnovitev najprej shrani trenutno stanje."
 
-#: src/features/resume/share/cv-domain-card.tsx
-msgid "Available"
-msgstr "Prosta"
-
 #: src/features/ats-checker/messages.ts
 msgid "Avoid heavy letter-spacing effects, then re-export."
 msgstr "Izogibajte se močnim učinkom razmika med črkami, nato izvozite znova."
@@ -2376,12 +2166,6 @@ msgstr "Priznanja"
 #: src/libs/locale.ts
 msgid "Azerbaijani"
 msgstr "Azerbajdžanščina"
-
-#: src/features/homepage/check.tsx
-#: src/features/homepage/hero.tsx
-#: src/features/homepage/sheet.tsx
-msgid "BA, Communication Design"
-msgstr "BA, komunikacijsko oblikovanje"
 
 #: src/features/documents/new-document-dialog.tsx
 msgid "Back"
@@ -2422,7 +2206,6 @@ msgstr "Nazaj na zgodbe"
 
 #: src/features/career/knowledge/stories.tsx
 #: src/features/career/workspace/apply.tsx
-#: src/features/homepage/remember.tsx
 msgid "Backed by"
 msgstr "Opira se na"
 
@@ -2443,18 +2226,10 @@ msgctxt "Entry header accent: a tinted background behind the header"
 msgid "Band"
 msgstr "Pas"
 
-#: src/features/homepage/sheet.tsx
-msgid "Banner"
-msgstr "Pasica"
-
 #: src/features/resume/editor/design/entries-group.tsx
 msgctxt "Entry header accent: a bar beside the header"
 msgid "Bar"
 msgstr "Letvica"
-
-#: src/features/homepage/hero.tsx
-msgid "Barista, 2012"
-msgstr "Barista, 2012"
 
 #: src/features/career/offer-entry.tsx
 #: src/features/career/offers.tsx
@@ -2579,25 +2354,9 @@ msgstr "Brskajte po brezplačnih predlogah življenjepisov in vzorčnih datoteka
 msgid "Browse free resume templates, compare one-column and two-column layouts, and download sample PDFs. Customize your resume and export to PDF or Word."
 msgstr "Brskajte po brezplačnih predlogah življenjepisa, primerjajte postavitve v enem in dveh stolpcih ter prenesite vzorčne datoteke PDF. Prilagodite svoj življenjepis in ga izvozite v PDF ali Microsoft Word."
 
-#: src/features/homepage/hero.tsx
-msgid "Build a professional resume, download it as PDF or Word, and manage your job search in one place. Free templates, no ads, no paywall."
-msgstr "Sestavite profesionalni življenjepis, ga prenesite kot PDF ali Microsoft Word in upravljajte iskanje zaposlitve na enem mestu. Brezplačne predloge, brez oglasov, brez plačljivega zidu."
-
 #: src/features/homepage/ui.tsx
 msgid "Build your resume"
 msgstr "Sestavite svoj življenjepis"
-
-#: src/features/homepage/sheet.tsx
-msgid "Built a shared design system used by six product teams, cutting UI review time by 40%."
-msgstr "Zgradili skupni sistem oblikovanja, ki ga uporablja šest skupin izdelkov, s čimer smo skrajšali čas pregleda uporabniškega vmesnika za 40 %."
-
-#: src/features/homepage/prepare.tsx
-msgid "Built a shared design system used by six product teams."
-msgstr "Zgradil skupni sistem oblikovanja, ki ga uporablja šest skupin izdelkov."
-
-#: src/features/homepage/prepare.tsx
-msgid "Built from the posting, Sam’s message and your two strongest stories."
-msgstr "Pripravljeno na podlagi oglasa, Samovega sporočila in vaših dveh najmočnejših zgodb."
 
 #: src/features/settings/ai/web-access.tsx
 msgid "Built-in reader"
@@ -2617,25 +2376,9 @@ msgstr "vnos na seznam {n}"
 msgid "Bulleted list"
 msgstr "Seznam z oznakami"
 
-#: src/features/homepage/footer.tsx
-msgid "By the community, for the community."
-msgstr "Od skupnosti, za skupnost."
-
 #: src/routes/dashboard/applications/index.tsx
 msgid "Calendar"
 msgstr "Koledar"
-
-#: src/features/homepage/faq.tsx
-msgid "Can I host it myself?"
-msgstr "Ali ga lahko gostim sam?"
-
-#: src/features/homepage/faq.tsx
-msgid "Can I import a resume I already have?"
-msgstr "Ali lahko uvozim življenjepis, ki ga že imam?"
-
-#: src/features/homepage/faq.tsx
-msgid "Can it help me prepare for interviews?"
-msgstr "Mi lahko pomaga pri pripravi na intervjuje?"
 
 #: src/features/ats-checker/checker.tsx
 msgid "Can software read your resume?"
@@ -2679,15 +2422,6 @@ msgstr ""
 msgid "Career"
 msgstr "Kariera"
 
-#: src/features/homepage/sections.tsx
-msgid "Career coach (your key)"
-msgstr "Karierni svetovalec (vaš ključ)"
-
-#. Hero headline, line 4 of 4: A free, open-source / resume builder / and / career manager. Lines 2 and 4 are highlighted: keep each a complete phrase.
-#: src/features/homepage/hero.tsx
-msgid "career manager."
-msgstr "za upravljanje kariere."
-
 #: src/features/settings/account/application-profile.tsx
 msgid "Career preferences"
 msgstr ""
@@ -2716,7 +2450,6 @@ msgstr "Spremenite povezavo"
 msgid "Change it in Design."
 msgstr "Spremenite ga v Design."
 
-#: src/features/homepage/sections.tsx
 #: src/routes/_home/-sections/header.tsx
 msgid "Change language"
 msgstr "Spremeni jezik"
@@ -2771,10 +2504,6 @@ msgstr "Neposredno spremenil življenjepis (prejšnji pogovor)"
 msgid "Changed your mind? Rename your resume to something more descriptive."
 msgstr "Ste si premislili? Preimenujte svoj življenjepis v nekaj bolj opisa."
 
-#: src/features/homepage/footer.tsx
-msgid "Changelog"
-msgstr "Dnevnik sprememb"
-
 #: src/features/resume/editor/design/style-groups.tsx
 msgid "Changes section titles and date words only, not your content."
 msgstr "Spremeni samo naslove razdelkov in datumske besede, ne pa tudi vaše vsebine."
@@ -2787,8 +2516,6 @@ msgstr "Če ga spremenite, se na novi naslov pošlje potrditev. Vaše uporabniš
 msgid "Changing your password…"
 msgstr "Spreminjanje gesla…"
 
-#: src/features/homepage/footer.tsx
-#: src/features/homepage/header.tsx
 #: src/routes/builder/$resumeId/-components/editor-bar.tsx
 #: src/routes/builder/$resumeId/-components/editor-shell.tsx
 msgid "Check"
@@ -2809,10 +2536,6 @@ msgstr "Preveri znova"
 #: src/features/ats-checker/checker.tsx
 msgid "Check another file"
 msgstr "Preverite drugo datoteko"
-
-#: src/features/homepage/check.tsx
-msgid "Check any PDF, no account needed"
-msgstr "Preverite kateri koli PDF, račun ni potreben"
 
 #: src/features/resume/share/custom-domain-field.tsx
 #: src/features/resume/share/dns-records-dialog.tsx
@@ -2838,10 +2561,6 @@ msgstr "Preverite, ali je točna."
 #: src/features/career/workspace/practise.tsx
 msgid "check numbers and names before using it"
 msgstr "pred uporabo preverite številke in imena"
-
-#: src/features/homepage/check.tsx
-msgid "Check reads your resume the way hiring software does and explains what to fix in plain words. It runs in your browser, so the file stays with you: 0 uploads."
-msgstr "Funkcija Preverjanje prebere vaš življenjepis na način, kot to počne programska oprema za zaposlovanje, in s preprostimi besedami razloži, kaj je treba popraviti. Zažene se v vašem brskalniku, zato vaša datoteka ostane v vaši napravi: 0 prenosov."
 
 #: src/features/career/workspace/prepare.tsx
 msgid "Check the details"
@@ -2880,7 +2599,6 @@ msgstr "Preverite svoj e-poštni naslov za povezavo za ponastavitev gesla."
 msgid "Check your email for a link to verify your account."
 msgstr "Preverite svoj e-poštni naslov za povezavo za potrditev računa."
 
-#: src/features/homepage/check.tsx
 #: src/features/templates/gallery.tsx
 msgid "Check your resume’s ATS readability"
 msgstr "Preverite ATS berljivost svojega življenjepisa"
@@ -3010,10 +2728,6 @@ msgstr ""
 #: src/features/career/workspace/fit.tsx
 msgid "Clarify"
 msgstr "Pojasni"
-
-#: src/features/homepage/sheet.tsx
-msgid "Classic"
-msgstr "Klasična"
 
 #: src/features/settings/ai/api-keys.tsx
 msgid "Claude Desktop"
@@ -3158,10 +2872,6 @@ msgstr "Stolpci"
 msgid "Columns can scramble the order text is read in."
 msgstr "Stolpci lahko zamegljujejo besedilo naročila, v katerem se bere."
 
-#: src/features/homepage/sections.tsx
-msgid "Coming soon"
-msgstr "Kmalu na voljo"
-
 #: src/features/career/today.tsx
 msgid "Coming up"
 msgstr "Prihajajoče"
@@ -3177,10 +2887,6 @@ msgstr "Paleta ukazov"
 #: src/features/command-palette/content.tsx
 msgid "Command palette: {currentPage}"
 msgstr "Paleta ukazov: {currentPage}"
-
-#: src/features/homepage/footer.tsx
-msgid "Community"
-msgstr "Skupnost"
 
 #: src/features/resume/editor/design/fit.ts
 #: src/features/resume/editor/design/style-groups.tsx
@@ -3234,8 +2940,8 @@ msgid "Complete {0} before saving."
 msgstr "Pred shranjevanjem izpolnite {0}."
 
 #: src/features/resume/share/download-tab.tsx
-msgid "Complete data backup. Imports back into Reactive Resume or JSON Resume tools."
-msgstr "Popolna varnostna kopija podatkov. Uvozi nazaj v orodja Reactive Resume ali JSON Resume."
+msgid "Complete data backup. Imports back into {appName} or JSON Resume tools."
+msgstr ""
 
 #: src/features/ats-checker/messages.ts
 msgid "Compress or remove large images to keep uploads quick."
@@ -3273,10 +2979,6 @@ msgstr "Pred dodajanjem novega intervjuja potrdite čas z osebo {contact}."
 msgid "Confirm the time, link and who you'll meet. Glance at the resume and letter you sent."
 msgstr "Potrdite čas, povezavo in s kom se boste srečali. Na hitro preglejte življenjepis in pismo, ki ste ju poslali."
 
-#: src/features/homepage/prepare.tsx
-msgid "Confirms {time} today, by video."
-msgstr "Potrjuje {time} danes, prek videoklica."
-
 #: src/features/assistant/provider-setup.tsx
 #: src/features/resume/share/custom-domain-field.tsx
 #: src/features/settings/account/security.tsx
@@ -3287,10 +2989,6 @@ msgstr "Poveži"
 #: src/features/resume/share/dns-records-dialog.tsx
 msgid "Connect {0}"
 msgstr "Poveži {0}"
-
-#: src/features/resume/share/cv-domain-card.tsx
-msgid "Connect {domain}"
-msgstr "Poveži {domain}"
 
 #: src/features/settings/ai/web-access.tsx
 msgid "Connect a service"
@@ -3365,7 +3063,6 @@ msgid "Connections bill speech separately and may use tokens on your account. Yo
 msgstr "Povezave govor zaračunavajo posebej in lahko porabijo žetone na vašem računu. Govor v brskalniku je brezplačen, vendar lahko zvok obdela njegov izdelovalec. Strežnik hrani prepise, nikoli posnetkov."
 
 #: src/features/applications/components/application-detail-sheet.tsx
-#: src/features/homepage/footer.tsx
 msgid "Contact"
 msgstr "Kontakt"
 
@@ -3377,10 +3074,6 @@ msgstr ""
 #: src/features/resume/editor/check/issues.ts
 msgid "Contact details"
 msgstr "Kontaktni podatki"
-
-#: src/features/homepage/check.tsx
-msgid "Contact details found"
-msgstr "Kontaktni podatki so bili najdeni"
 
 #: src/features/applications/components/import-applications-sheet.tsx
 msgid "Contact email"
@@ -3432,18 +3125,6 @@ msgstr "Nadaljuj"
 msgid "Continue as guest"
 msgstr "Nadaljuj kot gost"
 
-#: src/features/homepage/sections.tsx
-msgid "Contribute code"
-msgstr "Prispevajte kodo"
-
-#: src/features/homepage/prepare.tsx
-msgid "Contribution clear"
-msgstr "Prispevek je jasen"
-
-#: src/features/homepage/prepare.tsx
-msgid "Contribution unclear"
-msgstr "Prispevek ni jasen"
-
 #: src/features/assistant/conversation.tsx
 #: src/features/career/coach-chat.tsx
 msgid "Conversation"
@@ -3471,7 +3152,6 @@ msgstr "Pogovori"
 msgid "Conversations about one job live in its workspace."
 msgstr "Pogovori o posameznem delovnem mestu so v njegovem delovnem prostoru."
 
-#: src/features/homepage/share.tsx
 #: src/features/resume/share/copy-link-button.tsx
 #: src/features/resume/share/copy-text.tsx
 #: src/features/settings/ai/api-keys.tsx
@@ -3520,10 +3200,6 @@ msgstr "Kopija za službo ..."
 #: src/features/settings/ai/api-keys.tsx
 msgid "Copy it now. For your security, it won't be shown again."
 msgstr "Kopiraj zdaj. Zaradi vaše varnosti ne bo več prikazan."
-
-#: src/features/homepage/share.tsx
-msgid "Copy link"
-msgstr "Kopiraj povezavo"
 
 #: src/features/documents/document-actions.tsx
 msgid "Copy public link"
@@ -4257,10 +3933,6 @@ msgstr "Spremno pismo"
 msgid "Cover letter — {0}"
 msgstr "Spremno pismo — {0}"
 
-#: src/features/homepage/tailor.tsx
-msgid "Cover letter · Fieldnote"
-msgstr "Spremno pismo · Fieldnote"
-
 #: src/features/applications/components/detail/sent-documents.tsx
 #: src/features/career/workspace/apply.tsx
 msgid "Cover letter file"
@@ -4281,7 +3953,6 @@ msgid "Cover letter submitted (optional)"
 msgstr "Poslano spremno pismo (neobvezno)"
 
 #: src/features/command-palette/pages/navigation.tsx
-#: src/features/homepage/sections.tsx
 msgid "Cover letters"
 msgstr "Spremna pisma"
 
@@ -4302,6 +3973,7 @@ msgid "Create a resume first, then ask about it."
 msgstr "Najprej ustvarite življenjepis, nato pa vprašajte o njem."
 
 #: src/features/auth/components/guest-banner.tsx
+#: src/features/homepage/page.tsx
 msgid "Create account"
 msgstr "Ustvari račun"
 
@@ -4349,10 +4021,6 @@ msgstr "Obreži in naloži"
 #: src/features/resume/editor/write/picture-settings.tsx
 msgid "Crop photo"
 msgstr "Obreži fotografijo"
-
-#: src/features/homepage/sheet.tsx
-msgid "Cross-functional leadership"
-msgstr "Medfunkcionalno vodenje"
 
 #: src/features/applications/components/import-applications-sheet.tsx
 msgid "CSV data"
@@ -4478,10 +4146,6 @@ msgstr "Datumi tečejo nazaj"
 msgid "Dates start in the future"
 msgstr "Datumi se začnejo v prihodnosti"
 
-#: src/features/homepage/check.tsx
-msgid "Dates use one format"
-msgstr "Datumi uporabljajo eno obliko"
-
 #: src/features/resume/editor/check/issues.ts
 msgid "Dates won't be read"
 msgstr "Datumi ne bodo prebrani"
@@ -4490,27 +4154,18 @@ msgstr "Datumi ne bodo prebrani"
 msgid "Dear {name},"
 msgstr "Spoštovani {name},"
 
-#: src/features/homepage/tailor.tsx
-msgid "Dear Fieldnote team,"
-msgstr "Spoštovana ekipa Fieldnote,"
-
 #: src/features/letters/compose.ts
 msgid "Dear hiring team,"
 msgstr "Spoštovana najemna ekipa,"
 
 #: src/features/career/shared.tsx
 #: src/features/career/workspace/saved.tsx
-#: src/features/homepage/prepare.tsx
 msgid "Debrief"
 msgstr "Analiza"
 
 #: src/features/auth/pages/accept-invitation.tsx
 msgid "Decline"
 msgstr ""
-
-#: src/features/homepage/prepare.tsx
-msgid "Deep breath."
-msgstr "Globoko vdihnite."
 
 #: src/features/resume/editor/write/rich-text-editor-field.tsx
 #: src/features/settings/ai/providers.tsx
@@ -4710,8 +4365,6 @@ msgstr "Opis"
 msgid "Description of role {0}"
 msgstr "Opis vloge {0}"
 
-#: src/features/homepage/design.tsx
-#: src/features/homepage/header.tsx
 #: src/libs/resume/section.tsx
 #: src/routes/builder/$resumeId/-components/design-panel.tsx
 #: src/routes/builder/$resumeId/-components/editor-bar.tsx
@@ -4729,16 +4382,6 @@ msgstr "Oblikovalske skupine"
 #: src/routes/builder/$resumeId/-components/design-panel.tsx
 msgid "Design reset to defaults"
 msgstr "Ponastavitev dizajna na privzete nastavitve"
-
-#: src/features/homepage/prepare.tsx
-msgid "Design system trade-offs"
-msgstr "Kompromisi sistema oblikovanja"
-
-#: src/features/homepage/check.tsx
-#: src/features/homepage/hero.tsx
-#: src/features/homepage/sheet.tsx
-msgid "Design systems"
-msgstr "Oblikovalski sistemi"
 
 #: src/features/career/workspace/shell.tsx
 #: src/routes/builder/$resumeId/-components/document-menu.tsx
@@ -4760,10 +4403,6 @@ msgstr "Narekovanje se je ustavilo pri omejitvi 2 minut."
 
 #: src/features/career/workspace/debrief.tsx
 msgid "Didn't land"
-msgstr "Ni uspelo"
-
-#: src/features/homepage/prepare.tsx
-msgid "Didn’t land"
 msgstr "Ni uspelo"
 
 #: src/features/career/offers.tsx
@@ -4813,10 +4452,6 @@ msgstr ""
 msgid "Do not share a resume"
 msgstr ""
 
-#: src/routes/dashboard/settings/route.tsx
-msgid "Docs"
-msgstr "Dokumentacija"
-
 #: src/features/resume/editor/chrome.tsx
 msgid "Document menu: {name}"
 msgstr "Meni dokumenta: {name}"
@@ -4824,10 +4459,6 @@ msgstr "Meni dokumenta: {name}"
 #: src/features/documents/documents-page.tsx
 msgid "Document type"
 msgstr "Vrsta dokumenta"
-
-#: src/features/homepage/footer.tsx
-msgid "Documentation"
-msgstr "Dokumentacija"
 
 #: src/features/command-palette/pages/navigation.tsx
 #: src/features/documents/documents-page.tsx
@@ -4848,10 +4479,6 @@ msgstr "Dokumenti za to delo"
 msgid "Documents you move here stay for 30 days."
 msgstr "Dokumenti, ki jih premaknete sem, ostanejo 30 dni."
 
-#: src/features/homepage/faq.tsx
-msgid "Does it use AI?"
-msgstr "Ali uporablja AI?"
-
 #: src/features/resume/share/custom-domain-field.tsx
 msgid "Domain connected"
 msgstr "Domena je povezana"
@@ -4864,12 +4491,6 @@ msgstr "Nimate računa? <0/>"
 #: src/features/assistant/conversation.tsx
 msgid "Don't send {0}"
 msgstr "Ne pošiljajte {0}"
-
-#: src/components/ui/donation-toast.tsx
-#: src/features/resume/share/download-tab.tsx
-#: src/routes/dashboard/settings/route.tsx
-msgid "Donate"
-msgstr "Donirajte"
 
 #: src/features/resume/editor/write/rich-text-editor-field.tsx
 #: src/features/settings/ai/api-keys.tsx
@@ -4999,10 +4620,6 @@ msgstr "Osnutek iz delovnega oglasa"
 msgid "Draft from your resume"
 msgstr "Osnutek iz vašega življenjepisa"
 
-#: src/features/homepage/remember.tsx
-msgid "Draft it as"
-msgstr "Pripravi osnutek kot"
-
 #: src/routes/builder/letter/-components/write-panel.tsx
 msgid "Draft kept. Edit anything you like."
 msgstr "Osnutek ohranjen. Uredite vse, kar želite."
@@ -5053,8 +4670,8 @@ msgid "Drag to reposition and use the slider to zoom before uploading."
 msgstr "Povlecite za spremembo položaja in pred nalaganjem uporabite drsnik za povečavo."
 
 #: src/features/documents/new-document-dialog.tsx
-msgid "Drop a file here or browse. PDF, Word, Reactive Resume or JSON Resume. We fill in every section and flag anything we're unsure of."
-msgstr "Spustite datoteko sem ali prebrskajte. PDF, Word, Reactive Resume ali JSON Resume. Izpolnimo vsak razdelek in označimo vse, o čemer nismo prepričani."
+msgid "Drop a file here or browse. PDF, Word, JSON or JSON Resume. We fill in every section and flag anything we're unsure of."
+msgstr ""
 
 #: src/features/ats-checker/checker.tsx
 msgid "Drop a PDF here or choose a file"
@@ -5250,12 +4867,6 @@ msgstr "Način urejevalnika"
 msgid "Editor views"
 msgstr "Pogledi urednika"
 
-#: src/features/homepage/sheet.tsx
-msgid "Editorial"
-msgstr "Uredništvo"
-
-#: src/features/homepage/check.tsx
-#: src/features/homepage/sheet.tsx
 #: src/libs/resume/section.tsx
 msgid "Education"
 msgstr "Izobrazba"
@@ -5321,11 +4932,6 @@ msgstr "Konec"
 msgid "English"
 msgstr "Angleščina"
 
-#: src/features/homepage/check.tsx
-#: src/features/homepage/sheet.tsx
-msgid "English (native)"
-msgstr "angleščina (domača)"
-
 #: src/libs/locale.ts
 msgid "English (United Kingdom)"
 msgstr "Angleščina (Združeno kraljestvo)"
@@ -5341,10 +4947,6 @@ msgstr "Izboljšano branje ni na voljo; uporabljal vgrajen čitalnik."
 #: src/features/applications/components/add-application-dialog.tsx
 msgid "Enhanced reading was unavailable. The built-in reader retrieved this posting."
 msgstr "Izboljšano branje ni bilo na voljo. Vgrajeni bralnik je pridobil to objavo delovnega mesta."
-
-#: src/components/ui/donation-toast.tsx
-msgid "Enjoying Reactive Resume?"
-msgstr "Vam je Reactive Resume všeč?"
 
 #: src/features/auth/pages/verify-2fa.tsx
 msgid "Enter a backup code."
@@ -5482,10 +5084,6 @@ msgstr "Vsak vnos ima datume v obrazcu, ki se berejo po vrstnem redu in nobenega
 msgid "Every role says what you did. Opinions on wording live in the Writing tab."
 msgstr "Vsaka vloga pove, kaj si naredil. Mnenja o besedilih živijo v zavihku Pisanje."
 
-#: src/features/homepage/faq.tsx
-msgid "Every template exports a text-based PDF with the words in reading order, which is what applicant tracking systems (ATS) need to parse a resume. To test any PDF, including one made elsewhere, the free ATS checker shows the text software extracts and what to fix."
-msgstr "Vsaka predloga izvozi PDF na podlagi besedila z besedami v vrstnem redu branja, kar sistemi za sledenje kandidatom (ATS) potrebujejo za razčlenitev življenjepisa. Za preizkus katerega koli PDF, vključno s tistim, izdelanim drugje, brezplačni preverjevalnik ATS prikaže besedilne izvlečke programske opreme in kaj je treba popraviti."
-
 #: src/features/ats-checker/checker.tsx
 msgid "Every term the posting stresses is already there."
 msgstr "Vsak izraz, ki ga poudarja oglas, je že tam."
@@ -5498,18 +5096,11 @@ msgstr "Vsak teden"
 msgid "Evidence changed or was removed. Edit and review before reuse."
 msgstr ""
 
-#: src/features/homepage/sections.tsx
-msgid "Exchange resume feedback, ask questions, and help shape Reactive Resume with the community."
-msgstr "Izmenjujte mnenja o življenjepisih, postavljajte vprašanja in skupaj s skupnostjo oblikujte Reactive Resume."
-
 #: src/features/resume/stylesheet/toolbar.tsx
 msgid "Exit focus mode"
 msgstr "Izhod iz načina ostrenja"
 
 #: src/features/career/knowledge/facts.tsx
-#: src/features/homepage/check.tsx
-#: src/features/homepage/sheet.tsx
-#: src/features/homepage/write.tsx
 #: src/libs/resume/section.tsx
 msgid "Experience"
 msgstr "Izkušnje"
@@ -5521,10 +5112,6 @@ msgstr "Izkušnje, Izobrazba in drugo"
 #: src/features/settings/ai/api-keys.tsx
 msgid "Expires"
 msgstr "poteče"
-
-#: src/features/homepage/prepare.tsx
-msgid "explain one limit of the measurement clearly, without underselling the work."
-msgstr "jasno pojasnite eno omejitev meritve, ne da bi podcenili delo."
 
 #: src/features/settings/account/data.tsx
 #: src/libs/resume/section.tsx
@@ -5602,10 +5189,6 @@ msgctxt "Entry header layout"
 msgid "Eyebrow"
 msgstr "Nadnaslov"
 
-#: src/features/homepage/remember.tsx
-msgid "Fact · Accomplishment"
-msgstr "Dejstvo · Dosežek"
-
 #: src/features/career/knowledge/facts.tsx
 msgid "Fact forgotten"
 msgstr "Dejstvo pozabljeno"
@@ -5631,10 +5214,6 @@ msgstr "Ni uspelo"
 msgid "Family name"
 msgstr ""
 
-#: src/features/homepage/footer.tsx
-msgid "Features"
-msgstr "Funkcije"
-
 #: src/features/career/workspace/practise.tsx
 msgid "Feedback"
 msgstr "Povratne informacije"
@@ -5643,33 +5222,10 @@ msgstr "Povratne informacije"
 msgid "Feedback needs an AI connection. <0>Add one in Settings</0>. Nothing is sent until you ask."
 msgstr "Za povratne informacije potrebujete povezavo AI. <0>Dodajte jo v Nastavitvah</0>. Dokler ne zaprosite, se nič ne pošlje."
 
-#: src/features/homepage/prepare.tsx
-msgid "Fewer support tickets isn’t backed by a number yet. Say it as something you noticed."
-msgstr "Manj zahtevkov za podporo še ni podprto s številko. Povejte to kot nekaj, kar ste opazili."
-
 #. placeholder {0}: index + 1
 #: src/features/resume/editor/write/basics-card.tsx
 msgid "Field {0}"
 msgstr "Polje {0}"
-
-#: src/features/homepage/prepare.tsx
-#: src/features/homepage/sections.tsx
-#: src/features/homepage/tailor.tsx
-msgid "Fieldnote"
-msgstr "Fieldnote"
-
-#: src/features/homepage/tailor.tsx
-msgid "Fieldnote · Remote, EU"
-msgstr "Fieldnote · Daljinec, EU"
-
-#: src/features/homepage/hero.tsx
-msgid "Figma"
-msgstr "Figma"
-
-#: src/features/homepage/check.tsx
-#: src/features/homepage/sheet.tsx
-msgid "Figma, HTML and CSS"
-msgstr "Figma, HTML in CSS"
 
 #: src/features/resume/share/download-tab.tsx
 msgid "File name"
@@ -5708,10 +5264,6 @@ msgstr "Izpolnjevanje vnosov"
 msgid "Filter by tag"
 msgstr "Filtriraj po oznaki"
 
-#: src/features/homepage/remember.tsx
-msgid "Find out why, and shorten setup without adding support work."
-msgstr "Ugotoviti, zakaj, in skrajšati nastavitev brez dodatnega dela za podporo."
-
 #: src/features/career/schedule-sheet.tsx
 msgid "Find roles"
 msgstr "Poišči vloge"
@@ -5743,7 +5295,6 @@ msgstr "Prileganje"
 
 #: src/features/career/shared.tsx
 #: src/features/career/workspace/saved.tsx
-#: src/features/homepage/prepare.tsx
 msgctxt "Application workspace tab: how well a job fits your experience"
 msgid "Fit"
 msgstr "Prileganje"
@@ -5775,10 +5326,6 @@ msgstr "Popravite jih v urejevalniku"
 #: src/features/applications/components/import-applications-sheet.tsx
 msgid "Fix these values in the CSV, or leave their columns out, before importing."
 msgstr "Pred uvozom popravite te vrednosti v datoteki CSV ali izpustite njihove stolpce."
-
-#: src/features/homepage/remember.tsx
-msgid "Fixing onboarding drop-off at Northwind Labs"
-msgstr "Odpravljanje osipa pri uvajanju v podjetju Northwind Labs"
 
 #: src/features/ats-checker/messages.ts
 msgid "Flatten the form so the text is part of the page."
@@ -5934,12 +5481,12 @@ msgid "Found for “{0}”. Posting checked {1}."
 msgstr ""
 
 #: src/features/career/schedule-sheet.tsx
-msgid "Found posting links are read by Reactive Resume and the sites being read."
+msgid "Found posting links are read by {appName} and the sites being read."
 msgstr ""
 
 #. placeholder {0}: webAccess.provider
 #: src/features/career/schedule-sheet.tsx
-msgid "Found posting links are read by Reactive Resume and, when needed, {0} and the sites being read. The reader may charge."
+msgid "Found posting links are read by {appName} and, when needed, {0} and the sites being read. The reader may charge."
 msgstr ""
 
 #: src/features/applications/components/add-application-dialog.tsx
@@ -5959,10 +5506,6 @@ msgid "Free ATS resume checker"
 msgstr "Brezplačen pregledovalnik življenjepisov ATS"
 
 #: src/libs/seo.ts
-msgid "Free resume builder with PDF & Word downloads"
-msgstr "Brezplačen urejevalnik življenjepisov s prenosi PDF in Word"
-
-#: src/libs/seo.ts
 msgid "Free resume templates with PDF examples"
 msgstr "Brezplačne predloge življenjepisov s primeri PDF"
 
@@ -5977,16 +5520,11 @@ msgstr "Prosta oblika"
 msgid "Free, no ads, no paywall."
 msgstr ""
 
-#: src/libs/seo.ts
-msgid "Free, open-source resume builder. Create, update, and share your resume, with PDF and Word downloads, no ads and no paywall."
-msgstr "Brezplačen, odprtokodni ustvarjalec življenjepisov. Ustvarite, posodobite in delite svoj življenjepis s prenosi PDF in Word, brez oglasov in plačilnega zidu."
-
 #: src/libs/locale.ts
 msgid "French"
 msgstr "Francoščina"
 
 #: src/features/career/workspace/fit.tsx
-#: src/features/homepage/prepare.tsx
 #: src/routes/builder/letter/-components/write-panel.tsx
 msgid "From"
 msgstr "Od"
@@ -5998,10 +5536,6 @@ msgstr "Iz analize"
 #: src/features/career/knowledge/facts.tsx
 msgid "From a document you attached"
 msgstr "Iz dokumenta, ki ste ga priložili"
-
-#: src/features/homepage/sections.tsx
-msgid "from developers who back it"
-msgstr "od razvijalcev, ki ga podpirajo"
 
 #: src/features/career/workspace/fit.tsx
 msgid "From Fit"
@@ -6065,10 +5599,6 @@ msgstr "Nemščina"
 msgid "Get a key at <0>{0}</0>. It's stored encrypted and used only for your requests."
 msgstr "Pridobite ključ pri <0>{0}</0>. Shranjen je šifriran in se uporablja samo za vaše zahteve."
 
-#: src/features/homepage/prepare.tsx
-msgid "Get a plan for the interview, built from the posting and your own stories. Practice out loud, then write down how it went."
-msgstr "Pridobite načrt za razgovor, pripravljen na podlagi oglasa in vaših zgodb. Vadite na glas, nato zapišite, kako je šlo."
-
 #: src/features/career/workspace/practise.tsx
 msgid "Get feedback"
 msgstr "Pridobi povratne informacije"
@@ -6077,21 +5607,9 @@ msgstr "Pridobi povratne informacije"
 msgid "Get feedback sends the question, your answer, this posting and your stories to {providerName}."
 msgstr "»Pridobi povratne informacije« pošlje vprašanje, vaš odgovor, ta oglas in vaše zgodbe. Prejemnik: {providerName}."
 
-#: src/features/homepage/sections.tsx
-msgid "Get it on"
-msgstr "Prenesite iz"
-
 #: src/features/career/today.tsx
 msgid "Get new roles here every morning"
 msgstr "Vsako jutro prejmite nove vloge tukaj"
-
-#: src/features/resume/share/download-tab.tsx
-msgid "Get resume feedback on Discord"
-msgstr "Pridobite mnenje o svojem življenjepisu na Discordu"
-
-#: src/features/homepage/footer.tsx
-msgid "Get started"
-msgstr "Začnite"
 
 #: src/routes/builder/letter/-components/write-panel.tsx
 msgid "Getting long. Try “Shorter”, or cut the least specific paragraph."
@@ -6148,10 +5666,6 @@ msgstr ""
 msgid "Go to…"
 msgstr "Pojdi na…"
 
-#: src/features/resume/share/download-tab.tsx
-msgid "Good luck out there. Reactive Resume stays free because people chip in."
-msgstr "Vso srečo tam zunaj. Reactive Resume ostane brezplačen, ker ljudje vplačajo žetone."
-
 #. Authentication provider display name in account settings
 #. Brand name label for Google social sign-in button
 #: src/features/auth/components/social-auth.tsx
@@ -6182,10 +5696,6 @@ msgstr "Nagovor"
 #: src/features/documents/documents-page.tsx
 msgid "Grid"
 msgstr "Mreža"
-
-#: src/features/homepage/remember.tsx
-msgid "Happy to walk you through it on our call."
-msgstr "Z veseljem vam ga podrobneje predstavim med pogovorom."
 
 #: src/features/ats-checker/checker.tsx
 #: src/features/resume/editor/check/check-panel.tsx
@@ -6230,7 +5740,6 @@ msgid "Headline"
 msgstr "Glava"
 
 #: src/features/career/workspace/practise.tsx
-#: src/features/homepage/prepare.tsx
 msgid "Hear it"
 msgstr "Poslušaj"
 
@@ -6249,18 +5758,6 @@ msgstr "Pomoč in dokumenti"
 #: src/features/career/coach.tsx
 msgid "Help me turn an accomplishment into a Situation, Task, Action, Result and Reflection story."
 msgstr "Pomagaj mi spremeniti dosežek v zgodbo s situacijo, nalogo, dejanjem, rezultatom in refleksijo."
-
-#: src/features/settings/preferences.tsx
-msgid "Help translate"
-msgstr "Pomagajte prevesti"
-
-#: src/features/homepage/sections.tsx
-msgid "Help translate it into yours."
-msgstr "Pomagajte pri prevodu v svoj jezik."
-
-#: src/features/homepage/prepare.tsx
-msgid "Hi Alex, great to confirm: you’ll meet our design team today at {time}, by video. Could you bring an example of your onboarding work?"
-msgstr "Pozdravljeni, Alex, z veseljem potrjujem: danes ob {time} se boste prek videoklica srečali z našo oblikovalsko ekipo. Bi lahko prinesli primer svojega dela pri uvajanju uporabnikov?"
 
 #: src/components/level/combobox.tsx
 #: src/features/resume/editor/write/entries.tsx
@@ -6366,10 +5863,6 @@ msgstr "Vodoravni rob"
 msgid "Horizontal spacing"
 msgstr "Vodoravni razmik"
 
-#: src/features/homepage/sections.tsx
-msgid "Hosting and development are paid for by people like you. Optional tip:"
-msgstr "Gostovanje in razvoj plačujejo ljudje, kot ste vi. Izbirni nasvet:"
-
 #: src/features/settings/account/application-profile.tsx
 msgid "Hour"
 msgstr ""
@@ -6379,7 +5872,6 @@ msgid "How did it go?"
 msgstr "Kako je šlo?"
 
 #: src/features/career/workspace/debrief.tsx
-#: src/features/homepage/prepare.tsx
 msgid "How did it land?"
 msgstr "Kako je bilo sprejeto?"
 
@@ -6402,10 +5894,6 @@ msgstr "Koliko dni dopusta pripada?"
 #: src/features/career/schedule-sheet.tsx
 msgid "How often"
 msgstr "Kako pogosto"
-
-#: src/features/templates/gallery.tsx
-msgid "How to choose a template"
-msgstr "Kako izbrati predlogo"
 
 #: src/features/ats-checker/checker.tsx
 msgid "How to show the file"
@@ -6436,10 +5924,6 @@ msgstr ""
 msgid "I can see this {kind}. Suggestions come back as edits you can review before accepting."
 msgstr ""
 
-#: src/features/homepage/remember.tsx
-msgid "I interviewed 14 customers, mapped three drop-off points and prototyped a shorter setup with engineering."
-msgstr "Opravil sem intervjuje s 14 strankami, opredelil tri točke osipa in z inženirji izdelal prototip krajše nastavitve."
-
 #: src/features/career/workspace/answer-library.tsx
 msgid "I removed employer-specific wording and reviewed reuse across employers."
 msgstr ""
@@ -6468,10 +5952,6 @@ msgstr "Ikona ..."
 #: src/features/resume/editor/design/style-groups.tsx
 msgid "Icons in contact line"
 msgstr "Ikone v kontaktni vrstici"
-
-#: src/features/homepage/remember.tsx
-msgid "If I did it again, I’d agree on the measure before the first prototype."
-msgstr "Če bi to ponovil, bi se o merilu dogovoril pred prvim prototipom."
 
 #: src/features/ats-checker/messages.ts
 msgid "If it came from a scan, that is expected. Otherwise remove it; recruiters read it as keyword stuffing."
@@ -6547,8 +6027,8 @@ msgid "Import steps"
 msgstr "Uvozite korake"
 
 #: src/features/ats-checker/checker.tsx
-msgid "Import this file into a free Reactive Resume. Every issue is waiting for you in Check."
-msgstr "Uvozite to datoteko v brezplačen Reactive Resume. Vsaka številka vas čaka v Čeku."
+msgid "Import this file into a free {appName} account. Every issue is waiting for you in Check."
+msgstr ""
 
 #: src/features/documents/documents-page.tsx
 msgid "Import your current resume and we'll lay out every section for you to refine. Or start fresh. Start with your name. Build from there."
@@ -6582,10 +6062,6 @@ msgstr "Izboljšaj izbrano vrstico"
 #: src/features/resume/editor/write/improve.tsx
 msgid "Improving…"
 msgstr "Izboljšanje ..."
-
-#: src/features/homepage/sections.tsx
-msgid "In good company"
-msgstr "V dobri družbi"
 
 #: src/features/ats-checker/messages.ts
 msgid "Increase line spacing so two lines are not merged into one."
@@ -6629,9 +6105,6 @@ msgstr "Samo vmesnik. Vsak življenjepis nastavi svoj jezik v Design."
 
 #: src/features/applications/stages.ts
 #: src/features/career/schedule-sheet.tsx
-#: src/features/homepage/prepare.tsx
-#: src/features/homepage/sections.tsx
-#: src/features/homepage/tailor.tsx
 msgid "Interview"
 msgstr "Intervju"
 
@@ -6643,15 +6116,6 @@ msgstr "Analiza intervjuja"
 msgid "Interview deleted"
 msgstr "Intervju izbrisan"
 
-#: src/features/homepage/prepare.tsx
-#: src/features/homepage/sections.tsx
-msgid "Interview done"
-msgstr "Intervju opravljen"
-
-#: src/features/homepage/prepare.tsx
-msgid "Interview in {duration}"
-msgstr "Intervju čez {duration}"
-
 #: src/features/applications/components/interview-dialog.tsx
 msgid "Interview is in another timezone"
 msgstr "Intervju je v drugem časovnem pasu"
@@ -6659,18 +6123,6 @@ msgstr "Intervju je v drugem časovnem pasu"
 #: src/features/career/workspace/shell.tsx
 msgid "Interview notes"
 msgstr "Opombe o intervjuju"
-
-#: src/features/homepage/prepare.tsx
-msgid "Interview now"
-msgstr "Intervju zdaj"
-
-#: src/features/homepage/remember.tsx
-msgid "Interview opening"
-msgstr "Uvod na intervjuju"
-
-#: src/features/homepage/sections.tsx
-msgid "Interview prep"
-msgstr "Priprava na intervju"
 
 #: src/features/career/schedule-sheet.tsx
 #: src/features/career/today.tsx
@@ -6693,10 +6145,6 @@ msgstr "Uporabljajo ga časi intervjujev, opomniki in urniki v Karieri."
 #: src/features/applications/components/interview-dialog.tsx
 msgid "Interview timezone"
 msgstr "Časovni pas intervjuja"
-
-#: src/features/homepage/remember.tsx
-msgid "Interviewed 14 customers, mapped three drop-off points and prototyped a shorter setup with engineering."
-msgstr "Opravil intervjuje s 14 strankami, opredelil tri točke osipa in z inženirji izdelal prototip krajše nastavitve."
 
 #: src/features/applications/components/detail/contacts.tsx
 msgid "Interviewer"
@@ -6722,10 +6170,6 @@ msgstr ""
 #: src/features/career/offers.tsx
 msgid "Is equity part of the offer?"
 msgstr "Je lastniški delež del ponudbe?"
-
-#: src/features/homepage/faq.tsx
-msgid "Is Reactive Resume really free?"
-msgstr "Je Reactive Resume res brezplačen?"
 
 #: src/features/career/offers.tsx
 msgid "Is there a bonus, and what does it depend on?"
@@ -6794,10 +6238,6 @@ msgstr "Za vedno bo izbrisan in ga ne bo več mogoče obnoviti."
 msgid "It will show on the application's timeline and on the calendar."
 msgstr "Prikazan bo na časovnici prijave za delo in na koledarju."
 
-#: src/components/ui/donation-toast.tsx
-msgid "It's free and open source, kept going by donations from the people who use it. If it has helped you, consider chipping in."
-msgstr "Je brezplačen in odprtokoden, vzdržujejo ga donacije ljudi, ki ga uporabljajo. Če vam je pomagal, razmislite o prispevku."
-
 #: src/features/applications/components/detail/activity.tsx
 msgid "It's removed from the timeline for good."
 msgstr "Za vedno je odstranjen s časovnice."
@@ -6849,7 +6289,6 @@ msgstr "Opis delovnega mesta"
 msgid "Job link or posting text"
 msgstr "Povezava do zaposlitve ali besedilo objave zaposlitve"
 
-#: src/features/homepage/tailor.tsx
 #: src/features/resume/editor/check/check-panel.tsx
 msgid "Job match"
 msgstr "Delovno ujemanje"
@@ -6874,10 +6313,6 @@ msgstr "Iskanje zaposlitve ni uspelo. Poskusite znova ali prilepite povezavo do 
 msgid "Job search pipeline"
 msgstr "Potek iskanja zaposlitve"
 
-#: src/features/homepage/sections.tsx
-msgid "Job tracker"
-msgstr "Sledilnik delovnih mest"
-
 #: src/features/command-palette/pages/navigation.tsx
 msgid "Jobs"
 msgstr "Zaposlitve"
@@ -6896,14 +6331,6 @@ msgstr "john.doe"
 #: src/features/auth/pages/accept-invitation.tsx
 msgid "Join {0}"
 msgstr ""
-
-#: src/features/homepage/footer.tsx
-msgid "Join Discord"
-msgstr "Pridruži se Discordu"
-
-#: src/features/homepage/sections.tsx
-msgid "Join the Discord community"
-msgstr "Pridružite se skupnosti na Discordu"
 
 #: src/features/resume/import/read-file.ts
 msgid "JSON read"
@@ -6948,10 +6375,6 @@ msgstr "Nadaljuj z urejanjem"
 msgid "Keep in Trash"
 msgstr "Shrani v smeti"
 
-#: src/features/homepage/sections.tsx
-msgid "Keep it <0>free.</0>"
-msgstr "Naj bo <0>brezplačno.</0>"
-
 #: src/features/career/workspace/prepare.tsx
 msgid "Keep it honest"
 msgstr "Ostanite iskreni"
@@ -6960,7 +6383,6 @@ msgstr "Ostanite iskreni"
 msgid "Keep it under 2.5 MB, usually by removing or shrinking images."
 msgstr "Ohranite ga pod 2,5 MB, običajno z odstranitvijo ali zmanjšanjem slik."
 
-#: src/features/homepage/write.tsx
 #: src/features/resume/editor/write/improve.tsx
 msgid "Keep mine"
 msgstr "Obdrži mojo"
@@ -6980,10 +6402,6 @@ msgstr "Vsebino življenjepisa ohranite kot pravo besedilo, ne kot slike besedil
 #: src/features/ats-checker/messages.ts
 msgid "Keep running heads short, or drop them. They repeat in the extracted text too."
 msgstr "Glave strani naj bodo kratke ali pa jih izpustite. Ponovijo se tudi v izvlečenem besedilu."
-
-#: src/features/homepage/prepare.tsx
-msgid "Keep the evidence precise"
-msgstr "Dokazi naj bodo natančni"
 
 #: src/features/resume/editor/chrome.tsx
 msgid "Keep the panel beside the page"
@@ -7013,10 +6431,6 @@ msgstr "Ohranja najbolj specifične dele"
 #: src/features/resume/editor/check/actions.ts
 msgid "Kept as it is"
 msgstr "Ohranjeno tako kot je"
-
-#: src/features/homepage/write.tsx
-msgid "Kept yours"
-msgstr "Ohranjeno vaše"
 
 #. placeholder {0}: keyEnding(provider.apiKeyPreview)
 #: src/features/settings/ai/providers.tsx
@@ -7056,7 +6470,6 @@ msgstr "Kmerščina"
 msgid "Kind regards,"
 msgstr "Lep pozdrav,"
 
-#: src/features/homepage/remember.tsx
 #: src/routes/dashboard/career/knowledge/route.tsx
 #: src/routes/dashboard/career/route.tsx
 msgid "Knowledge"
@@ -7065,10 +6478,6 @@ msgstr "Znanje"
 #: src/features/career/coach.tsx
 msgid "Knowledge couldn't load. Try again or switch Knowledge off before sending."
 msgstr "Znanja ni bilo mogoče naložiti. Poskusite znova ali pred pošiljanjem izklopite Znanje."
-
-#: src/features/homepage/prepare.tsx
-msgid "Knowledge doesn’t mention mentoring."
-msgstr "Znanje ne omenja mentorstva."
 
 #: src/features/career/role-suggestions.tsx
 msgid "Knowledge:"
@@ -7104,8 +6513,6 @@ msgstr "Ležeče (Landscape)"
 msgid "Language"
 msgstr "Jezik"
 
-#: src/features/homepage/check.tsx
-#: src/features/homepage/sheet.tsx
 #: src/libs/resume/section.tsx
 msgid "Languages"
 msgstr "Jeziki"
@@ -7161,21 +6568,6 @@ msgstr "Besedilo razporedite vodoravno. Zasukani odseki se pogosto izgubijo ali 
 msgid "Layout"
 msgstr "Postavitev"
 
-#: src/features/homepage/prepare.tsx
-msgid "Lead across functions"
-msgstr "Medfunkcijsko vodenje"
-
-#: src/features/homepage/check.tsx
-#: src/features/homepage/hero.tsx
-#: src/features/homepage/sheet.tsx
-#: src/features/homepage/write.tsx
-msgid "Lead Product Designer"
-msgstr "Vodilni oblikovalec izdelkov"
-
-#: src/features/homepage/write.tsx
-msgid "Lead with the result and give it a scale."
-msgstr "Vodite z rezultatom in mu dajte lestvico."
-
 #: src/features/assistant/assistant-panel.tsx
 msgid "Leads with why you fit"
 msgstr "Vodi s tem, zakaj ste primerni"
@@ -7210,14 +6602,6 @@ msgstr "Pustite prazno, da uporabite izvirni naslov."
 msgid "Leave out"
 msgstr "Pusti ven"
 
-#: src/features/homepage/sheet.tsx
-msgid "Led <0>user research</0> for the onboarding redesign; activation rose from 31% to 44%."
-msgstr "Vodil sem <0>raziskave uporabnikov</0> za prenovo uvajanja novih uporabnikov; aktivacija se je povečala z 31 % na 44 %."
-
-#: src/features/homepage/prepare.tsx
-msgid "Led research for the onboarding redesign; activation rose from 31% to 44%."
-msgstr "Vodil raziskavo za prenovo uvajanja; aktivacija se je dvignila z 31 % na 44 %."
-
 #: src/features/resume/editor/design/template-group.tsx
 msgid "Left"
 msgstr "levo"
@@ -7225,10 +6609,6 @@ msgstr "levo"
 #: src/features/resume/import/read-file.ts
 msgid "Legacy Word files aren't supported. Open the file in Word and save it as .docx first."
 msgstr "Podedovane datoteke Word niso podprte. Odprite datoteko v Word in jo najprej shranite kot .docx."
-
-#: src/features/homepage/footer.tsx
-msgid "Legal"
-msgstr "Pravno"
 
 #: src/routes/builder/$resumeId/-components/document-details.tsx
 #: src/routes/builder/letter/-components/write-panel.tsx
@@ -7315,10 +6695,6 @@ msgstr "Raven"
 msgid "Level {level} of 5"
 msgstr "Raven {level} od 5"
 
-#: src/features/homepage/footer.tsx
-msgid "Licensed under <0>MIT</0>"
-msgstr "Licenca <0>MIT</0>"
-
 #: src/features/ats-checker/messages.ts
 msgid "Ligatures can drop letters out of words such as \"workflow\"."
 msgstr "Ligature lahko iz besed, kot je „workflow“, izpustijo črke."
@@ -7370,12 +6746,12 @@ msgid "Link {0} URL"
 msgstr ""
 
 #: src/features/applications/components/application-form-sheet.tsx
-msgid "Link a Reactive Resume (recommended)"
-msgstr "Poveži Reactive Resume (priporočeno)"
+msgid "Link a resume (recommended)"
+msgstr ""
 
 #: src/features/applications/components/application-form-sheet.tsx
-msgid "Link a Reactive Resume to use AI match scoring and tailoring."
-msgstr "Povežite življenjepis iz Reactive Resume, da boste lahko uporabljali ocenjevanje ujemanja in prilagajanje z AI."
+msgid "Link a resume to use AI match scoring and tailoring."
+msgstr ""
 
 #: src/features/resume/editor/write/basics-card.tsx
 #: src/features/resume/editor/write/rich-text-editor-field.tsx
@@ -7466,15 +6842,6 @@ msgstr "Povezovanje ..."
 msgid "Links"
 msgstr "Povezave"
 
-#: src/features/homepage/hero.tsx
-msgid "Lisbon"
-msgstr "Lisbon"
-
-#: src/features/homepage/check.tsx
-#: src/features/homepage/sheet.tsx
-msgid "Lisbon, Portugal"
-msgstr "Lisbon, Portugal"
-
 #: src/features/documents/documents-page.tsx
 #: src/routes/dashboard/applications/index.tsx
 msgid "List"
@@ -7500,10 +6867,6 @@ msgstr "V živo · se posodablja med urejanjem"
 #: src/features/resume/share/address-field.tsx
 msgid "Live at {0}"
 msgstr "V živo na {0}"
-
-#: src/features/homepage/sections.tsx
-msgid "Live totals, refreshed every 6 hours."
-msgstr "Seštevki v živo, osveženi vsakih 6 ur."
 
 #: src/features/applications/components/import-applications-sheet.tsx
 msgid "Load your stages before importing named stages. Your CSV data is kept."
@@ -7575,10 +6938,6 @@ msgstr "Nalaganje shranjene različice…"
 msgid "Loading stylesheet editor…"
 msgstr "Nalaganje urejevalnika slogov…"
 
-#: src/features/homepage/sections.tsx
-msgid "Loading the total"
-msgstr "Nalaganje vsote"
-
 #: src/features/career/workspace/shell.tsx
 msgid "Loading workspace…"
 msgstr "Nalaganje delovnega prostora…"
@@ -7647,8 +7006,8 @@ msgid "Lower the design sheet"
 msgstr "Spustite oblikovalni list"
 
 #: src/features/resume/share/web-page-text.ts
-msgid "Made with Reactive Resume, free and open source"
-msgstr "Izdelano z Reactive Resume, brezplačno in odprtokodno"
+msgid "Made with {appName}"
+msgstr ""
 
 #. Layout editor column label for the primary content area
 #: src/routes/builder/$resumeId/-sidebar/right/sections/layout/pages.tsx
@@ -7658,10 +7017,6 @@ msgstr "Glavna"
 #: src/routes/_home/-sections/header.tsx
 msgid "Main navigation"
 msgstr "Glavna navigacija"
-
-#: src/features/homepage/design.tsx
-msgid "Make any of them yours."
-msgstr "Naj bo kateri koli od njih vaš."
 
 #: src/features/settings/ai/providers.tsx
 msgid "Make default"
@@ -7814,14 +7169,6 @@ msgstr "Ujemanje z življenjepisom"
 msgid "Matching your facts"
 msgstr "Ujemanje z vašimi dejstvi"
 
-#: src/features/resume/share/cv-domain-card.tsx
-msgid "May be available"
-msgstr "Morda je prosta"
-
-#: src/components/ui/donation-toast.tsx
-msgid "Maybe later"
-msgstr "Morda pozneje"
-
 #: src/features/command-palette/pages/navigation.tsx
 msgid "MCP"
 msgstr "MCP"
@@ -7852,10 +7199,6 @@ msgstr ""
 msgid "Members & invites"
 msgstr ""
 
-#: src/features/homepage/prepare.tsx
-msgid "Mentor other designers"
-msgstr "Mentoriranje drugih oblikovalcev"
-
 #: src/features/assistant/conversation.tsx
 msgid "Message the assistant"
 msgstr "Pošlji pomočniku sporočilo"
@@ -7865,17 +7208,8 @@ msgid "Message the coach"
 msgstr "Sporočilo svetovalcu"
 
 #: src/features/career/shared.tsx
-#: src/features/homepage/prepare.tsx
 msgid "Messages"
 msgstr "Sporočila"
-
-#: src/features/homepage/prepare.tsx
-msgid "Messages · Pasted from your email"
-msgstr "Sporočila · Prilepljeno iz vaše e-pošte"
-
-#: src/features/homepage/remember.tsx
-msgid "Messages · Reply to Sam at Fieldnote"
-msgstr "Sporočila · Odgovor Samu v podjetju Fieldnote"
 
 #: src/features/career/workspace/practise.tsx
 msgid "Microphone blocked. Allow it in your browser settings, or type your answer."
@@ -7885,22 +7219,9 @@ msgstr "Mikrofon je blokiran. Dovolite ga v nastavitvah brskalnika ali vtipkajte
 msgid "Minimum base salary"
 msgstr "Najnižja osnovna plača"
 
-#: src/features/homepage/prepare.tsx
-msgid "Missing evidence means your notes don’t show it yet, not that you lack it."
-msgstr "Manjkajoči dokazi pomenijo, da vaše opombe tega še ne kažejo, ne pa, da vam tega manjka."
-
-#: src/features/homepage/footer.tsx
-msgid "MIT License"
-msgstr "Licenca MIT"
-
 #: src/features/career/workspace/debrief.tsx
-#: src/features/homepage/prepare.tsx
 msgid "Mixed"
 msgstr "Mešano"
-
-#: src/features/homepage/check.tsx
-msgid "mixed format"
-msgstr "mešani format"
 
 #: src/features/assistant/provider-setup.tsx
 #: src/features/settings/ai/providers.tsx
@@ -7918,10 +7239,6 @@ msgstr "Predlogi modelov niso na voljo. Še vedno lahko vnesete poljuben ID mode
 #: src/features/assistant/assistant-panel.tsx
 msgid "Model: {label}"
 msgstr "Model: {label}"
-
-#: src/features/homepage/sheet.tsx
-msgid "Mono"
-msgstr "Mono"
 
 #: src/features/settings/account/application-profile.tsx
 msgid "Month"
@@ -7968,10 +7285,6 @@ msgstr "Večina alinej se začne s praznimi besedami namesto z opisom, kaj ste d
 #: src/features/ats-checker/messages.ts
 msgid "Most entries have no dates."
 msgstr "Večina vnosov nima datumov."
-
-#: src/features/homepage/remember.tsx
-msgid "Most new teams at Northwind Labs stalled during setup and never reached activation."
-msgstr "Večina novih ekip v podjetju Northwind Labs je obtičala med nastavitvijo in nikoli ni dosegla aktivacije."
 
 #: src/routes/builder/letter/-components/write-panel.tsx
 msgid "Most recruiters read 180–320 words. The shaded band shows the range."
@@ -8043,10 +7356,6 @@ msgstr "Premakni se na {0}"
 msgid "Move to {stage}"
 msgstr "Premakni na stopnjo {stage}"
 
-#: src/features/homepage/prepare.tsx
-msgid "Move to Interview"
-msgstr "Premakni na stopnjo Intervju"
-
 #: src/features/documents/document-actions.tsx
 #: src/features/documents/documents-page.tsx
 #: src/routes/builder/$resumeId/-components/document-menu.tsx
@@ -8084,10 +7393,6 @@ msgstr "Premaknjeno v {label}"
 msgid "Moves the application from {0}."
 msgstr "Premakne prijavo s stopnje {0}."
 
-#: src/features/homepage/remember.tsx
-msgid "My job was to find out why, without adding support work."
-msgstr "Moja naloga je bila ugotoviti, zakaj, ne da bi dodali delo za podporo."
-
 #. Label for full name input on registration form
 #: src/dialogs/resume/index.tsx
 #: src/features/applications/components/detail/contacts.tsx
@@ -8123,10 +7428,6 @@ msgstr "Ime osebe {0}"
 #: src/routes/builder/letter/-components/write-panel.tsx
 msgid "Name or team"
 msgstr "Ime ali ekipa"
-
-#: src/features/homepage/prepare.tsx
-msgid "Name the problem, what you led and how activation was measured."
-msgstr "Navedite problem, kaj ste vodili in kako je bila merjena aktivacija."
 
 #: src/dialogs/resume/index.tsx
 msgid "Name the resume after the position you are applying for."
@@ -8267,10 +7568,6 @@ msgstr "Nova rubrika"
 msgid "New stage color"
 msgstr "Barva nove stopnje"
 
-#: src/features/homepage/remember.tsx
-msgid "New teams at Northwind were stalling in setup; most never got through."
-msgstr "Nove ekipe v podjetju Northwind so obtičale pri nastavitvi; večina je ni nikoli dokončala."
-
 #: src/features/documents/page-navigation.tsx
 msgid "Next"
 msgstr ""
@@ -8302,10 +7599,6 @@ msgstr "Naslednji korak: {0}"
 #: src/features/career/workspace/messages.tsx
 msgid "Next step: {0}. Adds a reminder to Today."
 msgstr "Naslednji korak: {0}. Doda opomnik v Danes."
-
-#: src/features/homepage/remember.tsx
-msgid "Next time, I’d agree how to measure success before the first prototype."
-msgstr "Naslednjič bi se o merjenju uspeha dogovoril pred prvim prototipom."
 
 #: src/features/settings/account/application-profile.tsx
 msgid "No"
@@ -8403,8 +7696,6 @@ msgid "No email address was found."
 msgstr "E-poštnega naslova ni bilo mogoče najti."
 
 #: src/features/career/shared.tsx
-#: src/features/homepage/prepare.tsx
-#: src/features/homepage/remember.tsx
 msgid "No evidence yet"
 msgstr "Še brez dokazov"
 
@@ -8571,15 +7862,6 @@ msgstr "Delovne izkušnje niso prikazane"
 msgid "No work-experience section was found."
 msgstr "Razdelka z delovnimi izkušnjami ni bilo mogoče najti."
 
-#: src/features/homepage/design.tsx
-msgid "No. {number} · {name}"
-msgstr "Št. {number} · {name}"
-
-#. Receipt line amount for something Reactive Resume doesn't have, e.g. ads.
-#: src/features/homepage/sections.tsx
-msgid "none"
-msgstr "nič"
-
 #: src/features/applications/components/add-application-dialog.tsx
 #: src/features/applications/components/application-detail-sheet.tsx
 #: src/features/applications/components/list-view.tsx
@@ -8604,15 +7886,6 @@ msgstr "normalno"
 #: src/features/resume/editor/design/fit.ts
 msgid "normal margins"
 msgstr "normalne robove"
-
-#: src/features/homepage/check.tsx
-msgid "Northwind Labs"
-msgstr "Northwind Labs"
-
-#: src/features/homepage/sheet.tsx
-#: src/features/homepage/write.tsx
-msgid "Northwind Labs · Lisbon"
-msgstr "Northwind Labs · Lisbon"
 
 #: src/libs/locale.ts
 msgid "Norwegian"
@@ -8708,10 +7981,6 @@ msgstr "Ni izbrano"
 #: src/features/settings/root.tsx
 msgid "Not set up"
 msgstr "Ni nastavljeno"
-
-#: src/features/resume/stylesheet/editor.tsx
-msgid "Not sure what to write?"
-msgstr "Niste prepričani, kaj naj napišete?"
 
 #: src/features/resume/editor/check/job-match.tsx
 msgid "Not true for me, hide it"
@@ -8809,7 +8078,6 @@ msgstr "Odpovedni rok"
 
 #: src/features/career/coach-thread.tsx
 #: src/features/career/coach.tsx
-#: src/features/homepage/prepare.tsx
 #: src/features/resume/share/history-tab.tsx
 msgid "Now"
 msgstr "zdaj"
@@ -8819,7 +8087,6 @@ msgid "Numbered list"
 msgstr "Oštevilčen seznam"
 
 #: src/features/career/workspace/debrief.tsx
-#: src/features/homepage/prepare.tsx
 msgid "Observation"
 msgstr "Opažanje"
 
@@ -8831,10 +8098,6 @@ msgstr "odijščina"
 msgid "Off"
 msgstr "Izključeno"
 
-#: src/features/homepage/remember.tsx
-msgid "Off: the coach won’t see it or claim it."
-msgstr "Izklopljeno: svetovalec tega ne bo videl in ne bo trdil."
-
 #: src/routes/builder/letter/-components/write-panel.tsx
 msgid "Off. Edit this letter’s details below. Turning this on replaces them with the resume’s current details."
 msgstr "Izklopljeno. Spodaj uredite podatke tega pisma. Z vklopom jih zamenjate s trenutnimi podatki iz življenjepisa."
@@ -8845,8 +8108,6 @@ msgstr "Izklopljeno. Vklopite, da vas bodo kadroviki našli v iskalniku Google."
 
 #: src/features/applications/stages.ts
 #: src/features/career/workspace/saved.tsx
-#: src/features/homepage/sections.tsx
-#: src/features/homepage/tailor.tsx
 msgid "Offer"
 msgstr "Ponudba"
 
@@ -8882,10 +8143,6 @@ msgstr "Vklopljeno. Vsakdo s povezavo si lahko ogleda vašo spletno stran."
 msgid "On. Visitors need the link and password to see your web page."
 msgstr "Vklopljeno. Obiskovalci za ogled vaše spletne strani potrebujejo povezavo in geslo."
 
-#: src/features/homepage/remember.tsx
-msgid "Onboarding story"
-msgstr "Zgodba o uvajanju"
-
 #: src/features/career/workspace/prepare.tsx
 msgid "Once a round is scheduled, Prepare builds a timed plan, your opening and the questions to ask."
 msgstr "Ko je krog načrtovan, Priprava sestavi časovno razporejen načrt, vaš uvod in vprašanja, ki jih zastavite."
@@ -8911,10 +8168,6 @@ msgstr "En stolpec s fotografijo poleg glave in dobro definiranimi naslovi razde
 msgid "One column with labeled section rows and subtle dividers. A compact layout for experience, education and supporting details."
 msgstr "En stolpec z označenimi vrsticami odsekov in subtilnimi ločnicami. Kompaktna postavitev za izkušnje, izobraževanje in podporne podrobnosti."
 
-#: src/features/homepage/check.tsx
-msgid "one format"
-msgstr "en format"
-
 #: src/features/resume/editor/design/entries-group.tsx
 msgctxt "Entry header layout"
 msgid "One line"
@@ -8932,10 +8185,6 @@ msgstr "Dovoli samo aplikacije, ki jim zaupaš. Ta aplikacija bo lahko:"
 #: src/routes/builder/$resumeId/-sidebar/right/sections/layout/pages.tsx
 msgid "Only applies when the section fits on a single page."
 msgstr "Velja le, če se razdelek prilega eni strani."
-
-#: src/features/homepage/faq.tsx
-msgid "Only if you want it to. Add your own key from OpenAI, Anthropic, Google Gemini, OpenRouter, Ollama or another provider for sharper lines, tailoring to a job posting, coaching for applications and interviews, and reading Word files. Without a key, nothing is sent to an AI service."
-msgstr "Samo če to želite. Dodajte svoj ključ ponudnika OpenAI, Anthropic, Google Gemini, OpenRouter, Ollama ali drugega za ostrejše formulacije, prilagajanje oglasu za delo, svetovanje pri prijavah in intervjujih ter branje datotek Word. Brez ključa se storitvi AI nič ne pošlje."
 
 #: src/features/ats-checker/messages.ts
 msgid "Only one recognizable section heading was found."
@@ -8974,10 +8223,6 @@ msgstr "Preverjene so bile le prve strani."
 #: src/features/resume/share/share-panel.tsx
 msgid "Only you see these"
 msgstr "Samo ti jih vidiš"
-
-#: src/features/homepage/faq.tsx
-msgid "Only you, until you share it. A resume can stay private, go live at a public link, or be protected with a password, and you can change that at any time. Deleting your account deletes your resumes with it."
-msgstr "Samo vi, dokler tega ne delite. Življenjepis lahko ostane zaseben, se objavi na javni povezavi ali je zaščiten z geslom, kar lahko kadar koli spremenite. Če izbrišete svoj račun, z njim izbrišete tudi svoje življenjepise."
 
 #: src/features/applications/components/interview-dialog.tsx
 msgid "Onsite"
@@ -9037,13 +8282,13 @@ msgstr ""
 msgid "Open story"
 msgstr "Odpri zgodbo"
 
+#: src/routes/auth/native-callback.tsx
+msgid "Open the {appName} app"
+msgstr ""
+
 #: src/features/ats-checker/messages.ts
 msgid "Open the exported file and confirm you can select and copy every part of it."
 msgstr "Odprite izvoženo datoteko in preverite, ali lahko označite in kopirate vsak njen del."
-
-#: src/routes/auth/native-callback.tsx
-msgid "Open the Reactive Resume app"
-msgstr "Odprite aplikacijo Reactive Resume"
 
 #: src/features/career/today.tsx
 msgid "Open the schedule"
@@ -9062,9 +8307,12 @@ msgstr "Odpri delovni prostor"
 msgid "Open Write"
 msgstr ""
 
-#: src/features/homepage/remember.tsx
-msgid "Opening"
-msgstr "Uvod"
+#: src/features/homepage/footer.tsx
+#: src/features/settings/root.tsx
+#: src/routes/_home/licenses.tsx
+#: src/routes/dashboard/settings/route.tsx
+msgid "Open-source licenses"
+msgstr ""
 
 #: src/features/ats-checker/checker.tsx
 msgid "Opening the file"
@@ -9073,10 +8321,6 @@ msgstr "Odpiranje datoteke"
 #: src/features/career/workspace/messages.tsx
 msgid "Opens in Career → Offers."
 msgstr "Odpre se v Kariera → Ponudbe."
-
-#: src/features/resume/stylesheet/editor.tsx
-msgid "opens in new tab"
-msgstr "odpre se v novem zavihku"
 
 #: src/features/documents/new-document-dialog.tsx
 msgid "Opens the editor on your name. Nothing else to fill in first."
@@ -9198,10 +8442,6 @@ msgstr "Izid"
 msgid "Outdent"
 msgstr "Zmanjšaj zamik"
 
-#: src/features/homepage/prepare.tsx
-msgid "Own and evolve a design system"
-msgstr "Skrbeti za sistem oblikovanja in ga razvijati"
-
 #: src/features/organization/roles.ts
 msgid "Owner"
 msgstr ""
@@ -9267,18 +8507,7 @@ msgstr "Odstavek"
 msgid "paragraph {n}"
 msgstr "odstavek {n}"
 
-#: src/features/homepage/check.tsx
-#: src/features/homepage/hero.tsx
-msgid "Parcel & Co."
-msgstr "Parcel & Co."
-
-#: src/features/homepage/sheet.tsx
-#: src/features/homepage/write.tsx
-msgid "Parcel & Co. · Porto"
-msgstr "Parcel & Co. · Porto"
-
 #: src/features/career/shared.tsx
-#: src/features/homepage/prepare.tsx
 msgid "Partly supported"
 msgstr "Delno podprto"
 
@@ -9302,7 +8531,6 @@ msgstr "Passkeys"
 #: src/features/auth/pages/login.tsx
 #: src/features/auth/pages/register.tsx
 #: src/features/command-palette/pages/navigation.tsx
-#: src/features/homepage/share.tsx
 #: src/features/resume/builder/password-dialog.tsx
 #: src/features/resume/share/web-page-text.ts
 #: src/features/settings/account/auth-hooks.ts
@@ -9337,10 +8565,6 @@ msgstr "Prilepite povezavo do zaposlitve ali objavo zaposlitve, nato preverite v
 #: src/routes/dashboard/applications/index.tsx
 msgid "Paste a job link. We'll save the posting so Check, the assistant and your letter can use it."
 msgstr "Prilepite povezavo do zaposlitve. Objavo zaposlitve bomo shranili, tako da jo lahko uporabijo Check, pomočnik in vaše pismo."
-
-#: src/features/homepage/tailor.tsx
-msgid "Paste a job posting once. It feeds a tailored copy of your resume, a match score, a cover letter draft and a place to track the role."
-msgstr "Oglas za delo prilepite enkrat. Iz njega nastanejo prilagojena kopija vašega življenjepisa, ocena ujemanja, osnutek spremnega pisma in mesto za spremljanje vloge."
 
 #: src/features/resume/editor/check/job-match.tsx
 msgid "Paste a job posting…"
@@ -9392,10 +8616,6 @@ msgstr "Prilepljena objava za delo"
 msgid "Pasting fills the fields automatically."
 msgstr "Lepljenje samodejno izpolni polja."
 
-#: src/features/homepage/sections.tsx
-msgid "Pause the list of languages"
-msgstr "Zaustavite seznam jezikov"
-
 #: src/features/career/today.tsx
 msgid "Paused · {line}"
 msgstr "Zaustavljeno · {line}"
@@ -9414,10 +8634,6 @@ msgstr "Obdobje plačila"
 msgid "PDF styles support a subset of CSS. Rotation, dashed and dotted borders, and some layout properties are ignored."
 msgstr "Slogi PDF podpirajo podnabor CSS. Vrtenje, črtkane in pikčaste obrobe ter nekatere lastnosti postavitve so prezrte."
 
-#: src/features/homepage/faq.tsx
-msgid "PDF, Word (DOCX), Markdown and JSON. The JSON export imports back into any Reactive Resume, including one you host yourself, so your data is never locked in."
-msgstr "PDF, Word (DOCX), Markdown in JSON. Izvoz JSON uvozi nazaj v kateri koli Reactive Resume, vključno s tistim, ki ga gostite sami, tako da vaši podatki niso nikoli zaklenjeni."
-
 #: src/features/documents/documents-page.tsx
 msgid "PDF, Word or JSON. We'll build a resume from it."
 msgstr "PDF, Word ali JSON. Iz tega bomo sestavili življenjepis."
@@ -9425,10 +8641,6 @@ msgstr "PDF, Word ali JSON. Iz tega bomo sestavili življenjepis."
 #: src/features/organization/members-page.tsx
 msgid "Pending invitations"
 msgstr ""
-
-#: src/features/homepage/sections.tsx
-msgid "People using it"
-msgstr "Ljudje ga uporabljajo"
 
 #: src/features/career/offer-entry.tsx
 msgid "Per hour"
@@ -9490,10 +8702,6 @@ msgstr "Izberite čas v prihodnosti."
 msgid "Pick an icon"
 msgstr "Izberite ikono"
 
-#: src/features/homepage/design.tsx
-msgid "Pick from {templateCount} templates, then set the type, color and spacing. The words stay put, so try as many looks as you like."
-msgstr "Izbirajte med {templateCount} predlogami, nato nastavite pisave, barvo in razmik. Vaše besedilo ostane enako, zato poskusite čim več dizajnov."
-
 #: src/features/ats-checker/messages.ts
 msgid "Pick one format and use it everywhere."
 msgstr "Izberite en format in ga uporabljajte povsod."
@@ -9542,10 +8750,6 @@ msgstr "Načrtujte iskanje, imejte dokaze na enem mestu in se odločite med ponu
 msgid "Planning your week"
 msgstr "Načrtovanje vašega tedna"
 
-#: src/features/homepage/sections.tsx
-msgid "Play the list of languages"
-msgstr "Predvajajte seznam jezikov"
-
 #: src/libs/locale.ts
 msgid "Polish"
 msgstr "poljščina"
@@ -9562,11 +8766,6 @@ msgstr "Portret"
 #: src/libs/locale.ts
 msgid "Portuguese (Brazil)"
 msgstr "portugalščina (Brazilija)"
-
-#: src/features/homepage/check.tsx
-#: src/features/homepage/sheet.tsx
-msgid "Portuguese (native)"
-msgstr "portugalščina (domači)"
 
 #: src/libs/locale.ts
 msgid "Portuguese (Portugal)"
@@ -9588,7 +8787,6 @@ msgstr "oglas"
 #: src/features/applications/components/application-detail-sheet.tsx
 #: src/features/career/workspace/fit.tsx
 #: src/features/career/workspace/preparation.tsx
-#: src/features/homepage/tailor.tsx
 msgid "Posting"
 msgstr "Oglas za delo"
 
@@ -9610,7 +8808,6 @@ msgstr ""
 
 #: src/features/career/workspace/practise.tsx
 #: src/features/career/workspace/saved.tsx
-#: src/features/homepage/prepare.tsx
 msgid "Practice"
 msgstr "Vaja"
 
@@ -9625,10 +8822,6 @@ msgctxt "Button: rehearse interview answers"
 msgid "Practice"
 msgstr "Vadi"
 
-#: src/features/homepage/remember.tsx
-msgid "Practice · Your opening, about 40 seconds aloud"
-msgstr "Vadba · Vaš uvod, približno 40 sekund na glas"
-
 #: src/features/career/workspace/practise.tsx
 msgid "Practice another question"
 msgstr "Vadi drugo vprašanje"
@@ -9638,22 +8831,12 @@ msgid "Practice for your {company} interviews."
 msgstr "Vaja za vaše intervjuje pri podjetju {company}."
 
 #: src/features/career/workspace/debrief.tsx
-#: src/features/homepage/prepare.tsx
 msgid "Practice priorities, not conclusions about why an employer decided anything."
 msgstr "Prednostne naloge za vadbo, ne sklepi o tem, zakaj se je delodajalec za kar koli odločil."
 
 #: src/features/career/workspace/debrief.tsx
-#: src/features/homepage/prepare.tsx
 msgid "Practice priority:"
 msgstr "Prednost pri vadbi:"
-
-#: src/features/homepage/prepare.tsx
-msgid "Practice questions are simulated, not from Fieldnote."
-msgstr "Vprašanja za vajo so simulirana, ne prihajajo od podjetja Fieldnote."
-
-#: src/features/homepage/prepare.tsx
-msgid "Practice your introduction once. Keep it to about 90 seconds."
-msgstr "Enkrat vadite svojo predstavitev. Naj traja približno 90 sekund."
 
 #: src/features/career/workspace/practise.tsx
 msgid "Practicing your story: {storyTitle}"
@@ -9688,9 +8871,6 @@ msgstr "Želje"
 
 #: src/features/career/schedule-sheet.tsx
 #: src/features/career/shared.tsx
-#: src/features/homepage/footer.tsx
-#: src/features/homepage/header.tsx
-#: src/features/homepage/prepare.tsx
 msgid "Prepare"
 msgstr "Priprava"
 
@@ -9797,10 +8977,6 @@ msgstr "Zasebnost"
 msgid "Privacy policy"
 msgstr "Politika zasebnosti"
 
-#: src/features/homepage/share.tsx
-msgid "Private"
-msgstr "Zasebno"
-
 #: src/features/career/workspace/apply.tsx
 #: src/features/settings/account/application-profile.tsx
 msgid "Private application profile"
@@ -9810,27 +8986,11 @@ msgstr ""
 msgid "Private. Only you can see it."
 msgstr "Zasebno. Samo vi ga lahko vidite."
 
-#: src/features/homepage/footer.tsx
-msgid "Product"
-msgstr "Izdelek"
-
-#: src/features/homepage/check.tsx
-#: src/features/homepage/sheet.tsx
-#: src/features/homepage/write.tsx
-msgid "Product Designer"
-msgstr "Oblikovalec izdelkov"
-
-#: src/features/homepage/sheet.tsx
-msgid "Product designer with nine years of experience building <0>design systems</0> and research-led products for B2B teams."
-msgstr "Oblikovalec izdelkov z devetletnimi izkušnjami pri ustvarjanju <0>oblikovnih sistemov</0> in izdelkov, ki temeljijo na raziskavah, za ekipe B2B."
-
 #: src/features/resume/editor/write/entries.tsx
 msgid "Proficiency"
 msgstr "Znanje"
 
 #: src/features/command-palette/pages/navigation.tsx
-#: src/features/homepage/check.tsx
-#: src/features/homepage/sheet.tsx
 #: src/features/settings/account/profile.tsx
 msgid "Profile"
 msgstr "Profil"
@@ -9860,10 +9020,6 @@ msgstr "Vrstica napredka"
 msgid "Projects"
 msgstr "Projekti"
 
-#: src/features/homepage/hero.tsx
-msgid "Promoted to lead, 2021"
-msgstr "Napredovan v vodjo, 2021"
-
 #: src/features/career/workspace/messages.tsx
 msgid "Proposed changes"
 msgstr "Predlagane spremembe"
@@ -9876,12 +9032,6 @@ msgstr "Predlagane spremembe"
 msgid "Protect your resume with a password"
 msgstr "Zaščitite svoj življenjepis z geslom"
 
-#: src/features/homepage/check.tsx
-#: src/features/homepage/hero.tsx
-#: src/features/homepage/sheet.tsx
-msgid "Prototyping"
-msgstr "Izdelava prototipov"
-
 #: src/features/settings/ai/web-access.tsx
 msgid "Provided by your server: {connectedProvider}."
 msgstr "Zagotovil vaš strežnik: {connectedProvider}."
@@ -9893,7 +9043,6 @@ msgstr "Ponudnik"
 
 #: src/features/documents/document-card.tsx
 #: src/features/documents/documents-page.tsx
-#: src/features/homepage/share.tsx
 #: src/routes/builder/$resumeId/-components/document-details.tsx
 #: src/routes/builder/$resumeId/-components/editor-bar.tsx
 msgid "Public"
@@ -9947,10 +9096,6 @@ msgstr "Vijolična"
 msgid "Put a plain email address near the top of the first page. It is what most systems file you under."
 msgstr "Preprost e-poštni naslov postavite blizu vrha prve strani. Prav po njem vas večina sistemov razvršča."
 
-#: src/features/homepage/sections.tsx
-msgid "Put it all on <0>one page.</0>"
-msgstr "Vse postavite na <0>eno stran.</0>"
-
 #: src/features/resume/editor/write/rich-text-editor-field.tsx
 msgid "Put the caret in a line to improve it"
 msgstr "Postavite kazalko v vrstico, da jo izboljšate"
@@ -9976,10 +9121,6 @@ msgstr ""
 msgid "Question {position} of {total}"
 msgstr "Vprašanje {position} od {total}"
 
-#: src/features/homepage/prepare.tsx
-msgid "Question 1 of 4 · Practice"
-msgstr "Vprašanje 1 od 4 · Vaja"
-
 #: src/features/career/workspace/apply.tsx
 msgid "Question from the form"
 msgstr "Vprašanje iz obrazca"
@@ -9992,22 +9133,13 @@ msgstr "Možnosti vprašanja"
 msgid "Question removed"
 msgstr "Vprašanje odstranjeno"
 
-#: src/features/homepage/faq.tsx
-msgid "Questions"
-msgstr "Vprašanja"
-
 #: src/features/career/offers.tsx
 msgid "Questions copied"
 msgstr "Vprašanja kopirana"
 
 #: src/features/career/workspace/prepare.tsx
-#: src/features/homepage/prepare.tsx
 msgid "Questions to ask"
 msgstr "Vprašanja, ki jih zastavite"
-
-#: src/features/homepage/remember.tsx
-msgid "R"
-msgstr "R"
 
 #: src/routes/builder/$resumeId/-components/design-panel.tsx
 msgid "Raise the design sheet"
@@ -10037,22 +9169,6 @@ msgstr "Izvozite znova z vdelanimi pisavami in preverite, da se besedilo kopira 
 msgid "Re-export with fonts embedded, then open the file and check that the text copies out cleanly."
 msgstr "Izvozite znova z vdelanimi pisavami, nato odprite datoteko in preverite, da se besedilo kopira brez napak."
 
-#: src/features/homepage/prepare.tsx
-msgid "Re: Senior Product Designer"
-msgstr "Re: Višji produktni oblikovalec"
-
-#: src/routes/_home/-sections/header.tsx
-msgid "Reactive Resume - Go to homepage"
-msgstr "Reactive Resume - Pojdi na domačo stran"
-
-#: src/routes/dashboard/settings/route.tsx
-msgid "Reactive Resume {__APP_VERSION__} · MIT"
-msgstr "Reactive Resume {__APP_VERSION__} · MIT"
-
-#: src/features/homepage/sections.tsx
-msgid "Reactive Resume is open source under the MIT License. Amruth Pillai and a community of contributors keep it running, and donations pay for hosting and development. There’s no paid tier."
-msgstr "Reactive Resume je odprtokoden pod licenco MIT. Amruth Pillai in skupnost sodelavcev skrbijo za njegovo delovanje, donacije pa krijejo gostovanje in razvoj. Plačljive različice ni."
-
 #. placeholder {0}: reader.label
 #: src/features/career/workspace/practise.tsx
 msgid "Read aloud by {0}, which may use tokens on that account."
@@ -10067,7 +9183,6 @@ msgid "Read briefing"
 msgstr "Preberi povzetek"
 
 #: src/features/career/workspace/messages.tsx
-#: src/features/homepage/prepare.tsx
 msgid "Read it for me"
 msgstr "Preberi namesto mene"
 
@@ -10083,10 +9198,6 @@ msgstr "Preberite objavo za delo"
 #: src/features/career/workspace/practise.tsx
 msgid "Read questions with"
 msgstr "Vprašanja bere"
-
-#: src/features/resume/stylesheet/editor.tsx
-msgid "Read the “Applying custom styles” guide."
-msgstr "Preberite vodnik »Uporaba slogov po meri«."
 
 #: src/features/assistant/conversation.tsx
 msgid "Read the attachment"
@@ -10107,10 +9218,6 @@ msgstr "Preberi stran"
 #: src/features/assistant/conversation.tsx
 msgid "Read the resume"
 msgstr "Prebral življenjepis"
-
-#: src/features/homepage/faq.tsx
-msgid "Read the self-hosting guide"
-msgstr "Preberite vodnik za samostojno gostovanje"
 
 #: src/features/auth/pages/consent.tsx
 msgid "Read your email address."
@@ -10270,10 +9377,6 @@ msgstr ""
 msgid "Recruiter"
 msgstr "Zaposlovalec"
 
-#: src/features/homepage/remember.tsx
-msgid "Recruiter reply"
-msgstr "Odgovor kadroviku"
-
 #: src/routes/builder/letter/-components/download-sheet.tsx
 msgid "Recruiters see this name. Your name plus “Cover Letter” works well."
 msgstr "Zaposlovalci vidijo to ime. Vaše ime in spremno pismo dobro delujeta."
@@ -10329,7 +9432,6 @@ msgid "Referred by…, things to emphasize, etc."
 msgstr "Napotil ..., stvari, ki jih je treba poudariti itd."
 
 #: src/features/career/knowledge/stories.tsx
-#: src/features/homepage/remember.tsx
 msgid "Reflection"
 msgstr "Refleksija"
 
@@ -10345,10 +9447,6 @@ msgstr "Osveži povzetek 24 ur prej"
 msgid "Refresh the briefing on the morning of"
 msgstr "Osveži povzetek zjutraj na dan intervjuja"
 
-#: src/features/resume/share/cv-domain-card.tsx
-msgid "Register at OlaCV"
-msgstr "Registriraj pri OlaCV"
-
 #: src/features/career/workspace/prepare.tsx
 msgid "Rehearse aloud"
 msgstr "Vadite na glas"
@@ -10356,10 +9454,6 @@ msgstr "Vadite na glas"
 #: src/features/career/workspace/prepare.tsx
 msgid "Rehearse one answer aloud"
 msgstr "Na glas vadite en odgovor"
-
-#: src/features/homepage/prepare.tsx
-msgid "Rehearse one disagreement with engineering and how it ended."
-msgstr "Vadite en primer nesoglasja z inženirji in kako se je končalo."
 
 #: src/features/resume/editor/proposals/proposal-list.tsx
 msgid "Reject"
@@ -10387,9 +9481,6 @@ msgid "Reload the saved version?"
 msgstr ""
 
 #: src/features/career/shared.tsx
-#: src/features/homepage/footer.tsx
-#: src/features/homepage/header.tsx
-#: src/features/homepage/remember.tsx
 msgid "Remember"
 msgstr "Zapomni si"
 
@@ -10630,19 +9721,12 @@ msgid "Replaces target roles only after you choose Use. Wait for Saved before op
 msgstr ""
 
 #: src/features/career/workspace/saved.tsx
-#: src/features/homepage/remember.tsx
 msgid "Reply"
 msgstr "Odgovor"
 
 #: src/features/career/workspace/messages.tsx
 msgid "Reply copied"
 msgstr "Odgovor kopiran"
-
-#: src/features/homepage/footer.tsx
-#: src/features/homepage/sections.tsx
-#: src/routes/dashboard/settings/route.tsx
-msgid "Report a bug"
-msgstr "Prijavite napako"
 
 #: src/features/settings/account/application-profile.tsx
 msgid "Requested amount"
@@ -10689,18 +9773,10 @@ msgstr "Ponastavite svoje geslo"
 msgid "Resetting your password..."
 msgstr "Ponastavljanje gesla..."
 
-#: src/features/homepage/footer.tsx
-msgid "Resources"
-msgstr "Viri"
-
 #: src/features/career/offer-entry.tsx
 #: src/features/career/offers.tsx
 msgid "Respond by"
 msgstr "Odgovorite do"
-
-#: src/features/homepage/write.tsx
-msgid "Responsible for the design system and helping other teams with their designs."
-msgstr "Odgovoren za sistem oblikovanja in pomoč drugim ekipam pri oblikovanju."
 
 #: src/features/documents/document-actions.tsx
 #: src/features/documents/trash-page.tsx
@@ -10739,13 +9815,8 @@ msgid "Restricted to its employer or application."
 msgstr ""
 
 #: src/features/career/knowledge/stories.tsx
-#: src/features/homepage/remember.tsx
 msgid "Result"
 msgstr "Rezultat"
-
-#: src/features/homepage/remember.tsx
-msgid "Result left out: no fact backs it. Switch it on, or add one, and it comes back."
-msgstr "Rezultat izpuščen: nobeno dejstvo ga ne podpira. Vklopite dejstvo ali dodajte novo in rezultat se vrne."
 
 #: src/features/assistant/assistant-panel.tsx
 msgid "resume"
@@ -10775,19 +9846,6 @@ msgstr "življenjepis (neobvezno)"
 #: src/routes/builder/letter/-components/download-sheet.tsx
 msgid "Resume + letter"
 msgstr "življenjepis + pismo"
-
-#: src/features/homepage/tailor.tsx
-msgid "Resume attached"
-msgstr "Priložen življenjepis"
-
-#. Hero headline, line 2 of 4: A free, open-source / resume builder / and / career manager. Lines 2 and 4 are highlighted: keep each a complete phrase.
-#: src/features/homepage/hero.tsx
-msgid "resume builder"
-msgstr "za ustvarjanje življenjepisov"
-
-#: src/features/homepage/sections.tsx
-msgid "Resume builder"
-msgstr "ustvarjalec življenjepisov"
 
 #: src/features/resume/preview/preview.browser.tsx
 msgid "Resume content"
@@ -10829,10 +9887,6 @@ msgstr "Življenjepisi"
 #: src/features/settings/preferences.tsx
 msgid "Resumes always render on white paper, whatever the theme."
 msgstr "življenjepisi so vedno prikazani na belem papirju, ne glede na temo."
-
-#: src/features/homepage/sections.tsx
-msgid "Resumes created"
-msgstr "ustvarjeni življenjepisi"
 
 #. placeholder {0}: application.postingSource.retrievedAt
 #. placeholder {1}: application.postingSource.method
@@ -11067,10 +10121,6 @@ msgstr "Črta"
 msgid "Run again"
 msgstr "Zaženi znova"
 
-#: src/features/homepage/prepare.tsx
-msgid "Run research with customers"
-msgstr "Izvajanje raziskav s strankami"
-
 #: src/routes/builder/$resumeId/-components/page-canvas.tsx
 msgid "Runs onto page {next}"
 msgstr "Teče na stran {next}"
@@ -11078,10 +10128,6 @@ msgstr "Teče na stran {next}"
 #: src/libs/locale.ts
 msgid "Russian"
 msgstr "ruščina"
-
-#: src/features/homepage/remember.tsx
-msgid "S"
-msgstr "S"
 
 #: src/features/applications/components/add-application-dialog.tsx
 #: src/features/applications/components/application-detail-sheet.tsx
@@ -11096,18 +10142,6 @@ msgstr ""
 #: src/features/applications/components/application-form-sheet.tsx
 msgid "Salary range"
 msgstr "Razpon plač"
-
-#: src/features/homepage/prepare.tsx
-msgid "Sam"
-msgstr "Sam"
-
-#: src/features/homepage/prepare.tsx
-msgid "Sam, Fieldnote"
-msgstr "Sam, Fieldnote"
-
-#: src/features/homepage/remember.tsx
-msgid "Same you. Less starting over."
-msgstr "Isti vi. Manj začenjanja od začetka."
 
 #: src/features/documents/use-start-document.ts
 msgid "Sample resume added. Delete it anytime."
@@ -11245,22 +10279,15 @@ msgstr "shranjeno"
 #: src/features/applications/components/add-application-dialog.tsx
 #: src/features/applications/stages.ts
 #: src/features/career/knowledge/preferences.tsx
-#: src/features/homepage/sections.tsx
-#: src/features/homepage/tailor.tsx
 #: src/features/resume/editor/save-status.tsx
 #: src/routes/builder/letter/-components/letter-bar.tsx
 msgid "Saved"
 msgstr "Shranjeno"
 
 #: src/features/career/shared.tsx
-#: src/features/homepage/prepare.tsx
 msgctxt "Application workspace tab: earlier results kept for this job"
 msgid "Saved"
 msgstr "Shranjeno"
-
-#: src/features/homepage/write.tsx
-msgid "Saved · version {version}"
-msgstr "Shranjeno · različica {version}"
 
 #: src/features/resume/share/history-tab.tsx
 msgid "Saved “{trimmed}”"
@@ -11349,10 +10376,6 @@ msgstr "Shranjevanje traja dlje, kot je bilo pričakovano. Vaše spremembe so š
 #: src/routes/builder/letter/-components/letter-bar.tsx
 msgid "Saving…"
 msgstr "Shranjevanje…"
-
-#: src/features/homepage/prepare.tsx
-msgid "Say it aloud"
-msgstr "Povejte na glas"
 
 #: src/dialogs/auth/enable-two-factor.tsx
 msgid "Scan the QR code with your authenticator app, or copy the secret and paste it into the app."
@@ -11617,10 +10640,6 @@ msgstr ""
 msgid "Selected resume:"
 msgstr ""
 
-#: src/features/homepage/footer.tsx
-msgid "Self-hosting"
-msgstr "Samostojno gostovanje"
-
 #: src/features/resume/stylesheet/editor.tsx
 msgid "Semantic CSS stylesheet"
 msgstr "Semantični CSS slogovni predlog"
@@ -11693,10 +10712,6 @@ msgstr "Pošlje ta življenjepis in objavo delovnega mesta na {provider} z vaši
 msgid "Sends this resume to {provider} with your key, only when you press send."
 msgstr "Pošlje ta življenjepis na {provider} z vašim ključem, samo ko pritisnete Pošlji."
 
-#: src/features/homepage/remember.tsx
-msgid "Sends this story and the facts switched on to your AI connection. Without one, nothing is sent."
-msgstr "Pošlje to zgodbo in vklopljena dejstva vaši povezavi AI. Brez nje se nič ne pošlje."
-
 #: src/features/assistant/conversation.tsx
 msgid "Sends your message and the posting to {provider} with your key, only when you press send."
 msgstr "Pošlje vaše sporočilo in objavo delovnega mesta na {provider} z vašim ključem, samo ko pritisnete pošlji."
@@ -11714,12 +10729,6 @@ msgstr "Pošlje vaše sporočilo, to prijavo (oglas, opombe, poslane dokumente) 
 #: src/features/resume/editor/check/writing-tab.tsx
 msgid "Sends your resume's text only to {0} · {1}, with your key."
 msgstr "Pošlje besedilo vašega življenjepisa samo na {0} · {1}, z vašim ključem."
-
-#: src/features/homepage/check.tsx
-#: src/features/homepage/sheet.tsx
-#: src/features/homepage/tailor.tsx
-msgid "Senior Product Designer"
-msgstr "Višji oblikovalec izdelkov"
 
 #: src/features/applications/components/list-view.tsx
 #: src/features/resume/share/format.ts
@@ -11775,10 +10784,6 @@ msgstr "Nastavite aplikacijo za preverjanje pristnosti"
 msgid "Settings"
 msgstr "Nastavitve"
 
-#: src/features/settings/ai/mcp.tsx
-msgid "Setup guide"
-msgstr "Vodnik za namestitev"
-
 #: src/features/resume/editor/write/picture-settings.tsx
 msgid "Shadow color"
 msgstr "Barva sence"
@@ -11787,18 +10792,11 @@ msgstr "Barva sence"
 msgid "Shadow width"
 msgstr "Širina sence"
 
-#: src/features/homepage/footer.tsx
-#: src/features/homepage/header.tsx
-#: src/features/homepage/share.tsx
 #: src/features/resume/share/web-page-text.ts
 #: src/routes/builder/$resumeId/-components/editor-bar.tsx
 #: src/routes/builder/$resumeId/-components/editor-shell.tsx
 msgid "Share"
 msgstr "Delite"
-
-#: src/features/homepage/share.tsx
-msgid "Share a public link, add a password or keep it private. Choose from 3 visibility options. Export to PDF or Word, or take all your data with you as JSON."
-msgstr "Delite javno povezavo, dodajte geslo ali ohranite zasebnost. Izbirate lahko med 3 možnostmi vidnosti. Izvozite v PDF ali Word ali vzemite vse svoje podatke s seboj kot JSON."
 
 #: src/features/career/role-suggestions.tsx
 msgid "Share enabled shared Knowledge"
@@ -11821,18 +10819,6 @@ msgstr "Deljenje"
 #: src/features/career/shared.tsx
 msgid "Sharpening the opening"
 msgstr "Izpopolnjevanje uvoda"
-
-#: src/features/homepage/sheet.tsx
-msgid "Shipped <0>accessible</0> checkout flows for web and iOS, meeting WCAG 2.1 AA."
-msgstr "Uvedel sem <0>dostopne</0> postopke plačevanja za splet in iOS, skladne z WCAG 2.1 AA."
-
-#: src/features/homepage/prepare.tsx
-msgid "Shipped checkout flows that meet WCAG 2.1 AA."
-msgstr "Izdal postopke zaključka nakupa, ki izpolnjujejo WCAG 2.1 AA."
-
-#: src/features/homepage/hero.tsx
-msgid "Shipped checkout for iOS"
-msgstr "Poslano na blagajno za iOS"
 
 #: src/routes/builder/letter/-components/write-panel.tsx
 msgid "Short and direct. Fine if the posting asks for brevity."
@@ -11859,8 +10845,8 @@ msgid "Show"
 msgstr "Prikaži"
 
 #: src/features/resume/share/share-panel.tsx
-msgid "Show “Made with Reactive Resume”"
-msgstr "Prikaži „Narejeno z Reactive Resume“"
+msgid "Show “Made with {appName}”"
+msgstr ""
 
 #. placeholder {0}: Math.min(remaining, COLUMN_PAGE_SIZE)
 #. placeholder {0}: visible.length - shown.length
@@ -11950,7 +10936,6 @@ msgid "Shows the tags they all share. Tags you add go on every document; tags yo
 msgstr "Prikazuje oznake, ki so skupne vsem. Oznake, ki jih dodate, se dodajo vsakemu dokumentu; oznake, ki jih odstranite, se odstranijo iz vseh. Zaklenjeni dokumenti ostanejo nespremenjeni."
 
 #. Layout editor column label for the secondary sidebar area
-#: src/features/homepage/sheet.tsx
 #: src/features/resume/editor/design/template-group.tsx
 #: src/features/resume/editor/write/outline.tsx
 #: src/routes/builder/$resumeId/-sidebar/right/sections/layout/pages.tsx
@@ -11977,7 +10962,7 @@ msgstr "Stranske vrstice se pogosto preberejo nazadnje ali pomešajo v glavni st
 #: src/features/auth/components/guest-banner.tsx
 #: src/features/auth/pages/accept-invitation.tsx
 #: src/features/auth/pages/login.tsx
-#: src/features/homepage/footer.tsx
+#: src/features/homepage/page.tsx
 msgid "Sign in"
 msgstr "Prijava"
 
@@ -12083,7 +11068,6 @@ msgid "Single-column; polished and serious for senior or enterprise-level positi
 msgstr "Enojen stolpec; izpiljeno in resno za višje ali podjetniške položaje."
 
 #: src/features/career/knowledge/stories.tsx
-#: src/features/homepage/remember.tsx
 msgid "Situation"
 msgstr "Situacija"
 
@@ -12099,10 +11083,6 @@ msgstr "Deli »Situacija«, »Naloga« in »Dejanje« so obvezni. Dela »Rezulta
 msgid "Situation, Task, Action, Result, Reflection. Link each story to facts you can support; leave unknown outcomes blank."
 msgstr "Situacija, naloga, dejanje, rezultat, refleksija. Vsako zgodbo povežite z dejstvi, ki jih lahko podprete; neznane izide pustite prazne."
 
-#: src/features/homepage/hero.tsx
-msgid "Six product teams"
-msgstr "Šest proizvodnih skupin"
-
 #: src/features/resume/editor/write/picture-settings.tsx
 msgid "Size"
 msgstr "Velikost"
@@ -12111,8 +11091,6 @@ msgstr "Velikost"
 msgid "Skill"
 msgstr "Spretnost"
 
-#: src/features/homepage/check.tsx
-#: src/features/homepage/sheet.tsx
 #: src/libs/resume/section.tsx
 msgid "Skills"
 msgstr "Spretnosti"
@@ -12154,10 +11132,6 @@ msgstr "Slovenščina"
 #: src/features/applications/components/insights-view.tsx
 msgid "Small numbers, but worth noticing."
 msgstr "Majhne številke, a vredne pozornosti."
-
-#: src/features/homepage/remember.tsx
-msgid "So I talked to 14 customers, found the three places people dropped off, and we prototyped a shorter setup."
-msgstr "Zato sem se pogovoril s 14 strankami, našel tri mesta, kjer so ljudje odnehali, in izdelali smo prototip krajše nastavitve."
 
 #: src/features/resume/editor/check/issues.ts
 msgid "Some application systems ask for one before you can apply."
@@ -12219,13 +11193,8 @@ msgstr "Razvrsti po datumu"
 #: src/features/applications/components/application-form-sheet.tsx
 #: src/features/applications/components/import-applications-sheet.tsx
 #: src/features/career/knowledge/facts.tsx
-#: src/routes/dashboard/settings/route.tsx
 msgid "Source"
 msgstr "Vir"
-
-#: src/features/homepage/footer.tsx
-msgid "Source code"
-msgstr "Izvorna koda"
 
 #: src/features/career/workspace/answer-library.tsx
 msgid "Source employer"
@@ -12246,22 +11215,9 @@ msgstr "Viri"
 msgid "Spanish"
 msgstr "španščina"
 
-#: src/features/homepage/check.tsx
-#: src/features/homepage/sheet.tsx
-msgid "Spanish (B2)"
-msgstr "španščina (B2)"
-
-#: src/features/homepage/hero.tsx
-msgid "Spanish, B2"
-msgstr "španščina, B2"
-
 #: src/features/career/workspace/practise.tsx
 msgid "Speak"
 msgstr "Govori"
-
-#: src/features/homepage/sections.tsx
-msgid "Speaks your language"
-msgstr "Govori vaš jezik"
 
 #: src/features/ats-checker/messages.ts
 msgid "Spell the month, as in \"Mar 2022\"."
@@ -12330,22 +11286,6 @@ msgstr "Stopnja ostane {stage}"
 msgid "Stages"
 msgstr "Faze"
 
-#: src/features/homepage/check.tsx
-msgid "Standard section headings"
-msgstr "Standardni naslovi razdelkov"
-
-#: src/features/homepage/header.tsx
-msgid "Star Reactive Resume on GitHub"
-msgstr "Zvezdica Reactive Resume na GitHub"
-
-#: src/components/input/github-stars-button.tsx
-msgid "Star us on GitHub (opens in new tab)"
-msgstr "Dajte nam zvezdico na GitHubu (odpre se v novem zavihku)"
-
-#: src/features/homepage/sections.tsx
-msgid "Stars on GitHub"
-msgstr "Zvezdice na GitHubu"
-
 #: src/features/resume/editor/write/dates-field.tsx
 msgid "Start"
 msgstr "Začetek"
@@ -12374,10 +11314,6 @@ msgstr "Začnite od"
 #: src/features/documents/new-document-dialog.tsx
 msgid "Start from one you have and link the application."
 msgstr "Začnite s tistim, ki ga imate, in povežite prošnjo za delo."
-
-#: src/features/homepage/sections.tsx
-msgid "Start from scratch or import what you have. It takes a few minutes, and you can come back to it anytime."
-msgstr "Začnite od začetka ali uvozite, kar imate. Traja nekaj minut in kadar koli se lahko vrnete."
 
 #: src/features/resume/editor/write/section-row.tsx
 msgid "Start on a new page"
@@ -12458,7 +11394,6 @@ msgstr ""
 
 #: src/features/assistant/conversation.tsx
 #: src/features/career/coach-thread.tsx
-#: src/features/homepage/prepare.tsx
 #: src/routes/builder/letter/-components/write-panel.tsx
 msgid "Stop"
 msgstr "Stop"
@@ -12502,14 +11437,6 @@ msgstr "Zgodbe"
 msgid "Stories to bring"
 msgstr "Zgodbe, ki jih pripravite"
 
-#: src/features/homepage/header.tsx
-msgid "Story"
-msgstr "Zgodba"
-
-#: src/features/homepage/remember.tsx
-msgid "Story · 5 of 5 parts"
-msgstr "Zgodba · 5 od 5 delov"
-
 #: src/features/career/knowledge/stories.tsx
 msgid "Story deleted"
 msgstr "Zgodba izbrisana"
@@ -12534,10 +11461,6 @@ msgstr "Močnejši glagol"
 msgid "Stylesheet editor"
 msgstr "Urejevalnik slogovnih predlog"
 
-#: src/features/homepage/prepare.tsx
-msgid "Subject"
-msgstr "Zadeva"
-
 #: src/features/applications/components/detail/sent-documents.tsx
 msgid "Submission recorded {date}. The sent versions never change; current drafts stay editable. This record does not confirm employer receipt."
 msgstr ""
@@ -12559,10 +11482,6 @@ msgstr "Poslano priloženo spremno pismo: {0}"
 #: src/features/applications/components/application-detail-sheet.tsx
 msgid "Submitted attached resume: {0}"
 msgstr "Oddan pripet življenjepis: {0}"
-
-#: src/features/homepage/footer.tsx
-msgid "Subreddit"
-msgstr "Podreddit"
 
 #: src/features/career/workspace/prepare.tsx
 msgid "Success at 90 days · next step"
@@ -12601,13 +11520,12 @@ msgstr "Povzetki vaših odprtih prijav"
 msgid "Summary"
 msgstr "Povzetek"
 
-#: src/features/homepage/sections.tsx
+#: src/routes/dashboard/settings/route.tsx
 msgid "Support"
 msgstr "Podpora"
 
 #: src/features/career/shared.tsx
 #: src/features/career/workspace/debrief.tsx
-#: src/features/homepage/prepare.tsx
 msgid "Supported"
 msgstr "Podprto"
 
@@ -12639,27 +11557,13 @@ msgstr "Zamenjajte začetni in končni datum."
 msgid "Swedish"
 msgstr "švedščina"
 
-#: src/features/homepage/remember.tsx
-msgid "Switch it off"
-msgstr "Izklopi"
-
 #: src/features/assistant/conversation.tsx
 msgid "Switch model"
 msgstr "Preklopni model"
 
-#: src/features/homepage/footer.tsx
-#: src/features/homepage/header.tsx
-msgid "Switch to dark mode"
-msgstr "Preklopite v temni način"
-
 #: src/features/theme/toggle-button.tsx
 msgid "Switch to dark theme"
 msgstr "Preklopi na temno temo"
-
-#: src/features/homepage/footer.tsx
-#: src/features/homepage/header.tsx
-msgid "Switch to light mode"
-msgstr "Preklopite v svetlobni način"
 
 #: src/features/theme/toggle-button.tsx
 msgid "Switch to light theme"
@@ -12690,10 +11594,6 @@ msgstr "Sistemi vas shranijo pod imenom na vrhu strani."
 #: src/features/resume/editor/check/issues.ts
 msgid "Systems look for an experience section. Projects or volunteering can show the same history."
 msgstr "Sistemi iščejo razdelek izkušenj. Projekti ali prostovoljstvo lahko kažejo isto zgodovino."
-
-#: src/features/homepage/remember.tsx
-msgid "T"
-msgstr "N"
 
 #: src/features/applications/components/list-view.tsx
 msgid "Tag"
@@ -12729,11 +11629,6 @@ msgstr "Oznake, ločene z vejicami"
 msgid "Tags…"
 msgstr "Oznake ..."
 
-#: src/features/homepage/header.tsx
-#: src/features/homepage/tailor.tsx
-msgid "Tailor"
-msgstr "Prilagodite se opisu delovnega mesta"
-
 #: src/features/career/workspace/preparation.tsx
 msgid "Tailor and review your resume"
 msgstr ""
@@ -12764,7 +11659,6 @@ msgid "Target roles"
 msgstr "Ciljne vloge"
 
 #: src/features/career/knowledge/stories.tsx
-#: src/features/homepage/remember.tsx
 msgid "Task"
 msgstr "Naloga"
 
@@ -12784,10 +11678,6 @@ msgstr "Povejte mi o delu, na katerega ste ponosni."
 #: src/features/career/workspace/practise.tsx
 msgid "Tell me about a piece of work you're proud of. What was your part in it, and how did you measure success?"
 msgstr "Povejte mi o delu, na katerega ste ponosni. Kakšna je bila vaša vloga in kako ste merili uspeh?"
-
-#: src/features/homepage/prepare.tsx
-msgid "Tell me about a product improvement you led. What was your contribution, and how did you measure success?"
-msgstr "Povejte mi o izboljšavi izdelka, ki ste jo vodili. Kakšen je bil vaš prispevek in kako ste merili uspeh?"
 
 #: src/features/career/workspace/practise.tsx
 msgid "Tell me about a time you disagreed with a colleague. How did you resolve it?"
@@ -12813,18 +11703,13 @@ msgstr "Predloga spremenjena v {0}"
 msgid "Template, type and colors follow the resume, so the pair always matches."
 msgstr "Predloga, vrsta in barve sledijo življenjepisu, tako da se par vedno ujema."
 
-#: src/features/homepage/design.tsx
-#: src/features/homepage/footer.tsx
-msgid "Templates"
-msgstr "Predloge"
-
-#: src/features/homepage/sections.tsx
-msgid "Templates × {templates}"
-msgstr "Predloge × {templates}"
-
 #: src/features/ats-checker/checker.tsx
 msgid "Terms from the posting"
 msgstr "Izrazi iz oglasa za delo"
+
+#: src/features/homepage/footer.tsx
+msgid "Terms of service"
+msgstr ""
 
 #: src/features/settings/ai/providers.tsx
 msgid "Test"
@@ -12880,10 +11765,6 @@ msgstr "Barva besedila"
 msgid "Text comes out in the order a person reads it, at a size and spacing that survive."
 msgstr "Besedilo se pojavi v vrstnem redu, v katerem ga oseba prebere, v velikosti in razmiku, ki preživita."
 
-#: src/features/homepage/check.tsx
-msgid "Text is selectable"
-msgstr "Besedilo je mogoče izbrati"
-
 #: src/features/ats-checker/messages.ts
 msgid "Text is written one character at a time."
 msgstr "Besedilo je zapisano po posameznih znakih."
@@ -12923,14 +11804,6 @@ msgstr "Besedilo pod {minimum} pt je lahko napačno prebrano, ko ga sistem ponov
 #: src/libs/locale.ts
 msgid "Thai"
 msgstr "tajščina"
-
-#: src/features/homepage/sections.tsx
-msgid "Thank you for keeping it free."
-msgstr "Hvala, ker ste ga ohranili brezplačno."
-
-#: src/features/homepage/remember.tsx
-msgid "Thanks, Sam. Here’s one: at Northwind Labs I led the onboarding redesign, from 14 customer interviews to a shorter setup."
-msgstr "Hvala, Sam. Tu je en primer: v podjetju Northwind Labs sem vodil prenovo uvajanja, od 14 intervjujev s strankami do krajše nastavitve."
 
 #: src/features/ats-checker/checker.tsx
 msgid "That file couldn't be read as a PDF. Choose a PDF file and try again."
@@ -12972,17 +11845,9 @@ msgstr "Ta ponudnik prijave na tem strežniku ni več na voljo. Uporabite drug n
 msgid "The {label} file couldn't be generated. Try again, or download PDF instead."
 msgstr "Datoteke {label} ni bilo mogoče ustvariti. Poskusite znova ali prenesite PDF."
 
-#: src/features/homepage/prepare.tsx
-msgid "The 13-point activation lift. Knowledge has the before and after."
-msgstr "Dvig aktivacije za 13 odstotnih točk. Znanje vsebuje stanje pred in po."
-
 #: src/libs/error-message.ts
 msgid "The address must contain only lowercase letters and numbers, separated by single dashes."
 msgstr "Naslov lahko vsebuje samo male črke in številke, ločene s posameznimi vezaji."
-
-#: src/features/homepage/faq.tsx
-msgid "The app is translated into {languages} languages by volunteers, and a resume can be written in any language, including right-to-left scripts like Arabic and Hebrew."
-msgstr "Aplikacijo v jezike {languages} prevedejo prostovoljci, življenjepis pa je mogoče napisati v katerem koli jeziku, vključno s pisavami od desne proti levi, kot sta arabščina in hebrejščina."
 
 #: src/features/auth/pages/error.tsx
 msgid "The application that sent you here made an invalid authorization request. Return to the application and try again."
@@ -13286,10 +12151,6 @@ msgstr "Iščejo naslove, kot so izkušnje, izobrazba in spretnosti."
 msgid "They lose access to this organization right away."
 msgstr ""
 
-#: src/features/homepage/prepare.tsx
-msgid "They’ve confirmed your interview for today"
-msgstr "Potrdili so vaš intervju za danes"
-
 #: src/features/career/shared.tsx
 msgid "Thinking"
 msgstr "Razmišljanje"
@@ -13392,8 +12253,8 @@ msgid "This file is larger than many application forms accept."
 msgstr "Ta datoteka je večja, kot jo sprejema veliko prijavnih obrazcev."
 
 #: src/features/documents/new-document-dialog.tsx
-msgid "This file type can't be imported. Use a PDF, Word, Reactive Resume or JSON Resume file, or a LinkedIn export (.zip)."
-msgstr "Te vrste datoteke ni mogoče uvoziti. Uporabite datoteko PDF, Word, Reactive Resume ali JSON Resume ali izvoz LinkedIn (.zip)."
+msgid "This file type can't be imported. Use a PDF, Word, JSON or JSON Resume file, or a LinkedIn export (.zip)."
+msgstr ""
 
 #: src/features/ats-checker/messages.ts
 msgid "This file uses a lot of different fonts."
@@ -13656,10 +12517,6 @@ msgstr "Presvetlo za naslove na beli barvi. Morda je težko berljiv in natisnjen
 msgid "Too many requests. Try again later."
 msgstr "Preveč zahtev. Poskusite znova pozneje."
 
-#: src/features/homepage/sections.tsx
-msgid "Total"
-msgstr "Skupaj"
-
 #: src/features/applications/components/application-form-sheet.tsx
 msgid "Track a job you're applying to and link the resume you sent."
 msgstr "Sledite delovnemu mestu, na katerega se prijavljate, in povežite življenjepis, ki ste ga poslali."
@@ -13676,10 +12533,6 @@ msgstr ""
 msgid "Track your first job"
 msgstr "Sledite svoji prvi zaposlitvi"
 
-#: src/features/homepage/sections.tsx
-msgid "Tracking"
-msgstr "Sledenje"
-
 #: src/features/career/workspace/practise.tsx
 msgid "Transcribe answers with"
 msgstr "Odgovore prepisuje"
@@ -13695,22 +12548,6 @@ msgstr "Prepisovanje z modelom {model}…"
 #: src/features/assistant/conversation.tsx
 msgid "Transcript copied"
 msgstr "Prepis kopiran"
-
-#: src/routes/dashboard/settings/route.tsx
-msgid "Translate"
-msgstr "Prevajaj"
-
-#: src/features/homepage/sections.tsx
-msgid "Translate the app"
-msgstr "Prevedite aplikacijo"
-
-#: src/features/homepage/sections.tsx
-msgid "Translated into {languageCount} languages."
-msgstr "Prevod je na voljo v {languageCount} jezikih."
-
-#: src/features/homepage/footer.tsx
-msgid "Translations"
-msgstr "Prevodi"
 
 #: src/features/command-palette/pages/navigation.tsx
 #: src/features/documents/trash-page.tsx
@@ -13768,10 +12605,6 @@ msgstr "Poskusi znova s tem"
 msgid "Try opening the app again"
 msgstr "Poskusite znova odpreti aplikacijo"
 
-#: src/features/homepage/faq.tsx
-msgid "Try the ATS checker"
-msgstr "Preizkusite preverjevalnik ATS"
-
 #: src/features/career/workspace/practise.tsx
 msgid "Try this opening"
 msgstr "Poskusite ta uvod"
@@ -13825,10 +12658,6 @@ msgstr "Dva stolpca"
 #: src/dialogs/resume/template/data.ts
 msgid "Two columns beneath a colored header band. Keep experience in the main column and supporting details in the sidebar."
 msgstr "Dva stolpca pod barvnim trakom glave. Hranite izkušnje v glavnem stolpcu in podporne podrobnosti v stranski vrstici."
-
-#: src/features/homepage/check.tsx
-msgid "Two date formats found"
-msgstr "Najdeni sta bili dve obliki datuma"
 
 #: src/features/career/workspace/prepare.tsx
 msgid "Two stories"
@@ -13932,7 +12761,6 @@ msgstr "Podčrtaj povezave"
 #: src/features/career/today.tsx
 #: src/features/career/workspace/fit.tsx
 #: src/features/documents/document-actions.tsx
-#: src/features/homepage/write.tsx
 #: src/features/resume/editor/check/actions.ts
 #: src/features/resume/editor/design/fit.ts
 #: src/features/resume/editor/design/template-group.tsx
@@ -13951,12 +12779,6 @@ msgstr "Razveljavi"
 #: src/features/resume/stylesheet/toolbar.tsx
 msgid "Undo resume change"
 msgstr "Razveljavi spremembo življenjepisa"
-
-#: src/features/homepage/check.tsx
-#: src/features/homepage/hero.tsx
-#: src/features/homepage/sheet.tsx
-msgid "University of Porto"
-msgstr "University of Porto"
 
 #: src/features/career/offer-entry.tsx
 #: src/features/career/offers.tsx
@@ -14236,7 +13058,6 @@ msgid "used {used}"
 msgstr "uporabljeno: {used}"
 
 #: src/features/career/knowledge/facts.tsx
-#: src/features/homepage/remember.tsx
 msgid "Used in coaching"
 msgstr "Uporabljeno pri svetovanju"
 
@@ -14247,11 +13068,6 @@ msgstr "Uporablja se za preverjanje vlog in ponudb. Vsaka vrednost je število, 
 #: src/features/settings/ai/web-access.tsx
 msgid "Used when {connectedProvider} can't read a page. No account needed."
 msgstr "Uporablja se, ko {connectedProvider} ne more brati strani. Račun ni potreben."
-
-#: src/features/homepage/check.tsx
-#: src/features/homepage/sheet.tsx
-msgid "User research"
-msgstr "Uporabniške raziskave"
 
 #. Label for username input on registration form
 #: src/features/auth/pages/register.tsx
@@ -14280,10 +13096,6 @@ msgstr "Uporablja vašo predlogo {0} in oblikovanje ter se prilagodi vsakemu zas
 #: src/features/settings/ai/web-access.tsx
 msgid "Uses your AI provider's own web search where supported, and reads links with the built-in reader."
 msgstr "Uporablja lastno spletno iskanje vašega ponudnika AI, kjer je podprto, in bere povezave z vgrajenim bralnikom."
-
-#: src/features/homepage/prepare.tsx
-msgid "Uses your browser’s voice"
-msgstr "Uporablja glas vašega brskalnika"
 
 #: src/libs/locale.ts
 msgid "Uzbek"
@@ -14420,10 +13232,6 @@ msgstr "Ogled {0} · {1} · samo za branje"
 msgid "views · 30 days"
 msgstr "ogledov · 30 dni"
 
-#: src/features/homepage/share.tsx
-msgid "Visibility"
-msgstr "Vidnost"
-
 #: src/features/resume/share/share-panel.tsx
 msgid "Visitors"
 msgstr "Obiskovalci"
@@ -14455,10 +13263,6 @@ msgstr "Čakam na odgovor"
 #: src/features/ats-checker/messages.ts
 msgid "Warning"
 msgstr "Opozorilo"
-
-#: src/features/homepage/hero.tsx
-msgid "WCAG 2.1 AA"
-msgstr "WCAG 2.1 AA"
 
 #: src/features/applications/components/add-application-dialog.tsx
 msgid "We read the page and save the posting for Check, the assistant and your letter."
@@ -14527,7 +13331,6 @@ msgid "Weighing each requirement"
 msgstr "Tehtanje vsake zahteve"
 
 #: src/features/career/workspace/debrief.tsx
-#: src/features/homepage/prepare.tsx
 msgid "Went well"
 msgstr "Šlo je dobro"
 
@@ -14548,7 +13351,6 @@ msgid "What changed? Leave blank if you can’t support it."
 msgstr "Kaj se je spremenilo? Pustite prazno, če tega ne morete podpreti."
 
 #: src/features/career/workspace/debrief.tsx
-#: src/features/homepage/prepare.tsx
 msgid "What did they ask?"
 msgstr "Kaj so vprašali?"
 
@@ -14559,10 +13361,6 @@ msgstr "Kaj natančno ste naredili?"
 #: src/features/career/workspace/debrief.tsx
 msgid "What did you say, as close as you remember?"
 msgstr "Kaj ste povedali, čim bolj natančno, kot se spomnite?"
-
-#: src/features/homepage/faq.tsx
-msgid "What formats can I download?"
-msgstr "Katere formate lahko prenesem?"
 
 #: src/features/resume/editor/write/add-section.tsx
 msgid "What goes in it?"
@@ -14611,10 +13409,6 @@ msgstr "Kaj naj se izvede"
 #: src/features/assistant/assistant-panel.tsx
 msgid "What should we work on?"
 msgstr "Na čem naj delamo?"
-
-#: src/features/homepage/check.tsx
-msgid "What software reads"
-msgstr "Katera programska oprema bere"
 
 #: src/features/career/workspace/prepare.tsx
 msgid "What success looks like, which challenge matters most, and the next step."
@@ -14719,10 +13513,6 @@ msgstr "Ali je življenjepis segmentiran tako, kot pričakuje programska oprema.
 msgid "Whether your timeline can be reconstructed."
 msgstr "Ali je mogoče obnoviti vašo časovnico."
 
-#: src/features/homepage/faq.tsx
-msgid "Which languages does it speak?"
-msgstr "Katere jezike govori?"
-
 #: src/features/career/coach.tsx
 msgid "Which opportunities best match my priorities?"
 msgstr "Katere priložnosti se najbolj ujemajo z mojimi prednostmi?"
@@ -14730,14 +13520,6 @@ msgstr "Katere priložnosti se najbolj ujemajo z mojimi prednostmi?"
 #: src/features/career/offers.tsx
 msgid "Which other benefits come with it, like pension or allowances?"
 msgstr "Katere druge ugodnosti so vključene, na primer pokojninsko zavarovanje ali dodatki?"
-
-#: src/features/homepage/faq.tsx
-msgid "Who can see my resume?"
-msgstr "Kdo lahko vidi moj življenjepis?"
-
-#: src/features/homepage/prepare.tsx
-msgid "Who owns the design system today? What does success look like in 90 days?"
-msgstr "Kdo je danes odgovoren za sistem oblikovanja? Kako je videti uspeh po 90 dneh?"
 
 #: src/features/applications/components/interview-dialog.tsx
 #: src/features/career/workspace/shell.tsx
@@ -14760,17 +13542,9 @@ msgstr "široki robovi"
 msgid "Width"
 msgstr "širina"
 
-#: src/features/homepage/faq.tsx
-msgid "Will my resume get past applicant tracking systems?"
-msgstr "Ali bo moj življenjepis presegel sisteme za sledenje kandidatom?"
-
 #: src/features/settings/account/application-profile.tsx
 msgid "Willing to relocate"
 msgstr ""
-
-#: src/features/homepage/remember.tsx
-msgid "Within a quarter, activation went from 31% to 44%."
-msgstr "V enem četrtletju se je aktivacija dvignila z 31 % na 44 %."
 
 #: src/routes/builder/letter/-components/write-panel.tsx
 msgid "Without one, you fill in the recipient yourself and drafting uses only your resume."
@@ -14801,9 +13575,6 @@ msgstr "Vredno vprašati"
 msgid "Worth asking {0}"
 msgstr "Vredno vprašati: {0}"
 
-#: src/features/homepage/footer.tsx
-#: src/features/homepage/header.tsx
-#: src/features/homepage/write.tsx
 #: src/routes/builder/$resumeId/-components/editor-bar.tsx
 #: src/routes/builder/$resumeId/-components/editor-shell.tsx
 #: src/routes/builder/letter/-components/letter-bar.tsx
@@ -14824,17 +13595,9 @@ msgstr ""
 msgid "Write a letter"
 msgstr "Napiši pismo"
 
-#: src/features/homepage/remember.tsx
-msgid "Write a story once, with the facts behind it, and the coach uses it in 3 places. Switch a fact off and nothing leans on it."
-msgstr "Zgodbo napišite enkrat, z dejstvi v ozadju, in svetovalec jo uporabi na 3 mestih. Izklopite dejstvo in nič se več ne opira nanj."
-
 #: src/features/career/workspace/preparation.tsx
 msgid "Write and review form answers"
 msgstr ""
-
-#: src/features/homepage/write.tsx
-msgid "Write beside a live page. It saves as you type and keeps every version. Ask the assistant for a sharper line: it suggests, you decide."
-msgstr "Pišite ob živi strani. Shranjuje sproti med tipkanjem in hrani vse različice. Pomočnika prosite za ostrejšo formulacijo: on predlaga, vi odločite."
 
 #: src/features/career/workspace/prepare.tsx
 msgid "Write down what they asked while it's fresh. The coach compares your answers with your stories."
@@ -14850,10 +13613,6 @@ msgstr "Zapišite ga kot en neprekinjen niz, brez posebnega razmika."
 
 #: src/features/career/workspace/debrief.tsx
 msgid "Write it down while it's fresh"
-msgstr "Zapišite, dokler je še sveže"
-
-#: src/features/homepage/prepare.tsx
-msgid "Write it down while it’s fresh"
 msgstr "Zapišite, dokler je še sveže"
 
 #: src/routes/builder/letter/-components/write-panel.tsx
@@ -14880,10 +13639,6 @@ msgstr "Napišite, kaj ste naredili."
 msgid "Write your answer, or draft one from your Knowledge."
 msgstr "Napišite odgovor ali pripravite osnutek iz svojega Znanja."
 
-#: src/features/homepage/write.tsx
-msgid "Write your professional resume"
-msgstr "Napišite svoj poklicni življenjepis"
-
 #: src/features/ats-checker/messages.ts
 #: src/features/resume/editor/check/check-panel.tsx
 #: src/features/resume/editor/check/issues.ts
@@ -14897,10 +13652,6 @@ msgstr "Pisanje odgovora…"
 #: src/features/settings/ai/providers.tsx
 msgid "Writing help, tailored suggestions and the assistant. The default provider is used wherever you don't pick one. Your keys stay encrypted."
 msgstr "Pomoč pri pisanju, prilagojeni predlogi in pomočnik. Privzeti ponudnik se uporabi povsod, kjer ga ne izberete. Vaši ključi ostanejo šifrirani."
-
-#: src/features/homepage/sections.tsx
-msgid "writing, tailoring and sending"
-msgstr "pisanje, priredba in pošiljanje"
 
 #: src/features/career/workspace/answer-library.tsx
 msgid "Written manually"
@@ -14918,22 +13669,6 @@ msgstr ""
 #: src/features/settings/account/application-profile.tsx
 msgid "Yes"
 msgstr ""
-
-#: src/features/homepage/faq.tsx
-msgid "Yes. Every feature is free: all {templates} templates, PDF and Word downloads, the ATS checker, cover letters and the job tracker. There are no ads, no tracking and no paid tier. Donations pay for hosting and development."
-msgstr "Da. Vsaka funkcija je brezplačna: vse predloge {templates}, prenosi PDF in Word, pregledovalnik ATS, spremna pisma in sledilnik delovnih mest. Ni oglasov, ni sledenja in ni plačane stopnje. Donacije plačajo gostovanje in razvoj."
-
-#: src/features/homepage/faq.tsx
-msgid "Yes. Every job you track gets its own workspace: check your fit against the posting, draft answers from stories you wrote once, get a short plan before the interview, practice out loud with feedback and debrief afterwards. When offers arrive, compare them side by side. The coaching uses your own AI key; the comparison doesn’t need one."
-msgstr "Da. Vsako delovno mesto, ki ga spremljate, dobi svoj delovni prostor: preverite ujemanje z oglasom, pripravite osnutke odgovorov iz zgodb, ki ste jih napisali enkrat, pred intervjujem dobite kratek načrt, vadite na glas s povratnimi informacijami in po njem naredite analizo. Ko prispejo ponudbe, jih primerjajte drugo ob drugi. Svetovanje uporablja vaš lastni ključ AI; primerjava ga ne potrebuje."
-
-#: src/features/homepage/faq.tsx
-msgid "Yes. Import a PDF, a LinkedIn data export, a JSON Resume file or a Reactive Resume export, then pick up where it left off. With an AI provider set up, Word documents work too."
-msgstr "ja Uvozite izvoz podatkov PDF, LinkedIn, datoteko JSON Resume ali izvoz Reactive Resume in nato nadaljujte tam, kjer ste končali. Z nastavljenim ponudnikom AI delujejo tudi dokumenti Word."
-
-#: src/features/homepage/faq.tsx
-msgid "Yes. Reactive Resume is open source under the MIT License and ships as a Docker image, so it runs on your own server with your own database and storage."
-msgstr "ja Reactive Resume je odprtokoden pod MIT License in se pošilja kot slika Docker, tako da deluje na vašem lastnem strežniku z vašo lastno bazo podatkov in prostorom za shranjevanje."
 
 #: src/features/career/coach-thread.tsx
 msgid "Yesterday"
@@ -14998,10 +13733,6 @@ msgstr "To ste že prej pozabili, zato ni bilo znova shranjeno."
 msgid "You need to belong to an organization to manage its members."
 msgstr ""
 
-#: src/features/homepage/prepare.tsx
-msgid "You partnered with engineering. How you led the work isn’t described yet."
-msgstr "Sodelovali ste z inženirji. Kako ste vodili delo, še ni opisano."
-
 #: src/features/career/offers.tsx
 msgid "You said: “{said}” Ask before deciding."
 msgstr "Rekli ste: »{said}« Vprašajte, preden se odločite."
@@ -15021,10 +13752,6 @@ msgstr "Prijavite se brez njega"
 #: src/features/career/schedule-sheet.tsx
 msgid "You'll always see it in Today. Email depends on your server's mail setup."
 msgstr "V Danes ga boste vedno videli. E-pošta je odvisna od nastavitev pošte na vašem strežniku."
-
-#: src/features/homepage/tailor.tsx
-msgid "You’ll own our <0>design systems</0>, run <1>user research</1> with customers and hold a high bar for <2>accessibility</2>, working in a <3>cross-functional</3> team."
-msgstr "Odgovorni boste za naše <0>oblikovne sisteme</0>, izvajali <1>raziskave uporabnikov</1> s strankami in vzdrževali visoke standarde <2>dostopnosti</2> v <3>medfunkcijski</3> ekipi."
 
 #: src/features/auth/pages/accept-invitation.tsx
 msgid "You're invited"
@@ -15073,7 +13800,6 @@ msgid "Your answer"
 msgstr "Vaš odgovor"
 
 #: src/features/career/workspace/practise.tsx
-#: src/features/homepage/prepare.tsx
 msgid "Your attempts"
 msgstr "Vaši poskusi"
 
@@ -15112,6 +13838,15 @@ msgstr "Narekovanje v brskalniku se je ustavilo. Poskusite znova ali vtipkajte o
 #: src/features/ats-checker/messages.ts
 msgid "Your bullets are drawn with unusual characters."
 msgstr "Vaše alineje so izrisane z nenavadnimi znaki."
+
+#: src/features/homepage/page.tsx
+#: src/libs/seo.ts
+msgid "Your career workspace"
+msgstr ""
+
+#: src/libs/seo.ts
+msgid "Your career workspace. Sign in or create an account."
+msgstr ""
 
 #: src/routes/builder/$resumeId/-components/use-editor-hotkeys.ts
 #: src/routes/builder/letter/-components/letter-shell.tsx
@@ -15214,10 +13949,6 @@ msgstr "vaše sporočilo"
 msgid "Your name"
 msgstr "Vaše ime"
 
-#: src/features/resume/share/cv-domain-card.tsx
-msgid "Your name as your address, from OlaCV, the .cv registry. Code <0/> takes 50% off the first year."
-msgstr "Vaše ime kot vaš naslov, pri OlaCV, registru domen .cv. S kodo <0/> dobite 50 % popusta za prvo leto."
-
 #: src/routes/builder/letter/-components/letter-shell.tsx
 msgid "Your name changed on the resume. The letter updated too."
 msgstr "Vaše ime se je spremenilo v življenjepisu. Tudi pismo je posodobljeno."
@@ -15229,10 +13960,6 @@ msgstr "Vaše ime manjka"
 #: src/features/career/workspace/saved.tsx
 msgid "your notes"
 msgstr "vaše opombe"
-
-#: src/features/homepage/prepare.tsx
-msgid "Your onboarding story"
-msgstr "Vaša zgodba o uvajanju"
 
 #: src/features/career/workspace/prepare.tsx
 msgid "Your opening"
@@ -15291,10 +14018,6 @@ msgstr "Vaš življenjepis je posodobljen."
 msgid "Your resume uses \"I\" and \"my\"."
 msgstr "Vaš življenjepis uporablja „I“ in „my“."
 
-#: src/features/homepage/share.tsx
-msgid "Your resume, live at"
-msgstr "Vaš življenjepis, v živo na"
-
 #: src/libs/error-message.ts
 msgid "Your selected font can't display some characters. They show as “?”. In Design, choose a font that has them."
 msgstr "Izbrana pisava ne more prikazati nekaterih znakov. Prikažejo se kot “?”. V razdelku Oblikovanje izberite pisavo, ki jih vsebuje."
@@ -15328,10 +14051,6 @@ msgstr "vaše zgodbe"
 msgid "Your story couldn't be loaded."
 msgstr "Vaše zgodbe ni bilo mogoče naložiti."
 
-#: src/features/homepage/sections.tsx
-msgid "Your turn"
-msgstr "Ti si na vrsti"
-
 #: src/features/career/workspace/prepare.tsx
 msgid "Your two-minute introduction"
 msgstr "Vaša dvominutna predstavitev"
@@ -15343,15 +14062,6 @@ msgstr "Vaša spletna stran je objavljena"
 #: src/features/auth/components/guest-banner.tsx
 msgid "Your work is lost when you sign out or the session ends. Create an account or sign in to keep your resumes, cover letters and applications."
 msgstr "Vaše delo se izgubi, ko se odjavite ali se seja konča. Ustvarite račun ali se prijavite, da obdržite svoje življenjepise, spremna pisma in prijave."
-
-#: src/features/homepage/sections.tsx
-msgid "Yours"
-msgstr "Vaš"
-
-#. placeholder {0}: templateNames[step] ?? ""
-#: src/features/homepage/design.tsx
-msgid "Yours · {0}"
-msgstr "Vaš · {0}"
 
 #: src/features/resume/editor/write/picture-settings.tsx
 msgid "Zoom"

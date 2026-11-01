@@ -542,24 +542,7 @@ function StylesheetEditorShell({ readOnly = false }: StylesheetEditorShellProps)
 				</span>
 			</p>
 
-			<p className="flex items-center gap-1.5 text-xs text-ink-3">
-				<Icon name="book-open-text" size={16} aria-hidden="true" className="shrink-0" />
-				<span>
-					<Trans>Not sure what to write?</Trans>{" "}
-					<a
-						className="text-accent-text underline underline-offset-4"
-						href="https://docs.rxresu.me/applying-custom-styles"
-						target="_blank"
-						rel="noopener noreferrer"
-					>
-						<Trans>Read the “Applying custom styles” guide.</Trans>
-						<span className="sr-only">
-							{" "}
-							(<Trans>opens in new tab</Trans>)
-						</span>
-					</a>
-				</span>
-			</p>
+			{/* CAREEROS: the upstream "Applying custom styles" docs link was removed. */}
 
 			<div className={focusOpen ? "h-[55svh] sm:h-[calc(100svh-14rem)]" : "h-72"}>{editor}</div>
 		</div>

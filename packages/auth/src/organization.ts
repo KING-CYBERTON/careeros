@@ -6,6 +6,7 @@ import * as schema from "@reactive-resume/db/schema";
 import { InvitationEmail } from "@reactive-resume/email/templates/auth";
 import { sendEmail } from "@reactive-resume/email/transport";
 import { env } from "@reactive-resume/env/server";
+import { PLATFORM_DEFAULT_APP_NAME } from "@reactive-resume/utils/brand";
 
 /** Invitations stay valid for 7 days (P1-T01). */
 export const INVITATION_EXPIRES_IN_SECONDS = 60 * 60 * 24 * 7;
@@ -40,7 +41,7 @@ export const organizationOptions = {
 		const url = new URL(`/auth/accept-invitation/${encodeURIComponent(id)}`, env.APP_URL).toString();
 		await sendEmail({
 			to: email,
-			subject: `Join ${organization.name} on Reactive Resume`,
+			subject: `Join ${organization.name} on ${PLATFORM_DEFAULT_APP_NAME}`,
 			react: createElement(InvitationEmail, {
 				url,
 				organizationName: organization.name,
