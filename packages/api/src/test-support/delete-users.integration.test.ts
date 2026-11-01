@@ -2,6 +2,7 @@ import { randomUUID } from "node:crypto";
 import { existsSync } from "node:fs";
 import { readdir, readFile } from "node:fs/promises";
 import { afterAll, beforeAll, describe, expect, it } from "vite-plus/test";
+import { createIsolatedTestDatabase, type IsolatedTestDatabase } from "@careeros/testing";
 import { drizzle } from "drizzle-orm/node-postgres";
 import { Pool } from "pg";
 import * as tables from "@reactive-resume/db/schema";
@@ -10,19 +11,29 @@ import * as tables from "@reactive-resume/db/schema";
 import { installSchemaLocalGuestMove } from "../test-organization";
 import { deleteAllUsers } from "./delete-users";
 
-const databaseUrl = process.env.INTEGRATIONS_TEST_DATABASE_URL ?? process.env.COVER_LETTER_TEST_DATABASE_URL;
+// CAREEROS (P1-Q09): replaying every migration into a schema also runs the `public.`-qualified function DDL, which would
+// rewrite the real definer functions and grants of the shared database. The replay therefore happens in a throwaway
+// database of its own (the two schemas still share it, so advisory locks contend as before).
+const configured = Boolean(
+	(process.env.INTEGRATIONS_TEST_DATABASE_URL ?? process.env.COVER_LETTER_TEST_DATABASE_URL) &&
+	process.env.CAREEROS_TEST_DATABASE_URL &&
+	process.env.CAREEROS_TEST_APP_DATABASE_URL,
+);
 const USERNAME_COUNT = 50;
 const ROUNDS = 20;
 
 // Real PostgreSQL, opt-in only. Two schemas hold the same usernames; advisory locks are database-wide, so concurrent
 // cleanups contend exactly as concurrent test files do.
-describe.skipIf(!databaseUrl)("deleteAllUsers: concurrent cleanup", () => {
+describe.skipIf(!configured)("deleteAllUsers: concurrent cleanup", () => {
 	let admin: Pool;
+	let database: IsolatedTestDatabase;
 	const pools: Pool[] = [];
 	const schemas = [0, 1].map((n) => `delete_users_test_${n}_${randomUUID().replaceAll("-", "")}`);
 	const usernames = Array.from({ length: USERNAME_COUNT }, (_, i) => `race-user-${String(i).padStart(3, "0")}`);
 
 	beforeAll(async () => {
+		database = await createIsolatedTestDatabase("delete_users");
+		const databaseUrl = database.ownerUrl;
 		admin = new Pool({ connectionString: databaseUrl });
 		const migrations = new URL("../../../../migrations/", import.meta.url);
 		const directories = (await readdir(migrations, { withFileTypes: true }))
@@ -46,6 +57,7 @@ describe.skipIf(!databaseUrl)("deleteAllUsers: concurrent cleanup", () => {
 		await Promise.all(pools.map((pool) => pool.end()));
 		for (const schema of schemas) await admin?.query(`DROP SCHEMA IF EXISTS ${schema} CASCADE`);
 		await admin?.end();
+		await database?.drop();
 	});
 
 	// Opposite insertion orders give the two schemas opposite physical row orders.

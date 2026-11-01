@@ -11,6 +11,10 @@ import { env } from "@reactive-resume/env/server";
 import { ensureTestOrganization, installSchemaLocalGuestMove, TEST_ORGANIZATION_ID } from "../../test-organization";
 import { authRouter } from "./router";
 
+// CAREEROS (P1-Q09): stays on a schema of the OAuth test database (not the shared `postgres` one) on purpose. Its tables
+// are copies of the public ones (`CREATE TABLE ... LIKE`), and the only functions it installs are schema-local copies
+// (`installSchemaLocalGuestMove` rewrites every `public.` to the schema), so it cannot rewrite any `public` definer
+// function or grant.
 // Like the OAuth CI checks, this uses a disposable, migrated database, with isolated fixture tables.
 describe.skipIf(!process.env.OAUTH_TEST_DATABASE_URL)("account wrapper ownership", () => {
 	const schemaName = `account_test_${randomUUID().replaceAll("-", "")}`;

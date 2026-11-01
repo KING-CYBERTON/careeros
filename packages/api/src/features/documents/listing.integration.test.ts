@@ -19,6 +19,8 @@ vi.mock("../resume/service", () => ({ resumeService: {} }));
 vi.mock("../cover-letters/service", () => ({ coverLetterService: {} }));
 vi.mock("../applications/service", () => ({ applicationService: {} }));
 
+// CAREEROS (P1-Q09): stays on a schema of the shared database on purpose. Its tables are hand-built in its own schema and no
+// migration or function DDL runs, so it cannot rewrite the `public` definer functions or grants.
 // Disposable database only; the test owns and drops its isolated schema.
 describe.skipIf(!process.env.COVER_LETTER_TEST_DATABASE_URL)("document SQL pages on a large account", () => {
 	const schemaName = `documents_test_${randomUUID().replaceAll("-", "")}`;

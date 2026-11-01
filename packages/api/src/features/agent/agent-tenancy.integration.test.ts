@@ -1,10 +1,11 @@
 import { randomUUID } from "node:crypto";
 import { afterAll, beforeAll, describe, expect, it, vi } from "vite-plus/test";
 import { captureOrgScope, withOrgContext } from "@careeros/tenancy";
+import { createIsolatedTestDatabase, type IsolatedTestDatabase } from "@careeros/testing";
 import { createRouterClient } from "@orpc/server";
 import { Pool } from "pg";
 import { linkAnonymousAccount } from "@reactive-resume/auth/config";
-import { withDatabasePool } from "@reactive-resume/db/client";
+import { bindGlobalPoolForTesting, withDatabasePool } from "@reactive-resume/db/client";
 import { defaultResumeData } from "@reactive-resume/schema/resume/default";
 import { aiProvidersRouter } from "../ai-providers/router";
 import { encryptCredential } from "../ai/credentials";
@@ -62,6 +63,9 @@ describe.skipIf(!configured)("assistant and AI tables, the assistant's tools and
 	};
 	let owner: Pool;
 	let app: Pool;
+	// CAREEROS (P1-Q09): its own database, so no other file's cleanup, purge or migration replay can touch these rows.
+	let database: IsolatedTestDatabase;
+	let restoreGlobalPool: (() => void) | undefined;
 
 	const inApp = <T>(fn: () => T) => withDatabasePool(app, fn);
 	const user = (id: string) => ({
@@ -105,8 +109,11 @@ describe.skipIf(!configured)("assistant and AI tables, the assistant's tools and
 	};
 
 	beforeAll(async () => {
-		owner = new Pool({ connectionString: process.env.CAREEROS_TEST_DATABASE_URL });
-		app = new Pool({ connectionString: process.env.CAREEROS_TEST_APP_DATABASE_URL });
+		database = await createIsolatedTestDatabase("agent_tenancy");
+		owner = new Pool({ connectionString: database.ownerUrl });
+		app = new Pool({ connectionString: database.appUrl });
+		// The assistant's tools leave the request scope (captureOrgScope) and then use the global pool: point it here too.
+		restoreGlobalPool = bindGlobalPoolForTesting(app);
 		await owner.query(
 			`INSERT INTO organization (id, name, slug) VALUES ($1, 'A', $1), ($2, 'B', $2), ($3, 'G', $3), ($4, 'T', $4)`,
 			[ids.orgA, ids.orgB, ids.orgG, ids.orgT],
@@ -163,17 +170,13 @@ describe.skipIf(!configured)("assistant and AI tables, the assistant's tools and
 			`INSERT INTO agent_actions (id, organization_id, user_id, thread_id, kind, title, operations, base_updated_at, applied_updated_at) VALUES ($1, $2, $3, $4, 'resume_patch', 'Secret edit', '[]', now(), now())`,
 			[`ag-act-b-${run}`, ids.orgB, ids.userAB, ids.threadB],
 		);
-	}, 30_000);
+	}, 60_000);
 
 	afterAll(async () => {
-		await owner?.query(`DELETE FROM organization WHERE id = ANY($1::text[])`, [
-			[ids.orgA, ids.orgB, ids.orgG, ids.orgT],
-		]);
-		await owner?.query(`DELETE FROM "user" WHERE id = ANY($1::text[]) OR id LIKE 'iso-user-%'`, [
-			[ids.userA, ids.userAB, ids.guest, ids.guest2, ids.target],
-		]);
+		restoreGlobalPool?.();
 		await owner?.end();
 		await app?.end();
+		await database?.drop();
 	});
 
 	describe("two organizations", () => {

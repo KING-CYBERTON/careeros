@@ -286,9 +286,9 @@ describe.skipIf(!configured)("remaining tables and tenant isolation", () => {
 		const job = (tag: string) => `uploads/${tag}-${run}`;
 		const insertJob = (org: string, owner_: string, tag: string) =>
 			owner.query(
-				// P1-Q08: due a minute ago. With the default `now()` a job inserted a moment before the worker's JS
-				// `new Date()` can still be "in the future" (millisecond against microsecond precision), so it is skipped.
-				`INSERT INTO storage_cleanup_job (id, organization_id, owner_id, storage_key, next_attempt_at) VALUES ($1, $2, $3, $4, now() - interval '1 minute')`,
+				// P1-Q09: the default `next_attempt_at` (database now()), as production writes it; the worker compares against
+				// database time too, so the job is due the moment it is inserted.
+				`INSERT INTO storage_cleanup_job (id, organization_id, owner_id, storage_key) VALUES ($1, $2, $3, $4)`,
 				[`job-${tag}-${run}`, org, owner_, job(tag)],
 			);
 		const exists = async (tag: string) =>
@@ -318,30 +318,53 @@ describe.skipIf(!configured)("remaining tables and tenant isolation", () => {
 			expect(retry.rows[0]).toMatchObject({ attempts: 1, claim_token: null, last_error: "storage unavailable" });
 		});
 
+		it("decides what is due by database time, whatever the JavaScript clock says", async () => {
+			const { enqueueStorageCleanup, runStorageCleanup } = await import("./storage/cleanup");
+			// P1-Q09 (Q73): next_attempt_at defaults to the database now() (microseconds). A pass that compared it with a
+			// JavaScript Date (milliseconds, and a different clock) could count a job written a moment ago as not yet due.
+			// Pushing the JavaScript clock a minute back makes that window wide: only database time can see the job as due.
+			const key = `uploads/${ids.userA}/clock-${run}`;
+			store.set(key, "ok");
+			vi.useFakeTimers({ toFake: ["Date"], now: Date.now() - 60_000 });
+			try {
+				const summary = await inApp(() =>
+					withOrgContext(ids.orgA, async () => {
+						await db.transaction((tx) => enqueueStorageCleanup(tx, ids.userA, [key]));
+						return runStorageCleanup({ storageKeys: [key], limit: 1 });
+					}),
+				);
+				expect(summary.completed).toBe(1);
+			} finally {
+				vi.useRealTimers();
+			}
+			expect(store.has(key)).toBe(false);
+		});
+
 		it("lists only ids and organizations, narrowed by owner, keys or organization, to careeros_app only", async () => {
 			await owner.query(
 				`UPDATE storage_cleanup_job SET next_attempt_at = now() - interval '1 minute' WHERE id LIKE $1`,
 				[`%${run}%`],
 			);
-			const due = await app.query(`SELECT * FROM careeros_due_storage_cleanup(now(), 1000)`);
+			const due = await app.query(`SELECT * FROM careeros_due_storage_cleanup(1000)`);
 			expect(Object.keys(due.rows[0] ?? { id: 1, organization_id: 1 }).sort()).toEqual(["id", "organization_id"]);
 			expect(due.rows).toEqual(expect.arrayContaining([{ id: `job-a-fail-${run}`, organization_id: ids.orgA }]));
-			const byOrg = await app.query(`SELECT * FROM careeros_due_storage_cleanup(now(), 1000, NULL, NULL, $1)`, [
-				ids.orgBad,
-			]);
+			const byOrg = await app.query(`SELECT * FROM careeros_due_storage_cleanup(1000, NULL, NULL, $1)`, [ids.orgBad]);
 			expect(byOrg.rows.every((row) => row.organization_id === ids.orgBad)).toBe(true);
-			const byOwner = await app.query(`SELECT * FROM careeros_due_storage_cleanup(now(), 1000, $1)`, [ids.userA]);
+			const byOwner = await app.query(`SELECT * FROM careeros_due_storage_cleanup(1000, $1)`, [ids.userA]);
 			expect(byOwner.rows).toEqual([{ id: `job-a-fail-${run}`, organization_id: ids.orgA }]);
-			const byKey = await app.query(
-				`SELECT * FROM careeros_due_storage_cleanup(now(), 1000, NULL, ARRAY[$1]::text[])`,
-				[job("bad-ok")],
-			);
+			const byKey = await app.query(`SELECT * FROM careeros_due_storage_cleanup(1000, NULL, ARRAY[$1]::text[])`, [
+				job("bad-ok"),
+			]);
 			expect(byKey.rows).toEqual([{ id: `job-bad-ok-${run}`, organization_id: ids.orgBad }]);
+			// The timestamp overload from P1-T09 stays for one release (servers not yet redeployed still call it).
+			const legacy = await app.query(`SELECT * FROM careeros_due_storage_cleanup(now(), 1000, $1)`, [ids.userA]);
+			expect(legacy.rows).toEqual(byOwner.rows);
 
 			const client = await owner.connect();
 			try {
 				await client.query(`SET ROLE "${ids.role}"`);
 				for (const call of [
+					"careeros_due_storage_cleanup(1)",
 					"careeros_due_storage_cleanup(now(), 1)",
 					"careeros_stale_custom_domains(now(), 1)",
 					"careeros_verified_domains()",

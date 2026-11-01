@@ -119,11 +119,29 @@ export const db = new Proxy(globalThis.__drizzle, {
 		const request = requestDatabase.getStore();
 		// CAREEROS: continuations that outlive their organization scope must fail, not use a released client (P1-T02)
 		assertScopeOpen(request);
-		const database = request?.database ?? target;
+		// CAREEROS (P1-Q09): resolved on every access, so a test can bind the global pool (see bindGlobalPoolForTesting).
+		const database = request?.database ?? globalThis.__drizzle ?? target;
 		const value = Reflect.get(database, property, database) as unknown;
 		return typeof value === "function" ? value.bind(database) : value;
 	},
 });
+
+/**
+ * CAREEROS (P1-Q09): tests only. Work that deliberately leaves a request or organization scope (`captureOrgScope`,
+ * workers) falls back to the global pool, which is built from `DATABASE_URL`. A suite on its own database binds that
+ * global pool to it for the suite's lifetime. Returns a function that restores the previous pool; the caller still
+ * ends `pool`. Production code never calls this.
+ */
+export function bindGlobalPoolForTesting(pool: Pool): () => void {
+	const previousPool = globalThis.__pool;
+	const previousDatabase = globalThis.__drizzle;
+	globalThis.__pool = pool;
+	globalThis.__drizzle = createDatabase(pool);
+	return () => {
+		globalThis.__pool = previousPool;
+		globalThis.__drizzle = previousDatabase;
+	};
+}
 
 /** The client, or a transaction on it: helpers that write take either, so callers choose the transaction. */
 export type DbOrTx = typeof db | Parameters<Parameters<typeof db.transaction>[0]>[0];

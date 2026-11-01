@@ -41,6 +41,8 @@ export async function installSchemaLocalGuestMove(client: Pick<Pool, "query">, s
 		["20261101083301_remaining_rls", "careeros_release_domain_claims", "custom_domain"],
 		["20261101083301_remaining_rls", "careeros_stale_custom_domains", "custom_domain"],
 		["20261101083301_remaining_rls", "careeros_due_storage_cleanup", "storage_cleanup_job"],
+		// CAREEROS (P1-Q09): the database-clock overload the storage cleanup worker calls
+		["20261101142451_storage_cleanup_db_time", "careeros_due_storage_cleanup", "storage_cleanup_job"],
 		["20261101083301_remaining_rls", "careeros_guest_cleanup_prefixes", "storage_cleanup_job"],
 		["20261101083301_remaining_rls", "enqueue_account_storage_cleanup", "storage_cleanup_job"],
 	] as const satisfies readonly (readonly [string, string, string?])[];

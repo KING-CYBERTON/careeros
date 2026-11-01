@@ -93,7 +93,7 @@ export function reportStorageCleanupSummary(summary: StorageCleanupSummary) {
  * worker took it or it is no longer due.
  */
 function claimJob(organizationId: string, id: string) {
-	const now = new Date();
+	// CAREEROS (P1-Q09, Q73): "due" and the lease are database time, because next_attempt_at defaults to the database now().
 	return withOrgContext(organizationId, () =>
 		db.transaction(async (tx) => {
 			const [job] = await tx
@@ -103,7 +103,7 @@ function claimJob(organizationId: string, id: string) {
 					and(
 						eq(schema.storageCleanupJob.id, id),
 						eq(schema.storageCleanupJob.status, "pending"),
-						sql`${schema.storageCleanupJob.nextAttemptAt} <= ${now}`,
+						sql`${schema.storageCleanupJob.nextAttemptAt} <= now()`,
 					),
 				)
 				.limit(1)
@@ -114,7 +114,7 @@ function claimJob(organizationId: string, id: string) {
 				.set({
 					attempts: job.attempts + 1,
 					claimToken: generateId(),
-					nextAttemptAt: new Date(now.getTime() + LEASE_MS),
+					nextAttemptAt: sql`now() + ${LEASE_MS} * interval '1 millisecond'`,
 				})
 				.where(eq(schema.storageCleanupJob.id, job.id))
 				.returning();
@@ -135,6 +135,7 @@ export async function runStorageCleanup(input: RunStorageCleanupInput = {}): Pro
 	const summary = emptySummary();
 	if (limit <= 0) return summary;
 
+	// CAREEROS (P1-Q09, Q73): the database decides what is due (its own now()); no JavaScript time is passed in.
 	// An array parameter would expand to a tuple, so the keys are spelled as an ARRAY[...] of parameters.
 	const keys = input.storageKeys
 		? sql`array[${sql.join(
@@ -143,7 +144,7 @@ export async function runStorageCleanup(input: RunStorageCleanupInput = {}): Pro
 			)}]::text[]`
 		: sql`null::text[]`;
 	const { rows: due } = await db.execute<{ id: string; organization_id: string }>(
-		sql`select id, organization_id from careeros_due_storage_cleanup(${new Date()}::timestamptz, ${limit}, ${input.ownerId ?? null}, ${keys}, ${currentOrgId() ?? null})`,
+		sql`select id, organization_id from careeros_due_storage_cleanup(${limit}::int, ${input.ownerId ?? null}::text, ${keys}, ${currentOrgId() ?? null}::text)`,
 	);
 	for (const { id, organization_id: organizationId } of due) {
 		try {
@@ -180,7 +181,7 @@ async function processJob(organizationId: string, id: string, summary: StorageCl
 			.set({
 				status: abandoned ? "abandoned" : "pending",
 				claimToken: null,
-				nextAttemptAt: new Date(Date.now() + (abandoned ? 0 : retryDelay)),
+				nextAttemptAt: sql`now() + ${abandoned ? 0 : retryDelay} * interval '1 millisecond'`,
 				lastError:
 					outcome.status === "partial"
 						? `Partial storage delete: ${outcome.remaining} object(s) remain.`

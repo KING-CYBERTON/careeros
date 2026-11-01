@@ -26,6 +26,9 @@ function getPool(): Pool {
 	return fixture.pool;
 }
 
+// CAREEROS (P1-Q09): stays on a schema of the shared database on purpose. It runs only table DDL (CREATE TABLE, ALTER TABLE,
+// CREATE INDEX) with the schema first on the search_path, never function DDL, so it cannot rewrite the `public` definer
+// functions or their grants, and its mocked db never reaches a global worker.
 // Opt-in real PostgreSQL tests. Use a disposable database; all tables live in an isolated schema.
 describe.skipIf(!process.env.COVER_LETTER_TEST_DATABASE_URL)("cover-letter owned persistence", () => {
 	let service: typeof import("./service").coverLetterService;
@@ -210,7 +213,11 @@ describe.skipIf(!process.env.COVER_LETTER_TEST_DATABASE_URL)("cover-letter owned
 			});
 		let blocked = false;
 		try {
-			for (let attempt = 0; attempt < 100 && !committed && !blocked; attempt++) {
+			// CAREEROS (P1-Q09): a deadline, not a fixed number of polls. A hundred back-to-back polls take a few milliseconds,
+			// which a slow runner can spend before the save has even reached the contended row; the assertion below still
+			// demands that the save was seen waiting, and a save that commits without waiting still ends the loop.
+			for (const deadline = Date.now() + 15_000; Date.now() < deadline && !committed && !blocked;) {
+				await new Promise((resolve) => setTimeout(resolve, 5));
 				const result = await getPool().query(
 					"SELECT EXISTS (SELECT 1 FROM pg_stat_activity WHERE datname = current_database() AND cardinality(pg_blocking_pids(pid)) > 0) AS blocked",
 				);
