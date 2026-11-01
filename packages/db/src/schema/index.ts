@@ -13,3 +13,5 @@ export * from "./application-profile";
 export * from "./organization";
 // CAREEROS: organization branding and settings (P2-T01)
 export * from "./branding";
+// CAREEROS: the social and OIDC sign-in handoff between a platform host and an organization host (P2-T05)
+export * from "./auth-handoff";

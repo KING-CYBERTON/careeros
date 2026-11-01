@@ -52,6 +52,7 @@ vi.mock("@reactive-resume/api/features/storage/cleanup", () => ({
 	runStorageCleanup: mocks.cleanup,
 	reportStorageCleanupSummary: vi.fn(),
 }));
+vi.mock("@reactive-resume/api/features/auth-handoff", () => ({ purgeExpiredHandoffs: vi.fn(async () => 0) }));
 vi.mock("@reactive-resume/api/features/agent/streams", () => ({
 	configureAgentStreamLifetime: (lifetime: (promise: Promise<unknown>) => void) => {
 		mocks.lifetime = lifetime;

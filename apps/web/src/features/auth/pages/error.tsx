@@ -33,6 +33,9 @@ function getErrorMessage(code: string | undefined): string {
 			return t`That provider account is already linked to another account. Use a different provider account.`;
 		case "unable_to_link_account":
 			return t`Couldn't link that provider account. Try again.`;
+		// CAREEROS (P2-T05): every failure of the organization sign-in handoff reads the same, so the page never says which check failed.
+		case "handoff_failed":
+			return t`This sign-in link expired or was already used. Go back to the sign-in page and try again.`;
 		case "signup_disabled":
 			return t`This server isn't accepting new accounts. Sign in with an existing account.`;
 		case "invalid_client":

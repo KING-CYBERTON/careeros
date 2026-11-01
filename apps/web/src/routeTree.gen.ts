@@ -38,6 +38,8 @@ import { Route as DashboardCoverLettersRouteImport } from "./routes/dashboard/co
 import { Route as DashboardSettingsRouteRouteImport } from "./routes/dashboard/settings/route";
 import { Route as DashboardTrashRouteImport } from "./routes/dashboard/trash";
 import { Route as AuthAcceptInvitationInvitationIdRouteImport } from "./routes/auth/accept-invitation.$invitationId";
+import { Route as AuthHandoffIndexRouteImport } from "./routes/auth/handoff.index";
+import { Route as AuthHandoffRedeemRouteImport } from "./routes/auth/handoff.redeem";
 import { Route as BuilderResumeIdIndexRouteImport } from "./routes/builder/$resumeId/index";
 import { Route as BuilderLetterCoverLetterIdRouteImport } from "./routes/builder/letter/$coverLetterId";
 import { Route as DashboardApplicationsIndexRouteImport } from "./routes/dashboard/applications/index";
@@ -206,6 +208,16 @@ const AuthAcceptInvitationInvitationIdRoute =
     path: "/accept-invitation/$invitationId",
     getParentRoute: () => AuthRouteRoute,
   } as any);
+const AuthHandoffIndexRoute = AuthHandoffIndexRouteImport.update({
+  id: "/handoff/",
+  path: "/handoff/",
+  getParentRoute: () => AuthRouteRoute,
+} as any);
+const AuthHandoffRedeemRoute = AuthHandoffRedeemRouteImport.update({
+  id: "/handoff/redeem",
+  path: "/handoff/redeem",
+  getParentRoute: () => AuthRouteRoute,
+} as any);
 const BuilderResumeIdIndexRoute = BuilderResumeIdIndexRouteImport.update({
   id: "/",
   path: "/",
@@ -364,6 +376,7 @@ export interface FileRoutesByFullPath {
   "/dashboard/career/knowledge": typeof DashboardCareerKnowledgeRouteRouteWithChildren;
   "/dashboard/settings/integrations": typeof DashboardSettingsIntegrationsRouteRoute;
   "/auth/accept-invitation/$invitationId": typeof AuthAcceptInvitationInvitationIdRoute;
+  "/auth/handoff/redeem": typeof AuthHandoffRedeemRoute;
   "/builder/letter/$coverLetterId": typeof BuilderLetterCoverLetterIdRoute;
   "/dashboard/career/offers": typeof DashboardCareerOffersRoute;
   "/dashboard/settings/account": typeof DashboardSettingsAccountRoute;
@@ -373,6 +386,7 @@ export interface FileRoutesByFullPath {
   "/dashboard/settings/members": typeof DashboardSettingsMembersRoute;
   "/dashboard/settings/preferences": typeof DashboardSettingsPreferencesRoute;
   "/dashboard/settings/profile": typeof DashboardSettingsProfileRoute;
+  "/auth/handoff/": typeof AuthHandoffIndexRoute;
   "/builder/$resumeId/": typeof BuilderResumeIdIndexRoute;
   "/dashboard/applications/": typeof DashboardApplicationsIndexRoute;
   "/dashboard/career/": typeof DashboardCareerIndexRoute;
@@ -410,6 +424,7 @@ export interface FileRoutesByTo {
   "/dashboard/career/knowledge": typeof DashboardCareerKnowledgeRouteRouteWithChildren;
   "/dashboard/settings/integrations": typeof DashboardSettingsIntegrationsRouteRoute;
   "/auth/accept-invitation/$invitationId": typeof AuthAcceptInvitationInvitationIdRoute;
+  "/auth/handoff/redeem": typeof AuthHandoffRedeemRoute;
   "/builder/letter/$coverLetterId": typeof BuilderLetterCoverLetterIdRoute;
   "/dashboard/career/offers": typeof DashboardCareerOffersRoute;
   "/dashboard/settings/account": typeof DashboardSettingsAccountRoute;
@@ -419,6 +434,7 @@ export interface FileRoutesByTo {
   "/dashboard/settings/members": typeof DashboardSettingsMembersRoute;
   "/dashboard/settings/preferences": typeof DashboardSettingsPreferencesRoute;
   "/dashboard/settings/profile": typeof DashboardSettingsProfileRoute;
+  "/auth/handoff": typeof AuthHandoffIndexRoute;
   "/builder/$resumeId": typeof BuilderResumeIdIndexRoute;
   "/dashboard/applications": typeof DashboardApplicationsIndexRoute;
   "/dashboard/career": typeof DashboardCareerIndexRoute;
@@ -464,6 +480,7 @@ export interface FileRoutesById {
   "/dashboard/career/knowledge": typeof DashboardCareerKnowledgeRouteRouteWithChildren;
   "/dashboard/settings/integrations": typeof DashboardSettingsIntegrationsRouteRoute;
   "/auth/accept-invitation/$invitationId": typeof AuthAcceptInvitationInvitationIdRoute;
+  "/auth/handoff/redeem": typeof AuthHandoffRedeemRoute;
   "/builder/letter/$coverLetterId": typeof BuilderLetterCoverLetterIdRoute;
   "/dashboard/career/offers": typeof DashboardCareerOffersRoute;
   "/dashboard/settings/account": typeof DashboardSettingsAccountRoute;
@@ -473,6 +490,7 @@ export interface FileRoutesById {
   "/dashboard/settings/members": typeof DashboardSettingsMembersRoute;
   "/dashboard/settings/preferences": typeof DashboardSettingsPreferencesRoute;
   "/dashboard/settings/profile": typeof DashboardSettingsProfileRoute;
+  "/auth/handoff/": typeof AuthHandoffIndexRoute;
   "/builder/$resumeId/": typeof BuilderResumeIdIndexRoute;
   "/dashboard/applications/": typeof DashboardApplicationsIndexRoute;
   "/dashboard/career/": typeof DashboardCareerIndexRoute;
@@ -518,6 +536,7 @@ export interface FileRouteTypes {
     | "/dashboard/career/knowledge"
     | "/dashboard/settings/integrations"
     | "/auth/accept-invitation/$invitationId"
+    | "/auth/handoff/redeem"
     | "/builder/letter/$coverLetterId"
     | "/dashboard/career/offers"
     | "/dashboard/settings/account"
@@ -527,6 +546,7 @@ export interface FileRouteTypes {
     | "/dashboard/settings/members"
     | "/dashboard/settings/preferences"
     | "/dashboard/settings/profile"
+    | "/auth/handoff/"
     | "/builder/$resumeId/"
     | "/dashboard/applications/"
     | "/dashboard/career/"
@@ -564,6 +584,7 @@ export interface FileRouteTypes {
     | "/dashboard/career/knowledge"
     | "/dashboard/settings/integrations"
     | "/auth/accept-invitation/$invitationId"
+    | "/auth/handoff/redeem"
     | "/builder/letter/$coverLetterId"
     | "/dashboard/career/offers"
     | "/dashboard/settings/account"
@@ -573,6 +594,7 @@ export interface FileRouteTypes {
     | "/dashboard/settings/members"
     | "/dashboard/settings/preferences"
     | "/dashboard/settings/profile"
+    | "/auth/handoff"
     | "/builder/$resumeId"
     | "/dashboard/applications"
     | "/dashboard/career"
@@ -617,6 +639,7 @@ export interface FileRouteTypes {
     | "/dashboard/career/knowledge"
     | "/dashboard/settings/integrations"
     | "/auth/accept-invitation/$invitationId"
+    | "/auth/handoff/redeem"
     | "/builder/letter/$coverLetterId"
     | "/dashboard/career/offers"
     | "/dashboard/settings/account"
@@ -626,6 +649,7 @@ export interface FileRouteTypes {
     | "/dashboard/settings/members"
     | "/dashboard/settings/preferences"
     | "/dashboard/settings/profile"
+    | "/auth/handoff/"
     | "/builder/$resumeId/"
     | "/dashboard/applications/"
     | "/dashboard/career/"
@@ -853,6 +877,20 @@ declare module "@tanstack/react-router" {
       preLoaderRoute: typeof AuthAcceptInvitationInvitationIdRouteImport;
       parentRoute: typeof AuthRouteRoute;
     };
+    "/auth/handoff/": {
+      id: "/auth/handoff/";
+      path: "/handoff";
+      fullPath: "/auth/handoff/";
+      preLoaderRoute: typeof AuthHandoffIndexRouteImport;
+      parentRoute: typeof AuthRouteRoute;
+    };
+    "/auth/handoff/redeem": {
+      id: "/auth/handoff/redeem";
+      path: "/handoff/redeem";
+      fullPath: "/auth/handoff/redeem";
+      preLoaderRoute: typeof AuthHandoffRedeemRouteImport;
+      parentRoute: typeof AuthRouteRoute;
+    };
     "/builder/$resumeId/": {
       id: "/builder/$resumeId/";
       path: "/";
@@ -1057,6 +1095,8 @@ interface AuthRouteRouteChildren {
   AuthVerify2faBackupRoute: typeof AuthVerify2faBackupRoute;
   AuthIndexRoute: typeof AuthIndexRoute;
   AuthAcceptInvitationInvitationIdRoute: typeof AuthAcceptInvitationInvitationIdRoute;
+  AuthHandoffRedeemRoute: typeof AuthHandoffRedeemRoute;
+  AuthHandoffIndexRoute: typeof AuthHandoffIndexRoute;
 }
 
 const AuthRouteRouteChildren: AuthRouteRouteChildren = {
@@ -1072,6 +1112,8 @@ const AuthRouteRouteChildren: AuthRouteRouteChildren = {
   AuthVerify2faBackupRoute: AuthVerify2faBackupRoute,
   AuthIndexRoute: AuthIndexRoute,
   AuthAcceptInvitationInvitationIdRoute: AuthAcceptInvitationInvitationIdRoute,
+  AuthHandoffRedeemRoute: AuthHandoffRedeemRoute,
+  AuthHandoffIndexRoute: AuthHandoffIndexRoute,
 };
 
 const AuthRouteRouteWithChildren = AuthRouteRoute._addFileChildren(
