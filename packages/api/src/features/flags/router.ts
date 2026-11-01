@@ -28,7 +28,7 @@ export const flagsRouter = {
 			operationId: "getFeatureFlags",
 			summary: "Get feature flags",
 			description:
-				"Returns the current feature flags for this Reactive Resume instance. Feature flags control instance-wide settings such as whether new user signups or email-based authentication are disabled. No authentication required.",
+				"Returns the current feature flags for this instance. Feature flags control instance-wide settings such as whether new user signups or email-based authentication are disabled. No authentication required.",
 			successDescription: "The current feature flags for this instance.",
 		})
 		.input(z.object({}).optional())

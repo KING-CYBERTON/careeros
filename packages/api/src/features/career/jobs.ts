@@ -8,6 +8,7 @@ import { db } from "@reactive-resume/db/client";
 import * as tables from "@reactive-resume/db/schema";
 import { sendCareerNotification } from "@reactive-resume/email/transport";
 import { env } from "@reactive-resume/env/server";
+import { PLATFORM_DEFAULT_APP_NAME } from "@reactive-resume/utils/brand";
 import { generateId } from "@reactive-resume/utils/string";
 import { STALE_AGENT_RUN_TTL_MS } from "../agent/runs";
 import { aiProvidersService } from "../ai-providers/service";
@@ -666,7 +667,7 @@ async function sendPendingEmail() {
 			const sent = await sendCareerNotification({
 				to: owner.email,
 				subject: noticeText(notification.notice).title,
-				text: "You have a career update in Reactive Resume.",
+				text: `You have a career update in ${PLATFORM_DEFAULT_APP_NAME}.`,
 				url: new URL(notification.url ?? CAREER_URL, env.APP_URL).toString(),
 				key: notification.key,
 			});

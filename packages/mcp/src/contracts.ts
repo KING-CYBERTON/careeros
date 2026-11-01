@@ -37,7 +37,7 @@ const resumeDataReference: JsonSchemaReference = {
 	type: "object",
 	additionalProperties: true,
 	description:
-		"Reactive Resume data (basics, summary, sections, customSections, metadata). Full JSON Schema: the resume://_meta/schema MCP resource, also served at /schema.json on this server.",
+		"Resume data (basics, summary, sections, customSections, metadata). Full JSON Schema: the resume://_meta/schema MCP resource, also served at /schema.json on this server.",
 };
 const coverLetterStyleReference: JsonSchemaReference = {
 	type: "object",

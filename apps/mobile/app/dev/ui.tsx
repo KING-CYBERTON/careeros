@@ -129,8 +129,8 @@ function Fields() {
 					prefix="https://"
 					value={server}
 					onChangeText={setServer}
-					placeholder="rxresu.me"
-					helper="The address you open Reactive Resume at."
+					placeholder="example.com"
+					helper="The address you open the app at."
 					autoCapitalize="none"
 					keyboardType="url"
 				/>
@@ -270,7 +270,7 @@ function Lists() {
 					leading="bell"
 					trailing={<Switch label="Interview reminders" value={notify} onValueChange={setNotify} />}
 				/>
-				<ListRow title="Password and passkeys" subtitle="rxresu.me" leading="lock" external onPress={noop} />
+				<ListRow title="Password and passkeys" subtitle="example.com" leading="lock" external onPress={noop} />
 				<ListRow title="Add server" leading="plus" accent onPress={noop} />
 				<ListRow title="Sign out" leading="sign-out" destructive onPress={noop} />
 			</ListGroup>
@@ -328,7 +328,7 @@ function Feedback() {
 			/>
 			<Banner
 				variant="sessionExpired"
-				title="Your session on rxresu.me ended"
+				title="Your session on example.com ended"
 				message="Sign in again to keep working. Edits you made are kept on this device."
 			/>
 			<Banner tone="danger" icon="warning-circle" message="The Word file couldn't be generated. Try again." />

@@ -21,11 +21,13 @@ import { Icon } from "@reactive-resume/ui/components/icon";
 import { Input } from "@reactive-resume/ui/components/input";
 import { OTPField } from "@reactive-resume/ui/components/otp-field";
 import { toast } from "@reactive-resume/ui/components/toast";
+import { brandSlug } from "@reactive-resume/utils/brand";
 import { downloadWithAnchor } from "@reactive-resume/utils/file";
 import { useDialogStore } from "../store";
 import { PasswordInput } from "@/components/input/password-input";
 import { useFormBlocker } from "@/hooks/use-form-blocker";
 import { authClient } from "@/libs/auth/client";
+import { getBrand } from "@/libs/brand";
 import { getReadableErrorMessage } from "@/libs/error-message";
 import { sessionQueryKey } from "@/libs/root-context";
 import { useAppForm } from "@/libs/tanstack-form";
@@ -69,7 +71,7 @@ export function EnableTwoFactorDialog(_: DialogProps<"auth.two-factor.enable">) 
 
 			const { data, error } = await authClient.twoFactor.enable({
 				password: value.password,
-				issuer: "Reactive Resume",
+				issuer: getBrand().appName,
 			});
 
 			if (error) {
@@ -170,7 +172,10 @@ export function EnableTwoFactorDialog(_: DialogProps<"auth.two-factor.enable">) 
 
 	const handleDownloadBackupCodes = () => {
 		if (!backupCodes) return;
-		downloadWithAnchor(new Blob([backupCodes.join("\n")], { type: "text/plain" }), "reactive-resume_backup-codes.txt");
+		downloadWithAnchor(
+			new Blob([backupCodes.join("\n")], { type: "text/plain" }),
+			`${brandSlug(getBrand().appName)}_backup-codes.txt`,
+		);
 	};
 
 	return (

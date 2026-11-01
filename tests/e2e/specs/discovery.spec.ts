@@ -138,9 +138,7 @@ test("target roles stay drafts until reviewed; manual setup needs no AI", async 
 	await page.reload();
 	await page.getByRole("button", { name: "Set up discovery", exact: true }).click();
 	await expect(page.getByLabel("Look for", { exact: true })).toHaveValue("Platform engineer");
-	await expect(
-		page.getByText(/Found posting links are read by Reactive Resume and, when needed, tavily/),
-	).toBeVisible();
+	await expect(page.getByText(/Found posting links are read by CareerOS and, when needed, tavily/)).toBeVisible();
 	await page.getByRole("button", { name: "Save schedule", exact: true }).click();
 	await expect(page.getByRole("dialog", { name: "New schedule", exact: true })).toBeHidden();
 	const schedules = await page.request.get("/api/openapi/career/schedules");

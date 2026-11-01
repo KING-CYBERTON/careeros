@@ -787,10 +787,7 @@ export const metadataSchema = z.object({
 	stylesheet: semanticStylesheetSchema.optional(),
 	web: z
 		.object({
-			showCredit: z
-				.boolean()
-				.catch(true)
-				.describe("Whether the web page shows the small 'Made with Reactive Resume' footer."),
+			showCredit: z.boolean().catch(true).describe("Whether the web page shows the small 'Made with' credit footer."),
 		})
 		.optional()
 		.catch(undefined)

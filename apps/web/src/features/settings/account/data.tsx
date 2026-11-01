@@ -16,11 +16,13 @@ import {
 import { Button } from "@reactive-resume/ui/components/button";
 import { Input } from "@reactive-resume/ui/components/input";
 import { toast } from "@reactive-resume/ui/components/toast";
+import { brandSlug } from "@reactive-resume/utils/brand";
 import { downloadWithAnchor } from "@reactive-resume/utils/file";
 import { SettingsRow, SettingsSection } from "../section";
 import { buildAccountZip } from "./export";
 import { clearAccountData } from "@/libs/auth/clear-account-data";
 import { authClient } from "@/libs/auth/client";
+import { getBrand } from "@/libs/brand";
 import { getReadableErrorMessage } from "@/libs/error-message";
 import { client } from "@/libs/orpc/client";
 
@@ -35,7 +37,10 @@ export function DataSection({ openDeletion = false }: DataSectionProps) {
 		mutationFn: async () => {
 			const zip = buildAccountZip(await client.auth.exportData());
 			const date = new Date().toISOString().slice(0, 10);
-			downloadWithAnchor(new Blob([zip as BlobPart], { type: "application/zip" }), `reactive-resume-${date}.zip`);
+			downloadWithAnchor(
+				new Blob([zip as BlobPart], { type: "application/zip" }),
+				`${brandSlug(getBrand().appName)}-${date}.zip`,
+			);
 		},
 		onError: (error) =>
 			toast.add({

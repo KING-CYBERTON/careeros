@@ -28,6 +28,7 @@ import {
 import { ResumePasswordDialog } from "@/features/resume/builder/password-dialog";
 import { useConfirm } from "@/hooks/use-confirm";
 import { authClient } from "@/libs/auth/client";
+import { getBrand } from "@/libs/brand";
 import { toastError } from "@/libs/error-message";
 import { ENTER_CLASS } from "@/libs/motion";
 import { orpc } from "@/libs/orpc/client";
@@ -232,6 +233,7 @@ function PrimaryRow({ setting: { update, isPending } }: ShareSettingProps) {
 
 /** The web page uses the resume's template and Design; the footer credit is its one setting of its own. */
 function WebPageSettings() {
+	const { appName } = getBrand();
 	const data = useResumeData();
 	const updateResumeData = useUpdateResumeData();
 	const locked = useIsResumeLocked();
@@ -257,7 +259,7 @@ function WebPageSettings() {
 						draft.metadata.web = { ...draft.metadata.web, showCredit: checked };
 					})
 				}
-				label={t`Show “Made with Reactive Resume”`}
+				label={t`Show “Made with ${appName}”`}
 				className="py-0"
 			/>
 		</section>

@@ -15,6 +15,7 @@ import { Route as AuthRouteRouteImport } from "./routes/auth/route";
 import { Route as DashboardRouteRouteImport } from "./routes/dashboard/route";
 import { Route as HomeIndexRouteImport } from "./routes/_home/index";
 import { Route as HomeAtsCheckerRouteImport } from "./routes/_home/ats-checker";
+import { Route as HomeLicensesRouteImport } from "./routes/_home/licenses";
 import { Route as HomeResumeTemplatesRouteImport } from "./routes/_home/resume-templates";
 import { Route as AgentIndexRouteImport } from "./routes/agent/index";
 import { Route as AgentThreadIdRouteImport } from "./routes/agent/$threadId";
@@ -86,6 +87,11 @@ const HomeIndexRoute = HomeIndexRouteImport.update({
 const HomeAtsCheckerRoute = HomeAtsCheckerRouteImport.update({
   id: "/ats-checker",
   path: "/ats-checker",
+  getParentRoute: () => HomeRouteRoute,
+} as any);
+const HomeLicensesRoute = HomeLicensesRouteImport.update({
+  id: "/licenses",
+  path: "/licenses",
   getParentRoute: () => HomeRouteRoute,
 } as any);
 const HomeResumeTemplatesRoute = HomeResumeTemplatesRouteImport.update({
@@ -330,6 +336,7 @@ export interface FileRoutesByFullPath {
   "/dashboard/career": typeof DashboardCareerRouteRouteWithChildren;
   "/dashboard/settings": typeof DashboardSettingsRouteRouteWithChildren;
   "/ats-checker": typeof HomeAtsCheckerRoute;
+  "/licenses": typeof HomeLicensesRoute;
   "/resume-templates": typeof HomeResumeTemplatesRoute;
   "/agent/$threadId": typeof AgentThreadIdRoute;
   "/agent/new": typeof AgentNewRoute;
@@ -373,6 +380,7 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   "/ats-checker": typeof HomeAtsCheckerRoute;
+  "/licenses": typeof HomeLicensesRoute;
   "/resume-templates": typeof HomeResumeTemplatesRoute;
   "/agent/$threadId": typeof AgentThreadIdRoute;
   "/agent/new": typeof AgentNewRoute;
@@ -425,6 +433,7 @@ export interface FileRoutesById {
   "/dashboard/career": typeof DashboardCareerRouteRouteWithChildren;
   "/dashboard/settings": typeof DashboardSettingsRouteRouteWithChildren;
   "/_home/ats-checker": typeof HomeAtsCheckerRoute;
+  "/_home/licenses": typeof HomeLicensesRoute;
   "/_home/resume-templates": typeof HomeResumeTemplatesRoute;
   "/agent/$threadId": typeof AgentThreadIdRoute;
   "/agent/new": typeof AgentNewRoute;
@@ -478,6 +487,7 @@ export interface FileRouteTypes {
     | "/dashboard/career"
     | "/dashboard/settings"
     | "/ats-checker"
+    | "/licenses"
     | "/resume-templates"
     | "/agent/$threadId"
     | "/agent/new"
@@ -521,6 +531,7 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo;
   to:
     | "/ats-checker"
+    | "/licenses"
     | "/resume-templates"
     | "/agent/$threadId"
     | "/agent/new"
@@ -572,6 +583,7 @@ export interface FileRouteTypes {
     | "/dashboard/career"
     | "/dashboard/settings"
     | "/_home/ats-checker"
+    | "/_home/licenses"
     | "/_home/resume-templates"
     | "/agent/$threadId"
     | "/agent/new"
@@ -666,6 +678,13 @@ declare module "@tanstack/react-router" {
       path: "/ats-checker";
       fullPath: "/ats-checker";
       preLoaderRoute: typeof HomeAtsCheckerRouteImport;
+      parentRoute: typeof HomeRouteRoute;
+    };
+    "/_home/licenses": {
+      id: "/_home/licenses";
+      path: "/licenses";
+      fullPath: "/licenses";
+      preLoaderRoute: typeof HomeLicensesRouteImport;
       parentRoute: typeof HomeRouteRoute;
     };
     "/_home/resume-templates": {
@@ -974,12 +993,14 @@ declare module "@tanstack/react-router" {
 
 interface HomeRouteRouteChildren {
   HomeAtsCheckerRoute: typeof HomeAtsCheckerRoute;
+  HomeLicensesRoute: typeof HomeLicensesRoute;
   HomeResumeTemplatesRoute: typeof HomeResumeTemplatesRoute;
   HomeIndexRoute: typeof HomeIndexRoute;
 }
 
 const HomeRouteRouteChildren: HomeRouteRouteChildren = {
   HomeAtsCheckerRoute: HomeAtsCheckerRoute,
+  HomeLicensesRoute: HomeLicensesRoute,
   HomeResumeTemplatesRoute: HomeResumeTemplatesRoute,
   HomeIndexRoute: HomeIndexRoute,
 };

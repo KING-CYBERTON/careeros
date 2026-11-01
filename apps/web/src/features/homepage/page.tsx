@@ -1,33 +1,18 @@
+// CAREEROS: the upstream marketing homepage is replaced by a minimal neutral landing page (P2-T08).
 import { t } from "@lingui/core/macro";
-import { useRef } from "react";
+import { Trans } from "@lingui/react/macro";
+import { Link } from "@tanstack/react-router";
+import { Button } from "@reactive-resume/ui/components/button";
 import { LandingBackground } from "./background";
-import { Check } from "./check";
-import { Design } from "./design";
-import { Faq } from "./faq";
 import { LandingFooter } from "./footer";
-import { LandingHeader, ThemeCord } from "./header";
-import { Hero } from "./hero";
-import { Prepare } from "./prepare";
-import { Remember } from "./remember";
-import { useScrollScenes } from "./scroll";
-import { Closing, Languages, Numbers, Support } from "./sections";
-import { Share } from "./share";
-import { Tailor } from "./tailor";
-import { Write } from "./write";
+import { getBrand } from "@/libs/brand";
 
-/**
- * The public landing page: one scroll-driven story, "Everything you've done, on one page." A single resume page is
- * assembled, written, restyled, checked, tailored and sent as the visitor scrolls. The reply that comes back turns
- * into interview day in the application's folder, and the story behind it is told once and reused. Then community
- * proof, languages, support, common questions, a closing call to action and the footer. The server prerenders it
- * (prerender.tsx), so every word is in the first response.
- */
+/** The public landing page: the app name, one line of copy, and the sign-in and registration buttons. */
 export function Homepage() {
-	const root = useRef<HTMLDivElement>(null);
-	useScrollScenes(root);
+	const { appName } = getBrand();
 
 	return (
-		<div ref={root} className="landing relative isolate overflow-x-clip bg-bg font-ui text-ink">
+		<div className="landing relative isolate flex min-h-svh flex-col bg-bg font-ui text-ink">
 			<LandingBackground />
 			<a
 				href="#main"
@@ -35,22 +20,19 @@ export function Homepage() {
 			>
 				{t`Skip to content`}
 			</a>
-			<LandingHeader />
-			<ThemeCord />
-			<main id="main">
-				<Hero />
-				<Write />
-				<Design />
-				<Check />
-				<Tailor />
-				<Share />
-				<Prepare />
-				<Remember />
-				<Numbers />
-				<Languages />
-				<Support />
-				<Faq />
-				<Closing />
+			<main id="main" className="flex flex-1 flex-col items-center justify-center gap-8 px-6 py-24 text-center">
+				<h1 className="font-display text-5xl font-semibold tracking-tight text-balance sm:text-6xl">{appName}</h1>
+				<p className="text-lg text-pretty text-ink-2 sm:text-xl">
+					<Trans>Your career workspace</Trans>
+				</p>
+				<div className="flex flex-wrap items-center justify-center gap-3">
+					<Button size="lg" nativeButton={false} render={<Link to="/auth/login" />}>
+						<Trans>Sign in</Trans>
+					</Button>
+					<Button size="lg" variant="secondary" nativeButton={false} render={<Link to="/auth/register" />}>
+						<Trans>Create account</Trans>
+					</Button>
+				</div>
 			</main>
 			<LandingFooter />
 		</div>

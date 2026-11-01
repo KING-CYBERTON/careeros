@@ -114,7 +114,7 @@ export const coverLettersRouter = {
 			tags: ["Cover Letters"],
 			operationId: "exportCoverLetter",
 			summary: "Export a cover letter",
-			description: "Exports a saved cover letter as a standalone Reactive Resume cover-letter document.",
+			description: "Exports a saved cover letter as a standalone cover-letter document.",
 			successDescription: "The exported cover letter document.",
 		})
 		.input(coverLetterDto.export.input)
@@ -127,7 +127,7 @@ export const coverLettersRouter = {
 			tags: ["Cover Letters"],
 			operationId: "importCoverLetter",
 			summary: "Import a cover letter",
-			description: "Creates a saved cover letter from an exported Reactive Resume cover-letter document.",
+			description: "Creates a saved cover letter from an exported cover-letter document.",
 			successDescription: "The imported cover letter.",
 		})
 		.input(coverLetterDto.import.input)

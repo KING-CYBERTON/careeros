@@ -27,33 +27,23 @@ vi.mock("@reactive-resume/env/server", () => ({
 
 const { handleWebApp } = await import("./web");
 
-const searchLink =
-	'<https://context7.com/api/v2/ask?siteKey=ask_b3fd9335a63f1b21b1a814ac>; rel="search"; type="text/plain"; title="Search rxresu.me"';
-
 describe("web app fallback classification", () => {
 	beforeEach(() => {
 		vi.clearAllMocks();
 		vi.mocked(fs.readFile).mockResolvedValue("<html>app</html>");
 	});
 
-	it.each(["/", "/?locale=de-DE", "/ats-checker", "/resume-templates", "/dashboard", "/index.html"])(
-		"advertises Context7 Ask in server-rendered %s and its HEAD response",
+	// CAREEROS: the upstream Context7 search note, verification tag and Link header were removed (P2-T08).
+	it.each(["/", "/?locale=de-DE", "/ats-checker", "/resume-templates", "/licenses", "/dashboard", "/index.html"])(
+		"serves %s without third-party search or upstream branding",
 		async (path) => {
 			vi.mocked(fs.readFile).mockResolvedValue('<html><head></head><body><div id="app"></div></body></html>');
-			const response = await handleWebApp(new Request(`https://rxresu.me${path}`));
+			const response = await handleWebApp(new Request(`https://example.com${path}`));
+			expect(response.status).toBe(200);
 			const html = await response.text();
-			expect(html).toContain('<meta name="context7-site-verification" content="ask_b3fd9335a63f1b21b1a814ac"></head>');
-			expect(html).toContain('<body><blockquote data-context7-ask="true" aria-hidden="true" class="sr-only">');
-			expect(html).toContain("<h2>Search</h2><p>Page index: https://rxresu.me/llms.txt.</p>");
-			expect(html).toContain(
-				"https://context7.com/api/v2/ask?siteKey=ask_b3fd9335a63f1b21b1a814ac&amp;query=&lt;URL-encoded question&gt;",
-			);
-			expect(html).toContain('</blockquote><div id="app"></div>');
-			expect(html).not.toContain("Add .md");
-			expect(response.headers.get("Link")).toBe(searchLink);
-			const head = await handleWebApp(new Request(`https://rxresu.me${path}`, { method: "HEAD" }));
-			expect(head.headers.get("Link")).toBe(searchLink);
-			expect(await head.text()).toBe("");
+			expect(html).not.toContain("context7");
+			expect(html).toContain('<body><div id="app"></div>');
+			expect(response.headers.get("Link") ?? "").not.toContain("context7");
 		},
 	);
 
@@ -62,10 +52,10 @@ describe("web app fallback classification", () => {
 			<!doctype html>
 			<html>
 				<head>
-					<title>Reactive Resume — A free and open-source resume builder</title>
+					<title>Your career workspace | CareerOS</title>
 					<meta
 						name="description"
-						content="Reactive Resume is a free and open-source resume builder that makes it easy to create, update, and share your resume."
+						content="Your career workspace. Sign in or create an account."
 					>
 				</head>
 				<body><div id="app"></div></body>
@@ -79,9 +69,11 @@ describe("web app fallback classification", () => {
 		expect(html).toContain('<meta property="og:url" content="https://rxresu.me/">');
 		expect(html).toContain('<script type="application/ld+json">');
 		expect(html).toContain(
-			'<meta property="og:description" content="Reactive Resume is a free and open-source resume builder that makes it easy to create, update, and share your resume.">',
+			'<meta property="og:description" content="Your career workspace. Sign in or create an account.">',
 		);
-		expect(html).toContain('"contactType":"support","email":"amruth@rxresu.me"');
+		expect(html).toContain('"@type":"Organization"');
+		expect(html).toContain('"name":"CareerOS"');
+		expect(html).not.toMatch(/amruth|reactive resume|opencollective|discord/i);
 		expect(html).not.toContain("utm_source");
 
 		const dashboardResponse = await handleWebApp(new Request("https://example.com/dashboard"));
@@ -125,7 +117,7 @@ describe("web app fallback classification", () => {
 	});
 
 	describe.each(["ats-checker", "resume-templates"])("the %s page", (path) => {
-		const shell = `<html><head><title>Reactive Resume — A free and open-source resume builder</title><meta name="description" content="Marketing copy."></head><body></body></html>`;
+		const shell = `<html><head><title>Your career workspace | CareerOS</title><meta name="description" content="Marketing copy."></head><body></body></html>`;
 
 		it("serves an indexable shell rather than a 404", async () => {
 			vi.mocked(fs.readFile).mockResolvedValue(shell);
@@ -185,7 +177,7 @@ describe("web app fallback classification", () => {
 
 		expect(response.headers.get("Cache-Tag")).toBe("html");
 		expect(response.headers.get("Link")).toBe(
-			`${searchLink}, </assets/index-a.css>; rel=preload; as=style; crossorigin, </assets/figtree-b.woff2>; rel=preload; as=font; crossorigin`,
+			`</assets/index-a.css>; rel=preload; as=style; crossorigin, </assets/figtree-b.woff2>; rel=preload; as=font; crossorigin`,
 		);
 	});
 

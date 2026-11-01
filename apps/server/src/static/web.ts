@@ -8,6 +8,7 @@ import { env } from "@reactive-resume/env/server";
 import { jsonLdScript, socialMetaTags } from "@reactive-resume/pdf/web-page-document";
 import { templateSchema } from "@reactive-resume/schema/templates";
 import { isAppSectionPath, RESERVED_SEGMENTS } from "@reactive-resume/utils/app-paths";
+import { PLATFORM_DEFAULT_APP_NAME } from "@reactive-resume/utils/brand";
 import {
 	defaultLocale,
 	getLocaleAlternates,
@@ -16,7 +17,6 @@ import {
 	supportedLocales,
 } from "@reactive-resume/utils/locale";
 import { escapeHtml } from "@reactive-resume/utils/string";
-import { CONTEXT7_ASK_DESCRIPTION, CONTEXT7_ASK_URL } from "./seo";
 
 function resolveWebDistPath() {
 	const candidates = [
@@ -42,7 +42,8 @@ const prerenderRoot = `${staticRoot}-prerender`;
  * Without an entry here the fallback below returns 404 for the path in production — the dev Vite
  * server serves the shell for anything, so this failure only ever shows up once deployed.
  */
-const indexableAppPaths = new Set(["/ats-checker", "/resume-templates"]);
+// CAREEROS: /licenses added (P2-T08).
+const indexableAppPaths = new Set(["/ats-checker", "/resume-templates", "/licenses"]);
 const reservedPublicResumeSegments = new Set<string>(RESERVED_SEGMENTS);
 
 function isAssetPath(pathname: string): boolean {
@@ -105,7 +106,6 @@ export function contentSecurityPolicy(html = "") {
 }
 
 export const BASE_SECURITY_HEADERS = {
-	Link: `<${CONTEXT7_ASK_URL}>; rel="search"; type="text/plain"; title="Search rxresu.me"`,
 	"X-Frame-Options": "DENY",
 	"X-Content-Type-Options": "nosniff",
 	"Referrer-Policy": "strict-origin-when-cross-origin",
@@ -135,11 +135,8 @@ function preloadLinks(html: string) {
  * any resume-derived markup goes in, so text that slipped past escaping could never allow itself.
  */
 function htmlResponse(html: string, headers: Record<string, string>, template = html) {
-	const verification = new URL(CONTEXT7_ASK_URL).searchParams.get("siteKey") ?? "";
-	const note = `<blockquote data-context7-ask="true" aria-hidden="true" class="sr-only"><h2>Search</h2><p>Page index: https://rxresu.me/llms.txt.</p><p>${escapeHtml(CONTEXT7_ASK_DESCRIPTION)}</p></blockquote>`;
-	const body = html
-		.replace("</head>", () => `<meta name="context7-site-verification" content="${verification}"></head>`)
-		.replace(/<body\b[^>]*>/i, (tag) => `${tag}${note}`);
+	// CAREEROS: the upstream third-party search note and site verification were removed (P2-T08).
+	const body = html;
 	return new Response(body, {
 		headers: {
 			...headers,
@@ -152,38 +149,29 @@ function htmlResponse(html: string, headers: Record<string, string>, template = 
 	});
 }
 
-const githubUrl = "https://github.com/reactive-resume/reactive-resume";
+// CAREEROS: the product name comes from the platform default; P2-T02 passes the org brand per request.
+const APP_NAME = PLATFORM_DEFAULT_APP_NAME;
 // The English copy, for a build without prerendered pages; a prerendered page carries its own locale's title and
 // description, and the social cards reuse them.
-const ROOT_TITLE = "Free resume builder with PDF &amp; Word downloads | Reactive Resume";
-const ROOT_DESCRIPTION =
-	"Free, open-source resume builder. Create, update, and share your resume, with PDF and Word downloads, no ads and no paywall.";
-const ATS_CHECKER_TITLE = "Free ATS resume checker | Reactive Resume";
+const ROOT_TITLE = `Your career workspace | ${APP_NAME}`;
+const ROOT_DESCRIPTION = "Your career workspace. Sign in or create an account.";
+const ATS_CHECKER_TITLE = `Free ATS resume checker | ${APP_NAME}`;
 const ATS_CHECKER_DESCRIPTION =
 	"Check whether software can read your resume PDF. Runs entirely in your browser, so your file is never uploaded.";
-const TEMPLATES_TITLE = "Free resume templates with PDF examples | Reactive Resume";
+const TEMPLATES_TITLE = `Free resume templates with PDF examples | ${APP_NAME}`;
 const TEMPLATES_DESCRIPTION =
 	"Browse free resume templates, compare one-column and two-column layouts, and download sample PDFs. Customize your resume and export to PDF or Word.";
 
 type StructuredData = Record<string, unknown>;
 
-/** Who makes Reactive Resume, referenced by id from every page's structured data. */
+/** The organization behind the site, referenced by id from every page's structured data. */
 function organization(origin: string): StructuredData {
 	return {
 		"@type": "Organization",
 		"@id": `${origin}/#organization`,
-		name: "Reactive Resume",
+		name: APP_NAME,
 		url: `${origin}/`,
-		contactPoint: { "@type": "ContactPoint", contactType: "support", email: "amruth@rxresu.me" },
 		logo: { "@type": "ImageObject", url: `${origin}/pwa-512x512.png`, width: 512, height: 512 },
-		sameAs: [
-			githubUrl,
-			"https://www.linkedin.com/company/reactive-resume",
-			"https://opencollective.com/reactive-resume",
-			"https://www.reddit.com/r/reactiveresume",
-			"https://discord.gg/aSyA5ZSxpb",
-			"https://crowdin.com/project/reactive-resume",
-		],
 	};
 }
 
@@ -196,32 +184,9 @@ function homepageStructuredData(origin: string): StructuredData {
 			{
 				"@type": "WebSite",
 				"@id": `${origin}/#website`,
-				name: "Reactive Resume",
+				name: APP_NAME,
 				url: rootUrl,
 				publisher: { "@id": `${origin}/#organization` },
-			},
-			{
-				"@type": ["SoftwareApplication", "WebApplication"],
-				name: "Reactive Resume",
-				url: rootUrl,
-				description: ROOT_DESCRIPTION,
-				applicationCategory: "BusinessApplication",
-				operatingSystem: "Web",
-				isAccessibleForFree: true,
-				offers: { "@type": "Offer", price: "0", priceCurrency: "USD" },
-				license: `${githubUrl}/blob/main/LICENSE`,
-				publisher: { "@id": `${origin}/#organization` },
-				featureList: [
-					"Resume editor with a live page preview",
-					`${templateSchema.options.length} templates`,
-					"PDF, Word (DOCX), Markdown and JSON export",
-					"Import from PDF, LinkedIn and JSON Resume, or Word with an AI provider",
-					"ATS readability checker",
-					"Public or password-protected sharing links",
-					"Cover letters and a job application tracker",
-					"Optional AI assistant with your own API key",
-					"Self-hosting with Docker",
-				],
 			},
 		],
 	};
@@ -241,7 +206,7 @@ function atsCheckerStructuredData(origin: string): StructuredData {
 				operatingSystem: "Web",
 				isAccessibleForFree: true,
 				offers: { "@type": "Offer", price: "0", priceCurrency: "USD" },
-				isPartOf: { "@type": "WebSite", "@id": `${origin}/#website`, name: "Reactive Resume", url: `${origin}/` },
+				isPartOf: { "@type": "WebSite", "@id": `${origin}/#website`, name: APP_NAME, url: `${origin}/` },
 				provider: { "@id": `${origin}/#organization` },
 			},
 		],
@@ -273,7 +238,7 @@ function createPageSeoMarkup(options: PageSeoOptions) {
 		<link rel="canonical" href="${url}">
 		${alternates}
 		<meta property="og:locale" content="${options.locale.replace("-", "_")}">
-		${socialMetaTags({ type: "website", title: options.title, description: options.description, url, image: options.imageUrl })}
+		${socialMetaTags({ type: "website", title: options.title, description: options.description, url, image: options.imageUrl, siteName: APP_NAME })}
 		${jsonLdScript(options.structuredData)}
 	`;
 }

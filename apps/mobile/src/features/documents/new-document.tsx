@@ -272,7 +272,7 @@ export function NewDocument() {
 									<Card>
 										<ListRow
 											title={t`Import a resume`}
-											subtitle={t`PDF, Word, Reactive Resume, JSON Resume or LinkedIn export.`}
+											subtitle={t`PDF, Word, JSON, JSON Resume or LinkedIn export.`}
 											leading="file-arrow-up"
 											chevron
 											disabled={busy}
@@ -398,7 +398,7 @@ export function NewDocument() {
 							{step === "import" && (
 								<>
 									<Text variant="heading">{t`Import a resume`}</Text>
-									<Text color="ink2">{t`PDF uses your AI provider when one is ready. Turn off the AI switch to read its text layer on your server. Word (.docx) needs an AI provider. Current and v4 Reactive Resume JSON, cover letters, JSON Resume and LinkedIn exports (.zip) are supported. Up to 10 MB.`}</Text>
+									<Text color="ink2">{t`PDF uses your AI provider when one is ready. Turn off the AI switch to read its text layer on your server. Word (.docx) needs an AI provider. Current and v4 JSON, cover letters, JSON Resume and LinkedIn exports (.zip) are supported. Up to 10 MB.`}</Text>
 									<View style={{ flexDirection: "row", alignItems: "center", gap: space.s3 }}>
 										<Text style={{ flex: 1 }}>{t`Use AI for PDF imports`}</Text>
 										<Switch

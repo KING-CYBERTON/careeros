@@ -1,11 +1,10 @@
 import { env } from "@reactive-resume/env/server";
 import { publicResumeUrl } from "@reactive-resume/resume/sharing";
 import { templateSchema } from "@reactive-resume/schema/templates";
+import { PLATFORM_DEFAULT_APP_NAME } from "@reactive-resume/utils/brand";
 import { getLocaleAlternates } from "@reactive-resume/utils/locale";
 
-const DOCS_URL = "https://docs.rxresu.me";
-export const CONTEXT7_ASK_URL = "https://context7.com/api/v2/ask?siteKey=ask_b3fd9335a63f1b21b1a814ac";
-export const CONTEXT7_ASK_DESCRIPTION = `This site has a search endpoint: ${CONTEXT7_ASK_URL}&query=<URL-encoded question>. It returns documentation that answers the question, with a source link for each part. No API key is needed. If nothing matches, it says so.`;
+// CAREEROS: the upstream docs site, third-party search and community links were removed (P2-T08).
 
 function appUrl() {
 	return env.APP_URL.replace(/\/+$/, "");
@@ -35,7 +34,6 @@ export function handleRobots() {
 		"Allow: /.well-known/agent-skills/",
 		"",
 		`Sitemap: ${baseUrl}/sitemap.xml`,
-		`Sitemap: ${DOCS_URL}/sitemap.xml`,
 		"",
 	].join("\n");
 
@@ -107,53 +105,40 @@ export async function handleResumesSitemap(page: number) {
 	);
 }
 
-export function handleLlms() {
+/** `llms.txt` for agents. `appName` defaults to the platform name; the org brand fills it in P2-T02. */
+export function handleLlms(appName: string = PLATFORM_DEFAULT_APP_NAME) {
 	const baseUrl = appUrl();
 	const body = [
-		"# Reactive Resume",
+		`# ${appName}`,
 		"",
-		`> Reactive Resume is a free and open-source resume builder. Write a resume in an editor beside a live page, pick one of ${templateSchema.options.length} templates, check that applicant tracking systems can read it, tailor it to a job posting, and share it at a public link or download it. No ads, no tracking, no paid tier; it is funded by donations and released under the MIT License.`,
-		"",
-		"## Search",
-		"",
-		CONTEXT7_ASK_DESCRIPTION,
+		`> ${appName} is a career workspace: write resumes and cover letters, check that applicant tracking systems can read them, tailor them to a job posting, track applications, and share or download the result.`,
 		"",
 		"## Product",
 		"",
-		`- [Homepage](${baseUrl}/): what Reactive Resume does, with answers to common questions.`,
-		`- [Resume templates](${baseUrl}/resume-templates): browse all ${templateSchema.options.length} free templates, compare layouts and download sample PDFs.`,
-		`- [ATS checker](${baseUrl}/ats-checker): a free tool that shows the text applicant tracking systems extract from a resume PDF and what to fix. It runs in the browser; the file is never uploaded.`,
+		`- [Homepage](${baseUrl}/): sign in or create an account.`,
+		`- [Resume templates](${baseUrl}/resume-templates): browse all ${templateSchema.options.length} templates, compare layouts and download sample PDFs.`,
+		`- [ATS checker](${baseUrl}/ats-checker): a tool that shows the text applicant tracking systems extract from a resume PDF and what to fix. It runs in the browser; the file is never uploaded.`,
 		`- [Get started](${baseUrl}/dashboard): create an account and a first resume.`,
 		"",
 		"## Facts",
 		"",
-		"- Price: free, every feature. Optional donations through GitHub Sponsors and Open Collective.",
 		"- Export: PDF, Word (DOCX), Markdown and JSON.",
-		"- Import: PDF, LinkedIn data export, JSON Resume, Reactive Resume JSON; Word files with an AI provider.",
+		"- Import: PDF, LinkedIn data export, JSON Resume; Word files with an AI provider.",
 		"- Sharing: private by default; a public link or a password-protected link, changeable at any time.",
-		"- AI: optional, with the user's own API key (OpenAI, Anthropic, Google Gemini, OpenRouter, Ollama and others). Nothing is sent to an AI service without one.",
+		"- AI: optional, with the user's own API key. Nothing is sent to an AI service without one.",
 		"- Also includes: cover letters, a job application tracker, version history, passkeys and two-factor authentication.",
-		"- Languages: the interface is translated into more than 50 languages by volunteers on Crowdin.",
-		"- Self-hosting: a Docker image, with PostgreSQL and local or S3-compatible storage.",
 		"",
-		"## Documentation",
+		"## Developers",
 		"",
-		`- [Documentation](${DOCS_URL}): guides for using and self-hosting Reactive Resume.`,
-		`- [Documentation llms.txt](${DOCS_URL}/llms.txt)`,
-		`- [Self-hosting with Docker](${DOCS_URL}/self-hosting/docker)`,
-		`- [API reference](${DOCS_URL}/api-reference)`,
 		`- [OpenAPI specification](${baseUrl}/openapi.json)`,
 		`- [Resume JSON schema](${baseUrl}/schema.json)`,
-		`- [MCP server guide](${DOCS_URL}/guides/using-the-mcp-server): connect any MCP client to ${baseUrl}/mcp with OAuth or an API key.`,
-		`- [Agent skills](${DOCS_URL}/guides/using-agent-skills): eight job-search skills, also listed at ${baseUrl}/.well-known/agent-skills/index.json.`,
+		`- [MCP server](${baseUrl}/mcp): connect any MCP client with OAuth or an API key.`,
+		`- [Agent skills](${baseUrl}/.well-known/agent-skills/index.json): job-search skills for agents.`,
 		`- [Integrations](${baseUrl}/.well-known/integrations.json): every API and MCP surface with its authentication.`,
 		"",
-		"## Community",
+		"## Legal",
 		"",
-		"- [Source code on GitHub](https://github.com/reactive-resume/reactive-resume)",
-		"- [Discord](https://discord.gg/aSyA5ZSxpb)",
-		"- [Subreddit](https://www.reddit.com/r/reactiveresume)",
-		"- [Translations on Crowdin](https://crowdin.com/project/reactive-resume)",
+		`- [Open-source licenses](${baseUrl}/licenses)`,
 		"",
 	].join("\n");
 

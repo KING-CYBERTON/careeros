@@ -14,10 +14,7 @@ export default function McpScreen() {
 				<Text selectable variant="mono">{`${server}/mcp`}</Text>
 			</Card>
 			<Text color="ink2">{t`Create an API key from Account settings in your browser. Keys act as you and can read and edit your documents.`}</Text>
-			<Text variant="title">{t`Setup guide`}</Text>
-			<Text selectable variant="mono">
-				https://docs.rxresu.me/guides/using-the-mcp-server
-			</Text>
+			{/* CAREEROS: the upstream setup-guide link was removed (P2-T08). */}
 		</Screen>
 	);
 }

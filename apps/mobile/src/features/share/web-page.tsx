@@ -9,6 +9,7 @@ import { openBrowserAsync } from "expo-web-browser";
 import { useState } from "react";
 import { View } from "react-native";
 import { publicResumeUrl } from "@reactive-resume/resume/sharing";
+import { getBrand } from "@reactive-resume/utils/brand";
 import { CustomDomain } from "./custom-domain";
 import { flushResume } from "./document";
 import { client, orpc } from "@/api/client";
@@ -34,6 +35,7 @@ type WebPageSettingsProps = {
  */
 export function WebPageSettings({ resume, offline, username, origin, flags, operations, save }: WebPageSettingsProps) {
 	const { t } = useLingui();
+	const { appName } = getBrand();
 	const { space } = useTheme();
 	const updateData = useResumeStore((state) => state.update);
 	const list = useQuery({ ...orpc.resume.list.queryOptions(), enabled: !offline });
@@ -122,10 +124,10 @@ export function WebPageSettings({ resume, offline, username, origin, flags, oper
 				footer={t`Uses your resume's template and Design, and fits any screen. Change them in Design.`}
 			>
 				<ListRow
-					title={t`Show “Made with Reactive Resume”`}
+					title={t`Show “Made with ${appName}”`}
 					trailing={
 						<Switch
-							label={t`Show “Made with Reactive Resume”`}
+							label={t`Show “Made with ${appName}”`}
 							value={resume.data.metadata.web?.showCredit !== false}
 							disabled={resume.isLocked}
 							onValueChange={(value) =>

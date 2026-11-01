@@ -4,8 +4,15 @@ import { createHash } from "node:crypto";
 import nodemailer from "nodemailer";
 import { render } from "react-email";
 import { env } from "@reactive-resume/env/server";
+import { PLATFORM_DEFAULT_APP_NAME } from "@reactive-resume/utils/brand";
 
-type SendEmailOptions = { to: string; subject: string; react: ReactElement };
+// CAREEROS: the sender display name defaults to the platform name when SMTP_FROM is a bare address (P2-T08).
+type SendEmailOptions = { to: string; subject: string; react: ReactElement; appName?: string | undefined };
+
+export const withDisplayName = (from: string | undefined, appName: string = PLATFORM_DEFAULT_APP_NAME) => {
+	if (!from || from.includes("<")) return from;
+	return `"${appName.replaceAll(/["\\\r\n]/g, "")}" <${from}>`;
+};
 
 let cachedTransport: Transporter | undefined;
 
@@ -27,7 +34,7 @@ const getTransport = () => {
 	return cachedTransport;
 };
 
-export const sendEmail = async ({ to, subject, react }: SendEmailOptions) => {
+export const sendEmail = async ({ to, subject, react, appName }: SendEmailOptions) => {
 	const transport = getTransport();
 	if (!transport && process.env.NODE_ENV === "production") {
 		console.info("SMTP not configured; skipping email send.", { to, subject });
@@ -35,7 +42,7 @@ export const sendEmail = async ({ to, subject, react }: SendEmailOptions) => {
 	}
 	const payload: SendMailOptions = {
 		to,
-		from: env.SMTP_FROM,
+		from: withDisplayName(env.SMTP_FROM, appName),
 		subject,
 		html: await render(react),
 		text: await render(react, { plainText: true }),
@@ -77,7 +84,7 @@ export async function sendCareerNotification({
 	try {
 		await transport.sendMail({
 			to,
-			from: env.SMTP_FROM,
+			from: withDisplayName(env.SMTP_FROM),
 			subject,
 			text: `${text}\n\n${link.toString()}`,
 			messageId: `<career-${createHash("sha256").update(key).digest("hex")}@reactive-resume.local>`,

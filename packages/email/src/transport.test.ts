@@ -22,7 +22,7 @@ vi.mock("react-email", () => ({
 		opts?.plainText ? "plain text body" : "<p>html body</p>",
 }));
 
-const { sendEmail } = await import("./transport");
+const { sendEmail, withDisplayName } = await import("./transport");
 
 const fakeReact = { $$typeof: Symbol.for("react.element") } as unknown as React.ReactElement;
 
@@ -85,5 +85,24 @@ describe("sendEmail", () => {
 		expect(createTransport).toHaveBeenCalledWith(expect.objectContaining({ secure: false, requireTLS: true }));
 		expect(errorSpy).toHaveBeenCalledExactlyOnceWith("There was an error sending mail.");
 		errorSpy.mockRestore();
+	});
+});
+
+// CAREEROS: the sender display name defaults to the platform name (P2-T08).
+describe("withDisplayName", () => {
+	it("adds the platform name to a bare address", () => {
+		expect(withDisplayName("noreply@example.com")).toBe('"CareerOS" <noreply@example.com>');
+	});
+
+	it("uses a given app name and strips characters that could break the header", () => {
+		expect(withDisplayName("noreply@example.com", 'Acme "Careers"')).toBe('"Acme Careers" <noreply@example.com>');
+	});
+
+	it("keeps an address that already has a display name", () => {
+		expect(withDisplayName("Me <me@example.com>")).toBe("Me <me@example.com>");
+	});
+
+	it("passes through an unset address", () => {
+		expect(withDisplayName(undefined)).toBeUndefined();
 	});
 });

@@ -1,15 +1,11 @@
-import { afterEach, expect, it, vi } from "vite-plus/test";
+import { expect, it } from "vite-plus/test";
 import { i18n } from "@lingui/core";
 import { I18nProvider } from "@lingui/react";
 import { createMemoryHistory, createRootRoute, createRouter, RouterContextProvider } from "@tanstack/react-router";
 import { renderToStaticMarkup } from "react-dom/server";
 import { LandingFooter } from "./footer";
-import { ThemeProvider } from "@/features/theme/provider";
 
-afterEach(() => vi.unstubAllGlobals());
-
-it("offers direct sign-in alongside account creation in homepage navigation", () => {
-	vi.stubGlobal("__APP_VERSION__", "test");
+it("links to the open-source licenses page and names the platform default brand", () => {
 	const router = createRouter({
 		routeTree: createRootRoute(),
 		history: createMemoryHistory({ initialEntries: ["/"] }),
@@ -19,13 +15,12 @@ it("offers direct sign-in alongside account creation in homepage navigation", ()
 	const html = renderToStaticMarkup(
 		<RouterContextProvider router={router}>
 			<I18nProvider i18n={i18n}>
-				<ThemeProvider theme="light">
-					<LandingFooter />
-				</ThemeProvider>
+				<LandingFooter />
 			</I18nProvider>
 		</RouterContextProvider>,
 	);
 
-	expect(html).toMatch(/<a[^>]*href="\/auth\/login"[^>]*>Sign in<\/a>/);
-	expect(html).toMatch(/<a[^>]*href="\/auth\/register"[^>]*>Get started<\/a>/);
+	expect(html).toMatch(/<a[^>]*href="\/licenses"[^>]*>Open-source licenses<\/a>/);
+	expect(html).toContain("CareerOS");
+	expect(html).not.toMatch(/Reactive Resume|rxresu/i);
 });

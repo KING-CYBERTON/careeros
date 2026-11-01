@@ -1,3 +1,4 @@
+import { PLATFORM_DEFAULT_APP_NAME } from "@reactive-resume/utils/brand";
 import webPageCatalog from "./web-page-catalog.json";
 
 /** The interface text on a web page, in English; `web-page-catalog.json` translates it (`pnpm pdf:translations`). */
@@ -5,7 +6,8 @@ const ENGLISH = {
 	downloadPdf: "Download PDF",
 	share: "Share",
 	linkCopied: "Link copied",
-	credit: "Made with Reactive Resume, free and open source",
+	// CAREEROS: `{appName}` is filled by `webPageMessages` (upstream name removed).
+	credit: "Made with {appName}",
 	passwordTitle: "This resume is password-protected",
 	passwordHint: "Enter the password the resume owner shared with you.",
 	password: "Password",
@@ -23,10 +25,13 @@ export const WEB_PAGE_SOURCE_MESSAGES = Object.values(ENGLISH);
 const catalogs: Record<string, Record<string, string>> = webPageCatalog;
 
 /** The page's interface text in `locale`, falling back to English string by string. */
-export function webPageMessages(locale: string): WebPageMessages {
+export function webPageMessages(locale: string, appName: string = PLATFORM_DEFAULT_APP_NAME): WebPageMessages {
 	const catalog = Object.hasOwn(catalogs, locale) ? catalogs[locale] : undefined;
 	return Object.fromEntries(
-		Object.entries(ENGLISH).map(([key, english]) => [key, catalog?.[english] || english]),
+		Object.entries(ENGLISH).map(([key, english]) => [
+			key,
+			(catalog?.[english] || english).replaceAll("{appName}", appName),
+		]),
 	) as WebPageMessages;
 }
 
