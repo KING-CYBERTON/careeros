@@ -1,7 +1,7 @@
 # Phase 1 exit: Opus security sign-off review 1
 
 **Reviewer:** Opus (Thread 1), 2026-11-01. **Scope:** `develop` at `0794338` (after #39), covering P1-T01 to T09, P1-C01 and P1-Q01 to Q09.
-**Verdict:** No open Critical or High findings. Sign-off is **conditional on P1-Q10** (M1 below) merging green. The Low items go to the backlog.
+**Verdict:** No open Critical or High findings. **Signed off** on 2026-11-01: P1-Q10 (M1) merged green in [#42](https://github.com/KING-CYBERTON/careeros/pull/42) with no leaks. The Low items go to the backlog.
 
 ## Method
 
