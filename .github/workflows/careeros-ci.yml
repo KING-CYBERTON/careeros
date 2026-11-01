@@ -31,6 +31,8 @@ jobs:
         uses: actions/checkout@v7
         with:
           persist-credentials: false
+          # CAREEROS: full history (this job is cheap) so the base commit is present without a credentialed fetch.
+          fetch-depth: 0
 
       - name: Detect docs-only change
         id: detect
@@ -48,7 +50,8 @@ jobs:
             *) fallback "event $EVENT_NAME has no base" ;;
           esac
           if [ -z "$base" ] || [[ "$base" =~ ^0+$ ]]; then fallback "no usable base commit"; fi
-          git fetch --no-tags --depth=1 origin "$base" || fallback "could not fetch base $base"
+          # The base commit comes from the full-history checkout; persist-credentials is false, so no later fetch.
+          git cat-file -e "$base^{commit}" 2>/dev/null || fallback "base $base is not in the local history"
           # --no-renames lists both sides of a rename, so moving code into docs/ still counts as code.
           git -c core.quotepath=off diff --name-only --no-renames "$base" HEAD > changed-files.txt || fallback "git diff failed"
           echo "Changed files:"
