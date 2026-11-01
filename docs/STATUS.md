@@ -2,10 +2,10 @@
 
 > Written by Opus after every plan, review and merge. Every thread reads this file first.
 
-**Current phase:** 0 — Setup (exit waits on owner actions) · 1 — Multi-tenancy complete in code; exit waits only on staging verification (owner actions)
+**Current phase:** 0 — Setup (exit waits on owner actions) · 1 — Multi-tenancy complete in code; exit waits only on staging verification (owner actions) · 2 — White-label in progress
 **Current version:** none yet (first tag will be `0.0.1` at Phase 0 exit)
 **Base:** Reactive Resume v6.0.10, upstream commit `a69e48318aab3c1c3ea57d2c0467710ef0d8342f` (2026-10-31)
-**Last updated:** 2026-11-01 (evening) by Opus (Thread 1)
+**Last updated:** 2026-11-01 (late evening) by Opus (Thread 1)
 
 ## Phase 0 exit criteria (PRODUCT.md §13)
 
@@ -63,6 +63,17 @@
 - [x] Opus security sign-off: [signed off](reviews/P1-EXIT-security-review-1.md), with no Critical or High findings; M1 closed by P1-Q10 ([#42](https://github.com/KING-CYBERTON/careeros/pull/42))
 - [x] BASELINE refreshed from develop run 41320943973 ([BASELINE.md](BASELINE.md#phase-1-exit-refresh-p1-c02): 3426 unit tests, 63 e2e)
 - [ ] Staging verified with the database role split (waits on Stephen: VPS runbook, default branch = `develop`)
+
+## Phase 2 tasks
+
+| Thread    | Task ID | Spec                                                                                 | Status                                                                                         | Branch / PR                                              |
+| --------- | ------- | ------------------------------------------------------------------------------------ | ---------------------------------------------------------------------------------------------- | -------------------------------------------------------- |
+| 1 — Build | P2-T01  | [plans/P2-T01-branding-tables.md](plans/P2-T01-branding-tables.md)                   | **Merged** · [review](reviews/P2-T01-review-1.md)                                              | [#46](https://github.com/KING-CYBERTON/careeros/pull/46) |
+| 1 — Build | P2-T08  | [plans/P2-T08-remove-upstream-branding.md](plans/P2-T08-remove-upstream-branding.md) | **Merged** · [review](reviews/P2-T08-review-1.md) (mobile native hosts: release blocker noted) | [#47](https://github.com/KING-CYBERTON/careeros/pull/47) |
+| 1 — Build | P2-T03  | (committed with the PR)                                                              | In review; CI running                                                                          | [#48](https://github.com/KING-CYBERTON/careeros/pull/48) |
+| 1 — Build | P2-T02  | [plans/P2-T02-branding-injection.md](plans/P2-T02-branding-injection.md)             | Approved; starts after T03 merges                                                              | —                                                        |
+
+Next specs: P2-T04 (branded emails), P2-T05 (auth handoff), P2-T06 (org custom domains, Cloudflare for SaaS), P2-T07 (branding settings UI), P2-Q01, P2-Q02, P2-C01 (DNS and tunnel routing), P2-C02 (branding grep gate).
 
 ## Blockers
 
@@ -135,3 +146,8 @@ _None yet._
 - Docs sync 9 and Phase 1 exit security review — [#40](https://github.com/KING-CYBERTON/careeros/pull/40), `f12278a`
 - Phase 1 CI baseline refresh — [#41](https://github.com/KING-CYBERTON/careeros/pull/41), `c58296a`
 - P1-Q10 Auth organization endpoint fuzz — [#42](https://github.com/KING-CYBERTON/careeros/pull/42), `951f766`
+- Phase 1 sign-off docs — [#43](https://github.com/KING-CYBERTON/careeros/pull/43), `4a5bc88`
+- Phase 2 plan and P2-T01 spec — [#44](https://github.com/KING-CYBERTON/careeros/pull/44), `7e3fbf2`
+- D2/D3 decisions — [#45](https://github.com/KING-CYBERTON/careeros/pull/45), `8088d15`
+- P2-T01 Branding and settings tables — [#46](https://github.com/KING-CYBERTON/careeros/pull/46), `f22f60b`
+- P2-T08 Remove upstream branding, licenses page — [#47](https://github.com/KING-CYBERTON/careeros/pull/47), `aa6bec9`
