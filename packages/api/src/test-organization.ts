@@ -33,8 +33,23 @@ export async function installSchemaLocalGuestMove(client: Pick<Pool, "query">, s
 		["20261101083119_career_rls", "careeros_orgs_with_career_upkeep"],
 		// CAREEROS (P1-T08): saved AI connections, assistant conversations and content reports
 		["20261101085357_agent_ai_rls", "careeros_move_guest_agent"],
-	] as const;
-	for (const [folder, name] of sources) {
+		// CAREEROS (P1-T09): the remaining tables' functions, including the account-delete trigger function, whose
+		// schema-local copy would otherwise stay the pre-T09 one (the migration replaces only the public copy).
+		["20261101083301_remaining_rls", "careeros_public_domain_owner", "custom_domain"],
+		["20261101083301_remaining_rls", "careeros_verified_domains", "custom_domain"],
+		["20261101083301_remaining_rls", "careeros_public_verified_domain", "custom_domain"],
+		["20261101083301_remaining_rls", "careeros_release_domain_claims", "custom_domain"],
+		["20261101083301_remaining_rls", "careeros_stale_custom_domains", "custom_domain"],
+		["20261101083301_remaining_rls", "careeros_due_storage_cleanup", "storage_cleanup_job"],
+		["20261101083301_remaining_rls", "careeros_guest_cleanup_prefixes", "storage_cleanup_job"],
+		["20261101083301_remaining_rls", "enqueue_account_storage_cleanup", "storage_cleanup_job"],
+	] as const satisfies readonly (readonly [string, string, string?])[];
+	for (const [folder, name, requiredTable] of sources) {
+		// A test that builds only some tables gets only the functions that work on them.
+		if (requiredTable) {
+			const { rows } = await client.query(`SELECT to_regclass($1) AS found`, [`${schemaName}.${requiredTable}`]);
+			if (!rows[0]?.found) continue;
+		}
 		const migration = await readFile(new URL(`../../../migrations/${folder}/migration.sql`, import.meta.url), "utf8");
 		const match = new RegExp(`CREATE OR REPLACE FUNCTION public\\.${name}[\\s\\S]*?\\n\\$\\$;`).exec(migration);
 		if (!match) throw new Error(`The guest-link function ${name} was not found in the migration.`);

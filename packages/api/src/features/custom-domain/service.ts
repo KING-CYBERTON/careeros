@@ -1,8 +1,10 @@
 import { randomBytes } from "node:crypto";
 import { resolve4, resolve6, resolveCname, resolveTxt } from "node:dns/promises";
 import { isIP } from "node:net";
+// CAREEROS: custom domains belong to an organization (P1-T09)
+import { requireOrgId, withOrgContext } from "@careeros/tenancy";
 import { ORPCError } from "@orpc/server";
-import { and, eq, isNotNull, isNull, lt, ne, or, sql } from "drizzle-orm";
+import { and, eq, sql } from "drizzle-orm";
 import { db } from "@reactive-resume/db/client";
 import * as schema from "@reactive-resume/db/schema";
 import { env } from "@reactive-resume/env/server";
@@ -139,8 +141,9 @@ export const customDomainService = {
 		};
 		const [domain] = await db
 			.insert(schema.customDomain)
-			.values({ userId, ...values })
-			.onConflictDoUpdate({ target: schema.customDomain.userId, set: values })
+			// CAREEROS: the tenant column comes from the request's organization, never from the client (P1-T09)
+			.values({ organizationId: requireOrgId(), userId, ...values })
+			.onConflictDoUpdate({ target: [schema.customDomain.organizationId, schema.customDomain.userId], set: values })
 			.returning();
 		if (!domain) throw new ORPCError("INTERNAL_SERVER_ERROR");
 		return toStatus(domain);
@@ -169,11 +172,10 @@ export const customDomainService = {
 			if (!current)
 				throw new ORPCError("CONFLICT", { message: "The domain changed during verification. Verify it again." });
 			const failingSince = current.failingSince ?? now;
+			// CAREEROS: other claimants live in other organizations, which row-level security hides, while the verified
+			// hostname index is global. A definer function un-verifies them, for the current organization only (P1-T09).
 			if (valid)
-				await tx
-					.update(schema.customDomain)
-					.set({ verifiedAt: null })
-					.where(and(eq(schema.customDomain.hostname, domain.hostname), ne(schema.customDomain.userId, userId)));
+				await tx.execute(sql`select careeros_release_domain_claims(${domain.hostname}, ${requireOrgId()}, ${userId})`);
 			const [row] = await tx
 				.update(schema.customDomain)
 				.set(
@@ -205,25 +207,23 @@ export const customDomainService = {
  */
 export const verifiedDomainColumn = () =>
 	isCustomDomainsEnabled()
-		? sql<
-				string | null
-			>`(select ${schema.customDomain.hostname} from ${schema.customDomain} where ${schema.customDomain.userId} = ${schema.resume.userId} and ${schema.customDomain.verifiedAt} is not null)`
+		? // CAREEROS: public lookup without an organization context, through a definer function (P1-T09, Q31)
+			sql<string | null>`careeros_public_verified_domain(${schema.resume.userId})`
 		: sql<string | null>`null`;
 
 /** The username whose primary resume a verified custom domain opens: `null` for an unknown host. */
 export async function customDomainUsername(hostname: string): Promise<string | null> {
 	if (!isCustomDomainsEnabled()) return null;
+	// CAREEROS: the public lookup has no organization; a definer function answers for a verified domain only (P1-T09, Q31).
+	const { rows } = await db.execute<{ user_id: string }>(
+		sql`select user_id from careeros_public_domain_owner(${hostname.toLowerCase()})`,
+	);
+	const userId = rows[0]?.user_id;
+	if (!userId) return null;
 	const [owner] = await db
 		.select({ username: schema.user.username })
-		.from(schema.customDomain)
-		.innerJoin(schema.user, eq(schema.customDomain.userId, schema.user.id))
-		.where(
-			and(
-				eq(schema.customDomain.hostname, hostname.toLowerCase()),
-				isNotNull(schema.customDomain.verifiedAt),
-				ownerIsNotBanned(),
-			),
-		);
+		.from(schema.user)
+		.where(and(eq(schema.user.id, userId), ownerIsNotBanned()));
 	return owner?.username ?? null;
 }
 
@@ -233,16 +233,15 @@ export async function customDomainUsername(hostname: string): Promise<string | n
  * verification, which takes its router away.
  */
 export async function traefikConfiguration(options: { service: string; entryPoint: string; certResolver: string }) {
-	const domains = await db
-		.select({ userId: schema.customDomain.userId, hostname: schema.customDomain.hostname })
-		.from(schema.customDomain)
-		.where(isNotNull(schema.customDomain.verifiedAt));
+	// CAREEROS: hostnames only, through a definer function, since the provider has no organization (P1-T09).
+	const { rows } = await db.execute<{ hostname: string }>(sql`select careeros_verified_domains() as hostname`);
+	const hostnames = rows.map((row) => row.hostname);
 
 	void recheckStaleDomains().catch((error: unknown) => console.warn("Custom domain re-check failed", error));
 
 	const routers = Object.fromEntries(
-		domains.map(({ userId, hostname }) => [
-			`custom-domain-${userId}`,
+		hostnames.map((hostname) => [
+			`custom-domain-${hostname}`,
 			{
 				rule: `Host(\`${hostname}\`)`,
 				entryPoints: [options.entryPoint],
@@ -252,53 +251,64 @@ export async function traefikConfiguration(options: { service: string; entryPoin
 		]),
 	);
 	// Traefik rejects an empty map ("routers cannot be a standalone element"), but accepts an empty document.
-	return domains.length > 0 ? { http: { routers } } : {};
+	return hostnames.length > 0 ? { http: { routers } } : {};
 }
 
 let rechecking = false;
 
-async function recheckStaleDomains() {
+/**
+ * CAREEROS (P1-T09, D9 pattern): the scheduler has no organization. A definer function lists the (user, organization)
+ * pairs that are due, and each is re-checked inside `withOrgContext` for its own organization. One failing domain is
+ * logged and does not stop the others. DNS is queried outside the database scope.
+ */
+export async function recheckStaleDomains() {
 	if (rechecking) return;
 	rechecking = true;
 	try {
-		const stale = await db
-			.select()
-			.from(schema.customDomain)
-			.where(
-				and(
-					isNotNull(schema.customDomain.verifiedAt),
-					or(
-						isNull(schema.customDomain.lastCheckedAt),
-						lt(schema.customDomain.lastCheckedAt, new Date(Date.now() - DAY_MS)),
-					),
-				),
-			)
-			.limit(20);
-		for (const domain of stale) {
-			const now = new Date();
-			const unchanged = and(
-				eq(schema.customDomain.userId, domain.userId),
-				eq(schema.customDomain.hostname, domain.hostname),
-				eq(schema.customDomain.verificationToken, domain.verificationToken),
-				domain.lastCheckedAt === null
-					? isNull(schema.customDomain.lastCheckedAt)
-					: eq(schema.customDomain.lastCheckedAt, domain.lastCheckedAt),
-			);
-			if (await dnsPointsHere(domain.hostname, domain.verificationToken)) {
-				await db.update(schema.customDomain).set({ lastCheckedAt: now, failingSince: null }).where(unchanged);
-				continue;
+		const { rows: due } = await db.execute<{ user_id: string; organization_id: string }>(
+			sql`select user_id, organization_id from careeros_stale_custom_domains(${new Date(Date.now() - DAY_MS)}::timestamptz, 20)`,
+		);
+		for (const { user_id: userId, organization_id: organizationId } of due) {
+			try {
+				await recheckDomain(userId, organizationId);
+			} catch (error) {
+				console.error(`[custom-domain] Re-check failed for organization ${organizationId}`, error);
 			}
-			const failingSince = domain.failingSince ?? now;
-			await db
-				.update(schema.customDomain)
-				.set({
-					lastCheckedAt: now,
-					failingSince,
-					...(now.getTime() - failingSince.getTime() > GRACE_MS ? { verifiedAt: null } : {}),
-				})
-				.where(unchanged);
 		}
 	} finally {
 		rechecking = false;
 	}
+}
+
+async function recheckDomain(userId: string, organizationId: string) {
+	const domain = await withOrgContext(organizationId, async () => {
+		const [row] = await db.select().from(schema.customDomain).where(eq(schema.customDomain.userId, userId));
+		return row;
+	});
+	if (!domain?.verifiedAt) return;
+	const valid = await dnsPointsHere(domain.hostname, domain.verificationToken);
+	const now = new Date();
+	const unchanged = and(
+		eq(schema.customDomain.userId, domain.userId),
+		eq(schema.customDomain.hostname, domain.hostname),
+		eq(schema.customDomain.verificationToken, domain.verificationToken),
+		domain.lastCheckedAt === null
+			? sql`${schema.customDomain.lastCheckedAt} is null`
+			: eq(schema.customDomain.lastCheckedAt, domain.lastCheckedAt),
+	);
+	await withOrgContext(organizationId, async () => {
+		if (valid) {
+			await db.update(schema.customDomain).set({ lastCheckedAt: now, failingSince: null }).where(unchanged);
+			return;
+		}
+		const failingSince = domain.failingSince ?? now;
+		await db
+			.update(schema.customDomain)
+			.set({
+				lastCheckedAt: now,
+				failingSince,
+				...(now.getTime() - failingSince.getTime() > GRACE_MS ? { verifiedAt: null } : {}),
+			})
+			.where(unchanged);
+	});
 }

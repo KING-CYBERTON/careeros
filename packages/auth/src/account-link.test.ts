@@ -32,7 +32,10 @@ const mocks = vi.hoisted(() => {
 		},
 	}));
 	const insert = vi.fn(() => ({ values: () => ({ onConflictDoNothing: () => Promise.resolve() }) }));
-	const execute = vi.fn((_query?: unknown) => Promise.resolve());
+	// CAREEROS (P1-T09): the guest's erasure prefixes come back from a definer function as `rows`
+	const execute = vi.fn((_query?: unknown) =>
+		Promise.resolve({ rows: [] as { storageKey: string }[] } as { rows: { storageKey: string }[] } | undefined),
+	);
 	const tx = { select, insert, update, delete: deleteFn, execute };
 	const transaction = vi.fn(async (cb: (tx: unknown) => Promise<unknown>) => cb(tx));
 	return { update, updateSet, updateWhere, delete: deleteFn, deleteWhere, execute, transaction, tx };
@@ -121,7 +124,10 @@ describe("linkAnonymousAccount", () => {
 		// CAREEROS (P1-T05): cover letters and their versions move through a second definer function.
 		// CAREEROS (P1-T06): the application profile, pipeline, lanes and applications move through a third.
 		// CAREEROS (P1-T07): saved answers and application-linked career rows move through a fourth.
-		expect(mocks.execute).toHaveBeenCalledTimes(5);
+		// CAREEROS (P1-T08): saved connections, conversations and reports move through a fifth definer function.
+		// CAREEROS (P1-T09): the guest's pending erasure prefixes are read through a sixth definer call.
+		expect(mocks.execute).toHaveBeenCalledTimes(6);
+		expect(JSON.stringify(mocks.execute.mock.calls.at(-1)?.[0])).toContain("careeros_guest_cleanup_prefixes");
 		const moveQuery = JSON.stringify(mocks.execute.mock.calls[0]?.[0]);
 		const letterMoveQuery = JSON.stringify(mocks.execute.mock.calls[1]?.[0]);
 		expect(letterMoveQuery).toContain("careeros_move_guest_cover_letters");

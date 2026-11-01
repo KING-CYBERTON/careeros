@@ -254,6 +254,9 @@ describe("coverage check", () => {
 			"agent_attachments",
 			"agent_actions",
 			"ai_content_report",
+			"custom_domain",
+			"web_access_credentials",
+			"storage_cleanup_job",
 		]);
 	});
 });
