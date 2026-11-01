@@ -5,7 +5,7 @@
 **Current phase:** 0 — Setup (exit waits on owner actions) · 1 — Multi-tenancy in progress
 **Current version:** none yet (first tag will be `0.0.1` at Phase 0 exit)
 **Base:** Reactive Resume v6.0.10, upstream commit `a69e48318aab3c1c3ea57d2c0467710ef0d8342f` (2026-10-31)
-**Last updated:** 2026-10-31 by Opus (Thread 1)
+**Last updated:** 2026-11-01 by Opus (Thread 1)
 
 ## Phase 0 exit criteria (PRODUCT.md §13)
 
@@ -31,27 +31,34 @@
 
 ## Phase 1 tasks
 
-| Thread    | Task ID | Spec                                                           | Status                                                                                           | Branch / PR                                              |
-| --------- | ------- | -------------------------------------------------------------- | ------------------------------------------------------------------------------------------------ | -------------------------------------------------------- |
-| 3 — CI/CD | P1-C01  | [plans/P1-C01-db-role-split.md](plans/P1-C01-db-role-split.md) | **Merged** · [review](reviews/P1-C01-review-1.md)                                                | [#16](https://github.com/KING-CYBERTON/careeros/pull/16) |
-| 1 — Build | P1-T01  | [plans/P1-T01-org-plugin.md](plans/P1-T01-org-plugin.md)       | **Merged** · [review](reviews/P1-T01-review-1.md)                                                | [#17](https://github.com/KING-CYBERTON/careeros/pull/17) |
-| 1 — Build | P1-T02  | [plans/P1-T02-tenancy-core.md](plans/P1-T02-tenancy-core.md)   | **Merged** · [review](reviews/P1-T02-review-1.md)                                                | [#19](https://github.com/KING-CYBERTON/careeros/pull/19) |
-| 2 — QA    | P1-Q01  | [plans/P1-Q01-tenancy-tests.md](plans/P1-Q01-tenancy-tests.md) | Approved · dispatched to Sonnet                                                                  | `feature/P1-Q01-tenancy-tests`                           |
-| 3 — CI/CD | P1-C02  | [plans/P1-C02-junit-summary.md](plans/P1-C02-junit-summary.md) | Approved · dispatched to Sonnet                                                                  | `feature/P1-C02-junit-summary`                           |
-| 3 — CI/CD | P1-C03  | (folded into P1-C01)                                           | Staging compose and `.env.staging.example` already split roles; verified at first staging deploy | —                                                        |
-| 1 — Build | P1-T03  | (spec after D6)                                                | Blocked on Stephen confirming D6 (personal org at signup)                                        | —                                                        |
+| Thread    | Task ID | Spec                                                                 | Status                                                                                           | Branch / PR                                              |
+| --------- | ------- | -------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------ | -------------------------------------------------------- |
+| 3 — CI/CD | P1-C01  | [plans/P1-C01-db-role-split.md](plans/P1-C01-db-role-split.md)       | **Merged** · [review](reviews/P1-C01-review-1.md)                                                | [#16](https://github.com/KING-CYBERTON/careeros/pull/16) |
+| 1 — Build | P1-T01  | [plans/P1-T01-org-plugin.md](plans/P1-T01-org-plugin.md)             | **Merged** · [review](reviews/P1-T01-review-1.md)                                                | [#17](https://github.com/KING-CYBERTON/careeros/pull/17) |
+| 1 — Build | P1-T02  | [plans/P1-T02-tenancy-core.md](plans/P1-T02-tenancy-core.md)         | **Merged** · [review](reviews/P1-T02-review-1.md)                                                | [#19](https://github.com/KING-CYBERTON/careeros/pull/19) |
+| 2 — QA    | P1-Q01  | [plans/P1-Q01-tenancy-tests.md](plans/P1-Q01-tenancy-tests.md)       | **Merged** · [review](reviews/P1-Q01-review-1.md)                                                | [#21](https://github.com/KING-CYBERTON/careeros/pull/21) |
+| 3 — CI/CD | P1-C02  | [plans/P1-C02-junit-summary.md](plans/P1-C02-junit-summary.md)       | **Merged** · [review](reviews/P1-C02-review-1.md)                                                | [#22](https://github.com/KING-CYBERTON/careeros/pull/22) |
+| 3 — CI/CD | P1-C03  | (folded into P1-C01)                                                 | Staging compose and `.env.staging.example` already split roles; verified at first staging deploy | —                                                        |
+| 1 — Build | P1-T03  | [plans/P1-T03-signup-invites.md](plans/P1-T03-signup-invites.md)     | **Merged** · [review](reviews/P1-T03-review-1.md) (D6 confirmed by Stephen)                      | [#23](https://github.com/KING-CYBERTON/careeros/pull/23) |
+| 2 — QA    | P1-Q04  | [plans/P1-Q04-cleanup-deadlock.md](plans/P1-Q04-cleanup-deadlock.md) | **Merged** · [review](reviews/P1-Q04-review-1.md)                                                | [#24](https://github.com/KING-CYBERTON/careeros/pull/24) |
+| 3 — CI/CD | P1-C05  | [plans/P1-C05-ci-speed.md](plans/P1-C05-ci-speed.md)                 | **Merged** · [review](reviews/P1-C05-review-1.md)                                                | [#25](https://github.com/KING-CYBERTON/careeros/pull/25) |
+| 2 — QA    | P1-Q05  | (spec next)                                                          | `pdf-text.spec.ts` route.fetch to fonts.gstatic.com races teardown                               | —                                                        |
+| 1 — Build | P1-T04  | [plans/P1-T04-resumes-rls.md](plans/P1-T04-resumes-rls.md)           | Approved · next to dispatch                                                                      | —                                                        |
 
 ## Blockers
 
 - **Owner actions (Stephen)**, the session proxy blocks repo-settings writes: (1) default branch → `develop`; (2) branch protection on `develop` and `main` (require PR, checks `static`, `unit`, `e2e`, up to date, no force-push/deletion; `main` restricted to Opus release merges); (3) enable secret scanning, push protection and Dependabot alerts.
-- **D6** (interim personal org at signup) needs Stephen's OK before P1-T03.
+- **D6** confirmed by Stephen (personal org at signup).
+- Please leave merging to Opus: PRs merge only after a clean review and green CI.
 - **Q3** answered (no inbound 80/443 → Cloudflare Tunnel). **Q4** answered (DNS on Cloudflare).
 - **E1, E2** resolved (private repo; home-lab VPS `careeros-staging.ayopa.co.ke`).
 
 ## Watch list
 
 - `tests/e2e/specs/library-pagination.spec.ts:201`: root cause fixed in P0-Q03 (oRPC batching bypassed the test mock). Watch for a strict-mode "two alerts" failure; if seen, Opus specs a per-item batch response.
-- BASELINE.md lacks unit counts for 9 packages (log tail limit); Phase 1 adds a per-package JUnit summary step and refreshes the baseline.
+- BASELINE.md lacks unit counts for 9 packages; P1-C02's JUnit summary now prints them. Refresh BASELINE from a develop run.
+- `packages/db` integration suites may hit the same 57P01 teardown race fixed in auth by P1-C05.
+- The docs-only CI fast path is unconfirmed in real CI until this docs sync runs.
 
 ## Planning docs
 
@@ -84,3 +91,10 @@ All 2026-10-31.
 ## Tags
 
 _None yet._
+
+- Docs sync 6 (Q01, C02, T03, T04 specs) — [#20](https://github.com/KING-CYBERTON/careeros/pull/20), `a571aee`
+- P1-Q01 Tenancy tests — [#21](https://github.com/KING-CYBERTON/careeros/pull/21)
+- P1-C02 JUnit summary — [#22](https://github.com/KING-CYBERTON/careeros/pull/22), `796bc3b`
+- P1-T03 Signup org, invitations, org switching — [#23](https://github.com/KING-CYBERTON/careeros/pull/23), `f17dde6`
+- P1-Q04 Integration-test cleanup deadlock — [#24](https://github.com/KING-CYBERTON/careeros/pull/24), `be14053`
+- P1-C05 CI speed — [#25](https://github.com/KING-CYBERTON/careeros/pull/25), `4b86609`

@@ -358,59 +358,64 @@ describe.skipIf(!process.env.OAUTH_TEST_DATABASE_URL)("account wrapper ownership
 					`guest-link:${owner.id}:${challengeId}`,
 				]);
 
-			// The deadline passes after the endpoint accepts the challenge, while its session row is being written.
-			await pool.query(
-				"CREATE FUNCTION delay_session() RETURNS trigger LANGUAGE plpgsql AS $$ BEGIN PERFORM pg_sleep(0.6); RETURN NEW; END $$",
-			);
-			await pool.query(
-				"CREATE TRIGGER delay_session BEFORE INSERT ON session FOR EACH ROW EXECUTE FUNCTION delay_session()",
-			);
+			// CAREEROS: session cleanup runs even when an assertion fails, so the next test sees a clean table.
 			try {
-				for (const id of ["deadline-1", "deadline-2", "deadline-3"]) {
-					const pending = await startGuest(id, owner.credentials);
-					const code = await totp(owner.id);
-					await expire(pending.challengeId, "now() + interval '300 milliseconds'");
-					const verified = await send("two-factor/verify-totp", { code }, pending.jar);
-					expect(verified.status, await verified.clone().text()).toBe(200);
-					expect(await resumeOwner(id)).toBe(owner.id);
-					expect(await userExists(pending.guest.id)).toBe(false);
+				// The deadline passes after the endpoint accepts the challenge, while its session row is being written.
+				// CAREEROS: margins widened (2 s deadline, 3 s write delay) so a loaded runner cannot pass the deadline before the check; two iterations keep the test well under its 30 s timeout.
+				await pool.query(
+					"CREATE FUNCTION delay_session() RETURNS trigger LANGUAGE plpgsql AS $$ BEGIN PERFORM pg_sleep(3); RETURN NEW; END $$",
+				);
+				await pool.query(
+					"CREATE TRIGGER delay_session BEFORE INSERT ON session FOR EACH ROW EXECUTE FUNCTION delay_session()",
+				);
+				try {
+					for (const id of ["deadline-1", "deadline-2"]) {
+						const pending = await startGuest(id, owner.credentials);
+						const code = await totp(owner.id);
+						await expire(pending.challengeId, "now() + interval '2 seconds'");
+						const verified = await send("two-factor/verify-totp", { code }, pending.jar);
+						expect(verified.status, await verified.clone().text()).toBe(200);
+						expect(await resumeOwner(id)).toBe(owner.id);
+						expect(await userExists(pending.guest.id)).toBe(false);
+					}
+				} finally {
+					await pool.query("DROP TRIGGER delay_session ON session");
+					await pool.query("DROP FUNCTION delay_session()");
 				}
+
+				const expired = await startGuest("expired-guest", owner.credentials);
+				await expire(expired.challengeId, "now() - interval '1 second'");
+				expect((await send("two-factor/verify-totp", { code: await totp(owner.id) }, expired.jar)).status).toBe(401);
+				expect(await resumeOwner("expired-guest")).toBe(expired.guest.id);
+
+				// Another account's successful verification, carrying this challenge's cookie, takes nothing.
+				const pending = await startGuest("foreign-guest", owner.credentials);
+				const other = await signUp("deadline-other");
+				expect((await send("two-factor/enable", { password: other.credentials.password }, other.jar)).status).toBe(200);
+				const mixed = new Map([...pending.jar, ...other.jar]);
+				expect((await send("two-factor/verify-totp", { code: await totp(other.id) }, mixed)).status).toBe(200);
+				expect(await resumeOwner("foreign-guest")).toBe(pending.guest.id);
+
+				// Concurrent verifications of one challenge: one succeeds and moves the work once.
+				const moves: string[] = [];
+				setAccountLinkHook(async ({ fromUserId }) => {
+					moves.push(fromUserId);
+				});
+				try {
+					const code = await totp(owner.id);
+					const responses = await Promise.all([
+						send("two-factor/verify-totp", { code }, new Map(pending.jar)),
+						send("two-factor/verify-totp", { code }, new Map(pending.jar)),
+					]);
+					expect(responses.map((response) => response.status).sort()).toEqual([200, 401]);
+				} finally {
+					setAccountLinkHook();
+				}
+				expect(moves).toEqual([pending.guest.id]);
+				expect(await resumeOwner("foreign-guest")).toBe(owner.id);
 			} finally {
-				await pool.query("DROP TRIGGER delay_session ON session");
-				await pool.query("DROP FUNCTION delay_session()");
+				await pool.query("DELETE FROM session");
 			}
-
-			const expired = await startGuest("expired-guest", owner.credentials);
-			await expire(expired.challengeId, "now() - interval '1 second'");
-			expect((await send("two-factor/verify-totp", { code: await totp(owner.id) }, expired.jar)).status).toBe(401);
-			expect(await resumeOwner("expired-guest")).toBe(expired.guest.id);
-
-			// Another account's successful verification, carrying this challenge's cookie, takes nothing.
-			const pending = await startGuest("foreign-guest", owner.credentials);
-			const other = await signUp("deadline-other");
-			expect((await send("two-factor/enable", { password: other.credentials.password }, other.jar)).status).toBe(200);
-			const mixed = new Map([...pending.jar, ...other.jar]);
-			expect((await send("two-factor/verify-totp", { code: await totp(other.id) }, mixed)).status).toBe(200);
-			expect(await resumeOwner("foreign-guest")).toBe(pending.guest.id);
-
-			// Concurrent verifications of one challenge: one succeeds and moves the work once.
-			const moves: string[] = [];
-			setAccountLinkHook(async ({ fromUserId }) => {
-				moves.push(fromUserId);
-			});
-			try {
-				const code = await totp(owner.id);
-				const responses = await Promise.all([
-					send("two-factor/verify-totp", { code }, new Map(pending.jar)),
-					send("two-factor/verify-totp", { code }, new Map(pending.jar)),
-				]);
-				expect(responses.map((response) => response.status).sort()).toEqual([200, 401]);
-			} finally {
-				setAccountLinkHook();
-			}
-			expect(moves).toEqual([pending.guest.id]);
-			expect(await resumeOwner("foreign-guest")).toBe(owner.id);
-			await pool.query("DELETE FROM session");
 		});
 	}, 30_000);
 
