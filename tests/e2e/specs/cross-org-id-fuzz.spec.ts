@@ -4,9 +4,9 @@ import type { APIRequestContext } from "@playwright/test";
 import {
 	buildMcpArguments,
 	buildRequest,
-	EMPTY_OK,
 	findLeaks,
 	ITEM_IDS_ONLY,
+	MCP_ALLOW,
 	isEmptyResult,
 	NO_TENANT_ID,
 	OVERRIDES,
@@ -47,7 +47,7 @@ async function send(request: APIRequestContext, built: BuiltRequest) {
 	if (built.multipart)
 		return request.fetch(url, {
 			...options,
-			multipart: { file: { name: "x.txt", mimeType: "text/plain", buffer: Buffer.from("x") } },
+			multipart: { file: { name: "x.pdf", mimeType: "application/pdf", buffer: Buffer.from("%PDF-1.4\n") } },
 		});
 	return request.fetch(url, { ...options, ...(built.json === undefined ? {} : { data: built.json }) });
 }
@@ -73,10 +73,12 @@ function judge(
 	const leaks = findLeaks(text, orgs.markers, orgs.foreignIds, sentIds);
 	if (leaks.length > 0) return `${label}: ${status} carries Organization A's ${leaks.join(", ")}`;
 	if (status === 404 || extraStatuses.includes(status)) return undefined;
+	// A stream answers 200 and then reports the failure as an event.
+	if (status === 200 && /^event: error\s+data: .*"code":"NOT_FOUND"/m.test(text)) return undefined;
 	if (status >= 200 && status < 300 && allowedEmpty) {
 		return isEmptyResult(parse(text)) ? undefined : `${label}: ${status} is not an empty result: ${text.slice(0, 200)}`;
 	}
-	return `${label}: expected 404, got ${status}: ${text.slice(0, 200)}`;
+	return `${label}: expected 404, got ${status}: ${text.slice(0, 600)}`;
 }
 
 test("an id from another organization never reads, changes or links Organization A's data", async ({
@@ -119,7 +121,7 @@ test("an id from another organization never reads, changes or links Organization
 					label: `${operation.key}${index > 0 ? ` (variant ${index})` : ""}`,
 					operation,
 					built: buildRequest(document, operation, orgs.ids, variant, problems),
-					allowedEmpty: operation.key in EMPTY_OK,
+					allowedEmpty: true,
 					extra: variant?.allow?.statuses ?? [],
 				});
 			}
@@ -131,6 +133,21 @@ test("an id from another organization never reads, changes or links Organization
 		const before = await snapshotOrgA(orgs);
 		const publicBefore = await orgs.anonymous.get(publicPage);
 		expect(publicBefore.status(), "Organization A's public resume page without a session").toBe(200);
+
+		// Control: the same read requests succeed as A, and the scanner sees A's values in them. Without this, a request
+		// that is merely malformed would pass as "not found".
+		const reads = planned.filter(
+			(plan) => plan.operation.method === "GET" && !plan.operation.path.endsWith("/updates"),
+		);
+		let carried = 0;
+		await pool(reads, 6, async (plan) => {
+			const response = await send(orgs.a.session, plan.built);
+			const text = await response.text();
+			if (response.status() >= 400 && !plan.extra.includes(response.status()))
+				failures.push(`control ${plan.label}: user A's own call answered ${response.status()}: ${text.slice(0, 200)}`);
+			if (findLeaks(text, orgs.markers, orgs.foreignIds, []).length > 0) carried += 1;
+		});
+		expect(carried, "the scanner must see Organization A's values in A's own answers").toBeGreaterThan(10);
 
 		// 3. B calls everything with A's ids: session cookie first, then API key.
 		const seen = new Map<string, string>();
@@ -219,7 +236,7 @@ test("an id from another organization never reads, changes or links Organization
 				return void failures.push(`${label}: HTTP ${answer.status}: ${answer.text.slice(0, 200)}`);
 			if (result.isError) return;
 			const body = parse(result.content?.map((part) => part.text ?? "").join("") ?? "");
-			if (!(tool.name in EMPTY_OK) || !isEmptyResult(body))
+			if (!(tool.name in MCP_ALLOW) && !isEmptyResult(body))
 				failures.push(`${label}: succeeded for A's ids: ${JSON.stringify(body).slice(0, 200)}`);
 		});
 

@@ -1,6 +1,6 @@
 import type { SeedIds } from "./cross-org-inventory";
 import type { E2EAccount } from "./data";
-import type { APIRequestContext, APIResponse, Playwright } from "@playwright/test";
+import type { APIRequestContext, APIResponse, PlaywrightWorkerArgs } from "@playwright/test";
 import { startAiStub } from "./ai-stub";
 import { createInviteeAccount, deleteE2EOrganizations } from "./careeros-org";
 import { deleteE2EUser } from "./db";
@@ -9,6 +9,8 @@ import { withSeedPool } from "./seed-db";
 // CareerOS (P1-Q03): two users in two organizations, with one of everything seeded in Organization A.
 // Accounts and organizations are made through the real sign-up flow; every row is created through the public API,
 // except the few that no endpoint can create without an AI run or DNS (see seedRowsWithoutEndpoint).
+
+type Playwright = PlaywrightWorkerArgs["playwright"];
 
 export type Party = {
 	account: E2EAccount;
@@ -151,8 +153,10 @@ export async function createTwoOrgs(playwright: Playwright, baseURL: string, own
 			await b.session.post(api("/auth/api-keys"), { data: { name: "xorg b", expiresIn: null, access: "full" } }),
 			"B's API key",
 		);
-		bKeyed = await playwright.request.newContext({ baseURL, extraHTTPHeaders: { "x-api-key": created.key } });
-		anonymous = await playwright.request.newContext({ baseURL });
+		const keyed = await playwright.request.newContext({ baseURL, extraHTTPHeaders: { "x-api-key": created.key } });
+		const open = await playwright.request.newContext({ baseURL });
+		bKeyed = keyed;
+		anonymous = open;
 
 		// Organization A's own API key (so the key routes have an id to attack).
 		await expectOk(
@@ -179,8 +183,8 @@ export async function createTwoOrgs(playwright: Playwright, baseURL: string, own
 			"versions",
 		);
 		const resumeVersion = resumeVersions[0]?.id;
-		await anonymous.get(`/${accountA.username}/${slug}`);
-		await anonymous.post(api(`/resumes/${accountA.username}/${slug}/statistics/download`));
+		await open.get(`/${accountA.username}/${slug}`);
+		await open.post(api(`/resumes/${accountA.username}/${slug}/statistics/download`));
 
 		// Cover letter and version.
 		const letterCreated = await json<{ id?: string }>(
@@ -387,8 +391,8 @@ export async function createTwoOrgs(playwright: Playwright, baseURL: string, own
 			a,
 			b,
 			bApiKey: created.key,
-			bKeyed,
-			anonymous,
+			bKeyed: keyed,
+			anonymous: open,
 			ids,
 			aResume: { username: accountA.username, slug, name: text("resume") },
 			markers: [`xorga${tag}`],

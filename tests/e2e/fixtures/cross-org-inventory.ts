@@ -49,7 +49,7 @@ export type Operation = {
 	pathParams: string[];
 	/** The first enum value of each path parameter that has one (a document type, an export format). */
 	pathDefaults: Record<string, string>;
-	queryParams: { name: string; schema: JsonSchema }[];
+	queryParams: { name: string; schema: JsonSchema; required: boolean }[];
 	/** The JSON request body schema, with references resolved. Undefined when the operation sends none. */
 	body: JsonSchema | undefined;
 	multipart: boolean;
@@ -111,7 +111,11 @@ export function readOperations(document: OpenApiDocument): Operation[] {
 				),
 				queryParams: parameters
 					.filter((parameter) => parameter.in === "query")
-					.map((parameter) => ({ name: parameter.name, schema: resolveSchema(document, parameter.schema) })),
+					.map((parameter) => ({
+						name: parameter.name,
+						schema: resolveSchema(document, parameter.schema),
+						required: parameter.required === true,
+					})),
 				body: json ? resolveSchema(document, json) : undefined,
 				multipart: !json && "multipart/form-data" in content,
 				idFields: [...ids].sort(),
@@ -238,23 +242,23 @@ export type SeedIds = Record<IdKind, string>;
 
 /** A path prefix decides what a bare `id` (or `versionId`) names. First match wins. */
 const PREFIX_KIND: [RegExp, IdKind][] = [
-	[/^\/resumes\//, "resume"],
-	[/^\/cover-letters\//, "letter"],
-	[/^\/applications\/lanes\//, "lane"],
+	[/^\/resumes(\/|$)/, "resume"],
+	[/^\/cover-letters(\/|$)/, "letter"],
+	[/^\/applications\/lanes(\/|$)/, "lane"],
 	[/^\/applications(\/|$)/, "application"],
 	[/^\/documents(\/|$)/, "resume"],
-	[/^\/ai\//, "resume"],
-	[/^\/ai-providers\//, "provider"],
-	[/^\/agent\/threads\//, "thread"],
-	[/^\/agent\/attachments\//, "attachment"],
-	[/^\/career\/facts\//, "fact"],
-	[/^\/career\/stories\//, "story"],
-	[/^\/career\/schedules\//, "schedule"],
-	[/^\/career\/answers\//, "answer"],
-	[/^\/career\/opportunities\//, "opportunity"],
-	[/^\/career\/notifications\//, "notification"],
-	[/^\/career\/saved\//, "savedItem"],
-	[/^\/career\/voice\/transcripts\//, "transcript"],
+	[/^\/ai(\/|$)/, "resume"],
+	[/^\/ai-providers(\/|$)/, "provider"],
+	[/^\/agent\/threads(\/|$)/, "thread"],
+	[/^\/agent\/attachments(\/|$)/, "attachment"],
+	[/^\/career\/facts(\/|$)/, "fact"],
+	[/^\/career\/stories(\/|$)/, "story"],
+	[/^\/career\/schedules(\/|$)/, "schedule"],
+	[/^\/career\/answers(\/|$)/, "answer"],
+	[/^\/career\/opportunities(\/|$)/, "opportunity"],
+	[/^\/career\/notifications(\/|$)/, "notification"],
+	[/^\/career\/saved(\/|$)/, "savedItem"],
+	[/^\/career\/voice\/transcripts(\/|$)/, "transcript"],
 	[/^\/auth\/api-keys/, "apiKey"],
 ];
 
@@ -390,8 +394,52 @@ export type Override = {
 	variants?: Override[];
 };
 
+const SLUG_FREE = {
+	statuses: [200],
+	why: "answers whether a slug is free; the reply is identical for an unknown id, so it reveals nothing of A's",
+};
+const DOC_BATCH = (ids: SeedIds) => ({ documents: [{ type: "resume", id: ids.resume }] });
 const LETTER: Override = { kind: "letter", path: { type: "letter" } };
 export const OVERRIDES: Record<string, Override> = {
+	// Fields the sampled request leaves out, but without which validation would answer before the ownership check.
+	"PUT /resumes/{id}": { set: () => ({ name: "x", data: undefined, expectedUpdatedAt: new Date().toISOString() }) },
+	"PATCH /resumes/{id}/metadata": {
+		set: () => ({ name: "x", data: undefined, expectedUpdatedAt: new Date().toISOString() }),
+	},
+	"GET /resumes/{resumeId}/slug-check": { allow: SLUG_FREE },
+	"GET /resumes/{resumeId}/slug-availability": { allow: SLUG_FREE },
+	"PATCH /ai-providers/{id}": { set: () => ({ label: "x" }) },
+	"PATCH /applications/{id}/timeline/{entryId}": { set: () => ({ text: "x" }) },
+	"PUT /applications/{id}/timeline/{entryId}": { set: () => ({ text: "x" }) },
+	"PATCH /resumes/{id}": { set: () => ({ operations: [{ op: "replace", path: "/basics/name", value: "x" }] }) },
+	"POST /agent/attachments": { set: () => ({ mediaType: "text/plain", data: "eA==" }) },
+	"POST /career/offers": { set: () => ({ currency: "EUR" }) },
+	"POST /career/schedules": { set: () => ({ timezone: "Europe/Berlin" }) },
+	"POST /career/target-roles/suggest": { set: () => ({ recipientVersion: "a".repeat(64) }) },
+	"POST /career/answers": { set: () => ({ reviewed: true, noEmployerWording: true }) },
+	"POST /documents/purge/batch": { set: DOC_BATCH },
+	"POST /documents/restore/batch": { set: DOC_BATCH },
+	"POST /agent/threads": {
+		// One context at a time: the route refuses a mix, and each is a way to link a thread to A's rows.
+		set: (ids) => ({
+			scope: "application",
+			applicationId: ids.application,
+			resumeId: undefined,
+			coverLetterId: undefined,
+		}),
+		variants: [
+			{
+				set: (ids) => ({ scope: "document", resumeId: ids.resume, applicationId: undefined, coverLetterId: undefined }),
+			},
+			{
+				set: (ids) => ({ scope: "document", coverLetterId: ids.letter, applicationId: undefined, resumeId: undefined }),
+			},
+		],
+	},
+	"POST /applications/lanes/reorder": {
+		set: (ids) => ({ ids: Array.from({ length: 6 }, () => ids.lane) }),
+		allow: { statuses: [400], why: "T06 review: BAD_REQUEST for ids the caller's organization does not have" },
+	},
 	// Document routes run once for a resume and once for a cover letter.
 	"DELETE /documents/{type}/{id}": { variants: [LETTER] },
 	"DELETE /documents/{type}/{id}/trash": { variants: [LETTER] },
@@ -436,6 +484,10 @@ function fillIds(
 	const record = value as Record<string, unknown>;
 	for (const [name, property] of Object.entries(resolved.properties ?? {})) {
 		if (isIdField(name)) {
+			// Ids nested inside a body (a passage, a workspace answer, a document's section) belong to that document,
+			// not to a row of ours; only a nested field that names a row (`resumeId`) is filled.
+			const bare = name === "id" || name === "ids";
+			if (depth > 0 && (bare || !(name in FIELD_KIND))) continue;
 			const kind = kindOfField(operation, name, forced);
 			if (!kind) {
 				problems.push(`${operation.key}: no id kind is mapped for the field "${name}"`);
@@ -503,14 +555,21 @@ export function buildRequest(
 		const body = (sample(document, operation.body) ?? {}) as Record<string, unknown>;
 		fillIds(document, operation, operation.body, body, ids, sent, problems, override?.kind);
 		for (const name of operation.pathParams) delete body[name];
-		Object.assign(body, override?.set?.(ids));
+		for (const [name, value] of Object.entries(override?.set?.(ids) ?? {})) {
+			if (value === undefined) delete body[name];
+			else body[name] = value;
+		}
 		if (isRead) {
 			for (const [name, value] of Object.entries(body))
 				query[name] = Array.isArray(value) ? value.map(String) : String(value);
 		} else json = body;
 	}
 	for (const parameter of operation.queryParams) {
-		if (!isIdField(parameter.name)) continue;
+		if (!isIdField(parameter.name)) {
+			const value = parameter.required ? sample(document, parameter.schema) : undefined;
+			if (value !== undefined && value !== null) query[parameter.name] = String(value);
+			continue;
+		}
 		const kind = kindOfField(operation, parameter.name, override?.kind);
 		if (!kind) {
 			problems.push(`${operation.key}: no id kind is mapped for the query parameter "${parameter.name}"`);
@@ -537,24 +596,24 @@ export function findLeaks(body: string, markers: string[], foreignIds: string[],
 // ---------------------------------------------------------------------------------------------------------------
 // Empty results. A list or bulk call may answer 200 as long as it answers with nothing.
 
-const COUNT_FIELD = /count|total|deleted|updated|affected|removed|restored|purged|changed|trashed/i;
+const IGNORED_NUMBER = /^(limit|offset|skipped)$/;
 
-/** True for null, "", a boolean, an empty array, or an object whose arrays are empty and whose counts are zero. */
+/** True for null, "", a boolean, zero, an empty array, or an object made only of such values (and paging numbers). */
 export function isEmptyResult(value: unknown, depth = 0): boolean {
 	if (value === null || value === undefined || value === "" || typeof value === "boolean") return true;
 	if (Array.isArray(value)) return value.length === 0;
 	if (typeof value === "number") return value === 0;
 	if (typeof value !== "object" || depth > 4) return false;
-	for (const [name, child] of Object.entries(value)) {
-		if (Array.isArray(child) && child.length > 0) return false;
-		if (typeof child === "number" && COUNT_FIELD.test(name) && child !== 0) return false;
-		if (child && typeof child === "object" && !Array.isArray(child) && !isEmptyResult(child, depth + 1)) return false;
-	}
-	return true;
+	return Object.entries(value).every(([name, child]) =>
+		typeof child === "number" && IGNORED_NUMBER.test(name) ? true : isEmptyResult(child, depth + 1),
+	);
 }
 
-/** What 2xx answers are accepted besides NOT_FOUND, by operation key (or MCP tool name), and why. */
-export const EMPTY_OK: Record<string, string> = {};
+/** MCP tools that may succeed for a foreign id without carrying A's data, and why. */
+export const MCP_ALLOW: Record<string, string> = {
+	api_resume_check_slug: "answers whether a slug is free; identical for an unknown id",
+	api_resume_set_password: "only returns a link to the browser flow, which checks ownership; no data of A's",
+};
 
 // ---------------------------------------------------------------------------------------------------------------
 // MCP: every tool is a procedure under another name, so the same request builder serves it.
@@ -563,7 +622,7 @@ export const EMPTY_OK: Record<string, string> = {};
 export function mcpSyntheticPath(tool: string): string {
 	const name = tool.replace(/^api_/, "");
 	const rules: [RegExp, string][] = [
-		[/cover_letter/, "/cover-letters/x"],
+		[/cover_letter|_letter/, "/cover-letters/x"],
 		[/documents|resume|download_resume|duplicate_resume|apply_resume_patch/, "/resumes/x"],
 		[/lane/, "/applications/lanes/x"],
 		[/application|autofill|score_|tailor_|draft_application/, "/applications/x"],
