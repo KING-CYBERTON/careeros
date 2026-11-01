@@ -492,10 +492,11 @@ export const globalTables: readonly AllowListEntry[] = [
  * (a table that is both registered and pending fails the check).
  */
 export const pendingTenantTables: readonly AllowListEntry[] = [
-	"ai_providers",
-	"agent_threads",
-	"agent_messages",
-	"agent_attachments",
-	"agent_actions",
-	"ai_content_report",
-].map((table) => ({ table, reason: "Pending P1-T08 (agent and AI)" }));
+	// TODO(P1-T08): agent and AI.
+	{ table: "ai_providers", reason: "Pending P1-T08 (agent and AI)" },
+	{ table: "agent_threads", reason: "Pending P1-T08 (agent and AI)" },
+	{ table: "agent_messages", reason: "Pending P1-T08 (agent and AI)" },
+	{ table: "agent_attachments", reason: "Pending P1-T08 (agent and AI)" },
+	{ table: "agent_actions", reason: "Pending P1-T08 (agent and AI)" },
+	{ table: "ai_content_report", reason: "Pending P1-T08 (agent and AI)" },
+];
