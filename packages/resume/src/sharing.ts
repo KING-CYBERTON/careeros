@@ -6,9 +6,6 @@ export const DNS_LABEL = /^[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?$/;
 /** The `.cv` domain to suggest for a username, when the username can be one. */
 export const cvDomainFor = (username: string) => (DNS_LABEL.test(username) ? `${username}.cv` : undefined);
 
-/** Where to register a suggested `.cv` domain. */
-export const cvDomainRegistrationUrl = (domain: string) => `https://ola.cv/?domain=${encodeURIComponent(domain)}`;
-
 type ResumeAddress = { username: string; slug: string; isPrimary?: boolean | undefined };
 
 /** A resume's web page on the app's domains: `/<username>` for the primary resume, otherwise `/<username>/<slug>`. */

@@ -4,6 +4,8 @@ import { aiRouter } from "../features/ai/router";
 import { applicationProfileRouter } from "../features/application-profile/router";
 import { applicationsRouter } from "../features/applications/router";
 import { authRouter } from "../features/auth/router";
+// CAREEROS: organization branding and settings (P2-T01)
+import { brandingRouter, settingsRouter } from "../features/branding/router";
 import { careerRouter } from "../features/career/router";
 import { coverLettersRouter } from "../features/cover-letters/router";
 import { customDomainRouter } from "../features/custom-domain/router";
@@ -21,12 +23,16 @@ export default {
 	agent: agentRouter,
 	applications: applicationsRouter,
 	auth: authRouter,
+	// CAREEROS: organization branding and settings (P2-T01)
+	branding: brandingRouter,
 	career: careerRouter,
 	coverLetters: coverLettersRouter,
 	customDomain: customDomainRouter,
 	documents: documentsRouter,
 	flags: flagsRouter,
 	resume: resumeRouter,
+	// CAREEROS: organization settings (P2-T01)
+	settings: settingsRouter,
 	statistics: statisticsRouter,
 	storage: storageRouter,
 	webAccess: webAccessRouter,

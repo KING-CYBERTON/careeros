@@ -184,7 +184,7 @@ function AddressesSection({ origin, username, setting }: AddressesSectionProps) 
 					</span>
 					<CopyLinkButton url={shortLink} className="h-8 gap-1.5" />
 				</div>
-				{flags?.customDomains && <CustomDomainField suggest={flags.olacvSuggestion ?? false} />}
+				{flags?.customDomains && <CustomDomainField />}
 			</section>
 		</>
 	);
