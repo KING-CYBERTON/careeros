@@ -5,7 +5,7 @@
 **Current phase:** 0 — Setup (exit waits on owner actions) · 1 — Multi-tenancy in progress
 **Current version:** none yet (first tag will be `0.0.1` at Phase 0 exit)
 **Base:** Reactive Resume v6.0.10, upstream commit `a69e48318aab3c1c3ea57d2c0467710ef0d8342f` (2026-10-31)
-**Last updated:** 2026-11-01 by Opus (Thread 1)
+**Last updated:** 2026-11-01 (afternoon) by Opus (Thread 1)
 
 ## Phase 0 exit criteria (PRODUCT.md §13)
 
@@ -31,19 +31,27 @@
 
 ## Phase 1 tasks
 
-| Thread    | Task ID | Spec                                                                 | Status                                                                                           | Branch / PR                                              |
-| --------- | ------- | -------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------ | -------------------------------------------------------- |
-| 3 — CI/CD | P1-C01  | [plans/P1-C01-db-role-split.md](plans/P1-C01-db-role-split.md)       | **Merged** · [review](reviews/P1-C01-review-1.md)                                                | [#16](https://github.com/KING-CYBERTON/careeros/pull/16) |
-| 1 — Build | P1-T01  | [plans/P1-T01-org-plugin.md](plans/P1-T01-org-plugin.md)             | **Merged** · [review](reviews/P1-T01-review-1.md)                                                | [#17](https://github.com/KING-CYBERTON/careeros/pull/17) |
-| 1 — Build | P1-T02  | [plans/P1-T02-tenancy-core.md](plans/P1-T02-tenancy-core.md)         | **Merged** · [review](reviews/P1-T02-review-1.md)                                                | [#19](https://github.com/KING-CYBERTON/careeros/pull/19) |
-| 2 — QA    | P1-Q01  | [plans/P1-Q01-tenancy-tests.md](plans/P1-Q01-tenancy-tests.md)       | **Merged** · [review](reviews/P1-Q01-review-1.md)                                                | [#21](https://github.com/KING-CYBERTON/careeros/pull/21) |
-| 3 — CI/CD | P1-C02  | [plans/P1-C02-junit-summary.md](plans/P1-C02-junit-summary.md)       | **Merged** · [review](reviews/P1-C02-review-1.md)                                                | [#22](https://github.com/KING-CYBERTON/careeros/pull/22) |
-| 3 — CI/CD | P1-C03  | (folded into P1-C01)                                                 | Staging compose and `.env.staging.example` already split roles; verified at first staging deploy | —                                                        |
-| 1 — Build | P1-T03  | [plans/P1-T03-signup-invites.md](plans/P1-T03-signup-invites.md)     | **Merged** · [review](reviews/P1-T03-review-1.md) (D6 confirmed by Stephen)                      | [#23](https://github.com/KING-CYBERTON/careeros/pull/23) |
-| 2 — QA    | P1-Q04  | [plans/P1-Q04-cleanup-deadlock.md](plans/P1-Q04-cleanup-deadlock.md) | **Merged** · [review](reviews/P1-Q04-review-1.md)                                                | [#24](https://github.com/KING-CYBERTON/careeros/pull/24) |
-| 3 — CI/CD | P1-C05  | [plans/P1-C05-ci-speed.md](plans/P1-C05-ci-speed.md)                 | **Merged** · [review](reviews/P1-C05-review-1.md)                                                | [#25](https://github.com/KING-CYBERTON/careeros/pull/25) |
-| 2 — QA    | P1-Q05  | (spec next)                                                          | `pdf-text.spec.ts` route.fetch to fonts.gstatic.com races teardown                               | —                                                        |
-| 1 — Build | P1-T04  | [plans/P1-T04-resumes-rls.md](plans/P1-T04-resumes-rls.md)           | Approved · next to dispatch                                                                      | —                                                        |
+| Thread    | Task ID | Spec                                                                       | Status                                                                                           | Branch / PR                                              |
+| --------- | ------- | -------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------ | -------------------------------------------------------- |
+| 3 — CI/CD | P1-C01  | [plans/P1-C01-db-role-split.md](plans/P1-C01-db-role-split.md)             | **Merged** · [review](reviews/P1-C01-review-1.md)                                                | [#16](https://github.com/KING-CYBERTON/careeros/pull/16) |
+| 1 — Build | P1-T01  | [plans/P1-T01-org-plugin.md](plans/P1-T01-org-plugin.md)                   | **Merged** · [review](reviews/P1-T01-review-1.md)                                                | [#17](https://github.com/KING-CYBERTON/careeros/pull/17) |
+| 1 — Build | P1-T02  | [plans/P1-T02-tenancy-core.md](plans/P1-T02-tenancy-core.md)               | **Merged** · [review](reviews/P1-T02-review-1.md)                                                | [#19](https://github.com/KING-CYBERTON/careeros/pull/19) |
+| 2 — QA    | P1-Q01  | [plans/P1-Q01-tenancy-tests.md](plans/P1-Q01-tenancy-tests.md)             | **Merged** · [review](reviews/P1-Q01-review-1.md)                                                | [#21](https://github.com/KING-CYBERTON/careeros/pull/21) |
+| 3 — CI/CD | P1-C02  | [plans/P1-C02-junit-summary.md](plans/P1-C02-junit-summary.md)             | **Merged** · [review](reviews/P1-C02-review-1.md)                                                | [#22](https://github.com/KING-CYBERTON/careeros/pull/22) |
+| 3 — CI/CD | P1-C03  | (folded into P1-C01)                                                       | Staging compose and `.env.staging.example` already split roles; verified at first staging deploy | —                                                        |
+| 1 — Build | P1-T03  | [plans/P1-T03-signup-invites.md](plans/P1-T03-signup-invites.md)           | **Merged** · [review](reviews/P1-T03-review-1.md) (D6 confirmed by Stephen)                      | [#23](https://github.com/KING-CYBERTON/careeros/pull/23) |
+| 2 — QA    | P1-Q04  | [plans/P1-Q04-cleanup-deadlock.md](plans/P1-Q04-cleanup-deadlock.md)       | **Merged** · [review](reviews/P1-Q04-review-1.md)                                                | [#24](https://github.com/KING-CYBERTON/careeros/pull/24) |
+| 3 — CI/CD | P1-C05  | [plans/P1-C05-ci-speed.md](plans/P1-C05-ci-speed.md)                       | **Merged** · [review](reviews/P1-C05-review-1.md)                                                | [#25](https://github.com/KING-CYBERTON/careeros/pull/25) |
+| 2 — QA    | P1-Q05  | [plans/P1-Q05-pdf-text-route.md](plans/P1-Q05-pdf-text-route.md)           | **Merged**                                                                                       | [#27](https://github.com/KING-CYBERTON/careeros/pull/27) |
+| 2 — QA    | P1-Q06  | [plans/P1-Q06-2fa-deadline-margin.md](plans/P1-Q06-2fa-deadline-margin.md) | **Merged**                                                                                       | [#28](https://github.com/KING-CYBERTON/careeros/pull/28) |
+| 1 — Build | P1-T04  | [plans/P1-T04-resumes-rls.md](plans/P1-T04-resumes-rls.md)                 | **Merged** · [review](reviews/P1-T04-review-1.md)                                                | [#29](https://github.com/KING-CYBERTON/careeros/pull/29) |
+| 1 — Build | P1-T05  | [plans/P1-T05-cover-letters-rls.md](plans/P1-T05-cover-letters-rls.md)     | **Merged** · [review](reviews/P1-T05-review-1.md)                                                | [#30](https://github.com/KING-CYBERTON/careeros/pull/30) |
+| 2 — QA    | P1-Q07  | [plans/P1-Q07-e2e-seed-pool.md](plans/P1-Q07-e2e-seed-pool.md)             | **Merged** (fixed develop e2e red after T05)                                                     | [#31](https://github.com/KING-CYBERTON/careeros/pull/31) |
+| 1 — Build | P1-T06  | [plans/P1-T06-applications-rls.md](plans/P1-T06-applications-rls.md)       | **Merged** · [review](reviews/P1-T06-review-1.md)                                                | [#32](https://github.com/KING-CYBERTON/careeros/pull/32) |
+| 1 — Build | P1-T07  | [plans/P1-T07-career-rls.md](plans/P1-T07-career-rls.md)                   | **Merged** · [review](reviews/P1-T07-review-1.md)                                                | [#33](https://github.com/KING-CYBERTON/careeros/pull/33) |
+| 1 — Build | P1-T09  | [plans/P1-T09-remaining-rls.md](plans/P1-T09-remaining-rls.md)             | **Merged** · [review](reviews/P1-T09-review-1.md) (H1 hardening applied)                         | [#34](https://github.com/KING-CYBERTON/careeros/pull/34) |
+| 1 — Build | P1-T08  | [plans/P1-T08-agent-ai-rls.md](plans/P1-T08-agent-ai-rls.md)               | Approved · Sonnet coding (stacked on T07, now on develop)                                        | —                                                        |
+| 2 — QA    | P1-Q03  | [plans/P1-Q03-cross-org-id-fuzz.md](plans/P1-Q03-cross-org-id-fuzz.md)     | Approved · dispatch after T08                                                                    | —                                                        |
 
 ## Blockers
 
@@ -57,8 +65,8 @@
 
 - `tests/e2e/specs/library-pagination.spec.ts:201`: root cause fixed in P0-Q03 (oRPC batching bypassed the test mock). Watch for a strict-mode "two alerts" failure; if seen, Opus specs a per-item batch response.
 - BASELINE.md lacks unit counts for 9 packages; P1-C02's JUnit summary now prints them. Refresh BASELINE from a develop run.
-- `packages/db` integration suites may hit the same 57P01 teardown race fixed in auth by P1-C05.
-- The docs-only CI fast path is unconfirmed in real CI until this docs sync runs.
+- `assistant.spec.ts:118` (reaccept "CPACC") failed once and passed on re-run (T05 era); root-cause if it recurs.
+- e2e specs doing raw SQL on tenant tables must use `withSeedPool` (P1-Q07); careeros_app sees nothing without an org context.
 
 ## Planning docs
 
@@ -98,3 +106,12 @@ _None yet._
 - P1-T03 Signup org, invitations, org switching — [#23](https://github.com/KING-CYBERTON/careeros/pull/23), `f17dde6`
 - P1-Q04 Integration-test cleanup deadlock — [#24](https://github.com/KING-CYBERTON/careeros/pull/24), `be14053`
 - P1-C05 CI speed — [#25](https://github.com/KING-CYBERTON/careeros/pull/25), `4b86609`
+- Docs sync 7 — [#26](https://github.com/KING-CYBERTON/careeros/pull/26), `1384eae`
+- P1-Q05 pdf-text teardown — [#27](https://github.com/KING-CYBERTON/careeros/pull/27), `398a9ff`
+- P1-Q06 2FA deadline margin — [#28](https://github.com/KING-CYBERTON/careeros/pull/28), `a800eda`
+- P1-T04 Resumes RLS — [#29](https://github.com/KING-CYBERTON/careeros/pull/29), `10cae49`
+- P1-T05 Cover letters RLS — [#30](https://github.com/KING-CYBERTON/careeros/pull/30), `dadf661`
+- P1-Q07 e2e seed pool — [#31](https://github.com/KING-CYBERTON/careeros/pull/31), `d9fc858`
+- P1-T06 Applications RLS — [#32](https://github.com/KING-CYBERTON/careeros/pull/32), `da8b228`
+- P1-T07 Career and scheduler RLS — [#33](https://github.com/KING-CYBERTON/careeros/pull/33), `fdd1454`
+- P1-T09 Custom domains, storage cleanup, web access RLS — [#34](https://github.com/KING-CYBERTON/careeros/pull/34), `616075f`
