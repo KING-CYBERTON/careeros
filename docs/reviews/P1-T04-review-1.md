@@ -43,3 +43,12 @@ A user with neither a name nor a username gets `My's workspace`. Use `Personal w
 - **Q29:** the backfill rules are accepted.
 - **Q30:** see M1.
 - **Q31:** noted for the T09 spec.
+
+## Re-review (commit `ac8f3f559`)
+
+**Verdict: Approved. Merge after green careeros-ci.**
+
+- **H1 fixed.** `startup/role-check.ts` refuses to start in production when the runtime role owns `resume`, is a superuser or has BYPASSRLS, and warns elsewhere. Both branches are tested, and the check is documented in `infra/staging/README.md`. The CI e2e job, which runs production mode as `careeros_app`, covers the pass path.
+- **M1 fixed.** API keys without an org and OAuth bearer tokens fall back to the owner's oldest membership, and fail closed when there is none. A key that has an org whose owner isn't a member gets no fallback, and sessions never fall back. The apikey backfill is in the migration and its test.
+- **L1 fixed.**
+- Note for Phase 2: replace both fallbacks with org-bound tokens and keys (the `CAREEROS:` comments mark them).
