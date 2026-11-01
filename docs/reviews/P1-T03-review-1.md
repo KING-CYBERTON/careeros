@@ -62,3 +62,11 @@ Don't change behaviour in this PR. Add a row to docs/questions.md (Q20) with the
 ### M2 (Medium): `organization.spec.ts:73`, invalid invitation shows the wrong state
 
 The `authPage` user is unverified, so the page probably renders "Verify your email first" before it checks the invitation. Check the invitation first. A missing, expired or foreign invitation shows "Invitation unavailable" whatever the verification state. Show the verify state only for a valid invitation addressed to this user. If Better Auth refuses to read the invitation for unverified users, handle that error as "unavailable" only when the invitation truly doesn't exist, and explain the choice. Then fix the spec if needed.
+
+## Re-review 2 (commit `7e1f48b`)
+
+- **H1 fixed.** `captureOrgScope` takes the org at handler start. Its runner leaves both stores and opens a fresh, short `withOrgContext` per call, or runs unscoped when nothing was captured. `withoutDatabaseScope` exits only client scopes, so test pools are kept. The agent's step and final writes, run cleanup and every tool `execute` are wrapped. The tests cover a closed scope, a timer, a still-open scope (a separate client) and nothing captured.
+- **M1:** recorded as Q20.
+- **M2 fixed.** The verify state appears only for the email-verification error code. Every other error shows "Invitation unavailable".
+
+Approved, merge after green CI. If e2e still fails, trace each remaining write from the spec.
