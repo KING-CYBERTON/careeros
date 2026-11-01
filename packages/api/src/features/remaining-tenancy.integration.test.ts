@@ -179,6 +179,29 @@ describe.skipIf(!configured)("remaining tables and tenant isolation", () => {
 			}
 		});
 
+		it("refuses to release other claimants when the caller holds no claim, leaving them verified", async () => {
+			// hostA is verified by orgB's user (previous test). orgA has no claim on it any more under this hostname.
+			await owner.query(`UPDATE custom_domain SET hostname = $2 WHERE organization_id = $1`, [
+				ids.orgA,
+				`other-${hostA}`,
+			]);
+			const client = await app.connect();
+			try {
+				await client.query("select set_config('app.current_org_id', $1, false)", [ids.orgA]);
+				await expect(
+					client.query(`SELECT careeros_release_domain_claims($1, $2, $3)`, [hostA, ids.orgA, ids.userA]),
+				).rejects.toThrow(/holds no claim/);
+			} finally {
+				client.release(true);
+			}
+			expect(
+				await count(
+					`SELECT count(*) AS n FROM custom_domain WHERE hostname = $1 AND verified_at IS NOT NULL AND organization_id = $2`,
+					[hostA, ids.orgB],
+				),
+			).toBe(1);
+		});
+
 		it("re-checks every due domain once per organization and survives one organization failing", async () => {
 			const { recheckStaleDomains } = await import("./custom-domain/service");
 			const hostBad = `bad-${run}.example.test`;

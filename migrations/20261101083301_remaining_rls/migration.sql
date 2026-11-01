@@ -127,17 +127,35 @@ LANGUAGE sql STABLE SECURITY DEFINER SET search_path = pg_catalog, public AS $$
 	ORDER BY d.verified_at, d.organization_id LIMIT 1
 $$;--> statement-breakpoint
 -- Proof of DNS ownership moves a hostname from any other claimant. The other claimants are in other organizations and
--- invisible under row-level security, and the verified-hostname unique index is global, so this un-verifies them. It
--- only acts for the caller's own organization (app.current_org_id must equal keep_org).
+-- invisible under row-level security, and the verified-hostname unique index is global (a partial index cannot be
+-- deferred), so the keeper cannot be verified before the others are released. This does both in one statement
+-- sequence: it requires that the keeper holds a claim on the hostname (a row of the current organization for that
+-- user and hostname, else it raises and changes nothing), un-verifies every other claimant, marks the keeper verified,
+-- and raises unless the keeper ends up with a verified claim. It only acts for the caller's own organization
+-- (app.current_org_id must equal keep_org). Review 1 H1.
 CREATE OR REPLACE FUNCTION public.careeros_release_domain_claims(for_hostname text, keep_org text, keep_user text) RETURNS void
 LANGUAGE plpgsql SECURITY DEFINER SET search_path = pg_catalog, public AS $$
 BEGIN
 	IF keep_org IS DISTINCT FROM nullif(current_setting('app.current_org_id', true), '') THEN
 		RAISE EXCEPTION 'careeros_release_domain_claims: the organization is not the current one';
 	END IF;
+	IF NOT EXISTS (
+		SELECT 1 FROM public.custom_domain
+		WHERE organization_id = keep_org AND user_id = keep_user AND hostname = for_hostname
+	) THEN
+		RAISE EXCEPTION 'careeros_release_domain_claims: the caller holds no claim on this hostname';
+	END IF;
 	UPDATE public.custom_domain SET verified_at = NULL
 	WHERE hostname = for_hostname AND verified_at IS NOT NULL
 		AND NOT (organization_id = keep_org AND user_id = keep_user);
+	UPDATE public.custom_domain SET verified_at = coalesce(verified_at, now())
+	WHERE organization_id = keep_org AND user_id = keep_user AND hostname = for_hostname;
+	IF NOT EXISTS (
+		SELECT 1 FROM public.custom_domain
+		WHERE organization_id = keep_org AND user_id = keep_user AND hostname = for_hostname AND verified_at IS NOT NULL
+	) THEN
+		RAISE EXCEPTION 'careeros_release_domain_claims: the caller holds no verified claim on this hostname';
+	END IF;
 END
 $$;--> statement-breakpoint
 -- D9 background job: the (user, organization) pairs whose verified domain is due a DNS re-check. No row data.
