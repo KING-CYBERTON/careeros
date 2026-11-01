@@ -38,10 +38,13 @@ import { handleAuth, handleOAuth } from "./auth";
 import { handleCareerJobs } from "./career-jobs";
 import { handleCustomDomain, handleTraefikProvider } from "./custom-domain";
 import { handleHealth } from "./health";
+// CAREEROS: the request host decides the organization (P2-T03)
+import { hostMiddleware, type HostVariables } from "./host";
 import { handlePublicResumePdf } from "./public-resume-pdf";
 import { handleResumePdfDownload } from "./resume-pdf";
 
-type ServerEnvironment = { Bindings: HttpBindings | Http2Bindings };
+// CAREEROS: the resolved request host (P2-T03)
+type ServerEnvironment = { Bindings: HttpBindings | Http2Bindings; Variables: HostVariables };
 
 const getTrustedClient = (context: Context<ServerEnvironment>, proxies: BlockList): string => {
 	try {
@@ -83,6 +86,8 @@ export function createApp(options: AppOptions = {}) {
 	}
 	const client = (c: Context<ServerEnvironment>) => options.trustedClient?.(c.req.raw) ?? getTrustedClient(c, proxies);
 
+	// CAREEROS (P2-T03): resolved first, once per request; an unknown organization host answers 404 here.
+	app.use("*", hostMiddleware(options.readWebFile));
 	// The alias domain serves the same public pages; only the signed-in app's sections move to APP_URL.
 	app.use("*", async (c, next) => handleAlias(c.req.raw) ?? (await next()));
 	// A verified custom domain shows its primary resume; other hosts fall through.
@@ -122,8 +127,8 @@ export function createApp(options: AppOptions = {}) {
 	app.use("/api/storage/stage", limitBody(64 * 1024));
 
 	app.post("/api/storage/stage", (c) => prepareStagedBody(c.req.raw));
-	app.all("/api/rpc/*", (c) => withStagedBody(c.req.raw, (request) => handleRpc(request, client(c))));
-	app.all("/api/openapi/*", (c) => handleOpenApi(c.req.raw, client(c)));
+	app.all("/api/rpc/*", (c) => withStagedBody(c.req.raw, (request) => handleRpc(request, client(c), c.get("host"))));
+	app.all("/api/openapi/*", (c) => handleOpenApi(c.req.raw, client(c), c.get("host")));
 	app.get("/api/auth/oauth", (c) => handleOAuth(c.req.raw));
 	app.all("/api/auth/*", (c) => handleAuth(c.req.raw, client(c)));
 	app.get("/api/health", () => handleHealth());
@@ -145,7 +150,7 @@ export function createApp(options: AppOptions = {}) {
 	app.get("/uploads/*", (c) => handleUpload(c.req.raw));
 	app.get("/schema.json", () => handleSchemaJson());
 	app.get("/openapi.json", () => handleOpenApiDocument());
-	app.all("/mcp/*", (c) => handleMcp(c.req.raw, client(c)));
+	app.all("/mcp/*", (c) => handleMcp(c.req.raw, client(c), c.get("host")));
 
 	app.get("/.well-known/apple-app-site-association", () => handleAppleAppSiteAssociation());
 	app.get("/.well-known/assetlinks.json", () => handleAndroidAssetLinks());

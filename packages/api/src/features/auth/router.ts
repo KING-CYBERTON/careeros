@@ -1,3 +1,4 @@
+import { currentHost } from "@careeros/tenancy";
 import { ORPCError } from "@orpc/server";
 import { APIError } from "better-auth";
 import { createSelectSchema } from "drizzle-zod";
@@ -202,7 +203,8 @@ export const authRouter = {
 				throw new ORPCError("FORBIDDEN", { message: "Create API keys from Settings in a web browser." });
 			await assertRecentSignIn(context.reqHeaders);
 			// CAREEROS: membership-checked active organization, null without one (P1-T03)
-			const organizationId = await organizationForNewApiKey(context.authentication);
+			// CAREEROS (P2-T03): the host's organization on an organization host
+			const organizationId = await organizationForNewApiKey(context.authentication, context.host ?? currentHost());
 			const result = await auth.api.createApiKey({
 				body: {
 					userId: context.user.id,

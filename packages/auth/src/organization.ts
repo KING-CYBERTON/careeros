@@ -1,4 +1,5 @@
 import type { OrganizationOptions } from "better-auth/plugins";
+import { bustHostCache } from "@careeros/tenancy";
 import { eq } from "drizzle-orm";
 import { createElement } from "react";
 import { db } from "@reactive-resume/db/client";
@@ -31,6 +32,11 @@ export const organizationOptions = {
 		},
 	},
 	organizationHooks: {
+		// CAREEROS (P2-T03): the host cache (60 s) must not keep answering to a slug the organization no longer has.
+		afterUpdateOrganization: ({ organization }) => {
+			if (organization) bustHostCache({ organizationId: organization.id, slug: organization.slug });
+			return Promise.resolve();
+		},
 		// The plugin does not know who invited the member; record the inviter once the invitation is accepted.
 		afterAcceptInvitation: async ({ invitation, member }) => {
 			await db.update(schema.member).set({ invitedBy: invitation.inviterId }).where(eq(schema.member.id, member.id));

@@ -1,3 +1,4 @@
+import { resolveHost } from "@careeros/tenancy";
 import { and, asc, eq, gt, inArray, isNull, ne, sql } from "drizzle-orm";
 import { db } from "@reactive-resume/db/client";
 import * as schema from "@reactive-resume/db/schema";
@@ -6,7 +7,8 @@ import * as schema from "@reactive-resume/db/schema";
 // organization. This file holds the logic; `packages/auth/src/config.ts` only calls into it.
 
 type NewUser = { id: string; email: string; name?: string | null; username?: string | null };
-type SignUpContext = { body?: unknown } | null | undefined;
+// CAREEROS (P2-T03): `request` is the auth request the hook runs for; it names the host. Server-side calls have none.
+type SignUpContext = { body?: unknown; request?: Request | undefined } | null | undefined;
 
 const MAX_ORGANIZATION_NAME_LENGTH = 100;
 
@@ -25,7 +27,12 @@ function invitationIdFromContext(context: SignUpContext): string | undefined {
  * A sign-up counts as invited only with both an `invitationId` in the sign-up request and a pending, unexpired
  * invitation with that id for the new user's email. Either alone is not enough (an id for another address is ignored).
  */
-async function isInvitedSignUp(user: NewUser, context: SignUpContext): Promise<boolean> {
+export async function isInvitedSignUp(
+	user: NewUser,
+	context: SignUpContext,
+	// CAREEROS (P2-T03): on an organization host the invitation must be to that organization.
+	organizationId?: string,
+): Promise<boolean> {
 	const invitationId = invitationIdFromContext(context);
 	if (!invitationId) return false;
 	const [row] = await db
@@ -36,6 +43,7 @@ async function isInvitedSignUp(user: NewUser, context: SignUpContext): Promise<b
 				eq(schema.invitation.id, invitationId),
 				eq(schema.invitation.status, "pending"),
 				gt(schema.invitation.expiresAt, new Date()),
+				...(organizationId ? [eq(schema.invitation.organizationId, organizationId)] : []),
 				sql`lower(${schema.invitation.email}) = lower(${user.email})`,
 			),
 		)
@@ -45,6 +53,23 @@ async function isInvitedSignUp(user: NewUser, context: SignUpContext): Promise<b
 
 /** Creates the user's personal organization (they become `owner`), unless they are signing up through an invitation. */
 export async function createPersonalOrganization(user: NewUser, context: SignUpContext): Promise<void> {
+	// CAREEROS (P2-T03, D6): a sign-up on an organization host joins that organization and gets no personal one.
+	// Without a request (a server-side call) the platform rule below applies.
+	const host = context?.request ? await resolveHost(context.request) : undefined;
+	if (host?.kind === "org") {
+		// An invitation to the host organization follows the invitation flow (the user accepts it later). Otherwise
+		// `guardOrgHostSignUp` already let the user through because the organization has open signup.
+		if (await isInvitedSignUp(user, context, host.organizationId)) return;
+		await db
+			.insert(schema.member)
+			.values({ organizationId: host.organizationId, userId: user.id, role: "member" })
+			.onConflictDoNothing();
+		await db
+			.update(schema.session)
+			.set({ activeOrganizationId: host.organizationId })
+			.where(and(eq(schema.session.userId, user.id), isNull(schema.session.activeOrganizationId)));
+		return;
+	}
 	if (await isInvitedSignUp(user, context)) return;
 
 	const displayName = user.name?.trim() || user.username?.trim() || "My";

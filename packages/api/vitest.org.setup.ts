@@ -12,6 +12,8 @@ vi.mock("@careeros/tenancy", () => ({
 	// A runner that executes at once; tests read `captureOrgScope.mock.results` to see which work it wrapped.
 	captureOrgScope: vi.fn(() => vi.fn(<T>(fn: () => Promise<T>) => fn())),
 	currentOrgId: () => TEST_ORGANIZATION_ID,
+	// P2-T03: no request host is registered in unit tests, so the platform rules apply.
+	currentHost: () => undefined,
 	requireOrgId: () => TEST_ORGANIZATION_ID,
 	resolveOrgForAuthentication: () => Promise.resolve(TEST_ORGANIZATION_ID),
 	resolveOrgForRequest: () => Promise.resolve(TEST_ORGANIZATION_ID),

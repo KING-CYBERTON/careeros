@@ -1,7 +1,14 @@
 import type { Locale } from "@reactive-resume/utils/locale";
 import type { User } from "better-auth";
 // CAREEROS: tenant context for every protected procedure (P1-T02)
-import { ORG_CONTEXT_REQUIRED, resolveOrgForAuthentication, withOrgContext } from "@careeros/tenancy";
+import {
+	currentHost,
+	ORG_CONTEXT_REQUIRED,
+	resolveOrgForAuthentication,
+	TenancyError,
+	withOrgContext,
+	type HostContext,
+} from "@careeros/tenancy";
 import { ORPCError, os } from "@orpc/server";
 import { eq } from "drizzle-orm";
 import { auth, verifyOAuthToken } from "@reactive-resume/auth/config";
@@ -28,6 +35,8 @@ interface ORPCContext {
 	trustedClient?: string;
 	/** Set only by a server adapter after authenticating this request. */
 	authentication?: RequestAuthentication | null;
+	/** CAREEROS (P2-T03): the request's resolved host. Set by the server adapters; absent means the platform host. */
+	host?: HostContext;
 }
 
 const TRUSTED_ORIGINS = getTrustedOrigins(env.APP_URL);
@@ -81,7 +90,11 @@ async function getAuthenticationFromApiKey(apiKey: string): Promise<RequestAuthe
 }
 
 /** API key, then OAuth bearer token, then same-origin session cookies. */
-export async function resolveAuthenticationFromRequestHeaders(headers: Headers): Promise<RequestAuthentication | null> {
+export async function resolveAuthenticationFromRequestHeaders(
+	headers: Headers,
+	// CAREEROS (P2-T03): an organization host also trusts its own origin; falls back to the host the server adapter registered.
+	host: HostContext | undefined = currentHost(),
+): Promise<RequestAuthentication | null> {
 	const apiKey = headers.get("x-api-key");
 	if (apiKey) {
 		const authentication = await getAuthenticationFromApiKey(apiKey);
@@ -92,7 +105,8 @@ export async function resolveAuthenticationFromRequestHeaders(headers: Headers):
 	const origin = headers.get("origin");
 	if (
 		headers.has("cookie") &&
-		((origin && !TRUSTED_ORIGINS.includes(origin)) || headers.get("sec-fetch-site") === "cross-site")
+		((origin && !TRUSTED_ORIGINS.includes(origin) && !(host?.kind === "org" && origin === host.origin)) ||
+			headers.get("sec-fetch-site") === "cross-site")
 	) {
 		throw new ORPCError("FORBIDDEN", {
 			message: "This request came from another site. Open Reactive Resume directly and try again.",
@@ -132,7 +146,7 @@ export const publicProcedure = base
 	.use(async ({ context, next }) => {
 		const authentication =
 			context.authentication === undefined
-				? await resolveAuthenticationFromRequestHeaders(context.reqHeaders)
+				? await resolveAuthenticationFromRequestHeaders(context.reqHeaders, context.host ?? currentHost())
 				: context.authentication;
 
 		return next({
@@ -182,9 +196,34 @@ export const protectedProcedureWithoutOrg = publicProcedure
 		});
 	});
 
+/** CAREEROS (P2-T03): maps a host-rule refusal to FORBIDDEN with a stable `data.code` the clients act on. */
+export function toHostError(error: unknown): unknown {
+	if (!(error instanceof TenancyError)) return error;
+	if (error.code === "not_member_of_host_org")
+		return new ORPCError("FORBIDDEN", {
+			message: "You are not a member of this organization.",
+			data: { code: "ORG_HOST_NOT_MEMBER" },
+		});
+	if (error.code === "key_org_mismatch")
+		return new ORPCError("FORBIDDEN", {
+			message: "This API key belongs to another organization.",
+			data: { code: "ORG_HOST_KEY_MISMATCH" },
+		});
+	if (error.code === "unknown_org_host")
+		return new ORPCError("NOT_FOUND", { message: "No organization answers on this address." });
+	return error;
+}
+
 // CAREEROS: resolves the organization and runs the handler inside withOrgContext (P1-T02)
 export const protectedProcedure = protectedProcedureWithoutOrg.use(async ({ context, next }) => {
-	const organizationId = context.authentication ? await resolveOrgForAuthentication(context.authentication) : undefined;
+	// CAREEROS (P2-T03): the host decides the organization on organization hosts; headers, query and body never do.
+	const organizationId = context.authentication
+		? await resolveOrgForAuthentication(context.authentication, context.host ?? currentHost()).catch(
+				(error: unknown) => {
+					throw toHostError(error);
+				},
+			)
+		: undefined;
 	const nextContext = { ...context, organizationId: organizationId as string | undefined };
 	if (!organizationId) {
 		// CAREEROS: enforcement is on since P1-T04 (see ORG_CONTEXT_REQUIRED). The branch below stays for the constant's `false` state.

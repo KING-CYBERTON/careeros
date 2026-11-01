@@ -392,6 +392,20 @@ const prerenderedPages: Record<
 
 export type ReadWebFile = (path: string) => Promise<string>;
 
+/**
+ * CAREEROS (P2-T03): the app shell with status 404 and no indexing, for a host that has the shape of an organization
+ * host but names no organization.
+ */
+export async function handleUnknownOrgHost(readFile: ReadWebFile = (path) => fs.readFile(path, "utf-8")) {
+	const response = htmlResponse(await readFile(indexHtmlPath), {
+		"Content-Type": "text/html; charset=UTF-8",
+		"X-Robots-Tag": "noindex, nofollow",
+		"Cache-Control": "no-store",
+		...BASE_SECURITY_HEADERS,
+	});
+	return new Response(response.body, { status: 404, headers: response.headers });
+}
+
 export async function handleWebApp(request: Request, readFile: ReadWebFile = (path) => fs.readFile(path, "utf-8")) {
 	const requestedPath = new URL(request.url).pathname;
 	const pathname = requestedPath === "/index.html" ? "/" : requestedPath;

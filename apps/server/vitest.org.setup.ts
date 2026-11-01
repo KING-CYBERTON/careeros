@@ -10,4 +10,15 @@ vi.mock("@careeros/tenancy", () => ({
 	resolveOrgForAuthentication: () => Promise.resolve("org_test"),
 	captureOrgScope: () => (fn: () => Promise<unknown>) => fn(),
 	withOrgContext: <T>(_organizationId: string, fn: () => Promise<T>) => fn(),
+	// P2-T03: unit tests run on the platform host, with no organization hosts configured.
+	currentHost: () => undefined,
+	resolveHost: () => Promise.resolve({ kind: "platform" }),
+	runWithHost: <T>(_host: unknown, fn: () => T) => fn(),
+	TenancyError: class TenancyError extends Error {
+		readonly code: string;
+		constructor(code: string) {
+			super(code);
+			this.code = code;
+		}
+	},
 }));

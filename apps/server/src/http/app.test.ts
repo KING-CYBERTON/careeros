@@ -1,6 +1,8 @@
 import { gunzipSync } from "node:zlib";
 import { beforeEach, describe, expect, it, vi } from "vite-plus/test";
 
+// CAREEROS (P2-T03): the host the shared tenancy mock (vitest.org.setup.ts) resolves.
+const PLATFORM_HOST = { kind: "platform" };
 const mocks = vi.hoisted(() => ({
 	trustedProxies: [] as string[],
 	handleAuth: vi.fn(),
@@ -206,10 +208,10 @@ describe("createApp", () => {
 		await app.fetch(trustedOpenApiRequest, transportEnv("203.0.113.9"));
 		await app.fetch(unknownOpenApiRequest);
 
-		expect(mocks.handleRpc).toHaveBeenNthCalledWith(1, trustedRpcRequest, "203.0.113.9");
-		expect(mocks.handleRpc).toHaveBeenNthCalledWith(2, unknownRpcRequest, "unknown");
-		expect(mocks.handleOpenApi).toHaveBeenNthCalledWith(1, trustedOpenApiRequest, "203.0.113.9");
-		expect(mocks.handleOpenApi).toHaveBeenNthCalledWith(2, unknownOpenApiRequest, "unknown");
+		expect(mocks.handleRpc).toHaveBeenNthCalledWith(1, trustedRpcRequest, "203.0.113.9", PLATFORM_HOST);
+		expect(mocks.handleRpc).toHaveBeenNthCalledWith(2, unknownRpcRequest, "unknown", PLATFORM_HOST);
+		expect(mocks.handleOpenApi).toHaveBeenNthCalledWith(1, trustedOpenApiRequest, "203.0.113.9", PLATFORM_HOST);
+		expect(mocks.handleOpenApi).toHaveBeenNthCalledWith(2, unknownOpenApiRequest, "unknown", PLATFORM_HOST);
 	});
 
 	it.each([
