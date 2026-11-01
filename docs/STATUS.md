@@ -59,7 +59,7 @@
 
 - [x] Every tenant table has `organization_id`, FORCE RLS and the tenant policy; the unclassified-tables check has an empty pending list
 - [x] Cross-org ID fuzz passes (P1-Q03)
-- [ ] Opus security sign-off review (no open Critical or High findings): in progress
+- [ ] Opus security sign-off review: [done](reviews/P1-EXIT-security-review-1.md), no Critical or High; conditional on P1-Q10 (auth organization endpoint fuzz)
 - [ ] BASELINE refresh from a develop run (P1-C02 summary)
 - [ ] Staging verified with the database role split (waits on Stephen: VPS runbook, default branch = `develop`)
 
