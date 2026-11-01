@@ -73,7 +73,8 @@
 | 1 — Build | P2-T03  | (committed with the PR)                                                              | In review; CI running                                                                          | [#48](https://github.com/KING-CYBERTON/careeros/pull/48) |
 | 1 — Build | P2-T02  | [plans/P2-T02-branding-injection.md](plans/P2-T02-branding-injection.md)             | Approved; starts after T03 merges                                                              | —                                                        |
 
-Next specs: P2-T04 (branded emails), P2-T05 (auth handoff), P2-T06 (org custom domains, Cloudflare for SaaS), P2-T07 (branding settings UI), P2-Q01, P2-Q02, P2-C01 (DNS and tunnel routing), P2-C02 (branding grep gate).
+| 1 — Build | P2-T04 | [plans/P2-T04-branded-emails.md](plans/P2-T04-branded-emails.md) | Approved; starts after T03 merges | — |
+Next specs: P2-T05 (auth handoff), P2-T06 (org custom domains, Cloudflare for SaaS), P2-T07 (branding settings UI), P2-Q01, P2-Q02, P2-C01 (DNS and tunnel routing), P2-C02 (branding grep gate).
 
 ## Blockers
 
