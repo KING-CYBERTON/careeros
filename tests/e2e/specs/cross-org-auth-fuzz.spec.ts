@@ -6,6 +6,9 @@ import {
 	AUTH_ORG_SERVER_ONLY,
 	AUTH_ORG_SKIP,
 	checkAuthOrgInventory,
+	checkHandoffAnswer,
+	checkHandoffInventory,
+	handoffAttacks,
 	readOrganizationEndpoints,
 } from "@careeros/testing/auth-org-inventory";
 import { findLeaks, isEmptyResult } from "@careeros/testing/cross-org-inventory";
@@ -245,8 +248,44 @@ test("an organization endpoint never reads, changes or joins Organization A for 
 			}
 		}
 
+		// 9. CAREEROS (P2-T05): the sign-in handoff endpoints. B calls each of them, on the platform host, with A's ids and
+		// slug. `begin` and `redeem` belong to organization hosts and `request` and `issue` to the platform, so each
+		// answers a fixed refusal, and nothing of A's comes back.
+		const handoffSeed = {
+			orgId: orgs.a.organizationId,
+			orgSlug: orgs.authOrg.orgSlug,
+			ownerUserId: orgs.a.userId,
+			invitationId: orgs.authOrg.invitationId,
+		};
+		failures.push(...checkHandoffInventory(handoffSeed));
+		const handoff = handoffAttacks(handoffSeed);
+		for (const attack of handoff) {
+			const options = { failOnStatusCode: false, maxRedirects: 0, timeout: 20_000 } as const;
+			const answer =
+				attack.method === "GET"
+					? await orgs.b.session.get(attack.path, options)
+					: await orgs.b.session.post(attack.path, {
+							...options,
+							data: attack.body ?? {},
+							headers: { origin: root },
+						});
+			const text = await answer.text();
+			failures.push(...checkHandoffAnswer(attack, { status: answer.status(), location: answer.headers().location }));
+			const leaks = leakCheck(`${text}\n${answer.headers().location ?? ""}`);
+			if (leaks.length > 0)
+				failures.push(`${attack.key} (${attack.label}): carries Organization A's ${leaks.join(", ")}`);
+		}
+		// A's handoff rows are untouched: B created and consumed none.
+		await withSeedPool(async (pool) => {
+			const { rows } = await pool.query<{ count: string }>(
+				"select count(*)::text as count from auth_handoff where organization_id = $1 or user_id = $2",
+				[orgs.a.organizationId, orgs.b.userId],
+			);
+			if (rows[0]?.count !== "0") failures.push(`the handoff attacks left ${rows[0]?.count} row(s) in auth_handoff`);
+		});
+
 		console.log(
-			`cross-org auth fuzz: ${endpoints.length} organization endpoints, ${attacks.length} requests, ${Object.keys(AUTH_ORG_SKIP).length} skipped, API key paths ${JSON.stringify(created2.map((item) => item.status))}, new keys ${bound.length}, bound to A ${boundToA.length}, bound to B ${bound.filter((row) => row.organization_id === orgs.b.organizationId).length}, unbound ${bound.filter((row) => row.organization_id === null).length}`,
+			`cross-org auth fuzz: ${endpoints.length} organization endpoints, ${attacks.length} requests, ${Object.keys(AUTH_ORG_SKIP).length} skipped, ${handoff.length} handoff requests, API key paths ${JSON.stringify(created2.map((item) => item.status))}, new keys ${bound.length}, bound to A ${boundToA.length}, bound to B ${bound.filter((row) => row.organization_id === orgs.b.organizationId).length}, unbound ${bound.filter((row) => row.organization_id === null).length}`,
 		);
 		expect(failures, failures.join("\n")).toEqual([]);
 	} finally {
