@@ -1,3 +1,5 @@
+// CAREEROS: the request's resolved host reaches protectedProcedure through the oRPC context (P2-T03)
+import type { HostContext } from "@careeros/tenancy";
 import { onError, ORPCError } from "@orpc/server";
 import { RPCHandler } from "@orpc/server/fetch";
 import { BatchHandlerPlugin, RequestHeadersPlugin, StrictGetMethodPlugin } from "@orpc/server/plugins";
@@ -16,7 +18,7 @@ const rpcHandler = new RPCHandler(router, {
 	],
 });
 
-export async function handleRpc(request: Request, trustedClient: string) {
+export async function handleRpc(request: Request, trustedClient: string, host?: HostContext) {
 	// RPC answers depend on the caller's cookies or credentials (private resumes, unlocked password-protected ones),
 	// so no browser or shared cache may keep them.
 	const resHeaders = new Headers({ "Cache-Control": "private, no-store" });
@@ -27,6 +29,8 @@ export async function handleRpc(request: Request, trustedClient: string) {
 			reqHeaders: request.headers,
 			resHeaders,
 			trustedClient,
+			// CAREEROS (P2-T03)
+			...(host ? { host } : {}),
 		},
 	});
 

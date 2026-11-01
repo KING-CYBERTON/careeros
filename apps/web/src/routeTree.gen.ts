@@ -26,6 +26,7 @@ import { Route as AuthErrorRouteImport } from "./routes/auth/error";
 import { Route as AuthForgotPasswordRouteImport } from "./routes/auth/forgot-password";
 import { Route as AuthLoginRouteImport } from "./routes/auth/login";
 import { Route as AuthNativeCallbackRouteImport } from "./routes/auth/native-callback";
+import { Route as AuthOrganizationAccessRouteImport } from "./routes/auth/organization-access";
 import { Route as AuthRegisterRouteImport } from "./routes/auth/register";
 import { Route as AuthResetPasswordRouteImport } from "./routes/auth/reset-password";
 import { Route as AuthVerify2faRouteImport } from "./routes/auth/verify-2fa";
@@ -142,6 +143,11 @@ const AuthLoginRoute = AuthLoginRouteImport.update({
 const AuthNativeCallbackRoute = AuthNativeCallbackRouteImport.update({
   id: "/native-callback",
   path: "/native-callback",
+  getParentRoute: () => AuthRouteRoute,
+} as any);
+const AuthOrganizationAccessRoute = AuthOrganizationAccessRouteImport.update({
+  id: "/organization-access",
+  path: "/organization-access",
   getParentRoute: () => AuthRouteRoute,
 } as any);
 const AuthRegisterRoute = AuthRegisterRouteImport.update({
@@ -345,6 +351,7 @@ export interface FileRoutesByFullPath {
   "/auth/forgot-password": typeof AuthForgotPasswordRoute;
   "/auth/login": typeof AuthLoginRoute;
   "/auth/native-callback": typeof AuthNativeCallbackRoute;
+  "/auth/organization-access": typeof AuthOrganizationAccessRoute;
   "/auth/register": typeof AuthRegisterRoute;
   "/auth/reset-password": typeof AuthResetPasswordRoute;
   "/auth/verify-2fa": typeof AuthVerify2faRoute;
@@ -389,6 +396,7 @@ export interface FileRoutesByTo {
   "/auth/forgot-password": typeof AuthForgotPasswordRoute;
   "/auth/login": typeof AuthLoginRoute;
   "/auth/native-callback": typeof AuthNativeCallbackRoute;
+  "/auth/organization-access": typeof AuthOrganizationAccessRoute;
   "/auth/register": typeof AuthRegisterRoute;
   "/auth/reset-password": typeof AuthResetPasswordRoute;
   "/auth/verify-2fa": typeof AuthVerify2faRoute;
@@ -442,6 +450,7 @@ export interface FileRoutesById {
   "/auth/forgot-password": typeof AuthForgotPasswordRoute;
   "/auth/login": typeof AuthLoginRoute;
   "/auth/native-callback": typeof AuthNativeCallbackRoute;
+  "/auth/organization-access": typeof AuthOrganizationAccessRoute;
   "/auth/register": typeof AuthRegisterRoute;
   "/auth/reset-password": typeof AuthResetPasswordRoute;
   "/auth/verify-2fa": typeof AuthVerify2faRoute;
@@ -496,6 +505,7 @@ export interface FileRouteTypes {
     | "/auth/forgot-password"
     | "/auth/login"
     | "/auth/native-callback"
+    | "/auth/organization-access"
     | "/auth/register"
     | "/auth/reset-password"
     | "/auth/verify-2fa"
@@ -540,6 +550,7 @@ export interface FileRouteTypes {
     | "/auth/forgot-password"
     | "/auth/login"
     | "/auth/native-callback"
+    | "/auth/organization-access"
     | "/auth/register"
     | "/auth/reset-password"
     | "/auth/verify-2fa"
@@ -592,6 +603,7 @@ export interface FileRouteTypes {
     | "/auth/forgot-password"
     | "/auth/login"
     | "/auth/native-callback"
+    | "/auth/organization-access"
     | "/auth/register"
     | "/auth/reset-password"
     | "/auth/verify-2fa"
@@ -755,6 +767,13 @@ declare module "@tanstack/react-router" {
       path: "/native-callback";
       fullPath: "/auth/native-callback";
       preLoaderRoute: typeof AuthNativeCallbackRouteImport;
+      parentRoute: typeof AuthRouteRoute;
+    };
+    "/auth/organization-access": {
+      id: "/auth/organization-access";
+      path: "/organization-access";
+      fullPath: "/auth/organization-access";
+      preLoaderRoute: typeof AuthOrganizationAccessRouteImport;
       parentRoute: typeof AuthRouteRoute;
     };
     "/auth/register": {
@@ -1031,6 +1050,7 @@ interface AuthRouteRouteChildren {
   AuthForgotPasswordRoute: typeof AuthForgotPasswordRoute;
   AuthLoginRoute: typeof AuthLoginRoute;
   AuthNativeCallbackRoute: typeof AuthNativeCallbackRoute;
+  AuthOrganizationAccessRoute: typeof AuthOrganizationAccessRoute;
   AuthRegisterRoute: typeof AuthRegisterRoute;
   AuthResetPasswordRoute: typeof AuthResetPasswordRoute;
   AuthVerify2faRoute: typeof AuthVerify2faRoute;
@@ -1045,6 +1065,7 @@ const AuthRouteRouteChildren: AuthRouteRouteChildren = {
   AuthForgotPasswordRoute: AuthForgotPasswordRoute,
   AuthLoginRoute: AuthLoginRoute,
   AuthNativeCallbackRoute: AuthNativeCallbackRoute,
+  AuthOrganizationAccessRoute: AuthOrganizationAccessRoute,
   AuthRegisterRoute: AuthRegisterRoute,
   AuthResetPasswordRoute: AuthResetPasswordRoute,
   AuthVerify2faRoute: AuthVerify2faRoute,

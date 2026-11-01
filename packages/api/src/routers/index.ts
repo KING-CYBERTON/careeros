@@ -11,6 +11,8 @@ import { coverLettersRouter } from "../features/cover-letters/router";
 import { customDomainRouter } from "../features/custom-domain/router";
 import { documentsRouter } from "../features/documents/router";
 import { flagsRouter } from "../features/flags/router";
+// CAREEROS: join or switch page of an organization host (P2-T03)
+import { organizationHostRouter } from "../features/organization-host/router";
 import { resumeRouter } from "../features/resume/router";
 import { statisticsRouter } from "../features/statistics/router";
 import { storageRouter } from "../features/storage/router";
@@ -30,6 +32,8 @@ export default {
 	customDomain: customDomainRouter,
 	documents: documentsRouter,
 	flags: flagsRouter,
+	// CAREEROS: join or switch page of an organization host (P2-T03)
+	organizationHost: organizationHostRouter,
 	resume: resumeRouter,
 	// CAREEROS: organization settings (P2-T01)
 	settings: settingsRouter,

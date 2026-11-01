@@ -8,6 +8,7 @@ const tenancy = vi.hoisted(() => ({
 	withOrgContext: vi.fn(),
 	inScope: false,
 	required: true,
+	registeredHost: undefined as unknown,
 }));
 
 vi.mock("@reactive-resume/auth/config", () => ({ auth: authMock, verifyOAuthToken: vi.fn() }));
@@ -21,6 +22,15 @@ vi.mock("@careeros/tenancy", () => ({
 	},
 	resolveOrgForAuthentication: tenancy.resolveOrgForAuthentication,
 	withOrgContext: tenancy.withOrgContext,
+	// P2-T03
+	currentHost: () => tenancy.registeredHost,
+	TenancyError: class TenancyError extends Error {
+		readonly code: string;
+		constructor(code: string) {
+			super(code);
+			this.code = code;
+		}
+	},
 }));
 
 const { protectedProcedure, protectedProcedureWithoutOrg, publicProcedure, resolveAuthenticationFromRequestHeaders } =
@@ -43,6 +53,7 @@ const reset = () => {
 	tenancy.withOrgContext.mockReset();
 	tenancy.inScope = false;
 	tenancy.required = true;
+	tenancy.registeredHost = undefined;
 	tenancy.withOrgContext.mockImplementation(async (_org: string, fn: () => Promise<unknown>) => {
 		tenancy.inScope = true;
 		try {
@@ -67,6 +78,7 @@ describe("protectedProcedure organization context", () => {
 		await expect(call(undefined)).resolves.toEqual({ inScope: true, organizationId: "org_a" });
 		expect(tenancy.resolveOrgForAuthentication).toHaveBeenCalledWith(
 			expect.objectContaining({ method: "session", activeOrganizationId: "org_a" }),
+			undefined,
 		);
 		expect(tenancy.withOrgContext).toHaveBeenCalledWith("org_a", expect.any(Function));
 	});
@@ -173,5 +185,94 @@ describe("authentication carries the organization sources", () => {
 		);
 		expect(result).toMatchObject({ method: "apiKey", apiKeyId: "key_1" });
 		expect(JSON.stringify(result)).not.toContain("org_evil");
+	});
+});
+
+// CAREEROS (P2-T03)
+describe("organization host", () => {
+	const orgHost = {
+		kind: "org" as const,
+		organizationId: "org_a",
+		slug: "a",
+		via: "subdomain" as const,
+		hostname: "a.example.com",
+		origin: "https://a.example.com",
+	};
+	const hostClient = <T>(procedure: T, auth: unknown, host: unknown) =>
+		createProcedureClient(procedure as never, {
+			context: { locale: "en-US", reqHeaders: new Headers(), authentication: auth, host },
+		}) as (input: undefined) => Promise<unknown>;
+
+	it("hands the resolved host to the organization resolution", async () => {
+		reset();
+		tenancy.resolveOrgForAuthentication.mockResolvedValue("org_a");
+		await hostClient(
+			protectedProcedure.handler(() => "ok"),
+			authentication({ activeOrganizationId: "org_b" }),
+			orgHost,
+		)(undefined);
+		expect(tenancy.resolveOrgForAuthentication).toHaveBeenCalledWith(
+			expect.objectContaining({ method: "session", activeOrganizationId: "org_b" }),
+			orgHost,
+		);
+	});
+
+	it("falls back to the host the server adapter registered for the request", async () => {
+		reset();
+		tenancy.registeredHost = orgHost;
+		tenancy.resolveOrgForAuthentication.mockResolvedValue("org_a");
+		await client(
+			protectedProcedure.handler(() => "ok"),
+			authentication(),
+		)(undefined);
+		expect(tenancy.resolveOrgForAuthentication).toHaveBeenCalledWith(expect.anything(), orgHost);
+	});
+
+	it.each([
+		["not_member_of_host_org", "FORBIDDEN", "ORG_HOST_NOT_MEMBER"],
+		["key_org_mismatch", "FORBIDDEN", "ORG_HOST_KEY_MISMATCH"],
+	])("maps %s to %s with data.code %s and never runs the handler", async (reason, code, dataCode) => {
+		reset();
+		const { TenancyError } = await import("@careeros/tenancy");
+		tenancy.resolveOrgForAuthentication.mockRejectedValue(
+			new (TenancyError as never as new (c: string) => Error)(reason),
+		);
+		const handler = vi.fn(() => "executed");
+		await expect(
+			hostClient(protectedProcedure.handler(handler), authentication(), orgHost)(undefined),
+		).rejects.toMatchObject({ code, data: { code: dataCode } });
+		expect(handler).not.toHaveBeenCalled();
+		expect(tenancy.withOrgContext).not.toHaveBeenCalled();
+	});
+
+	it("maps an unknown organization host to NOT_FOUND", async () => {
+		reset();
+		const { TenancyError } = await import("@careeros/tenancy");
+		tenancy.resolveOrgForAuthentication.mockRejectedValue(
+			new (TenancyError as never as new (c: string) => Error)("unknown_org_host"),
+		);
+		await expect(
+			hostClient(
+				protectedProcedure.handler(() => "x"),
+				authentication(),
+				{ kind: "unknown", matchesOrgPattern: true },
+			)(undefined),
+		).rejects.toMatchObject({ code: "NOT_FOUND" });
+	});
+
+	it("trusts the origin of an organization host for cookie requests, and no other origin", async () => {
+		reset();
+		authMock.api.getSession.mockResolvedValue({ user, session: { activeOrganizationId: "org_a" } });
+		const request = (origin: string) => new Headers({ cookie: "session=valid", origin });
+		dbMock.select.mockReturnValueOnce({ from: () => ({ where: () => ({ limit: async () => [user] }) }) });
+		await expect(
+			resolveAuthenticationFromRequestHeaders(request("https://a.example.com"), orgHost),
+		).resolves.toMatchObject({ method: "session" });
+		await expect(
+			resolveAuthenticationFromRequestHeaders(request("https://b.example.com"), orgHost),
+		).rejects.toMatchObject({ code: "FORBIDDEN" });
+		await expect(
+			resolveAuthenticationFromRequestHeaders(request("https://a.example.com"), { kind: "platform" }),
+		).rejects.toMatchObject({ code: "FORBIDDEN" });
 	});
 });

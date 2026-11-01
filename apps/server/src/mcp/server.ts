@@ -1,3 +1,5 @@
+// CAREEROS: the request's resolved host reaches protectedProcedure through the oRPC context (P2-T03)
+import type { HostContext } from "@careeros/tenancy";
 import type { RouterClient } from "@orpc/server";
 import type { RequestAuthentication } from "@reactive-resume/api/context";
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
@@ -22,6 +24,7 @@ function createRequestClient(
 	authentication: RequestAuthentication,
 	trustedClient: string,
 	resHeaders: Headers,
+	host: HostContext | undefined,
 ): RouterClient<typeof MCP_ROUTER> {
 	const reqHeaders = new Headers(request.headers);
 	reqHeaders.delete("cookie");
@@ -44,6 +47,8 @@ function createRequestClient(
 			resHeaders,
 			trustedClient,
 			authentication,
+			// CAREEROS (P2-T03)
+			...(host ? { host } : {}),
 		}),
 	});
 }
@@ -53,6 +58,7 @@ export function createMcpServer(
 	authentication: RequestAuthentication,
 	trustedClient: string,
 	resHeaders: Headers,
+	host?: HostContext,
 ) {
 	const server = new McpServer(buildMcpServerInfo(appVersion), {
 		instructions: [
@@ -65,7 +71,7 @@ export function createMcpServer(
 		].join(" "),
 	});
 
-	const client = createRequestClient(request, authentication, trustedClient, resHeaders);
+	const client = createRequestClient(request, authentication, trustedClient, resHeaders, host);
 	const headers = new Headers(request.headers);
 	headers.delete("cookie");
 	registerResources(server, client);

@@ -1,6 +1,8 @@
 import { and, asc, eq } from "drizzle-orm";
 import { db } from "@reactive-resume/db/client";
 import { apikey, member } from "@reactive-resume/db/schema";
+import { TenancyError } from "./errors";
+import { type HostContext } from "./host";
 
 export type SessionOrgSource = { userId: string; activeOrganizationId?: string | null | undefined };
 /** `organizationId` is the `apikey.organization_id` column of the verified key. */
@@ -55,19 +57,26 @@ export type AuthenticationOrgSource = {
 };
 
 /**
- * Resolves the organization for an authenticated request: the verified API key's `organization_id`, or the session's
- * active organization, each after the membership check. OAuth bearer tokens carry no organization and resolve to none.
+ * Resolves the organization for an authenticated request.
+ *
+ * Platform host (and any host that is not an organization host; `host` omitted): the verified API key's
+ * `organization_id`, or the session's active organization, each after the membership check; keys and OAuth tokens
+ * without an organization fall back to the owner's oldest membership (Phase 1 behaviour).
+ *
+ * Organization host (P2-T03, D4): the host's organization decides, never the session's active organization. A session
+ * must belong to it, an API key bound to another organization is refused, and a key or token without an organization
+ * acts in the host's organization if its owner is a member. Failures throw a `TenancyError`.
  */
 export async function resolveOrgForAuthentication(
 	authentication: AuthenticationOrgSource,
+	host?: HostContext,
 ): Promise<string | undefined> {
+	if (host?.kind === "org") return resolveOrgOnOrgHost(authentication, host.organizationId);
+	// A host that has the shape of an organization host but names none must not fall back to the platform rules.
+	if (host?.kind === "unknown" && host.matchesOrgPattern) throw new TenancyError("unknown_org_host");
 	if (authentication.method === "apiKey") {
 		if (!authentication.apiKeyId) return undefined;
-		const [key] = await db
-			.select({ organizationId: apikey.organizationId })
-			.from(apikey)
-			.where(eq(apikey.id, authentication.apiKeyId))
-			.limit(1);
+		const key = await apiKeyOrganization(authentication.apiKeyId);
 		const resolved = await resolveOrgForRequest({
 			apiKey: { userId: authentication.user.id, organizationId: key?.organizationId },
 		});
@@ -84,4 +93,29 @@ export async function resolveOrgForAuthentication(
 	// CAREEROS: OAuth bearer tokens carry no organization; fall back to the token owner's oldest membership and fail
 	// closed (undefined) when the user has none. Phase 2 replaces this with org-bound tokens (P1-T04 review 1, M1).
 	return oldestMembershipOrg(authentication.user.id);
+}
+
+async function apiKeyOrganization(apiKeyId: string) {
+	const [key] = await db
+		.select({ organizationId: apikey.organizationId })
+		.from(apikey)
+		.where(eq(apikey.id, apiKeyId))
+		.limit(1);
+	return key;
+}
+
+/** CAREEROS (P2-T03): the rules of an organization host. Only the resolved host organization is ever returned. */
+async function resolveOrgOnOrgHost(
+	authentication: AuthenticationOrgSource,
+	hostOrganizationId: string,
+): Promise<string | undefined> {
+	if (authentication.method === "apiKey") {
+		if (!authentication.apiKeyId) return undefined;
+		const key = await apiKeyOrganization(authentication.apiKeyId);
+		if (key?.organizationId && key.organizationId !== hostOrganizationId) throw new TenancyError("key_org_mismatch");
+	}
+	// Session, key and token alike: the user must be a member of the host organization. A session's active
+	// organization is ignored here.
+	if (!(await isMember(hostOrganizationId, authentication.user.id))) throw new TenancyError("not_member_of_host_org");
+	return hostOrganizationId;
 }

@@ -5,6 +5,7 @@
 	"private": true,
 	"exports": {
 		"./config": "./src/config.ts",
+		"./org-host": "./src/org-host.ts",
 		"./personal-org": "./src/personal-org.ts",
 		"./trusted-origins": "./src/trusted-origins.ts",
 		"./types": "./src/types.ts"
@@ -16,6 +17,7 @@
 		"test:ci": "vp test run --reporter=default --reporter=github-actions --reporter=json --reporter=junit --outputFile.json=reports/vitest-results.json --outputFile.junit=reports/vitest-junit.xml --passWithNoTests"
 	},
 	"dependencies": {
+		"@careeros/tenancy": "workspace:*",
 		"@better-auth/api-key": "catalog:",
 		"@better-auth/drizzle-adapter": "catalog:",
 		"@better-auth/infra": "catalog:",

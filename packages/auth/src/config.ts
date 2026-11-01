@@ -12,6 +12,7 @@ import { drizzleAdapter } from "@better-auth/drizzle-adapter/relations-v2";
 import { dash } from "@better-auth/infra";
 import { oauthProvider } from "@better-auth/oauth-provider";
 import { passkey } from "@better-auth/passkey";
+import { hostTrustedOrigins } from "@careeros/tenancy";
 import { compare, hash } from "bcryptjs";
 import { APIError, betterAuth } from "better-auth";
 import {
@@ -40,6 +41,8 @@ import { generateId, toUsername } from "@reactive-resume/utils/string";
 import { timezoneSchema } from "@reactive-resume/utils/timezone";
 import { isAllowedOAuthRedirectUri } from "@reactive-resume/utils/url-security.node";
 import { createGithubProfileMapper, createProfileMapper, isUsernameReserved } from "./oauth-profile";
+// CAREEROS: invite-only organization hosts (P2-T03)
+import { guardOrgHostSignUp } from "./org-host";
 // CAREEROS: organization plugin options (P1-T01)
 import { organizationOptions } from "./organization";
 // CAREEROS: personal organization at signup, default active organization, owner-only role changes (P1-T03)
@@ -448,10 +451,13 @@ const getAuthConfig = () => {
 		database: drizzleAdapter(db, { schema, provider: "pg" }),
 
 		telemetry: { enabled: false },
-		trustedOrigins: [
+		// CAREEROS (P2-T03, D5): Better Auth 1.7 accepts a function here, called with the request. The platform origins
+		// stay; the request host's own origin is added only when it resolves to an organization host.
+		trustedOrigins: async (request) => [
 			...TRUSTED_ORIGINS,
 			// Apple's form_post callback includes this origin; keep CSRF checks enabled.
 			...(env.APPLE_CLIENT_ID && env.APPLE_CLIENT_SECRET ? ["https://appleid.apple.com"] : []),
+			...(await hostTrustedOrigins(request)),
 		],
 		rateLimit: {
 			...rateLimitConfig.betterAuth.global,
@@ -463,6 +469,8 @@ const getAuthConfig = () => {
 			user: {
 				create: {
 					before: async (user, context) => {
+						// CAREEROS (P2-T03, D6): an invite-only organization host refuses new accounts without an invitation
+						await guardOrgHostSignUp(user, context);
 						// New accounts inherit the device timezone from the auth request, so interview times,
 						// reminders and schedules are right from the first use. Social callbacks don't carry the
 						// header; the sign-in hook stores the validated zone in the signed OAuth state.

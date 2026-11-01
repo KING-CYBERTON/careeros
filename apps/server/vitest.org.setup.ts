@@ -3,11 +3,24 @@
 // organization behaviour itself (`mcp/handler-org.test.ts`) declare their own `vi.mock("@careeros/tenancy")`.
 import { vi } from "vite-plus/test";
 
-vi.mock("@careeros/tenancy", () => ({
+// P2-T03: the real module underneath, so exports added later (hostTrustedOrigins, bustHostCache, ...) cannot go missing.
+vi.mock("@careeros/tenancy", async (importOriginal) => ({
+	...(await importOriginal<typeof import("@careeros/tenancy")>()),
 	ORG_CONTEXT_REQUIRED: true,
 	requireOrgId: () => "org_test",
 	currentOrgId: () => "org_test",
 	resolveOrgForAuthentication: () => Promise.resolve("org_test"),
 	captureOrgScope: () => (fn: () => Promise<unknown>) => fn(),
 	withOrgContext: <T>(_organizationId: string, fn: () => Promise<T>) => fn(),
+	// P2-T03: unit tests run on the platform host, with no organization hosts configured.
+	currentHost: () => undefined,
+	resolveHost: () => Promise.resolve({ kind: "platform" }),
+	runWithHost: <T>(_host: unknown, fn: () => T) => fn(),
+	TenancyError: class TenancyError extends Error {
+		readonly code: string;
+		constructor(code: string) {
+			super(code);
+			this.code = code;
+		}
+	},
 }));

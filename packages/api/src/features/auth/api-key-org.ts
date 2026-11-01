@@ -1,8 +1,9 @@
-import { resolveOrgForAuthentication, type AuthenticationOrgSource } from "@careeros/tenancy";
+import { resolveOrgForAuthentication, type AuthenticationOrgSource, type HostContext } from "@careeros/tenancy";
 import { ORPCError } from "@orpc/server";
 import { and, eq } from "drizzle-orm";
 import { db } from "@reactive-resume/db/client";
 import { apikey } from "@reactive-resume/db/schema";
+import { toHostError } from "../../context";
 
 // CareerOS (P1-T03, Q9): API keys carry the organization they were created in.
 
@@ -11,7 +12,17 @@ import { apikey } from "@reactive-resume/db/schema";
  * when the session has none (such keys are refused once `ORG_CONTEXT_REQUIRED` is true). An active organization the
  * user no longer belongs to is refused rather than stored.
  */
-export async function organizationForNewApiKey(authentication: AuthenticationOrgSource): Promise<string | null> {
+export async function organizationForNewApiKey(
+	authentication: AuthenticationOrgSource,
+	// CAREEROS (P2-T03): on an organization host the key belongs to the host's organization, not the session's active one.
+	host?: HostContext,
+): Promise<string | null> {
+	if (host?.kind === "org") {
+		const hostOrganizationId = await resolveOrgForAuthentication(authentication, host).catch((error: unknown) => {
+			throw toHostError(error);
+		});
+		if (hostOrganizationId) return hostOrganizationId;
+	}
 	if (!authentication.activeOrganizationId) return null;
 	const organizationId = await resolveOrgForAuthentication(authentication);
 	if (!organizationId)

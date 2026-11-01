@@ -18,6 +18,20 @@ if (workspaceRoot) {
 	}
 }
 
+/** CAREEROS (P2-T03): `{slug}` appears once and the pattern is a host name once a slug is put in its place. */
+function isValidOrgHostPattern(pattern: string): boolean {
+	if (pattern.split("{slug}").length !== 2) return false;
+	const sample = pattern.replace("{slug}", "a");
+	return /^(?=.{1,253}$)[a-z0-9]([a-z0-9-]{0,61}[a-z0-9])?(\.[a-z0-9]([a-z0-9-]{0,61}[a-z0-9])?)*$/.test(sample);
+}
+
+/** CAREEROS (P2-T03): whether `hostname` is the pattern with a slug `[a-z0-9-]{1,63}` in place of `{slug}`. */
+function matchesOrgHostPattern(pattern: string, hostname: string): boolean {
+	const [prefix = "", suffix = ""] = pattern.split("{slug}");
+	const slug = hostname.slice(prefix.length, hostname.length - suffix.length);
+	return hostname.startsWith(prefix) && hostname.endsWith(suffix) && /^[a-z0-9-]{1,63}$/.test(slug);
+}
+
 // ioredis authenticates as `AUTH <username> <password>`; a bare "redis://value@host" (userinfo with no colon) puts
 // that value in the username slot and Redis rejects the resulting auth. Password-only servers (redis-server
 // --requirepass) need an empty username — "redis://:<pass>@<host>" — or the built-in ACL user,
@@ -95,6 +109,17 @@ export const env = createEnv({
 				"Use a host name such as domains.example.com",
 			)
 			.optional(),
+		// CAREEROS (P2-T03): organization hosts. A host pattern with exactly one {slug} placeholder, e.g.
+		// {slug}-careeros.ayopa.co.ke (staging) or {slug}.example.com. Unset turns organization hosts off.
+		ORG_HOST_PATTERN: z
+			.string()
+			.trim()
+			.toLowerCase()
+			.refine(isValidOrgHostPattern, "Use a host name with exactly one {slug}, such as {slug}.example.com")
+			.optional(),
+		// CAREEROS (P2-T03): read the organization host from X-Forwarded-Host instead of Host. Off by default: the
+		// staging tunnel sets Host correctly. Only turn it on behind a proxy that overwrites X-Forwarded-Host.
+		TRUST_FORWARDED_HOST: z.stringbool().default(false),
 		// Sent by Traefik's HTTP provider to read the custom domains' routers; at least 32 characters.
 		CUSTOM_DOMAIN_PROVIDER_SECRET: z.string().min(32).optional(),
 		// OlaCV API token: with FLAG_OLACV_SUGGESTION, Share checks which .cv names are free before suggesting one.
@@ -218,6 +243,13 @@ export const env = createEnv({
 	runtimeEnv: deploymentEnvironment(process.env),
 	emptyStringAsUndefined: true,
 });
+
+// CAREEROS (P2-T03): the platform's own hosts are never organization hosts.
+if (env.ORG_HOST_PATTERN) {
+	const platformHosts = [env.APP_URL, env.APP_ALIAS_URL].flatMap((url) => (url ? [new URL(url).hostname] : []));
+	if (platformHosts.some((hostname) => matchesOrgHostPattern(env.ORG_HOST_PATTERN as string, hostname)))
+		throw new Error("ORG_HOST_PATTERN must not match the host of APP_URL or APP_ALIAS_URL.");
+}
 
 if (
 	(env.WEB_ACCESS_PROVIDER || env.WEB_ACCESS_API_KEY || env.WEB_ACCESS_API_URL) &&
