@@ -2,6 +2,8 @@ import type { IconName } from "@/ui";
 import type { BottomTabBarProps } from "expo-router/tabs";
 import type { ReactNode } from "react";
 import { useLingui } from "@lingui/react/macro";
+// CAREEROS (P2-T02): the organization's name and logo in the sidebar
+import { Image } from "expo-image";
 import { useRouter, usePathname } from "expo-router";
 import { Children, useEffect, useState } from "react";
 import { I18nManager, Platform, Pressable, ScrollView, View, useWindowDimensions } from "react-native";
@@ -13,7 +15,7 @@ import Animated, {
 	withTiming,
 } from "react-native-reanimated";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import { getBrand } from "@reactive-resume/utils/brand";
+import { useBrand } from "@/branding/store";
 import { routes } from "@/routes";
 import { Button, Icon, IconButton, Text, haptics, useReducedMotion, useTheme } from "@/ui";
 import { useKeyboardVisible } from "@/ui/keyboard";
@@ -375,7 +377,7 @@ function SidebarItem({
 export function AppSidebar(props: BottomTabBarProps) {
 	const router = useRouter();
 	const { t } = useLingui();
-	const { appName } = getBrand();
+	const { appName, logoUrl } = useBrand();
 	const { state, insets } = props;
 	const pathname = usePathname();
 	const { colors, radius, size, space, type } = useTheme();
@@ -401,15 +403,37 @@ export function AppSidebar(props: BottomTabBarProps) {
 				borderEndColor: colors.line,
 			}}
 		>
-			<Text
-				variant="heading"
-				accessibilityLabel={appName}
-				align={compact ? "center" : undefined}
-				numberOfLines={1}
-				style={{ paddingHorizontal: compact ? 0 : space.s3, paddingBottom: space.s3 }}
+			<View
+				style={{
+					flexDirection: "row",
+					alignItems: "center",
+					justifyContent: compact ? "center" : "flex-start",
+					gap: space.s2,
+					paddingHorizontal: compact ? 0 : space.s3,
+					paddingBottom: space.s3,
+				}}
 			>
-				{compact ? appName.slice(0, 1) : appName}
-			</Text>
+				{logoUrl ? (
+					<Image
+						source={{ uri: logoUrl }}
+						accessible={false}
+						contentFit="contain"
+						style={{ width: space.s6, height: space.s6 }}
+					/>
+				) : null}
+				{/* With a logo the compact rail shows the logo alone; the name stays as the accessible label. */}
+				{compact && logoUrl ? null : (
+					<Text
+						variant="heading"
+						accessibilityLabel={appName}
+						align={compact ? "center" : undefined}
+						numberOfLines={1}
+						style={{ flexShrink: 1 }}
+					>
+						{compact ? appName.slice(0, 1) : appName}
+					</Text>
+				)}
+			</View>
 			{compact ? (
 				<View style={{ alignItems: "center" }}>
 					<IconButton icon="magnifying-glass" label={t`Search or run…`} onPress={() => router.push(routes.search())} />

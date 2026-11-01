@@ -111,7 +111,8 @@ describe("web app fallback classification", () => {
 		expect(html).toContain('<div id="app">de-DE</div>');
 		expect(html).toContain('<link rel="canonical" href="https://rxresu.me/?locale=de-DE">');
 		expect(html).toContain('<link rel="alternate" hreflang="x-default" href="https://rxresu.me/">');
-		expect(german.headers.get("Vary")).toBe("Cookie");
+		// CAREEROS (P2-T02): every HTML shell also varies on the host.
+		expect(german.headers.get("Vary")).toBe("Cookie, Host");
 
 		const saved = new Request("https://example.com/", { headers: { cookie: "theme=dark; locale=ar-SA" } });
 		const savedHtml = await (await handleWebApp(saved)).text();
