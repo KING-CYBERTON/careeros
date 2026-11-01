@@ -395,7 +395,7 @@ jobs:
 
       - name: Run browser tests
         if: needs.changes.outputs.code == 'true'
-        run: pnpm exec playwright test --workers=3
+        run: pnpm exec playwright test --workers=1
 
       - name: Upload browser test reports and traces
         if: ${{ failure() && needs.changes.outputs.code == 'true' }}
