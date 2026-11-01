@@ -7,6 +7,7 @@ import { drizzle } from "drizzle-orm/node-postgres";
 import { Pool } from "pg";
 import * as tables from "@reactive-resume/db/schema";
 import { careerScheduleInputSchema } from "@reactive-resume/schema/career";
+import { ensureTestOrganization, installSchemaLocalGuestMove, TEST_ORGANIZATION_ID } from "../../test-organization";
 
 const fixture = vi.hoisted(() => ({
 	db: undefined as ReturnType<typeof drizzle> | undefined,
@@ -106,6 +107,9 @@ describe.skipIf(!databaseUrl)("durable career scheduling", () => {
 			const file = new URL(`${directory}/migration.sql`, migrations);
 			if (existsSync(file)) await pool.query((await readFile(file, "utf8")).replaceAll('"public".', ""));
 		}
+		// CAREEROS (P1-T06): the scheduler asks definer functions about applications; this schema needs its own copies.
+		await installSchemaLocalGuestMove(pool, schemaName);
+		await ensureTestOrganization(pool);
 		({ careerJobs: jobs, runCareerJobs: run } = await import("./jobs"));
 	}, 30_000);
 
@@ -168,6 +172,7 @@ describe.skipIf(!databaseUrl)("durable career scheduling", () => {
 			.insert(tables.application)
 			.values({
 				id: "alice-app",
+				organizationId: TEST_ORGANIZATION_ID,
 				userId: "alice",
 				company: "ACME",
 				role: "Engineer",
@@ -260,9 +265,13 @@ describe.skipIf(!databaseUrl)("durable career scheduling", () => {
 	it.each(["pause", "delete schedule", "delete application"] as const)(
 		"discards an in-flight search after %s",
 		async (action) => {
-			await getDb()
-				.insert(tables.application)
-				.values({ id: "alice-app", userId: "alice", company: "ACME", role: "Engineer" });
+			await getDb().insert(tables.application).values({
+				id: "alice-app",
+				organizationId: TEST_ORGANIZATION_ID,
+				userId: "alice",
+				company: "ACME",
+				role: "Engineer",
+			});
 			const saved = await schedule("alice-app");
 			const started = Promise.withResolvers<void>();
 			const release = Promise.withResolvers<void>();

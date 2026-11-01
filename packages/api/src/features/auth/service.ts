@@ -105,7 +105,10 @@ export const authService = {
 				coverLetters.map(({ id }) => coverLetterService.getById({ id, userId: input.userId })),
 			),
 			applicationPipeline: await applicationLaneService.get(input.userId),
-			applications: applications.map(({ userId: _userId, ...application }) => application),
+			// CAREEROS (P1-T06): the tenant column is not part of the export
+			applications: applications.map(
+				({ userId: _userId, organizationId: _organizationId, ...application }) => application,
+			),
 			aiContentReports: await db
 				.select()
 				.from(schema.aiContentReport)

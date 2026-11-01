@@ -26,10 +26,9 @@ import { admin, anonymous, jwt, openAPI, organization } from "better-auth/plugin
 import { genericOAuth } from "better-auth/plugins/generic-oauth";
 import { twoFactor } from "better-auth/plugins/two-factor";
 import { username } from "better-auth/plugins/username";
-import { and, asc, eq, gt, inArray, ne, sql } from "drizzle-orm";
+import { and, asc, eq, gt, ne, sql } from "drizzle-orm";
 import { createLocalJWKSet, jwtVerify } from "jose";
 import { createElement } from "react";
-import { createDefaultOwnedApplicationLanes, MAX_APPLICATION_LANES } from "@reactive-resume/db/application-lanes";
 import { db } from "@reactive-resume/db/client";
 import * as schema from "@reactive-resume/db/schema";
 import { ResetPasswordEmail, VerifyEmail, VerifyEmailChange } from "@reactive-resume/email/templates/auth";
@@ -203,62 +202,6 @@ export async function linkAnonymousAccount({
 			if (!owner) throw new APIError("NOT_FOUND", { message: "The account is unavailable." });
 		}
 
-		const profiles = await tx
-			.select()
-			.from(schema.applicationProfile)
-			.where(inArray(schema.applicationProfile.userId, [fromUserId, toUserId]));
-		const sourceProfile = profiles.find((profile) => profile.userId === fromUserId);
-		if (sourceProfile && profiles.some((profile) => profile.userId === toUserId))
-			throw new APIError("CONFLICT", {
-				message:
-					"Both accounts have a private application profile. Export and delete one profile in Settings → Account before linking, so neither is silently overwritten.",
-			});
-		if (sourceProfile)
-			await tx
-				.update(schema.applicationProfile)
-				.set({ userId: toUserId, revision: generateId() })
-				.where(eq(schema.applicationProfile.userId, fromUserId));
-		const sourceLanes = await tx
-			.select()
-			.from(schema.applicationLane)
-			.where(eq(schema.applicationLane.userId, fromUserId));
-		const targetLanes = await tx
-			.select()
-			.from(schema.applicationLane)
-			.where(eq(schema.applicationLane.userId, toUserId));
-		const defaultLanes = createDefaultOwnedApplicationLanes(toUserId);
-		const targetActiveCount = targetLanes.length
-			? targetLanes.filter((lane) => !lane.retiredAt).length
-			: defaultLanes.length;
-		if (
-			targetActiveCount + sourceLanes.filter((lane) => !lane.systemKey && !lane.retiredAt).length >
-			MAX_APPLICATION_LANES
-		)
-			throw new APIError("CONFLICT", {
-				message:
-					"Retire unused application lanes before combining these accounts; the combined pipeline exceeds 40 active lanes.",
-			});
-		await tx.insert(schema.applicationPipeline).values({ userId: toUserId }).onConflictDoNothing();
-		await tx.insert(schema.applicationLane).values(defaultLanes).onConflictDoNothing();
-		const laneIds = new Map<string, string>();
-		let position = Math.max(5, ...targetLanes.map((lane) => lane.position)) + 1;
-		for (const lane of sourceLanes) {
-			const id = lane.systemKey
-				? (targetLanes.find((target) => target.systemKey === lane.systemKey)?.id ??
-					`application-lane:${toUserId}:${lane.systemKey}`)
-				: generateId();
-			laneIds.set(lane.id, id);
-			if (!lane.systemKey)
-				await tx.insert(schema.applicationLane).values({ ...lane, id, userId: toUserId, position: position++ });
-		}
-		await tx
-			.update(schema.applicationPipeline)
-			.set({ revision: sql`${schema.applicationPipeline.revision} + 1` })
-			.where(eq(schema.applicationPipeline.userId, toUserId));
-
-		const rewriteUploadsUrl = (column: unknown) =>
-			sql`case when ${column} is not null then replace(${column}, 'uploads/' || ${fromUserId} || '/', 'uploads/' || ${toUserId} || '/') else null end`;
-
 		// CAREEROS (P1-T04): resumes, their versions, slug redirects and statistics now belong to an organization, and
 		// row-level security hides the guest's organization from this request. A narrow security definer function
 		// moves them to the account's oldest organization (see migration 20261101004553_resumes_rls). It refuses a
@@ -282,28 +225,28 @@ export async function linkAnonymousAccount({
 			sql`select careeros_move_guest_cover_letters(${fromUserId}, ${toUserId}, ${targetMembership?.organizationId ?? null})`,
 		);
 
-		const applications = await tx
-			.select()
-			.from(schema.application)
-			.where(eq(schema.application.userId, fromUserId))
-			.for("update");
-		for (const application of applications) {
-			await tx
-				.update(schema.application)
-				.set({
-					userId: toUserId,
-					laneId: application.laneId
-						? (laneIds.get(application.laneId) ?? `application-lane:${toUserId}:${application.status}`)
-						: `application-lane:${toUserId}:${application.status}`,
-					activity: application.activity.map((entry) =>
-						entry.type === "stage" && entry.laneId && laneIds.has(entry.laneId)
-							? { ...entry, laneId: laneIds.get(entry.laneId) ?? entry.laneId }
-							: entry,
-					),
-					resumeFileUrl: rewriteUploadsUrl(schema.application.resumeFileUrl),
-					coverLetterUrl: rewriteUploadsUrl(schema.application.coverLetterUrl),
-				})
-				.where(and(eq(schema.application.id, application.id), eq(schema.application.userId, fromUserId)));
+		// CAREEROS (P1-T06): the application profile, pipeline, lanes and applications belong to an organization too, and
+		// are per (organization, user) (D11). The same narrow definer function pattern moves them into the account's
+		// oldest organization: a profile on both sides, or a merged pipeline over 40 active lanes, is a conflict (the
+		// function raises SQLSTATE CR001 and CR002); system lanes map to the target's, custom lanes are copied, and
+		// stage history lane references and upload paths follow. The function is called as one statement.
+		try {
+			await tx.execute(
+				sql`select careeros_move_guest_applications(${fromUserId}, ${toUserId}, ${targetMembership?.organizationId ?? null})`,
+			);
+		} catch (error) {
+			const code = ((error as { code?: string; cause?: { code?: string } }).cause ?? (error as { code?: string })).code;
+			if (code === "CR001")
+				throw new APIError("CONFLICT", {
+					message:
+						"Both accounts have a private application profile. Export and delete one profile in Settings → Account before linking, so neither is silently overwritten.",
+				});
+			if (code === "CR002")
+				throw new APIError("CONFLICT", {
+					message:
+						"Retire unused application lanes before combining these accounts; the combined pipeline exceeds 40 active lanes.",
+				});
+			throw error;
 		}
 
 		const sourceAnswers = await tx.select().from(schema.careerAnswer).where(eq(schema.careerAnswer.userId, fromUserId));

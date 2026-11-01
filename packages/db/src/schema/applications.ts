@@ -11,23 +11,40 @@ import * as pg from "drizzle-orm/pg-core";
 import { generateId } from "@reactive-resume/utils/string";
 import { user } from "./auth";
 import { coverLetter, coverLetterVersion } from "./cover-letter";
+import { organization } from "./organization";
 import { resume, resumeVersion } from "./resume";
 
-export const applicationPipeline = pg.pgTable("application_pipeline", {
-	userId: pg
-		.text("user_id")
-		.primaryKey()
-		.references(() => user.id, { onDelete: "cascade" }),
-	revision: pg.integer("revision").notNull().default(0),
-});
+// CAREEROS (P1-T06, D11): the pipeline is per (organization, user), not per user. Row-level security keys on
+// `organization_id`; writers set it from `requireOrgId()` and upserts conflict on the composite key.
+export const applicationPipeline = pg.pgTable(
+	"application_pipeline",
+	{
+		organizationId: pg
+			.text("organization_id")
+			.notNull()
+			.references(() => organization.id, { onDelete: "cascade" }),
+		userId: pg
+			.text("user_id")
+			.notNull()
+			.references(() => user.id, { onDelete: "cascade" }),
+		revision: pg.integer("revision").notNull().default(0),
+	},
+	(t) => [pg.primaryKey({ columns: [t.organizationId, t.userId] })],
+);
 
 export const applicationLane = pg.pgTable(
 	"application_lane",
 	{
 		id: pg
 			.text("id")
-			.primaryKey()
+			.notNull()
 			.$defaultFn(() => generateId()),
+		// CAREEROS (P1-T06): tenant column. The default lanes keep their deterministic ids in every organization, so the
+		// primary key is (organization_id, id) rather than id alone.
+		organizationId: pg
+			.text("organization_id")
+			.notNull()
+			.references(() => organization.id, { onDelete: "cascade" }),
 		userId: pg
 			.text("user_id")
 			.notNull()
@@ -41,9 +58,11 @@ export const applicationLane = pg.pgTable(
 		retiredAt: pg.timestamp("retired_at", { withTimezone: true }),
 	},
 	(t) => [
-		pg.unique("application_lane_owner_id_unique").on(t.userId, t.id),
-		pg.unique("application_lane_owner_system_unique").on(t.userId, t.systemKey),
-		pg.index().on(t.userId),
+		// CAREEROS (P1-T06): keys and indexes are scoped to (organization, user) and led by the organization.
+		pg.primaryKey({ columns: [t.organizationId, t.id] }),
+		pg.unique("application_lane_owner_id_unique").on(t.organizationId, t.userId, t.id),
+		pg.unique("application_lane_owner_system_unique").on(t.organizationId, t.userId, t.systemKey),
+		pg.index().on(t.organizationId, t.userId),
 	],
 );
 
@@ -57,6 +76,11 @@ export const application = pg.pgTable(
 			.notNull()
 			.primaryKey()
 			.$defaultFn(() => generateId()),
+		// CAREEROS (P1-T06): tenant column. Row-level security keys on it; inserts set it from `requireOrgId()`.
+		organizationId: pg
+			.text("organization_id")
+			.notNull()
+			.references(() => organization.id, { onDelete: "cascade" }),
 		userId: pg
 			.text("user_id")
 			.notNull()
@@ -119,9 +143,13 @@ export const application = pg.pgTable(
 		pg.index().on(t.userId, t.updatedAt.desc()),
 		pg.foreignKey({
 			name: "application_lane_owner_fk",
-			columns: [t.userId, t.laneId],
-			foreignColumns: [applicationLane.userId, applicationLane.id],
+			// CAREEROS (P1-T06): a lane is looked up inside the application's own organization.
+			columns: [t.organizationId, t.userId, t.laneId],
+			foreignColumns: [applicationLane.organizationId, applicationLane.userId, applicationLane.id],
 		}),
 		pg.index().on(t.userId, t.laneId),
+		// CAREEROS: organization-led twins of the list indexes above (P1-T06).
+		pg.index().on(t.organizationId, t.userId, t.updatedAt.desc()),
+		pg.index().on(t.organizationId, t.userId, t.laneId),
 	],
 );

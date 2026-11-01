@@ -27,7 +27,7 @@ describe.skipIf(!configured)("the isolation registry on the migrated schema", ()
 		await pools?.close();
 	});
 
-	it("registers the resume, cover letter, custom domain, web access and storage cleanup tables", () => {
+	it("registers the resume, cover letter, application, custom domain, web access and storage cleanup tables", () => {
 		expect(isolationRegistry.map((entry) => entry.table)).toEqual([
 			"resume",
 			"resume_version",
@@ -36,6 +36,10 @@ describe.skipIf(!configured)("the isolation registry on the migrated schema", ()
 			"resume_statistics_daily",
 			"cover_letter",
 			"cover_letter_version",
+			"application",
+			"application_lane",
+			"application_pipeline",
+			"application_profile",
 			"custom_domain",
 			"web_access_credentials",
 			"storage_cleanup_job",

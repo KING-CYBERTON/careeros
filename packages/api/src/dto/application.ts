@@ -36,6 +36,7 @@ const httpUrlSchema = z
 	.trim()
 	.pipe(z.url({ protocol: /^https?$/, error: "URL must use http or https." }));
 
+// CAREEROS (P1-T06): the tenant column (`organization_id`) is omitted from every output below; it is not API surface.
 const applicationSchema = createSelectSchema(schema.application, {
 	id: z.string().describe("The ID of the application."),
 	company: z.string().trim().min(1).describe("The company applied to."),
@@ -114,7 +115,7 @@ const applicationSummarySchema = applicationSchema.pick({
 
 const applicationSummaryWithInitialDetailSchema = applicationSummarySchema.extend({
 	/** A small number of full rows can be attached to the initial list response for eager detail rendering. */
-	initialDetail: applicationSchema.omit({ userId: true }).optional(),
+	initialDetail: applicationSchema.omit({ userId: true, organizationId: true }).optional(),
 });
 
 // Fields a client is allowed to set/change. `status`, `activity` and AI-owned fields are
@@ -166,7 +167,7 @@ export const applicationDto = {
 			})
 			.optional()
 			.default({}),
-		output: z.array(applicationSchema.omit({ userId: true })),
+		output: z.array(applicationSchema.omit({ userId: true, organizationId: true })),
 	},
 
 	listSummary: {
@@ -185,7 +186,7 @@ export const applicationDto = {
 
 	getById: {
 		input: applicationSchema.pick({ id: true }),
-		output: applicationSchema.omit({ userId: true }),
+		output: applicationSchema.omit({ userId: true, organizationId: true }),
 	},
 
 	create: {
@@ -211,7 +212,7 @@ export const applicationDto = {
 				.optional()
 				.describe("Why the application closed; kept when status stays closed, cleared by any other stage."),
 		}),
-		output: applicationSchema.omit({ userId: true }),
+		output: applicationSchema.omit({ userId: true, organizationId: true }),
 	},
 
 	attachDocument: {
@@ -220,7 +221,7 @@ export const applicationDto = {
 			kind: applicationDocumentKindSchema,
 			file: applicationDocumentFileSchema,
 		}),
-		output: applicationSchema.omit({ userId: true }),
+		output: applicationSchema.omit({ userId: true, organizationId: true }),
 	},
 
 	removeDocument: {
@@ -228,12 +229,12 @@ export const applicationDto = {
 			id: z.string(),
 			kind: applicationDocumentKindSchema,
 		}),
-		output: applicationSchema.omit({ userId: true }),
+		output: applicationSchema.omit({ userId: true, organizationId: true }),
 	},
 
 	addNote: {
 		input: z.object({ id: z.string(), text: z.string().trim().min(1), date: timelineDateSchema.optional() }),
-		output: applicationSchema.omit({ userId: true }),
+		output: applicationSchema.omit({ userId: true, organizationId: true }),
 	},
 
 	updateTimelineEntry: {
@@ -245,7 +246,7 @@ export const applicationDto = {
 				text: z.string().trim().min(1).optional(),
 			})
 			.refine((value) => value.date !== undefined || value.text !== undefined, "Provide date or text to update."),
-		output: applicationSchema.omit({ userId: true }),
+		output: applicationSchema.omit({ userId: true, organizationId: true }),
 	},
 
 	// Interviews live on the activity timeline (type "interview") so they show up there and on
@@ -255,7 +256,7 @@ export const applicationDto = {
 			id: z.string(),
 			at: interviewAtSchema,
 		}),
-		output: applicationSchema.omit({ userId: true }),
+		output: applicationSchema.omit({ userId: true, organizationId: true }),
 	},
 
 	updateInterview: {
@@ -273,12 +274,12 @@ export const applicationDto = {
 			audience: interviewDetailsSchema.shape.audience.unwrap().optional(),
 			timezone: interviewDetailsSchema.shape.timezone.unwrap().optional(),
 		}),
-		output: applicationSchema.omit({ userId: true }),
+		output: applicationSchema.omit({ userId: true, organizationId: true }),
 	},
 
 	deleteTimelineEntry: {
 		input: z.object({ id: z.string(), entryId: z.string() }),
-		output: applicationSchema.omit({ userId: true }),
+		output: applicationSchema.omit({ userId: true, organizationId: true }),
 	},
 
 	delete: {

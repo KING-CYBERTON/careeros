@@ -60,6 +60,32 @@ async function seedCoverLetter(orgId: string, db: pg.Pool): Promise<{ userId: st
 	return { userId, letterId };
 }
 
+/** CAREEROS (P1-T06): an owner (user) with a pipeline in `orgId`, inserted by the owner pool. */
+async function seedPipeline(orgId: string, db: pg.Pool): Promise<{ userId: string }> {
+	await ensureOrganization(db, orgId);
+	const userId = `iso-user-${randomUUID()}`;
+	await db.query(
+		`INSERT INTO "user" (id, name, email, username, display_username) VALUES ($1, 'Isolation user', $1 || '@example.test', $1, $1)`,
+		[userId],
+	);
+	await db.query(`INSERT INTO application_pipeline (organization_id, user_id, revision) VALUES ($1, $2, 7)`, [
+		orgId,
+		userId,
+	]);
+	return { userId };
+}
+
+/** CAREEROS (P1-T06): a lane (of a fresh pipeline) in `orgId`. */
+async function seedLane(orgId: string, db: pg.Pool): Promise<{ userId: string; laneId: string }> {
+	const { userId } = await seedPipeline(orgId, db);
+	const laneId = `iso-lane-${randomUUID()}`;
+	await db.query(
+		`INSERT INTO application_lane (id, organization_id, user_id, category, label, color, position) VALUES ($1, $2, $3, 'saved', 'Isolation lane', '#123456', 0)`,
+		[laneId, orgId, userId],
+	);
+	return { userId, laneId };
+}
+
 /** CAREEROS (P1-T09): a user in `orgId`, inserted by the owner pool. */
 async function seedUserIn(orgId: string, db: pg.Pool): Promise<string> {
 	await ensureOrganization(db, orgId);
@@ -73,8 +99,9 @@ async function seedUserIn(orgId: string, db: pg.Pool): Promise<string> {
 
 /**
  * Every tenant table (one with an `organization_id` column) must be registered here. The five resume tables are
- * registered by P1-T04, the two cover letter tables by P1-T05. The resume route group's API check is attached by `packages/api` (it needs the router), which
- * runs `runApiIsolationCheck` with this entry's seed.
+ * registered by P1-T04, the two cover letter tables by P1-T05 and the four application tables by P1-T06. The route
+ * groups' API checks are attached by `packages/api` (it needs the router), which runs `runApiIsolationCheck` with this
+ * entry's seed.
  */
 export const isolationRegistry: readonly RegistryEntry[] = [
 	{
@@ -144,6 +171,56 @@ export const isolationRegistry: readonly RegistryEntry[] = [
 				[id, letterId, userId, orgId],
 			);
 			return id;
+		},
+	},
+	// CAREEROS (P1-T06): the application tables. `application` seeds through the lane trigger, which creates the
+	// pipeline and the default lanes of the organization; the pipeline and the profile are keyed by (organization, user),
+	// so their id column is `user_id` and every seed uses a fresh user.
+	{
+		table: "application",
+		seed: async (orgId, db) => {
+			const { userId } = await seedPipeline(orgId, db);
+			const id = `iso-application-${randomUUID()}`;
+			await db.query(
+				`INSERT INTO application (id, organization_id, user_id, company, role) VALUES ($1, $2, $3, 'Isolation Co', 'Engineer')`,
+				[id, orgId, userId],
+			);
+			return id;
+		},
+	},
+	{
+		table: "application_lane",
+		seed: async (orgId, db) => (await seedLane(orgId, db)).laneId,
+	},
+	{
+		table: "application_pipeline",
+		idColumn: "user_id",
+		seed: async (orgId, db) => {
+			const { userId } = await seedPipeline(orgId, db);
+			// A marker lane the API check looks for in the other organization's view.
+			await db.query(
+				`INSERT INTO application_lane (id, organization_id, user_id, category, label, color, position, system_key) VALUES ($1, $2, $3, 'saved', 'Isolation lane', '#123456', 0, 'saved')`,
+				[`application-lane:${userId}:saved`, orgId, userId],
+			);
+			return userId;
+		},
+	},
+	{
+		table: "application_profile",
+		idColumn: "user_id",
+		seed: async (orgId, db) => {
+			await ensureOrganization(db, orgId);
+			const userId = `iso-user-${randomUUID()}`;
+			await db.query(
+				`INSERT INTO "user" (id, name, email, username, display_username) VALUES ($1, 'Isolation user', $1 || '@example.test', $1, $1)`,
+				[userId],
+			);
+			// The revision equals the owner's id, so the API check can tell this row from any other.
+			await db.query(
+				`INSERT INTO application_profile (organization_id, user_id, data, reviewed_at, revision) VALUES ($1, $2, '{}', now(), $2)`,
+				[orgId, userId],
+			);
+			return userId;
 		},
 	},
 	// CAREEROS (P1-T09): the three remaining tenant tables. custom_domain and web_access_credentials have a composite
@@ -254,11 +331,6 @@ export const globalTables: readonly AllowListEntry[] = [
  * (a table that is both registered and pending fails the check).
  */
 export const pendingTenantTables: readonly AllowListEntry[] = [
-	// TODO(P1-T06): applications.
-	...["application", "application_lane", "application_pipeline", "application_profile"].map((table) => ({
-		table,
-		reason: "Pending P1-T06 (applications)",
-	})),
 	// TODO(P1-T07): career.
 	...[
 		"career_profile",

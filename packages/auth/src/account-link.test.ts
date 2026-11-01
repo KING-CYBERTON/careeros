@@ -33,7 +33,9 @@ const mocks = vi.hoisted(() => {
 	}));
 	const insert = vi.fn(() => ({ values: () => ({ onConflictDoNothing: () => Promise.resolve() }) }));
 	// CAREEROS (P1-T09): the guest's erasure prefixes come back from a definer function as `rows`
-	const execute = vi.fn((_query?: unknown) => Promise.resolve({ rows: [] as { storageKey: string }[] }));
+	const execute = vi.fn((_query?: unknown) =>
+		Promise.resolve({ rows: [] as { storageKey: string }[] } as { rows: { storageKey: string }[] } | undefined),
+	);
 	const tx = { select, insert, update, delete: deleteFn, execute };
 	const transaction = vi.fn(async (cb: (tx: unknown) => Promise<unknown>) => cb(tx));
 	return { update, updateSet, updateWhere, delete: deleteFn, deleteWhere, execute, transaction, tx };
@@ -120,9 +122,10 @@ describe("linkAnonymousAccount", () => {
 		// CAREEROS (P1-T04): resumes, their versions, redirects and statistics move through one definer function,
 		// into the target account's organization; there is no direct update of the resume tables any more.
 		// CAREEROS (P1-T05): cover letters and their versions move through a second definer function.
-		expect(mocks.execute).toHaveBeenCalledTimes(3);
-		// CAREEROS (P1-T09): the guest's pending erasure prefixes are read through a definer function.
-		expect(JSON.stringify(mocks.execute.mock.calls[2]?.[0])).toContain("careeros_guest_cleanup_prefixes");
+		// CAREEROS (P1-T06): the application profile, pipeline, lanes and applications move through a third.
+		// CAREEROS (P1-T09): the guest's pending erasure prefixes are read through a fourth definer call.
+		expect(mocks.execute).toHaveBeenCalledTimes(4);
+		expect(JSON.stringify(mocks.execute.mock.calls[3]?.[0])).toContain("careeros_guest_cleanup_prefixes");
 		const moveQuery = JSON.stringify(mocks.execute.mock.calls[0]?.[0]);
 		const letterMoveQuery = JSON.stringify(mocks.execute.mock.calls[1]?.[0]);
 		expect(letterMoveQuery).toContain("careeros_move_guest_cover_letters");
@@ -138,15 +141,18 @@ describe("linkAnonymousAccount", () => {
 		expect(mocks.update.mock.calls.some((call) => call[0] === schema.resumeVersion)).toBe(false);
 		expect(mocks.update.mock.calls.some((call) => call[0] === schema.resumeSlugRedirect)).toBe(false);
 
-		// Check application update includes resumeFileUrl and coverLetterUrl rewrites
-		const appUpdateCall = mocks.update.mock.calls.find((call) => call[0] === schema.application);
-		expect(appUpdateCall).toBeDefined();
-		const appSetArg = mocks.updateSet.mock.calls.find(
-			(_, idx) => mocks.update.mock.calls[idx]?.[0] === schema.application,
-		)?.[0];
-		expect(appSetArg).toMatchObject({ userId: "user-456" });
-		expect(appSetArg).toHaveProperty("resumeFileUrl");
-		expect(appSetArg).toHaveProperty("coverLetterUrl");
+		const applicationMoveQuery = JSON.stringify(mocks.execute.mock.calls[2]?.[0]);
+		expect(applicationMoveQuery).toContain("careeros_move_guest_applications");
+		expect(applicationMoveQuery).toContain("guest-123");
+		expect(applicationMoveQuery).toContain("user-456");
+		expect(applicationMoveQuery).toContain("org-user-456");
+		for (const table of [
+			schema.application,
+			schema.applicationLane,
+			schema.applicationPipeline,
+			schema.applicationProfile,
+		])
+			expect(mocks.update.mock.calls.some((call) => call[0] === table)).toBe(false);
 
 		// Check hook execution
 		expect(hook).toHaveBeenCalledWith({
@@ -154,6 +160,26 @@ describe("linkAnonymousAccount", () => {
 			toUserId: "user-456",
 			excludedStoragePrefixes: [],
 		});
+	});
+
+	it("reports the definer function's conflicts as CONFLICT replies", async () => {
+		for (const [code, message] of [
+			["CR001", "private application profile"],
+			["CR002", "exceeds 40 active lanes"],
+		] as const) {
+			mocks.execute.mockResolvedValueOnce(undefined).mockResolvedValueOnce(undefined);
+			mocks.execute.mockRejectedValueOnce(Object.assign(new Error("Failed query"), { cause: { code } }));
+			await expect(linkAnonymousAccount({ fromUserId: "guest-123", toUserId: "user-456" })).rejects.toMatchObject({
+				status: "CONFLICT",
+				body: { message: expect.stringContaining(message) },
+			});
+		}
+		// Anything else is not turned into a conflict.
+		mocks.execute.mockResolvedValueOnce(undefined).mockResolvedValueOnce(undefined);
+		mocks.execute.mockRejectedValueOnce(new Error("Database unavailable"));
+		await expect(linkAnonymousAccount({ fromUserId: "guest-123", toUserId: "user-456" })).rejects.toThrow(
+			"Database unavailable",
+		);
 	});
 
 	it("does nothing when fromUserId equals toUserId", async () => {
