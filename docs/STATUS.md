@@ -2,7 +2,7 @@
 
 > Written by Opus after every plan, review and merge. Every thread reads this file first.
 
-**Current phase:** 0 — Setup (exit waits on owner actions) · 1 — Multi-tenancy functionally complete; exit review in progress
+**Current phase:** 0 — Setup (exit waits on owner actions) · 1 — Multi-tenancy complete in code; exit waits only on staging verification (owner actions)
 **Current version:** none yet (first tag will be `0.0.1` at Phase 0 exit)
 **Base:** Reactive Resume v6.0.10, upstream commit `a69e48318aab3c1c3ea57d2c0467710ef0d8342f` (2026-10-31)
 **Last updated:** 2026-11-01 (evening) by Opus (Thread 1)
@@ -54,12 +54,13 @@
 | 2 — QA    | P1-Q03  | [plans/P1-Q03-cross-org-id-fuzz.md](plans/P1-Q03-cross-org-id-fuzz.md)                                     | **Merged** · [review](reviews/P1-Q03-review-1.md) (157 operations, 106 MCP tools, no leaks)      | [#37](https://github.com/KING-CYBERTON/careeros/pull/37) |
 | 2 — QA    | P1-Q08  | [plans/P1-Q08-shared-db-test-races.md](plans/P1-Q08-shared-db-test-races.md)                               | **Merged** · [review](reviews/P1-Q08-review-1.md)                                                | [#38](https://github.com/KING-CYBERTON/careeros/pull/38) |
 | 2 — QA    | P1-Q09  | [plans/P1-Q09-cleanup-db-time-and-suite-isolation.md](plans/P1-Q09-cleanup-db-time-and-suite-isolation.md) | **Merged** · [review](reviews/P1-Q09-review-1.md)                                                | [#39](https://github.com/KING-CYBERTON/careeros/pull/39) |
+| 2 — QA    | P1-Q10  | [plans/P1-Q10-auth-org-endpoint-fuzz.md](plans/P1-Q10-auth-org-endpoint-fuzz.md)                           | **Merged** · [review](reviews/P1-Q10-review-1.md) (22 endpoints, no leaks)                       | [#42](https://github.com/KING-CYBERTON/careeros/pull/42) |
 
 ## Phase 1 exit criteria (PRODUCT.md §13)
 
 - [x] Every tenant table has `organization_id`, FORCE RLS and the tenant policy; the unclassified-tables check has an empty pending list
 - [x] Cross-org ID fuzz passes (P1-Q03)
-- [ ] Opus security sign-off review: [done](reviews/P1-EXIT-security-review-1.md), no Critical or High; conditional on P1-Q10 (auth organization endpoint fuzz)
+- [x] Opus security sign-off: [signed off](reviews/P1-EXIT-security-review-1.md), with no Critical or High findings; M1 closed by P1-Q10 ([#42](https://github.com/KING-CYBERTON/careeros/pull/42))
 - [x] BASELINE refreshed from develop run 41320943973 ([BASELINE.md](BASELINE.md#phase-1-exit-refresh-p1-c02): 3426 unit tests, 63 e2e)
 - [ ] Staging verified with the database role split (waits on Stephen: VPS runbook, default branch = `develop`)
 
@@ -75,7 +76,7 @@
 
 - `tests/e2e/specs/library-pagination.spec.ts:201`: root cause fixed in P0-Q03 (oRPC batching bypassed the test mock). Watch for a strict-mode "two alerts" failure; if seen, Opus specs a per-item batch response.
 - `assistant.spec.ts:118` (reaccept "CPACC") failed once and passed on re-run (T05 era); root-cause if it recurs.
-- Follow-ups: drop the old `careeros_due_storage_cleanup` overload in the first Phase 1b follow-on migration (Q74); make `bindGlobalPoolForTesting` throw in production (Q75); plan Q20 (`Promise.all` on one org-scoped client); Q03 F1/F2 (custom-domain routes and MCP control call in the fuzz).
+- Follow-ups: drop the old `careeros_due_storage_cleanup` overload in the first Phase 1b follow-on migration (Q74); make `bindGlobalPoolForTesting` throw in production (Q75); plan Q20 (`Promise.all` on one org-scoped client); Q03 F1 (custom-domain routes in the fuzz); exit review L1, L2 (Phase 2 hygiene).
 - e2e specs doing raw SQL on tenant tables must use `withSeedPool` (P1-Q07); careeros_app sees nothing without an org context.
 
 ## Planning docs
@@ -130,3 +131,6 @@ _None yet._
 - P1-Q03 Cross-org ID fuzz — [#37](https://github.com/KING-CYBERTON/careeros/pull/37), `a19e3cc`
 - P1-Q08 Shared-database test races — [#38](https://github.com/KING-CYBERTON/careeros/pull/38), `bd460b1`
 - P1-Q09 Cleanup database time and suite isolation — [#39](https://github.com/KING-CYBERTON/careeros/pull/39), `0794338`
+- Docs sync 9 and Phase 1 exit security review — [#40](https://github.com/KING-CYBERTON/careeros/pull/40), `f12278a`
+- Phase 1 CI baseline refresh — [#41](https://github.com/KING-CYBERTON/careeros/pull/41), `c58296a`
+- P1-Q10 Auth organization endpoint fuzz — [#42](https://github.com/KING-CYBERTON/careeros/pull/42), `951f766`
