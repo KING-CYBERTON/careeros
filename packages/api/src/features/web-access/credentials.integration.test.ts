@@ -24,6 +24,9 @@ vi.mock("@reactive-resume/db/client", () => ({
 	},
 }));
 
+// CAREEROS (P1-Q09): stays on a schema of the shared database on purpose. It runs only table DDL (CREATE TABLE, ALTER TABLE,
+// CREATE INDEX) with the schema first on the search_path, never function DDL, so it cannot rewrite the `public` definer
+// functions or their grants, and its mocked db never reaches a global worker.
 // Opt in with a disposable PostgreSQL database. Each run owns and removes a separate schema.
 describe.skipIf(!process.env.INTEGRATIONS_TEST_DATABASE_URL)("integration credentials and server precedence", () => {
 	let web: typeof import("./credentials").webAccessService;

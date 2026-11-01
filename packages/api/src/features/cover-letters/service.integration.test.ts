@@ -26,6 +26,9 @@ function getPool(): Pool {
 	return fixture.pool;
 }
 
+// CAREEROS (P1-Q09): stays on a schema of the shared database on purpose. It runs only table DDL (CREATE TABLE, ALTER TABLE,
+// CREATE INDEX) with the schema first on the search_path, never function DDL, so it cannot rewrite the `public` definer
+// functions or their grants, and its mocked db never reaches a global worker.
 // Opt-in real PostgreSQL tests. Use a disposable database; all tables live in an isolated schema.
 describe.skipIf(!process.env.COVER_LETTER_TEST_DATABASE_URL)("cover-letter owned persistence", () => {
 	let service: typeof import("./service").coverLetterService;
