@@ -1,4 +1,4 @@
-import { and, eq } from "drizzle-orm";
+import { and, asc, eq } from "drizzle-orm";
 import { db } from "@reactive-resume/db/client";
 import { apikey, member } from "@reactive-resume/db/schema";
 
@@ -18,6 +18,17 @@ async function isMember(organizationId: string, userId: string) {
 		.where(and(eq(member.organizationId, organizationId), eq(member.userId, userId)))
 		.limit(1);
 	return row !== undefined;
+}
+
+/** The user's oldest membership, the same ordering as the sign-in hook. */
+async function oldestMembershipOrg(userId: string) {
+	const [row] = await db
+		.select({ organizationId: member.organizationId })
+		.from(member)
+		.where(eq(member.userId, userId))
+		.orderBy(asc(member.createdAt), asc(member.id))
+		.limit(1);
+	return row?.organizationId;
 }
 
 /**
@@ -57,12 +68,20 @@ export async function resolveOrgForAuthentication(
 			.from(apikey)
 			.where(eq(apikey.id, authentication.apiKeyId))
 			.limit(1);
-		return resolveOrgForRequest({ apiKey: { userId: authentication.user.id, organizationId: key?.organizationId } });
+		const resolved = await resolveOrgForRequest({
+			apiKey: { userId: authentication.user.id, organizationId: key?.organizationId },
+		});
+		if (resolved || key?.organizationId) return resolved;
+		// CAREEROS: a key without an organization falls back to its owner's oldest membership. Phase 2 replaces this
+		// with org-bound keys and tokens (P1-T04 review 1, M1).
+		return oldestMembershipOrg(authentication.user.id);
 	}
 	if (authentication.method === "session") {
 		return resolveOrgForRequest({
 			session: { userId: authentication.user.id, activeOrganizationId: authentication.activeOrganizationId },
 		});
 	}
-	return undefined;
+	// CAREEROS: OAuth bearer tokens carry no organization; fall back to the token owner's oldest membership and fail
+	// closed (undefined) when the user has none. Phase 2 replaces this with org-bound tokens (P1-T04 review 1, M1).
+	return oldestMembershipOrg(authentication.user.id);
 }

@@ -12,6 +12,7 @@ vi.mock("@careeros/tenancy", () => ({
 	// A runner that executes at once; tests read `captureOrgScope.mock.results` to see which work it wrapped.
 	captureOrgScope: vi.fn(() => vi.fn(<T>(fn: () => Promise<T>) => fn())),
 	currentOrgId: () => TEST_ORGANIZATION_ID,
+	requireOrgId: () => TEST_ORGANIZATION_ID,
 	resolveOrgForAuthentication: () => Promise.resolve(TEST_ORGANIZATION_ID),
 	resolveOrgForRequest: () => Promise.resolve(TEST_ORGANIZATION_ID),
 	withOrgContext: <T>(_organizationId: string, fn: () => Promise<T>) => fn(),

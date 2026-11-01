@@ -1,4 +1,4 @@
-import { count } from "drizzle-orm";
+import { count, sql } from "drizzle-orm";
 import z from "zod";
 import { db } from "@reactive-resume/db/client";
 import * as schema from "@reactive-resume/db/schema";
@@ -45,6 +45,13 @@ const getCachedCount = async (
 };
 
 const getCountFromDatabase = async (table: typeof schema.user | typeof schema.resume): Promise<number | null> => {
+	// CAREEROS (P1-T04): the public total spans every organization, which row-level security hides from the application
+	// role, so resumes are counted by a definer function that returns this one number.
+	if (table === schema.resume) {
+		const result = await db.execute<{ total: string | number }>(sql`select public.careeros_resume_count() as total`);
+		const total = result.rows[0]?.total;
+		return total === undefined ? null : Number(total);
+	}
 	const [result] = await db.select({ count: count() }).from(table);
 	return result?.count ?? null;
 };

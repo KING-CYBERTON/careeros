@@ -8,6 +8,7 @@ import { drizzle } from "drizzle-orm/node-postgres";
 import { Pool } from "pg";
 import * as tables from "@reactive-resume/db/schema";
 import { sampleResumeData } from "@reactive-resume/schema/resume/sample";
+import { ensureTestOrganization, TEST_ORGANIZATION_ID } from "../../test-organization";
 
 const fixture = vi.hoisted(() => ({
 	db: undefined as ReturnType<typeof drizzle> | undefined,
@@ -70,6 +71,7 @@ describe.skipIf(!databaseUrl)("reviewed target role suggestions", () => {
 	};
 	beforeEach(async () => {
 		await pool.query('TRUNCATE "user" CASCADE');
+		await ensureTestOrganization(pool);
 		await getDb()
 			.insert(tables.user)
 			.values([
@@ -181,9 +183,14 @@ describe.skipIf(!databaseUrl)("reviewed target role suggestions", () => {
 			code: "BAD_REQUEST",
 		});
 		await expect(suggest("alice", { ...input, providerId: "foreign" })).rejects.toMatchObject({ code: "NOT_FOUND" });
-		await getDb()
-			.insert(tables.resume)
-			.values({ id: "bob-resume", userId: "bob", name: "Private", slug: "private", data: sampleResumeData });
+		await getDb().insert(tables.resume).values({
+			organizationId: TEST_ORGANIZATION_ID,
+			id: "bob-resume",
+			userId: "bob",
+			name: "Private",
+			slug: "private",
+			data: sampleResumeData,
+		});
 		await expect(suggest("alice", { ...input, resumeId: "bob-resume" })).rejects.toMatchObject({ code: "NOT_FOUND" });
 		expect(fixture.generate).not.toHaveBeenCalled();
 	});
@@ -208,9 +215,14 @@ describe.skipIf(!databaseUrl)("reviewed target role suggestions", () => {
 		expect(fixture.generate).toHaveBeenCalledTimes(1);
 	});
 	it("shares only an explicitly chosen resume, blocks corrected-source replay and never guesses quotes", async () => {
-		await getDb()
-			.insert(tables.resume)
-			.values({ id: "alice-resume", userId: "alice", name: "Synthetic", slug: "synthetic", data: sampleResumeData });
+		await getDb().insert(tables.resume).values({
+			organizationId: TEST_ORGANIZATION_ID,
+			id: "alice-resume",
+			userId: "alice",
+			name: "Synthetic",
+			slug: "synthetic",
+			data: sampleResumeData,
+		});
 		fixture.generate.mockResolvedValue({
 			suggestions: [{ role: "Engineer", factIds: ["active"], resumeQuote: "made-up" }],
 		});

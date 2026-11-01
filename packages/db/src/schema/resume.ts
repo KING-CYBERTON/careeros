@@ -6,6 +6,7 @@ import { defaultResumeData } from "@reactive-resume/schema/resume/default";
 import { generateId } from "@reactive-resume/utils/string";
 import { application } from "./applications";
 import { user } from "./auth";
+import { organization } from "./organization";
 
 export const resume = pg.pgTable(
 	"resume",
@@ -40,6 +41,11 @@ export const resume = pg.pgTable(
 			.notNull()
 			.$type<ResumeData>()
 			.$defaultFn(() => defaultResumeData),
+		// CAREEROS: tenant column (P1-T04). Row-level security keys on it; inserts set it from `requireOrgId()`.
+		organizationId: pg
+			.text("organization_id")
+			.notNull()
+			.references(() => organization.id, { onDelete: "cascade" }),
 		userId: pg
 			.text("user_id")
 			.notNull()
@@ -52,6 +58,7 @@ export const resume = pg.pgTable(
 			.$onUpdate(() => /* @__PURE__ */ new Date()),
 	},
 	(t) => [
+		pg.index().on(t.organizationId, t.userId, t.updatedAt.desc()),
 		pg.unique().on(t.slug, t.userId),
 		pg.index().on(t.createdAt.asc()),
 		pg.index().on(t.userId, t.updatedAt.desc()),
@@ -97,6 +104,11 @@ export const resumeVersion = pg.pgTable(
 			.text("resume_id")
 			.notNull()
 			.references(() => resume.id, { onDelete: "cascade" }),
+		// CAREEROS: tenant column (P1-T04). Row-level security keys on it; inserts set it from `requireOrgId()`.
+		organizationId: pg
+			.text("organization_id")
+			.notNull()
+			.references(() => organization.id, { onDelete: "cascade" }),
 		userId: pg
 			.text("user_id")
 			.notNull()
@@ -112,6 +124,7 @@ export const resumeVersion = pg.pgTable(
 		createdAt: pg.timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
 	},
 	(t) => [
+		pg.index().on(t.organizationId, t.resumeId, t.createdAt.desc()),
 		pg.index().on(t.resumeId, t.createdAt.desc()),
 		pg
 			.uniqueIndex("resume_version_session_unique")
@@ -134,6 +147,11 @@ export const resumeSlugRedirect = pg.pgTable(
 			.text("resume_id")
 			.notNull()
 			.references(() => resume.id, { onDelete: "cascade" }),
+		// CAREEROS: tenant column (P1-T04). Row-level security keys on it; inserts set it from `requireOrgId()`.
+		organizationId: pg
+			.text("organization_id")
+			.notNull()
+			.references(() => organization.id, { onDelete: "cascade" }),
 		userId: pg
 			.text("user_id")
 			.notNull()
@@ -141,31 +159,41 @@ export const resumeSlugRedirect = pg.pgTable(
 		expiresAt: pg.timestamp("expires_at", { withTimezone: true }).notNull(),
 		createdAt: pg.timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
 	},
-	(t) => [pg.unique().on(t.userId, t.slug), pg.index().on(t.resumeId)],
+	(t) => [pg.unique().on(t.userId, t.slug), pg.index().on(t.organizationId, t.resumeId), pg.index().on(t.resumeId)],
 );
 
-export const resumeStatistics = pg.pgTable("resume_statistics", {
-	id: pg
-		.text("id")
-		.notNull()
-		.primaryKey()
-		.$defaultFn(() => generateId()),
-	views: pg.integer("views").notNull().default(0),
-	downloads: pg.integer("downloads").notNull().default(0),
-	lastViewedAt: pg.timestamp("last_viewed_at", { withTimezone: true }),
-	lastDownloadedAt: pg.timestamp("last_downloaded_at", { withTimezone: true }),
-	resumeId: pg
-		.text("resume_id")
-		.unique()
-		.notNull()
-		.references(() => resume.id, { onDelete: "cascade" }),
-	createdAt: pg.timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
-	updatedAt: pg
-		.timestamp("updated_at", { withTimezone: true })
-		.notNull()
-		.defaultNow()
-		.$onUpdate(() => /* @__PURE__ */ new Date()),
-});
+export const resumeStatistics = pg.pgTable(
+	"resume_statistics",
+	{
+		id: pg
+			.text("id")
+			.notNull()
+			.primaryKey()
+			.$defaultFn(() => generateId()),
+		// CAREEROS: tenant column (P1-T04). Row-level security keys on it; inserts set it from `requireOrgId()`.
+		organizationId: pg
+			.text("organization_id")
+			.notNull()
+			.references(() => organization.id, { onDelete: "cascade" }),
+
+		views: pg.integer("views").notNull().default(0),
+		downloads: pg.integer("downloads").notNull().default(0),
+		lastViewedAt: pg.timestamp("last_viewed_at", { withTimezone: true }),
+		lastDownloadedAt: pg.timestamp("last_downloaded_at", { withTimezone: true }),
+		resumeId: pg
+			.text("resume_id")
+			.unique()
+			.notNull()
+			.references(() => resume.id, { onDelete: "cascade" }),
+		createdAt: pg.timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
+		updatedAt: pg
+			.timestamp("updated_at", { withTimezone: true })
+			.notNull()
+			.defaultNow()
+			.$onUpdate(() => /* @__PURE__ */ new Date()),
+	},
+	(t) => [pg.index().on(t.organizationId, t.resumeId)],
+);
 
 export const resumeStatisticsDaily = pg.pgTable(
 	"resume_statistics_daily",
@@ -175,6 +203,11 @@ export const resumeStatisticsDaily = pg.pgTable(
 			.notNull()
 			.primaryKey()
 			.$defaultFn(() => generateId()),
+		// CAREEROS: tenant column (P1-T04). Row-level security keys on it; inserts set it from `requireOrgId()`.
+		organizationId: pg
+			.text("organization_id")
+			.notNull()
+			.references(() => organization.id, { onDelete: "cascade" }),
 		date: pg.date("date", { mode: "string" }).notNull(),
 		views: pg.integer("views").notNull().default(0),
 		downloads: pg.integer("downloads").notNull().default(0),
@@ -189,5 +222,9 @@ export const resumeStatisticsDaily = pg.pgTable(
 			.defaultNow()
 			.$onUpdate(() => /* @__PURE__ */ new Date()),
 	},
-	(t) => [pg.unique().on(t.resumeId, t.date), pg.index().on(t.resumeId, t.date.desc())],
+	(t) => [
+		pg.unique().on(t.resumeId, t.date),
+		pg.index().on(t.organizationId, t.resumeId, t.date.desc()),
+		pg.index().on(t.resumeId, t.date.desc()),
+	],
 );

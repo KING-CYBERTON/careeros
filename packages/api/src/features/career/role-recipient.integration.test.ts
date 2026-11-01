@@ -11,6 +11,7 @@ import { db, withDatabasePool } from "@reactive-resume/db/client";
 import * as tables from "@reactive-resume/db/schema";
 import { env } from "@reactive-resume/env/server";
 import { sampleResumeData } from "@reactive-resume/schema/resume/sample";
+import { ensureTestOrganization, TEST_ORGANIZATION_ID } from "../../test-organization";
 import { aiProvidersRouter } from "../ai-providers/router";
 import { aiProvidersService } from "../ai-providers/service";
 import { getModel } from "../ai/service";
@@ -161,6 +162,7 @@ describe.skipIf(!databaseUrl)("role recipient approval through router, PostgreSQ
 	beforeEach(async () => {
 		Object.assign(env, { AI_PROVIDER: undefined, AI_MODEL: undefined, AI_API_KEY: undefined, AI_BASE_URL: undefined });
 		await pool.query('TRUNCATE "user" CASCADE');
+		await ensureTestOrganization(pool);
 		await withDatabasePool(pool, async () => {
 			const users = await db
 				.insert(tables.user)
@@ -456,9 +458,14 @@ describe.skipIf(!databaseUrl)("role recipient approval through router, PostgreSQ
 		(change) =>
 			run(async () => {
 				const disclosed = await create();
-				await db
-					.insert(tables.resume)
-					.values({ id: "selected", userId: user.id, name: "Synthetic", slug: "selected", data: sampleResumeData });
+				await db.insert(tables.resume).values({
+					organizationId: TEST_ORGANIZATION_ID,
+					id: "selected",
+					userId: user.id,
+					name: "Synthetic",
+					slug: "selected",
+					data: sampleResumeData,
+				});
 				const lock = await pool.connect();
 				await lock.query("BEGIN");
 				await lock.query("LOCK TABLE resume IN ACCESS EXCLUSIVE MODE");
@@ -509,9 +516,14 @@ describe.skipIf(!databaseUrl)("role recipient approval through router, PostgreSQ
 				const disclosed = await create();
 				const data = structuredClone(sampleResumeData);
 				data.basics.headline = "Synthetic ".repeat(1500) + "original tail";
-				await db
-					.insert(tables.resume)
-					.values({ id: "selected", userId: user.id, name: "Synthetic", slug: "selected", data });
+				await db.insert(tables.resume).values({
+					organizationId: TEST_ORGANIZATION_ID,
+					id: "selected",
+					userId: user.id,
+					name: "Synthetic",
+					slug: "selected",
+					data,
+				});
 				const lock = await pool.connect();
 				await lock.query("BEGIN");
 				await lock.query("SELECT id FROM resume WHERE id='selected' FOR UPDATE");
@@ -553,9 +565,14 @@ describe.skipIf(!databaseUrl)("role recipient approval through router, PostgreSQ
 		(status) =>
 			run(async () => {
 				const disclosed = await create();
-				await db
-					.insert(tables.resume)
-					.values({ id: "selected", userId: user.id, name: "Synthetic", slug: "selected", data: sampleResumeData });
+				await db.insert(tables.resume).values({
+					organizationId: TEST_ORGANIZATION_ID,
+					id: "selected",
+					userId: user.id,
+					name: "Synthetic",
+					slug: "selected",
+					data: sampleResumeData,
+				});
 				let arrived!: () => void;
 				let release!: () => void;
 				const entered = new Promise<void>((resolve) => {
@@ -619,9 +636,14 @@ describe.skipIf(!databaseUrl)("role recipient approval through router, PostgreSQ
 				});
 			const disclosed = change === "managed-off" ? (await client().providers.list({}))[0] : await create();
 			assert(disclosed);
-			await db
-				.insert(tables.resume)
-				.values({ id: "selected", userId: user.id, name: "Synthetic", slug: "selected", data: sampleResumeData });
+			await db.insert(tables.resume).values({
+				organizationId: TEST_ORGANIZATION_ID,
+				id: "selected",
+				userId: user.id,
+				name: "Synthetic",
+				slug: "selected",
+				data: sampleResumeData,
+			});
 			const lock = await pool.connect();
 			await lock.query("BEGIN");
 			await lock.query(
@@ -735,9 +757,14 @@ describe.skipIf(!databaseUrl)("role recipient approval through router, PostgreSQ
 	it("keeps the captured approved recipient when configuration changes during context preparation", () =>
 		run(async () => {
 			const disclosed = await create();
-			await db
-				.insert(tables.resume)
-				.values({ id: "selected", userId: user.id, name: "Synthetic", slug: "selected", data: sampleResumeData });
+			await db.insert(tables.resume).values({
+				organizationId: TEST_ORGANIZATION_ID,
+				id: "selected",
+				userId: user.id,
+				name: "Synthetic",
+				slug: "selected",
+				data: sampleResumeData,
+			});
 			const lock = await pool.connect();
 			await lock.query("BEGIN");
 			await lock.query("LOCK TABLE resume IN ACCESS EXCLUSIVE MODE");

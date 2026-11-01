@@ -11,6 +11,12 @@ import { copyCoverLetterStyle } from "@reactive-resume/resume/cover-letter";
 import { reviewedAnswerEvidence, reviewedAnswerInputSchema } from "@reactive-resume/schema/application-answers";
 import { careerOfferInputSchema, careerProfileDataSchema, savedItemDataSchema } from "@reactive-resume/schema/career";
 import { defaultResumeData } from "@reactive-resume/schema/resume/default";
+import {
+	ensureTestOrganization,
+	installSchemaLocalGuestMove,
+	prepareGuestLink,
+	TEST_ORGANIZATION_ID,
+} from "../../test-organization";
 import { reviewedAnswers } from "./answers";
 
 const fixture = vi.hoisted(() => ({
@@ -106,6 +112,7 @@ describe.skipIf(!databaseUrl)("career knowledge, context and data lifecycle", ()
 			const migration = await readFile(file, "utf8");
 			await pool.query(migration.replaceAll('"public".', ""));
 		}
+		await installSchemaLocalGuestMove(pool, schemaName);
 		service = (await import("./service")).careerService;
 		applications = (await import("../applications/service")).applicationService;
 	}, 30_000);
@@ -175,6 +182,7 @@ describe.skipIf(!databaseUrl)("career knowledge, context and data lifecycle", ()
 		fixture.provider.mockClear();
 		fixture.storageDelete.mockReset().mockResolvedValue(undefined);
 		await pool.query('TRUNCATE "user", "released_username" CASCADE');
+		await ensureTestOrganization(pool);
 		await getDb()
 			.insert(tables.user)
 			.values(
@@ -190,18 +198,27 @@ describe.skipIf(!databaseUrl)("career knowledge, context and data lifecycle", ()
 			.insert(tables.resume)
 			.values([
 				{
+					organizationId: TEST_ORGANIZATION_ID,
 					id: "shared-resume",
 					userId: "alice",
 					name: "Current",
 					slug: "current",
 					data: resumeData("LIVE UNSUBMITTED DRAFT"),
 				},
-				{ id: "bob-resume", userId: "bob", name: "Bob", slug: "bob", data: resumeData("Bob private history") },
+				{
+					organizationId: TEST_ORGANIZATION_ID,
+					id: "bob-resume",
+					userId: "bob",
+					name: "Bob",
+					slug: "bob",
+					data: resumeData("Bob private history"),
+				},
 			]);
 		await getDb()
 			.insert(tables.resumeVersion)
 			.values([
 				{
+					organizationId: TEST_ORGANIZATION_ID,
 					id: "sent-acme",
 					resumeId: "shared-resume",
 					userId: "alice",
@@ -209,6 +226,7 @@ describe.skipIf(!databaseUrl)("career knowledge, context and data lifecycle", ()
 					data: resumeData("ACME submitted reliability lead"),
 				},
 				{
+					organizationId: TEST_ORGANIZATION_ID,
 					id: "sent-nova",
 					resumeId: "shared-resume",
 					userId: "alice",
@@ -216,6 +234,7 @@ describe.skipIf(!databaseUrl)("career knowledge, context and data lifecycle", ()
 					data: resumeData("NOVA submitted mentor"),
 				},
 				{
+					organizationId: TEST_ORGANIZATION_ID,
 					id: "sent-bob",
 					resumeId: "bob-resume",
 					userId: "bob",
@@ -316,6 +335,7 @@ describe.skipIf(!databaseUrl)("career knowledge, context and data lifecycle", ()
 			expectedEvidence: reviewedAnswerEvidence([evidence], [], [evidence.id], []),
 		});
 		const row = await reviewedAnswers.save("alice", input);
+		await prepareGuestLink(pool, "alice", "bob");
 		const { linkAnonymousAccount, setAccountLinkHook } = await import("@reactive-resume/auth/config");
 		await expect(linkAnonymousAccount({ fromUserId: "alice", toUserId: "bob" })).rejects.toMatchObject({
 			status: "CONFLICT",
@@ -1772,8 +1792,15 @@ describe.skipIf(!databaseUrl)("career knowledge, context and data lifecycle", ()
 				);
 				if (operation === "submission")
 					await editor.query(
-						"INSERT INTO resume_version (id, resume_id, user_id, kind, data) VALUES ($1, $2, $3, $4, $5)",
-						["concurrent-sent", "shared-resume", "alice", "sent", JSON.stringify(resumeData("Concurrent version"))],
+						"INSERT INTO resume_version (id, resume_id, user_id, kind, data, organization_id) VALUES ($1, $2, $3, $4, $5, $6)",
+						[
+							"concurrent-sent",
+							"shared-resume",
+							"alice",
+							"sent",
+							JSON.stringify(resumeData("Concurrent version")),
+							TEST_ORGANIZATION_ID,
+						],
 					);
 				else await editor.query("UPDATE career_job SET error = 'Concurrent job write' WHERE id = 'contended-job'");
 				await editor.query("COMMIT");

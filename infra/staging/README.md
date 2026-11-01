@@ -139,6 +139,8 @@ The app does not connect as the PostgreSQL superuser. Two roles exist (P1-C01):
 
 Row-level security (added from Phase 1b) only protects data when the app is not the table owner and cannot bypass RLS, which is why the split is required.
 
+Startup check (P1-T04): after migrations, the server inspects the `DATABASE_URL` role. If it owns `public.resume`, is a superuser or has `BYPASSRLS`, startup logs an error naming the role and exits non-zero when `NODE_ENV=production` (the Docker image default); in other environments it logs a warning and continues, because the unit-test job runs as `postgres`. If staging refuses to start with this message, point `DATABASE_URL` at `careeros_app` and `DATABASE_MIGRATION_URL` at `careeros_owner`. Self-hosters running a single database role must do the same split (see `infra/db/bootstrap-roles.sql`).
+
 How it works: the one-shot compose service `db_bootstrap` runs `bootstrap-roles.sql` as the superuser (`POSTGRES_PASSWORD`) on every `docker compose up`, before `app` starts (`app` waits for it with `service_completed_successfully`). The script is idempotent: it creates or normalises both roles with the passwords from `CAREEROS_OWNER_PASSWORD` / `CAREEROS_APP_PASSWORD`, moves ownership of every existing table and sequence in `public` and `drizzle` to `careeros_owner` (no `DROP`), and grants `careeros_app` data access only. So the first deploy after this change converts the existing staging database in place; no data is lost.
 
 To change a role password, edit it in `.env` (both the variable and the URL) and redeploy. To check the result on the server:

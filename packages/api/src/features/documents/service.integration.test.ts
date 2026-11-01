@@ -8,6 +8,12 @@ import { Pool } from "pg";
 import * as tables from "@reactive-resume/db/schema";
 import { copyCoverLetterStyle } from "@reactive-resume/resume/cover-letter";
 import { defaultResumeData } from "@reactive-resume/schema/resume/default";
+import {
+	ensureTestOrganization,
+	installSchemaLocalGuestMove,
+	prepareGuestLink,
+	TEST_ORGANIZATION_ID,
+} from "../../test-organization";
 import { createPublicResumePdf } from "../resume/public-pdf";
 import { runStorageCleanup } from "../storage/cleanup";
 
@@ -111,6 +117,7 @@ describe.skipIf(!databaseUrl)("Trash batch operations", () => {
 			if (!existsSync(file)) continue;
 			await pool.query((await readFile(file, "utf8")).replaceAll('"public".', ""));
 		}
+		await installSchemaLocalGuestMove(pool, schemaName);
 		service = (await import("./service")).documentsService;
 	}, 30_000);
 
@@ -132,6 +139,7 @@ describe.skipIf(!databaseUrl)("Trash batch operations", () => {
 
 	async function seed() {
 		await pool.query('TRUNCATE released_username, storage_cleanup_job, "user" CASCADE');
+		await ensureTestOrganization(pool);
 		await getDb()
 			.insert(tables.user)
 			.values(
@@ -147,6 +155,7 @@ describe.skipIf(!databaseUrl)("Trash batch operations", () => {
 			.insert(tables.resume)
 			.values([
 				{
+					organizationId: TEST_ORGANIZATION_ID,
 					id: "alice-active",
 					userId: "alice",
 					name: "Active",
@@ -154,6 +163,7 @@ describe.skipIf(!databaseUrl)("Trash batch operations", () => {
 					data: structuredClone(defaultResumeData),
 				},
 				{
+					organizationId: TEST_ORGANIZATION_ID,
 					id: "alice-trashed-1",
 					userId: "alice",
 					name: "Trashed one",
@@ -162,6 +172,7 @@ describe.skipIf(!databaseUrl)("Trash batch operations", () => {
 					data: structuredClone(defaultResumeData),
 				},
 				{
+					organizationId: TEST_ORGANIZATION_ID,
 					id: "alice-trashed-2",
 					userId: "alice",
 					name: "Trashed two",
@@ -170,6 +181,7 @@ describe.skipIf(!databaseUrl)("Trash batch operations", () => {
 					data: structuredClone(defaultResumeData),
 				},
 				{
+					organizationId: TEST_ORGANIZATION_ID,
 					id: "bob-trashed",
 					userId: "bob",
 					name: "Bob trash",
@@ -241,6 +253,7 @@ describe.skipIf(!databaseUrl)("Trash batch operations", () => {
 		await getDb()
 			.insert(tables.resumeVersion)
 			.values({
+				organizationId: TEST_ORGANIZATION_ID,
 				id: "sent-version",
 				resumeId: "alice-trashed-1",
 				userId: "alice",
@@ -496,6 +509,7 @@ describe.skipIf(!databaseUrl)("Trash batch operations", () => {
 
 	it("does not copy pending or abandoned erasure prefixes when guest work changes owners", async () => {
 		const { migrateUserStorage } = await import("../storage/service");
+		await prepareGuestLink(pool, "alice", "bob");
 		const { linkAnonymousAccount, setAccountLinkHook } =
 			await vi.importActual<typeof import("@reactive-resume/auth/config")>("@reactive-resume/auth/config");
 		putResumeFiles("alice", "alice-trashed-1");
@@ -605,6 +619,7 @@ describe.skipIf(!databaseUrl)("Trash batch operations", () => {
 			.insert(tables.resume)
 			.values(
 				Array.from({ length: 12 }, (_, index) => ({
+					organizationId: TEST_ORGANIZATION_ID,
 					id: `alice-bulk-${index}`,
 					userId: "alice",
 					name: `Bulk ${index}`,
@@ -633,6 +648,7 @@ describe.skipIf(!databaseUrl)("Trash batch operations", () => {
 			.insert(tables.resume)
 			.values(
 				Array.from({ length: 150 }, (_, index) => ({
+					organizationId: TEST_ORGANIZATION_ID,
 					id: `alice-scale-${index}`,
 					userId: "alice",
 					name: `Scale ${index}`,

@@ -5,6 +5,8 @@ import { vi } from "vite-plus/test";
 
 vi.mock("@careeros/tenancy", () => ({
 	ORG_CONTEXT_REQUIRED: true,
+	requireOrgId: () => "org_test",
+	currentOrgId: () => "org_test",
 	resolveOrgForAuthentication: () => Promise.resolve("org_test"),
 	captureOrgScope: () => (fn: () => Promise<unknown>) => fn(),
 	withOrgContext: <T>(_organizationId: string, fn: () => Promise<T>) => fn(),

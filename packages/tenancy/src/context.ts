@@ -15,6 +15,16 @@ export function currentOrgId(): string | undefined {
 }
 
 /**
+ * The organization of the active scope, for code that writes a tenant row. Throws `TenancyError("org_required")`
+ * outside a scope, so an insert never reaches the database without an `organization_id`.
+ */
+export function requireOrgId(): string {
+	const orgId = currentOrgId();
+	if (orgId === undefined) throw new TenancyError("org_required", "This write needs an organization context.");
+	return orgId;
+}
+
+/**
  * Runs `fn` with one checked-out database client whose session has `app.current_org_id` set, and with the global
  * `db` and `getPool()` bound to that client, so row-level security sees the organization for every query.
  *

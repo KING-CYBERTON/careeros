@@ -8,6 +8,7 @@ import { drizzle } from "drizzle-orm/node-postgres";
 import { Pool } from "pg";
 import * as tables from "@reactive-resume/db/schema";
 import { defaultResumeData } from "@reactive-resume/schema/resume/default";
+import { ensureTestOrganization, installSchemaLocalGuestMove, TEST_ORGANIZATION_ID } from "../../test-organization";
 import { deleteAllUsers } from "../../test-support/delete-users";
 
 const fixture = vi.hoisted(() => ({
@@ -107,6 +108,7 @@ describe.skipIf(!databaseUrl)("application lanes: persisted owner and workflow i
 				migrationRowsAfter = (await pool.query("SELECT * FROM application ORDER BY id")).rows;
 			}
 		}
+		await installSchemaLocalGuestMove(pool, schemaName);
 		applications = (await import("./service")).applicationService;
 		lanes = (await import("./lanes")).applicationLaneService;
 		career = (await import("../career/service")).careerService;
@@ -122,6 +124,7 @@ describe.skipIf(!databaseUrl)("application lanes: persisted owner and workflow i
 		// CAREEROS: ordered, deadlock-retrying delete (P1-Q04); the unordered bulk delete deadlocked on username advisory locks.
 		await deleteAllUsers(getDb(), tables.user);
 		await getDb().delete(tables.releasedUsername);
+		await ensureTestOrganization(pool);
 		await getDb()
 			.insert(tables.user)
 			.values([
@@ -440,9 +443,14 @@ describe.skipIf(!databaseUrl)("application lanes: persisted owner and workflow i
 
 	it("sent versions remain stable across lane moves, metadata edits and submission retries", async () => {
 		const data = structuredClone(defaultResumeData);
-		await getDb()
-			.insert(tables.resume)
-			.values({ id: "resume", userId: "alice", name: "Fixture", slug: "fixture", data });
+		await getDb().insert(tables.resume).values({
+			organizationId: TEST_ORGANIZATION_ID,
+			id: "resume",
+			userId: "alice",
+			name: "Fixture",
+			slug: "fixture",
+			data,
+		});
 		const custom = await addLane("Awaiting response", "applied");
 		const id = await applications.create({ userId: "alice", company: "Co", role: "Role", resumeId: "resume" });
 		await career.submitApplication("alice", id, [], []);
@@ -530,6 +538,7 @@ describe.skipIf(!databaseUrl)("application lanes: persisted owner and workflow i
 			await getDb()
 				.insert(tables.resume)
 				.values({
+					organizationId: TEST_ORGANIZATION_ID,
 					id: "resume",
 					userId: "alice",
 					name: "Fixture",
