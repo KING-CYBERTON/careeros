@@ -265,12 +265,17 @@ export const authRouter = {
 						}),
 					),
 					attachments: z.array(createSelectSchema(schema.agentAttachment)),
+					// CAREEROS (P1-T07): the tenant column is not part of the export
 					opportunities: z.array(
-						createSelectSchema(schema.careerOpportunity, { discoverySource: discoverySourceSchema.nullable() }),
+						createSelectSchema(schema.careerOpportunity, { discoverySource: discoverySourceSchema.nullable() }).omit({
+							organizationId: true,
+						}),
 					),
-					jobs: z.array(createSelectSchema(schema.careerJob)),
-					transcripts: z.array(createSelectSchema(schema.careerTranscript)),
-					workspaces: z.array(createSelectSchema(schema.careerWorkspace, { data: careerWorkspaceSchema })),
+					jobs: z.array(createSelectSchema(schema.careerJob).omit({ organizationId: true })),
+					transcripts: z.array(createSelectSchema(schema.careerTranscript).omit({ organizationId: true })),
+					workspaces: z.array(
+						createSelectSchema(schema.careerWorkspace, { data: careerWorkspaceSchema }).omit({ organizationId: true }),
+					),
 				}),
 			}),
 		)

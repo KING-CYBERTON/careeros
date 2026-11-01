@@ -124,6 +124,7 @@ describe("career voice transcription", () => {
 			}),
 		);
 		expect(mocks.values).toHaveBeenCalledExactlyOnceWith({
+			organizationId: "org_test",
 			userId: "owner",
 			applicationId: "owned-application",
 			original: "I led the warehouse migration.",

@@ -167,11 +167,22 @@ test("discovery explains unknowns and bulk partial failures keep only failed rol
 		}),
 	).toBeOK();
 	try {
+		// CAREEROS (P1-T07, Q37): career_opportunity is a tenant table; the rows go to the user's active (oldest) organization.
+		const { rows: orgs } = await pool.query<{ organization_id: string }>(
+			`SELECT organization_id FROM member WHERE user_id = $1 ORDER BY created_at, id LIMIT 1`,
+			[owner],
+		);
+		const organizationId = orgs[0]?.organization_id;
+		if (!organizationId) throw new Error("The test user has no organization.");
 		await pool.query(
-			`INSERT INTO career_opportunity (id,user_id,url,role,company,location,snippet,description,discovery_source) VALUES
-		('rx76-first-' || $1,$1,'https://example.test/jobs/platform','Platform engineer','Canopy Systems','Berlin','Maintain reliable services.','Maintain reliable services for 10,000 users and remote APIs.',$2),
-		('rx76-second-' || $1,$1,'https://example.test/jobs/reliability','Reliability engineer','Brightpath','','Build reliable products.','Build reliable products.',null)`,
-			[owner, JSON.stringify({ query: "Platform engineer Berlin", checkedAt: "2026-10-30T08:00:00.000Z" })],
+			`INSERT INTO career_opportunity (id,organization_id,user_id,url,role,company,location,snippet,description,discovery_source) VALUES
+		('rx76-first-' || $1,$3,$1,'https://example.test/jobs/platform','Platform engineer','Canopy Systems','Berlin','Maintain reliable services.','Maintain reliable services for 10,000 users and remote APIs.',$2),
+		('rx76-second-' || $1,$3,$1,'https://example.test/jobs/reliability','Reliability engineer','Brightpath','','Build reliable products.','Build reliable products.',null)`,
+			[
+				owner,
+				JSON.stringify({ query: "Platform engineer Berlin", checkedAt: "2026-10-30T08:00:00.000Z" }),
+				organizationId,
+			],
 		);
 		await page.setViewportSize({ width: 1440, height: 1150 });
 		await page.goto("/dashboard/career");

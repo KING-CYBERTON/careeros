@@ -332,6 +332,8 @@ async function followInterviewSchedules(
 			.where(eq(schema.careerSchedule.id, schedule.id));
 	if (at || !schedules.some((schedule) => schedule.enabled)) return;
 	await tx.insert(schema.careerNotification).values({
+		// CAREEROS: tenant column (P1-T07)
+		organizationId: requireOrgId(),
 		userId,
 		applicationId,
 		key: `interview-removed:${generateId()}`,

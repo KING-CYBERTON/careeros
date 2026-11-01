@@ -151,5 +151,7 @@ export const application = pg.pgTable(
 		// CAREEROS: organization-led twins of the list indexes above (P1-T06).
 		pg.index().on(t.organizationId, t.userId, t.updatedAt.desc()),
 		pg.index().on(t.organizationId, t.userId, t.laneId),
+		// CAREEROS (P1-T07): the target of career_workspace's composite foreign key.
+		pg.unique("application_organization_id_id_unique").on(t.organizationId, t.id),
 	],
 );

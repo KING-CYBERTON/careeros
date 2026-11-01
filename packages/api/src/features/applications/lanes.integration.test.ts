@@ -572,6 +572,7 @@ describe.skipIf(!databaseUrl)("application lanes: persisted owner and workflow i
 		await getDb()
 			.insert(tables.careerSchedule)
 			.values({
+				organizationId: TEST_ORGANIZATION_ID,
 				id: "follow-up",
 				userId: "alice",
 				applicationId: id,
@@ -584,8 +585,15 @@ describe.skipIf(!databaseUrl)("application lanes: persisted owner and workflow i
 		await getDb()
 			.insert(tables.careerJob)
 			.values([
-				{ id: "queued", userId: "alice", scheduleId: "follow-up", dueAt: new Date(Date.now() - 60_000) },
 				{
+					organizationId: TEST_ORGANIZATION_ID,
+					id: "queued",
+					userId: "alice",
+					scheduleId: "follow-up",
+					dueAt: new Date(Date.now() - 60_000),
+				},
+				{
+					organizationId: TEST_ORGANIZATION_ID,
 					id: "completed",
 					userId: "alice",
 					scheduleId: "follow-up",
@@ -596,6 +604,7 @@ describe.skipIf(!databaseUrl)("application lanes: persisted owner and workflow i
 		await getDb()
 			.insert(tables.careerNotification)
 			.values({
+				organizationId: TEST_ORGANIZATION_ID,
 				id: "pending-email",
 				userId: "alice",
 				applicationId: id,
@@ -626,6 +635,7 @@ describe.skipIf(!databaseUrl)("application lanes: persisted owner and workflow i
 		await getDb()
 			.insert(tables.careerSchedule)
 			.values({
+				organizationId: TEST_ORGANIZATION_ID,
 				id: "email-schedule",
 				userId: "alice",
 				applicationId: id,
@@ -636,6 +646,7 @@ describe.skipIf(!databaseUrl)("application lanes: persisted owner and workflow i
 				timezone: "UTC",
 			});
 		await getDb().insert(tables.careerJob).values({
+			organizationId: TEST_ORGANIZATION_ID,
 			id: "email-job",
 			userId: "alice",
 			scheduleId: "email-schedule",
@@ -645,6 +656,7 @@ describe.skipIf(!databaseUrl)("application lanes: persisted owner and workflow i
 		await getDb()
 			.insert(tables.careerNotification)
 			.values({
+				organizationId: TEST_ORGANIZATION_ID,
 				id: "email-notice",
 				userId: "alice",
 				applicationId: id,

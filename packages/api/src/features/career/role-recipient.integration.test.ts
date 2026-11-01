@@ -181,6 +181,7 @@ describe.skipIf(!databaseUrl)("role recipient approval through router, PostgreSQ
 			assert(alice);
 			user = alice;
 			await db.insert(tables.careerFact).values({
+				organizationId: TEST_ORGANIZATION_ID,
 				id: "shared",
 				userId: user.id,
 				text: "Synthetic reliable systems",
@@ -286,6 +287,7 @@ describe.skipIf(!databaseUrl)("role recipient approval through router, PostgreSQ
 			assert(bob);
 			user = bob;
 			await db.insert(tables.careerFact).values({
+				organizationId: TEST_ORGANIZATION_ID,
 				userId: user.id,
 				text: "Bob fact",
 				category: "skill",
