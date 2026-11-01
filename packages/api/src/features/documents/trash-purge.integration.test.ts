@@ -1,5 +1,6 @@
 import { randomUUID } from "node:crypto";
 import { afterAll, beforeAll, describe, expect, it, vi } from "vite-plus/test";
+import { createIsolatedTestDatabase, type IsolatedTestDatabase } from "@careeros/testing";
 import { Pool } from "pg";
 import { withDatabasePool } from "@reactive-resume/db/client";
 import { defaultResumeData } from "@reactive-resume/schema/resume/default";
@@ -25,6 +26,8 @@ describe.skipIf(!configured)("scheduled Trash purge", () => {
 		role: `t05_noexec_${run}`,
 	};
 	let owner: Pool;
+	// CAREEROS (P1-Q08): its own database, because this file runs the global Trash purge.
+	let database: IsolatedTestDatabase;
 	let app: Pool;
 	const old = "now() - interval '40 days'";
 
@@ -51,8 +54,9 @@ describe.skipIf(!configured)("scheduled Trash purge", () => {
 	};
 
 	beforeAll(async () => {
-		owner = new Pool({ connectionString: process.env.CAREEROS_TEST_DATABASE_URL });
-		app = new Pool({ connectionString: process.env.CAREEROS_TEST_APP_DATABASE_URL });
+		database = await createIsolatedTestDatabase("trash_purge");
+		owner = new Pool({ connectionString: database.ownerUrl });
+		app = new Pool({ connectionString: database.appUrl });
 		for (const [org, user] of [
 			[ids.orgA, ids.userA],
 			[ids.orgB, ids.userB],
@@ -78,6 +82,7 @@ describe.skipIf(!configured)("scheduled Trash purge", () => {
 		await owner?.query(`DROP ROLE IF EXISTS "${ids.role}"`);
 		await owner?.end();
 		await app?.end();
+		await database?.drop();
 	});
 
 	it("purges expired Trash in every organization in one tick and keeps the rest", async () => {

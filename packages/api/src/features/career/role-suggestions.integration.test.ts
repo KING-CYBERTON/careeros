@@ -1,7 +1,5 @@
-import { randomUUID } from "node:crypto";
-import { existsSync } from "node:fs";
-import { readdir, readFile } from "node:fs/promises";
 import { afterAll, beforeAll, beforeEach, describe, expect, it, vi } from "vite-plus/test";
+import { createIsolatedTestDatabase, type IsolatedTestDatabase } from "@careeros/testing";
 import { ORPCError } from "@orpc/client";
 import { eq } from "drizzle-orm";
 import { drizzle } from "drizzle-orm/node-postgres";
@@ -29,37 +27,23 @@ function getDb() {
 	if (!fixture.db) throw new Error("Database unavailable");
 	return fixture.db;
 }
-const databaseUrl = process.env.INTEGRATIONS_TEST_DATABASE_URL;
+const configured = Boolean(process.env.CAREEROS_TEST_DATABASE_URL && process.env.CAREEROS_TEST_APP_DATABASE_URL);
 
-describe.skipIf(!databaseUrl)("reviewed target role suggestions", () => {
+describe.skipIf(!configured)("reviewed target role suggestions", () => {
 	let suggest: typeof import("./role-suggestions").suggestTargetRoles;
-	let admin: Pool;
 	let pool: Pool;
-	const schemaName = `rx76_roles_${randomUUID().replaceAll("-", "")}`;
+	// CAREEROS (P1-Q08): its own database instead of a schema whose migration replay rewrites `public` objects.
+	let database: IsolatedTestDatabase;
 	beforeAll(async () => {
-		admin = new Pool({ connectionString: databaseUrl });
-		await admin.query(`CREATE SCHEMA ${schemaName}`);
-		pool = new Pool({
-			connectionString: databaseUrl,
-			options: `-c search_path=${schemaName} -c statement_timeout=10000`,
-		});
+		database = await createIsolatedTestDatabase("role_suggestions");
+		pool = new Pool({ connectionString: database.ownerUrl, options: "-c statement_timeout=10000" });
 		fixture.db = drizzle({ client: pool });
-		const migrations = new URL("../../../../../migrations/", import.meta.url);
-		const directories = (await readdir(migrations, { withFileTypes: true }))
-			.filter((entry) => entry.isDirectory() && /^\d+_/.test(entry.name))
-			.map((entry) => entry.name)
-			.sort();
-		for (const directory of directories) {
-			const file = new URL(`${directory}/migration.sql`, migrations);
-			if (existsSync(file)) await pool.query((await readFile(file, "utf8")).replaceAll('"public".', ""));
-		}
 		({ suggestTargetRoles: suggest } = await import("./role-suggestions"));
-	}, 30_000);
+	}, 60_000);
 
 	afterAll(async () => {
 		await pool?.end();
-		await admin?.query(`DROP SCHEMA IF EXISTS ${schemaName} CASCADE`);
-		await admin?.end();
+		await database?.drop();
 	});
 
 	const input = {

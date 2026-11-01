@@ -1,5 +1,6 @@
 import { randomUUID } from "node:crypto";
 import { afterAll, beforeAll, describe, expect, it, vi } from "vite-plus/test";
+import { createIsolatedTestDatabase, type IsolatedTestDatabase } from "@careeros/testing";
 import { createRouterClient } from "@orpc/server";
 import { Pool } from "pg";
 import { linkAnonymousAccount } from "@reactive-resume/auth/config";
@@ -68,6 +69,8 @@ describe.skipIf(!configured)("career tables, the scheduler and tenant isolation"
 		appSchedB: `car-sapp-b-${run}`,
 	};
 	let owner: Pool;
+	// CAREEROS (P1-Q08): its own database, because this file runs the global career scheduler.
+	let database: IsolatedTestDatabase;
 	let app: Pool;
 
 	const inApp = <T>(fn: () => T) => withDatabasePool(app, fn);
@@ -121,8 +124,9 @@ describe.skipIf(!configured)("career tables, the scheduler and tenant isolation"
 	});
 
 	beforeAll(async () => {
-		owner = new Pool({ connectionString: process.env.CAREEROS_TEST_DATABASE_URL });
-		app = new Pool({ connectionString: process.env.CAREEROS_TEST_APP_DATABASE_URL });
+		database = await createIsolatedTestDatabase("career_tenancy");
+		owner = new Pool({ connectionString: database.ownerUrl });
+		app = new Pool({ connectionString: database.appUrl });
 		await owner.query(
 			`INSERT INTO organization (id, name, slug) VALUES ($1, 'A', $1), ($2, 'B', $2), ($3, 'G', $3), ($4, 'T', $4)`,
 			[ids.orgA, ids.orgB, ids.orgG, ids.orgT],
@@ -196,6 +200,7 @@ describe.skipIf(!configured)("career tables, the scheduler and tenant isolation"
 		await owner?.query(`DROP ROLE IF EXISTS "${ids.role}"`);
 		await owner?.end();
 		await app?.end();
+		await database?.drop();
 	});
 
 	describe("two organizations", () => {

@@ -1,8 +1,7 @@
 import type { CareerSource } from "@reactive-resume/schema/career";
 import { randomUUID } from "node:crypto";
-import { existsSync } from "node:fs";
-import { readdir, readFile } from "node:fs/promises";
 import { afterAll, beforeAll, beforeEach, describe, expect, it, vi } from "vite-plus/test";
+import { createIsolatedTestDatabase, type IsolatedTestDatabase } from "@careeros/testing";
 import { eq } from "drizzle-orm";
 import { drizzle } from "drizzle-orm/node-postgres";
 import { Pool } from "pg";
@@ -11,12 +10,7 @@ import { copyCoverLetterStyle } from "@reactive-resume/resume/cover-letter";
 import { reviewedAnswerEvidence, reviewedAnswerInputSchema } from "@reactive-resume/schema/application-answers";
 import { careerOfferInputSchema, careerProfileDataSchema, savedItemDataSchema } from "@reactive-resume/schema/career";
 import { defaultResumeData } from "@reactive-resume/schema/resume/default";
-import {
-	ensureTestOrganization,
-	installSchemaLocalGuestMove,
-	prepareGuestLink,
-	TEST_ORGANIZATION_ID,
-} from "../../test-organization";
+import { ensureTestOrganization, prepareGuestLink, TEST_ORGANIZATION_ID } from "../../test-organization";
 import { reviewedAnswers } from "./answers";
 
 const fixture = vi.hoisted(() => ({
@@ -49,7 +43,7 @@ function getDb() {
 	return fixture.db;
 }
 
-const databaseUrl = process.env.INTEGRATIONS_TEST_DATABASE_URL ?? process.env.COVER_LETTER_TEST_DATABASE_URL;
+const configured = Boolean(process.env.CAREEROS_TEST_DATABASE_URL && process.env.CAREEROS_TEST_APP_DATABASE_URL);
 const round = {
 	id: "alice-round",
 	type: "interview" as const,
@@ -82,45 +76,30 @@ describe("mergeCareerProfile", () => {
 	}, 30_000);
 });
 
-// Real PostgreSQL, opt-in only. Every table and FK comes from shipped migrations in a unique schema.
-describe.skipIf(!databaseUrl)("career knowledge, context and data lifecycle", () => {
+// Real PostgreSQL, opt-in only. Every table and FK comes from the shipped migrations in a database of its own.
+describe.skipIf(!configured)("career knowledge, context and data lifecycle", () => {
 	let service: typeof import("./service").careerService;
 	let applications: typeof import("../applications/service").applicationService;
 	let admin: Pool;
 	let pool: Pool;
-	const schemaName = `career_test_${randomUUID().replaceAll("-", "")}`;
+	// CAREEROS (P1-Q08): its own database, migrated like production. It used to replay the migrations into a schema of
+	// the shared database, which rewrote `public` functions other files were using.
+	let database: IsolatedTestDatabase;
 
 	beforeAll(async () => {
-		admin = new Pool({ connectionString: databaseUrl });
-		await admin.query(`CREATE SCHEMA ${schemaName}`);
+		database = await createIsolatedTestDatabase("career_svc");
+		admin = new Pool({ connectionString: database.ownerUrl });
 		// Match deployments with a single request connection; nested global queries must not deadlock.
-		pool = new Pool({
-			connectionString: databaseUrl,
-			max: 1,
-			connectionTimeoutMillis: 2000,
-			options: `-c search_path=${schemaName}`,
-		});
+		pool = new Pool({ connectionString: database.ownerUrl, max: 1, connectionTimeoutMillis: 2000 });
 		fixture.db = drizzle({ client: pool });
-		const migrations = new URL("../../../../../migrations/", import.meta.url);
-		const directories = (await readdir(migrations, { withFileTypes: true }))
-			.filter((entry) => entry.isDirectory() && /^\d+_/.test(entry.name))
-			.map((entry) => entry.name)
-			.sort();
-		for (const directory of directories) {
-			const file = new URL(`${directory}/migration.sql`, migrations);
-			if (!existsSync(file)) continue;
-			const migration = await readFile(file, "utf8");
-			await pool.query(migration.replaceAll('"public".', ""));
-		}
-		await installSchemaLocalGuestMove(pool, schemaName);
 		service = (await import("./service")).careerService;
 		applications = (await import("../applications/service")).applicationService;
-	}, 30_000);
+	}, 60_000);
 
 	afterAll(async () => {
 		await pool?.end();
-		await admin?.query(`DROP SCHEMA IF EXISTS ${schemaName} CASCADE`);
 		await admin?.end();
+		await database?.drop();
 	});
 
 	async function thread(id: string, userId: string, applicationId: string | null) {
@@ -1716,7 +1695,7 @@ describe.skipIf(!databaseUrl)("career knowledge, context and data lifecycle", ()
 				.update(tables.resume)
 				.set({ applicationId: "alice-app" })
 				.where(eq(tables.resume.id, "shared-resume"));
-			const editorPool = new Pool({ connectionString: databaseUrl, max: 1, options: `-c search_path=${schemaName}` });
+			const editorPool = new Pool({ connectionString: database.ownerUrl, max: 1 });
 			const editor = await editorPool.connect();
 			let completion: Promise<{ error: unknown }> | undefined;
 			try {
@@ -1798,7 +1777,7 @@ describe.skipIf(!databaseUrl)("career knowledge, context and data lifecycle", ()
 					lease: "editor",
 					leaseUntil: new Date("2030-10-09T08:00:00Z"),
 				});
-			const editorPool = new Pool({ connectionString: databaseUrl, max: 1, options: `-c search_path=${schemaName}` });
+			const editorPool = new Pool({ connectionString: database.ownerUrl, max: 1 });
 			const editor = await editorPool.connect();
 			let completion: Promise<{ error: unknown }> | undefined;
 			try {

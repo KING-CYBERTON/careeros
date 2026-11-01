@@ -1,9 +1,8 @@
 import type { AddressInfo } from "node:net";
 import assert from "node:assert/strict";
-import { randomUUID } from "node:crypto";
-import { readdir, readFile } from "node:fs/promises";
 import { createServer } from "node:http";
 import { afterAll, beforeAll, beforeEach, describe, expect, it, vi } from "vite-plus/test";
+import { createIsolatedTestDatabase, type IsolatedTestDatabase } from "@careeros/testing";
 import { createRouterClient } from "@orpc/server";
 import { Pool } from "pg";
 import z from "zod";
@@ -98,7 +97,7 @@ async function localProvider() {
 	};
 }
 
-const databaseUrl = process.env.INTEGRATIONS_TEST_DATABASE_URL;
+const configured = Boolean(process.env.CAREEROS_TEST_DATABASE_URL && process.env.CAREEROS_TEST_APP_DATABASE_URL);
 it("recipient test provider rejects unrelated probes without recording or throwing", async () => {
 	const provider = await localProvider();
 	try {
@@ -110,10 +109,11 @@ it("recipient test provider rejects unrelated probes without recording or throwi
 		await provider.close();
 	}
 });
-describe.skipIf(!databaseUrl)("role recipient approval through router, PostgreSQL and HTTP", () => {
-	const schemaName = `rx76_recipient_${randomUUID().replaceAll("-", "")}`;
-	const admin = new Pool({ connectionString: databaseUrl });
+describe.skipIf(!configured)("role recipient approval through router, PostgreSQL and HTTP", () => {
 	let pool: Pool;
+	let admin: Pool;
+	// CAREEROS (P1-Q08): its own database instead of a schema whose migration replay rewrites `public` objects.
+	let database: IsolatedTestDatabase;
 	let a: Awaited<ReturnType<typeof localProvider>>;
 	let b: Awaited<ReturnType<typeof localProvider>>;
 	let user: typeof tables.user.$inferSelect;
@@ -146,19 +146,12 @@ describe.skipIf(!databaseUrl)("role recipient approval through router, PostgreSQ
 	};
 	const run = (operation: () => Promise<void>) => withDatabasePool(pool, operation);
 	beforeAll(async () => {
-		await admin.query(`CREATE SCHEMA ${schemaName}`);
-		pool = new Pool({
-			connectionString: databaseUrl,
-			options: `-c search_path=${schemaName} -c statement_timeout=10000`,
-		});
-		const migrations = new URL("../../../../../migrations/", import.meta.url);
-		for (const directory of (await readdir(migrations)).filter((name) => /^\d+_/.test(name)).sort())
-			await pool.query(
-				(await readFile(new URL(`${directory}/migration.sql`, migrations), "utf8")).replaceAll('"public".', ""),
-			);
+		database = await createIsolatedTestDatabase("role_recipient");
+		pool = new Pool({ connectionString: database.ownerUrl, options: "-c statement_timeout=10000" });
+		admin = new Pool({ connectionString: database.ownerUrl });
 		a = await localProvider();
 		b = await localProvider();
-	}, 30000);
+	}, 60_000);
 	beforeEach(async () => {
 		Object.assign(env, { AI_PROVIDER: undefined, AI_MODEL: undefined, AI_API_KEY: undefined, AI_BASE_URL: undefined });
 		await pool.query('TRUNCATE "user" CASCADE');
@@ -195,8 +188,8 @@ describe.skipIf(!databaseUrl)("role recipient approval through router, PostgreSQ
 		await a?.close();
 		await b?.close();
 		await pool?.end();
-		await admin.query(`DROP SCHEMA IF EXISTS ${schemaName} CASCADE`);
-		await admin.end();
+		await admin?.end();
+		await database?.drop();
 	});
 
 	it.each(["excluded", "forgotten"] as const)(

@@ -1,19 +1,13 @@
 import type { ApplicationStatus } from "@reactive-resume/schema/applications/data";
-import { randomUUID } from "node:crypto";
-import { readdir, readFile } from "node:fs/promises";
 import { afterAll, beforeAll, beforeEach, describe, expect, it, vi } from "vite-plus/test";
+import { createIsolatedTestDatabase, type IsolatedTestDatabase } from "@careeros/testing";
 import { createRouterClient } from "@orpc/server";
 import { eq } from "drizzle-orm";
 import { drizzle } from "drizzle-orm/node-postgres";
 import { Pool } from "pg";
 import * as tables from "@reactive-resume/db/schema";
 import { defaultResumeData } from "@reactive-resume/schema/resume/default";
-import {
-	ensureTestOrganization,
-	installSchemaLocalGuestMove,
-	prepareGuestLink,
-	TEST_ORGANIZATION_ID,
-} from "../../test-organization";
+import { ensureTestOrganization, prepareGuestLink, TEST_ORGANIZATION_ID } from "../../test-organization";
 import { deleteAllUsers } from "../../test-support/delete-users";
 
 const fixture = vi.hoisted(() => ({
@@ -38,16 +32,17 @@ vi.mock("@reactive-resume/env/server", () => ({
 vi.mock("@reactive-resume/email/transport", () => ({ sendEmail: vi.fn(), sendCareerNotification: fixture.email }));
 vi.mock("../storage/service", () => ({ getStorageService: () => ({ delete: async () => {} }), uploadFile: vi.fn() }));
 
-const databaseUrl = process.env.INTEGRATIONS_TEST_DATABASE_URL ?? process.env.COVER_LETTER_TEST_DATABASE_URL;
+const configured = Boolean(process.env.CAREEROS_TEST_DATABASE_URL && process.env.CAREEROS_TEST_APP_DATABASE_URL);
 
-describe.skipIf(!databaseUrl)("application lanes: persisted owner and workflow invariants", () => {
+describe.skipIf(!configured)("application lanes: persisted owner and workflow invariants", () => {
 	let pool: Pool;
 	let admin: Pool;
 	let applications: typeof import("./service").applicationService;
 	let lanes: typeof import("./lanes").applicationLaneService;
 	let career: typeof import("../career/service").careerService;
 	let linkGuest: typeof import("@reactive-resume/auth/config").linkAnonymousAccount;
-	const schemaName = `application_lanes_test_${randomUUID().replaceAll("-", "")}`;
+	// CAREEROS (P1-Q08): its own database instead of a schema whose migration replay rewrites `public` objects.
+	let database: IsolatedTestDatabase;
 	let beforeMigration: Record<string, unknown>;
 	let afterMigration: Record<string, unknown>;
 	let migrationRowsBefore: Record<string, unknown>[];
@@ -58,71 +53,64 @@ describe.skipIf(!databaseUrl)("application lanes: persisted owner and workflow i
 	};
 
 	beforeAll(async () => {
-		admin = new Pool({ connectionString: databaseUrl });
-		await admin.query(`CREATE SCHEMA ${schemaName}`);
-		pool = new Pool({ connectionString: databaseUrl, max: 4, options: `-c search_path=${schemaName}` });
-		fixture.db = drizzle({ client: pool });
-		const migrations = new URL("../../../../../migrations/", import.meta.url);
-		const directories = (await readdir(migrations, { withFileTypes: true }))
-			.filter((entry) => entry.isDirectory() && /^\d+_/.test(entry.name))
-			.map((entry) => entry.name)
-			.sort();
-		for (const directory of directories) {
-			if (directory === "20261029063845_nappy_thor") {
-				await pool.query(
-					`INSERT INTO "user" (id,name,email,username,display_username) VALUES ('migration-owner','Migration Fixture','migration@example.test','migration-owner','migration-owner')`,
-				);
-				await pool.query(`INSERT INTO application (id,user_id,company,role,status,activity,applied_at,created_at,updated_at,notes)
+		database = await createIsolatedTestDatabase("app_lanes", {
+			onMigration: async ({ directory, phase }, client) => {
+				if (directory !== "20261029063845_nappy_thor") return;
+				if (phase === "before") {
+					await client.query(
+						`INSERT INTO "user" (id,name,email,username,display_username) VALUES ('migration-owner','Migration Fixture','migration@example.test','migration-owner','migration-owner')`,
+					);
+					await client.query(`INSERT INTO application (id,user_id,company,role,status,activity,applied_at,created_at,updated_at,notes)
      VALUES ('migration-app','migration-owner','Fixture Co','Engineer','applied',
       '[{"id":"legacy-stage","type":"stage","stage":"applied","at":"2025-01-01T12:00:00.000Z"}]',
       '2025-01-01T12:00:00Z','2025-01-01T12:00:00Z','2025-01-02T12:00:00Z','Keep legacy notes')`);
-				await pool.query(
-					`INSERT INTO resume (id,user_id,name,slug,data) VALUES ('migration-resume','migration-owner','Legacy','legacy','{}')`,
-				);
-				await pool.query(
-					`INSERT INTO resume_version (id,resume_id,user_id,data,kind) VALUES ('migration-version','migration-resume','migration-owner','{}','sent')`,
-				);
-				await pool.query(
-					`UPDATE application SET resume_id = 'migration-resume', sent_resume_version_id = 'migration-version' WHERE id = 'migration-app'`,
-				);
-				for (const [status, reason] of [
-					["saved", null],
-					["screening", null],
-					["interview", null],
-					["offer", null],
-					["closed", null],
-					["closed", "accepted"],
-					["closed", "not-selected"],
-					["closed", "withdrew"],
-					["closed", "accepted-other"],
-					["closed", "no-response"],
-				]) {
-					await pool.query(
-						`INSERT INTO application (id,user_id,company,role,status,closed_reason,activity,applied_at,created_at,updated_at)
-   VALUES ($1,'migration-owner','Migration Fixture','Role',$2,$3,'[]','2025-02-01T12:00:00Z','2025-02-01T12:00:00Z','2025-02-02T12:00:00Z')`,
-						[`migration-${status}-${reason ?? "none"}`, status, reason],
+					await client.query(
+						`INSERT INTO resume (id,user_id,name,slug,data) VALUES ('migration-resume','migration-owner','Legacy','legacy','{}')`,
 					);
+					await client.query(
+						`INSERT INTO resume_version (id,resume_id,user_id,data,kind) VALUES ('migration-version','migration-resume','migration-owner','{}','sent')`,
+					);
+					await client.query(
+						`UPDATE application SET resume_id = 'migration-resume', sent_resume_version_id = 'migration-version' WHERE id = 'migration-app'`,
+					);
+					for (const [status, reason] of [
+						["saved", null],
+						["screening", null],
+						["interview", null],
+						["offer", null],
+						["closed", null],
+						["closed", "accepted"],
+						["closed", "not-selected"],
+						["closed", "withdrew"],
+						["closed", "accepted-other"],
+						["closed", "no-response"],
+					]) {
+						await client.query(
+							`INSERT INTO application (id,user_id,company,role,status,closed_reason,activity,applied_at,created_at,updated_at)
+   VALUES ($1,'migration-owner','Migration Fixture','Role',$2,$3,'[]','2025-02-01T12:00:00Z','2025-02-01T12:00:00Z','2025-02-02T12:00:00Z')`,
+							[`migration-${status}-${reason ?? "none"}`, status, reason],
+						);
+					}
+					migrationRowsBefore = (await client.query("SELECT * FROM application ORDER BY id")).rows;
+					beforeMigration = (await client.query("SELECT * FROM application WHERE id = 'migration-app'")).rows[0];
+				} else {
+					afterMigration = (await client.query("SELECT * FROM application WHERE id = 'migration-app'")).rows[0];
+					migrationRowsAfter = (await client.query("SELECT * FROM application ORDER BY id")).rows;
 				}
-				migrationRowsBefore = (await pool.query("SELECT * FROM application ORDER BY id")).rows;
-				beforeMigration = (await pool.query("SELECT * FROM application WHERE id = 'migration-app'")).rows[0];
-			}
-			const migration = await readFile(new URL(`${directory}/migration.sql`, migrations), "utf8");
-			await pool.query(migration.replaceAll('"public".', ""));
-			if (directory === "20261029063845_nappy_thor") {
-				afterMigration = (await pool.query("SELECT * FROM application WHERE id = 'migration-app'")).rows[0];
-				migrationRowsAfter = (await pool.query("SELECT * FROM application ORDER BY id")).rows;
-			}
-		}
-		await installSchemaLocalGuestMove(pool, schemaName);
+			},
+		});
+		admin = new Pool({ connectionString: database.ownerUrl });
+		pool = new Pool({ connectionString: database.ownerUrl, max: 4 });
+		fixture.db = drizzle({ client: pool });
 		applications = (await import("./service")).applicationService;
 		lanes = (await import("./lanes")).applicationLaneService;
 		career = (await import("../career/service")).careerService;
 		linkGuest = (await import("@reactive-resume/auth/config")).linkAnonymousAccount;
-	}, 30_000);
+	}, 60_000);
 	afterAll(async () => {
 		await pool?.end();
-		await admin?.query(`DROP SCHEMA IF EXISTS ${schemaName} CASCADE`);
 		await admin?.end();
+		await database?.drop();
 	});
 	beforeEach(async () => {
 		fixture.email.mockClear();
