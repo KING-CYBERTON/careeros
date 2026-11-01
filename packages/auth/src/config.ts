@@ -26,7 +26,7 @@ import { admin, anonymous, jwt, openAPI, organization } from "better-auth/plugin
 import { genericOAuth } from "better-auth/plugins/generic-oauth";
 import { twoFactor } from "better-auth/plugins/two-factor";
 import { username } from "better-auth/plugins/username";
-import { and, eq, gt, inArray, ne, sql } from "drizzle-orm";
+import { and, asc, eq, gt, inArray, ne, sql } from "drizzle-orm";
 import { createLocalJWKSet, jwtVerify } from "jose";
 import { createElement } from "react";
 import { createDefaultOwnedApplicationLanes, MAX_APPLICATION_LANES } from "@reactive-resume/db/application-lanes";
@@ -262,23 +262,21 @@ export async function linkAnonymousAccount({
 		const rewriteUploadsUrl = (column: unknown) =>
 			sql`case when ${column} is not null then replace(${column}, 'uploads/' || ${fromUserId} || '/', 'uploads/' || ${toUserId} || '/') else null end`;
 
-		// An existing account may already use a slug; suffix the guest's copy to keep (user, slug) unique.
-		await tx
-			.update(schema.resume)
-			.set({
-				userId: toUserId,
-				slug: sql`case when exists (select 1 from resume r where r.user_id = ${toUserId} and r.slug = resume.slug) then resume.slug || '-' || right(resume.id, 6) else resume.slug end`,
-				data: rewriteUploadsJson(schema.resume.data),
-			})
-			.where(eq(schema.resume.userId, fromUserId));
-
-		await tx
-			.update(schema.resumeVersion)
-			.set({
-				userId: toUserId,
-				data: rewriteUploadsJson(schema.resumeVersion.data),
-			})
-			.where(eq(schema.resumeVersion.userId, fromUserId));
+		// CAREEROS (P1-T04): resumes, their versions, slug redirects and statistics now belong to an organization, and
+		// row-level security hides the guest's organization from this request. A narrow security definer function
+		// moves them to the account's oldest organization (see migration 20261101004553_resumes_rls). It refuses a
+		// source that is not a guest and a target organization the account is not a member of. The slug suffix,
+		// the upload-path rewrite and the redirect de-duplication are the same as before, done inside the function.
+		// Called without a schema so that tests with their own schema can install a local copy.
+		const [targetMembership] = await tx
+			.select({ organizationId: schema.member.organizationId })
+			.from(schema.member)
+			.where(eq(schema.member.userId, toUserId))
+			.orderBy(asc(schema.member.createdAt), asc(schema.member.id))
+			.limit(1);
+		await tx.execute(
+			sql`select careeros_move_guest_resumes(${fromUserId}, ${toUserId}, ${targetMembership?.organizationId ?? null})`,
+		);
 
 		await tx
 			.update(schema.coverLetter)
@@ -332,20 +330,6 @@ export async function linkAnonymousAccount({
 			.update(schema.careerAnswer)
 			.set({ userId: toUserId, updatedAt: schema.careerAnswer.updatedAt })
 			.where(eq(schema.careerAnswer.userId, fromUserId));
-
-		await tx
-			.delete(schema.resumeSlugRedirect)
-			.where(
-				and(
-					eq(schema.resumeSlugRedirect.userId, fromUserId),
-					sql`exists (select 1 from resume_slug_redirect rsr where rsr.user_id = ${toUserId} and rsr.slug = resume_slug_redirect.slug)`,
-				),
-			);
-
-		await tx
-			.update(schema.resumeSlugRedirect)
-			.set({ userId: toUserId })
-			.where(eq(schema.resumeSlugRedirect.userId, fromUserId));
 
 		// Ownership updates lock document rows, so guest saves cannot add uncopied references during copying.
 		const hook = accountLinkHook;

@@ -1,3 +1,5 @@
+// CAREEROS: the signed link names its organization; the download runs in that scope (P1-T04)
+import { withOrgContext } from "@careeros/tenancy";
 import { createResumePdfDownload, verifyResumePdfDownloadToken } from "@reactive-resume/api/features/resume/export";
 
 const downloadHeaders = {
@@ -27,9 +29,15 @@ export async function handleResumePdfDownload(request: Request, id: string) {
 	const target = searchParams.get("target");
 	if (target && target !== "resume") return text("Not found", 404);
 
+	// CAREEROS: a link made before organizations existed has no organization; it is refused rather than guessed.
+	const organizationId = verification.organizationId;
+	if (!organizationId) return text("Unauthorized", 401);
+
 	try {
 		const resHeaders = new Headers();
-		const download = await createResumePdfDownload({ id, userId: verification.userId, resHeaders });
+		const download = await withOrgContext(organizationId, () =>
+			createResumePdfDownload({ id, userId: verification.userId, resHeaders }),
+		);
 
 		return new Response(download.body, {
 			headers: {

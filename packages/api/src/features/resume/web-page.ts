@@ -1,20 +1,15 @@
 import type { ResumeMatch } from "./slugs";
 import type { ResumeData } from "@reactive-resume/schema/resume/data";
-import { and, asc, count, eq, isNull, sql } from "drizzle-orm";
+import { eq, sql } from "drizzle-orm";
 import { isbot } from "isbot";
 import { db } from "@reactive-resume/db/client";
 import * as schema from "@reactive-resume/db/schema";
 import { env } from "@reactive-resume/env/server";
 import { publicResumePath } from "@reactive-resume/resume/sharing";
-import { verifiedDomainColumn } from "../custom-domain/service";
+import { isCustomDomainsEnabled, verifiedDomainColumn } from "../custom-domain/service";
 import { createPreviewToken, hasResumeAccess, isValidPreviewToken } from "./access";
-import {
-	ownerIsNotBanned,
-	publicResumeData,
-	requiresPassword,
-	resolveViewer,
-	shouldCountForStatistics,
-} from "./access-policy";
+import { publicResumeData, requiresPassword, resolveViewer, shouldCountForStatistics } from "./access-policy";
+import { viewerOrganizationId, withPublicResumeScope } from "./public-scope";
 import { parseStoredResumeData } from "./resume-data-validation";
 import { resumeService } from "./service";
 import { findResume } from "./slugs";
@@ -51,7 +46,20 @@ const isCrawler = (headers: Headers) => isbot(headers.get("user-agent") ?? "");
  * A public resume as its web page shows it, in one lookup. Every visitor, the owner included, gets the public view, so
  * the page is what the owner shares. Views count once an hour per visitor, never for the owner or for crawlers.
  */
-export async function loadPublicWebPage(input: {
+export function loadPublicWebPage(input: {
+	match: ResumeMatch;
+	requestHeaders: Headers;
+	trustedClient: string;
+	previewToken?: string | undefined;
+}): Promise<PublicWebPage> {
+	// CAREEROS: a visitor has no organization; the public resume's own organization scopes the lookup and the counter.
+	// A preview of an unpublished resume has no public organization: the owner's own organization is the fallback.
+	return withPublicResumeScope(input.match, () => loadPublicWebPageInScope(input), {
+		fallbackOrganizationId: input.previewToken ? () => viewerOrganizationId(input.requestHeaders) : undefined,
+	});
+}
+
+async function loadPublicWebPageInScope(input: {
 	match: ResumeMatch;
 	requestHeaders: Headers;
 	trustedClient: string;
@@ -121,10 +129,13 @@ export async function verifyWebPagePassword(input: {
 }): Promise<boolean> {
 	if (input.password.length < 6 || input.password.length > 64) return false;
 	// The verify call names a resume by username and slug; a page at `/<username>` or the root looks its slug up.
+	// CAREEROS: that lookup runs in the public resume's organization (the verify call scopes itself).
 	const address =
 		"slug" in input.match
 			? input.match
-			: await findResume(input.match, { username: schema.user.username, slug: schema.resume.slug });
+			: await withPublicResumeScope(input.match, () =>
+					findResume(input.match, { username: schema.user.username, slug: schema.resume.slug }),
+				);
 	if (!address) return false;
 	return resumeService
 		.verifyPassword({
@@ -155,42 +166,26 @@ export const SITEMAP_PAGE_SIZE = 50_000;
 
 /**
  * Resumes whose owners let search engines list them: public, no password, outside Trash, owner not banned. A primary
- * resume with a verified custom domain is left out; its own domain is its address. Needs the `user` join.
+ * resume with a verified custom domain is left out; its own domain is its address.
+ *
+ * CAREEROS (P1-T04): a sitemap spans every organization, so it reads through security definer functions that return
+ * public listing data only (username, slug, updated time), never an organization id or any other column.
  */
-const indexableResumeWhere = () =>
-	and(
-		eq(schema.resume.isPublic, true),
-		eq(schema.resume.showInSearchEngines, true),
-		isNull(schema.resume.password),
-		isNull(schema.resume.trashedAt),
-		ownerIsNotBanned(),
-		sql`not (${schema.resume.isPrimary} and ${verifiedDomainColumn()} is not null)`,
+export async function listIndexableResumes(page: number) {
+	const result = await db.execute<{ username: string; slug: string; is_primary: boolean; updated_at: Date | string }>(
+		sql`select * from public.careeros_public_indexable_resumes(${page * SITEMAP_PAGE_SIZE}, ${SITEMAP_PAGE_SIZE}, ${isCustomDomainsEnabled()})`,
 	);
-
-export function listIndexableResumes(page: number) {
-	return (
-		db
-			.select({
-				username: schema.user.username,
-				slug: schema.resume.slug,
-				isPrimary: schema.resume.isPrimary,
-				updatedAt: schema.resume.updatedAt,
-			})
-			.from(schema.resume)
-			.innerJoin(schema.user, eq(schema.resume.userId, schema.user.id))
-			.where(indexableResumeWhere())
-			// ponytail: offset paging; switch to keyset ranges if sitemap pages get slow.
-			.orderBy(asc(schema.resume.id))
-			.limit(SITEMAP_PAGE_SIZE)
-			.offset(page * SITEMAP_PAGE_SIZE)
-	);
+	return result.rows.map((row) => ({
+		username: row.username,
+		slug: row.slug,
+		isPrimary: row.is_primary,
+		updatedAt: new Date(row.updated_at),
+	}));
 }
 
 export async function countIndexableResumes(): Promise<number> {
-	const [row] = await db
-		.select({ total: count() })
-		.from(schema.resume)
-		.innerJoin(schema.user, eq(schema.resume.userId, schema.user.id))
-		.where(indexableResumeWhere());
-	return row?.total ?? 0;
+	const result = await db.execute<{ total: string | number }>(
+		sql`select public.careeros_public_indexable_resume_count(${isCustomDomainsEnabled()}) as total`,
+	);
+	return Number(result.rows[0]?.total ?? 0);
 }

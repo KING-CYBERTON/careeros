@@ -1,4 +1,9 @@
-export type TenancyErrorCode = "invalid_org" | "org_switch_in_scope" | "scope_closed" | "connect_in_scope";
+export type TenancyErrorCode =
+	| "invalid_org"
+	| "org_switch_in_scope"
+	| "scope_closed"
+	| "connect_in_scope"
+	| "org_required";
 
 /** Raised when an organization context cannot be established or would be unsafe. Always fail closed. */
 export class TenancyError extends Error {

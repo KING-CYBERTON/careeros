@@ -76,3 +76,21 @@ $$;
 
 GRANT SELECT, INSERT, UPDATE, DELETE ON ALL TABLES IN SCHEMA public TO careeros_app;
 GRANT USAGE, SELECT ON ALL SEQUENCES IN SCHEMA public TO careeros_app;
+
+-- P1-T04: the security definer lookup functions (careeros_*) are executable by the app role only. A migration that ran
+-- before this role existed (a fresh test database) could not grant it, so grant here too. Idempotent.
+DO $$
+DECLARE
+	fn record;
+BEGIN
+	FOR fn IN
+		SELECT p.oid::regprocedure AS signature
+		FROM pg_proc p
+		JOIN pg_namespace n ON n.oid = p.pronamespace
+		WHERE n.nspname = 'public' AND p.proname LIKE 'careeros\_%'
+	LOOP
+		EXECUTE format('REVOKE ALL ON FUNCTION %s FROM PUBLIC', fn.signature);
+		EXECUTE format('GRANT EXECUTE ON FUNCTION %s TO careeros_app', fn.signature);
+	END LOOP;
+END
+$$;

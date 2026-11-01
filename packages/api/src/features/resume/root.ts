@@ -1,7 +1,12 @@
 import type { resumeService } from "./service";
 import { ORPCError } from "@orpc/server";
 
-type RootRequest = { requestHeaders: Headers; currentUserId?: string };
+type RootRequest = {
+	requestHeaders: Headers;
+	currentUserId?: string;
+	/** CAREEROS (P1-T04): see `ownerViewer`. */
+	fallbackOrganizationId?: (() => Promise<string | undefined>) | undefined;
+};
 type RootDependencies = {
 	config: { rootResumeId?: string | undefined; appUrl: string };
 	findTarget(id: string): Promise<{ username: string; slug: string; isPublic: boolean } | null>;
@@ -18,13 +23,17 @@ const getDependencies = async (): Promise<RootDependencies> => {
 	]);
 	return {
 		config: { rootResumeId: env.ROOT_RESUME_ID, appUrl: env.APP_URL },
+		// CAREEROS: the instance's root resume is read in its own organization, found by a public-only definer lookup (P1-T04).
 		findTarget: async (id) => {
-			const [target] = await db
-				.select({ username: schema.user.username, slug: schema.resume.slug, isPublic: schema.resume.isPublic })
-				.from(schema.resume)
-				.innerJoin(schema.user, eq(schema.resume.userId, schema.user.id))
-				.where(eq(schema.resume.id, id));
-			return target ?? null;
+			const { withPublicResumeScope } = await import("./public-scope");
+			return withPublicResumeScope({ id }, async () => {
+				const [target] = await db
+					.select({ username: schema.user.username, slug: schema.resume.slug, isPublic: schema.resume.isPublic })
+					.from(schema.resume)
+					.innerJoin(schema.user, eq(schema.resume.userId, schema.user.id))
+					.where(eq(schema.resume.id, id));
+				return target ?? null;
+			});
 		},
 		getBySlug: resumeService.getBySlug,
 	};

@@ -1,6 +1,8 @@
 import type { StorageService } from "../storage";
 import type { ResumeData } from "@reactive-resume/schema/resume/data";
 import { createHash } from "node:crypto";
+// CAREEROS: scopes and public-render persistence (P1-T04)
+import { captureOrgScope } from "@careeros/tenancy";
 import { ORPCError } from "@orpc/server";
 import { and, eq, isNull } from "drizzle-orm";
 import { isbot } from "isbot";
@@ -19,6 +21,7 @@ import {
 	shouldCountForStatistics,
 } from "./access-policy";
 import { publicRenderRateLimiter } from "./public-render-rate-limit";
+import { viewerOrganizationId, withPublicResumeScope } from "./public-scope";
 import { findResume } from "./slugs";
 import { countVisit } from "./view-dedup";
 
@@ -44,7 +47,15 @@ export type PublicResumePdf = { body: File | null; filename: string; etag: strin
  * Enforces visibility, password access, and rate limiting before generating the file, or before confirming a
  * cached copy is current.
  */
-export async function createPublicResumePdf(input: CreatePublicResumePdfInput): Promise<PublicResumePdf> {
+export function createPublicResumePdf(input: CreatePublicResumePdfInput): Promise<PublicResumePdf> {
+	// CAREEROS: a visitor has no organization; the public resume's own organization scopes the lookup and the counter.
+	// The owner's own unpublished resume is reached through their organization (fallback, membership checked).
+	return withPublicResumeScope(input, () => createPublicResumePdfInScope(input), {
+		fallbackOrganizationId: () => viewerOrganizationId(input.requestHeaders),
+	});
+}
+
+async function createPublicResumePdfInScope(input: CreatePublicResumePdfInput): Promise<PublicResumePdf> {
 	const resume = await findResume(
 		{ username: input.username, slug: input.slug },
 		{
@@ -99,7 +110,9 @@ export async function createPublicResumePdf(input: CreatePublicResumePdfInput): 
 	if (!pending) {
 		// Only a render spends the visitor's budget; a cached file is as cheap as a picture.
 		await publicRenderRateLimiter.consume({ trustedClient: input.trustedClient, resumeId: resume.id });
-		pending = renderAndStore(storage, {
+		// CAREEROS: the shared render outlives this request's scope when another visitor awaits it, so its database
+		// writes open their own scope for this resume's organization (captured here, inside the scope).
+		pending = renderAndStore(storage, captureOrgScope(), {
 			data,
 			filename,
 			folder,
@@ -117,6 +130,7 @@ const PDF = { type: "application/pdf" };
 
 async function renderAndStore(
 	storage: StorageService | undefined,
+	inScope: ReturnType<typeof captureOrgScope>,
 	{
 		data,
 		filename,
@@ -134,18 +148,20 @@ async function renderAndStore(
 	try {
 		// Publication is serialized with deletion under the same owner lock. Deletion waits for the write; if it
 		// already committed, revalidation stops this late render from recreating a cleaned prefix.
-		await db.transaction(async (tx) => {
-			await lockUser(tx, userId);
-			const [live] = await tx
-				.select({ id: schema.resume.id })
-				.from(schema.resume)
-				.where(and(eq(schema.resume.id, resumeId), eq(schema.resume.userId, userId), isNull(schema.resume.trashedAt)))
-				.limit(1);
-			if (!live) return;
-			await storage.write({ key, data: bytes, contentType: "application/pdf" });
-			const stale = (await storage.list(folder)).filter((name) => name !== key && name.includes("/public-"));
-			await Promise.all(stale.map((name) => storage.delete(name)));
-		});
+		await inScope(() =>
+			db.transaction(async (tx) => {
+				await lockUser(tx, userId);
+				const [live] = await tx
+					.select({ id: schema.resume.id })
+					.from(schema.resume)
+					.where(and(eq(schema.resume.id, resumeId), eq(schema.resume.userId, userId), isNull(schema.resume.trashedAt)))
+					.limit(1);
+				if (!live) return;
+				await storage.write({ key, data: bytes, contentType: "application/pdf" });
+				const stale = (await storage.list(folder)).filter((name) => name !== key && name.includes("/public-"));
+				await Promise.all(stale.map((name) => storage.delete(name)));
+			}),
+		);
 	} catch (error) {
 		if ((error as { code?: string } | null)?.code === "NOT_FOUND") return bytes;
 		console.warn("Failed to cache public resume PDF", error);

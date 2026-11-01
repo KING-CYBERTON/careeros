@@ -2,6 +2,8 @@ import type { DbOrTx } from "@reactive-resume/db/client";
 import type { SQL } from "drizzle-orm";
 import type { SelectedFields } from "drizzle-orm/pg-core";
 import type { SelectResultFields } from "drizzle-orm/query-builders/select.types";
+// CAREEROS: tenant column for inserts (P1-T04)
+import { requireOrgId } from "@careeros/tenancy";
 import { and, desc, eq, gt, inArray, isNull, like, or, sql } from "drizzle-orm";
 import { db } from "@reactive-resume/db/client";
 import * as schema from "@reactive-resume/db/schema";
@@ -90,7 +92,13 @@ export async function recordSlugChange(
 	const expiresAt = new Date(Date.now() + REDIRECT_LIFETIME_MS);
 	await client
 		.insert(schema.resumeSlugRedirect)
-		.values({ userId: input.userId, resumeId: input.resumeId, slug: input.from, expiresAt })
+		.values({
+			organizationId: requireOrgId(),
+			userId: input.userId,
+			resumeId: input.resumeId,
+			slug: input.from,
+			expiresAt,
+		})
 		.onConflictDoUpdate({
 			target: [schema.resumeSlugRedirect.userId, schema.resumeSlugRedirect.slug],
 			set: { resumeId: input.resumeId, expiresAt },

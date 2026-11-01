@@ -220,11 +220,18 @@ describe("coverage check", () => {
 		const result = await runCoverageCheck(pools.app, isolationRegistry);
 		expect(result.failures).toEqual([]);
 		expect(result.ok).toBe(true);
-		expect(result.tenantTables).toEqual([]);
+		// CAREEROS (P1-T04): the five resume tables are the tenant tables so far.
+		expect(result.tenantTables.sort()).toEqual(isolationRegistry.map((entry) => entry.table).sort());
 	});
 
-	it("ships an empty registry", () => {
-		expect(isolationRegistry).toEqual([]);
+	it("registers the resume tables (P1-T04); later batches add theirs", () => {
+		expect(isolationRegistry.map((entry) => entry.table)).toEqual([
+			"resume",
+			"resume_version",
+			"resume_slug_redirect",
+			"resume_statistics",
+			"resume_statistics_daily",
+		]);
 	});
 });
 
@@ -300,8 +307,8 @@ describe("runner", () => {
 		expect(its).toHaveLength(3); // db check for both, api check for the second
 	});
 
-	it("registers nothing for the empty Phase 0 registry", () => {
-		expect(registerIsolationSuite(isolationRegistry, ctx)).toEqual([]);
+	it("registers nothing for an empty registry", () => {
+		expect(registerIsolationSuite([], ctx)).toEqual([]);
 	});
 });
 

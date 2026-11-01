@@ -187,7 +187,7 @@ export const protectedProcedure = protectedProcedureWithoutOrg.use(async ({ cont
 	const organizationId = context.authentication ? await resolveOrgForAuthentication(context.authentication) : undefined;
 	const nextContext = { ...context, organizationId: organizationId as string | undefined };
 	if (!organizationId) {
-		// CAREEROS: enforcement is off until P1-T04 (see ORG_CONTEXT_REQUIRED); then the handler runs without a scope.
+		// CAREEROS: enforcement is on since P1-T04 (see ORG_CONTEXT_REQUIRED). The branch below stays for the constant's `false` state.
 		if (ORG_CONTEXT_REQUIRED) throw new ORPCError("FORBIDDEN", { message: "No active organization" });
 		return next({ context: nextContext });
 	}

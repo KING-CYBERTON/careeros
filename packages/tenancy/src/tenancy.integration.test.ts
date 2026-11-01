@@ -52,6 +52,13 @@ describe.skipIf(!configured)("tenancy core (real Postgres)", () => {
 		await pools?.close();
 	});
 
+	it("requireOrgId returns the scope's organization and throws org_required outside one (P1-T04)", async () => {
+		expect(() => tenancy.requireOrgId()).toThrowError(expect.objectContaining({ code: "org_required" }));
+		expect(await tenancy.withOrgContext("org_a", async () => tenancy.requireOrgId())).toBe("org_a");
+		// After the scope ended there is no organization again.
+		expect(() => tenancy.requireOrgId()).toThrowError(expect.objectContaining({ code: "org_required" }));
+	});
+
 	it("shows the context inside fn and clears it after return", async () => {
 		const seen = await tenancy.withOrgContext("org_a", async () => ({
 			viaPool: await setting(),

@@ -39,7 +39,7 @@ export async function handleMcp(request: Request, trustedClient = "unknown") {
 		await consumeMcpUserLimit(authentication.user.id);
 		// CAREEROS: no organization (none on the key or session, or not a member) means no access (P1-T02)
 		const organizationId = await resolveOrgForAuthentication(authentication);
-		// Enforcement is off until P1-T04 (see ORG_CONTEXT_REQUIRED); then the request runs without a scope.
+		// Enforcement is on since P1-T04 (see ORG_CONTEXT_REQUIRED).
 		if (!organizationId && ORG_CONTEXT_REQUIRED) return errorResponse(403, "No active organization");
 		const resHeaders = new Headers(responseHeaders);
 		server = createMcpServer(request, authentication, trustedClient, resHeaders);

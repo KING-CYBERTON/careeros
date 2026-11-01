@@ -23,6 +23,7 @@ describe("handleResumePdfDownload", () => {
 			ok: true,
 			resumeId: "resume-1",
 			userId: "user-1",
+			organizationId: "org_test",
 			expiresAt: "2026-06-01T10:10:00.000Z",
 		});
 		mocks.createResumePdfDownload.mockResolvedValueOnce({
@@ -71,8 +72,18 @@ describe("handleResumePdfDownload", () => {
 		expect(response.status).toBe(410);
 		expect(mocks.createResumePdfDownload).not.toHaveBeenCalled();
 	});
-	it("returns the shared renderer's rate limit as HTTP 429", async () => {
+	it("refuses a signed link made before organizations existed", async () => {
 		mocks.verifyResumePdfDownloadToken.mockReturnValueOnce({ ok: true, userId: "user-1" });
+		const response = await handleResumePdfDownload(
+			new Request("https://example.com/api/resumes/resume-1/pdf?token=signed"),
+			"resume-1",
+		);
+		expect(response.status).toBe(401);
+		expect(mocks.createResumePdfDownload).not.toHaveBeenCalled();
+	});
+
+	it("returns the shared renderer's rate limit as HTTP 429", async () => {
+		mocks.verifyResumePdfDownloadToken.mockReturnValueOnce({ ok: true, userId: "user-1", organizationId: "org_test" });
 		mocks.createResumePdfDownload.mockRejectedValueOnce({
 			code: "TOO_MANY_REQUESTS",
 			data: { reset: Date.now() + 30_000 },

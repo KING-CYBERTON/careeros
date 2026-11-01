@@ -21,13 +21,21 @@ const mocks = vi.hoisted(() => {
 					: table === schema.application
 						? [{ id: "guest-application", status: "saved", laneId: null, activity: [] }]
 						: [];
-			return { where: () => Object.assign(Promise.resolve(rows), { for: () => Promise.resolve(rows) }) };
+			return {
+				where: () =>
+					Object.assign(Promise.resolve(rows), {
+						for: () => Promise.resolve(rows),
+						// CAREEROS (P1-T04): the target account's oldest membership
+						orderBy: () => ({ limit: () => Promise.resolve([{ organizationId: "org-user-456" }]) }),
+					}),
+			};
 		},
 	}));
 	const insert = vi.fn(() => ({ values: () => ({ onConflictDoNothing: () => Promise.resolve() }) }));
-	const tx = { select, insert, update, delete: deleteFn };
+	const execute = vi.fn((_query?: unknown) => Promise.resolve());
+	const tx = { select, insert, update, delete: deleteFn, execute };
 	const transaction = vi.fn(async (cb: (tx: unknown) => Promise<unknown>) => cb(tx));
-	return { update, updateSet, updateWhere, delete: deleteFn, deleteWhere, transaction, tx };
+	return { update, updateSet, updateWhere, delete: deleteFn, deleteWhere, execute, transaction, tx };
 });
 
 vi.mock("better-auth", async (importOriginal) => ({
@@ -46,6 +54,7 @@ const { linkAnonymousAccount, setAccountLinkHook } = await import("./config");
 
 beforeEach(() => {
 	mocks.update.mockClear();
+	mocks.execute.mockClear();
 	mocks.updateSet.mockClear();
 	mocks.updateWhere.mockClear();
 	mocks.delete.mockClear();
@@ -107,23 +116,17 @@ describe("linkAnonymousAccount", () => {
 
 		expect(mocks.transaction).toHaveBeenCalledOnce();
 
-		// Check resume update includes data rewrite
-		const resumeUpdateCall = mocks.update.mock.calls.find((call) => call[0] === schema.resume);
-		expect(resumeUpdateCall).toBeDefined();
-		const resumeSetArg = mocks.updateSet.mock.calls.find(
-			(_, idx) => mocks.update.mock.calls[idx]?.[0] === schema.resume,
-		)?.[0];
-		expect(resumeSetArg).toMatchObject({ userId: "user-456" });
-		expect(resumeSetArg).toHaveProperty("data");
-
-		// Check resumeVersion update includes data rewrite
-		const resumeVersionUpdateCall = mocks.update.mock.calls.find((call) => call[0] === schema.resumeVersion);
-		expect(resumeVersionUpdateCall).toBeDefined();
-		const resumeVersionSetArg = mocks.updateSet.mock.calls.find(
-			(_, idx) => mocks.update.mock.calls[idx]?.[0] === schema.resumeVersion,
-		)?.[0];
-		expect(resumeVersionSetArg).toMatchObject({ userId: "user-456" });
-		expect(resumeVersionSetArg).toHaveProperty("data");
+		// CAREEROS (P1-T04): resumes, their versions, redirects and statistics move through one definer function,
+		// into the target account's organization; there is no direct update of the resume tables any more.
+		expect(mocks.execute).toHaveBeenCalledOnce();
+		const moveQuery = JSON.stringify(mocks.execute.mock.calls[0]?.[0]);
+		expect(moveQuery).toContain("careeros_move_guest_resumes");
+		expect(moveQuery).toContain("guest-123");
+		expect(moveQuery).toContain("user-456");
+		expect(moveQuery).toContain("org-user-456");
+		expect(mocks.update.mock.calls.some((call) => call[0] === schema.resume)).toBe(false);
+		expect(mocks.update.mock.calls.some((call) => call[0] === schema.resumeVersion)).toBe(false);
+		expect(mocks.update.mock.calls.some((call) => call[0] === schema.resumeSlugRedirect)).toBe(false);
 
 		// Check application update includes resumeFileUrl and coverLetterUrl rewrites
 		const appUpdateCall = mocks.update.mock.calls.find((call) => call[0] === schema.application);
@@ -152,17 +155,6 @@ describe("linkAnonymousAccount", () => {
 		)?.[0];
 		expect(coverLetterVersionSetArg).toMatchObject({ userId: "user-456" });
 		expect(coverLetterVersionSetArg).toHaveProperty("data");
-
-		// Check resumeSlugRedirect deduplication and update
-		const redirectDeleteCall = mocks.delete.mock.calls.find((call) => call[0] === schema.resumeSlugRedirect);
-		expect(redirectDeleteCall).toBeDefined();
-
-		const redirectUpdateCall = mocks.update.mock.calls.find((call) => call[0] === schema.resumeSlugRedirect);
-		expect(redirectUpdateCall).toBeDefined();
-		const redirectSetArg = mocks.updateSet.mock.calls.find(
-			(_, idx) => mocks.update.mock.calls[idx]?.[0] === schema.resumeSlugRedirect,
-		)?.[0];
-		expect(redirectSetArg).toMatchObject({ userId: "user-456" });
 
 		// Check hook execution
 		expect(hook).toHaveBeenCalledWith({

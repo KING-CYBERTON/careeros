@@ -1,4 +1,6 @@
 import type { CoverLetterDraftInput } from "../../dto/cover-letter";
+// CAREEROS: the stream is read after the request scope closed; its data reads open a scope of their own (P1-T04)
+import { captureOrgScope } from "@careeros/tenancy";
 import { ORPCError } from "@orpc/client";
 import { streamText } from "ai";
 import { letterDraftSystemPrompt } from "@reactive-resume/ai/prompts";
@@ -44,17 +46,29 @@ function buildLetterDraftPrompt(input: PromptInput): string {
  * Streams a draft of the letter's body from its resume and its application's posting. Nothing is saved: the client
  * shows the draft until it's kept or discarded, so a failure leaves the letter as it was.
  */
-export async function* draftLetterBody(
-	input: CoverLetterDraftInput & { userId: string; signal?: AbortSignal | undefined },
+type DraftInput = CoverLetterDraftInput & { userId: string; signal?: AbortSignal | undefined };
+
+// CAREEROS: called inside the request's organization scope (the procedure handler), so the organization is captured
+// here; a generator body would only run later, when the client reads the stream.
+export function draftLetterBody(input: DraftInput): AsyncGenerator<string> {
+	return streamLetterDraft(input, captureOrgScope());
+}
+
+async function* streamLetterDraft(
+	input: DraftInput,
+	inScope: ReturnType<typeof captureOrgScope>,
 ): AsyncGenerator<string> {
 	const { userId } = input;
-	const letter = await coverLetterService.getById({ id: input.id, userId });
-	const [resume, application] = await Promise.all([
-		letter.sourceResumeId ? resumeService.getById({ id: letter.sourceResumeId, userId }).catch(() => null) : null,
-		letter.sourceApplicationId
-			? applicationService.getById({ id: letter.sourceApplicationId, userId }).catch(() => null)
-			: null,
-	]);
+	const { resume, application } = await inScope(async () => {
+		const letter = await coverLetterService.getById({ id: input.id, userId });
+		const [resume, application] = await Promise.all([
+			letter.sourceResumeId ? resumeService.getById({ id: letter.sourceResumeId, userId }).catch(() => null) : null,
+			letter.sourceApplicationId
+				? applicationService.getById({ id: letter.sourceApplicationId, userId }).catch(() => null)
+				: null,
+		]);
+		return { resume, application };
+	});
 	if (!resume && !application) {
 		throw new ORPCError("BAD_REQUEST", { message: "Link the letter to a resume or an application first." });
 	}

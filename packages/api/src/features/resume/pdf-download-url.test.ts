@@ -39,6 +39,8 @@ describe("resume PDF signed download URLs", () => {
 			ok: true,
 			resumeId: "resume-1",
 			userId: "user-1",
+			// CAREEROS (P1-T04): the link carries the organization of the request that made it (mocked as org_test).
+			organizationId: "org_test",
 			expiresAt: "2026-06-01T10:10:00.000Z",
 		});
 	});
