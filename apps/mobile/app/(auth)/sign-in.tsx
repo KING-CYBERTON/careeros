@@ -1,3 +1,4 @@
+import type { BrandInfo } from "@reactive-resume/utils/brand";
 import { useLingui } from "@lingui/react/macro";
 import { useQuery } from "@tanstack/react-query";
 import { ObserveInteractiveMarker } from "expo-observe";
@@ -7,6 +8,8 @@ import { AuthHeader, PrivacyPolicyLink, hostOf } from "@/auth/auth-header";
 import { getFlags, isAllowedServer, toOrigin } from "@/auth/oauth";
 import { useSession } from "@/auth/session";
 import { useSignIn } from "@/auth/use-sign-in";
+// CAREEROS (P2-T02): the organization's name, logo and link, as last seen on this server
+import { useStoredBrand } from "@/branding/store";
 import { routes } from "@/routes";
 import { Banner, Button, Card, ListRow, Screen, Text, useTheme } from "@/ui";
 
@@ -25,6 +28,7 @@ export default function SignInScreen() {
 	const { size, space } = useTheme();
 	const server = useTargetServer();
 	const host = hostOf(server);
+	const brand = useStoredBrand(server);
 	const { attempt, start, cancel, reset } = useSignIn();
 	const flags = useQuery({ queryKey: ["auth", "flags", server], queryFn: () => getFlags(server) });
 
@@ -43,10 +47,10 @@ export default function SignInScreen() {
 				contentContainerStyle={{ flexGrow: 1, justifyContent: "center", gap: space.s8, paddingVertical: space.s8 }}
 			>
 				{attempt.state === "waiting" ? (
-					<Waiting onCancel={cancel} />
+					<Waiting onCancel={cancel} brand={brand} />
 				) : attempt.state === "failed" ? (
 					<>
-						<AuthHeader />
+						<AuthHeader brand={brand} />
 						<View style={{ gap: space.s3 }}>
 							<Banner
 								tone="danger"
@@ -66,7 +70,7 @@ export default function SignInScreen() {
 					</>
 				) : (
 					<>
-						<AuthHeader subtitle={t`Your resumes, letters and applications, on ${host}.`} />
+						<AuthHeader brand={brand} subtitle={t`Your resumes, letters and applications, on ${host}.`} />
 						<View style={{ gap: space.s3 }}>
 							{flags.data?.disableSignups ? (
 								<Banner
@@ -118,22 +122,23 @@ export default function SignInScreen() {
 					/>
 				</Card>
 			) : null}
-			<PrivacyPolicyLink />
+			<PrivacyPolicyLink brand={brand} />
 		</Screen>
 	);
 }
 
 type WaitingProps = {
 	onCancel: () => void;
+	brand: BrandInfo;
 };
 
-function Waiting({ onCancel }: WaitingProps) {
+function Waiting({ onCancel, brand }: WaitingProps) {
 	const { t } = useLingui();
 	const { colors, space } = useTheme();
 
 	return (
 		<>
-			<AuthHeader />
+			<AuthHeader brand={brand} />
 			<View style={{ gap: space.s4, alignItems: "center", paddingHorizontal: space.s2 }}>
 				<ActivityIndicator size="large" color={colors.accent} />
 				<Text variant="heading" align="center">{t`Finish signing in in the browser`}</Text>

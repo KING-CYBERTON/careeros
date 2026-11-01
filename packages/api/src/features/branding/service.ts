@@ -9,6 +9,7 @@ import * as schema from "@reactive-resume/db/schema";
 import { env } from "@reactive-resume/env/server";
 import { enqueueStorageCleanup, runStorageCleanup } from "../storage/cleanup";
 import { getStorageService } from "../storage/service";
+import { bustPublicBranding, readPublicBrandingCache } from "./cache";
 
 // CAREEROS (P2-T01): organization branding and settings. Every query here runs inside the request's organization
 // scope (`protectedProcedure`), so row-level security confines it; the organization id is never taken from the client.
@@ -82,6 +83,8 @@ export async function updateBranding(userId: string, input: BrandingUpdate) {
 		.values({ organizationId, ...values })
 		.onConflictDoUpdate({ target: schema.organizationBranding.organizationId, set: values })
 		.returning();
+	// CAREEROS (P2-T02): the app shell caches public branding for 60 s; drop this organization's entry.
+	bustPublicBranding(organizationId);
 	return toBranding(organizationId, row);
 }
 
@@ -120,6 +123,7 @@ export async function replaceBrandingAsset(userId: string, kind: AssetKind, asse
 		await storage.delete(key).catch(() => false);
 		throw error;
 	}
+	bustPublicBranding(organizationId);
 	if (previous) await runStorageCleanup({ ownerId: organizationId, storageKeys: [previous] }).catch(() => undefined);
 	return { url: brandingAssetUrl(organizationId, key) ?? "", contentType: asset.contentType };
 }
@@ -180,6 +184,22 @@ export async function getPublicBrandingBySlug(slug: string) {
 	const { rows } = await db.execute<PublicRow>(sql`select * from careeros_public_branding_by_slug(${slug}::text)`);
 	return rows[0] ? toPublic(rows[0]) : null;
 }
+
+/** The public fields of an organization, by id, without a session. `null` for an unknown organization. */
+export async function getPublicBrandingByOrganizationId(organizationId: string) {
+	const { rows } = await db.execute<PublicRow>(sql`select * from careeros_public_branding(${organizationId}::text)`);
+	return rows[0] ? toPublic(rows[0]) : null;
+}
+
+/**
+ * CAREEROS (P2-T02): `getPublicBrandingByOrganizationId` through a 60 s in-process cache, for the app shell. The id must
+ * come from the request's resolved host, never from the client. `updateBranding` and uploads bust the entry.
+ */
+export function getCachedPublicBranding(organizationId: string) {
+	return readPublicBrandingCache(organizationId, () => getPublicBrandingByOrganizationId(organizationId));
+}
+
+export type PublicBranding = NonNullable<Awaited<ReturnType<typeof getPublicBrandingBySlug>>>;
 
 /**
  * The stored asset behind a public branding URL, or `null`. Only the file the branding currently points at is public:

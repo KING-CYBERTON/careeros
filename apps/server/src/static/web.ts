@@ -1,3 +1,5 @@
+import type { HostContext } from "@careeros/tenancy";
+import type { BrandInfo } from "@reactive-resume/utils/brand";
 import type { Locale } from "@reactive-resume/utils/locale";
 import { createHash } from "node:crypto";
 import { existsSync } from "node:fs";
@@ -17,6 +19,17 @@ import {
 	supportedLocales,
 } from "@reactive-resume/utils/locale";
 import { escapeHtml } from "@reactive-resume/utils/string";
+// CAREEROS (P2-T02): organization branding injected into the shell at serve time
+import {
+	applyBrand,
+	loadShellBrand,
+	PLATFORM_SHELL_BRAND,
+	renderManifest,
+	shellCacheTags,
+	varyOn,
+	type BrandingLoader,
+	type ShellBrand,
+} from "./brand-shell";
 
 function resolveWebDistPath() {
 	const candidates = [
@@ -134,7 +147,13 @@ function preloadLinks(html: string) {
  * An HTML page whose policy allows exactly the inline scripts of its template. Hashes come from the template before
  * any resume-derived markup goes in, so text that slipped past escaping could never allow itself.
  */
-function htmlResponse(html: string, headers: Record<string, string>, template = html) {
+function htmlResponse(
+	html: string,
+	headers: Record<string, string>,
+	template = html,
+	// CAREEROS (P2-T02): the shell's brand decides the cache tags; the platform brand keeps the single `html` tag.
+	shell: ShellBrand = PLATFORM_SHELL_BRAND,
+) {
 	// CAREEROS: the upstream third-party search note and site verification were removed (P2-T08).
 	const body = html;
 	return new Response(body, {
@@ -142,14 +161,14 @@ function htmlResponse(html: string, headers: Record<string, string>, template = 
 			...headers,
 			Link: [headers.Link, ...preloadLinks(template)].filter(Boolean).join(", "),
 			// Pages name the current build's assets, so a release purges this tag from Cloudflare's cache
-			// (.github/workflows/docker-publish.yml).
-			"Cache-Tag": "html",
+			// (.github/workflows/docker-publish.yml). CAREEROS: an organization host adds its own tag.
+			"Cache-Tag": shellCacheTags(shell),
 			"Content-Security-Policy": contentSecurityPolicy(template),
 		},
 	});
 }
 
-// CAREEROS: the product name comes from the platform default; P2-T02 passes the org brand per request.
+// CAREEROS: the product name comes from the platform default; P2-T02 puts the org brand in per request (`applyBrand`).
 const APP_NAME = PLATFORM_DEFAULT_APP_NAME;
 // The English copy, for a build without prerendered pages; a prerendered page carries its own locale's title and
 // description, and the social cards reuse them.
@@ -165,26 +184,29 @@ const TEMPLATES_DESCRIPTION =
 type StructuredData = Record<string, unknown>;
 
 /** The organization behind the site, referenced by id from every page's structured data. */
-function organization(origin: string): StructuredData {
+function organization(origin: string, brand: BrandInfo): StructuredData {
 	return {
 		"@type": "Organization",
 		"@id": `${origin}/#organization`,
-		name: APP_NAME,
+		name: brand.appName,
 		url: `${origin}/`,
-		logo: { "@type": "ImageObject", url: `${origin}/pwa-512x512.png`, width: 512, height: 512 },
+		// CAREEROS: an organization's own logo; its size is not known, so the platform's 512 px size stays off it.
+		logo: brand.logoUrl
+			? { "@type": "ImageObject", url: `${origin}${brand.logoUrl}` }
+			: { "@type": "ImageObject", url: `${origin}/pwa-512x512.png`, width: 512, height: 512 },
 	};
 }
 
-function homepageStructuredData(origin: string): StructuredData {
+function homepageStructuredData(origin: string, brand: BrandInfo): StructuredData {
 	const rootUrl = `${origin}/`;
 	return {
 		"@context": "https://schema.org",
 		"@graph": [
-			organization(origin),
+			organization(origin, brand),
 			{
 				"@type": "WebSite",
 				"@id": `${origin}/#website`,
-				name: APP_NAME,
+				name: brand.appName,
 				url: rootUrl,
 				publisher: { "@id": `${origin}/#organization` },
 			},
@@ -192,11 +214,11 @@ function homepageStructuredData(origin: string): StructuredData {
 	};
 }
 
-function atsCheckerStructuredData(origin: string): StructuredData {
+function atsCheckerStructuredData(origin: string, brand: BrandInfo): StructuredData {
 	return {
 		"@context": "https://schema.org",
 		"@graph": [
-			organization(origin),
+			organization(origin, brand),
 			{
 				"@type": "WebApplication",
 				name: "ATS Checker",
@@ -206,7 +228,7 @@ function atsCheckerStructuredData(origin: string): StructuredData {
 				operatingSystem: "Web",
 				isAccessibleForFree: true,
 				offers: { "@type": "Offer", price: "0", priceCurrency: "USD" },
-				isPartOf: { "@type": "WebSite", "@id": `${origin}/#website`, name: APP_NAME, url: `${origin}/` },
+				isPartOf: { "@type": "WebSite", "@id": `${origin}/#website`, name: brand.appName, url: `${origin}/` },
 				provider: { "@id": `${origin}/#organization` },
 			},
 		],
@@ -224,6 +246,8 @@ type PageSeoOptions = {
 	description: string;
 	imageUrl: string;
 	structuredData: StructuredData;
+	/** CAREEROS (P2-T02): the product name for `og:site_name` (escaped by `socialMetaTags`). */
+	siteName: string;
 };
 
 function createPageSeoMarkup(options: PageSeoOptions) {
@@ -238,7 +262,7 @@ function createPageSeoMarkup(options: PageSeoOptions) {
 		<link rel="canonical" href="${url}">
 		${alternates}
 		<meta property="og:locale" content="${options.locale.replace("-", "_")}">
-		${socialMetaTags({ type: "website", title: options.title, description: options.description, url, image: options.imageUrl, siteName: APP_NAME })}
+		${socialMetaTags({ type: "website", title: options.title, description: options.description, url, image: options.imageUrl, siteName: options.siteName })}
 		${jsonLdScript(options.structuredData)}
 	`;
 }
@@ -317,7 +341,7 @@ const prerenderedPages: Record<
 		name: string;
 		meta: { title: string; description: string };
 		image: string;
-		structuredData: (origin: string) => StructuredData;
+		structuredData: (origin: string, brand: BrandInfo) => StructuredData;
 	}
 > = {
 	"/": {
@@ -357,21 +381,72 @@ const prerenderedPages: Record<
 
 export type ReadWebFile = (path: string) => Promise<string>;
 
+const defaultReadFile: ReadWebFile = (path) => fs.readFile(path, "utf-8");
+
+/** CAREEROS (P2-T02): the response headers every branded page carries, whatever its content. */
+function brandedHeaders(headers: Record<string, string>, shell: ShellBrand) {
+	return {
+		...headers,
+		// The page differs per host: a shared cache must never serve one organization's shell to another.
+		Vary: varyOn(headers.Vary),
+		// A shell built from a failed branding lookup shows the platform default; no cache may keep it.
+		...(shell.degraded ? { "Cache-Control": "no-store" } : {}),
+	};
+}
+
 /**
- * CAREEROS (P2-T03): the app shell with status 404 and no indexing, for a host that has the shape of an organization
- * host but names no organization.
+ * CAREEROS (P2-T03, P2-T02): the app shell with status 404 and no indexing, for a host that has the shape of an
+ * organization host but names no organization. It carries the neutral platform brand and `window.__ORG_NOT_FOUND__`,
+ * which the SPA turns into the "This address isn't set up yet" page.
  */
-export async function handleUnknownOrgHost(readFile: ReadWebFile = (path) => fs.readFile(path, "utf-8")) {
-	const response = htmlResponse(await readFile(indexHtmlPath), {
+export async function handleUnknownOrgHost(readFile: ReadWebFile = defaultReadFile) {
+	const shell = (await readFile(indexHtmlPath))
+		.replace(/<title>[^<]*<\/title>/, () => `<title>${escapeHtml("This address isn't set up yet")}</title>`)
+		.replace(/<meta\s+name="description"[^>]*>/, () => "");
+	const html = applyBrand(shell, PLATFORM_SHELL_BRAND, { extraScript: "window.__ORG_NOT_FOUND__=true;" });
+	const response = htmlResponse(html, {
 		"Content-Type": "text/html; charset=UTF-8",
 		"X-Robots-Tag": "noindex, nofollow",
 		"Cache-Control": "no-store",
+		Vary: "Host",
 		...BASE_SECURITY_HEADERS,
 	});
 	return new Response(response.body, { status: 404, headers: response.headers });
 }
 
-export async function handleWebApp(request: Request, readFile: ReadWebFile = (path) => fs.readFile(path, "utf-8")) {
+/**
+ * CAREEROS (P2-T02): `/manifest.webmanifest` for the request's host, with the organization's name, theme colour and
+ * icon. Built from the shipped manifest at serve time; cached per host like the shell.
+ */
+export async function handleWebManifest(
+	host: HostContext = { kind: "platform" },
+	readFile: ReadWebFile = defaultReadFile,
+	load?: BrandingLoader,
+) {
+	const shell = await loadShellBrand(host, load);
+	// A build without the shipped manifest has nothing to brand.
+	const base = await readFile(`${staticRoot}/manifest.webmanifest`).catch(() => null);
+	if (base === null) return new Response("Not Found", { status: 404, headers: { "Cache-Control": "no-store" } });
+	return new Response(renderManifest(base, shell), {
+		headers: brandedHeaders(
+			{
+				"Content-Type": "application/manifest+json; charset=UTF-8",
+				"Cache-Control": shell.degraded ? "no-store" : "public, max-age=300",
+				"Cache-Tag": shellCacheTags(shell, "public"),
+				"X-Content-Type-Options": "nosniff",
+			},
+			shell,
+		),
+	});
+}
+
+export async function handleWebApp(
+	request: Request,
+	readFile: ReadWebFile = defaultReadFile,
+	// CAREEROS (P2-T02): the host the middleware resolved; the platform host when none is given.
+	host: HostContext = { kind: "platform" },
+	loadBranding?: BrandingLoader,
+) {
 	const requestedPath = new URL(request.url).pathname;
 	const pathname = requestedPath === "/index.html" ? "/" : requestedPath;
 
@@ -379,42 +454,51 @@ export async function handleWebApp(request: Request, readFile: ReadWebFile = (pa
 		return new Response("Not Found", { status: 404 });
 	}
 
-	const headers = getFallbackResponseHeaders(pathname);
-	if (!headers)
+	const baseHeaders = getFallbackResponseHeaders(pathname);
+	if (!baseHeaders)
 		return new Response("Not Found", {
 			status: 404,
 			headers: { "Content-Type": "text/plain; charset=UTF-8", "X-Robots-Tag": "noindex, nofollow" },
 		});
 
+	const shell = await loadShellBrand(host, loadBranding);
+	const headers = brandedHeaders(baseHeaders, shell);
+
 	// Hono drops HEAD bodies itself; returning early skips reading the shell and a public resume's DB lookup.
 	if (request.method === "HEAD") return new Response(null, { status: 200, headers });
 
-	const html = await readFile(indexHtmlPath);
+	const rawHtml = await readFile(indexHtmlPath);
 
 	const prerendered = prerenderedPages[pathname];
 	if (prerendered) {
 		const { locale, requested } = getPageLocale(request);
-		const origin = new URL(env.APP_URL).origin;
+		// CAREEROS (P2-T02): an organization host is its own site; its address is the canonical one.
+		const siteOrigin = host.kind === "org" ? host.origin : new URL(env.APP_URL).origin;
 		// Without a prerendered page (a build that skipped it), the app shell titled for the page renders it in the browser.
-		const page = await readFile(`${prerenderRoot}/${prerendered.name}/${locale}.html`).catch(() =>
-			withMeta(html, prerendered.meta),
+		const raw = await readFile(`${prerenderRoot}/${prerendered.name}/${locale}.html`).catch(() =>
+			withMeta(rawHtml, prerendered.meta),
 		);
+		// Branded here, at serve time: the prerendered files hold the platform name and are shared by every host.
+		const page = applyBrand(raw, shell);
 		const markup = createPageSeoMarkup({
-			canonicalUrl: new URL(pathname, env.APP_URL).toString(),
+			canonicalUrl: new URL(pathname, host.kind === "org" ? host.origin : env.APP_URL).toString(),
 			locale,
 			requested,
 			...readPageMeta(page, prerendered.meta),
-			imageUrl: `${origin}${prerendered.image}`,
-			structuredData: prerendered.structuredData(origin),
+			imageUrl: `${siteOrigin}${prerendered.image}`,
+			structuredData: prerendered.structuredData(siteOrigin, shell.brand),
+			siteName: shell.brand.appName,
 		});
 
 		// The saved locale changes what this address shows, so caches have to key on the cookie.
 		return htmlResponse(
 			page.replace("</head>", () => `${markup}</head>`),
-			{ ...headers, Vary: "Cookie" },
+			{ ...headers, Vary: varyOn("Cookie", "Host") },
 			page,
+			shell,
 		);
 	}
 
-	return htmlResponse(html, headers);
+	const html = applyBrand(rawHtml, shell);
+	return htmlResponse(html, headers, html, shell);
 }

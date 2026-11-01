@@ -30,7 +30,8 @@ import { serveResumePage } from "../static/resume-page";
 import { handleSchemaJson } from "../static/schema";
 import { handleLlms, handlePagesSitemap, handleResumesSitemap, handleRobots, handleSitemap } from "../static/seo";
 import { handleUpload } from "../static/uploads";
-import { handleWebApp, isProfilePath, isPublicResumePath, serveWebDistStatic } from "../static/web";
+// CAREEROS (P2-T02): handleWebManifest serves the per-host manifest
+import { handleWebApp, handleWebManifest, isProfilePath, isPublicResumePath, serveWebDistStatic } from "../static/web";
 import { handleAlias } from "./alias";
 import { handleAppleAppSiteAssociation, handleAndroidAssetLinks } from "./app-links";
 import { handleAuth, handleOAuth } from "./auth";
@@ -176,6 +177,9 @@ export function createApp(options: AppOptions = {}) {
 	app.get("/.well-known/openai-apps-challenge", () => handleOpenAiAppsChallenge());
 	app.all("/.well-known/*", () => handleWellKnownFallback());
 
+	// CAREEROS (P2-T02): the manifest carries the host's brand, so it is built per request, ahead of the static file.
+	app.get("/manifest.webmanifest", (c) => handleWebManifest(c.get("host"), options.readWebFile));
+
 	app.get("/robots.txt", () => handleRobots());
 	app.get("/sitemap.xml", () => handleSitemap());
 	app.get("/sitemaps/pages.xml", () => handlePagesSitemap());
@@ -195,8 +199,8 @@ export function createApp(options: AppOptions = {}) {
 	const rootResumeId = env.ROOT_RESUME_ID;
 	app.on("GET", ["/", "/index.html"], (c) =>
 		rootResumeId
-			? serveResumePage(c.req.raw, { id: rootResumeId }, client(c))
-			: handleWebApp(c.req.raw, options.readWebFile),
+			? serveResumePage(c.req.raw, { id: rootResumeId }, client(c), { host: c.get("host") })
+			: handleWebApp(c.req.raw, options.readWebFile, c.get("host")),
 	);
 	if (rootResumeId)
 		app.post("/", limitBody(16 * 1024), (c) => serveResumePage(c.req.raw, { id: rootResumeId }, client(c)));
@@ -205,15 +209,19 @@ export function createApp(options: AppOptions = {}) {
 	// just above. `/<username>` is the account's primary resume, on every domain the app answers.
 	app.on(["GET", "POST"], "/:username/:slug", limitBody(16 * 1024), (c, next) =>
 		isPublicResumePath(c.req.path)
-			? serveResumePage(c.req.raw, { username: c.req.param("username"), slug: c.req.param("slug") }, client(c))
+			? serveResumePage(c.req.raw, { username: c.req.param("username"), slug: c.req.param("slug") }, client(c), {
+					host: c.get("host"),
+				})
 			: next(),
 	);
 	app.on(["GET", "POST"], "/:username", limitBody(16 * 1024), (c, next) =>
 		isProfilePath(c.req.path)
-			? serveResumePage(c.req.raw, { username: c.req.param("username"), primary: true }, client(c))
+			? serveResumePage(c.req.raw, { username: c.req.param("username"), primary: true }, client(c), {
+					host: c.get("host"),
+				})
 			: next(),
 	);
-	app.get("/*", (c) => handleWebApp(c.req.raw, options.readWebFile));
+	app.get("/*", (c) => handleWebApp(c.req.raw, options.readWebFile, c.get("host")));
 
 	return app;
 }
