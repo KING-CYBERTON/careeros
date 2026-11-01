@@ -256,9 +256,6 @@ export async function linkAnonymousAccount({
 			.set({ revision: sql`${schema.applicationPipeline.revision} + 1` })
 			.where(eq(schema.applicationPipeline.userId, toUserId));
 
-		const rewriteUploadsJson = (column: unknown) =>
-			sql`cast(replace(cast(${column} as text), 'uploads/' || ${fromUserId} || '/', 'uploads/' || ${toUserId} || '/') as jsonb)`;
-
 		const rewriteUploadsUrl = (column: unknown) =>
 			sql`case when ${column} is not null then replace(${column}, 'uploads/' || ${fromUserId} || '/', 'uploads/' || ${toUserId} || '/') else null end`;
 
@@ -278,21 +275,12 @@ export async function linkAnonymousAccount({
 			sql`select careeros_move_guest_resumes(${fromUserId}, ${toUserId}, ${targetMembership?.organizationId ?? null})`,
 		);
 
-		await tx
-			.update(schema.coverLetter)
-			.set({
-				userId: toUserId,
-				style: rewriteUploadsJson(schema.coverLetter.style),
-			})
-			.where(eq(schema.coverLetter.userId, fromUserId));
-
-		await tx
-			.update(schema.coverLetterVersion)
-			.set({
-				userId: toUserId,
-				data: rewriteUploadsJson(schema.coverLetterVersion.data),
-			})
-			.where(eq(schema.coverLetterVersion.userId, fromUserId));
+		// CAREEROS (P1-T05): cover letters and their versions belong to an organization too; the same narrow definer
+		// function pattern moves them to the account's oldest organization (it refuses a non-guest source and a
+		// target organization the account is not a member of). The upload-path rewrite happens inside the function.
+		await tx.execute(
+			sql`select careeros_move_guest_cover_letters(${fromUserId}, ${toUserId}, ${targetMembership?.organizationId ?? null})`,
+		);
 
 		const applications = await tx
 			.select()

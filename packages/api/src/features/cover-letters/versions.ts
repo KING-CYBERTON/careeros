@@ -1,6 +1,8 @@
 import type { DbOrTx } from "@reactive-resume/db/client";
 import type { CoverLetterVersionData, CoverLetterVersionKind } from "@reactive-resume/db/schema";
 import type { CoverLetter } from "@reactive-resume/schema/cover-letter/data";
+// CAREEROS: tenant column for version inserts (P1-T05)
+import { requireOrgId } from "@careeros/tenancy";
 import * as schema from "@reactive-resume/db/schema";
 import { createVersionHistory } from "../documents/version-history";
 
@@ -25,6 +27,7 @@ const history = createVersionHistory<CoverLetterVersionKind, CoverLetter>({
 	expiringKinds: ["auto", "restored"],
 	toStored: letterVersionData,
 	label: "letter",
+	insertValues: () => ({ organizationId: requireOrgId() }),
 });
 
 type Owned = { coverLetterId: string; userId: string };

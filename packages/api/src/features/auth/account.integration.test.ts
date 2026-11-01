@@ -94,11 +94,11 @@ describe.skipIf(!process.env.OAUTH_TEST_DATABASE_URL)("account wrapper ownership
 			[JSON.stringify({ picture: oldUrl })],
 		);
 		await pool.query(
-			`INSERT INTO cover_letter (id, name, user_id, style) VALUES ('guest-letter', 'Guest', 'link-guest', $1)`,
+			`INSERT INTO cover_letter (id, name, user_id, style, organization_id) VALUES ('guest-letter', 'Guest', 'link-guest', $1, 'org-guest')`,
 			[JSON.stringify({ picture: oldUrl })],
 		);
 		await pool.query(
-			`INSERT INTO cover_letter_version (id, cover_letter_id, user_id, data) VALUES ('guest-letter-version', 'guest-letter', 'link-guest', $1)`,
+			`INSERT INTO cover_letter_version (id, cover_letter_id, user_id, data, organization_id) VALUES ('guest-letter-version', 'guest-letter', 'link-guest', $1, 'org-guest')`,
 			[JSON.stringify({ style: { picture: oldUrl } })],
 		);
 		await pool.query(
@@ -140,6 +140,11 @@ describe.skipIf(!process.env.OAUTH_TEST_DATABASE_URL)("account wrapper ownership
 			expect((await pool.query(`SELECT user_id, ${column} AS value FROM ${table}`)).rows).toEqual([
 				{ user_id: "link-owner", value },
 			]);
+			// CAREEROS (P1-T05): letters and their versions move to the account's organization too.
+			if (table.startsWith("cover_letter"))
+				expect((await pool.query(`SELECT organization_id FROM ${table}`)).rows).toEqual([
+					{ organization_id: "org-owner" },
+				]);
 		}
 		expect((await pool.query("SELECT user_id, resume_file_url, cover_letter_url FROM application")).rows).toEqual([
 			{ user_id: "link-owner", resume_file_url: newUrl, cover_letter_url: null },

@@ -220,17 +220,19 @@ describe("coverage check", () => {
 		const result = await runCoverageCheck(pools.app, isolationRegistry);
 		expect(result.failures).toEqual([]);
 		expect(result.ok).toBe(true);
-		// CAREEROS (P1-T04): the five resume tables are the tenant tables so far.
+		// CAREEROS (P1-T04, P1-T05): the resume and cover letter tables are the tenant tables so far.
 		expect(result.tenantTables.sort()).toEqual(isolationRegistry.map((entry) => entry.table).sort());
 	});
 
-	it("registers the resume tables (P1-T04); later batches add theirs", () => {
+	it("registers the resume tables (P1-T04) and the cover letter tables (P1-T05); later batches add theirs", () => {
 		expect(isolationRegistry.map((entry) => entry.table)).toEqual([
 			"resume",
 			"resume_version",
 			"resume_slug_redirect",
 			"resume_statistics",
 			"resume_statistics_daily",
+			"cover_letter",
+			"cover_letter_version",
 		]);
 	});
 });

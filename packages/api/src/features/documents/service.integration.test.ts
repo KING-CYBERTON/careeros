@@ -194,6 +194,7 @@ describe.skipIf(!databaseUrl)("Trash batch operations", () => {
 			.insert(tables.coverLetter)
 			.values([
 				{
+					organizationId: TEST_ORGANIZATION_ID,
 					id: "alice-letter",
 					userId: "alice",
 					name: "Letter",
@@ -201,6 +202,7 @@ describe.skipIf(!databaseUrl)("Trash batch operations", () => {
 					trashedAt: trashedAt(),
 				},
 				{
+					organizationId: TEST_ORGANIZATION_ID,
 					id: "bob-letter",
 					userId: "bob",
 					name: "Bob letter",
