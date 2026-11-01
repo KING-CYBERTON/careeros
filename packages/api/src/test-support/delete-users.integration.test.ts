@@ -5,6 +5,9 @@ import { afterAll, beforeAll, describe, expect, it } from "vite-plus/test";
 import { drizzle } from "drizzle-orm/node-postgres";
 import { Pool } from "pg";
 import * as tables from "@reactive-resume/db/schema";
+// CAREEROS (P1-T09): the replayed migrations create the account-delete trigger function in this schema; the T09
+// migration replaces only the public copy, so a schema-local copy is installed.
+import { installSchemaLocalGuestMove } from "../test-organization";
 import { deleteAllUsers } from "./delete-users";
 
 const databaseUrl = process.env.INTEGRATIONS_TEST_DATABASE_URL ?? process.env.COVER_LETTER_TEST_DATABASE_URL;
@@ -35,6 +38,7 @@ describe.skipIf(!databaseUrl)("deleteAllUsers: concurrent cleanup", () => {
 				if (!existsSync(file)) continue;
 				await pool.query((await readFile(file, "utf8")).replaceAll('"public".', ""));
 			}
+			await installSchemaLocalGuestMove(pool, schema);
 		}
 	}, 60_000);
 

@@ -1,9 +1,11 @@
 import { describe, expect, it, vi } from "vite-plus/test";
 
-const verified = vi.hoisted(() => [] as { userId: string; hostname: string }[]);
+const verified = vi.hoisted(() => [] as { hostname: string }[]);
 // Verified domains for the provider; the background re-check finds none stale.
 vi.mock("@reactive-resume/db/client", () => ({
 	db: {
+		// CAREEROS (P1-T09): the verified hostnames (careeros_verified_domains) and the stale pairs are definer calls.
+		execute: async () => ({ rows: [...verified] }),
 		select: () => ({
 			from: () => ({ where: () => Object.assign(Promise.resolve(verified), { limit: async () => [] }) }),
 		}),
@@ -57,11 +59,11 @@ describe("traefikConfiguration", () => {
 	});
 
 	it("routes each verified domain to the app with its own certificate", async () => {
-		verified.splice(0, verified.length, { userId: "u1", hostname: "resume.example.com" });
+		verified.splice(0, verified.length, { hostname: "resume.example.com" });
 		expect(await traefikConfiguration(options)).toEqual({
 			http: {
 				routers: {
-					"custom-domain-u1": {
+					"custom-domain-resume.example.com": {
 						rule: "Host(`resume.example.com`)",
 						entryPoints: ["websecure"],
 						service: "app@swarm",

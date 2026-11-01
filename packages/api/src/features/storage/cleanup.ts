@@ -1,5 +1,7 @@
 import type { DbOrTx } from "@reactive-resume/db/client";
-import { and, asc, eq, inArray, lte } from "drizzle-orm";
+// CAREEROS: the cleanup queue is per organization (P1-T09)
+import { currentOrgId, requireOrgId, withOrgContext } from "@careeros/tenancy";
+import { and, eq, sql } from "drizzle-orm";
 import { db } from "@reactive-resume/db/client";
 import * as schema from "@reactive-resume/db/schema";
 import { generateId } from "@reactive-resume/utils/string";
@@ -43,11 +45,13 @@ async function deleteStoragePrefix(storageKey: string): Promise<StorageDeleteOut
 
 /** Writes durable cleanup rows in the same transaction that deletes their document rows. */
 export async function enqueueStorageCleanup(tx: DbOrTx, ownerId: string, storageKeys: readonly string[]) {
+	// CAREEROS: the work belongs to the organization of the delete that wrote it (P1-T09).
+	const organizationId = requireOrgId();
 	const unique = [...new Set(storageKeys)];
 	for (let start = 0; start < unique.length; start += ENQUEUE_CHUNK) {
 		await tx
 			.insert(schema.storageCleanupJob)
-			.values(unique.slice(start, start + ENQUEUE_CHUNK).map((storageKey) => ({ ownerId, storageKey })))
+			.values(unique.slice(start, start + ENQUEUE_CHUNK).map((storageKey) => ({ organizationId, ownerId, storageKey })))
 			.onConflictDoNothing();
 	}
 }
@@ -84,63 +88,94 @@ export function reportStorageCleanupSummary(summary: StorageCleanupSummary) {
 	);
 }
 
-/** Claims one due job close to execution, with a new fence token for every attempt. */
-function claimNext(input: RunStorageCleanupInput) {
+/**
+ * Claims one specific due job inside its organization, with a new fence token for every attempt. `null` when another
+ * worker took it or it is no longer due.
+ */
+function claimJob(organizationId: string, id: string) {
 	const now = new Date();
-	return db.transaction(async (tx) => {
-		const [job] = await tx
-			.select()
-			.from(schema.storageCleanupJob)
-			.where(
-				and(
-					eq(schema.storageCleanupJob.status, "pending"),
-					lte(schema.storageCleanupJob.nextAttemptAt, now),
-					input.ownerId ? eq(schema.storageCleanupJob.ownerId, input.ownerId) : undefined,
-					input.storageKeys ? inArray(schema.storageCleanupJob.storageKey, [...new Set(input.storageKeys)]) : undefined,
-				),
-			)
-			.orderBy(asc(schema.storageCleanupJob.nextAttemptAt))
-			.limit(1)
-			.for("update", { skipLocked: true });
-		if (!job) return null;
-		const [claimed] = await tx
-			.update(schema.storageCleanupJob)
-			.set({
-				attempts: job.attempts + 1,
-				claimToken: generateId(),
-				nextAttemptAt: new Date(now.getTime() + LEASE_MS),
-			})
-			.where(eq(schema.storageCleanupJob.id, job.id))
-			.returning();
-		return claimed ?? null;
-	});
+	return withOrgContext(organizationId, () =>
+		db.transaction(async (tx) => {
+			const [job] = await tx
+				.select()
+				.from(schema.storageCleanupJob)
+				.where(
+					and(
+						eq(schema.storageCleanupJob.id, id),
+						eq(schema.storageCleanupJob.status, "pending"),
+						sql`${schema.storageCleanupJob.nextAttemptAt} <= ${now}`,
+					),
+				)
+				.limit(1)
+				.for("update", { skipLocked: true });
+			if (!job) return null;
+			const [claimed] = await tx
+				.update(schema.storageCleanupJob)
+				.set({
+					attempts: job.attempts + 1,
+					claimToken: generateId(),
+					nextAttemptAt: new Date(now.getTime() + LEASE_MS),
+				})
+				.where(eq(schema.storageCleanupJob.id, job.id))
+				.returning();
+			return claimed ?? null;
+		}),
+	);
 }
 
-/** Processes a bounded run, one fenced claim at a time, so each lease starts immediately before its storage work. */
+/**
+ * CAREEROS (P1-T09, D9 pattern): the worker has no organization and row-level security hides every job from it. A
+ * definer function lists the due `(id, organization_id)` pairs, then each job is claimed, executed and acknowledged
+ * inside `withOrgContext` for its own organization, keeping the claim-token fencing. A job (or organization) that
+ * fails is counted and does not stop the others. Called inside a request, only that request's organization is touched
+ * (an organization is never switched mid-scope); the scheduler picks up the rest.
+ */
 export async function runStorageCleanup(input: RunStorageCleanupInput = {}): Promise<StorageCleanupSummary> {
 	const limit = input.limit ?? 200;
 	const summary = emptySummary();
 	if (limit <= 0) return summary;
 
-	for (let processed = 0; processed < limit; processed += 1) {
-		const job = await claimNext(input);
-		if (!job?.claimToken) break;
-		const claim = and(eq(schema.storageCleanupJob.id, job.id), eq(schema.storageCleanupJob.claimToken, job.claimToken));
-		const outcome = await deleteStoragePrefix(job.storageKey);
-		if (outcome.status === "deleted" || outcome.status === "missing") {
-			const [acknowledged] = await db
-				.delete(schema.storageCleanupJob)
-				.where(claim)
-				.returning({ id: schema.storageCleanupJob.id });
-			if (!acknowledged) continue;
-			if (outcome.status === "deleted") summary.completed += 1;
-			else summary.missing += 1;
-			continue;
+	// An array parameter would expand to a tuple, so the keys are spelled as an ARRAY[...] of parameters.
+	const keys = input.storageKeys
+		? sql`array[${sql.join(
+				[...new Set(input.storageKeys)].map((key) => sql`${key}`),
+				sql`, `,
+			)}]::text[]`
+		: sql`null::text[]`;
+	const { rows: due } = await db.execute<{ id: string; organization_id: string }>(
+		sql`select id, organization_id from careeros_due_storage_cleanup(${new Date()}::timestamptz, ${limit}, ${input.ownerId ?? null}, ${keys}, ${currentOrgId() ?? null})`,
+	);
+	for (const { id, organization_id: organizationId } of due) {
+		try {
+			await processJob(organizationId, id, summary);
+		} catch (error) {
+			summary.failed += 1;
+			console.error(`[storage-cleanup] Job failed for organization ${organizationId}`, error);
 		}
+	}
+	return summary;
+}
 
-		const abandoned = job.attempts >= MAX_ATTEMPTS;
-		const retryDelay = Math.min(RETRY_BASE_MS * 2 ** (job.attempts - 1), RETRY_MAX_MS);
-		const [acknowledged] = await db
+async function processJob(organizationId: string, id: string, summary: StorageCleanupSummary) {
+	const job = await claimJob(organizationId, id);
+	if (!job?.claimToken) return;
+	const claim = and(eq(schema.storageCleanupJob.id, job.id), eq(schema.storageCleanupJob.claimToken, job.claimToken));
+	// Storage work runs outside any database scope so a slow delete holds no connection.
+	const outcome = await deleteStoragePrefix(job.storageKey);
+	if (outcome.status === "deleted" || outcome.status === "missing") {
+		const acknowledged = await withOrgContext(organizationId, () =>
+			db.delete(schema.storageCleanupJob).where(claim).returning({ id: schema.storageCleanupJob.id }),
+		);
+		if (acknowledged.length === 0) return;
+		if (outcome.status === "deleted") summary.completed += 1;
+		else summary.missing += 1;
+		return;
+	}
+
+	const abandoned = job.attempts >= MAX_ATTEMPTS;
+	const retryDelay = Math.min(RETRY_BASE_MS * 2 ** (job.attempts - 1), RETRY_MAX_MS);
+	const acknowledged = await withOrgContext(organizationId, () =>
+		db
 			.update(schema.storageCleanupJob)
 			.set({
 				status: abandoned ? "abandoned" : "pending",
@@ -152,11 +187,10 @@ export async function runStorageCleanup(input: RunStorageCleanupInput = {}): Pro
 						: outcome.error,
 			})
 			.where(claim)
-			.returning({ id: schema.storageCleanupJob.id });
-		if (!acknowledged) continue;
-		if (outcome.status === "partial") summary.partial += 1;
-		else summary.failed += 1;
-		if (abandoned) summary.abandoned += 1;
-	}
-	return summary;
+			.returning({ id: schema.storageCleanupJob.id }),
+	);
+	if (acknowledged.length === 0) return;
+	if (outcome.status === "partial") summary.partial += 1;
+	else summary.failed += 1;
+	if (abandoned) summary.abandoned += 1;
 }

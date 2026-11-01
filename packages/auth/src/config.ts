@@ -322,10 +322,13 @@ export async function linkAnonymousAccount({
 		// Ownership updates lock document rows, so guest saves cannot add uncopied references during copying.
 		const hook = accountLinkHook;
 		if (!hook) return;
-		const erasures = await tx
-			.select({ storageKey: schema.storageCleanupJob.storageKey })
-			.from(schema.storageCleanupJob)
-			.where(eq(schema.storageCleanupJob.ownerId, fromUserId));
+		// CAREEROS (P1-T09): the guest's erasure work sits in the guest's organizations, which row-level security hides
+		// from this request. A definer function returns the storage keys of an anonymous user's jobs. A guest's custom
+		// domain and web connection are deliberately not moved (see docs/plans/P1-T09-remaining-rls.md): they are
+		// proven by DNS or hold the guest's own key, and they go away with the guest account as before.
+		const { rows: erasures } = await tx.execute<{ storageKey: string }>(
+			sql`select careeros_guest_cleanup_prefixes(${fromUserId}) as "storageKey"`,
+		);
 		return hook({ fromUserId, toUserId, excludedStoragePrefixes: erasures.map(({ storageKey }) => storageKey) });
 	});
 

@@ -104,7 +104,9 @@ describe.skipIf(!databaseUrl)("Trash batch operations", () => {
 			max: 4,
 			application_name: schemaName,
 			connectionTimeoutMillis: 2000,
-			options: `-c search_path=${schemaName}`,
+			// CAREEROS (P1-T09): the mocked tenancy scope does not set the session setting; this stands in for it, so
+			// the account-delete trigger files its cleanup job under the test organization.
+			options: `-c search_path=${schemaName} -c app.current_org_id=${TEST_ORGANIZATION_ID}`,
 		});
 		fixture.db = drizzle({ client: pool });
 		const migrations = new URL("../../../../../migrations/", import.meta.url);
@@ -407,6 +409,7 @@ describe.skipIf(!databaseUrl)("Trash batch operations", () => {
 			.insert(tables.storageCleanupJob)
 			.values({
 				id: "stale-job",
+				organizationId: TEST_ORGANIZATION_ID,
 				ownerId: "alice",
 				storageKey,
 				attempts: 6,
