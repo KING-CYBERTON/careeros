@@ -37,3 +37,12 @@ export {
 	type HostResolverConfig,
 	type OrgHostPattern,
 } from "./host";
+export {
+	bustPublicBranding,
+	clearPublicBrandingCache,
+	createBrandingCache,
+	readEmailBrandingCache,
+	readPublicBrandingCache,
+	type BrandingCache,
+	type BrandingCacheOptions,
+} from "./branding-cache";

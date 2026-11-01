@@ -1,3 +1,4 @@
+import type { EmailBrand } from "../brand";
 import * as React from "react";
 import {
 	Body,
@@ -16,16 +17,15 @@ import {
 	Tailwind,
 	Text,
 } from "react-email";
-import { PLATFORM_DEFAULT_APP_NAME } from "@reactive-resume/utils/brand";
+import { resolveEmailBrand } from "../brand";
 
 // ponytail: server dev consumes this source through tsx, which emits React.createElement here.
 void React;
 
-// CAREEROS: every template takes the product name (and an absolute logo URL, when the brand has one) as optional
-// props and falls back to the platform default (P2-T08). Callers pass the org brand once P2-T02 lands.
+// CAREEROS: every template takes the organization's brand as one optional `brand` prop and falls back to the platform
+// default (P2-T08, P2-T04). The brand is checked again here (`resolveEmailBrand`) before it reaches a style or a link.
 type EmailBrandProps = {
-	appName?: string | undefined;
-	logoUrl?: string | undefined;
+	brand?: EmailBrand | undefined;
 };
 
 interface AuthEmailLayoutProps extends EmailBrandProps {
@@ -46,9 +46,9 @@ function AuthEmailLayout({
 	actionLabel,
 	actionUrl,
 	outro,
-	appName = PLATFORM_DEFAULT_APP_NAME,
-	logoUrl,
+	brand,
 }: AuthEmailLayoutProps) {
+	const { appName, logoUrl, primaryColor, primaryForeground, links } = resolveEmailBrand(brand);
 	return (
 		<Html lang="en">
 			<Tailwind
@@ -111,6 +111,8 @@ function AuthEmailLayout({
 								target="_blank"
 								href={actionUrl}
 								className="mt-6 box-border inline-block bg-zinc-200 px-6 py-3 text-center text-zinc-900 no-underline"
+								// CAREEROS (P2-T04): the organization's primary colour, with the readable text colour on it.
+								style={primaryColor ? { backgroundColor: primaryColor, color: primaryForeground } : undefined}
 							>
 								{actionLabel}
 							</Button>
@@ -131,6 +133,19 @@ function AuthEmailLayout({
 							<Hr className="my-10 border-zinc-700" />
 
 							<Text className="font-heading mt-8 text-base font-medium tracking-tight opacity-80">{appName}</Text>
+
+							{links.length > 0 ? (
+								<Text className="mt-0 text-xs opacity-60">
+									{links.map(({ label, url }, index) => (
+										<React.Fragment key={label}>
+											{index > 0 ? " · " : null}
+											<Link className="text-zinc-50 underline" href={url}>
+												{label}
+											</Link>
+										</React.Fragment>
+									))}
+								</Text>
+							) : null}
 						</Section>
 					</Container>
 				</Body>
@@ -143,11 +158,11 @@ interface ResetPasswordEmailProps extends EmailBrandProps {
 	url: string;
 }
 
-export function ResetPasswordEmail({ url, appName = PLATFORM_DEFAULT_APP_NAME, logoUrl }: ResetPasswordEmailProps) {
+export function ResetPasswordEmail({ url, brand }: ResetPasswordEmailProps) {
+	const { appName } = resolveEmailBrand(brand);
 	return (
 		<AuthEmailLayout
-			appName={appName}
-			logoUrl={logoUrl}
+			brand={brand}
 			preview={`Reset your ${appName} password`}
 			heading="Reset your password"
 			intro={`We received a request to reset your ${appName} password.`}
@@ -163,11 +178,11 @@ interface VerifyEmailProps extends EmailBrandProps {
 	url: string;
 }
 
-export function VerifyEmail({ url, appName = PLATFORM_DEFAULT_APP_NAME, logoUrl }: VerifyEmailProps) {
+export function VerifyEmail({ url, brand }: VerifyEmailProps) {
+	const { appName } = resolveEmailBrand(brand);
 	return (
 		<AuthEmailLayout
-			appName={appName}
-			logoUrl={logoUrl}
+			brand={brand}
 			preview={`Verify your email for ${appName}`}
 			heading="Verify your email"
 			intro={`Thanks for signing up for ${appName}. Verify your email address to continue.`}
@@ -185,17 +200,11 @@ interface VerifyEmailChangeProps extends EmailBrandProps {
 	newEmail: string;
 }
 
-export function VerifyEmailChange({
-	url,
-	previousEmail,
-	newEmail,
-	appName = PLATFORM_DEFAULT_APP_NAME,
-	logoUrl,
-}: VerifyEmailChangeProps) {
+export function VerifyEmailChange({ url, previousEmail, newEmail, brand }: VerifyEmailChangeProps) {
+	const { appName } = resolveEmailBrand(brand);
 	return (
 		<AuthEmailLayout
-			appName={appName}
-			logoUrl={logoUrl}
+			brand={brand}
 			preview={`Approve changing your ${appName} email address`}
 			heading="Approve email change"
 			intro={`Someone asked to change your ${appName} email from ${previousEmail} to ${newEmail}.`}
@@ -214,17 +223,11 @@ interface InvitationEmailProps extends EmailBrandProps {
 	inviterName: string;
 }
 
-export function InvitationEmail({
-	url,
-	organizationName,
-	inviterName,
-	appName = PLATFORM_DEFAULT_APP_NAME,
-	logoUrl,
-}: InvitationEmailProps) {
+export function InvitationEmail({ url, organizationName, inviterName, brand }: InvitationEmailProps) {
+	const { appName } = resolveEmailBrand(brand);
 	return (
 		<AuthEmailLayout
-			appName={appName}
-			logoUrl={logoUrl}
+			brand={brand}
 			preview={`Join ${organizationName} on ${appName}`}
 			heading="You have been invited"
 			intro={`${inviterName} invited you to join ${organizationName} on ${appName}.`}

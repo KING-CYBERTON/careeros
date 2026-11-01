@@ -382,6 +382,105 @@ describe.skipIf(!configured)("organization branding and settings", () => {
 		});
 	});
 
+	// P2-T04: the email sender reads branding without a session, through its own definer function.
+	describe("email branding", () => {
+		const emailRow = (organizationId: string) =>
+			app.query(`SELECT * FROM careeros_email_branding($1)`, [organizationId]).then((result) => result.rows);
+
+		it("returns the sender name and reply-to of the right organization only", async () => {
+			await invoke(
+				branding.update,
+				{ emailFromName: "Acme Careers Team", emailReplyTo: "help@acme.example" },
+				asUser(ids.ownerA, ids.orgA),
+			);
+			await invoke(
+				branding.update,
+				{ emailFromName: "Other Team", emailReplyTo: "ask@other.example" },
+				asUser(ids.ownerB, ids.orgB),
+			);
+			const rows = await emailRow(ids.orgA);
+			expect(rows).toHaveLength(1);
+			expect(rows[0]).toMatchObject({
+				organization_id: ids.orgA,
+				email_from_name: "Acme Careers Team",
+				email_reply_to: "help@acme.example",
+			});
+			expect(JSON.stringify(rows)).not.toContain("Other Team");
+			expect(JSON.stringify(rows)).not.toContain("ask@other.example");
+			expect(Object.keys(rows[0]).sort()).toEqual(
+				[
+					"organization_id",
+					"slug",
+					"app_name",
+					"logo_storage_key",
+					"primary_color",
+					"support_url",
+					"terms_url",
+					"privacy_url",
+					"email_from_name",
+					"email_reply_to",
+				].sort(),
+			);
+			expect(await emailRow(`nope-${run}`)).toEqual([]);
+		});
+
+		it("is executable by careeros_app and not by PUBLIC", async () => {
+			const { rows } = await owner.query(
+				`SELECT has_function_privilege('careeros_app', 'public.careeros_email_branding(text)', 'EXECUTE') AS app,
+				        has_function_privilege('public', 'public.careeros_email_branding(text)', 'EXECUTE') AS pub`,
+			);
+			expect(rows[0]).toEqual({ app: true, pub: false });
+		});
+
+		it("rejects a reply-to that is not one address, in the API and in the database", async () => {
+			for (const bad of ["A <a@b.c>", "a@b.c, d@e.f", "a@b.c\r\nBcc: x@y.z", "a b@c.d", "a@@b.c", "nobody"]) {
+				await expect(
+					invoke(branding.update, { emailReplyTo: bad }, asUser(ids.ownerA, ids.orgA)),
+				).rejects.toMatchObject({ code: "BAD_REQUEST" });
+				await expect(
+					owner.query(`UPDATE organization_branding SET email_reply_to = $2 WHERE organization_id = $1`, [
+						ids.orgA,
+						bad,
+					]),
+				).rejects.toThrow(/organization_branding_email_reply_to_check/);
+			}
+			expect((await emailRow(ids.orgA))[0]).toMatchObject({ email_reply_to: "help@acme.example" });
+		});
+
+		it("lets only owners and admins set the reply-to, and null clears it", async () => {
+			await expect(
+				invoke(branding.update, { emailReplyTo: "x@y.z" }, asUser(ids.memberA, ids.orgA)),
+			).rejects.toMatchObject({ code: "FORBIDDEN" });
+			const admin = await invoke<{ emailReplyTo: string | null }>(
+				branding.update,
+				{ emailReplyTo: "admin@acme.example" },
+				asUser(ids.adminA, ids.orgA),
+			);
+			expect(admin.emailReplyTo).toBe("admin@acme.example");
+			await invoke(branding.update, { emailReplyTo: "help@acme.example" }, asUser(ids.ownerA, ids.orgA));
+		});
+
+		it("builds the email context from the database and sees an update at once (cache bust)", async () => {
+			const { buildEmailContext } = await import("@reactive-resume/auth/email-brand");
+			const first = await inApp(() => buildEmailContext({ source: "invitation", organizationId: ids.orgA }));
+			expect(first).toMatchObject({
+				organizationId: ids.orgA,
+				fromName: "Acme Careers Team",
+				replyTo: "help@acme.example",
+			});
+			expect(first.brand.appName).toBe("Acme Co");
+			await invoke(branding.update, { emailFromName: "Renamed Team" }, asUser(ids.ownerA, ids.orgA));
+			const second = await inApp(() => buildEmailContext({ source: "invitation", organizationId: ids.orgA }));
+			expect(second.fromName).toBe("Renamed Team");
+			const other = await inApp(() => buildEmailContext({ source: "organization", organizationId: ids.orgB }));
+			expect(other.fromName).toBe("Other Team");
+			expect(other.replyTo).toBe("ask@other.example");
+			const unknown = await inApp(() => buildEmailContext({ source: "organization", organizationId: `nope-${run}` }));
+			expect(unknown).toMatchObject({ organizationId: null, fromName: undefined, replyTo: undefined });
+			expect(unknown.brand.appName).toBe("CareerOS");
+		});
+	});
+
 	describe("uploads", () => {
 		it("stores a logo under orgs/<org>/branding/ and serves only the current file", async () => {
 			const first = await invoke<{ url: string; contentType: string }>(

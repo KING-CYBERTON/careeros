@@ -4,11 +4,11 @@ import type z from "zod";
 import { requireOrgId, withOrgContext } from "@careeros/tenancy";
 import { ORPCError } from "@orpc/client";
 import { and, asc, desc, eq, inArray, isNull, lte, or, sql } from "drizzle-orm";
+import { buildEmailContext } from "@reactive-resume/auth/email-brand";
 import { db } from "@reactive-resume/db/client";
 import * as tables from "@reactive-resume/db/schema";
 import { sendCareerNotification } from "@reactive-resume/email/transport";
 import { env } from "@reactive-resume/env/server";
-import { PLATFORM_DEFAULT_APP_NAME } from "@reactive-resume/utils/brand";
 import { generateId } from "@reactive-resume/utils/string";
 import { STALE_AGENT_RUN_TTL_MS } from "../agent/runs";
 import { aiProvidersService } from "../ai-providers/service";
@@ -664,12 +664,17 @@ async function sendPendingEmail() {
 		// The short claim/check transactions are committed before external I/O. Closing an application must
 		// never wait for SMTP; a delivery already handed to the mail transport cannot be recalled.
 		try {
+			// CAREEROS (P2-T04): the row's own organization decides the brand, sender name and reply-to. The link stays on
+			// APP_URL (a job has no request host to start from).
+			const mail = await buildEmailContext({ source: "organization", organizationId: notification.organizationId });
 			const sent = await sendCareerNotification({
 				to: owner.email,
 				subject: noticeText(notification.notice).title,
-				text: `You have a career update in ${PLATFORM_DEFAULT_APP_NAME}.`,
+				text: `You have a career update in ${mail.brand.appName}.`,
 				url: new URL(notification.url ?? CAREER_URL, env.APP_URL).toString(),
 				key: notification.key,
+				fromName: mail.fromName,
+				replyTo: mail.replyTo,
 			});
 			if (!sent) throw new Error("SMTP unavailable");
 			await db

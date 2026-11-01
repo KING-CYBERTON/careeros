@@ -4,10 +4,11 @@ import { eq } from "drizzle-orm";
 import { createElement } from "react";
 import { db } from "@reactive-resume/db/client";
 import * as schema from "@reactive-resume/db/schema";
+import { invitationSubject } from "@reactive-resume/email/subjects";
 import { InvitationEmail } from "@reactive-resume/email/templates/auth";
 import { sendEmail } from "@reactive-resume/email/transport";
-import { env } from "@reactive-resume/env/server";
-import { PLATFORM_DEFAULT_APP_NAME } from "@reactive-resume/utils/brand";
+// CAREEROS: branded emails (P2-T04)
+import { buildEmailContext } from "./email-brand";
 
 /** Invitations stay valid for 7 days (P1-T01). */
 export const INVITATION_EXPIRES_IN_SECONDS = 60 * 60 * 24 * 7;
@@ -43,16 +44,21 @@ export const organizationOptions = {
 			await db.update(schema.member).set({ invitedBy: invitation.inviterId }).where(eq(schema.member.id, member.id));
 		},
 	},
+	// CAREEROS (P2-T04): branded by the inviting organization and linked to its own host when it has one.
 	sendInvitationEmail: async ({ id, email, organization, inviter }) => {
-		const url = new URL(`/auth/accept-invitation/${encodeURIComponent(id)}`, env.APP_URL).toString();
+		const mail = await buildEmailContext({ source: "invitation", organizationId: organization.id });
+		const url = new URL(`/auth/accept-invitation/${encodeURIComponent(id)}`, mail.linkOrigin).toString();
 		await sendEmail({
 			to: email,
-			subject: `Join ${organization.name} on ${PLATFORM_DEFAULT_APP_NAME}`,
+			subject: invitationSubject(organization.name, mail.brand),
 			react: createElement(InvitationEmail, {
 				url,
 				organizationName: organization.name,
 				inviterName: inviter.user.name,
+				brand: mail.brand,
 			}),
+			fromName: mail.fromName,
+			replyTo: mail.replyTo,
 		});
 	},
 } satisfies OrganizationOptions;
