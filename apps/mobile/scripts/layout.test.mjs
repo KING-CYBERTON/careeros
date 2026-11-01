@@ -43,6 +43,9 @@ const mocks = {
 		brandSlug: () => "careeros",
 		PLATFORM_DEFAULT_APP_NAME: "CareerOS",
 	},
+	// CAREEROS (P2-T02): the sidebar reads the live brand and draws an organization logo.
+	"@/branding/store": { useBrand: () => ({ appName: "CareerOS" }) },
+	"expo-image": { Image: "Image" },
 	react,
 	"react-native": native,
 	"react-native-safe-area-context": safe,

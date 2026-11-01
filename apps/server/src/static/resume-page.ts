@@ -1,3 +1,4 @@
+import type { HostContext } from "@careeros/tenancy";
 import type { ResumeMatch } from "@reactive-resume/api/features/resume/web-page";
 import type { ResumeWebPage } from "@reactive-resume/pdf/web-page";
 import type { ResumeData } from "@reactive-resume/schema/resume/data";
@@ -15,6 +16,8 @@ import {
 } from "@reactive-resume/pdf/web-page-document";
 import { publicResumePath } from "@reactive-resume/resume/sharing";
 import { getResumeSocialMeta } from "@reactive-resume/resume/social-meta";
+// CAREEROS (P2-T02): the organization's name and icon on its resume pages
+import { loadShellBrand, replaceIconLinks, varyOn } from "./brand-shell";
 import { BASE_SECURITY_HEADERS, contentSecurityPolicy } from "./web";
 
 const origin = () => new URL(env.APP_URL).origin;
@@ -29,6 +32,8 @@ function html(body: string, status: number, headers: Record<string, string> = {}
 			"Cache-Control": "private, no-store",
 			"Content-Security-Policy": contentSecurityPolicy(`<script>${WEB_PAGE_SCRIPT}</script>`),
 			...headers,
+			// CAREEROS (P2-T02): the credit and icon follow the host's brand.
+			Vary: varyOn(headers.Vary),
 		},
 	});
 }
@@ -72,6 +77,8 @@ function structuredData(data: ResumeData, url: string, updatedAt: Date) {
 type PageOptions = {
 	/** Set on a custom domain: the page lives at its root there. */
 	customDomain?: string | undefined;
+	/** CAREEROS (P2-T02): the request's host, from the host middleware; the platform host when absent. */
+	host?: HostContext | undefined;
 };
 
 /** Off, unknown or trashed resumes read the same, in the visitor's language. */
@@ -125,7 +132,10 @@ async function showPage(request: Request, match: ResumeMatch, trustedClient: str
 			: `${origin()}${publicResumePath(result)}`;
 	const social = getResumeSocialMeta(data);
 
+	// CAREEROS (P2-T02): on an organization's host the page credits the organization and uses its favicon.
+	const { brand } = await loadShellBrand(options.host ?? { kind: "platform" });
 	const body = renderWebPageDocument({
+		appName: brand.appName,
 		page,
 		messages: webPageMessages(data.metadata.page.locale),
 		head: {
@@ -141,7 +151,7 @@ async function showPage(request: Request, match: ResumeMatch, trustedClient: str
 		creditUrl: data.metadata.web?.showCredit === false ? undefined : origin(),
 	});
 	return html(
-		body,
+		replaceIconLinks(body, brand),
 		200,
 		result.indexable ? {} : { "X-Robots-Tag": previewToken ? "noindex, nofollow" : "noindex, follow" },
 	);

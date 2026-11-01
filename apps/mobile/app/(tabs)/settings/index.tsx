@@ -3,7 +3,8 @@ import Constants from "expo-constants";
 import { useRouter } from "expo-router";
 import { openBrowserAsync } from "expo-web-browser";
 import { View } from "react-native";
-import { getBrand } from "@reactive-resume/utils/brand";
+// CAREEROS (P2-T02): the brand follows the organization the server belongs to
+import { useBrand } from "@/branding/store";
 import { SettingsGroup, SettingsPage } from "@/features/settings/layout";
 import { useProfile } from "@/features/settings/queries";
 import { SignOutRow } from "@/features/settings/sign-out";
@@ -15,7 +16,7 @@ export default function SettingsScreen() {
 	const { t } = useLingui();
 	const { space } = useTheme();
 	const profile = useProfile();
-	const { appName, supportUrl, privacyUrl, termsUrl } = getBrand();
+	const { appName, supportUrl, privacyUrl, termsUrl } = useBrand();
 	const openLink = (url: string) => {
 		void openBrowserAsync(url).catch(() => showToast({ message: t`Couldn't open the browser. Try again.` }));
 	};
