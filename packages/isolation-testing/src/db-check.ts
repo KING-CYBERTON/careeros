@@ -25,9 +25,14 @@ export async function runDbIsolationCheck(entry: RegistryEntry, ctx: DbCheckCont
 
 	const count = (orgId: string, byId: boolean) =>
 		withOrgContext(ctx.pools.app, orgId, async (client) => {
+			// CAREEROS (P2-T01): a table with a row per organization is counted for rows of other organizations only.
 			const { rows } = byId
 				? await client.query<{ n: number }>(`SELECT count(*)::int AS n FROM ${table} WHERE ${idColumn} = $1`, [id])
-				: await client.query<{ n: number }>(`SELECT count(*)::int AS n FROM ${table}`);
+				: entry.rowPerOrganization
+					? await client.query<{ n: number }>(`SELECT count(*)::int AS n FROM ${table} WHERE "organization_id" <> $1`, [
+							orgId,
+						])
+					: await client.query<{ n: number }>(`SELECT count(*)::int AS n FROM ${table}`);
 			return rows[0]?.n ?? 0;
 		});
 

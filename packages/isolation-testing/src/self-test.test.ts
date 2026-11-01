@@ -257,6 +257,8 @@ describe("coverage check", () => {
 			"custom_domain",
 			"web_access_credentials",
 			"storage_cleanup_job",
+			"organization_branding",
+			"organization_settings",
 		]);
 	});
 });

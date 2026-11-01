@@ -11,3 +11,5 @@ export * from "./ai-content-report";
 export * from "./application-profile";
 // CAREEROS: organization plugin tables (P1-T01)
 export * from "./organization";
+// CAREEROS: organization branding and settings (P2-T01)
+export * from "./branding";
