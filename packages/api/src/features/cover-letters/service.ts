@@ -165,6 +165,12 @@ async function assertSourceResume(userId: string, resumeId: string | null | unde
 	if (resumeId) await resumeService.getById({ userId, id: resumeId });
 }
 
+// CAREEROS (P1-T06): a letter may only point at an application of its own organization. The read goes through the
+// scoped application query, so row-level security answers NOT_FOUND for an application of any other organization.
+async function assertSourceApplication(userId: string, applicationId: string | null | undefined): Promise<void> {
+	if (applicationId) await getOwnedApplication(userId, applicationId);
+}
+
 async function insert(
 	input: {
 		userId: string;
@@ -192,8 +198,7 @@ async function insert(
 		});
 	const content = coverLetterContentSchema.parse(input);
 	await assertSourceResume(input.userId, input.sourceResumeId);
-	// CAREEROS (P1-T06 TODO): `sourceApplicationId` is not checked against the organization yet. T06 puts the
-	// application tables behind row-level security and adds the same check as `assertSourceResume`.
+	await assertSourceApplication(input.userId, input.sourceApplicationId);
 	const [row] = await client
 		.insert(schema.coverLetter)
 		.values({
@@ -226,6 +231,7 @@ async function updateRevision(
 			return updateRevision(input, changes, tx);
 		});
 	await assertSourceResume(input.userId, changes.sourceResumeId);
+	await assertSourceApplication(input.userId, changes.sourceApplicationId);
 	const [row] = await client
 		.update(schema.coverLetter)
 		.set({ ...changes, revision: sql`${schema.coverLetter.revision} + 1` })

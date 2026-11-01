@@ -84,9 +84,13 @@ describe.skipIf(!databaseUrl)("reviewed target role suggestions", () => {
 				},
 				{ id: "bob", name: "Bob Example", email: "bob@example.test", username: "bob", displayUsername: "bob" },
 			]);
-		await getDb()
-			.insert(tables.application)
-			.values({ id: "alice-app", userId: "alice", company: "Fictional", role: "Engineer" });
+		await getDb().insert(tables.application).values({
+			id: "alice-app",
+			organizationId: TEST_ORGANIZATION_ID,
+			userId: "alice",
+			company: "Fictional",
+			role: "Engineer",
+		});
 		await getDb()
 			.insert(tables.careerFact)
 			.values([

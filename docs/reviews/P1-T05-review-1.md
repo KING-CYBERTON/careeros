@@ -27,3 +27,11 @@ The batch follows the T04 pattern closely. The migration, the policies, the `sou
 - **Q34:** the D7 safety net is accepted.
 - **Q35:** a sibling migration test is accepted.
 - **Q36:** the extra scoped read is accepted.
+
+## Re-review (commit `9ee0d8d19`)
+
+**Verdict: Approved. Merge after green careeros-ci.**
+
+- **H1 fixed.** `careeros_orgs_with_expired_trash` returns org ids only. It is a definer function with a pinned search_path, and only `careeros_app` can execute it. The scheduled purge runs once per org in `withOrgContext`, and one failing org doesn't stop the rest. Three integration tests against `careeros_app` cover two orgs in one tick, failure isolation and EXECUTE denial.
+- **CI 57P01 (packages/db).** `guardTestPool` moved to `@careeros/testing`, and all three db tests that drop databases use it, as auth's do. CI unit (rest) is the confirmation.
+- The same per-org definer-list pattern is the template for D9 (the career scheduler) in T07.

@@ -8,7 +8,7 @@ import { auth, linkAnonymousAccount, setAccountLinkHook } from "@reactive-resume
 import { db, withDatabasePool } from "@reactive-resume/db/client";
 import * as schema from "@reactive-resume/db/schema";
 import { env } from "@reactive-resume/env/server";
-import { installSchemaLocalGuestMove } from "../../test-organization";
+import { ensureTestOrganization, installSchemaLocalGuestMove, TEST_ORGANIZATION_ID } from "../../test-organization";
 import { authRouter } from "./router";
 
 // Like the OAuth CI checks, this uses a disposable, migrated database, with isolated fixture tables.
@@ -102,7 +102,7 @@ describe.skipIf(!process.env.OAUTH_TEST_DATABASE_URL)("account wrapper ownership
 			[JSON.stringify({ style: { picture: oldUrl } })],
 		);
 		await pool.query(
-			`INSERT INTO application (id, user_id, company, role, resume_file_url, cover_letter_url) VALUES ('guest-application', 'link-guest', 'Example', 'Engineer', $1, NULL)`,
+			`INSERT INTO application (id, organization_id, user_id, company, role, resume_file_url, cover_letter_url) VALUES ('guest-application', 'org-guest', 'link-guest', 'Example', 'Engineer', $1, NULL)`,
 			[oldUrl],
 		);
 		await pool.query(`INSERT INTO resume_slug_redirect (id, user_id, resume_id, slug, expires_at, organization_id) VALUES
@@ -158,7 +158,7 @@ describe.skipIf(!process.env.OAUTH_TEST_DATABASE_URL)("account wrapper ownership
 	it("transfers a guest profile intact and refuses to overwrite a destination profile", async () => {
 		const data = { email: "guest-private@example.test" };
 		await pool.query(
-			`INSERT INTO application_profile (user_id,data,reviewed_at,revision) VALUES ('link-guest',$1,'2030-01-01T00:00:00Z','guest-revision')`,
+			`INSERT INTO application_profile (organization_id,user_id,data,reviewed_at,revision) VALUES ('org-guest','link-guest',$1,'2030-01-01T00:00:00Z','guest-revision')`,
 			[JSON.stringify(data)],
 		);
 		await withDatabasePool(pool, () => linkAnonymousAccount({ fromUserId: "link-guest", toUserId: "link-owner" }));
@@ -168,7 +168,7 @@ describe.skipIf(!process.env.OAUTH_TEST_DATABASE_URL)("account wrapper ownership
 		expect(transferred).toMatchObject({ user_id: "link-owner", data, reviewed_at: new Date("2030-01-01T00:00:00Z") });
 		expect(transferred.revision).not.toBe("guest-revision");
 		await pool.query(
-			`INSERT INTO application_profile (user_id,data,reviewed_at,revision) VALUES ('link-guest','{}',now(),'second-profile')`,
+			`INSERT INTO application_profile (organization_id,user_id,data,reviewed_at,revision) VALUES ('org-guest','link-guest','{}',now(),'second-profile')`,
 		);
 		await expect(
 			withDatabasePool(pool, () => linkAnonymousAccount({ fromUserId: "link-guest", toUserId: "link-owner" })),
@@ -466,6 +466,13 @@ describe.skipIf(!process.env.OAUTH_TEST_DATABASE_URL)("account wrapper ownership
 			const { reviewedAnswers: answers } = await import("../career/answers");
 			const { applicationProfileDataSchema } = await import("@reactive-resume/schema/application-profile");
 			const owner = await signUpWithTwoFactor("private-link-owner");
+			// CAREEROS (P1-T06): the shared test setup puts every service call in the test organization, so the account's
+			// oldest organization (where guest work lands) is that one.
+			await ensureTestOrganization(pool);
+			await pool.query(
+				`INSERT INTO member (id,organization_id,user_id,role,created_at) VALUES ($1,$2,$3,'owner','2000-01-01')`,
+				[`member-test-${owner.id}`, TEST_ORGANIZATION_ID, owner.id],
+			);
 			const pending = await startGuest("private-link-guest", owner.credentials);
 			const guestProfile = await profiles.save(pending.guest.id, {
 				data: applicationProfileDataSchema.parse({
@@ -479,8 +486,20 @@ describe.skipIf(!process.env.OAUTH_TEST_DATABASE_URL)("account wrapper ownership
 				expectedRevision: null,
 			});
 			await db.insert(schema.application).values([
-				{ id: "private-guest-app", userId: pending.guest.id, company: "Harbor", role: "Engineer" },
-				{ id: "private-owner-app", userId: owner.id, company: "Nova", role: "Engineer" },
+				{
+					id: "private-guest-app",
+					organizationId: TEST_ORGANIZATION_ID,
+					userId: pending.guest.id,
+					company: "Harbor",
+					role: "Engineer",
+				},
+				{
+					id: "private-owner-app",
+					organizationId: TEST_ORGANIZATION_ID,
+					userId: owner.id,
+					company: "Nova",
+					role: "Engineer",
+				},
 			]);
 			const input = {
 				question: "Describe your project",

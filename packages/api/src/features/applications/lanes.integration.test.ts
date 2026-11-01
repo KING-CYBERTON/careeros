@@ -8,7 +8,12 @@ import { drizzle } from "drizzle-orm/node-postgres";
 import { Pool } from "pg";
 import * as tables from "@reactive-resume/db/schema";
 import { defaultResumeData } from "@reactive-resume/schema/resume/default";
-import { ensureTestOrganization, installSchemaLocalGuestMove, TEST_ORGANIZATION_ID } from "../../test-organization";
+import {
+	ensureTestOrganization,
+	installSchemaLocalGuestMove,
+	prepareGuestLink,
+	TEST_ORGANIZATION_ID,
+} from "../../test-organization";
 import { deleteAllUsers } from "../../test-support/delete-users";
 
 const fixture = vi.hoisted(() => ({
@@ -173,9 +178,14 @@ describe.skipIf(!databaseUrl)("application lanes: persisted owner and workflow i
 		]);
 		const pipeline = await lanes.get("alice");
 		expect(pipeline.lanes).toHaveLength(6);
-		await getDb()
-			.insert(tables.application)
-			.values({ id: "old-server", userId: "bob", company: "Old", role: "Writer", status: "interview" });
+		await getDb().insert(tables.application).values({
+			id: "old-server",
+			organizationId: TEST_ORGANIZATION_ID,
+			userId: "bob",
+			company: "Old",
+			role: "Writer",
+			status: "interview",
+		});
 		const [old] = await getDb().select().from(tables.application).where(eq(tables.application.id, "old-server"));
 		expect(old?.laneId).toBe("application-lane:bob:interview");
 		expect((await lanes.get("bob")).lanes).toHaveLength(6);
@@ -250,6 +260,7 @@ describe.skipIf(!databaseUrl)("application lanes: persisted owner and workflow i
 		await expect(
 			getDb().insert(tables.application).values({
 				id: "foreign-db",
+				organizationId: TEST_ORGANIZATION_ID,
 				userId: "bob",
 				company: "Co",
 				role: "Role",
@@ -513,6 +524,7 @@ describe.skipIf(!databaseUrl)("application lanes: persisted owner and workflow i
 			.values(
 				Array.from({ length: 33 }, (_, index) => ({
 					id: `capacity-${index}`,
+					organizationId: TEST_ORGANIZATION_ID,
 					userId: "alice",
 					category: "saved" as const,
 					label: `Custom ${index}`,
@@ -746,11 +758,14 @@ describe.skipIf(!databaseUrl)("application lanes: persisted owner and workflow i
 		const custom = await addLane("Technical", "interview");
 		const id = await applications.create({ userId: "alice", company: "Co", role: "Role", laneId: custom.id });
 		await lanes.get("bob");
+		// CAREEROS (P1-T06): the guest move is a definer function; alice becomes a guest and bob a member of the test org
+		await prepareGuestLink(pool, "alice", "bob");
 		await getDb()
 			.insert(tables.applicationLane)
 			.values(
 				Array.from({ length: 34 }, (_, index) => ({
 					id: `target-capacity-${index}`,
+					organizationId: TEST_ORGANIZATION_ID,
 					userId: "bob",
 					category: "saved" as const,
 					label: `Custom ${index}`,
@@ -771,6 +786,7 @@ describe.skipIf(!databaseUrl)("application lanes: persisted owner and workflow i
 		const id = await applications.create({ userId: "alice", company: "Co", role: "Role", laneId: custom.id });
 		const before = await read(id);
 		await lanes.get("bob");
+		await prepareGuestLink(pool, "alice", "bob");
 		await linkGuest({ fromUserId: "alice", toUserId: "bob" });
 		const row = await applications.getById({ userId: "bob", id });
 		const pipeline = await lanes.get("bob");
