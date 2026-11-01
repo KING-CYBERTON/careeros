@@ -5,6 +5,7 @@ import { drizzle } from "drizzle-orm/node-postgres";
 import { migrate } from "drizzle-orm/node-postgres/migrator";
 import { Pool } from "pg";
 import { authOrganizationRelations } from "@reactive-resume/db/schema";
+import { guardTestPool } from "./integration-test-pool";
 
 const fixture = vi.hoisted(() => ({
 	db: undefined as unknown,
@@ -28,6 +29,7 @@ describe.skipIf(!process.env.COVER_LETTER_TEST_DATABASE_URL)(
 	() => {
 		let admin: Pool;
 		let pool: Pool;
+		let closePool: (() => Promise<void>) | undefined;
 		const databaseName = `personal_org_test_${randomUUID().replaceAll("-", "")}`;
 		let auth: typeof import("./config").auth;
 		let deleteSoleMemberOrganizations: typeof import("./personal-org").deleteSoleMemberOrganizations;
@@ -118,6 +120,7 @@ describe.skipIf(!process.env.COVER_LETTER_TEST_DATABASE_URL)(
 			const url = new URL(databaseUrl);
 			url.pathname = `/${databaseName}`;
 			pool = new Pool({ connectionString: url.toString() });
+			closePool = guardTestPool(pool).close;
 			fixture.pool = pool;
 			fixture.db = drizzle({ client: pool, relations: authOrganizationRelations });
 			await migrate(fixture.db as Parameters<typeof migrate>[0], { migrationsFolder });
@@ -128,7 +131,7 @@ describe.skipIf(!process.env.COVER_LETTER_TEST_DATABASE_URL)(
 		afterAll(async () => {
 			// Let background session work from the last request finish before the database is dropped.
 			await new Promise((resolve) => setTimeout(resolve, 250));
-			await pool?.end();
+			await closePool?.();
 			await admin?.query(`DROP DATABASE IF EXISTS "${databaseName}" WITH (FORCE)`);
 			await admin?.end();
 		});
