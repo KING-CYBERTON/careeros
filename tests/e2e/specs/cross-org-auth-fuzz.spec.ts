@@ -246,7 +246,7 @@ test("an organization endpoint never reads, changes or joins Organization A for 
 		}
 
 		console.log(
-			`cross-org auth fuzz: ${endpoints.length} organization endpoints, ${attacks.length} requests, ${Object.keys(AUTH_ORG_SKIP).length} skipped, API key paths ${JSON.stringify(created2.map((item) => item.status))}`,
+			`cross-org auth fuzz: ${endpoints.length} organization endpoints, ${attacks.length} requests, ${Object.keys(AUTH_ORG_SKIP).length} skipped, API key paths ${JSON.stringify(created2.map((item) => item.status))}, new keys ${bound.length}, bound to A ${boundToA.length}, bound to B ${bound.filter((row) => row.organization_id === orgs.b.organizationId).length}, unbound ${bound.filter((row) => row.organization_id === null).length}`,
 		);
 		expect(failures, failures.join("\n")).toEqual([]);
 	} finally {
