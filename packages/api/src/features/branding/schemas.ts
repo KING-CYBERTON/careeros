@@ -1,5 +1,6 @@
 import z from "zod";
 import { BRANDING_FONTS } from "@reactive-resume/db/schema";
+import { isSingleEmailAddress } from "@reactive-resume/utils/brand";
 
 // CAREEROS (P2-T01). The database CHECK constraints are the last line; these schemas give the caller a clear error first.
 
@@ -42,6 +43,7 @@ export const brandingSchema = z.object({
 	logoUrl: z.string().nullable().describe("Where the logo is served, or null when none was uploaded."),
 	faviconUrl: z.string().nullable().describe("Where the favicon is served, or null when none was uploaded."),
 	emailFromName: z.string().nullable().describe("The sender name on emails the organization sends."),
+	emailReplyTo: z.string().nullable().describe("The Reply-To address on emails the organization sends."),
 	updatedAt: z.date(),
 });
 
@@ -61,6 +63,14 @@ export const brandingUpdateSchema = z.object({
 	font: brandingFontSchema.nullable().optional(),
 	emailFromName: text(80)
 		.refine((value) => !CONTROL_OR_ANGLE.test(value), "Use a plain name without line breaks or angle brackets.")
+		.nullable()
+		.optional(),
+	// CAREEROS (P2-T04): one bare address; the database CHECK has the same rule.
+	emailReplyTo: z
+		.string()
+		.trim()
+		.max(254)
+		.refine(isSingleEmailAddress, "Use one address like help@example.com, without a name or angle brackets.")
 		.nullable()
 		.optional(),
 	supportUrl: httpsUrlSchema.nullable().optional(),

@@ -65,6 +65,8 @@ function load(path) {
 	return module.exports;
 }
 modules["./ai-consent"] = load("src/api/ai-consent.ts");
+// P2-T03: client.ts reports an organization-host block through this module, so it is loaded for real.
+modules["@/auth/org-host-block"] = load("src/auth/org-host-block.ts");
 const { client, streamClient, rest } = load("src/api/client.ts");
 async function waitForDialog() {
 	for (let step = 0; step < 100 && !dialog; step++) await new Promise((resolve) => setImmediate(resolve));

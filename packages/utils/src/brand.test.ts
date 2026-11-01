@@ -1,5 +1,13 @@
 import { describe, expect, it } from "vite-plus/test";
-import { contrastRatio, ensureContrast, isHexColor, mixHex, readableForeground, relativeLuminance } from "./brand";
+import {
+	contrastRatio,
+	ensureContrast,
+	isHexColor,
+	isSingleEmailAddress,
+	mixHex,
+	readableForeground,
+	relativeLuminance,
+} from "./brand";
 
 describe("isHexColor", () => {
 	it("accepts only #rrggbb", () => {
@@ -79,5 +87,33 @@ describe("accentTokens", () => {
 			expect(contrastRatio(dark.accent, dark.onAccent)).toBeGreaterThanOrEqual(4.5);
 			expect(contrastRatio(dark.accentText, dark.accentSoft)).toBeGreaterThanOrEqual(4.5);
 		}
+	});
+});
+
+describe("isSingleEmailAddress", () => {
+	it("accepts one bare address", () => {
+		expect(isSingleEmailAddress("help@example.com")).toBe(true);
+		expect(isSingleEmailAddress("first.last+tag@sub.example.co")).toBe(true);
+	});
+
+	it("rejects names, lists, headers and anything but exactly one at-sign", () => {
+		for (const bad of [
+			"",
+			"a",
+			"@b.c",
+			"a@",
+			"a@b@c.d",
+			"A <a@b.c>",
+			"<a@b.c>",
+			"a@b.c, d@e.f",
+			"a@b.c; d@e.f",
+			"a b@c.d",
+			"a@b.c\r\nBcc: x@y.z",
+			"a@b.c\nBcc: x@y.z",
+			"a\t@b.c",
+			`${"a".repeat(251)}@b.c`,
+		])
+			expect(isSingleEmailAddress(bad)).toBe(false);
+		expect(isSingleEmailAddress(undefined)).toBe(false);
 	});
 });
