@@ -4,6 +4,7 @@ import * as pg from "drizzle-orm/pg-core";
 import { generateId } from "@reactive-resume/utils/string";
 import { application } from "./applications";
 import { user } from "./auth";
+import { organization } from "./organization";
 import { resume } from "./resume";
 
 export const coverLetter = pg.pgTable(
@@ -14,6 +15,11 @@ export const coverLetter = pg.pgTable(
 			.notNull()
 			.primaryKey()
 			.$defaultFn(() => generateId()),
+		// CAREEROS: tenant column (P1-T05). Row-level security keys on it; inserts set it from `requireOrgId()`.
+		organizationId: pg
+			.text("organization_id")
+			.notNull()
+			.references(() => organization.id, { onDelete: "cascade" }),
 		userId: pg
 			.text("user_id")
 			.notNull()
@@ -48,6 +54,8 @@ export const coverLetter = pg.pgTable(
 	},
 	(table) => [
 		pg.index().on(table.userId, table.updatedAt.desc(), table.id.desc()),
+		// CAREEROS: organization-led twin of the list index above (P1-T05).
+		pg.index().on(table.organizationId, table.userId, table.updatedAt.desc(), table.id.desc()),
 		// Finds letters past Trash retention without scanning every letter.
 		pg
 			.index()
@@ -86,6 +94,11 @@ export const coverLetterVersion = pg.pgTable(
 			.text("cover_letter_id")
 			.notNull()
 			.references(() => coverLetter.id, { onDelete: "cascade" }),
+		// CAREEROS: tenant column (P1-T05). Row-level security keys on it; inserts set it from `requireOrgId()`.
+		organizationId: pg
+			.text("organization_id")
+			.notNull()
+			.references(() => organization.id, { onDelete: "cascade" }),
 		userId: pg
 			.text("user_id")
 			.notNull()
@@ -100,6 +113,8 @@ export const coverLetterVersion = pg.pgTable(
 	},
 	(t) => [
 		pg.index().on(t.coverLetterId, t.createdAt.desc()),
+		// CAREEROS: organization-led twin of the index above (P1-T05).
+		pg.index().on(t.organizationId, t.coverLetterId, t.createdAt.desc()),
 		pg
 			.uniqueIndex("cover_letter_version_session_unique")
 			.on(t.coverLetterId, t.sessionId)

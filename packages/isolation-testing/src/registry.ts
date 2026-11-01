@@ -44,9 +44,25 @@ async function seedResume(orgId: string, db: pg.Pool): Promise<{ userId: string;
 	return { userId, resumeId };
 }
 
+/** CAREEROS (P1-T05): a cover letter (and its owner) in `orgId`, inserted by the owner pool. */
+async function seedCoverLetter(orgId: string, db: pg.Pool): Promise<{ userId: string; letterId: string }> {
+	await ensureOrganization(db, orgId);
+	const userId = `iso-user-${randomUUID()}`;
+	const letterId = `iso-letter-${randomUUID()}`;
+	await db.query(
+		`INSERT INTO "user" (id, name, email, username, display_username) VALUES ($1, 'Isolation user', $1 || '@example.test', $1, $1)`,
+		[userId],
+	);
+	await db.query(
+		`INSERT INTO cover_letter (id, name, style, user_id, organization_id) VALUES ($1, 'Isolation letter', '{}', $2, $3)`,
+		[letterId, userId, orgId],
+	);
+	return { userId, letterId };
+}
+
 /**
  * Every tenant table (one with an `organization_id` column) must be registered here. The five resume tables are
- * registered by P1-T04. The resume route group's API check is attached by `packages/api` (it needs the router), which
+ * registered by P1-T04, the two cover letter tables by P1-T05. The resume route group's API check is attached by `packages/api` (it needs the router), which
  * runs `runApiIsolationCheck` with this entry's seed.
  */
 export const isolationRegistry: readonly RegistryEntry[] = [
@@ -99,6 +115,22 @@ export const isolationRegistry: readonly RegistryEntry[] = [
 			await db.query(
 				`INSERT INTO resume_statistics_daily (id, resume_id, date, organization_id) VALUES ($1, $2, current_date, $3)`,
 				[id, resumeId, orgId],
+			);
+			return id;
+		},
+	},
+	{
+		table: "cover_letter",
+		seed: async (orgId, db) => (await seedCoverLetter(orgId, db)).letterId,
+	},
+	{
+		table: "cover_letter_version",
+		seed: async (orgId, db) => {
+			const { userId, letterId } = await seedCoverLetter(orgId, db);
+			const id = `iso-letter-version-${randomUUID()}`;
+			await db.query(
+				`INSERT INTO cover_letter_version (id, cover_letter_id, user_id, data, organization_id) VALUES ($1, $2, $3, '{}', $4)`,
+				[id, letterId, userId, orgId],
 			);
 			return id;
 		},

@@ -19,16 +19,20 @@ export async function ensureTestOrganization(client: Pick<Pool, "query">): Promi
  */
 export async function installSchemaLocalGuestMove(client: Pick<Pool, "query">, schemaName: string): Promise<void> {
 	const { readFile } = await import("node:fs/promises");
-	const migration = await readFile(
-		new URL("../../../migrations/20261101004553_resumes_rls/migration.sql", import.meta.url),
-		"utf8",
-	);
-	const match = /CREATE OR REPLACE FUNCTION public\.careeros_move_guest_resumes[\s\S]*?\n\$\$;/.exec(migration);
-	if (!match) throw new Error("The guest-link function was not found in the migration.");
-	const ddl = match[0]
-		.replaceAll("SET search_path = pg_catalog, public", `SET search_path = pg_catalog, ${schemaName}`)
-		.replaceAll("public.", `${schemaName}.`);
-	await client.query(ddl);
+	// CAREEROS (P1-T05): the cover letter function lives in its own migration.
+	const sources = [
+		["20261101004553_resumes_rls", "careeros_move_guest_resumes"],
+		["20261101072723_cover_letters_rls", "careeros_move_guest_cover_letters"],
+	] as const;
+	for (const [folder, name] of sources) {
+		const migration = await readFile(new URL(`../../../migrations/${folder}/migration.sql`, import.meta.url), "utf8");
+		const match = new RegExp(`CREATE OR REPLACE FUNCTION public\\.${name}[\\s\\S]*?\\n\\$\\$;`).exec(migration);
+		if (!match) throw new Error(`The guest-link function ${name} was not found in the migration.`);
+		const ddl = match[0]
+			.replaceAll("SET search_path = pg_catalog, public", `SET search_path = pg_catalog, ${schemaName}`)
+			.replaceAll("public.", `${schemaName}.`);
+		await client.query(ddl);
+	}
 }
 
 /** Makes `guestId` a guest account and `targetId` a member of the test organization, so a guest link can move work. */

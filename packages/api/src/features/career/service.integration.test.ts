@@ -646,6 +646,7 @@ describe.skipIf(!databaseUrl)("career knowledge, context and data lifecycle", ()
 		const style = copyCoverLetterStyle(defaultResumeData);
 		await getDb().insert(tables.coverLetter).values({
 			id: "alice-letter",
+			organizationId: TEST_ORGANIZATION_ID,
 			userId: "alice",
 			name: "Current letter",
 			content: "<p>UNSENT LETTER EDIT</p>",
@@ -655,6 +656,7 @@ describe.skipIf(!databaseUrl)("career knowledge, context and data lifecycle", ()
 			.insert(tables.coverLetterVersion)
 			.values({
 				id: "sent-letter",
+				organizationId: TEST_ORGANIZATION_ID,
 				userId: "alice",
 				coverLetterId: "alice-letter",
 				kind: "sent",
@@ -1235,6 +1237,7 @@ describe.skipIf(!databaseUrl)("career knowledge, context and data lifecycle", ()
 			.insert(tables.coverLetter)
 			.values({
 				id: "submit-letter",
+				organizationId: TEST_ORGANIZATION_ID,
 				userId: "alice",
 				name: "For ACME",
 				content: "<p>Final letter</p>",
@@ -1663,6 +1666,7 @@ describe.skipIf(!databaseUrl)("career knowledge, context and data lifecycle", ()
 				.insert(tables.coverLetter)
 				.values({
 					id: "contended-letter",
+					organizationId: TEST_ORGANIZATION_ID,
 					userId: "alice",
 					name: "Contended",
 					style: copyCoverLetterStyle(defaultResumeData),

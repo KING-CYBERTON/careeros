@@ -4,6 +4,7 @@ import { tmpdir } from "node:os";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { describe, expect, it } from "vite-plus/test";
+import { guardTestPool } from "@careeros/testing";
 import { drizzle } from "drizzle-orm/node-postgres";
 import { migrate } from "drizzle-orm/node-postgres/migrator";
 import { Pool } from "pg";
@@ -25,6 +26,7 @@ describe.skipIf(!process.env.COVER_LETTER_TEST_DATABASE_URL)("resume tenancy mig
 		const baselineFolder = await mkdtemp(path.join(tmpdir(), "careeros-t04-migrations-"));
 		const databaseName = `migration_t04_${randomUUID().replaceAll("-", "")}`;
 		let pool: Pool | undefined;
+		let closePool: (() => Promise<void>) | undefined;
 		try {
 			for (const name of await readdir(migrationsFolder)) {
 				if (name < FOLDER) await symlink(path.join(migrationsFolder, name), path.join(baselineFolder, name));
@@ -33,6 +35,7 @@ describe.skipIf(!process.env.COVER_LETTER_TEST_DATABASE_URL)("resume tenancy mig
 			const url = new URL(databaseUrl);
 			url.pathname = `/${databaseName}`;
 			pool = new Pool({ connectionString: url.toString(), max: 1 });
+			closePool = guardTestPool(pool).close;
 			await migrate(drizzle({ client: pool }), { migrationsFolder: baselineFolder });
 			const q = async <T extends Record<string, unknown>>(sql: string, params: unknown[] = []) =>
 				(await (pool as Pool).query<T>(sql, params)).rows;
@@ -187,7 +190,7 @@ describe.skipIf(!process.env.COVER_LETTER_TEST_DATABASE_URL)("resume tenancy mig
 			const again = await snapshot();
 			expect(again.rows).toEqual(first.rows);
 		} finally {
-			await pool?.end().catch(() => undefined);
+			await closePool?.().catch(() => undefined);
 			await admin.query(`DROP DATABASE IF EXISTS "${databaseName}" WITH (FORCE)`).catch(() => undefined);
 			await admin.end();
 			await rm(baselineFolder, { recursive: true, force: true });

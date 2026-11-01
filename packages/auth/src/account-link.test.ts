@@ -118,8 +118,15 @@ describe("linkAnonymousAccount", () => {
 
 		// CAREEROS (P1-T04): resumes, their versions, redirects and statistics move through one definer function,
 		// into the target account's organization; there is no direct update of the resume tables any more.
-		expect(mocks.execute).toHaveBeenCalledOnce();
+		// CAREEROS (P1-T05): cover letters and their versions move through a second definer function.
+		expect(mocks.execute).toHaveBeenCalledTimes(2);
 		const moveQuery = JSON.stringify(mocks.execute.mock.calls[0]?.[0]);
+		const letterMoveQuery = JSON.stringify(mocks.execute.mock.calls[1]?.[0]);
+		expect(letterMoveQuery).toContain("careeros_move_guest_cover_letters");
+		expect(letterMoveQuery).toContain("guest-123");
+		expect(letterMoveQuery).toContain("org-user-456");
+		expect(mocks.update.mock.calls.some((call) => call[0] === schema.coverLetter)).toBe(false);
+		expect(mocks.update.mock.calls.some((call) => call[0] === schema.coverLetterVersion)).toBe(false);
 		expect(moveQuery).toContain("careeros_move_guest_resumes");
 		expect(moveQuery).toContain("guest-123");
 		expect(moveQuery).toContain("user-456");
@@ -137,24 +144,6 @@ describe("linkAnonymousAccount", () => {
 		expect(appSetArg).toMatchObject({ userId: "user-456" });
 		expect(appSetArg).toHaveProperty("resumeFileUrl");
 		expect(appSetArg).toHaveProperty("coverLetterUrl");
-
-		// Check coverLetter update includes style rewrite
-		const coverLetterUpdateCall = mocks.update.mock.calls.find((call) => call[0] === schema.coverLetter);
-		expect(coverLetterUpdateCall).toBeDefined();
-		const coverLetterSetArg = mocks.updateSet.mock.calls.find(
-			(_, idx) => mocks.update.mock.calls[idx]?.[0] === schema.coverLetter,
-		)?.[0];
-		expect(coverLetterSetArg).toMatchObject({ userId: "user-456" });
-		expect(coverLetterSetArg).toHaveProperty("style");
-
-		// Check coverLetterVersion update includes data rewrite
-		const coverLetterVersionUpdateCall = mocks.update.mock.calls.find((call) => call[0] === schema.coverLetterVersion);
-		expect(coverLetterVersionUpdateCall).toBeDefined();
-		const coverLetterVersionSetArg = mocks.updateSet.mock.calls.find(
-			(_, idx) => mocks.update.mock.calls[idx]?.[0] === schema.coverLetterVersion,
-		)?.[0];
-		expect(coverLetterVersionSetArg).toMatchObject({ userId: "user-456" });
-		expect(coverLetterVersionSetArg).toHaveProperty("data");
 
 		// Check hook execution
 		expect(hook).toHaveBeenCalledWith({

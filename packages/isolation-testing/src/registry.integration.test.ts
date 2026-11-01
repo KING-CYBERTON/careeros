@@ -25,13 +25,15 @@ describe.skipIf(!configured)("the isolation registry on the migrated schema", ()
 		await pools?.close();
 	});
 
-	it("registers the five resume tables", () => {
+	it("registers the five resume tables and the two cover letter tables", () => {
 		expect(isolationRegistry.map((entry) => entry.table)).toEqual([
 			"resume",
 			"resume_version",
 			"resume_slug_redirect",
 			"resume_statistics",
 			"resume_statistics_daily",
+			"cover_letter",
+			"cover_letter_version",
 		]);
 	});
 
