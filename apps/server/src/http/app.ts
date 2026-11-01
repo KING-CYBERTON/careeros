@@ -24,6 +24,8 @@ import {
 } from "../openapi/metadata";
 import { handleRpc } from "../rpc/handler";
 import { handleAgentSkillArchive, handleAgentSkillsIndex } from "../static/agent-skills";
+// CAREEROS: organization logo and favicon (P2-T01)
+import { handleBrandingAssetRequest } from "../static/branding";
 import { handleResumeCard } from "../static/resume-card";
 import { serveResumePage } from "../static/resume-page";
 import { handleSchemaJson } from "../static/schema";
@@ -134,6 +136,10 @@ export function createApp(options: AppOptions = {}) {
 	// Outside /api/resumes, which robots.txt keeps crawlers out of: link previews need to fetch these.
 	app.get("/cards/:username/:file{.+\\.png}", (c) =>
 		handleResumeCard(c.req.raw, c.req.param("username"), c.req.param("file").slice(0, -".png".length)),
+	);
+	// CAREEROS: organization logo and favicon (P2-T01)
+	app.get("/api/branding-assets/:organizationId/:filename", (c) =>
+		handleBrandingAssetRequest(c.req.raw, c.req.param("organizationId"), c.req.param("filename")),
 	);
 	app.get("/api/uploads/*", (c) => handleUpload(c.req.raw));
 	app.get("/uploads/*", (c) => handleUpload(c.req.raw));

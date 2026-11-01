@@ -17,6 +17,11 @@ export type RegistryEntry = {
 	schema?: string;
 	/** Name of the primary key column used to look the seeded row up. Defaults to "id". */
 	idColumn?: string;
+	/**
+	 * CAREEROS (P2-T01): every organization owns exactly one row of this table from the moment it exists (a trigger
+	 * creates it). The check then expects Org B to see no row of ANOTHER organization, not no row at all.
+	 */
+	rowPerOrganization?: boolean;
 	/** Inserts one row owned by `orgId` using the owner pool (setup only) and returns its id. */
 	seed: (orgId: string, db: pg.Pool) => Promise<string>;
 	/** Optional API surface; when present the ID-fuzz API check also runs. */
@@ -156,7 +161,7 @@ async function seedUserIn(orgId: string, db: pg.Pool): Promise<string> {
 /**
  * Every tenant table (one with an `organization_id` column) must be registered here. The five resume tables are
  * registered by P1-T04, the two cover letter tables by P1-T05 and the four application tables by P1-T06, the eleven career tables by P1-T07, the six assistant and AI tables by P1-T08 and
- * the three remaining ones by P1-T09. The route
+ * the three remaining ones by P1-T09 and the two branding ones by P2-T01. The route
  * groups' API checks are attached by `packages/api` (it needs the router), which runs `runApiIsolationCheck` with this
  * entry's seed.
  */
@@ -501,6 +506,37 @@ export const isolationRegistry: readonly RegistryEntry[] = [
 				[id, orgId],
 			);
 			return id;
+		},
+	},
+	// CAREEROS (P2-T01): branding and settings, one row per organization (the primary key is the organization id). The
+	// organization insert creates the default rows through a trigger, so the seed updates them (or inserts, if the
+	// organization already existed without them).
+	{
+		table: "organization_branding",
+		idColumn: "organization_id",
+		rowPerOrganization: true,
+		seed: async (orgId, db) => {
+			await ensureOrganization(db, orgId);
+			await db.query(
+				`INSERT INTO organization_branding (organization_id, app_name) VALUES ($1, 'Isolation branding')
+				 ON CONFLICT (organization_id) DO UPDATE SET app_name = excluded.app_name`,
+				[orgId],
+			);
+			return orgId;
+		},
+	},
+	{
+		table: "organization_settings",
+		idColumn: "organization_id",
+		rowPerOrganization: true,
+		seed: async (orgId, db) => {
+			await ensureOrganization(db, orgId);
+			await db.query(
+				`INSERT INTO organization_settings (organization_id, open_signup) VALUES ($1, true)
+				 ON CONFLICT (organization_id) DO UPDATE SET open_signup = excluded.open_signup`,
+				[orgId],
+			);
+			return orgId;
 		},
 	},
 ];
