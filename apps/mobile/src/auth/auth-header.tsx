@@ -2,6 +2,7 @@ import { useLingui } from "@lingui/react/macro";
 import { Image } from "expo-image";
 import { openBrowserAsync } from "expo-web-browser";
 import { View } from "react-native";
+import { getBrand } from "@reactive-resume/utils/brand";
 import { Button, Text, showToast, useTheme } from "@/ui";
 
 type AuthHeaderProps = {
@@ -10,7 +11,6 @@ type AuthHeaderProps = {
 
 /** The app mark and name at the top of the sign-in screens. */
 export function AuthHeader({ subtitle }: AuthHeaderProps) {
-	const { t } = useLingui();
 	const { radius, space } = useTheme();
 
 	return (
@@ -26,7 +26,7 @@ export function AuthHeader({ subtitle }: AuthHeaderProps) {
 				}}
 			/>
 			<Text variant="display" align="center" accessibilityRole="header">
-				{t`Reactive Resume`}
+				{getBrand().appName}
 			</Text>
 			{subtitle ? (
 				<Text color="ink2" align="center">
@@ -39,13 +39,16 @@ export function AuthHeader({ subtitle }: AuthHeaderProps) {
 
 export function PrivacyPolicyLink() {
 	const { t } = useLingui();
+	// CAREEROS: the link goes to the brand's privacy policy; with none set, the link is not shown (P2-T08).
+	const { privacyUrl } = getBrand();
+	if (!privacyUrl) return null;
 	return (
 		<View style={{ alignSelf: "center" }}>
 			<Button
 				label={t`Privacy policy`}
 				variant="link"
 				onPress={() => {
-					void openBrowserAsync("https://docs.rxresu.me/legal/privacy-policy").catch(() =>
+					void openBrowserAsync(privacyUrl).catch(() =>
 						showToast({ message: t`Couldn't open the browser. Try again.` }),
 					);
 				}}
@@ -54,5 +57,5 @@ export function PrivacyPolicyLink() {
 	);
 }
 
-/** The host of an origin, as people type it: `https://rxresu.me` → `rxresu.me`. */
+/** The host of an origin, as people type it: `https://example.com` → `example.com`. */
 export const hostOf = (origin: string) => origin.replace(/^https?:\/\//, "");

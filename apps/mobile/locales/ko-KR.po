@@ -493,14 +493,6 @@ msgstr "{company} · {tabName}"
 msgid "{completed, plural, one {# document updated} other {# documents updated}}"
 msgstr "{completed, plural, one {문서 #개 업데이트됨} other {문서 #개 업데이트됨}}"
 
-#: src/features/share/custom-domain.tsx
-msgid "{cost} a year"
-msgstr "연 {cost}"
-
-#: src/features/share/custom-domain.tsx
-msgid "{cost} the first year"
-msgstr "첫해 {cost}"
-
 #: src/features/write/section-sheet.tsx
 msgid "{count, plural, one {# column} other {# columns}}"
 msgstr "{count, plural, one {#열} other {#열}}"
@@ -750,8 +742,8 @@ msgid "24 hours before"
 msgstr "24시간 전"
 
 #: src/features/letters/share.tsx
-msgid "A backup of this letter. Imports back into Reactive Resume as a letter."
-msgstr "이 편지의 백업본입니다. 문자로 Reactive Resume에 다시 가져옵니다."
+msgid "A backup of this letter. Imports back into {appName} as a letter."
+msgstr ""
 
 #: src/features/check/issues.ts
 msgid "A city and country let roles be matched to where you are."
@@ -1776,10 +1768,6 @@ msgstr "어시스턴트에게 작업을 요청하세요."
 msgid "Ask the coach"
 msgstr "코치에게 묻기"
 
-#: src/features/share/download.tsx
-msgid "Ask the community. Remove personal details before posting."
-msgstr "커뮤니티에 물어보세요. 게시하기 전에 개인 정보를 삭제하세요."
-
 #: src/auth/session-gate.tsx
 msgid "Ask the organization's administrator for an invitation, or sign out and use a different account."
 msgstr ""
@@ -1868,10 +1856,6 @@ msgstr "자동으로"
 #: src/features/history/history.tsx
 msgid "Autosaves are grouped by session and kept for 90 days. Named versions are kept until you delete them. Restoring saves the current state first."
 msgstr "자동 저장은 세션별로 그룹화되어 90일 동안 보관됩니다. 명명된 버전은 삭제할 때까지 유지됩니다. 복원하면 현재 상태가 먼저 저장됩니다."
-
-#: src/features/share/custom-domain.tsx
-msgid "Available"
-msgstr "등록 가능"
 
 #: src/features/ats-checker/messages.ts
 msgid "Avoid heavy letter-spacing effects, then re-export."
@@ -2096,10 +2080,6 @@ msgstr "글머리 기호 목록"
 #: src/features/letters/design-presets.ts
 msgid "Burgundy"
 msgstr "버건디"
-
-#: app/(tabs)/settings/index.tsx
-msgid "by <0>Amruth Pillai</0>"
-msgstr "개발: <0>Amruth Pillai</0>"
 
 #: src/features/applications-board/views.tsx
 msgid "Calendar"
@@ -2566,10 +2546,6 @@ msgstr "종료됨: {closed}"
 msgid "Coach"
 msgstr "코치"
 
-#: src/features/share/custom-domain.tsx
-msgid "Code copied"
-msgstr "코드가 복사되었습니다"
-
 #: src/features/design/design-pane.tsx
 #: src/features/letters/design.tsx
 msgid "Color"
@@ -2640,8 +2616,8 @@ msgid "Complete {0} before saving."
 msgstr "저장하기 전에 {0} 항목을 작성하세요."
 
 #: src/features/share/download.tsx
-msgid "Complete data backup. Imports back into Reactive Resume or JSON Resume tools."
-msgstr "데이터 백업을 완료하세요. Reactive Resume 또는 JSON Resume 도구로 다시 가져옵니다."
+msgid "Complete data backup. Imports back into {appName} or JSON Resume tools."
+msgstr ""
 
 #: src/features/ats-checker/messages.ts
 msgid "Compress or remove large images to keep uploads quick."
@@ -2676,10 +2652,6 @@ msgstr "연결"
 #: src/features/share/custom-domain.tsx
 msgid "Connect {0}"
 msgstr "{0} 연결"
-
-#: src/features/share/custom-domain.tsx
-msgid "Connect {domain}"
-msgstr "{domain} 연결"
 
 #: src/features/ai/web-access.tsx
 msgid "Connect a service"
@@ -2844,10 +2816,6 @@ msgstr "직업에 대한 이력서 복사"
 #: src/features/workspace/tabs/apply.tsx
 msgid "Copy answers"
 msgstr "답변 복사"
-
-#: src/features/share/custom-domain.tsx
-msgid "Copy code"
-msgstr "코드 복사"
 
 #: src/features/document-menu/index.tsx
 msgid "Copy created"
@@ -3089,7 +3057,6 @@ msgstr "지원함으로 표시할 수 없습니다. 다시 시도해 보세요."
 #: app/(tabs)/settings/index.tsx
 #: src/auth/auth-header.tsx
 #: src/features/settings/api-keys.tsx
-#: src/features/share/download.tsx
 msgid "Couldn't open the browser. Try again."
 msgstr "브라우저를 열 수 없습니다. 다시 시도해 보세요."
 
@@ -3896,10 +3863,6 @@ msgstr "{0} 채용 공고를 보내지 마세요."
 msgid "Don't share"
 msgstr "공유하지 않음"
 
-#: app/(tabs)/settings/index.tsx
-msgid "Donate on Open Collective"
-msgstr "Open Collective에서 후원하기"
-
 #: app/(tabs)/settings/preferences.tsx
 #: src/features/applications/list-screen.tsx
 #: src/features/career/today.tsx
@@ -4302,8 +4265,8 @@ msgid "Enter terms yourself. No AI request is made. Leave unknown amounts blank.
 msgstr "조건을 직접 입력하세요. AI 요청은 전송되지 않습니다. 모르는 금액은 비워 두세요."
 
 #: app/(auth)/server.tsx
-msgid "Enter the address you open Reactive Resume at in a browser. The app checks it's a Reactive Resume server that allows app sign-in before you continue."
-msgstr "브라우저에서 Reactive Resume를 여는 주소를 입력하세요. 계속하기 전에 앱에서 로그인을 허용하는 Reactive Resume 서버인지 확인합니다."
+msgid "Enter the address you open {appName} at in a browser. The app checks it's a {appName} server that allows app sign-in before you continue."
+msgstr ""
 
 #: src/features/letters/write.tsx
 msgid "Enter your details below. Choosing a resume replaces them and links its design."
@@ -4680,12 +4643,12 @@ msgstr ""
 
 #: src/api/ai-consent.ts
 #: src/features/career/schedule-sheet.tsx
-msgid "Found posting links are read by Reactive Resume and the sites being read."
+msgid "Found posting links are read by {appName} and the sites being read."
 msgstr ""
 
 #: src/api/ai-consent.ts
 #: src/features/career/schedule-sheet.tsx
-msgid "Found posting links are read by Reactive Resume and, when needed, {reader} and the sites being read. The reader may charge."
+msgid "Found posting links are read by {appName} and, when needed, {reader} and the sites being read. The reader may charge."
 msgstr ""
 
 #: src/features/design/style-groups.tsx
@@ -4752,10 +4715,6 @@ msgstr "피드백 받기를 누르면 질문, 답변, 이 채용 공고, 내 스
 #: src/features/career/today.tsx
 msgid "Get new roles here every morning"
 msgstr "매일 아침 새 직무를 여기서 받아 보기"
-
-#: src/features/share/download.tsx
-msgid "Get resume feedback on Discord"
-msgstr "Discord에서 이력서 피드백 받기"
 
 #: src/features/letters/write.tsx
 msgid "Getting long. Try “Shorter”, or cut the least specific paragraph."
@@ -5342,10 +5301,6 @@ msgstr "구직 파이프라인"
 #: src/features/search/search-screen.tsx
 msgid "Jobs"
 msgstr "일자리"
-
-#: app/(tabs)/settings/index.tsx
-msgid "Join the Discord"
-msgstr "Discord 참여하기"
 
 #: src/features/letters/share.tsx
 #: src/features/share/download.tsx
@@ -6122,10 +6077,6 @@ msgstr "이력서와 일치"
 msgid "Matching your facts"
 msgstr "사실과 맞춰 보는 중"
 
-#: src/features/share/custom-domain.tsx
-msgid "May be available"
-msgstr "등록 가능할 수 있음"
-
 #: src/features/search/search-screen.tsx
 msgid "MCP"
 msgstr "MCP"
@@ -6163,10 +6114,6 @@ msgstr "최소 기본급"
 #: src/features/career/offers.tsx
 msgid "Minimum salary cannot be compared in these terms."
 msgstr "최저임금은 이 용어로 비교할 수 없습니다."
-
-#: app/(tabs)/settings/index.tsx
-msgid "MIT License"
-msgstr "MIT 라이선스"
 
 #: src/features/workspace/tabs/debrief.tsx
 msgid "Mixed"
@@ -6710,10 +6657,6 @@ msgstr "사진이 없습니다. 대부분의 ATS는 사진을 무시합니다. �
 msgid "No postings found. Try different keywords."
 msgstr "채용공고를 찾을 수 없습니다. 다른 키워드를 사용해 보세요."
 
-#: src/auth/messages.ts
-msgid "No Reactive Resume server answered at this address. Check the spelling, or ask your administrator whether the server allows app sign-in."
-msgstr "이 주소에서는 Reactive Resume 서버가 응답하지 않습니다. 철자를 확인하거나 서버에서 앱 로그인을 허용하는지 관리자에게 문의하세요."
-
 #: src/features/check/job-match.tsx
 msgid "No recognizable terms in this posting."
 msgstr "이 채용 공고에 인식 가능한 용어가 없습니다."
@@ -6737,6 +6680,10 @@ msgstr "결과 없음"
 #: src/features/letters/write.tsx
 msgid "No resume"
 msgstr "이력서 없음"
+
+#: src/auth/messages.ts
+msgid "No server answered at this address. Check the spelling, or ask your administrator whether the server allows app sign-in."
+msgstr ""
 
 #: src/features/ats-checker/messages.ts
 msgid "No skills section was found."
@@ -7463,20 +7410,20 @@ msgid "PDF check canceled. Retry when ready."
 msgstr "PDF 검사가 취소되었습니다. 준비되면 다시 시도하세요."
 
 #: src/features/application-detail/sections.tsx
-msgid "PDF only · up to 10 MB each. Linking a Reactive Resume enables AI match scoring and tailoring."
-msgstr "PDF만 · 파일당 최대 10MB. Reactive Resume 이력서를 연결하면 AI 일치도 평가와 맞춤 편집을 사용할 수 있습니다."
+msgid "PDF only · up to 10 MB each. Linking a resume enables AI match scoring and tailoring."
+msgstr ""
 
 #: src/features/design/advanced.tsx
 msgid "PDF styles support a subset of CSS. Rotation, dashed and dotted borders, and some layout properties are ignored."
 msgstr "PDF 스타일은 CSS의 하위 집합을 지원합니다. 회전, 파선 및 점선 테두리, 일부 레이아웃 속성은 무시됩니다."
 
 #: src/features/documents/new-document.tsx
-msgid "PDF uses your AI provider when one is ready. Turn off the AI switch to read its text layer on your server. Word (.docx) needs an AI provider. Current and v4 Reactive Resume JSON, cover letters, JSON Resume and LinkedIn exports (.zip) are supported. Up to 10 MB."
-msgstr "준비된 AI 제공자가 있으면 PDF에 사용합니다. AI 스위치를 끄면 서버에서 텍스트 레이어를 읽습니다. Word(.docx)에는 AI 제공자가 필요합니다. 현재 및 v4 Reactive Resume JSON, 커버레터, JSON Resume, LinkedIn 내보내기(.zip)를 지원합니다. 최대 10MB입니다."
+msgid "PDF uses your AI provider when one is ready. Turn off the AI switch to read its text layer on your server. Word (.docx) needs an AI provider. Current and v4 JSON, cover letters, JSON Resume and LinkedIn exports (.zip) are supported. Up to 10 MB."
+msgstr ""
 
 #: src/features/documents/new-document.tsx
-msgid "PDF, Word, Reactive Resume, JSON Resume or LinkedIn export."
-msgstr "PDF, Word, Reactive Resume, JSON Resume 또는 LinkedIn 내보내기."
+msgid "PDF, Word, JSON, JSON Resume or LinkedIn export."
+msgstr ""
 
 #: src/features/career/offer-entry.tsx
 #: src/features/career/offers.tsx
@@ -7826,6 +7773,10 @@ msgstr ""
 msgid "Private. Only you can see it."
 msgstr "사적인. 오직 당신만이 그것을 볼 수 있습니다."
 
+#: app/(tabs)/settings/licences.tsx
+msgid "Product"
+msgstr ""
+
 #: src/features/design/style-groups.tsx
 #: src/features/letters/design-presets.ts
 msgid "Professional"
@@ -7990,10 +7941,6 @@ msgstr "폰트를 임베드하여 다시 내보낸 뒤, 텍스트가 깔끔하�
 #: src/features/ats-checker/messages.ts
 msgid "Re-export with fonts embedded, then open the file and check that the text copies out cleanly."
 msgstr "폰트를 임베드하여 다시 내보낸 뒤 파일을 열어 텍스트가 깔끔하게 복사되는지 확인하세요."
-
-#: src/auth/auth-header.tsx
-msgid "Reactive Resume"
-msgstr "Reactive Resume"
 
 #: src/features/workspace/tabs/prepare.tsx
 msgid "Read briefing"
@@ -8214,10 +8161,6 @@ msgstr "24시간 전에 브리핑 새로 고침"
 #: src/features/workspace/tabs/prepare.tsx
 msgid "Refresh the briefing on the morning of"
 msgstr "당일 아침에 브리핑 새로 고침"
-
-#: src/features/share/custom-domain.tsx
-msgid "Register at OlaCV"
-msgstr "OlaCV에서 등록"
 
 #: src/features/workspace/tabs/prepare.tsx
 msgid "Rehearse aloud"
@@ -8472,10 +8415,6 @@ msgstr "신고"
 msgid "Report AI content"
 msgstr "AI 콘텐츠 신고"
 
-#: app/(tabs)/settings/index.tsx
-msgid "Report an issue"
-msgstr "문제 신고"
-
 #: src/features/ai/report-content.tsx
 msgid "Report received by your server operator. Thank you."
 msgstr "귀하의 서버 운영자로부터 보고를 받았습니다. 감사합니다."
@@ -8575,10 +8514,6 @@ msgstr "이력서 + 편지"
 #: src/features/document-menu/index.tsx
 msgid "Resume details"
 msgstr "이력서 세부정보"
-
-#: app/(tabs)/settings/index.tsx
-msgid "Resume feedback, product help, and community ideas."
-msgstr "이력서 피드백, 제품 도움말, 커뮤니티 아이디어."
 
 #: src/features/application-detail/sections.tsx
 #: src/features/workspace/tabs/apply.tsx
@@ -9456,10 +9391,6 @@ msgstr "역할을 찾으려면 설정에서 웹 검색을 설정하세요."
 msgid "Settings"
 msgstr "설정"
 
-#: app/(tabs)/settings/ai-mcp.tsx
-msgid "Setup guide"
-msgstr "설정 가이드"
-
 #: src/features/ai/report-content.tsx
 msgid "Sexual content"
 msgstr "성적인 콘텐츠"
@@ -9540,8 +9471,8 @@ msgid "Shorter"
 msgstr "더 짧게"
 
 #: src/features/share/web-page.tsx
-msgid "Show “Made with Reactive Resume”"
-msgstr "“Reactive Resume로 제작” 표시"
+msgid "Show “Made with {appName}”"
+msgstr ""
 
 #. placeholder {0}: Math.min(remaining, COLUMN_PAGE_SIZE)
 #: src/features/applications-board/board-screen.tsx
@@ -9905,10 +9836,6 @@ msgstr "출처"
 #: src/features/career/facts.tsx
 msgid "Source and correction history"
 msgstr "소스 및 수정 내역"
-
-#: app/(tabs)/settings/index.tsx
-msgid "Source code on GitHub"
-msgstr "GitHub 소스 코드"
 
 #: src/features/workspace/answer-library.tsx
 msgid "Source employer"
@@ -12266,8 +12193,8 @@ msgid "your Knowledge"
 msgstr "내 지식"
 
 #: app/(tabs)/settings/preferences.tsx
-msgid "Your language is saved. Restart Reactive Resume to apply the new left-to-right or right-to-left layout."
-msgstr "귀하의 언어가 저장되었습니다. 새로운 왼쪽에서 오른쪽 또는 오른쪽에서 왼쪽 레이아웃을 적용하려면 Reactive Resume를 다시 시작하세요."
+msgid "Your language is saved. Restart the app to apply the new left-to-right or right-to-left layout."
+msgstr ""
 
 #: src/features/ats-checker/messages.ts
 msgid "Your lines are packed very tightly."
@@ -12284,10 +12211,6 @@ msgstr "내 메시지"
 #: src/features/write/outline.tsx
 msgid "Your name"
 msgstr "이름"
-
-#: src/features/share/custom-domain.tsx
-msgid "Your name as your address, from OlaCV, the .cv registry. Code {CODE} takes 50% off the first year."
-msgstr "내 이름을 그대로 주소로. .cv 레지스트리인 OlaCV에서 제공합니다. 코드 {CODE} 사용 시 첫해 50% 할인됩니다."
 
 #: src/features/check/issues.ts
 msgid "Your name is missing"

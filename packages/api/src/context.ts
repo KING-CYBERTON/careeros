@@ -109,7 +109,7 @@ export async function resolveAuthenticationFromRequestHeaders(
 			headers.get("sec-fetch-site") === "cross-site")
 	) {
 		throw new ORPCError("FORBIDDEN", {
-			message: "This request came from another site. Open Reactive Resume directly and try again.",
+			message: "This request came from another site. Open the app directly and try again.",
 		});
 	}
 	// Do not let Better Auth turn an API key into an unrestricted synthetic session.

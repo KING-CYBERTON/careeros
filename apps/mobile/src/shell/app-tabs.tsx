@@ -13,6 +13,7 @@ import Animated, {
 	withTiming,
 } from "react-native-reanimated";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { getBrand } from "@reactive-resume/utils/brand";
 import { routes } from "@/routes";
 import { Button, Icon, IconButton, Text, haptics, useReducedMotion, useTheme } from "@/ui";
 import { useKeyboardVisible } from "@/ui/keyboard";
@@ -374,6 +375,7 @@ function SidebarItem({
 export function AppSidebar(props: BottomTabBarProps) {
 	const router = useRouter();
 	const { t } = useLingui();
+	const { appName } = getBrand();
 	const { state, insets } = props;
 	const pathname = usePathname();
 	const { colors, radius, size, space, type } = useTheme();
@@ -401,12 +403,12 @@ export function AppSidebar(props: BottomTabBarProps) {
 		>
 			<Text
 				variant="heading"
-				accessibilityLabel="Reactive Resume"
+				accessibilityLabel={appName}
 				align={compact ? "center" : undefined}
 				numberOfLines={1}
 				style={{ paddingHorizontal: compact ? 0 : space.s3, paddingBottom: space.s3 }}
 			>
-				{compact ? "Rx" : "Reactive Resume"}
+				{compact ? appName.slice(0, 1) : appName}
 			</Text>
 			{compact ? (
 				<View style={{ alignItems: "center" }}>

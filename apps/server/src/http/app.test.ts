@@ -230,6 +230,19 @@ describe("createApp", () => {
 		expect(mocks.handleWellKnownFallback).not.toHaveBeenCalled();
 	});
 
+	// CAREEROS: the upstream agent-skills plugin is no longer served (P2-T08).
+	it.each(["/.well-known/agent-skills/index.json", "/.well-known/agent-skills/resume-writer.tar.gz"])(
+		"does not serve %s; it falls through to the well-known fallback",
+		async (path) => {
+			const { createApp } = await import("./app");
+
+			const response = await createApp().fetch(new Request(`http://localhost:3001${path}`));
+
+			expect(await response.text()).toBe("well-known");
+			expect(mocks.handleWellKnownFallback).toHaveBeenCalled();
+		},
+	);
+
 	it("routes GET / to the web app before static files", async () => {
 		const { createApp } = await import("./app");
 		const app = createApp();

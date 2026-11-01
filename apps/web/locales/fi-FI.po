@@ -73,10 +73,6 @@ msgstr "\"{value}\" alkaa tämän päivän jälkeen. Tarkista vuosi tai merkitse
 msgid "“{written}” added to Skills"
 msgstr "\"{written}\" lisättiin Skillsiin"
 
-#: src/features/homepage/prepare.tsx
-msgid "“How did you measure the onboarding redesign?”"
-msgstr "“Miten mittasit aloitusprosessin uudistusta?”"
-
 #: src/features/applications/components/import-applications-sheet.tsx
 msgid "(no header)"
 msgstr "(ei otsikkoa)"
@@ -393,10 +389,8 @@ msgstr "{0} haastattelu"
 msgid "{0} invited you to join as {1}."
 msgstr ""
 
-#. placeholder {0}: i18n.number(row.minutes)
 #. placeholder {0}: row.minutes
 #: src/features/career/workspace/prepare.tsx
-#: src/features/homepage/prepare.tsx
 msgid "{0} min"
 msgstr "{0} min"
 
@@ -516,6 +510,10 @@ msgstr "{0}. Ongelma ratkaistu."
 msgid "{accepted} of {0} applied"
 msgstr "{accepted}/{0} otettu käyttöön"
 
+#: src/routes/_home/-sections/header.tsx
+msgid "{appName} - Go to homepage"
+msgstr ""
+
 #: src/routes/builder/$resumeId/-components/page-canvas.tsx
 msgid "{authored, plural, =1 {Fit to one page} other {Fit to # pages}}"
 msgstr "{authored, plural, =1 {Sovita yhdelle sivulle} other {Sovita # sivulle}}"
@@ -543,14 +541,6 @@ msgstr "Vain {company}"
 #: src/features/career/coach-chat.tsx
 msgid "{connection} didn't respond."
 msgstr "{connection} ei vastannut."
-
-#: src/features/resume/share/cv-domain-card.tsx
-msgid "{cost} a year"
-msgstr "{cost} vuodessa"
-
-#: src/features/resume/share/cv-domain-card.tsx
-msgid "{cost} the first year"
-msgstr "{cost} ensimmäisenä vuonna"
 
 #: src/features/resume/editor/write/section-row.tsx
 msgid "{count, plural, one {# entry} other {# entries}}"
@@ -613,10 +603,6 @@ msgstr "{done}/{count} tehty"
 #: src/features/career/workspace/prepare.tsx
 msgid "{doneMinutes} of {total} min"
 msgstr "{doneMinutes}/{total} min"
-
-#: src/features/homepage/prepare.tsx
-msgid "{earlier} · typed"
-msgstr "{earlier} · kirjoitettu"
 
 #: src/features/resume/editor/write/write-panel.tsx
 msgid "{entries, plural, one {# entry} other {# entries}}"
@@ -731,10 +717,6 @@ msgstr "{name} käyttää yhtä saraketta"
 msgid "{names} come last in the text. Most systems still find them; some don't."
 msgstr "{names} ovat viimeisenä tekstissä. Useimmat järjestelmät löytävät ne edelleen; jotkut eivät."
 
-#: src/features/homepage/prepare.tsx
-msgid "{now} · typed"
-msgstr "{now} · kirjoitettu"
-
 #: src/features/resume/editor/check/check-panel.tsx
 msgid "{open, plural, one {# thing to review.} other {# things to review.}}"
 msgstr "{open, plural, one {# arvosteltava asia.} other {# arvosteltavia asioita.}}"
@@ -796,14 +778,6 @@ msgstr "{size} pt"
 msgid "{skipped, plural, one {# row had no company or role and was skipped.} other {# rows had no company or role and were skipped.}}"
 msgstr "{skipped, plural, one {# riviltä puuttui yritys tai rooli, joten se ohitettiin.} other {# riviltä puuttui yritys tai rooli, joten ne ohitettiin.}}"
 
-#: src/components/input/github-stars-button.tsx
-msgid "{starCount, plural, one {Star us on GitHub, currently # star (opens in new tab)} other {Star us on GitHub, currently # stars (opens in new tab)}}"
-msgstr "{starCount, plural, one {Anna meille tähti GitHubissa, nyt # tähti (avautuu uuteen välilehteen)} other {Anna meille tähti GitHubissa, nyt # tähteä (avautuu uuteen välilehteen)}}"
-
-#: src/features/homepage/header.tsx
-msgid "{stars, plural, one {Star Reactive Resume on GitHub, # star} other {Star Reactive Resume on GitHub, # stars}}"
-msgstr "{stars, plural, one {Anna Reactive Resumelle tähti GitHubissa, # tähti} other {Anna Reactive Resumelle tähti GitHubissa, # tähteä}}"
-
 #: src/features/documents/page-navigation.tsx
 msgid "{start}–{end} of {total}"
 msgstr ""
@@ -819,14 +793,6 @@ msgstr "{summary}. Avautuu kohdassa Ura → Tarjoukset."
 #: src/features/career/workspace/fit.tsx
 msgid "{supported} supported · {partial} partly · {missing} missing"
 msgstr "{supported} tuettua · {partial} osittain · {missing} puuttuu"
-
-#: src/features/homepage/design.tsx
-msgid "{templateCount} free resume templates."
-msgstr "{templateCount} ilmaista CV-mallia."
-
-#: src/features/homepage/prepare.tsx
-msgid "{time} · Video call · 45 min"
-msgstr "{time} · Videopuhelu · 45 min"
 
 #: src/features/resume/editor/write/section-row.tsx
 msgid "{title} cleared"
@@ -895,10 +861,6 @@ msgstr "/ vuosi"
 msgid "+{extra} more"
 msgstr "+{extra} lisää"
 
-#: src/features/homepage/hero.tsx
-msgid "+13 pts activation"
-msgstr "+13 pisteen aktivointi"
-
 #: src/features/resume/editor/check/check-panel.tsx
 msgid "<0>Nothing to fix.</0> Every check passes."
 msgstr "<0>Ei korjattavaa.</0> Kaikki tarkistukset läpäisty."
@@ -906,11 +868,6 @@ msgstr "<0>Ei korjattavaa.</0> Kaikki tarkistukset läpäisty."
 #: src/features/career/offers.tsx
 msgid "<0>Totals aren't added up on purpose.</0> Bonus and equity depend on conditions, and equity value is uncertain for both. Read the original offer documents before comparing totals."
 msgstr "<0>Kokonaissummia ei lasketa yhteen tarkoituksella.</0> Bonus ja osakkeet riippuvat ehdoista, ja osakkeiden arvo on epävarma kummassakin tarjouksessa. Lue alkuperäiset tarjousasiakirjat ennen kuin vertaat kokonaissummia."
-
-#: src/features/homepage/check.tsx
-#: src/features/homepage/sheet.tsx
-msgid "06/2017 – 2021"
-msgstr "06/2017 – 2021"
 
 #: src/features/resume/editor/write/section-row.tsx
 msgid "1 column, inline"
@@ -937,59 +894,26 @@ msgstr "2 tuntia ennen"
 msgid "2–3 sentences reads best"
 msgstr "2–3 lausetta luetaan parhaiten"
 
-#: src/features/homepage/check.tsx
-#: src/features/homepage/sheet.tsx
-msgid "2013 – 2017"
-msgstr "2013 – 2017"
-
-#: src/features/homepage/check.tsx
-#: src/features/homepage/sheet.tsx
-#: src/features/homepage/write.tsx
-msgid "2017 – 2021"
-msgstr "2017 – 2021"
-
-#: src/features/homepage/check.tsx
-#: src/features/homepage/sheet.tsx
-#: src/features/homepage/write.tsx
-msgid "2021 – Present"
-msgstr "2021 – nykyhetki"
-
 #: src/features/career/schedule-sheet.tsx
 #: src/features/career/today.tsx
 msgid "24 hours before"
 msgstr "24 tuntia ennen"
 
-#: src/features/homepage/prepare.tsx
-msgid "3 supported · 1 partly · 1 missing"
-msgstr "3 tuettua · 1 osittain · 1 puuttuu"
-
 #: src/features/settings/ai/api-keys.tsx
 msgid "30 days"
 msgstr "30 päivää"
 
-#: src/features/homepage/hero.tsx
-msgid "40% faster reviews"
-msgstr "40 % nopeammat arvostelut"
-
-#: src/features/homepage/faq.tsx
-msgid "9 short answers to what people ask before they start. Anything else, ask on <0>Discord</0>."
-msgstr "9 lyhyttä vastausta kysymyksiin, joita ihmiset kysyvät ennen aloittamista. Muuta kysyttävää? Kysy <0>Discordissa</0>."
-
 #: src/features/settings/ai/api-keys.tsx
 msgid "90 days"
 msgstr "90 päivää"
-
-#: src/features/homepage/remember.tsx
-msgid "A"
-msgstr "A"
 
 #: src/features/resume/editor/proposals/proposal-list.tsx
 msgid "A accepts and R rejects the focused edit. ↑ and ↓ move between edits."
 msgstr "A hyväksyy ja R hylkää kohdistetun muokkauksen. ↑ ja ↓ siirtyvät muokkausten välillä."
 
 #: src/routes/builder/letter/-components/download-sheet.tsx
-msgid "A backup of this letter. Imports back into Reactive Resume as a letter."
-msgstr "Varmuuskopio tästä kirjeestä. Tuodaan takaisin Reactive Resume:hen kirjeenä."
+msgid "A backup of this letter. Imports back into {appName} as a letter."
+msgstr ""
 
 #: src/features/resume/editor/check/issues.ts
 msgid "A city and country let roles be matched to where you are."
@@ -1027,10 +951,6 @@ msgstr "Fakta muuttui. Tarkista tämä tarina."
 msgid "A fact you've since forgotten"
 msgstr "Fakta, jonka olet sittemmin unohtanut"
 
-#: src/features/homepage/prepare.tsx
-msgid "A focused 30-minute plan"
-msgstr "Keskittynyt 30 minuutin suunnitelma"
-
 #: src/features/career/workspace/prepare.tsx
 msgid "A focused plan for this round"
 msgstr "Keskittynyt suunnitelma tälle kierrokselle"
@@ -1039,15 +959,6 @@ msgstr "Keskittynyt suunnitelma tälle kierrokselle"
 msgid "A font is referenced but not embedded."
 msgstr "Fonttiin viitataan, mutta sitä ei ole upotettu."
 
-#: src/features/homepage/sections.tsx
-msgid "A free and open-source resume builder"
-msgstr "Ilmainen ja avoimen lähdekoodin ansioluettelon rakentaja"
-
-#. Hero headline, line 1 of 4: A free, open-source / resume builder / and / career manager.
-#: src/features/homepage/hero.tsx
-msgid "A free, open-source"
-msgstr "Ilmainen avoimen lähdekoodin työkalu"
-
 #: src/features/ats-checker/messages.ts
 msgid "A full-height gap splits this page into two columns."
 msgstr "Koko sivun korkuinen väli jakaa tämän sivun kahteen sarakkeeseen."
@@ -1055,10 +966,6 @@ msgstr "Koko sivun korkuinen väli jakaa tämän sivun kahteen sarakkeeseen."
 #: src/features/ats-checker/messages.ts
 msgid "A gap is not a problem. Add a one-line explanation if you want to; many strong resumes simply do not."
 msgstr "Aukko ei ole ongelma. Lisää halutessasi yhden rivin selitys; monissa vahvoissa ansioluetteloissa sitä ei yksinkertaisesti ole."
-
-#: src/features/homepage/prepare.tsx
-msgid "A high bar for accessibility"
-msgstr "Korkea rima saavutettavuudessa"
 
 #: src/features/resume/editor/check/issues.ts
 msgid "A link isn't a full address"
@@ -1104,10 +1011,6 @@ msgstr "Tallennettu tarjous"
 msgid "A second opinion on your wording"
 msgstr "Toinen mielipide sanamuodostasi"
 
-#: src/features/homepage/sections.tsx
-msgid "A second pair of eyes."
-msgstr "Toinen silmäpari."
-
 #: src/features/applications/next-step.ts
 msgid "A short follow-up is usually fine now"
 msgstr "Lyhyt seuranta on yleensä hyvä nyt"
@@ -1116,10 +1019,6 @@ msgstr "Lyhyt seuranta on yleensä hyvä nyt"
 msgid "A story you've since deleted"
 msgstr "Tarina, jonka olet sittemmin poistanut"
 
-#: src/features/homepage/prepare.tsx
-msgid "A strong match, with one question to resolve"
-msgstr "Vahva vastaavuus, yksi kysymys selvitettävänä"
-
 #: src/features/career/workspace/prepare.tsx
 msgid "A timed plan, your opening, the stories to bring and questions to ask. It becomes your checklist 10 minutes before the call."
 msgstr "Ajoitettu suunnitelma, avauksesi, mukaan otettavat tarinat ja esitettävät kysymykset. Siitä tulee tarkistuslistasi 10 minuuttia ennen puhelua."
@@ -1127,10 +1026,6 @@ msgstr "Ajoitettu suunnitelma, avauksesi, mukaan otettavat tarinat ja esitettäv
 #: src/features/ats-checker/messages.ts
 msgid "A web address is written without https://."
 msgstr "Verkko-osoite on kirjoitettu ilman https://-etuliitettä."
-
-#: src/features/homepage/footer.tsx
-msgid "About"
-msgstr "Tietoja tästä sovelluksesta"
 
 #: src/features/career/workspace/practise.tsx
 msgid "About 90 seconds when spoken"
@@ -1150,7 +1045,6 @@ msgstr "Aksenttia käytetään otsikoissa, kuvakkeissa ja otsikkonauhassa. Runko
 
 #: src/features/auth/pages/accept-invitation.tsx
 #: src/features/career/workspace/apply.tsx
-#: src/features/homepage/write.tsx
 #: src/features/resume/editor/proposals/proposal-list.tsx
 msgid "Accept"
 msgstr "Hyväksyä"
@@ -1162,10 +1056,6 @@ msgstr "Hyväksy kaikki"
 #: src/features/organization/no-organization-notice.tsx
 msgid "Accept your invitation"
 msgstr ""
-
-#: src/features/homepage/write.tsx
-msgid "Accepted"
-msgstr "Hyväksytty"
 
 #: src/features/applications/stages.ts
 msgid "Accepted another offer"
@@ -1187,12 +1077,6 @@ msgstr "Pääsy on myönnetty"
 msgid "Access your account through the API, including reading, changing and deleting your documents and job applications."
 msgstr "Käytä tiliäsi API:n kautta, mukaan lukien asiakirjojen ja työhakemusten lukeminen, muuttaminen ja poistaminen."
 
-#: src/features/homepage/check.tsx
-#: src/features/homepage/hero.tsx
-#: src/features/homepage/sheet.tsx
-msgid "Accessibility"
-msgstr "Saavutettavuus"
-
 #: src/features/career/knowledge/facts.tsx
 msgid "Accomplishment"
 msgstr "Saavutus"
@@ -1206,25 +1090,12 @@ msgid "Account"
 msgstr "Tili"
 
 #: src/features/career/knowledge/stories.tsx
-#: src/features/homepage/remember.tsx
 msgid "Action"
 msgstr "Toiminta"
 
 #: src/features/settings/ai/api-keys.tsx
 msgid "Actions"
 msgstr "Toiminnot"
-
-#: src/features/homepage/remember.tsx
-msgid "Activation rose from 31% to 44% in one quarter, measured across new teams."
-msgstr "Aktivointiaste nousi 31 prosentista 44 prosenttiin yhdessä vuosineljänneksessä uusista tiimeistä mitattuna."
-
-#: src/features/homepage/remember.tsx
-msgid "Activation rose from 31% to 44% in one quarter."
-msgstr "Aktivointiaste nousi 31 prosentista 44 prosenttiin yhdessä vuosineljänneksessä."
-
-#: src/features/homepage/remember.tsx
-msgid "Activation rose from 31%…"
-msgstr "Aktivointiaste nousi 31 prosentista…"
 
 #: src/features/settings/ai/web-access.tsx
 msgid "Active"
@@ -1640,10 +1511,6 @@ msgstr "Säädä fontteja, värejä, välilyöntejä ja osioita CV-muodossa. Vie
 msgid "Admin"
 msgstr ""
 
-#: src/features/homepage/sections.tsx
-msgid "Ads"
-msgstr "Mainokset"
-
 #: src/routes/builder/$resumeId/-components/design-panel.tsx
 msgid "Advanced"
 msgstr "Edistynyt"
@@ -1663,10 +1530,6 @@ msgstr "Käyttäytymishaastattelun jälkeen"
 #: src/features/career/workspace/debrief.tsx
 msgid "After the interview"
 msgstr "Haastattelun jälkeen"
-
-#: src/features/homepage/prepare.tsx
-msgid "After the interview · Today"
-msgstr "Haastattelun jälkeen · Tänään"
 
 #: src/features/career/workspace/debrief.tsx
 msgid "After the onsite"
@@ -1756,11 +1619,6 @@ msgstr ""
 msgid "Albanian"
 msgstr "albania"
 
-#: src/features/homepage/check.tsx
-#: src/features/homepage/sheet.tsx
-msgid "Alex Morgan"
-msgstr "Alex Morgan"
-
 #: src/features/resume/editor/write/rich-text-editor-field.tsx
 msgid "Align center"
 msgstr "Keskitä"
@@ -1846,10 +1704,6 @@ msgstr "Lataa myös {0} saatekirje"
 msgid "Also email {0}"
 msgstr "Lähetä myös sähköpostiin {0}"
 
-#: src/features/homepage/sections.tsx
-msgid "Also on mobile"
-msgstr "Myös mobiilissa"
-
 #: src/features/resume/editor/design/style-groups.tsx
 msgid "Also shows the icons on skills, profiles and interests."
 msgstr "Näyttää myös taitojen, profiilien ja kiinnostuksen kohteiden kuvakkeet."
@@ -1878,20 +1732,10 @@ msgstr ""
 msgid "An unexpected error stopped this page from loading. Try again, or go to the dashboard."
 msgstr "Odottamaton virhe esti tämän sivun latautumisen. Yritä uudelleen tai siirry hallintapaneeliin."
 
-#. Hero headline, line 3 of 4: A free, open-source / resume builder / and / career manager.
-#: src/features/homepage/hero.tsx
-msgctxt "hero headline"
-msgid "and"
-msgstr "ja"
-
 #. placeholder {0}: others.length
 #: src/features/applications/components/detail/contacts.tsx
 msgid "and {0} more"
 msgstr "ja {0} enemmän"
-
-#: src/features/homepage/sections.tsx
-msgid "and counting"
-msgstr "ja laskeminen"
 
 #: src/features/resume/share/address-field.tsx
 msgid "Another of your resumes uses this address."
@@ -1903,7 +1747,6 @@ msgstr "Toinen ansioluettelo käyttää jo tätä osoitetta. Valitse toinen."
 
 #: src/features/career/workspace/answer-library.tsx
 #: src/features/career/workspace/apply.tsx
-#: src/features/homepage/remember.tsx
 msgid "Answer"
 msgstr "Vastaus"
 
@@ -2039,7 +1882,6 @@ msgid "Application added"
 msgstr "Hakemus lisätty"
 
 #: src/features/career/workspace/answer-library.tsx
-#: src/features/homepage/remember.tsx
 msgid "Application answer"
 msgstr "Hakemuksen vastaus"
 
@@ -2096,10 +1938,6 @@ msgstr ""
 msgid "application summaries"
 msgstr "hakemusten yhteenvedot"
 
-#: src/features/homepage/prepare.tsx
-msgid "Application tabs"
-msgstr "Hakemuksen välilehdet"
-
 #: src/features/applications/components/application-form-sheet.tsx
 #: src/features/career/workspace/messages.tsx
 msgid "Application updated"
@@ -2134,14 +1972,10 @@ msgstr "Vietävät hakemukset"
 
 #: src/features/applications/components/application-detail-sheet.tsx
 #: src/features/applications/stages.ts
-#: src/features/homepage/prepare.tsx
-#: src/features/homepage/sections.tsx
-#: src/features/homepage/tailor.tsx
 msgid "Applied"
 msgstr "Haettu"
 
 #: src/features/career/workspace/messages.tsx
-#: src/features/homepage/prepare.tsx
 #: src/features/resume/editor/proposals/proposal-list.tsx
 msgctxt "A proposed change has been applied"
 msgid "Applied"
@@ -2166,17 +2000,8 @@ msgid "Applied. The application is updated."
 msgstr "Tehty. Hakemus on päivitetty."
 
 #: src/features/career/shared.tsx
-#: src/features/homepage/prepare.tsx
 msgid "Apply"
 msgstr "Hakeminen"
-
-#: src/features/homepage/remember.tsx
-msgid "Apply · Describe a product improvement you led."
-msgstr "Hakeminen · Kuvaile johtamaasi tuoteparannusta."
-
-#: src/features/homepage/prepare.tsx
-msgid "Apply 1 change"
-msgstr "Tee 1 muutos"
 
 #: src/libs/locale.ts
 msgid "Arabic"
@@ -2252,10 +2077,6 @@ msgstr "Pyydä assistenttia käsittelemään se"
 msgid "Ask the coach"
 msgstr "Kysy valmentajalta"
 
-#: src/features/resume/share/download-tab.tsx
-msgid "Ask the community. Remove personal details before posting."
-msgstr "Kysy yhteisöltä. Poista henkilötiedot ennen julkaisemista."
-
 #: src/features/settings/ai/web-access.tsx
 msgid "Ask your server administrator to enable credential encryption or configure a shared web connection."
 msgstr "Pyydä palvelimen järjestelmänvalvojaa ottamaan käyttöön tunnistetietojen salaus tai määrittämään jaettu verkkoyhteys."
@@ -2263,14 +2084,6 @@ msgstr "Pyydä palvelimen järjestelmänvalvojaa ottamaan käyttöön tunnisteti
 #: src/features/assistant/conversation.tsx
 msgid "Ask, or describe a change…"
 msgstr "Kysy tai kuvaile muutosta…"
-
-#: src/features/homepage/faq.tsx
-msgid "Asked and <0>answered.</0>"
-msgstr "Kysymyksiä ja <0>vastauksia.</0>"
-
-#: src/features/homepage/prepare.tsx
-msgid "Asks for an example of your onboarding work."
-msgstr "Pyytää esimerkkiä aloitusprosessiin liittyvästä työstäsi."
 
 #: src/features/resume/editor/write/picture-settings.tsx
 msgid "Aspect ratio"
@@ -2280,13 +2093,8 @@ msgstr "Kuvasuhde"
 #: src/features/assistant/assistant-panel.tsx
 #: src/features/assistant/conversation.tsx
 #: src/features/command-palette/pages/resumes.tsx
-#: src/features/homepage/write.tsx
 msgid "Assistant"
 msgstr "Avustaja"
-
-#: src/features/homepage/sections.tsx
-msgid "Assistant (your key)"
-msgstr "Assistant (avaimesi)"
 
 #: src/features/command-palette/pages/resumes.tsx
 msgid "Assistant conversations"
@@ -2296,23 +2104,9 @@ msgstr "Assistenttien keskustelut"
 msgid "Assistant."
 msgstr "Avustaja."
 
-#: src/features/homepage/prepare.tsx
-msgid "At Northwind Labs I led research for our onboarding redesign. I interviewed 14 customers, found three drop-off points, and we shipped a shorter setup. Activation rose from 31% to 44%."
-msgstr "Northwind Labsissa johdin aloitusprosessin uudistuksen tutkimusta. Haastattelin 14 asiakasta, löysin kolme kohtaa, joissa käyttäjät putosivat pois, ja julkaisimme lyhyemmän käyttöönoton. Aktivointiaste nousi 31 prosentista 44 prosenttiin."
-
-#: src/features/homepage/remember.tsx
-msgid "At Northwind Labs, most new teams stalled before they finished setup."
-msgstr "Northwind Labsissa useimmat uudet tiimit jumittuivat ennen kuin saivat käyttöönoton valmiiksi."
-
 #: src/features/command-palette/pages/navigation.tsx
-#: src/features/homepage/footer.tsx
-#: src/features/homepage/sections.tsx
 msgid "ATS checker"
 msgstr "ATS-tarkistus"
-
-#: src/features/homepage/check.tsx
-msgid "ATS readability"
-msgstr "ATS luettavuus"
 
 #: src/features/resume/editor/design/template-group.tsx
 msgid "ATS-safe"
@@ -2361,10 +2155,6 @@ msgstr "automaattisesti tallennettu"
 msgid "Autosaves are grouped by session and kept for 90 days. Named versions are kept until you delete them. Restoring saves the current state first."
 msgstr "Automaattiset tallennukset ryhmitellään istunnon mukaan ja säilytetään 90 päivää. Nimetyt versiot säilytetään, kunnes poistat ne. Palauttaminen tallentaa ensin nykyisen tilan."
 
-#: src/features/resume/share/cv-domain-card.tsx
-msgid "Available"
-msgstr "Vapaana"
-
 #: src/features/ats-checker/messages.ts
 msgid "Avoid heavy letter-spacing effects, then re-export."
 msgstr "Vältä voimakkaita kirjainvälistystehosteita ja vie tiedosto uudelleen."
@@ -2380,12 +2170,6 @@ msgstr "Palkinnot"
 #: src/libs/locale.ts
 msgid "Azerbaijani"
 msgstr "azeri"
-
-#: src/features/homepage/check.tsx
-#: src/features/homepage/hero.tsx
-#: src/features/homepage/sheet.tsx
-msgid "BA, Communication Design"
-msgstr "BA, viestintäsuunnittelu"
 
 #: src/features/documents/new-document-dialog.tsx
 msgid "Back"
@@ -2426,7 +2210,6 @@ msgstr "Takaisin tarinoihin"
 
 #: src/features/career/knowledge/stories.tsx
 #: src/features/career/workspace/apply.tsx
-#: src/features/homepage/remember.tsx
 msgid "Backed by"
 msgstr "Perusteena"
 
@@ -2447,18 +2230,10 @@ msgctxt "Entry header accent: a tinted background behind the header"
 msgid "Band"
 msgstr "Taustanauha"
 
-#: src/features/homepage/sheet.tsx
-msgid "Banner"
-msgstr "Banneri"
-
 #: src/features/resume/editor/design/entries-group.tsx
 msgctxt "Entry header accent: a bar beside the header"
 msgid "Bar"
 msgstr "Sivupalkki"
-
-#: src/features/homepage/hero.tsx
-msgid "Barista, 2012"
-msgstr "Barista, 2012"
 
 #: src/features/career/offer-entry.tsx
 #: src/features/career/offers.tsx
@@ -2583,25 +2358,9 @@ msgstr "Selaa ilmaisia ​​CV-malleja ja PDF-esimerkkejä"
 msgid "Browse free resume templates, compare one-column and two-column layouts, and download sample PDFs. Customize your resume and export to PDF or Word."
 msgstr "Selaa ilmaisia ​​CV-malleja, vertaa yhden sarakkeen ja kahden sarakkeen asetteluja ja lataa PDF-esimerkkejä. Mukauta CV:si ja vie se PDF- tai Microsoft Wordiin."
 
-#: src/features/homepage/hero.tsx
-msgid "Build a professional resume, download it as PDF or Word, and manage your job search in one place. Free templates, no ads, no paywall."
-msgstr "Rakenna ammattimainen CV, lataa se PDF- tai Microsoft Word -muodossa ja hallitse työnhakuasi yhdessä paikassa. Ilmaiset mallit, ei mainoksia, ei maksumuuria."
-
 #: src/features/homepage/ui.tsx
 msgid "Build your resume"
 msgstr "Rakenna ansioluettelosi"
-
-#: src/features/homepage/sheet.tsx
-msgid "Built a shared design system used by six product teams, cutting UI review time by 40%."
-msgstr "Rakensi kuuden tuotetiimin käyttämän jaetun suunnittelujärjestelmän, mikä lyhensi käyttöliittymän tarkistusaikaa 40 %."
-
-#: src/features/homepage/prepare.tsx
-msgid "Built a shared design system used by six product teams."
-msgstr "Rakensin jaetun suunnittelujärjestelmän, jota käyttää kuusi tuotetiimiä."
-
-#: src/features/homepage/prepare.tsx
-msgid "Built from the posting, Sam’s message and your two strongest stories."
-msgstr "Koottu ilmoituksesta, Samin viestistä ja kahdesta vahvimmasta tarinastasi."
 
 #: src/features/settings/ai/web-access.tsx
 msgid "Built-in reader"
@@ -2621,25 +2380,9 @@ msgstr "luettelomerkintä {n}"
 msgid "Bulleted list"
 msgstr "Luettelona"
 
-#: src/features/homepage/footer.tsx
-msgid "By the community, for the community."
-msgstr "Yhteisöltä yhteisölle."
-
 #: src/routes/dashboard/applications/index.tsx
 msgid "Calendar"
 msgstr "Kalenteri"
-
-#: src/features/homepage/faq.tsx
-msgid "Can I host it myself?"
-msgstr "Voinko isännöidä sitä itse?"
-
-#: src/features/homepage/faq.tsx
-msgid "Can I import a resume I already have?"
-msgstr "Voinko tuoda jo olemassa olevan ansioluettelon?"
-
-#: src/features/homepage/faq.tsx
-msgid "Can it help me prepare for interviews?"
-msgstr "Voiko se auttaa minua valmistautumaan haastatteluihin?"
 
 #: src/features/ats-checker/checker.tsx
 msgid "Can software read your resume?"
@@ -2683,15 +2426,6 @@ msgstr ""
 msgid "Career"
 msgstr "Ura"
 
-#: src/features/homepage/sections.tsx
-msgid "Career coach (your key)"
-msgstr "Uravalmentaja (oma avain)"
-
-#. Hero headline, line 4 of 4: A free, open-source / resume builder / and / career manager. Lines 2 and 4 are highlighted: keep each a complete phrase.
-#: src/features/homepage/hero.tsx
-msgid "career manager."
-msgstr "uran hallintaan."
-
 #: src/features/settings/account/application-profile.tsx
 msgid "Career preferences"
 msgstr ""
@@ -2720,7 +2454,6 @@ msgstr "Vaihda yhteys"
 msgid "Change it in Design."
 msgstr "Muuta se Suunnittelussa."
 
-#: src/features/homepage/sections.tsx
 #: src/routes/_home/-sections/header.tsx
 msgid "Change language"
 msgstr "Vaihda kieli"
@@ -2775,10 +2508,6 @@ msgstr "Muutin ansioluetteloa suoraan (aiempi keskustelu)"
 msgid "Changed your mind? Rename your resume to something more descriptive."
 msgstr "Muutitko mieltäsi? Nimeä ansioluettelosi uudelleen kuvaavammaksi."
 
-#: src/features/homepage/footer.tsx
-msgid "Changelog"
-msgstr "Muutosloki"
-
 #: src/features/resume/editor/design/style-groups.tsx
 msgid "Changes section titles and date words only, not your content."
 msgstr "Muuttaa vain osien otsikot ja päivämääräsanat, ei sisältöäsi."
@@ -2791,8 +2520,6 @@ msgstr "Sen muuttaminen lähettää vahvistuksen uuteen osoitteeseen. Käyttäj�
 msgid "Changing your password…"
 msgstr "Vaihdetaan salasanaasi…"
 
-#: src/features/homepage/footer.tsx
-#: src/features/homepage/header.tsx
 #: src/routes/builder/$resumeId/-components/editor-bar.tsx
 #: src/routes/builder/$resumeId/-components/editor-shell.tsx
 msgid "Check"
@@ -2813,10 +2540,6 @@ msgstr "Tarkista uudelleen"
 #: src/features/ats-checker/checker.tsx
 msgid "Check another file"
 msgstr "Tarkista toinen tiedosto"
-
-#: src/features/homepage/check.tsx
-msgid "Check any PDF, no account needed"
-msgstr "Tarkista mikä tahansa PDF, tiliä ei tarvita"
 
 #: src/features/resume/share/custom-domain-field.tsx
 #: src/features/resume/share/dns-records-dialog.tsx
@@ -2842,10 +2565,6 @@ msgstr "Tarkista, että se on tarkka."
 #: src/features/career/workspace/practise.tsx
 msgid "check numbers and names before using it"
 msgstr "tarkista luvut ja nimet ennen käyttöä"
-
-#: src/features/homepage/check.tsx
-msgid "Check reads your resume the way hiring software does and explains what to fix in plain words. It runs in your browser, so the file stays with you: 0 uploads."
-msgstr "Tarkistus-ominaisuus lukee ansioluettelosi samalla tavalla kuin rekrytointiohjelmisto ja selittää yksinkertaisin sanoin, mitä korjata. Se toimii selaimessasi, joten tiedostosi pysyy laitteessasi: 0 latausta."
 
 #: src/features/career/workspace/prepare.tsx
 msgid "Check the details"
@@ -2884,7 +2603,6 @@ msgstr "Tarkista sähköpostisi linkin löytämiseksi salasanan palauttamiseksi.
 msgid "Check your email for a link to verify your account."
 msgstr "Tarkista sähköpostisi linkin löytämiseksi tilisi vahvistamiseksi."
 
-#: src/features/homepage/check.tsx
 #: src/features/templates/gallery.tsx
 msgid "Check your resume’s ATS readability"
 msgstr "Tarkista CV:si ATS-luetettavuus"
@@ -3014,10 +2732,6 @@ msgstr ""
 #: src/features/career/workspace/fit.tsx
 msgid "Clarify"
 msgstr "Tarkenna"
-
-#: src/features/homepage/sheet.tsx
-msgid "Classic"
-msgstr "Klassinen"
 
 #: src/features/settings/ai/api-keys.tsx
 msgid "Claude Desktop"
@@ -3162,10 +2876,6 @@ msgstr "Sarakkeet"
 msgid "Columns can scramble the order text is read in."
 msgstr "Sarakkeet voivat sekoittaa järjestyksen tekstin lukemista."
 
-#: src/features/homepage/sections.tsx
-msgid "Coming soon"
-msgstr "Tulossa pian"
-
 #: src/features/career/today.tsx
 msgid "Coming up"
 msgstr "Tulossa"
@@ -3181,10 +2891,6 @@ msgstr "Komentopaletti"
 #: src/features/command-palette/content.tsx
 msgid "Command palette: {currentPage}"
 msgstr "Komentopaletti: {currentPage}"
-
-#: src/features/homepage/footer.tsx
-msgid "Community"
-msgstr "Yhteisö"
 
 #: src/features/resume/editor/design/fit.ts
 #: src/features/resume/editor/design/style-groups.tsx
@@ -3238,8 +2944,8 @@ msgid "Complete {0} before saving."
 msgstr "Täytä {0} ennen tallentamista."
 
 #: src/features/resume/share/download-tab.tsx
-msgid "Complete data backup. Imports back into Reactive Resume or JSON Resume tools."
-msgstr "Täydellinen tietojen varmuuskopiointi. Tuo takaisin Reactive Resume- tai JSON Resume-työkaluihin."
+msgid "Complete data backup. Imports back into {appName} or JSON Resume tools."
+msgstr ""
 
 #: src/features/ats-checker/messages.ts
 msgid "Compress or remove large images to keep uploads quick."
@@ -3277,10 +2983,6 @@ msgstr "Vahvista aika yhteyshenkilön {contact} kanssa ennen uuden haastattelun 
 msgid "Confirm the time, link and who you'll meet. Glance at the resume and letter you sent."
 msgstr "Vahvista aika, linkki ja keitä tapaat. Vilkaise lähettämääsi ansioluetteloa ja kirjettä."
 
-#: src/features/homepage/prepare.tsx
-msgid "Confirms {time} today, by video."
-msgstr "Vahvistaa ajan tänään klo {time}, videopuheluna."
-
 #: src/features/assistant/provider-setup.tsx
 #: src/features/resume/share/custom-domain-field.tsx
 #: src/features/settings/account/security.tsx
@@ -3291,10 +2993,6 @@ msgstr "Yhdistä"
 #: src/features/resume/share/dns-records-dialog.tsx
 msgid "Connect {0}"
 msgstr "Yhdistä {0}"
-
-#: src/features/resume/share/cv-domain-card.tsx
-msgid "Connect {domain}"
-msgstr "Yhdistä {domain}"
 
 #: src/features/settings/ai/web-access.tsx
 msgid "Connect a service"
@@ -3369,7 +3067,6 @@ msgid "Connections bill speech separately and may use tokens on your account. Yo
 msgstr "Yhteydet laskuttavat puheesta erikseen ja voivat kuluttaa tilisi tokeneita. Selaimesi puhe on ilmaista, mutta selaimen valmistaja voi käsitellä äänen. Palvelin säilyttää litteroinnit, ei koskaan äänitteitä."
 
 #: src/features/applications/components/application-detail-sheet.tsx
-#: src/features/homepage/footer.tsx
 msgid "Contact"
 msgstr "Ota yhteyttä"
 
@@ -3381,10 +3078,6 @@ msgstr ""
 #: src/features/resume/editor/check/issues.ts
 msgid "Contact details"
 msgstr "Yhteystiedot"
-
-#: src/features/homepage/check.tsx
-msgid "Contact details found"
-msgstr "Yhteystiedot löytyivät"
 
 #: src/features/applications/components/import-applications-sheet.tsx
 msgid "Contact email"
@@ -3436,18 +3129,6 @@ msgstr "Jatka"
 msgid "Continue as guest"
 msgstr "Jatka vieraana"
 
-#: src/features/homepage/sections.tsx
-msgid "Contribute code"
-msgstr "Osallistu koodilla"
-
-#: src/features/homepage/prepare.tsx
-msgid "Contribution clear"
-msgstr "Oma osuus selvä"
-
-#: src/features/homepage/prepare.tsx
-msgid "Contribution unclear"
-msgstr "Oma osuus epäselvä"
-
 #: src/features/assistant/conversation.tsx
 #: src/features/career/coach-chat.tsx
 msgid "Conversation"
@@ -3475,7 +3156,6 @@ msgstr "Keskustelut"
 msgid "Conversations about one job live in its workspace."
 msgstr "Yhtä työpaikkaa koskevat keskustelut ovat sen työtilassa."
 
-#: src/features/homepage/share.tsx
 #: src/features/resume/share/copy-link-button.tsx
 #: src/features/resume/share/copy-text.tsx
 #: src/features/settings/ai/api-keys.tsx
@@ -3524,10 +3204,6 @@ msgstr "Kopioi työhön…"
 #: src/features/settings/ai/api-keys.tsx
 msgid "Copy it now. For your security, it won't be shown again."
 msgstr "Kopioi se nyt. Turvallisuutesi vuoksi sitä ei näytetä uudelleen."
-
-#: src/features/homepage/share.tsx
-msgid "Copy link"
-msgstr "Kopioi linkki"
 
 #: src/features/documents/document-actions.tsx
 msgid "Copy public link"
@@ -4266,10 +3942,6 @@ msgstr "Saatekirje"
 msgid "Cover letter — {0}"
 msgstr "Saatekirje — {0}"
 
-#: src/features/homepage/tailor.tsx
-msgid "Cover letter · Fieldnote"
-msgstr "Saatekirje · Fieldnote"
-
 #: src/features/applications/components/detail/sent-documents.tsx
 #: src/features/career/workspace/apply.tsx
 msgid "Cover letter file"
@@ -4290,7 +3962,6 @@ msgid "Cover letter submitted (optional)"
 msgstr "Saatekirje lähetetty (valinnainen)"
 
 #: src/features/command-palette/pages/navigation.tsx
-#: src/features/homepage/sections.tsx
 msgid "Cover letters"
 msgstr "Saatekirjeet"
 
@@ -4311,6 +3982,7 @@ msgid "Create a resume first, then ask about it."
 msgstr "Luo ensin ansioluettelo ja kysy sitten."
 
 #: src/features/auth/components/guest-banner.tsx
+#: src/features/homepage/page.tsx
 msgid "Create account"
 msgstr "Luo tili"
 
@@ -4358,10 +4030,6 @@ msgstr "Rajaa ja lataa"
 #: src/features/resume/editor/write/picture-settings.tsx
 msgid "Crop photo"
 msgstr "Rajaa kuvaa"
-
-#: src/features/homepage/sheet.tsx
-msgid "Cross-functional leadership"
-msgstr "Monitoiminen johtajuus"
 
 #: src/features/applications/components/import-applications-sheet.tsx
 msgid "CSV data"
@@ -4487,10 +4155,6 @@ msgstr "Päivämäärät juoksevat taaksepäin"
 msgid "Dates start in the future"
 msgstr "Päivämäärät alkavat tulevaisuudessa"
 
-#: src/features/homepage/check.tsx
-msgid "Dates use one format"
-msgstr "Päivämäärät käyttävät yhtä muotoa"
-
 #: src/features/resume/editor/check/issues.ts
 msgid "Dates won't be read"
 msgstr "Päivämääriä ei lueta"
@@ -4499,27 +4163,18 @@ msgstr "Päivämääriä ei lueta"
 msgid "Dear {name},"
 msgstr "Hyvä {name},"
 
-#: src/features/homepage/tailor.tsx
-msgid "Dear Fieldnote team,"
-msgstr "Hyvä Fieldnote-tiimi,"
-
 #: src/features/letters/compose.ts
 msgid "Dear hiring team,"
 msgstr "Arvoisa rekrytointitiimi,"
 
 #: src/features/career/shared.tsx
 #: src/features/career/workspace/saved.tsx
-#: src/features/homepage/prepare.tsx
 msgid "Debrief"
 msgstr "Jälkipuinti"
 
 #: src/features/auth/pages/accept-invitation.tsx
 msgid "Decline"
 msgstr ""
-
-#: src/features/homepage/prepare.tsx
-msgid "Deep breath."
-msgstr "Hengitä syvään."
 
 #: src/features/resume/editor/write/rich-text-editor-field.tsx
 #: src/features/settings/ai/providers.tsx
@@ -4719,8 +4374,6 @@ msgstr "Kuvaus"
 msgid "Description of role {0}"
 msgstr "Roolin kuvaus {0}"
 
-#: src/features/homepage/design.tsx
-#: src/features/homepage/header.tsx
 #: src/libs/resume/section.tsx
 #: src/routes/builder/$resumeId/-components/design-panel.tsx
 #: src/routes/builder/$resumeId/-components/editor-bar.tsx
@@ -4738,16 +4391,6 @@ msgstr "Suunnitteluryhmät"
 #: src/routes/builder/$resumeId/-components/design-panel.tsx
 msgid "Design reset to defaults"
 msgstr "Suunnittelu palautettu oletusasetuksiin"
-
-#: src/features/homepage/prepare.tsx
-msgid "Design system trade-offs"
-msgstr "Suunnittelujärjestelmän kompromissit"
-
-#: src/features/homepage/check.tsx
-#: src/features/homepage/hero.tsx
-#: src/features/homepage/sheet.tsx
-msgid "Design systems"
-msgstr "Suunnittelujärjestelmät"
 
 #: src/features/career/workspace/shell.tsx
 #: src/routes/builder/$resumeId/-components/document-menu.tsx
@@ -4769,10 +4412,6 @@ msgstr "Sanelu pysähtyi 2 minuutin rajaan."
 
 #: src/features/career/workspace/debrief.tsx
 msgid "Didn't land"
-msgstr "Ei mennyt perille"
-
-#: src/features/homepage/prepare.tsx
-msgid "Didn’t land"
 msgstr "Ei mennyt perille"
 
 #: src/features/career/offers.tsx
@@ -4822,10 +4461,6 @@ msgstr ""
 msgid "Do not share a resume"
 msgstr ""
 
-#: src/routes/dashboard/settings/route.tsx
-msgid "Docs"
-msgstr "Dokumentaatio"
-
 #: src/features/resume/editor/chrome.tsx
 msgid "Document menu: {name}"
 msgstr "Asiakirjavalikko: {name}"
@@ -4833,10 +4468,6 @@ msgstr "Asiakirjavalikko: {name}"
 #: src/features/documents/documents-page.tsx
 msgid "Document type"
 msgstr "Asiakirjan tyyppi"
-
-#: src/features/homepage/footer.tsx
-msgid "Documentation"
-msgstr "Dokumentaatio"
 
 #: src/features/command-palette/pages/navigation.tsx
 #: src/features/documents/documents-page.tsx
@@ -4857,10 +4488,6 @@ msgstr "Asiakirjat tätä työtä varten"
 msgid "Documents you move here stay for 30 days."
 msgstr "Tänne siirtämäsi asiakirjat säilyvät 30 päivää."
 
-#: src/features/homepage/faq.tsx
-msgid "Does it use AI?"
-msgstr "Käyttääkö se tekoälyä?"
-
 #: src/features/resume/share/custom-domain-field.tsx
 msgid "Domain connected"
 msgstr "Verkkotunnus yhdistetty"
@@ -4873,12 +4500,6 @@ msgstr "Eikö sinulla ole tiliä? <0/>"
 #: src/features/assistant/conversation.tsx
 msgid "Don't send {0}"
 msgstr "Älä lähetä {0}"
-
-#: src/components/ui/donation-toast.tsx
-#: src/features/resume/share/download-tab.tsx
-#: src/routes/dashboard/settings/route.tsx
-msgid "Donate"
-msgstr "Lahjoittaa"
 
 #: src/features/resume/editor/write/rich-text-editor-field.tsx
 #: src/features/settings/ai/api-keys.tsx
@@ -5008,10 +4629,6 @@ msgstr "Luonnos työpaikkailmoituksesta"
 msgid "Draft from your resume"
 msgstr "Luonnos ansioluettelostasi"
 
-#: src/features/homepage/remember.tsx
-msgid "Draft it as"
-msgstr "Luonnostele muotoon"
-
 #: src/routes/builder/letter/-components/write-panel.tsx
 msgid "Draft kept. Edit anything you like."
 msgstr "Luonnos säilytetty. Muokkaa mitä haluat."
@@ -5062,8 +4679,8 @@ msgid "Drag to reposition and use the slider to zoom before uploading."
 msgstr "Siirrä sijaintia vetämällä ja zoomaa liukusäätimellä ennen lataamista."
 
 #: src/features/documents/new-document-dialog.tsx
-msgid "Drop a file here or browse. PDF, Word, Reactive Resume or JSON Resume. We fill in every section and flag anything we're unsure of."
-msgstr "Pudota tiedosto tähän tai selaa. PDF, Word, Reactive Resume tai JSON Resume. Täytämme jokaisen osion ja merkitsemme kaiken, mistä olemme epävarmoja."
+msgid "Drop a file here or browse. PDF, Word, JSON or JSON Resume. We fill in every section and flag anything we're unsure of."
+msgstr ""
 
 #: src/features/ats-checker/checker.tsx
 msgid "Drop a PDF here or choose a file"
@@ -5259,12 +4876,6 @@ msgstr "Editor-tila"
 msgid "Editor views"
 msgstr "Toimittajan näkymät"
 
-#: src/features/homepage/sheet.tsx
-msgid "Editorial"
-msgstr "Toimitus"
-
-#: src/features/homepage/check.tsx
-#: src/features/homepage/sheet.tsx
 #: src/libs/resume/section.tsx
 msgid "Education"
 msgstr "Koulutus"
@@ -5330,11 +4941,6 @@ msgstr "Loppu"
 msgid "English"
 msgstr "englanti"
 
-#: src/features/homepage/check.tsx
-#: src/features/homepage/sheet.tsx
-msgid "English (native)"
-msgstr "englanti (syntyperäinen)"
-
 #: src/libs/locale.ts
 msgid "English (United Kingdom)"
 msgstr "Englanti (Yhdistynyt kuningaskunta)"
@@ -5350,10 +4956,6 @@ msgstr "Parannettu lukeminen ei ole käytettävissä; käytti sisäänrakennettu
 #: src/features/applications/components/add-application-dialog.tsx
 msgid "Enhanced reading was unavailable. The built-in reader retrieved this posting."
 msgstr "Tehostettu lukeminen ei ollut käytettävissä. Sisäänrakennettu lukija haki tämän työpaikkailmoituksen."
-
-#: src/components/ui/donation-toast.tsx
-msgid "Enjoying Reactive Resume?"
-msgstr "Onko Reactive Resume ollut mieleesi?"
 
 #: src/features/auth/pages/verify-2fa.tsx
 msgid "Enter a backup code."
@@ -5491,10 +5093,6 @@ msgstr "Jokaisella merkinnällä on päivämäärät lomakejärjestelmissä, jot
 msgid "Every role says what you did. Opinions on wording live in the Writing tab."
 msgstr "Jokainen rooli kertoo mitä teit. Mielipiteet sanamuodosta elävät Kirjoitus-välilehdellä."
 
-#: src/features/homepage/faq.tsx
-msgid "Every template exports a text-based PDF with the words in reading order, which is what applicant tracking systems (ATS) need to parse a resume. To test any PDF, including one made elsewhere, the free ATS checker shows the text software extracts and what to fix."
-msgstr "Jokainen malli vie tekstipohjaisen PDF:n, jossa sanat ovat lukujärjestyksessä, minkä vuoksi hakijoiden seurantajärjestelmien (ATS) on jäsenneltävä ansioluettelo. Jotta voit testata mitä tahansa PDF:ta, mukaan lukien muualla valmistettu, ilmainen ATS-tarkistus näyttää ohjelmiston tekstiotteet ja korjattavat asiat."
-
 #: src/features/ats-checker/checker.tsx
 msgid "Every term the posting stresses is already there."
 msgstr "Jokainen työpaikkailmoituksessa painotettu termi on jo olemassa."
@@ -5507,18 +5105,11 @@ msgstr "Joka viikko"
 msgid "Evidence changed or was removed. Edit and review before reuse."
 msgstr ""
 
-#: src/features/homepage/sections.tsx
-msgid "Exchange resume feedback, ask questions, and help shape Reactive Resume with the community."
-msgstr "Vaihda palautetta ansioluetteloista, kysy kysymyksiä ja auta muokkaamaan Reactive Resumea yhdessä yhteisön kanssa."
-
 #: src/features/resume/stylesheet/toolbar.tsx
 msgid "Exit focus mode"
 msgstr "Poistu tarkennustilasta"
 
 #: src/features/career/knowledge/facts.tsx
-#: src/features/homepage/check.tsx
-#: src/features/homepage/sheet.tsx
-#: src/features/homepage/write.tsx
 #: src/libs/resume/section.tsx
 msgid "Experience"
 msgstr "Työkokemus"
@@ -5530,10 +5121,6 @@ msgstr "Työkokemus, Koulutus ja muut"
 #: src/features/settings/ai/api-keys.tsx
 msgid "Expires"
 msgstr "Vanhenee"
-
-#: src/features/homepage/prepare.tsx
-msgid "explain one limit of the measurement clearly, without underselling the work."
-msgstr "selitä selkeästi yksi mittauksen rajoitus vähättelemättä työtä."
 
 #: src/features/settings/account/data.tsx
 #: src/libs/resume/section.tsx
@@ -5611,10 +5198,6 @@ msgctxt "Entry header layout"
 msgid "Eyebrow"
 msgstr "Yläotsikko"
 
-#: src/features/homepage/remember.tsx
-msgid "Fact · Accomplishment"
-msgstr "Fakta · Saavutus"
-
 #: src/features/career/knowledge/facts.tsx
 msgid "Fact forgotten"
 msgstr "Fakta unohdettu"
@@ -5640,10 +5223,6 @@ msgstr "Epäonnistui"
 msgid "Family name"
 msgstr ""
 
-#: src/features/homepage/footer.tsx
-msgid "Features"
-msgstr "Ominaisuudet"
-
 #: src/features/career/workspace/practise.tsx
 msgid "Feedback"
 msgstr "Palaute"
@@ -5652,33 +5231,10 @@ msgstr "Palaute"
 msgid "Feedback needs an AI connection. <0>Add one in Settings</0>. Nothing is sent until you ask."
 msgstr "Palaute vaatii tekoälyyhteyden. <0>Lisää yhteys asetuksissa</0>. Mitään ei lähetetä ennen kuin pyydät."
 
-#: src/features/homepage/prepare.tsx
-msgid "Fewer support tickets isn’t backed by a number yet. Say it as something you noticed."
-msgstr "Väitteelle “vähemmän tukipyyntöjä” ei ole vielä lukua. Kerro se havaintona."
-
 #. placeholder {0}: index + 1
 #: src/features/resume/editor/write/basics-card.tsx
 msgid "Field {0}"
 msgstr "Kenttä {0}"
-
-#: src/features/homepage/prepare.tsx
-#: src/features/homepage/sections.tsx
-#: src/features/homepage/tailor.tsx
-msgid "Fieldnote"
-msgstr "Fieldnote"
-
-#: src/features/homepage/tailor.tsx
-msgid "Fieldnote · Remote, EU"
-msgstr "Fieldnote · Kaukosäädin, EU"
-
-#: src/features/homepage/hero.tsx
-msgid "Figma"
-msgstr "Figma"
-
-#: src/features/homepage/check.tsx
-#: src/features/homepage/sheet.tsx
-msgid "Figma, HTML and CSS"
-msgstr "Figma, HTML ja CSS"
 
 #: src/features/resume/share/download-tab.tsx
 msgid "File name"
@@ -5717,10 +5273,6 @@ msgstr "Merkintöjen täyttäminen"
 msgid "Filter by tag"
 msgstr "Suodata tunnisteen mukaan"
 
-#: src/features/homepage/remember.tsx
-msgid "Find out why, and shorten setup without adding support work."
-msgstr "Selvitä syy ja lyhennä käyttöönottoa lisäämättä tukityötä."
-
 #: src/features/career/schedule-sheet.tsx
 msgid "Find roles"
 msgstr "Etsi työpaikkoja"
@@ -5752,7 +5304,6 @@ msgstr "Sovitus"
 
 #: src/features/career/shared.tsx
 #: src/features/career/workspace/saved.tsx
-#: src/features/homepage/prepare.tsx
 msgctxt "Application workspace tab: how well a job fits your experience"
 msgid "Fit"
 msgstr "Sovitus"
@@ -5784,10 +5335,6 @@ msgstr "Korjaa nämä editorissa"
 #: src/features/applications/components/import-applications-sheet.tsx
 msgid "Fix these values in the CSV, or leave their columns out, before importing."
 msgstr "Korjaa nämä arvot CSV-tiedostossa tai jätä niiden sarakkeet pois ennen tuontia."
-
-#: src/features/homepage/remember.tsx
-msgid "Fixing onboarding drop-off at Northwind Labs"
-msgstr "Aloitusprosessin keskeyttämisten korjaaminen Northwind Labsissa"
 
 #: src/features/ats-checker/messages.ts
 msgid "Flatten the form so the text is part of the page."
@@ -5943,12 +5490,12 @@ msgid "Found for “{0}”. Posting checked {1}."
 msgstr ""
 
 #: src/features/career/schedule-sheet.tsx
-msgid "Found posting links are read by Reactive Resume and the sites being read."
+msgid "Found posting links are read by {appName} and the sites being read."
 msgstr ""
 
 #. placeholder {0}: webAccess.provider
 #: src/features/career/schedule-sheet.tsx
-msgid "Found posting links are read by Reactive Resume and, when needed, {0} and the sites being read. The reader may charge."
+msgid "Found posting links are read by {appName} and, when needed, {0} and the sites being read. The reader may charge."
 msgstr ""
 
 #: src/features/applications/components/add-application-dialog.tsx
@@ -5968,10 +5515,6 @@ msgid "Free ATS resume checker"
 msgstr "Ilmainen ATS ansioluettelon tarkistus"
 
 #: src/libs/seo.ts
-msgid "Free resume builder with PDF & Word downloads"
-msgstr "Ilmainen ansioluettelotyökalu PDF- ja Word-latauksilla"
-
-#: src/libs/seo.ts
 msgid "Free resume templates with PDF examples"
 msgstr "Ilmaiset ansioluettelomallit PDF-esimerkeillä"
 
@@ -5986,16 +5529,11 @@ msgstr "Vapaamuotoinen"
 msgid "Free, no ads, no paywall."
 msgstr ""
 
-#: src/libs/seo.ts
-msgid "Free, open-source resume builder. Create, update, and share your resume, with PDF and Word downloads, no ads and no paywall."
-msgstr "Ilmainen, avoimen lähdekoodin ansioluettelon rakentaja. Luo, päivitä ja jaa ansioluettelosi PDF- ja Word-latauksilla, ilman mainoksia eikä maksumuuria."
-
 #: src/libs/locale.ts
 msgid "French"
 msgstr "ranska"
 
 #: src/features/career/workspace/fit.tsx
-#: src/features/homepage/prepare.tsx
 #: src/routes/builder/letter/-components/write-panel.tsx
 msgid "From"
 msgstr "Lähettäjä"
@@ -6007,10 +5545,6 @@ msgstr "Jälkipuinnista"
 #: src/features/career/knowledge/facts.tsx
 msgid "From a document you attached"
 msgstr "Liittämästäsi asiakirjasta"
-
-#: src/features/homepage/sections.tsx
-msgid "from developers who back it"
-msgstr "kehittäjiltä, jotka tukevat sitä"
 
 #: src/features/career/workspace/fit.tsx
 msgid "From Fit"
@@ -6074,10 +5608,6 @@ msgstr "saksa"
 msgid "Get a key at <0>{0}</0>. It's stored encrypted and used only for your requests."
 msgstr "Hanki avain osoitteesta <0>{0}</0>. Se tallennetaan salattuna ja sitä käytetään vain pyyntöihisi."
 
-#: src/features/homepage/prepare.tsx
-msgid "Get a plan for the interview, built from the posting and your own stories. Practice out loud, then write down how it went."
-msgstr "Saat haastattelusuunnitelman, joka perustuu työpaikkailmoitukseen ja omiin tarinoihisi. Harjoittele ääneen ja kirjoita sitten muistiin, miten meni."
-
 #: src/features/career/workspace/practise.tsx
 msgid "Get feedback"
 msgstr "Pyydä palautetta"
@@ -6086,21 +5616,9 @@ msgstr "Pyydä palautetta"
 msgid "Get feedback sends the question, your answer, this posting and your stories to {providerName}."
 msgstr "Pyydä palautetta -toiminto lähettää kysymyksen, vastauksesi, tämän ilmoituksen ja tarinasi palveluun {providerName}."
 
-#: src/features/homepage/sections.tsx
-msgid "Get it on"
-msgstr "Lataa palvelusta"
-
 #: src/features/career/today.tsx
 msgid "Get new roles here every morning"
 msgstr "Saat uusia työpaikkoja tänne joka aamu"
-
-#: src/features/resume/share/download-tab.tsx
-msgid "Get resume feedback on Discord"
-msgstr "Saa palautetta ansioluettelostasi Discordissa"
-
-#: src/features/homepage/footer.tsx
-msgid "Get started"
-msgstr "Aloita"
 
 #: src/routes/builder/letter/-components/write-panel.tsx
 msgid "Getting long. Try “Shorter”, or cut the least specific paragraph."
@@ -6158,10 +5676,6 @@ msgstr ""
 msgid "Go to…"
 msgstr "Siirry kohtaan…"
 
-#: src/features/resume/share/download-tab.tsx
-msgid "Good luck out there. Reactive Resume stays free because people chip in."
-msgstr "Onnea sinne. Reactive Resume pysyy ilmaiseksi, koska ihmiset hakeutuvat sisään."
-
 #. Authentication provider display name in account settings
 #. Brand name label for Google social sign-in button
 #: src/features/auth/components/social-auth.tsx
@@ -6192,10 +5706,6 @@ msgstr "Tervehdys"
 #: src/features/documents/documents-page.tsx
 msgid "Grid"
 msgstr "Ruudukko"
-
-#: src/features/homepage/remember.tsx
-msgid "Happy to walk you through it on our call."
-msgstr "Kerron mielelläni lisää puhelussamme."
 
 #: src/features/ats-checker/checker.tsx
 #: src/features/resume/editor/check/check-panel.tsx
@@ -6240,7 +5750,6 @@ msgid "Headline"
 msgstr "Kuvausteksti"
 
 #: src/features/career/workspace/practise.tsx
-#: src/features/homepage/prepare.tsx
 msgid "Hear it"
 msgstr "Kuuntele"
 
@@ -6259,18 +5768,6 @@ msgstr "Ohjeet ja asiakirjat"
 #: src/features/career/coach.tsx
 msgid "Help me turn an accomplishment into a Situation, Task, Action, Result and Reflection story."
 msgstr "Auta minua muuttamaan saavutus tarinaksi, jossa on tilanne, tehtävä, toiminta, tulos ja pohdinta."
-
-#: src/features/settings/preferences.tsx
-msgid "Help translate"
-msgstr "Auta kääntämään"
-
-#: src/features/homepage/sections.tsx
-msgid "Help translate it into yours."
-msgstr "Auta kääntämään se omalle kielellesi."
-
-#: src/features/homepage/prepare.tsx
-msgid "Hi Alex, great to confirm: you’ll meet our design team today at {time}, by video. Could you bring an example of your onboarding work?"
-msgstr "Hei Alex, vahvistamme mielellämme: tapaat suunnittelutiimimme tänään klo {time} videopuhelussa. Voisitko tuoda esimerkin aloitusprosessiin liittyvästä työstäsi?"
 
 #: src/components/level/combobox.tsx
 #: src/features/resume/editor/write/entries.tsx
@@ -6376,10 +5873,6 @@ msgstr "Vaakamarginaali"
 msgid "Horizontal spacing"
 msgstr "Vaakaväli"
 
-#: src/features/homepage/sections.tsx
-msgid "Hosting and development are paid for by people like you. Optional tip:"
-msgstr "Sinun kaltaiset ihmiset maksavat isännöinnin ja kehityksen. Valinnainen vinkki:"
-
 #: src/features/settings/account/application-profile.tsx
 msgid "Hour"
 msgstr ""
@@ -6389,7 +5882,6 @@ msgid "How did it go?"
 msgstr "Miten meni?"
 
 #: src/features/career/workspace/debrief.tsx
-#: src/features/homepage/prepare.tsx
 msgid "How did it land?"
 msgstr "Miten se otettiin vastaan?"
 
@@ -6412,10 +5904,6 @@ msgstr "Montako lomapäivää siihen kuuluu?"
 #: src/features/career/schedule-sheet.tsx
 msgid "How often"
 msgstr "Kuinka usein"
-
-#: src/features/templates/gallery.tsx
-msgid "How to choose a template"
-msgstr "Kuinka valita malli"
 
 #: src/features/ats-checker/checker.tsx
 msgid "How to show the file"
@@ -6446,10 +5934,6 @@ msgstr ""
 msgid "I can see this {kind}. Suggestions come back as edits you can review before accepting."
 msgstr ""
 
-#: src/features/homepage/remember.tsx
-msgid "I interviewed 14 customers, mapped three drop-off points and prototyped a shorter setup with engineering."
-msgstr "Haastattelin 14 asiakasta, kartoitin kolme keskeyttämiskohtaa ja prototypoin kehittäjien kanssa lyhyemmän käyttöönoton."
-
 #: src/features/career/workspace/answer-library.tsx
 msgid "I removed employer-specific wording and reviewed reuse across employers."
 msgstr ""
@@ -6478,10 +5962,6 @@ msgstr "Kuvake…"
 #: src/features/resume/editor/design/style-groups.tsx
 msgid "Icons in contact line"
 msgstr "Kuvakkeet kontaktilinjassa"
-
-#: src/features/homepage/remember.tsx
-msgid "If I did it again, I’d agree on the measure before the first prototype."
-msgstr "Jos tekisin sen uudelleen, sopisin mittarista ennen ensimmäistä prototyyppiä."
 
 #: src/features/ats-checker/messages.ts
 msgid "If it came from a scan, that is expected. Otherwise remove it; recruiters read it as keyword stuffing."
@@ -6557,8 +6037,8 @@ msgid "Import steps"
 msgstr "Tuo vaiheet"
 
 #: src/features/ats-checker/checker.tsx
-msgid "Import this file into a free Reactive Resume. Every issue is waiting for you in Check."
-msgstr "Tuo tämä tiedosto ilmaiseen Reactive Resume:hen. Jokainen ongelma odottaa sinua Checkissä."
+msgid "Import this file into a free {appName} account. Every issue is waiting for you in Check."
+msgstr ""
 
 #: src/features/documents/documents-page.tsx
 msgid "Import your current resume and we'll lay out every section for you to refine. Or start fresh. Start with your name. Build from there."
@@ -6592,10 +6072,6 @@ msgstr "Paranna valittua riviä"
 #: src/features/resume/editor/write/improve.tsx
 msgid "Improving…"
 msgstr "Parannetaan…"
-
-#: src/features/homepage/sections.tsx
-msgid "In good company"
-msgstr "Hyvässä seurassa"
 
 #: src/features/ats-checker/messages.ts
 msgid "Increase line spacing so two lines are not merged into one."
@@ -6639,9 +6115,6 @@ msgstr "Vain käyttöliittymä. Jokainen ansioluettelo asettaa oman kielensä De
 
 #: src/features/applications/stages.ts
 #: src/features/career/schedule-sheet.tsx
-#: src/features/homepage/prepare.tsx
-#: src/features/homepage/sections.tsx
-#: src/features/homepage/tailor.tsx
 msgid "Interview"
 msgstr "Haastattelu"
 
@@ -6653,15 +6126,6 @@ msgstr "Haastattelun jälkipuinti"
 msgid "Interview deleted"
 msgstr "Haastattelu poistettu"
 
-#: src/features/homepage/prepare.tsx
-#: src/features/homepage/sections.tsx
-msgid "Interview done"
-msgstr "Haastattelu pidetty"
-
-#: src/features/homepage/prepare.tsx
-msgid "Interview in {duration}"
-msgstr "Haastattelu alkaa {duration} kuluttua"
-
 #: src/features/applications/components/interview-dialog.tsx
 msgid "Interview is in another timezone"
 msgstr "Haastattelu on eri aikavyöhykkeellä"
@@ -6669,18 +6133,6 @@ msgstr "Haastattelu on eri aikavyöhykkeellä"
 #: src/features/career/workspace/shell.tsx
 msgid "Interview notes"
 msgstr "Haastattelumuistiinpanot"
-
-#: src/features/homepage/prepare.tsx
-msgid "Interview now"
-msgstr "Haastattelu nyt"
-
-#: src/features/homepage/remember.tsx
-msgid "Interview opening"
-msgstr "Haastattelun avaus"
-
-#: src/features/homepage/sections.tsx
-msgid "Interview prep"
-msgstr "Haastatteluun valmistautuminen"
 
 #: src/features/career/schedule-sheet.tsx
 #: src/features/career/today.tsx
@@ -6703,10 +6155,6 @@ msgstr "Uran haastatteluajat, muistutukset ja ajastukset käyttävät sitä."
 #: src/features/applications/components/interview-dialog.tsx
 msgid "Interview timezone"
 msgstr "Haastattelun aikavyöhyke"
-
-#: src/features/homepage/remember.tsx
-msgid "Interviewed 14 customers, mapped three drop-off points and prototyped a shorter setup with engineering."
-msgstr "Haastattelin 14 asiakasta, kartoitin kolme keskeyttämiskohtaa ja prototypoin kehittäjien kanssa lyhyemmän käyttöönoton."
 
 #: src/features/applications/components/detail/contacts.tsx
 msgid "Interviewer"
@@ -6732,10 +6180,6 @@ msgstr ""
 #: src/features/career/offers.tsx
 msgid "Is equity part of the offer?"
 msgstr "Kuuluuko tarjoukseen osakkeita?"
-
-#: src/features/homepage/faq.tsx
-msgid "Is Reactive Resume really free?"
-msgstr "Onko Reactive Resume todella ilmainen?"
 
 #: src/features/career/offers.tsx
 msgid "Is there a bonus, and what does it depend on?"
@@ -6804,10 +6248,6 @@ msgstr "Se poistetaan lopullisesti, eikä sitä voi palauttaa."
 msgid "It will show on the application's timeline and on the calendar."
 msgstr "Se näkyy työhakemuksen aikajanalla ja kalenterissa."
 
-#: src/components/ui/donation-toast.tsx
-msgid "It's free and open source, kept going by donations from the people who use it. If it has helped you, consider chipping in."
-msgstr "Se on ilmainen ja avointa lähdekoodia, ja sitä pitävät yllä sen käyttäjien lahjoitukset. Jos siitä on ollut sinulle apua, harkitse lahjoitusta."
-
 #: src/features/applications/components/detail/activity.tsx
 msgid "It's removed from the timeline for good."
 msgstr "Se on poistettu aikajanalta lopullisesti."
@@ -6859,7 +6299,6 @@ msgstr "Työnkuvaus"
 msgid "Job link or posting text"
 msgstr "Työlinkki tai työpaikkailmoituksen teksti"
 
-#: src/features/homepage/tailor.tsx
 #: src/features/resume/editor/check/check-panel.tsx
 msgid "Job match"
 msgstr "Työn ottelu"
@@ -6884,10 +6323,6 @@ msgstr "Työnhaku epäonnistui. Yritä uudelleen tai liitä työpaikkailmoitusli
 msgid "Job search pipeline"
 msgstr "Työnhaun eteneminen"
 
-#: src/features/homepage/sections.tsx
-msgid "Job tracker"
-msgstr "Hakemusten seuranta"
-
 #: src/features/command-palette/pages/navigation.tsx
 msgid "Jobs"
 msgstr "Työpaikat"
@@ -6906,14 +6341,6 @@ msgstr "John.Doe"
 #: src/features/auth/pages/accept-invitation.tsx
 msgid "Join {0}"
 msgstr ""
-
-#: src/features/homepage/footer.tsx
-msgid "Join Discord"
-msgstr "Liity Discordiin"
-
-#: src/features/homepage/sections.tsx
-msgid "Join the Discord community"
-msgstr "Liity Discord-yhteisöön"
 
 #: src/features/auth/pages/organization-access.tsx
 msgid "Join this organization"
@@ -6962,10 +6389,6 @@ msgstr "Jatka muokkausta"
 msgid "Keep in Trash"
 msgstr "Säilytä roskakorissa"
 
-#: src/features/homepage/sections.tsx
-msgid "Keep it <0>free.</0>"
-msgstr "Pidetään se <0>ilmaisena.</0>"
-
 #: src/features/career/workspace/prepare.tsx
 msgid "Keep it honest"
 msgstr "Pysy rehellisenä"
@@ -6974,7 +6397,6 @@ msgstr "Pysy rehellisenä"
 msgid "Keep it under 2.5 MB, usually by removing or shrinking images."
 msgstr "Pidä se alle 2,5 megatavun, yleensä poistamalla tai pienentämällä kuvia."
 
-#: src/features/homepage/write.tsx
 #: src/features/resume/editor/write/improve.tsx
 msgid "Keep mine"
 msgstr "Pidä minun"
@@ -6994,10 +6416,6 @@ msgstr "Pidä ansioluettelon sisältö todellisena tekstinä kuvien sijaan."
 #: src/features/ats-checker/messages.ts
 msgid "Keep running heads short, or drop them. They repeat in the extracted text too."
 msgstr "Pidä sivun ylätunnisteet lyhyinä tai poista ne. Ne toistuvat myös poimitussa tekstissä."
-
-#: src/features/homepage/prepare.tsx
-msgid "Keep the evidence precise"
-msgstr "Pidä näyttö täsmällisenä"
 
 #: src/features/resume/editor/chrome.tsx
 msgid "Keep the panel beside the page"
@@ -7027,10 +6445,6 @@ msgstr "Säilyttää tarkimmat osat"
 #: src/features/resume/editor/check/actions.ts
 msgid "Kept as it is"
 msgstr "Pidetty sellaisenaan"
-
-#: src/features/homepage/write.tsx
-msgid "Kept yours"
-msgstr "Omasi säilytetty"
 
 #. placeholder {0}: keyEnding(provider.apiKeyPreview)
 #: src/features/settings/ai/providers.tsx
@@ -7070,7 +6484,6 @@ msgstr "khmer"
 msgid "Kind regards,"
 msgstr "Ystävällisin terveisin"
 
-#: src/features/homepage/remember.tsx
 #: src/routes/dashboard/career/knowledge/route.tsx
 #: src/routes/dashboard/career/route.tsx
 msgid "Knowledge"
@@ -7079,10 +6492,6 @@ msgstr "Tietopankki"
 #: src/features/career/coach.tsx
 msgid "Knowledge couldn't load. Try again or switch Knowledge off before sending."
 msgstr "Tietopankkia ei voitu ladata. Yritä uudelleen tai poista tietopankki käytöstä ennen lähettämistä."
-
-#: src/features/homepage/prepare.tsx
-msgid "Knowledge doesn’t mention mentoring."
-msgstr "Tietopankissa ei mainita mentorointia."
 
 #: src/features/career/role-suggestions.tsx
 msgid "Knowledge:"
@@ -7118,8 +6527,6 @@ msgstr "Vaaka"
 msgid "Language"
 msgstr "Kieli"
 
-#: src/features/homepage/check.tsx
-#: src/features/homepage/sheet.tsx
 #: src/libs/resume/section.tsx
 msgid "Languages"
 msgstr "Kielet"
@@ -7175,21 +6582,6 @@ msgstr "Aseta teksti vaakasuoraan. Käännetyt tekstijaksot jäävät usein pois
 msgid "Layout"
 msgstr "Asettelu"
 
-#: src/features/homepage/prepare.tsx
-msgid "Lead across functions"
-msgstr "Monialainen johtaminen"
-
-#: src/features/homepage/check.tsx
-#: src/features/homepage/hero.tsx
-#: src/features/homepage/sheet.tsx
-#: src/features/homepage/write.tsx
-msgid "Lead Product Designer"
-msgstr "Johtava tuotesuunnittelija"
-
-#: src/features/homepage/write.tsx
-msgid "Lead with the result and give it a scale."
-msgstr "Johda tuloksella ja anna sille asteikko."
-
 #: src/features/assistant/assistant-panel.tsx
 msgid "Leads with why you fit"
 msgstr "Johtaa miksi sovit"
@@ -7224,14 +6616,6 @@ msgstr "Jätä tyhjäksi käyttääksesi alkuperäistä otsikkoa."
 msgid "Leave out"
 msgstr "Jättää pois"
 
-#: src/features/homepage/sheet.tsx
-msgid "Led <0>user research</0> for the onboarding redesign; activation rose from 31% to 44%."
-msgstr "Johti <0>käyttäjätutkimusta</0> aloitusprosessin uudistamiseksi; aktivointiaste nousi 31 prosentista 44 prosenttiin."
-
-#: src/features/homepage/prepare.tsx
-msgid "Led research for the onboarding redesign; activation rose from 31% to 44%."
-msgstr "Johdin aloitusprosessin uudistuksen tutkimusta; aktivointiaste nousi 31 prosentista 44 prosenttiin."
-
 #: src/features/resume/editor/design/template-group.tsx
 msgid "Left"
 msgstr "Vasen"
@@ -7239,10 +6623,6 @@ msgstr "Vasen"
 #: src/features/resume/import/read-file.ts
 msgid "Legacy Word files aren't supported. Open the file in Word and save it as .docx first."
 msgstr "Vanhoja Word-tiedostoja ei tueta. Avaa tiedosto Word:ssa ja tallenna se ensin nimellä .docx."
-
-#: src/features/homepage/footer.tsx
-msgid "Legal"
-msgstr "Oikeudelliset tiedot"
 
 #: src/routes/builder/$resumeId/-components/document-details.tsx
 #: src/routes/builder/letter/-components/write-panel.tsx
@@ -7329,10 +6709,6 @@ msgstr "Taso"
 msgid "Level {level} of 5"
 msgstr "Taso {level} / 5"
 
-#: src/features/homepage/footer.tsx
-msgid "Licensed under <0>MIT</0>"
-msgstr "Lisenssi: <0>MIT</0>"
-
 #: src/features/ats-checker/messages.ts
 msgid "Ligatures can drop letters out of words such as \"workflow\"."
 msgstr "Ligatuurit voivat pudottaa kirjaimia sanoista, kuten \"workflow\"."
@@ -7384,12 +6760,12 @@ msgid "Link {0} URL"
 msgstr ""
 
 #: src/features/applications/components/application-form-sheet.tsx
-msgid "Link a Reactive Resume (recommended)"
-msgstr "Linkitä Reactive Resume (suositus)"
+msgid "Link a resume (recommended)"
+msgstr ""
 
 #: src/features/applications/components/application-form-sheet.tsx
-msgid "Link a Reactive Resume to use AI match scoring and tailoring."
-msgstr "Liitä Reactive Resume -ansioluettelo, jotta voit käyttää tekoälyn osuvuuspisteytystä ja räätälöintiä."
+msgid "Link a resume to use AI match scoring and tailoring."
+msgstr ""
 
 #: src/features/resume/editor/write/basics-card.tsx
 #: src/features/resume/editor/write/rich-text-editor-field.tsx
@@ -7480,15 +6856,6 @@ msgstr "Linkitetään…"
 msgid "Links"
 msgstr "Linkit"
 
-#: src/features/homepage/hero.tsx
-msgid "Lisbon"
-msgstr "Lisbon"
-
-#: src/features/homepage/check.tsx
-#: src/features/homepage/sheet.tsx
-msgid "Lisbon, Portugal"
-msgstr "Lisbon, Portugal"
-
 #: src/features/documents/documents-page.tsx
 #: src/routes/dashboard/applications/index.tsx
 msgid "List"
@@ -7514,10 +6881,6 @@ msgstr "Live · päivityksiä muokkaaessasi"
 #: src/features/resume/share/address-field.tsx
 msgid "Live at {0}"
 msgstr "Live osoitteessa {0}"
-
-#: src/features/homepage/sections.tsx
-msgid "Live totals, refreshed every 6 hours."
-msgstr "Live-kokonaisuudet, päivitetään 6 tunnin välein."
 
 #: src/features/applications/components/import-applications-sheet.tsx
 msgid "Load your stages before importing named stages. Your CSV data is kept."
@@ -7589,10 +6952,6 @@ msgstr "Ladataan tallennettua versiota…"
 msgid "Loading stylesheet editor…"
 msgstr "Ladataan tyylieditoria…"
 
-#: src/features/homepage/sections.tsx
-msgid "Loading the total"
-msgstr "Ladataan kokonaissummaa"
-
 #: src/features/career/workspace/shell.tsx
 msgid "Loading workspace…"
 msgstr "Ladataan työtilaa…"
@@ -7661,8 +7020,8 @@ msgid "Lower the design sheet"
 msgstr "Laske suunnitteluarkki alas"
 
 #: src/features/resume/share/web-page-text.ts
-msgid "Made with Reactive Resume, free and open source"
-msgstr "Tehty Reactive Resumella – ilmainen ja avoimen lähdekoodin sovellus"
+msgid "Made with {appName}"
+msgstr ""
 
 #. Layout editor column label for the primary content area
 #: src/routes/builder/$resumeId/-sidebar/right/sections/layout/pages.tsx
@@ -7672,10 +7031,6 @@ msgstr "Pääosa"
 #: src/routes/_home/-sections/header.tsx
 msgid "Main navigation"
 msgstr "Päävalikko"
-
-#: src/features/homepage/design.tsx
-msgid "Make any of them yours."
-msgstr "Tee niistä mikä tahansa omasi."
 
 #: src/features/settings/ai/providers.tsx
 msgid "Make default"
@@ -7828,14 +7183,6 @@ msgstr "Vastaa ansioluetteloa"
 msgid "Matching your facts"
 msgstr "Verrataan faktoihisi"
 
-#: src/features/resume/share/cv-domain-card.tsx
-msgid "May be available"
-msgstr "Saattaa olla vapaana"
-
-#: src/components/ui/donation-toast.tsx
-msgid "Maybe later"
-msgstr "Ehkä myöhemmin"
-
 #: src/features/command-palette/pages/navigation.tsx
 msgid "MCP"
 msgstr "MCP"
@@ -7866,10 +7213,6 @@ msgstr ""
 msgid "Members & invites"
 msgstr ""
 
-#: src/features/homepage/prepare.tsx
-msgid "Mentor other designers"
-msgstr "Mentoroi muita suunnittelijoita"
-
 #: src/features/assistant/conversation.tsx
 msgid "Message the assistant"
 msgstr "Laita viestiä avustajalle"
@@ -7879,17 +7222,8 @@ msgid "Message the coach"
 msgstr "Viesti valmentajalle"
 
 #: src/features/career/shared.tsx
-#: src/features/homepage/prepare.tsx
 msgid "Messages"
 msgstr "Viestit"
-
-#: src/features/homepage/prepare.tsx
-msgid "Messages · Pasted from your email"
-msgstr "Viestit · Liitetty sähköpostistasi"
-
-#: src/features/homepage/remember.tsx
-msgid "Messages · Reply to Sam at Fieldnote"
-msgstr "Viestit · Vastaus Samille, Fieldnote"
 
 #: src/features/career/workspace/practise.tsx
 msgid "Microphone blocked. Allow it in your browser settings, or type your answer."
@@ -7899,22 +7233,9 @@ msgstr "Mikrofoni estetty. Salli se selaimen asetuksissa tai kirjoita vastaukses
 msgid "Minimum base salary"
 msgstr "Vähimmäisperuspalkka"
 
-#: src/features/homepage/prepare.tsx
-msgid "Missing evidence means your notes don’t show it yet, not that you lack it."
-msgstr "Puuttuva näyttö tarkoittaa, ettei muistiinpanoistasi vielä näy sitä – ei sitä, että sinulta puuttuisi se."
-
-#: src/features/homepage/footer.tsx
-msgid "MIT License"
-msgstr "MIT-lisenssi"
-
 #: src/features/career/workspace/debrief.tsx
-#: src/features/homepage/prepare.tsx
 msgid "Mixed"
 msgstr "Vaihtelevasti"
-
-#: src/features/homepage/check.tsx
-msgid "mixed format"
-msgstr "sekoitettu muoto"
 
 #: src/features/assistant/provider-setup.tsx
 #: src/features/settings/ai/providers.tsx
@@ -7932,10 +7253,6 @@ msgstr "Malliehdotukset eivät ole saatavilla. Voit silti antaa minkä tahansa m
 #: src/features/assistant/assistant-panel.tsx
 msgid "Model: {label}"
 msgstr "Malli: {label}"
-
-#: src/features/homepage/sheet.tsx
-msgid "Mono"
-msgstr "Mono"
 
 #: src/features/settings/account/application-profile.tsx
 msgid "Month"
@@ -7982,10 +7299,6 @@ msgstr "Useimmat luettelokohdat alkavat täytesanoilla sen sijaan, että kertois
 #: src/features/ats-checker/messages.ts
 msgid "Most entries have no dates."
 msgstr "Useimmilla merkinnöillä ei ole päivämääriä."
-
-#: src/features/homepage/remember.tsx
-msgid "Most new teams at Northwind Labs stalled during setup and never reached activation."
-msgstr "Useimmat Northwind Labsin uudet tiimit jumittuivat käyttöönotossa eivätkä koskaan aktivoituneet."
 
 #: src/routes/builder/letter/-components/write-panel.tsx
 msgid "Most recruiters read 180–320 words. The shaded band shows the range."
@@ -8057,10 +7370,6 @@ msgstr "Vaihda malliin {0}"
 msgid "Move to {stage}"
 msgstr "Siirrä vaiheeseen {stage}"
 
-#: src/features/homepage/prepare.tsx
-msgid "Move to Interview"
-msgstr "Siirrä vaiheeseen Haastattelu"
-
 #: src/features/documents/document-actions.tsx
 #: src/features/documents/documents-page.tsx
 #: src/routes/builder/$resumeId/-components/document-menu.tsx
@@ -8098,10 +7407,6 @@ msgstr "Siirretty vaiheeseen {label}"
 msgid "Moves the application from {0}."
 msgstr "Siirtää hakemuksen vaiheesta {0}."
 
-#: src/features/homepage/remember.tsx
-msgid "My job was to find out why, without adding support work."
-msgstr "Tehtäväni oli selvittää syy lisäämättä tukityötä."
-
 #. Label for full name input on registration form
 #: src/dialogs/resume/index.tsx
 #: src/features/applications/components/detail/contacts.tsx
@@ -8137,10 +7442,6 @@ msgstr "Henkilön {0} nimi"
 #: src/routes/builder/letter/-components/write-panel.tsx
 msgid "Name or team"
 msgstr "Nimi tai joukkue"
-
-#: src/features/homepage/prepare.tsx
-msgid "Name the problem, what you led and how activation was measured."
-msgstr "Kerro ongelma, mitä johdit ja miten aktivointia mitattiin."
 
 #: src/dialogs/resume/index.tsx
 msgid "Name the resume after the position you are applying for."
@@ -8281,10 +7582,6 @@ msgstr "Uusi jakso"
 msgid "New stage color"
 msgstr "Uuden vaiheen väri"
 
-#: src/features/homepage/remember.tsx
-msgid "New teams at Northwind were stalling in setup; most never got through."
-msgstr "Northwindin uudet tiimit jumittuivat käyttöönotossa; useimmat eivät päässeet loppuun."
-
 #: src/features/documents/page-navigation.tsx
 msgid "Next"
 msgstr ""
@@ -8316,10 +7613,6 @@ msgstr "Seuraava vaihe: {0}"
 #: src/features/career/workspace/messages.tsx
 msgid "Next step: {0}. Adds a reminder to Today."
 msgstr "Seuraava vaihe: {0}. Lisää muistutuksen Tänään-näkymään."
-
-#: src/features/homepage/remember.tsx
-msgid "Next time, I’d agree how to measure success before the first prototype."
-msgstr "Ensi kerralla sopisin onnistumisen mittaamisesta ennen ensimmäistä prototyyppiä."
 
 #: src/features/settings/account/application-profile.tsx
 msgid "No"
@@ -8417,8 +7710,6 @@ msgid "No email address was found."
 msgstr "Sähköpostiosoitetta ei löytynyt."
 
 #: src/features/career/shared.tsx
-#: src/features/homepage/prepare.tsx
-#: src/features/homepage/remember.tsx
 msgid "No evidence yet"
 msgstr "Ei vielä näyttöä"
 
@@ -8585,15 +7876,6 @@ msgstr "Työkokemusta ei näy"
 msgid "No work-experience section was found."
 msgstr "Työkokemusosiota ei löytynyt."
 
-#: src/features/homepage/design.tsx
-msgid "No. {number} · {name}"
-msgstr "Nro {number} · {name}"
-
-#. Receipt line amount for something Reactive Resume doesn't have, e.g. ads.
-#: src/features/homepage/sections.tsx
-msgid "none"
-msgstr "ei yhtään"
-
 #: src/features/applications/components/add-application-dialog.tsx
 #: src/features/applications/components/application-detail-sheet.tsx
 #: src/features/applications/components/list-view.tsx
@@ -8618,15 +7900,6 @@ msgstr "Normaali"
 #: src/features/resume/editor/design/fit.ts
 msgid "normal margins"
 msgstr "normaalit marginaalit"
-
-#: src/features/homepage/check.tsx
-msgid "Northwind Labs"
-msgstr "Northwind Labs"
-
-#: src/features/homepage/sheet.tsx
-#: src/features/homepage/write.tsx
-msgid "Northwind Labs · Lisbon"
-msgstr "Northwind Labs · Lisbon"
 
 #: src/libs/locale.ts
 msgid "Norwegian"
@@ -8722,10 +7995,6 @@ msgstr "Ei valittu"
 #: src/features/settings/root.tsx
 msgid "Not set up"
 msgstr "Ei asetettu"
-
-#: src/features/resume/stylesheet/editor.tsx
-msgid "Not sure what to write?"
-msgstr "Etkö ole varma, mitä kirjoittaa?"
 
 #: src/features/resume/editor/check/job-match.tsx
 msgid "Not true for me, hide it"
@@ -8823,7 +8092,6 @@ msgstr "Irtisanomisaika"
 
 #: src/features/career/coach-thread.tsx
 #: src/features/career/coach.tsx
-#: src/features/homepage/prepare.tsx
 #: src/features/resume/share/history-tab.tsx
 msgid "Now"
 msgstr "Nyt"
@@ -8833,7 +8101,6 @@ msgid "Numbered list"
 msgstr "Numeroitu luettelo"
 
 #: src/features/career/workspace/debrief.tsx
-#: src/features/homepage/prepare.tsx
 msgid "Observation"
 msgstr "Havainto"
 
@@ -8845,10 +8112,6 @@ msgstr "odia"
 msgid "Off"
 msgstr "Pois"
 
-#: src/features/homepage/remember.tsx
-msgid "Off: the coach won’t see it or claim it."
-msgstr "Pois: valmentaja ei näe sitä eikä väitä sitä."
-
 #: src/routes/builder/letter/-components/write-panel.tsx
 msgid "Off. Edit this letter’s details below. Turning this on replaces them with the resume’s current details."
 msgstr "Pois käytöstä. Muokkaa tämän kirjeen tietoja alla. Käyttöönotto korvaa ne ansioluettelon nykyisillä tiedoilla."
@@ -8859,8 +8122,6 @@ msgstr "Pois. Ota tämä käyttöön, jotta rekrytoijat löytävät sinut Google
 
 #: src/features/applications/stages.ts
 #: src/features/career/workspace/saved.tsx
-#: src/features/homepage/sections.tsx
-#: src/features/homepage/tailor.tsx
 msgid "Offer"
 msgstr "Tarjous"
 
@@ -8896,10 +8157,6 @@ msgstr "Päällä. Kuka tahansa, jolla on linkki, voi nähdä verkkosivusi."
 msgid "On. Visitors need the link and password to see your web page."
 msgstr "Käytössä. Vierailijat tarvitsevat linkin ja salasanan nähdäkseen verkkosivusi."
 
-#: src/features/homepage/remember.tsx
-msgid "Onboarding story"
-msgstr "Aloitusprosessitarina"
-
 #: src/features/career/workspace/prepare.tsx
 msgid "Once a round is scheduled, Prepare builds a timed plan, your opening and the questions to ask."
 msgstr "Kun kierros on ajastettu, Valmistautuminen luo ajoitetun suunnitelman, avauksesi ja esitettävät kysymykset."
@@ -8925,10 +8182,6 @@ msgstr "Yksi sarake, jossa on valokuva otsikon vieressä ja hyvin määritellyt 
 msgid "One column with labeled section rows and subtle dividers. A compact layout for experience, education and supporting details."
 msgstr "Yksi sarake, jossa on nimiöidyt osarivit ja hienovaraiset jakajat. Kompakti asettelu kokemusta, koulutusta ja tukitietoja varten."
 
-#: src/features/homepage/check.tsx
-msgid "one format"
-msgstr "yksi muoto"
-
 #: src/features/resume/editor/design/entries-group.tsx
 msgctxt "Entry header layout"
 msgid "One line"
@@ -8946,10 +8199,6 @@ msgstr "Salli vain sovellukset, joihin luotat. Tämä sovellus voi:"
 #: src/routes/builder/$resumeId/-sidebar/right/sections/layout/pages.tsx
 msgid "Only applies when the section fits on a single page."
 msgstr "Koskee vain tilanteita, joissa osio mahtuu yhdelle sivulle."
-
-#: src/features/homepage/faq.tsx
-msgid "Only if you want it to. Add your own key from OpenAI, Anthropic, Google Gemini, OpenRouter, Ollama or another provider for sharper lines, tailoring to a job posting, coaching for applications and interviews, and reading Word files. Without a key, nothing is sent to an AI service."
-msgstr "Vain jos haluat. Lisää oma avaimesi OpenAI:lta, Anthropicilta, Google Geminiltä, OpenRouterilta, Ollamalta tai muulta palveluntarjoajalta, niin saat terävämpiä muotoiluja, räätälöinnin työpaikkailmoitukseen, valmennusta hakemuksiin ja haastatteluihin sekä Word-tiedostojen lukemisen. Ilman avainta mitään ei lähetetä tekoälypalveluun."
 
 #: src/features/ats-checker/messages.ts
 msgid "Only one recognizable section heading was found."
@@ -8988,10 +8237,6 @@ msgstr "Vain ensimmäiset sivut tarkistettiin."
 #: src/features/resume/share/share-panel.tsx
 msgid "Only you see these"
 msgstr "Vain sinä näet nämä"
-
-#: src/features/homepage/faq.tsx
-msgid "Only you, until you share it. A resume can stay private, go live at a public link, or be protected with a password, and you can change that at any time. Deleting your account deletes your resumes with it."
-msgstr "Vain sinä, kunnes jaat sen. Ansioluettelo voi pysyä yksityisenä, julkaista julkisen linkin kautta tai olla suojattu salasanalla, ja voit muuttaa sitä milloin tahansa. Tilisi poistaminen poistaa sen mukana olevat ansioluettelosi."
 
 #: src/features/applications/components/interview-dialog.tsx
 msgid "Onsite"
@@ -9051,13 +8296,13 @@ msgstr ""
 msgid "Open story"
 msgstr "Avaa tarina"
 
+#: src/routes/auth/native-callback.tsx
+msgid "Open the {appName} app"
+msgstr ""
+
 #: src/features/ats-checker/messages.ts
 msgid "Open the exported file and confirm you can select and copy every part of it."
 msgstr "Avaa viety tiedosto ja varmista, että voit valita ja kopioida jokaisen sen osan."
-
-#: src/routes/auth/native-callback.tsx
-msgid "Open the Reactive Resume app"
-msgstr "Avaa Reactive Resume-sovellus"
 
 #: src/features/career/today.tsx
 msgid "Open the schedule"
@@ -9076,9 +8321,12 @@ msgstr "Avaa työtila"
 msgid "Open Write"
 msgstr ""
 
-#: src/features/homepage/remember.tsx
-msgid "Opening"
-msgstr "Avaus"
+#: src/features/homepage/footer.tsx
+#: src/features/settings/root.tsx
+#: src/routes/_home/licenses.tsx
+#: src/routes/dashboard/settings/route.tsx
+msgid "Open-source licenses"
+msgstr ""
 
 #: src/features/ats-checker/checker.tsx
 msgid "Opening the file"
@@ -9087,10 +8335,6 @@ msgstr "Tiedoston avaaminen"
 #: src/features/career/workspace/messages.tsx
 msgid "Opens in Career → Offers."
 msgstr "Avautuu kohdassa Ura → Tarjoukset."
-
-#: src/features/resume/stylesheet/editor.tsx
-msgid "opens in new tab"
-msgstr "avautuu uuteen välilehteen"
 
 #: src/features/documents/new-document-dialog.tsx
 msgid "Opens the editor on your name. Nothing else to fill in first."
@@ -9212,10 +8456,6 @@ msgstr "Lopputulos"
 msgid "Outdent"
 msgstr "Pienennä sisennystä"
 
-#: src/features/homepage/prepare.tsx
-msgid "Own and evolve a design system"
-msgstr "Omista ja kehitä suunnittelujärjestelmää"
-
 #: src/features/organization/roles.ts
 msgid "Owner"
 msgstr ""
@@ -9281,18 +8521,7 @@ msgstr "Kappale"
 msgid "paragraph {n}"
 msgstr "kohta {n}"
 
-#: src/features/homepage/check.tsx
-#: src/features/homepage/hero.tsx
-msgid "Parcel & Co."
-msgstr "Parcel & Co."
-
-#: src/features/homepage/sheet.tsx
-#: src/features/homepage/write.tsx
-msgid "Parcel & Co. · Porto"
-msgstr "Parcel & Co. · Porto"
-
 #: src/features/career/shared.tsx
-#: src/features/homepage/prepare.tsx
 msgid "Partly supported"
 msgstr "Osittain tuettu"
 
@@ -9316,7 +8545,6 @@ msgstr "Passkeys"
 #: src/features/auth/pages/login.tsx
 #: src/features/auth/pages/register.tsx
 #: src/features/command-palette/pages/navigation.tsx
-#: src/features/homepage/share.tsx
 #: src/features/resume/builder/password-dialog.tsx
 #: src/features/resume/share/web-page-text.ts
 #: src/features/settings/account/auth-hooks.ts
@@ -9351,10 +8579,6 @@ msgstr "Liitä työlinkki tai työpaikkailmoitus ja tarkista sitten rooli ja yri
 #: src/routes/dashboard/applications/index.tsx
 msgid "Paste a job link. We'll save the posting so Check, the assistant and your letter can use it."
 msgstr "Liitä työpaikkalinkki. Tallennamme työpaikkailmoituksen, jotta Check, avustaja ja kirjeesi voivat käyttää sitä."
-
-#: src/features/homepage/tailor.tsx
-msgid "Paste a job posting once. It feeds a tailored copy of your resume, a match score, a cover letter draft and a place to track the role."
-msgstr "Liitä työpaikkailmoitus kerran. Siitä syntyy räätälöity kopio ansioluettelostasi, vastaavuuspisteet, saatekirjeluonnos ja paikka seurata tehtävää."
 
 #: src/features/resume/editor/check/job-match.tsx
 msgid "Paste a job posting…"
@@ -9406,10 +8630,6 @@ msgstr "Työpaikkailmoitus liitetty"
 msgid "Pasting fills the fields automatically."
 msgstr "Liittäminen täyttää kentät automaattisesti."
 
-#: src/features/homepage/sections.tsx
-msgid "Pause the list of languages"
-msgstr "Keskeytä kieliluettelo"
-
 #: src/features/career/today.tsx
 msgid "Paused · {line}"
 msgstr "Keskeytetty · {line}"
@@ -9428,10 +8648,6 @@ msgstr "Palkkajakso"
 msgid "PDF styles support a subset of CSS. Rotation, dashed and dotted borders, and some layout properties are ignored."
 msgstr "PDF-tyylit tukevat CSS:n osajoukkoa. Kierto, katkoviivat ja katkoviivat sekä jotkin asettelun ominaisuudet jätetään huomiotta."
 
-#: src/features/homepage/faq.tsx
-msgid "PDF, Word (DOCX), Markdown and JSON. The JSON export imports back into any Reactive Resume, including one you host yourself, so your data is never locked in."
-msgstr "PDF, Word (DOCX), Markdown ja JSON. JSON viedään takaisin mihin tahansa Reactive Resume-laitteeseen, mukaan lukien itse isännöimäsi, joten tietojasi ei koskaan lukita."
-
 #: src/features/documents/documents-page.tsx
 msgid "PDF, Word or JSON. We'll build a resume from it."
 msgstr "PDF, Word tai JSON. Rakennamme siitä ansioluettelon."
@@ -9439,10 +8655,6 @@ msgstr "PDF, Word tai JSON. Rakennamme siitä ansioluettelon."
 #: src/features/organization/members-page.tsx
 msgid "Pending invitations"
 msgstr ""
-
-#: src/features/homepage/sections.tsx
-msgid "People using it"
-msgstr "Ihmiset käyttävät sitä"
 
 #: src/features/career/offer-entry.tsx
 msgid "Per hour"
@@ -9504,10 +8716,6 @@ msgstr "Valitse tulevaisuudessa oleva aika."
 msgid "Pick an icon"
 msgstr "Valitse kuvake"
 
-#: src/features/homepage/design.tsx
-msgid "Pick from {templateCount} templates, then set the type, color and spacing. The words stay put, so try as many looks as you like."
-msgstr "Valitse {templateCount} mallista ja aseta sitten fontit, värit ja välit. Tekstisi pysyy samana, joten kokeile niin monta mallia kuin haluat."
-
 #: src/features/ats-checker/messages.ts
 msgid "Pick one format and use it everywhere."
 msgstr "Valitse yksi muoto ja käytä sitä kaikkialla."
@@ -9556,10 +8764,6 @@ msgstr "Suunnittele työnhakusi, pidä näyttösi yhdessä paikassa ja päätä 
 msgid "Planning your week"
 msgstr "Suunnitellaan viikkoasi"
 
-#: src/features/homepage/sections.tsx
-msgid "Play the list of languages"
-msgstr "Toista kieliluettelo"
-
 #: src/libs/locale.ts
 msgid "Polish"
 msgstr "puola"
@@ -9576,11 +8780,6 @@ msgstr "Pysty"
 #: src/libs/locale.ts
 msgid "Portuguese (Brazil)"
 msgstr "portugali (Brasilia)"
-
-#: src/features/homepage/check.tsx
-#: src/features/homepage/sheet.tsx
-msgid "Portuguese (native)"
-msgstr "portugali (syntyperäinen)"
 
 #: src/libs/locale.ts
 msgid "Portuguese (Portugal)"
@@ -9602,7 +8801,6 @@ msgstr "ilmoitus"
 #: src/features/applications/components/application-detail-sheet.tsx
 #: src/features/career/workspace/fit.tsx
 #: src/features/career/workspace/preparation.tsx
-#: src/features/homepage/tailor.tsx
 msgid "Posting"
 msgstr "Työpaikkailmoitus"
 
@@ -9624,7 +8822,6 @@ msgstr ""
 
 #: src/features/career/workspace/practise.tsx
 #: src/features/career/workspace/saved.tsx
-#: src/features/homepage/prepare.tsx
 msgid "Practice"
 msgstr "Harjoitus"
 
@@ -9639,10 +8836,6 @@ msgctxt "Button: rehearse interview answers"
 msgid "Practice"
 msgstr "Harjoittele"
 
-#: src/features/homepage/remember.tsx
-msgid "Practice · Your opening, about 40 seconds aloud"
-msgstr "Harjoittelu · Avauksesi, noin 40 sekuntia ääneen"
-
 #: src/features/career/workspace/practise.tsx
 msgid "Practice another question"
 msgstr "Harjoittele toista kysymystä"
@@ -9652,22 +8845,12 @@ msgid "Practice for your {company} interviews."
 msgstr "Harjoitusta yrityksen {company} haastatteluihin."
 
 #: src/features/career/workspace/debrief.tsx
-#: src/features/homepage/prepare.tsx
 msgid "Practice priorities, not conclusions about why an employer decided anything."
 msgstr "Harjoittelun painopisteitä, ei päätelmiä siitä, miksi työnantaja päätti mitään."
 
 #: src/features/career/workspace/debrief.tsx
-#: src/features/homepage/prepare.tsx
 msgid "Practice priority:"
 msgstr "Harjoittelun painopiste:"
-
-#: src/features/homepage/prepare.tsx
-msgid "Practice questions are simulated, not from Fieldnote."
-msgstr "Harjoituskysymykset ovat simuloituja, eivätkä ne tule Fieldnotelta."
-
-#: src/features/homepage/prepare.tsx
-msgid "Practice your introduction once. Keep it to about 90 seconds."
-msgstr "Harjoittele esittelyäsi kerran. Pidä se noin 90 sekunnissa."
 
 #: src/features/career/workspace/practise.tsx
 msgid "Practicing your story: {storyTitle}"
@@ -9702,9 +8885,6 @@ msgstr "Toiveet"
 
 #: src/features/career/schedule-sheet.tsx
 #: src/features/career/shared.tsx
-#: src/features/homepage/footer.tsx
-#: src/features/homepage/header.tsx
-#: src/features/homepage/prepare.tsx
 msgid "Prepare"
 msgstr "Valmistautuminen"
 
@@ -9811,10 +8991,6 @@ msgstr "Yksityisyys"
 msgid "Privacy policy"
 msgstr "Tietosuojakäytäntö"
 
-#: src/features/homepage/share.tsx
-msgid "Private"
-msgstr "Yksityinen"
-
 #: src/features/career/workspace/apply.tsx
 #: src/features/settings/account/application-profile.tsx
 msgid "Private application profile"
@@ -9824,27 +9000,11 @@ msgstr ""
 msgid "Private. Only you can see it."
 msgstr "Yksityinen. Vain sinä näet sen."
 
-#: src/features/homepage/footer.tsx
-msgid "Product"
-msgstr "Tuote"
-
-#: src/features/homepage/check.tsx
-#: src/features/homepage/sheet.tsx
-#: src/features/homepage/write.tsx
-msgid "Product Designer"
-msgstr "Tuotesuunnittelija"
-
-#: src/features/homepage/sheet.tsx
-msgid "Product designer with nine years of experience building <0>design systems</0> and research-led products for B2B teams."
-msgstr "Tuotesuunnittelija, jolla on yhdeksän vuoden kokemus <0>suunnittelujärjestelmien</0> ja tutkimukseen perustuvien tuotteiden kehittämisestä B2B-tiimeille."
-
 #: src/features/resume/editor/write/entries.tsx
 msgid "Proficiency"
 msgstr "Osaamistaso"
 
 #: src/features/command-palette/pages/navigation.tsx
-#: src/features/homepage/check.tsx
-#: src/features/homepage/sheet.tsx
 #: src/features/settings/account/profile.tsx
 msgid "Profile"
 msgstr "Profiili"
@@ -9874,10 +9034,6 @@ msgstr "Edistymispalkki"
 msgid "Projects"
 msgstr "Projektit"
 
-#: src/features/homepage/hero.tsx
-msgid "Promoted to lead, 2021"
-msgstr "Ylennettiin johtajaksi, 2021"
-
 #: src/features/career/workspace/messages.tsx
 msgid "Proposed changes"
 msgstr "Ehdotetut muutokset"
@@ -9890,12 +9046,6 @@ msgstr "Ehdotetut muokkaukset"
 msgid "Protect your resume with a password"
 msgstr "Suojaa ansioluettelosi salasanalla"
 
-#: src/features/homepage/check.tsx
-#: src/features/homepage/hero.tsx
-#: src/features/homepage/sheet.tsx
-msgid "Prototyping"
-msgstr "Prototyyppien tekeminen"
-
 #: src/features/settings/ai/web-access.tsx
 msgid "Provided by your server: {connectedProvider}."
 msgstr "Palvelimesi toimittama: {connectedProvider}."
@@ -9907,7 +9057,6 @@ msgstr "Palveluntarjoaja"
 
 #: src/features/documents/document-card.tsx
 #: src/features/documents/documents-page.tsx
-#: src/features/homepage/share.tsx
 #: src/routes/builder/$resumeId/-components/document-details.tsx
 #: src/routes/builder/$resumeId/-components/editor-bar.tsx
 msgid "Public"
@@ -9961,10 +9110,6 @@ msgstr "Violetti"
 msgid "Put a plain email address near the top of the first page. It is what most systems file you under."
 msgstr "Sijoita tavallinen sähköpostiosoite lähelle ensimmäisen sivun alkua. Sen mukaan useimmat järjestelmät luokittelevat sinut."
 
-#: src/features/homepage/sections.tsx
-msgid "Put it all on <0>one page.</0>"
-msgstr "Mahduta kaikki <0>yhdelle sivulle.</0>"
-
 #: src/features/resume/editor/write/rich-text-editor-field.tsx
 msgid "Put the caret in a line to improve it"
 msgstr "Paranna sitä asettamalla se linjaan"
@@ -9990,10 +9135,6 @@ msgstr ""
 msgid "Question {position} of {total}"
 msgstr "Kysymys {position}/{total}"
 
-#: src/features/homepage/prepare.tsx
-msgid "Question 1 of 4 · Practice"
-msgstr "Kysymys 1/4 · Harjoitus"
-
 #: src/features/career/workspace/apply.tsx
 msgid "Question from the form"
 msgstr "Lomakkeen kysymys"
@@ -10006,22 +9147,13 @@ msgstr "Kysymyksen vaihtoehdot"
 msgid "Question removed"
 msgstr "Kysymys poistettu"
 
-#: src/features/homepage/faq.tsx
-msgid "Questions"
-msgstr "Kysymyksiä"
-
 #: src/features/career/offers.tsx
 msgid "Questions copied"
 msgstr "Kysymykset kopioitu"
 
 #: src/features/career/workspace/prepare.tsx
-#: src/features/homepage/prepare.tsx
 msgid "Questions to ask"
 msgstr "Esitettävät kysymykset"
-
-#: src/features/homepage/remember.tsx
-msgid "R"
-msgstr "R"
 
 #: src/routes/builder/$resumeId/-components/design-panel.tsx
 msgid "Raise the design sheet"
@@ -10051,22 +9183,6 @@ msgstr "Vie tiedosto uudelleen fontit upotettuina ja tarkista, että teksti kopi
 msgid "Re-export with fonts embedded, then open the file and check that the text copies out cleanly."
 msgstr "Vie tiedosto uudelleen fontit upotettuina, avaa se sitten ja tarkista, että teksti kopioituu siististi."
 
-#: src/features/homepage/prepare.tsx
-msgid "Re: Senior Product Designer"
-msgstr "Vs: Senior Product Designer"
-
-#: src/routes/_home/-sections/header.tsx
-msgid "Reactive Resume - Go to homepage"
-msgstr "Reactive Resume – Siirry etusivulle"
-
-#: src/routes/dashboard/settings/route.tsx
-msgid "Reactive Resume {__APP_VERSION__} · MIT"
-msgstr "Reactive Resume {__APP_VERSION__} · MIT"
-
-#: src/features/homepage/sections.tsx
-msgid "Reactive Resume is open source under the MIT License. Amruth Pillai and a community of contributors keep it running, and donations pay for hosting and development. There’s no paid tier."
-msgstr "Reactive Resume on avointa lähdekoodia MIT-lisenssillä. Amruth Pillai ja avustajien yhteisö pitävät sen käynnissä, ja lahjoitukset kattavat ylläpidon ja kehityksen kulut. Maksullista versiota ei ole."
-
 #. placeholder {0}: reader.label
 #: src/features/career/workspace/practise.tsx
 msgid "Read aloud by {0}, which may use tokens on that account."
@@ -10081,7 +9197,6 @@ msgid "Read briefing"
 msgstr "Lue muistio"
 
 #: src/features/career/workspace/messages.tsx
-#: src/features/homepage/prepare.tsx
 msgid "Read it for me"
 msgstr "Lue se minulle"
 
@@ -10097,10 +9212,6 @@ msgstr "Lue työpaikkailmoitus"
 #: src/features/career/workspace/practise.tsx
 msgid "Read questions with"
 msgstr "Lue kysymykset äänellä"
-
-#: src/features/resume/stylesheet/editor.tsx
-msgid "Read the “Applying custom styles” guide."
-msgstr "Lue opas ”Mukautettujen tyylien käyttäminen”."
 
 #: src/features/assistant/conversation.tsx
 msgid "Read the attachment"
@@ -10121,10 +9232,6 @@ msgstr "Lue sivu"
 #: src/features/assistant/conversation.tsx
 msgid "Read the resume"
 msgstr "Luki ansioluettelon"
-
-#: src/features/homepage/faq.tsx
-msgid "Read the self-hosting guide"
-msgstr "Lue itsepalvelun opas"
 
 #: src/features/auth/pages/consent.tsx
 msgid "Read your email address."
@@ -10284,10 +9391,6 @@ msgstr ""
 msgid "Recruiter"
 msgstr "Rekrytoija"
 
-#: src/features/homepage/remember.tsx
-msgid "Recruiter reply"
-msgstr "Vastaus rekrytoijalle"
-
 #: src/routes/builder/letter/-components/download-sheet.tsx
 msgid "Recruiters see this name. Your name plus “Cover Letter” works well."
 msgstr "Rekrytoijat näkevät tämän nimen. Nimesi ja saatekirje toimii hyvin."
@@ -10343,7 +9446,6 @@ msgid "Referred by…, things to emphasize, etc."
 msgstr "Suosittelija…, korostettavat asiat jne."
 
 #: src/features/career/knowledge/stories.tsx
-#: src/features/homepage/remember.tsx
 msgid "Reflection"
 msgstr "Pohdinta"
 
@@ -10359,10 +9461,6 @@ msgstr "Päivitä muistio 24 tuntia ennen"
 msgid "Refresh the briefing on the morning of"
 msgstr "Päivitä muistio samana aamuna"
 
-#: src/features/resume/share/cv-domain-card.tsx
-msgid "Register at OlaCV"
-msgstr "Rekisteröi OlaCV:ssä"
-
 #: src/features/career/workspace/prepare.tsx
 msgid "Rehearse aloud"
 msgstr "Harjoittele ääneen"
@@ -10370,10 +9468,6 @@ msgstr "Harjoittele ääneen"
 #: src/features/career/workspace/prepare.tsx
 msgid "Rehearse one answer aloud"
 msgstr "Harjoittele yksi vastaus ääneen"
-
-#: src/features/homepage/prepare.tsx
-msgid "Rehearse one disagreement with engineering and how it ended."
-msgstr "Harjoittele yhtä erimielisyyttä kehittäjien kanssa ja sitä, miten se päättyi."
 
 #: src/features/resume/editor/proposals/proposal-list.tsx
 msgid "Reject"
@@ -10401,9 +9495,6 @@ msgid "Reload the saved version?"
 msgstr ""
 
 #: src/features/career/shared.tsx
-#: src/features/homepage/footer.tsx
-#: src/features/homepage/header.tsx
-#: src/features/homepage/remember.tsx
 msgid "Remember"
 msgstr "Muista"
 
@@ -10644,19 +9735,12 @@ msgid "Replaces target roles only after you choose Use. Wait for Saved before op
 msgstr ""
 
 #: src/features/career/workspace/saved.tsx
-#: src/features/homepage/remember.tsx
 msgid "Reply"
 msgstr "Vastaus"
 
 #: src/features/career/workspace/messages.tsx
 msgid "Reply copied"
 msgstr "Vastaus kopioitu"
-
-#: src/features/homepage/footer.tsx
-#: src/features/homepage/sections.tsx
-#: src/routes/dashboard/settings/route.tsx
-msgid "Report a bug"
-msgstr "Ilmoita virheestä"
 
 #: src/features/settings/account/application-profile.tsx
 msgid "Requested amount"
@@ -10703,18 +9787,10 @@ msgstr "Palauta salasanasi"
 msgid "Resetting your password..."
 msgstr "Palautetaan salasanaasi..."
 
-#: src/features/homepage/footer.tsx
-msgid "Resources"
-msgstr "Resurssit"
-
 #: src/features/career/offer-entry.tsx
 #: src/features/career/offers.tsx
 msgid "Respond by"
 msgstr "Vastattava viimeistään"
-
-#: src/features/homepage/write.tsx
-msgid "Responsible for the design system and helping other teams with their designs."
-msgstr "Vastaat suunnittelujärjestelmästä ja autamme muita tiimejä niiden suunnittelussa."
 
 #: src/features/documents/document-actions.tsx
 #: src/features/documents/trash-page.tsx
@@ -10753,13 +9829,8 @@ msgid "Restricted to its employer or application."
 msgstr ""
 
 #: src/features/career/knowledge/stories.tsx
-#: src/features/homepage/remember.tsx
 msgid "Result"
 msgstr "Tulos"
-
-#: src/features/homepage/remember.tsx
-msgid "Result left out: no fact backs it. Switch it on, or add one, and it comes back."
-msgstr "Tulos jätetty pois: mikään fakta ei tue sitä. Ota fakta käyttöön tai lisää uusi, niin se palaa."
 
 #: src/features/assistant/assistant-panel.tsx
 msgid "resume"
@@ -10789,19 +9860,6 @@ msgstr "ansioluettelo (valinnainen)"
 #: src/routes/builder/letter/-components/download-sheet.tsx
 msgid "Resume + letter"
 msgstr "ansioluettelo + kirje"
-
-#: src/features/homepage/tailor.tsx
-msgid "Resume attached"
-msgstr "Ansioluettelo liitetty"
-
-#. Hero headline, line 2 of 4: A free, open-source / resume builder / and / career manager. Lines 2 and 4 are highlighted: keep each a complete phrase.
-#: src/features/homepage/hero.tsx
-msgid "resume builder"
-msgstr "ansioluettelon luomiseen"
-
-#: src/features/homepage/sections.tsx
-msgid "Resume builder"
-msgstr "Ansioluetteloeditori"
 
 #: src/features/resume/preview/preview.browser.tsx
 msgid "Resume content"
@@ -10843,10 +9901,6 @@ msgstr "Ansioluettelot"
 #: src/features/settings/preferences.tsx
 msgid "Resumes always render on white paper, whatever the theme."
 msgstr "Ansioluettelot tehdään aina valkoiselle paperille teemasta riippumatta."
-
-#: src/features/homepage/sections.tsx
-msgid "Resumes created"
-msgstr "ansioluettelot luotu"
 
 #. placeholder {0}: application.postingSource.retrievedAt
 #. placeholder {1}: application.postingSource.method
@@ -11081,10 +10135,6 @@ msgstr "Viiva"
 msgid "Run again"
 msgstr "Suorita uudelleen"
 
-#: src/features/homepage/prepare.tsx
-msgid "Run research with customers"
-msgstr "Tee tutkimusta asiakkaiden kanssa"
-
 #: src/routes/builder/$resumeId/-components/page-canvas.tsx
 msgid "Runs onto page {next}"
 msgstr "Toimii sivulla {next}"
@@ -11092,10 +10142,6 @@ msgstr "Toimii sivulla {next}"
 #: src/libs/locale.ts
 msgid "Russian"
 msgstr "venäjä"
-
-#: src/features/homepage/remember.tsx
-msgid "S"
-msgstr "S"
 
 #: src/features/applications/components/add-application-dialog.tsx
 #: src/features/applications/components/application-detail-sheet.tsx
@@ -11110,18 +10156,6 @@ msgstr ""
 #: src/features/applications/components/application-form-sheet.tsx
 msgid "Salary range"
 msgstr "Palkkahaarukka"
-
-#: src/features/homepage/prepare.tsx
-msgid "Sam"
-msgstr "Sam"
-
-#: src/features/homepage/prepare.tsx
-msgid "Sam, Fieldnote"
-msgstr "Sam, Fieldnote"
-
-#: src/features/homepage/remember.tsx
-msgid "Same you. Less starting over."
-msgstr "Sama sinä. Vähemmän alusta aloittamista."
 
 #: src/features/documents/use-start-document.ts
 msgid "Sample resume added. Delete it anytime."
@@ -11259,22 +10293,15 @@ msgstr "tallennettu"
 #: src/features/applications/components/add-application-dialog.tsx
 #: src/features/applications/stages.ts
 #: src/features/career/knowledge/preferences.tsx
-#: src/features/homepage/sections.tsx
-#: src/features/homepage/tailor.tsx
 #: src/features/resume/editor/save-status.tsx
 #: src/routes/builder/letter/-components/letter-bar.tsx
 msgid "Saved"
 msgstr "Tallennettu"
 
 #: src/features/career/shared.tsx
-#: src/features/homepage/prepare.tsx
 msgctxt "Application workspace tab: earlier results kept for this job"
 msgid "Saved"
 msgstr "Tallennettu"
-
-#: src/features/homepage/write.tsx
-msgid "Saved · version {version}"
-msgstr "Tallennettu · versio {version}"
 
 #: src/features/resume/share/history-tab.tsx
 msgid "Saved “{trimmed}”"
@@ -11363,10 +10390,6 @@ msgstr "Tallentaminen kestää odotettua kauemmin. Muutoksesi ovat edelleen tall
 #: src/routes/builder/letter/-components/letter-bar.tsx
 msgid "Saving…"
 msgstr "Tallennetaan…"
-
-#: src/features/homepage/prepare.tsx
-msgid "Say it aloud"
-msgstr "Sano se ääneen"
 
 #: src/dialogs/auth/enable-two-factor.tsx
 msgid "Scan the QR code with your authenticator app, or copy the secret and paste it into the app."
@@ -11631,10 +10654,6 @@ msgstr ""
 msgid "Selected resume:"
 msgstr ""
 
-#: src/features/homepage/footer.tsx
-msgid "Self-hosting"
-msgstr "Itsenäinen isännöinti"
-
 #: src/features/resume/stylesheet/editor.tsx
 msgid "Semantic CSS stylesheet"
 msgstr "Semanttinen CSS-tyylitiedosto"
@@ -11707,10 +10726,6 @@ msgstr "Lähettää tämän ansioluettelon ja työpaikkailmoituksen osoitteeseen
 msgid "Sends this resume to {provider} with your key, only when you press send."
 msgstr "Lähettää tämän ansioluettelon numeroon {provider} avaimesi kanssa vain, kun painat lähetä."
 
-#: src/features/homepage/remember.tsx
-msgid "Sends this story and the facts switched on to your AI connection. Without one, nothing is sent."
-msgstr "Lähettää tämän tarinan ja käyttöön otetut faktat tekoälyyhteydellesi. Ilman yhteyttä mitään ei lähetetä."
-
 #: src/features/assistant/conversation.tsx
 msgid "Sends your message and the posting to {provider} with your key, only when you press send."
 msgstr "Lähettää viestisi ja työpaikkailmoituksen osoitteeseen {provider} avaimellasi vain, kun painat lähetä."
@@ -11728,12 +10743,6 @@ msgstr "Lähettää viestisi, tämän hakemuksen (ilmoitus, muistiinpanot, lähe
 #: src/features/resume/editor/check/writing-tab.tsx
 msgid "Sends your resume's text only to {0} · {1}, with your key."
 msgstr "Lähettää ansioluettelosi tekstin vain numeroon {0} · {1} avaimesi kanssa."
-
-#: src/features/homepage/check.tsx
-#: src/features/homepage/sheet.tsx
-#: src/features/homepage/tailor.tsx
-msgid "Senior Product Designer"
-msgstr "Vanhempi tuotesuunnittelija"
 
 #: src/features/applications/components/list-view.tsx
 #: src/features/resume/share/format.ts
@@ -11789,10 +10798,6 @@ msgstr "Ota todennussovellus käyttöön"
 msgid "Settings"
 msgstr "Asetukset"
 
-#: src/features/settings/ai/mcp.tsx
-msgid "Setup guide"
-msgstr "Asennusopas"
-
 #: src/features/resume/editor/write/picture-settings.tsx
 msgid "Shadow color"
 msgstr "Varjon väri"
@@ -11801,18 +10806,11 @@ msgstr "Varjon väri"
 msgid "Shadow width"
 msgstr "Varjon leveys"
 
-#: src/features/homepage/footer.tsx
-#: src/features/homepage/header.tsx
-#: src/features/homepage/share.tsx
 #: src/features/resume/share/web-page-text.ts
 #: src/routes/builder/$resumeId/-components/editor-bar.tsx
 #: src/routes/builder/$resumeId/-components/editor-shell.tsx
 msgid "Share"
 msgstr "Jakaa"
-
-#: src/features/homepage/share.tsx
-msgid "Share a public link, add a password or keep it private. Choose from 3 visibility options. Export to PDF or Word, or take all your data with you as JSON."
-msgstr "Jaa julkinen linkki, lisää salasana tai pidä se yksityisenä. Valitse kolmesta näkyvyysvaihtoehdosta. Vie tiedostoihin PDF tai Word tai ota kaikki tietosi mukaasi nimellä JSON."
 
 #: src/features/career/role-suggestions.tsx
 msgid "Share enabled shared Knowledge"
@@ -11835,18 +10833,6 @@ msgstr "Jakaminen"
 #: src/features/career/shared.tsx
 msgid "Sharpening the opening"
 msgstr "Hiotaan avausta"
-
-#: src/features/homepage/sheet.tsx
-msgid "Shipped <0>accessible</0> checkout flows for web and iOS, meeting WCAG 2.1 AA."
-msgstr "Kehitti <0>saavutettavia</0> maksuprosesseja verkkoon ja iOS:lle WCAG 2.1 AA:n mukaisesti."
-
-#: src/features/homepage/prepare.tsx
-msgid "Shipped checkout flows that meet WCAG 2.1 AA."
-msgstr "Toimitin WCAG 2.1 AA -vaatimukset täyttäviä kassaprosesseja."
-
-#: src/features/homepage/hero.tsx
-msgid "Shipped checkout for iOS"
-msgstr "Toimitettu kassalle iOS"
 
 #: src/routes/builder/letter/-components/write-panel.tsx
 msgid "Short and direct. Fine if the posting asks for brevity."
@@ -11873,8 +10859,8 @@ msgid "Show"
 msgstr "Näytä"
 
 #: src/features/resume/share/share-panel.tsx
-msgid "Show “Made with Reactive Resume”"
-msgstr "Näytä ”Tehty Reactive Resumella”"
+msgid "Show “Made with {appName}”"
+msgstr ""
 
 #. placeholder {0}: Math.min(remaining, COLUMN_PAGE_SIZE)
 #. placeholder {0}: visible.length - shown.length
@@ -11964,7 +10950,6 @@ msgid "Shows the tags they all share. Tags you add go on every document; tags yo
 msgstr "Näyttää tunnisteet, jotka ovat kaikille yhteisiä. Lisäämäsi tunnisteet lisätään jokaiseen asiakirjaan ja poistamasi poistetaan jokaisesta. Lukitut asiakirjat jätetään ennalleen."
 
 #. Layout editor column label for the secondary sidebar area
-#: src/features/homepage/sheet.tsx
 #: src/features/resume/editor/design/template-group.tsx
 #: src/features/resume/editor/write/outline.tsx
 #: src/routes/builder/$resumeId/-sidebar/right/sections/layout/pages.tsx
@@ -11992,7 +10977,7 @@ msgstr "Sivupalkit luetaan usein viimeisenä tai sekoitetaan pääsarakkeeseen."
 #: src/features/auth/pages/accept-invitation.tsx
 #: src/features/auth/pages/login.tsx
 #: src/features/auth/pages/organization-access.tsx
-#: src/features/homepage/footer.tsx
+#: src/features/homepage/page.tsx
 msgid "Sign in"
 msgstr "Kirjaudu sisään"
 
@@ -12103,7 +11088,6 @@ msgid "Single-column; polished and serious for senior or enterprise-level positi
 msgstr "Yksipalstainen; viimeistelty ja asiallinen kokeneille tai yritystason tehtäviin hakeville."
 
 #: src/features/career/knowledge/stories.tsx
-#: src/features/homepage/remember.tsx
 msgid "Situation"
 msgstr "Tilanne"
 
@@ -12119,10 +11103,6 @@ msgstr "Tilanne, Tehtävä ja Toiminta ovat pakollisia. Jätä Tulos ja Pohdinta
 msgid "Situation, Task, Action, Result, Reflection. Link each story to facts you can support; leave unknown outcomes blank."
 msgstr "Tilanne, tehtävä, toiminta, tulos, pohdinta. Linkitä jokainen tarina faktoihin, jotka voit perustella; jätä tuntemattomat tulokset tyhjiksi."
 
-#: src/features/homepage/hero.tsx
-msgid "Six product teams"
-msgstr "Kuusi tuoteryhmää"
-
 #: src/features/resume/editor/write/picture-settings.tsx
 msgid "Size"
 msgstr "Koko"
@@ -12131,8 +11111,6 @@ msgstr "Koko"
 msgid "Skill"
 msgstr "Taito"
 
-#: src/features/homepage/check.tsx
-#: src/features/homepage/sheet.tsx
 #: src/libs/resume/section.tsx
 msgid "Skills"
 msgstr "Taidot"
@@ -12174,10 +11152,6 @@ msgstr "Sloveeni"
 #: src/features/applications/components/insights-view.tsx
 msgid "Small numbers, but worth noticing."
 msgstr "Pieniä lukuja, mutta huomioimisen arvoisia."
-
-#: src/features/homepage/remember.tsx
-msgid "So I talked to 14 customers, found the three places people dropped off, and we prototyped a shorter setup."
-msgstr "Joten juttelin 14 asiakkaan kanssa, löysin kolme kohtaa, joissa ihmiset luopuivat, ja prototypoimme lyhyemmän käyttöönoton."
 
 #: src/features/resume/editor/check/issues.ts
 msgid "Some application systems ask for one before you can apply."
@@ -12239,13 +11213,8 @@ msgstr "Lajittele päivämäärän mukaan"
 #: src/features/applications/components/application-form-sheet.tsx
 #: src/features/applications/components/import-applications-sheet.tsx
 #: src/features/career/knowledge/facts.tsx
-#: src/routes/dashboard/settings/route.tsx
 msgid "Source"
 msgstr "Lähde"
-
-#: src/features/homepage/footer.tsx
-msgid "Source code"
-msgstr "Lähdekoodi"
 
 #: src/features/career/workspace/answer-library.tsx
 msgid "Source employer"
@@ -12266,22 +11235,9 @@ msgstr "Lähteet"
 msgid "Spanish"
 msgstr "espanja"
 
-#: src/features/homepage/check.tsx
-#: src/features/homepage/sheet.tsx
-msgid "Spanish (B2)"
-msgstr "espanja (B2)"
-
-#: src/features/homepage/hero.tsx
-msgid "Spanish, B2"
-msgstr "espanja, B2"
-
 #: src/features/career/workspace/practise.tsx
 msgid "Speak"
 msgstr "Puhu"
-
-#: src/features/homepage/sections.tsx
-msgid "Speaks your language"
-msgstr "Puhuu kieltäsi"
 
 #: src/features/ats-checker/messages.ts
 msgid "Spell the month, as in \"Mar 2022\"."
@@ -12350,22 +11306,6 @@ msgstr "Vaihe pysyy: {stage}"
 msgid "Stages"
 msgstr "Vaiheet"
 
-#: src/features/homepage/check.tsx
-msgid "Standard section headings"
-msgstr "Vakioosien otsikot"
-
-#: src/features/homepage/header.tsx
-msgid "Star Reactive Resume on GitHub"
-msgstr "Star Reactive Resume mallissa GitHub"
-
-#: src/components/input/github-stars-button.tsx
-msgid "Star us on GitHub (opens in new tab)"
-msgstr "Anna meille tähti GitHubissa (avautuu uuteen välilehteen)"
-
-#: src/features/homepage/sections.tsx
-msgid "Stars on GitHub"
-msgstr "Tähtiä GitHubissa"
-
 #: src/features/resume/editor/write/dates-field.tsx
 msgid "Start"
 msgstr "Aloita"
@@ -12394,10 +11334,6 @@ msgstr "Aloita alkaen"
 #: src/features/documents/new-document-dialog.tsx
 msgid "Start from one you have and link the application."
 msgstr "Aloita omasta ja linkitä työhakemus."
-
-#: src/features/homepage/sections.tsx
-msgid "Start from scratch or import what you have. It takes a few minutes, and you can come back to it anytime."
-msgstr "Aloita alusta tai tuo, mitä sinulla jo on. Se vie muutaman minuutin, ja voit palata siihen milloin tahansa."
 
 #: src/features/resume/editor/write/section-row.tsx
 msgid "Start on a new page"
@@ -12478,7 +11414,6 @@ msgstr ""
 
 #: src/features/assistant/conversation.tsx
 #: src/features/career/coach-thread.tsx
-#: src/features/homepage/prepare.tsx
 #: src/routes/builder/letter/-components/write-panel.tsx
 msgid "Stop"
 msgstr "Pysäytä"
@@ -12522,14 +11457,6 @@ msgstr "Tarinat"
 msgid "Stories to bring"
 msgstr "Mukaan otettavat tarinat"
 
-#: src/features/homepage/header.tsx
-msgid "Story"
-msgstr "Tarina"
-
-#: src/features/homepage/remember.tsx
-msgid "Story · 5 of 5 parts"
-msgstr "Tarina · 5/5 osaa"
-
 #: src/features/career/knowledge/stories.tsx
 msgid "Story deleted"
 msgstr "Tarina poistettu"
@@ -12554,10 +11481,6 @@ msgstr "Vahvempi verbi"
 msgid "Stylesheet editor"
 msgstr "Tyylitiedostoeditori"
 
-#: src/features/homepage/prepare.tsx
-msgid "Subject"
-msgstr "Aihe"
-
 #: src/features/applications/components/detail/sent-documents.tsx
 msgid "Submission recorded {date}. The sent versions never change; current drafts stay editable. This record does not confirm employer receipt."
 msgstr ""
@@ -12579,10 +11502,6 @@ msgstr "Lähetetty liitteenä oleva saatekirje: {0}"
 #: src/features/applications/components/application-detail-sheet.tsx
 msgid "Submitted attached resume: {0}"
 msgstr "Lähetetty liitteenä oleva ansioluettelo: {0}"
-
-#: src/features/homepage/footer.tsx
-msgid "Subreddit"
-msgstr "Subreddit"
 
 #: src/features/career/workspace/prepare.tsx
 msgid "Success at 90 days · next step"
@@ -12621,13 +11540,12 @@ msgstr "Yhteenvedot avoimista hakemuksistasi"
 msgid "Summary"
 msgstr "Yhteenveto"
 
-#: src/features/homepage/sections.tsx
+#: src/routes/dashboard/settings/route.tsx
 msgid "Support"
 msgstr "Tukea"
 
 #: src/features/career/shared.tsx
 #: src/features/career/workspace/debrief.tsx
-#: src/features/homepage/prepare.tsx
 msgid "Supported"
 msgstr "Tuettu"
 
@@ -12659,27 +11577,13 @@ msgstr "Vaihda aloitus- ja lopetuspäivät."
 msgid "Swedish"
 msgstr "ruotsi"
 
-#: src/features/homepage/remember.tsx
-msgid "Switch it off"
-msgstr "Poista se käytöstä"
-
 #: src/features/assistant/conversation.tsx
 msgid "Switch model"
 msgstr "Vaihda mallia"
 
-#: src/features/homepage/footer.tsx
-#: src/features/homepage/header.tsx
-msgid "Switch to dark mode"
-msgstr "Vaihda pimeään tilaan"
-
 #: src/features/theme/toggle-button.tsx
 msgid "Switch to dark theme"
 msgstr "Vaihda tummaan teemaan"
-
-#: src/features/homepage/footer.tsx
-#: src/features/homepage/header.tsx
-msgid "Switch to light mode"
-msgstr "Vaihda valotilaan"
 
 #: src/features/theme/toggle-button.tsx
 msgid "Switch to light theme"
@@ -12710,10 +11614,6 @@ msgstr "Systems tiedostot sinulle sivun yläreunassa olevan nimen alla."
 #: src/features/resume/editor/check/issues.ts
 msgid "Systems look for an experience section. Projects or volunteering can show the same history."
 msgstr "Järjestelmät etsivät kokemusosastoa. Projektit tai vapaaehtoistyö voivat näyttää saman historian."
-
-#: src/features/homepage/remember.tsx
-msgid "T"
-msgstr "T"
 
 #: src/features/applications/components/list-view.tsx
 msgid "Tag"
@@ -12749,11 +11649,6 @@ msgstr "Tunnisteet pilkuilla erotettuina"
 msgid "Tags…"
 msgstr "Tunnisteet…"
 
-#: src/features/homepage/header.tsx
-#: src/features/homepage/tailor.tsx
-msgid "Tailor"
-msgstr "Sopeutua työnkuvaan"
-
 #: src/features/career/workspace/preparation.tsx
 msgid "Tailor and review your resume"
 msgstr ""
@@ -12784,7 +11679,6 @@ msgid "Target roles"
 msgstr "Tavoitetehtävät"
 
 #: src/features/career/knowledge/stories.tsx
-#: src/features/homepage/remember.tsx
 msgid "Task"
 msgstr "Tehtävä"
 
@@ -12804,10 +11698,6 @@ msgstr "Kerro työstä, josta olet ylpeä."
 #: src/features/career/workspace/practise.tsx
 msgid "Tell me about a piece of work you're proud of. What was your part in it, and how did you measure success?"
 msgstr "Kerro työstä, josta olet ylpeä. Mikä oli osuutesi siinä, ja miten mittasit onnistumista?"
-
-#: src/features/homepage/prepare.tsx
-msgid "Tell me about a product improvement you led. What was your contribution, and how did you measure success?"
-msgstr "Kerro johtamastasi tuoteparannuksesta. Mikä oli panoksesi, ja miten mittasit onnistumista?"
 
 #: src/features/career/workspace/practise.tsx
 msgid "Tell me about a time you disagreed with a colleague. How did you resolve it?"
@@ -12833,18 +11723,13 @@ msgstr "Malli muutettu malliksi {0}"
 msgid "Template, type and colors follow the resume, so the pair always matches."
 msgstr "Malli, tyyppi ja värit seuraavat ansioluetteloa, joten pari sopii aina yhteen."
 
-#: src/features/homepage/design.tsx
-#: src/features/homepage/footer.tsx
-msgid "Templates"
-msgstr "Mallipohjat"
-
-#: src/features/homepage/sections.tsx
-msgid "Templates × {templates}"
-msgstr "Mallit × {templates}"
-
 #: src/features/ats-checker/checker.tsx
 msgid "Terms from the posting"
 msgstr "Työpaikkailmoituksen ehdot"
+
+#: src/features/homepage/footer.tsx
+msgid "Terms of service"
+msgstr ""
 
 #: src/features/settings/ai/providers.tsx
 msgid "Test"
@@ -12900,10 +11785,6 @@ msgstr "Tekstiväri"
 msgid "Text comes out in the order a person reads it, at a size and spacing that survive."
 msgstr "Teksti tulee ulos siinä järjestyksessä, jossa henkilö lukee sen, sellaisessa koossa ja välissä, joka säilyy."
 
-#: src/features/homepage/check.tsx
-msgid "Text is selectable"
-msgstr "Teksti on valittavissa"
-
 #: src/features/ats-checker/messages.ts
 msgid "Text is written one character at a time."
 msgstr "Teksti on kirjoitettu yksi merkki kerrallaan."
@@ -12943,14 +11824,6 @@ msgstr "Tekstin alla {minimum} pt voidaan lukea väärin, kun järjestelmä hahm
 #: src/libs/locale.ts
 msgid "Thai"
 msgstr "thai"
-
-#: src/features/homepage/sections.tsx
-msgid "Thank you for keeping it free."
-msgstr "Kiitos, että pidit sen ilmaiseksi."
-
-#: src/features/homepage/remember.tsx
-msgid "Thanks, Sam. Here’s one: at Northwind Labs I led the onboarding redesign, from 14 customer interviews to a shorter setup."
-msgstr "Kiitos, Sam. Tässä yksi: Northwind Labsissa johdin aloitusprosessin uudistusta 14 asiakashaastattelusta lyhyempään käyttöönottoon."
 
 #: src/features/ats-checker/checker.tsx
 msgid "That file couldn't be read as a PDF. Choose a PDF file and try again."
@@ -12992,17 +11865,9 @@ msgstr "Tämä kirjautumispalvelu ei ole enää käytettävissä tällä palveli
 msgid "The {label} file couldn't be generated. Try again, or download PDF instead."
 msgstr "{label}-tiedostoa ei voitu luoda. Yritä uudelleen tai lataa PDF sen sijaan."
 
-#: src/features/homepage/prepare.tsx
-msgid "The 13-point activation lift. Knowledge has the before and after."
-msgstr "13 prosenttiyksikön aktivointinousu. Tietopankissa on luvut ennen ja jälkeen."
-
 #: src/libs/error-message.ts
 msgid "The address must contain only lowercase letters and numbers, separated by single dashes."
 msgstr "Osoite saa sisältää vain pieniä kirjaimia ja numeroita, erotettuna yksittäisillä yhdysviivoilla."
-
-#: src/features/homepage/faq.tsx
-msgid "The app is translated into {languages} languages by volunteers, and a resume can be written in any language, including right-to-left scripts like Arabic and Hebrew."
-msgstr "Vapaaehtoiset kääntävät sovelluksen {languages}-kielille, ja ansioluettelo voidaan kirjoittaa millä tahansa kielellä, mukaan lukien oikealta vasemmalle kirjoitetut kirjaimet, kuten arabia ja heprea."
 
 #: src/features/auth/pages/error.tsx
 msgid "The application that sent you here made an invalid authorization request. Return to the application and try again."
@@ -13306,10 +12171,6 @@ msgstr "He etsivät otsikoita, kuten Kokemus, Koulutus ja Taidot."
 msgid "They lose access to this organization right away."
 msgstr ""
 
-#: src/features/homepage/prepare.tsx
-msgid "They’ve confirmed your interview for today"
-msgstr "He ovat vahvistaneet haastattelusi tälle päivälle"
-
 #: src/features/career/shared.tsx
 msgid "Thinking"
 msgstr "Mietitään"
@@ -13424,8 +12285,8 @@ msgid "This file is larger than many application forms accept."
 msgstr "Tämä tiedosto on suurempi kuin monet hakulomakkeet hyväksyvät."
 
 #: src/features/documents/new-document-dialog.tsx
-msgid "This file type can't be imported. Use a PDF, Word, Reactive Resume or JSON Resume file, or a LinkedIn export (.zip)."
-msgstr "Tätä tiedostotyyppiä ei voi tuoda. Käytä PDF-, Word-, Reactive Resume- tai JSON Resume-tiedostoa tai LinkedIn-vientitiedostoa (.zip)."
+msgid "This file type can't be imported. Use a PDF, Word, JSON or JSON Resume file, or a LinkedIn export (.zip)."
+msgstr ""
 
 #: src/features/ats-checker/messages.ts
 msgid "This file uses a lot of different fonts."
@@ -13688,10 +12549,6 @@ msgstr "Liian vaalea valkoisille otsikoille. Sitä voi olla vaikea lukea ja tulo
 msgid "Too many requests. Try again later."
 msgstr "Liikaa pyyntöjä. Yritä myöhemmin uudelleen."
 
-#: src/features/homepage/sections.tsx
-msgid "Total"
-msgstr "Kokonais"
-
 #: src/features/applications/components/application-form-sheet.tsx
 msgid "Track a job you're applying to and link the resume you sent."
 msgstr "Seuraa työpaikkaa, johon haet, ja linkitä lähettämäsi ansioluettelo."
@@ -13708,10 +12565,6 @@ msgstr ""
 msgid "Track your first job"
 msgstr "Seuraa ensimmäistä työpaikkaasi"
 
-#: src/features/homepage/sections.tsx
-msgid "Tracking"
-msgstr "Seuranta"
-
 #: src/features/career/workspace/practise.tsx
 msgid "Transcribe answers with"
 msgstr "Litteroi vastaukset palvelulla"
@@ -13727,22 +12580,6 @@ msgstr "Litteroidaan mallilla {model}…"
 #: src/features/assistant/conversation.tsx
 msgid "Transcript copied"
 msgstr "Literaatti kopioitu"
-
-#: src/routes/dashboard/settings/route.tsx
-msgid "Translate"
-msgstr "Kääntää"
-
-#: src/features/homepage/sections.tsx
-msgid "Translate the app"
-msgstr "Käännä sovellus"
-
-#: src/features/homepage/sections.tsx
-msgid "Translated into {languageCount} languages."
-msgstr "Käännetty {languageCount} kielelle."
-
-#: src/features/homepage/footer.tsx
-msgid "Translations"
-msgstr "Käännökset"
 
 #: src/features/command-palette/pages/navigation.tsx
 #: src/features/documents/trash-page.tsx
@@ -13800,10 +12637,6 @@ msgstr "Yritä uudelleen tällä"
 msgid "Try opening the app again"
 msgstr "Yritä avata sovellus uudelleen"
 
-#: src/features/homepage/faq.tsx
-msgid "Try the ATS checker"
-msgstr "Kokeile ATS-tarkistusta"
-
 #: src/features/career/workspace/practise.tsx
 msgid "Try this opening"
 msgstr "Kokeile tätä avausta"
@@ -13857,10 +12690,6 @@ msgstr "Kaksi saraketta"
 #: src/dialogs/resume/template/data.ts
 msgid "Two columns beneath a colored header band. Keep experience in the main column and supporting details in the sidebar."
 msgstr "Kaksi saraketta värillisen otsikkonauhan alla. Säilytä kokemus pääsarakkeessa ja tukitiedot sivupalkissa."
-
-#: src/features/homepage/check.tsx
-msgid "Two date formats found"
-msgstr "Kaksi päivämäärämuotoa löytyi"
 
 #: src/features/career/workspace/prepare.tsx
 msgid "Two stories"
@@ -13964,7 +12793,6 @@ msgstr "Alleviivaa linkit"
 #: src/features/career/today.tsx
 #: src/features/career/workspace/fit.tsx
 #: src/features/documents/document-actions.tsx
-#: src/features/homepage/write.tsx
 #: src/features/resume/editor/check/actions.ts
 #: src/features/resume/editor/design/fit.ts
 #: src/features/resume/editor/design/template-group.tsx
@@ -13983,12 +12811,6 @@ msgstr "Kumoa"
 #: src/features/resume/stylesheet/toolbar.tsx
 msgid "Undo resume change"
 msgstr "Kumoa ansioluettelon muutos"
-
-#: src/features/homepage/check.tsx
-#: src/features/homepage/hero.tsx
-#: src/features/homepage/sheet.tsx
-msgid "University of Porto"
-msgstr "University of Porto"
 
 #: src/features/career/offer-entry.tsx
 #: src/features/career/offers.tsx
@@ -14268,7 +13090,6 @@ msgid "used {used}"
 msgstr "käytetty: {used}"
 
 #: src/features/career/knowledge/facts.tsx
-#: src/features/homepage/remember.tsx
 msgid "Used in coaching"
 msgstr "Käytössä valmennuksessa"
 
@@ -14279,11 +13100,6 @@ msgstr "Käytetään työpaikkojen ja tarjousten arviointiin. Jokainen on luku, 
 #: src/features/settings/ai/web-access.tsx
 msgid "Used when {connectedProvider} can't read a page. No account needed."
 msgstr "Käytetään, kun {connectedProvider} ei pysty lukemaan sivua. Tiliä ei tarvita."
-
-#: src/features/homepage/check.tsx
-#: src/features/homepage/sheet.tsx
-msgid "User research"
-msgstr "Käyttäjätutkimus"
 
 #. Label for username input on registration form
 #: src/features/auth/pages/register.tsx
@@ -14312,10 +13128,6 @@ msgstr "Käyttää mallipohjaa {0} ja ulkoasuasi ja sopii mille tahansa näytöl
 #: src/features/settings/ai/web-access.tsx
 msgid "Uses your AI provider's own web search where supported, and reads links with the built-in reader."
 msgstr "Käyttää tekoälypalveluntarjoajasi omaa verkkohakua, jos se tuetaan, ja lukee linkkejä sisäänrakennetulla lukijalla."
-
-#: src/features/homepage/prepare.tsx
-msgid "Uses your browser’s voice"
-msgstr "Käyttää selaimesi ääntä"
 
 #: src/libs/locale.ts
 msgid "Uzbek"
@@ -14452,10 +13264,6 @@ msgstr "Katsotaan {0} · {1} · vain luku"
 msgid "views · 30 days"
 msgstr "katselukerrat · 30 päivää"
 
-#: src/features/homepage/share.tsx
-msgid "Visibility"
-msgstr "Näkyvyys"
-
 #: src/features/resume/share/share-panel.tsx
 msgid "Visitors"
 msgstr "Vierailijat"
@@ -14487,10 +13295,6 @@ msgstr "Odotetaan kuulemista"
 #: src/features/ats-checker/messages.ts
 msgid "Warning"
 msgstr "Varoitus"
-
-#: src/features/homepage/hero.tsx
-msgid "WCAG 2.1 AA"
-msgstr "WCAG 2.1 AA"
 
 #: src/features/applications/components/add-application-dialog.tsx
 msgid "We read the page and save the posting for Check, the assistant and your letter."
@@ -14559,7 +13363,6 @@ msgid "Weighing each requirement"
 msgstr "Punnitaan jokaista vaatimusta"
 
 #: src/features/career/workspace/debrief.tsx
-#: src/features/homepage/prepare.tsx
 msgid "Went well"
 msgstr "Meni hyvin"
 
@@ -14580,7 +13383,6 @@ msgid "What changed? Leave blank if you can’t support it."
 msgstr "Mikä muuttui? Jätä tyhjäksi, jos et voi perustella sitä."
 
 #: src/features/career/workspace/debrief.tsx
-#: src/features/homepage/prepare.tsx
 msgid "What did they ask?"
 msgstr "Mitä he kysyivät?"
 
@@ -14591,10 +13393,6 @@ msgstr "Mitä teit, tarkalleen?"
 #: src/features/career/workspace/debrief.tsx
 msgid "What did you say, as close as you remember?"
 msgstr "Mitä sanoit, niin tarkasti kuin muistat?"
-
-#: src/features/homepage/faq.tsx
-msgid "What formats can I download?"
-msgstr "Mitä formaatteja voin ladata?"
 
 #: src/features/resume/editor/write/add-section.tsx
 msgid "What goes in it?"
@@ -14643,10 +13441,6 @@ msgstr "Mitä ajetaan"
 #: src/features/assistant/assistant-panel.tsx
 msgid "What should we work on?"
 msgstr "Mitä meidän pitäisi työstää?"
-
-#: src/features/homepage/check.tsx
-msgid "What software reads"
-msgstr "Mikä ohjelmisto lukee"
 
 #: src/features/career/workspace/prepare.tsx
 msgid "What success looks like, which challenge matters most, and the next step."
@@ -14751,10 +13545,6 @@ msgstr "Onko ansioluettelo segmentoitu tavalla, jota ohjelmisto odottaa."
 msgid "Whether your timeline can be reconstructed."
 msgstr "Voidaanko aikajanasi muodostaa uudelleen."
 
-#: src/features/homepage/faq.tsx
-msgid "Which languages does it speak?"
-msgstr "Mitä kieliä se puhuu?"
-
 #: src/features/career/coach.tsx
 msgid "Which opportunities best match my priorities?"
 msgstr "Mitkä mahdollisuudet vastaavat parhaiten prioriteettejani?"
@@ -14762,14 +13552,6 @@ msgstr "Mitkä mahdollisuudet vastaavat parhaiten prioriteettejani?"
 #: src/features/career/offers.tsx
 msgid "Which other benefits come with it, like pension or allowances?"
 msgstr "Mitä muita etuja siihen kuuluu, kuten eläke tai lisät?"
-
-#: src/features/homepage/faq.tsx
-msgid "Who can see my resume?"
-msgstr "Kuka voi nähdä ansioluetteloni?"
-
-#: src/features/homepage/prepare.tsx
-msgid "Who owns the design system today? What does success look like in 90 days?"
-msgstr "Kuka omistaa suunnittelujärjestelmän nyt? Miltä onnistuminen näyttää 90 päivässä?"
 
 #: src/features/applications/components/interview-dialog.tsx
 #: src/features/career/workspace/shell.tsx
@@ -14792,17 +13574,9 @@ msgstr "leveät marginaalit"
 msgid "Width"
 msgstr "Leveys"
 
-#: src/features/homepage/faq.tsx
-msgid "Will my resume get past applicant tracking systems?"
-msgstr "Meneekö ansioluetteloni hakijoiden seurantajärjestelmien ohi?"
-
 #: src/features/settings/account/application-profile.tsx
 msgid "Willing to relocate"
 msgstr ""
-
-#: src/features/homepage/remember.tsx
-msgid "Within a quarter, activation went from 31% to 44%."
-msgstr "Vuosineljänneksessä aktivointiaste nousi 31 prosentista 44 prosenttiin."
 
 #: src/routes/builder/letter/-components/write-panel.tsx
 msgid "Without one, you fill in the recipient yourself and drafting uses only your resume."
@@ -14833,9 +13607,6 @@ msgstr "Kannattaa kysyä"
 msgid "Worth asking {0}"
 msgstr "Kannattaa kysyä: {0}"
 
-#: src/features/homepage/footer.tsx
-#: src/features/homepage/header.tsx
-#: src/features/homepage/write.tsx
 #: src/routes/builder/$resumeId/-components/editor-bar.tsx
 #: src/routes/builder/$resumeId/-components/editor-shell.tsx
 #: src/routes/builder/letter/-components/letter-bar.tsx
@@ -14856,17 +13627,9 @@ msgstr ""
 msgid "Write a letter"
 msgstr "Kirjoita kirje"
 
-#: src/features/homepage/remember.tsx
-msgid "Write a story once, with the facts behind it, and the coach uses it in 3 places. Switch a fact off and nothing leans on it."
-msgstr "Kirjoita tarina kerran faktoineen, niin valmentaja käyttää sitä 3 paikassa. Poista fakta käytöstä, niin mikään ei nojaa siihen."
-
 #: src/features/career/workspace/preparation.tsx
 msgid "Write and review form answers"
 msgstr ""
-
-#: src/features/homepage/write.tsx
-msgid "Write beside a live page. It saves as you type and keeps every version. Ask the assistant for a sharper line: it suggests, you decide."
-msgstr "Kirjoita elävän sivun vieressä. Se tallentuu kirjoittaessasi ja säilyttää jokaisen version. Pyydä avustajalta terävämpää muotoilua: se ehdottaa, sinä päätät."
 
 #: src/features/career/workspace/prepare.tsx
 msgid "Write down what they asked while it's fresh. The coach compares your answers with your stories."
@@ -14882,10 +13645,6 @@ msgstr "Kirjoita se yhtenä katkeamattomana kokonaisuutena ilman erikoisvälisty
 
 #: src/features/career/workspace/debrief.tsx
 msgid "Write it down while it's fresh"
-msgstr "Kirjoita muistiin, kun se on vielä tuoreessa muistissa"
-
-#: src/features/homepage/prepare.tsx
-msgid "Write it down while it’s fresh"
 msgstr "Kirjoita muistiin, kun se on vielä tuoreessa muistissa"
 
 #: src/routes/builder/letter/-components/write-panel.tsx
@@ -14912,10 +13671,6 @@ msgstr "Kirjoita, mitä teit."
 msgid "Write your answer, or draft one from your Knowledge."
 msgstr "Kirjoita vastauksesi tai luonnostele se tietopankistasi."
 
-#: src/features/homepage/write.tsx
-msgid "Write your professional resume"
-msgstr "Kirjoita ammatillinen CV"
-
 #: src/features/ats-checker/messages.ts
 #: src/features/resume/editor/check/check-panel.tsx
 #: src/features/resume/editor/check/issues.ts
@@ -14929,10 +13684,6 @@ msgstr "Kirjoitetaan vastausta…"
 #: src/features/settings/ai/providers.tsx
 msgid "Writing help, tailored suggestions and the assistant. The default provider is used wherever you don't pick one. Your keys stay encrypted."
 msgstr "Kirjoitusapu, räätälöidyt ehdotukset ja avustaja. Oletuspalveluntarjoajaa käytetään aina, kun et valitse muuta. Avaimesi pysyvät salattuina."
-
-#: src/features/homepage/sections.tsx
-msgid "writing, tailoring and sending"
-msgstr "kirjoittaminen, muokkaaminen ja lähettäminen"
 
 #: src/features/career/workspace/answer-library.tsx
 msgid "Written manually"
@@ -14950,22 +13701,6 @@ msgstr ""
 #: src/features/settings/account/application-profile.tsx
 msgid "Yes"
 msgstr ""
-
-#: src/features/homepage/faq.tsx
-msgid "Yes. Every feature is free: all {templates} templates, PDF and Word downloads, the ATS checker, cover letters and the job tracker. There are no ads, no tracking and no paid tier. Donations pay for hosting and development."
-msgstr "Kyllä. Jokainen ominaisuus on ilmainen: kaikki {templates} mallia, PDF- ja Word-lataukset, ATS-tarkistus, saatekirjeet ja hakemusten seuranta. Ei mainoksia, ei seurantaa eikä maksullista tasoa. Lahjoituksilla maksetaan isännöinti ja kehitys."
-
-#: src/features/homepage/faq.tsx
-msgid "Yes. Every job you track gets its own workspace: check your fit against the posting, draft answers from stories you wrote once, get a short plan before the interview, practice out loud with feedback and debrief afterwards. When offers arrive, compare them side by side. The coaching uses your own AI key; the comparison doesn’t need one."
-msgstr "Kyllä. Jokainen seuraamasi työpaikka saa oman työtilan: vertaa sopivuuttasi työpaikkailmoitukseen, luonnostele vastauksia kerran kirjoittamistasi tarinoista, saa lyhyt suunnitelma ennen haastattelua, harjoittele ääneen palautteen kanssa ja pura kokemus jälkikäteen. Kun tarjouksia tulee, vertaa niitä rinnakkain. Valmennus käyttää omaa tekoälyavaintasi; vertailu ei tarvitse sitä."
-
-#: src/features/homepage/faq.tsx
-msgid "Yes. Import a PDF, a LinkedIn data export, a JSON Resume file or a Reactive Resume export, then pick up where it left off. With an AI provider set up, Word documents work too."
-msgstr "Kyllä. Tuo PDF, LinkedIn-tietojen vienti, JSON Resume-tiedosto tai Reactive Resume-vienti ja jatka sitten siitä, mihin se jäi. Kun tekoälypalveluntarjoaja on määritetty, myös Word-asiakirjat toimivat."
-
-#: src/features/homepage/faq.tsx
-msgid "Yes. Reactive Resume is open source under the MIT License and ships as a Docker image, so it runs on your own server with your own database and storage."
-msgstr "Kyllä. Reactive Resume on avoimen lähdekoodin alla MIT License ja toimitetaan Docker-kuvana, joten se toimii omalla palvelimellasi oman tietokannan ja tallennustilan kanssa."
 
 #: src/features/career/coach-thread.tsx
 msgid "Yesterday"
@@ -15030,10 +13765,6 @@ msgstr "Unohdit tämän aiemmin, joten sitä ei tallennettu uudelleen."
 msgid "You need to belong to an organization to manage its members."
 msgstr ""
 
-#: src/features/homepage/prepare.tsx
-msgid "You partnered with engineering. How you led the work isn’t described yet."
-msgstr "Teit yhteistyötä kehittäjien kanssa. Sitä, miten johdit työtä, ei ole vielä kuvattu."
-
 #: src/features/career/offers.tsx
 msgid "You said: “{said}” Ask before deciding."
 msgstr "Sanoit: “{said}” Kysy ennen kuin päätät."
@@ -15053,10 +13784,6 @@ msgstr "Kirjaudut sisään ilman"
 #: src/features/career/schedule-sheet.tsx
 msgid "You'll always see it in Today. Email depends on your server's mail setup."
 msgstr "Näet sen aina Tänään-näkymässä. Sähköposti riippuu palvelimesi sähköpostiasetuksista."
-
-#: src/features/homepage/tailor.tsx
-msgid "You’ll own our <0>design systems</0>, run <1>user research</1> with customers and hold a high bar for <2>accessibility</2>, working in a <3>cross-functional</3> team."
-msgstr "Vastaat <0>suunnittelujärjestelmistämme</0>, teet <1>käyttäjätutkimusta</1> asiakkaiden kanssa ja asetat korkeat vaatimukset <2>saavutettavuudelle</2> osana <3>monialaista</3> tiimiä."
 
 #: src/features/auth/pages/organization-access.tsx
 msgid "You're a member of {organizationName}"
@@ -15113,7 +13840,6 @@ msgid "Your answer"
 msgstr "Vastauksesi"
 
 #: src/features/career/workspace/practise.tsx
-#: src/features/homepage/prepare.tsx
 msgid "Your attempts"
 msgstr "Yrityskertasi"
 
@@ -15152,6 +13878,15 @@ msgstr "Selaimesi sanelu pysähtyi. Yritä uudelleen tai kirjoita vastauksesi."
 #: src/features/ats-checker/messages.ts
 msgid "Your bullets are drawn with unusual characters."
 msgstr "Luettelokohtasi merkitään epätavallisilla merkeillä."
+
+#: src/features/homepage/page.tsx
+#: src/libs/seo.ts
+msgid "Your career workspace"
+msgstr ""
+
+#: src/libs/seo.ts
+msgid "Your career workspace. Sign in or create an account."
+msgstr ""
 
 #: src/routes/builder/$resumeId/-components/use-editor-hotkeys.ts
 #: src/routes/builder/letter/-components/letter-shell.tsx
@@ -15254,10 +13989,6 @@ msgstr "viestisi"
 msgid "Your name"
 msgstr "Nimesi"
 
-#: src/features/resume/share/cv-domain-card.tsx
-msgid "Your name as your address, from OlaCV, the .cv registry. Code <0/> takes 50% off the first year."
-msgstr "Nimesi osoitteeksesi OlaCV:ltä, .cv-verkkotunnusten rekisterinpitäjältä. Koodilla <0/> saat 50 % alennuksen ensimmäisestä vuodesta."
-
 #: src/routes/builder/letter/-components/letter-shell.tsx
 msgid "Your name changed on the resume. The letter updated too."
 msgstr "Nimesi muuttui ansioluettelossa. Myös kirje päivitetty."
@@ -15269,10 +14000,6 @@ msgstr "Nimesi puuttuu"
 #: src/features/career/workspace/saved.tsx
 msgid "your notes"
 msgstr "muistiinpanosi"
-
-#: src/features/homepage/prepare.tsx
-msgid "Your onboarding story"
-msgstr "Aloitusprosessitarinasi"
 
 #: src/features/career/workspace/prepare.tsx
 msgid "Your opening"
@@ -15331,10 +14058,6 @@ msgstr "Ansioluettelosi on päivitetty."
 msgid "Your resume uses \"I\" and \"my\"."
 msgstr "Ansioluettelossasi käytetään sanoja \"I\" ja \"my\"."
 
-#: src/features/homepage/share.tsx
-msgid "Your resume, live at"
-msgstr "Ansioluettelosi, live klo"
-
 #: src/libs/error-message.ts
 msgid "Your selected font can't display some characters. They show as “?”. In Design, choose a font that has them."
 msgstr "Valitsemasi fontti ei pysty näyttämään joitakin merkkejä. Ne näkyvät muodossa “?”. Valitse Ulkoasu-välilehdeltä fontti, jossa ne ovat."
@@ -15368,10 +14091,6 @@ msgstr "tarinasi"
 msgid "Your story couldn't be loaded."
 msgstr "Tarinaasi ei voitu ladata."
 
-#: src/features/homepage/sections.tsx
-msgid "Your turn"
-msgstr "Sinun vuorosi"
-
 #: src/features/career/workspace/prepare.tsx
 msgid "Your two-minute introduction"
 msgstr "Kahden minuutin esittelysi"
@@ -15383,15 +14102,6 @@ msgstr "Verkkosivusi on julkaistu"
 #: src/features/auth/components/guest-banner.tsx
 msgid "Your work is lost when you sign out or the session ends. Create an account or sign in to keep your resumes, cover letters and applications."
 msgstr "Työsi katoaa, kun kirjaudut ulos tai istunto päättyy. Luo tili tai kirjaudu sisään säilyttääksesi ansioluettelosi, saatekirjeesi ja hakemuksesi."
-
-#: src/features/homepage/sections.tsx
-msgid "Yours"
-msgstr "Sinun"
-
-#. placeholder {0}: templateNames[step] ?? ""
-#: src/features/homepage/design.tsx
-msgid "Yours · {0}"
-msgstr "Sinun · {0}"
 
 #: src/features/resume/editor/write/picture-settings.tsx
 msgid "Zoom"

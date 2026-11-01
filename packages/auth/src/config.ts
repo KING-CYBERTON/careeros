@@ -35,6 +35,7 @@ import * as schema from "@reactive-resume/db/schema";
 import { ResetPasswordEmail, VerifyEmail, VerifyEmailChange } from "@reactive-resume/email/templates/auth";
 import { sendEmail } from "@reactive-resume/email/transport";
 import { env } from "@reactive-resume/env/server";
+import { PLATFORM_DEFAULT_APP_NAME } from "@reactive-resume/utils/brand";
 import { rateLimitConfig } from "@reactive-resume/utils/rate-limit";
 import { generateId, toUsername } from "@reactive-resume/utils/string";
 import { timezoneSchema } from "@reactive-resume/utils/timezone";
@@ -443,7 +444,7 @@ const getAuthConfig = () => {
 	}
 
 	return betterAuth({
-		appName: "Reactive Resume",
+		appName: PLATFORM_DEFAULT_APP_NAME, // CAREEROS: P2-T08
 		baseURL: authBaseUrl,
 		secret: env.AUTH_SECRET,
 
@@ -817,7 +818,7 @@ const getAuthConfig = () => {
 			organizationRules,
 			passkey(),
 			genericOAuth({ config: authConfigs }),
-			twoFactor({ issuer: "Reactive Resume" }),
+			twoFactor({ issuer: PLATFORM_DEFAULT_APP_NAME }),
 			apiKey({
 				enableSessionForAPIKeys: false,
 				rateLimit: {

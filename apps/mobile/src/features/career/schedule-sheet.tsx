@@ -7,6 +7,7 @@ import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 import { Platform, View } from "react-native";
 import { careerScheduleInputSchema } from "@reactive-resume/schema/career";
+import { getBrand } from "@reactive-resume/utils/brand";
 import { fromZonedDateTime } from "@reactive-resume/utils/timezone";
 import { client, useCareerAction, useCareerQueries, useCareerTime, useNow } from "./hooks";
 import { collectInterviews, nextCareerRun, prepareRunAt, rollForward, toZoned } from "./scheduling";
@@ -97,6 +98,7 @@ function ScheduleForm({
 	ai,
 }: FormProps) {
 	const { t } = useLingui();
+	const { appName } = getBrand();
 	const { space } = useTheme();
 	const now = useNow();
 	const upcoming = collectInterviews(applications, now);
@@ -215,8 +217,8 @@ function ScheduleForm({
 						<Text color="ink3">{t`Uses web search set up in Settings. Only this query and search countries are sent; your resume and Knowledge are not sent to search. The service may charge. Results wait in Today; applications and documents are never created for you.`}</Text>
 						<Text color="ink3">
 							{reader
-								? t`Found posting links are read by Reactive Resume and, when needed, ${reader} and the sites being read. The reader may charge.`
-								: t`Found posting links are read by Reactive Resume and the sites being read.`}
+								? t`Found posting links are read by ${appName} and, when needed, ${reader} and the sites being read. The reader may charge.`
+								: t`Found posting links are read by ${appName} and the sites being read.`}
 						</Text>
 						<Text color="ink3">{t`AI is optional. Review target roles in Knowledge, wait for Saved, then create a new schedule. Existing schedules keep this query until you edit and save it.`}</Text>
 						<Text color="ink3">{t`Repeats at this local time in the displayed timezone across clock changes. A skipped clock time moves forward. Missed runs combine into one search. Results and failures appear in Today; delivery depends on the server runner.`}</Text>

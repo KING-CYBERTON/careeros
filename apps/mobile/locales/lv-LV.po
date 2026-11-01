@@ -493,14 +493,6 @@ msgstr "{company} · {tabName}"
 msgid "{completed, plural, one {# document updated} other {# documents updated}}"
 msgstr "{completed, plural, one {# dokuments atjaunināts} other {# dokumenti atjaunināti} zero {# dokumentu atjaunināts}}"
 
-#: src/features/share/custom-domain.tsx
-msgid "{cost} a year"
-msgstr "{cost} gadā"
-
-#: src/features/share/custom-domain.tsx
-msgid "{cost} the first year"
-msgstr "{cost} pirmajā gadā"
-
 #: src/features/write/section-sheet.tsx
 msgid "{count, plural, one {# column} other {# columns}}"
 msgstr "{count, plural, one {# kolonna} other {# kolonnas} zero {# kolonnu}}"
@@ -750,8 +742,8 @@ msgid "24 hours before"
 msgstr "24 stundas iepriekš"
 
 #: src/features/letters/share.tsx
-msgid "A backup of this letter. Imports back into Reactive Resume as a letter."
-msgstr "Šīs vēstules dublējums. Importē atpakaļ Reactive Resume kā vēstuli."
+msgid "A backup of this letter. Imports back into {appName} as a letter."
+msgstr ""
 
 #: src/features/check/issues.ts
 msgid "A city and country let roles be matched to where you are."
@@ -1776,10 +1768,6 @@ msgstr "Palūdziet asistentam to iestrādāt"
 msgid "Ask the coach"
 msgstr "Jautāt konsultantam"
 
-#: src/features/share/download.tsx
-msgid "Ask the community. Remove personal details before posting."
-msgstr "Jautājiet kopienai. Pirms publicēšanas noņemiet personas datus."
-
 #: src/auth/session-gate.tsx
 msgid "Ask the organization's administrator for an invitation, or sign out and use a different account."
 msgstr ""
@@ -1868,10 +1856,6 @@ msgstr "Automātiski"
 #: src/features/history/history.tsx
 msgid "Autosaves are grouped by session and kept for 90 days. Named versions are kept until you delete them. Restoring saves the current state first."
 msgstr "Automātiskā saglabāšana tiek grupēta pēc sesijas un tiek glabāta 90 dienas. Nosauktās versijas tiek saglabātas, līdz tās izdzēšat. Atjaunojot, vispirms tiek saglabāts pašreizējais stāvoklis."
-
-#: src/features/share/custom-domain.tsx
-msgid "Available"
-msgstr "Pieejams"
 
 #: src/features/ats-checker/messages.ts
 msgid "Avoid heavy letter-spacing effects, then re-export."
@@ -2096,10 +2080,6 @@ msgstr "Saraksts ar aizzīmēm"
 #: src/features/letters/design-presets.ts
 msgid "Burgundy"
 msgstr "Bordo"
-
-#: app/(tabs)/settings/index.tsx
-msgid "by <0>Amruth Pillai</0>"
-msgstr "izstrādāja <0>Amruth Pillai</0>"
 
 #: src/features/applications-board/views.tsx
 msgid "Calendar"
@@ -2566,10 +2546,6 @@ msgstr "Slēgts: {closed}"
 msgid "Coach"
 msgstr "Konsultants"
 
-#: src/features/share/custom-domain.tsx
-msgid "Code copied"
-msgstr "Kods nokopēts"
-
 #: src/features/design/design-pane.tsx
 #: src/features/letters/design.tsx
 msgid "Color"
@@ -2640,8 +2616,8 @@ msgid "Complete {0} before saving."
 msgstr "Pirms saglabāšanas aizpildiet {0}."
 
 #: src/features/share/download.tsx
-msgid "Complete data backup. Imports back into Reactive Resume or JSON Resume tools."
-msgstr "Pilnīga datu dublēšana. Importē atpakaļ Reactive Resume vai JSON Resume rīkos."
+msgid "Complete data backup. Imports back into {appName} or JSON Resume tools."
+msgstr ""
 
 #: src/features/ats-checker/messages.ts
 msgid "Compress or remove large images to keep uploads quick."
@@ -2676,10 +2652,6 @@ msgstr "Savienot"
 #: src/features/share/custom-domain.tsx
 msgid "Connect {0}"
 msgstr "Savienot {0}"
-
-#: src/features/share/custom-domain.tsx
-msgid "Connect {domain}"
-msgstr "Savienot {domain}"
 
 #: src/features/ai/web-access.tsx
 msgid "Connect a service"
@@ -2844,10 +2816,6 @@ msgstr "Kopējiet darba CV"
 #: src/features/workspace/tabs/apply.tsx
 msgid "Copy answers"
 msgstr "Kopēt atbildes"
-
-#: src/features/share/custom-domain.tsx
-msgid "Copy code"
-msgstr "Kopēt kodu"
 
 #: src/features/document-menu/index.tsx
 msgid "Copy created"
@@ -3089,7 +3057,6 @@ msgstr "Nevarēja atzīmēt kā pieteiktu. Mēģiniet vēlreiz."
 #: app/(tabs)/settings/index.tsx
 #: src/auth/auth-header.tsx
 #: src/features/settings/api-keys.tsx
-#: src/features/share/download.tsx
 msgid "Couldn't open the browser. Try again."
 msgstr "Nevarēja atvērt pārlūkprogrammu. Mēģiniet vēlreiz."
 
@@ -3896,10 +3863,6 @@ msgstr "Nesūtiet {0} darba sludinājumu"
 msgid "Don't share"
 msgstr "Nedalies"
 
-#: app/(tabs)/settings/index.tsx
-msgid "Donate on Open Collective"
-msgstr "Ziedot Open Collective"
-
 #: app/(tabs)/settings/preferences.tsx
 #: src/features/applications/list-screen.tsx
 #: src/features/career/today.tsx
@@ -4302,8 +4265,8 @@ msgid "Enter terms yourself. No AI request is made. Leave unknown amounts blank.
 msgstr "Ievadiet nosacījumus pats. MI pieprasījums netiks nosūtīts. Nezināmās summas atstājiet tukšas."
 
 #: app/(auth)/server.tsx
-msgid "Enter the address you open Reactive Resume at in a browser. The app checks it's a Reactive Resume server that allows app sign-in before you continue."
-msgstr "Ievadiet adresi, kuru izmantojat, lai pārlūkprogrammā atvērtu Reactive Resume. Pirms turpināt, mobilā lietotne pārbauda, vai tas ir Reactive Resume serveris ar iespējotu mobilo pierakstīšanos."
+msgid "Enter the address you open {appName} at in a browser. The app checks it's a {appName} server that allows app sign-in before you continue."
+msgstr ""
 
 #: src/features/letters/write.tsx
 msgid "Enter your details below. Choosing a resume replaces them and links its design."
@@ -4680,12 +4643,12 @@ msgstr ""
 
 #: src/api/ai-consent.ts
 #: src/features/career/schedule-sheet.tsx
-msgid "Found posting links are read by Reactive Resume and the sites being read."
+msgid "Found posting links are read by {appName} and the sites being read."
 msgstr ""
 
 #: src/api/ai-consent.ts
 #: src/features/career/schedule-sheet.tsx
-msgid "Found posting links are read by Reactive Resume and, when needed, {reader} and the sites being read. The reader may charge."
+msgid "Found posting links are read by {appName} and, when needed, {reader} and the sites being read. The reader may charge."
 msgstr ""
 
 #: src/features/design/style-groups.tsx
@@ -4752,10 +4715,6 @@ msgstr "Nospiežot “Saņemt atsauksmi”, {providerName} saņems jautājumu, j
 #: src/features/career/today.tsx
 msgid "Get new roles here every morning"
 msgstr "Saņemiet jaunas vakances šeit katru rītu"
-
-#: src/features/share/download.tsx
-msgid "Get resume feedback on Discord"
-msgstr "Saņemiet atsauksmes par CV Discord"
 
 #: src/features/letters/write.tsx
 msgid "Getting long. Try “Shorter”, or cut the least specific paragraph."
@@ -5342,10 +5301,6 @@ msgstr "Darba meklēšanas process"
 #: src/features/search/search-screen.tsx
 msgid "Jobs"
 msgstr "Darbs"
-
-#: app/(tabs)/settings/index.tsx
-msgid "Join the Discord"
-msgstr "Pievienoties Discord"
 
 #: src/features/letters/share.tsx
 #: src/features/share/download.tsx
@@ -6122,10 +6077,6 @@ msgstr "Atbilstība CV"
 msgid "Matching your facts"
 msgstr "Salīdzina ar jūsu faktiem"
 
-#: src/features/share/custom-domain.tsx
-msgid "May be available"
-msgstr "Iespējams, pieejams"
-
 #: src/features/search/search-screen.tsx
 msgid "MCP"
 msgstr "MCP"
@@ -6163,10 +6114,6 @@ msgstr "Minimālā pamatalga"
 #: src/features/career/offers.tsx
 msgid "Minimum salary cannot be compared in these terms."
 msgstr "Minimālo algu nevar salīdzināt, izmantojot šīs valūtas vai samaksas periodus."
-
-#: app/(tabs)/settings/index.tsx
-msgid "MIT License"
-msgstr "MIT licence"
 
 #: src/features/workspace/tabs/debrief.tsx
 msgid "Mixed"
@@ -6710,10 +6657,6 @@ msgstr "Foto nav. Lielākā daļa ATS ignorē fotoattēlus; daži reģioni to sa
 msgid "No postings found. Try different keywords."
 msgstr "Nav atrasts neviens darba sludinājums. Izmēģiniet dažādus atslēgvārdus."
 
-#: src/auth/messages.ts
-msgid "No Reactive Resume server answered at this address. Check the spelling, or ask your administrator whether the server allows app sign-in."
-msgstr "Uz šo adresi neatbildēja neviens Reactive Resume serveris. Pārbaudiet pareizrakstību vai jautājiet savam administratoram, vai serveris atļauj pierakstīties lietotnē."
-
 #: src/features/check/job-match.tsx
 msgid "No recognizable terms in this posting."
 msgstr "Šajā darba sludinājumā nav atpazīstamu terminu."
@@ -6737,6 +6680,10 @@ msgstr "Nav rezultātu"
 #: src/features/letters/write.tsx
 msgid "No resume"
 msgstr "Nav CV"
+
+#: src/auth/messages.ts
+msgid "No server answered at this address. Check the spelling, or ask your administrator whether the server allows app sign-in."
+msgstr ""
 
 #: src/features/ats-checker/messages.ts
 msgid "No skills section was found."
@@ -7463,20 +7410,20 @@ msgid "PDF check canceled. Retry when ready."
 msgstr "PDF pārbaude atcelta. Mēģiniet vēlreiz, kad esat gatavs."
 
 #: src/features/application-detail/sections.tsx
-msgid "PDF only · up to 10 MB each. Linking a Reactive Resume enables AI match scoring and tailoring."
-msgstr "Tikai PDF · līdz 10 MB katram failam. Piesaistiet Reactive Resume CV, lai ar AI vērtētu atbilstību un pielāgotu CV."
+msgid "PDF only · up to 10 MB each. Linking a resume enables AI match scoring and tailoring."
+msgstr ""
 
 #: src/features/design/advanced.tsx
 msgid "PDF styles support a subset of CSS. Rotation, dashed and dotted borders, and some layout properties are ignored."
 msgstr "PDF stili atbalsta CSS apakškopu. Rotācija, punktētās un punktētās apmales un daži izkārtojuma rekvizīti tiek ignorēti."
 
 #: src/features/documents/new-document.tsx
-msgid "PDF uses your AI provider when one is ready. Turn off the AI switch to read its text layer on your server. Word (.docx) needs an AI provider. Current and v4 Reactive Resume JSON, cover letters, JSON Resume and LinkedIn exports (.zip) are supported. Up to 10 MB."
-msgstr "Kad ir pieejams AI nodrošinātājs, tas nolasa importētos PDF failus. Atspējojiet AI, lai tā vietā izvilktu PDF tekstu savā serverī. Word (.docx) ir nepieciešams AI nodrošinātājs. Atbalsta pašreizējo un v4 Reactive Resume JSON, motivācijas vēstules, JSON Resume un LinkedIn eksportu (.zip). Faila lieluma ierobežojums: 10 MB."
+msgid "PDF uses your AI provider when one is ready. Turn off the AI switch to read its text layer on your server. Word (.docx) needs an AI provider. Current and v4 JSON, cover letters, JSON Resume and LinkedIn exports (.zip) are supported. Up to 10 MB."
+msgstr ""
 
 #: src/features/documents/new-document.tsx
-msgid "PDF, Word, Reactive Resume, JSON Resume or LinkedIn export."
-msgstr "PDF, Word, Reactive Resume, JSON Resume vai LinkedIn eksports."
+msgid "PDF, Word, JSON, JSON Resume or LinkedIn export."
+msgstr ""
 
 #: src/features/career/offer-entry.tsx
 #: src/features/career/offers.tsx
@@ -7826,6 +7773,10 @@ msgstr ""
 msgid "Private. Only you can see it."
 msgstr "Privāts. Tikai jūs to varat redzēt."
 
+#: app/(tabs)/settings/licences.tsx
+msgid "Product"
+msgstr ""
+
 #: src/features/design/style-groups.tsx
 #: src/features/letters/design-presets.ts
 msgid "Professional"
@@ -7990,10 +7941,6 @@ msgstr "Eksportējiet atkārtoti ar iegultiem fontiem un pārbaudiet, vai teksts
 #: src/features/ats-checker/messages.ts
 msgid "Re-export with fonts embedded, then open the file and check that the text copies out cleanly."
 msgstr "Eksportējiet atkārtoti ar iegultiem fontiem, pēc tam atveriet failu un pārbaudiet, vai teksts kopējas tīri."
-
-#: src/auth/auth-header.tsx
-msgid "Reactive Resume"
-msgstr "Reactive Resume"
 
 #: src/features/workspace/tabs/prepare.tsx
 msgid "Read briefing"
@@ -8214,10 +8161,6 @@ msgstr "Atjaunināt atgādni 24 stundas iepriekš"
 #: src/features/workspace/tabs/prepare.tsx
 msgid "Refresh the briefing on the morning of"
 msgstr "Atjaunināt atgādni tās dienas rītā"
-
-#: src/features/share/custom-domain.tsx
-msgid "Register at OlaCV"
-msgstr "Reģistrēt vietnē OlaCV"
 
 #: src/features/workspace/tabs/prepare.tsx
 msgid "Rehearse aloud"
@@ -8472,10 +8415,6 @@ msgstr "Pārskats"
 msgid "Report AI content"
 msgstr "Ziņojiet par AI saturu"
 
-#: app/(tabs)/settings/index.tsx
-msgid "Report an issue"
-msgstr "Ziņot par problēmu"
-
 #: src/features/ai/report-content.tsx
 msgid "Report received by your server operator. Thank you."
 msgstr "Jūsu servera operators saņēmis ziņojumu. Paldies."
@@ -8575,10 +8514,6 @@ msgstr "CV + vēstule"
 #: src/features/document-menu/index.tsx
 msgid "Resume details"
 msgstr "CV informācija"
-
-#: app/(tabs)/settings/index.tsx
-msgid "Resume feedback, product help, and community ideas."
-msgstr "Atsauksmes par CV, palīdzība ar produktu un kopienas idejas."
 
 #: src/features/application-detail/sections.tsx
 #: src/features/workspace/tabs/apply.tsx
@@ -9456,10 +9391,6 @@ msgstr "Konfigurējiet tīmekļa meklēšanu “Iestatījumi”, lai atrastu dar
 msgid "Settings"
 msgstr "Iestatījumi"
 
-#: app/(tabs)/settings/ai-mcp.tsx
-msgid "Setup guide"
-msgstr "Iestatīšanas rokasgrāmata"
-
 #: src/features/ai/report-content.tsx
 msgid "Sexual content"
 msgstr "Seksuāls saturs"
@@ -9540,8 +9471,8 @@ msgid "Shorter"
 msgstr "Īsāks"
 
 #: src/features/share/web-page.tsx
-msgid "Show “Made with Reactive Resume”"
-msgstr "Rādīt “Izveidots ar Reactive Resume”"
+msgid "Show “Made with {appName}”"
+msgstr ""
 
 #. placeholder {0}: Math.min(remaining, COLUMN_PAGE_SIZE)
 #: src/features/applications-board/board-screen.tsx
@@ -9905,10 +9836,6 @@ msgstr "Avots"
 #: src/features/career/facts.tsx
 msgid "Source and correction history"
 msgstr "Avots un labojumu vēsture"
-
-#: app/(tabs)/settings/index.tsx
-msgid "Source code on GitHub"
-msgstr "Pirmkods vietnē GitHub"
 
 #: src/features/workspace/answer-library.tsx
 msgid "Source employer"
@@ -12266,8 +12193,8 @@ msgid "your Knowledge"
 msgstr "jūsu Zināšanas"
 
 #: app/(tabs)/settings/preferences.tsx
-msgid "Your language is saved. Restart Reactive Resume to apply the new left-to-right or right-to-left layout."
-msgstr "Jūsu valoda ir saglabāta. Restartējiet Reactive Resume, lai lietotu jauno izkārtojumu no kreisās uz labo vai no labās uz kreiso."
+msgid "Your language is saved. Restart the app to apply the new left-to-right or right-to-left layout."
+msgstr ""
 
 #: src/features/ats-checker/messages.ts
 msgid "Your lines are packed very tightly."
@@ -12284,10 +12211,6 @@ msgstr "jūsu ziņojums"
 #: src/features/write/outline.tsx
 msgid "Your name"
 msgstr "Jūsu vārds"
-
-#: src/features/share/custom-domain.tsx
-msgid "Your name as your address, from OlaCV, the .cv registry. Code {CODE} takes 50% off the first year."
-msgstr "Jūsu vārds kā jūsu adrese no OlaCV, .cv reģistra. Kods {CODE} dod 50% atlaidi pirmajam gadam."
 
 #: src/features/check/issues.ts
 msgid "Your name is missing"

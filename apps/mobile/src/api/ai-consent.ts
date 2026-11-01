@@ -1,6 +1,7 @@
 import type { client } from "./client";
 import { t } from "@lingui/core/macro";
 import { Alert } from "react-native";
+import { getBrand } from "@reactive-resume/utils/brand";
 import { getAccountScope, getServer } from "@/auth/session";
 
 type ConsentApi = Pick<typeof client, "aiProviders" | "agent" | "webAccess">;
@@ -16,6 +17,7 @@ export async function authorizeAiRequest(
 	signal?: AbortSignal,
 ): Promise<void> {
 	const operation = path.join(".");
+	const { appName } = getBrand();
 	const fields = input && typeof input === "object" ? (input as Record<string, unknown>) : {};
 	const scheduled = operation === "career.saveSchedule" && fields.enabled !== false;
 	const searchOnly = (scheduled && fields.kind === "discovery") || operation === "applications.ai.searchPostings";
@@ -99,8 +101,8 @@ export async function authorizeAiRequest(
 	const webNotice =
 		scheduled && fields.kind === "discovery"
 			? reader
-				? t`Found posting links are read by Reactive Resume and, when needed, ${reader} and the sites being read. The reader may charge.`
-				: t`Found posting links are read by Reactive Resume and the sites being read.`
+				? t`Found posting links are read by ${appName} and, when needed, ${reader} and the sites being read. The reader may charge.`
+				: t`Found posting links are read by ${appName} and the sites being read.`
 			: !web || searchOnly
 				? ""
 				: webStatus?.searxng !== true

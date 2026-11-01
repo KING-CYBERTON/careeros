@@ -38,6 +38,11 @@ const routes = {
 	settings: (page) => `/settings/${page}`,
 };
 const mocks = {
+	"@reactive-resume/utils/brand": {
+		getBrand: () => ({ appName: "CareerOS" }),
+		brandSlug: () => "careeros",
+		PLATFORM_DEFAULT_APP_NAME: "CareerOS",
+	},
 	react,
 	"react-native": native,
 	"react-native-safe-area-context": safe,

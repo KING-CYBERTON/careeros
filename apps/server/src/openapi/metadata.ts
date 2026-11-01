@@ -2,9 +2,12 @@ import { oauthProviderAuthServerMetadata, oauthProviderOpenIdConfigMetadata } fr
 import { auth } from "@reactive-resume/auth/config";
 import { env } from "@reactive-resume/env/server";
 import { buildMcpServerCard } from "@reactive-resume/mcp/server-card";
+import { brandSlug, PLATFORM_DEFAULT_APP_NAME } from "@reactive-resume/utils/brand";
 import { appVersion } from "../app-version";
 
-const DOCS_URL = "https://docs.rxresu.me";
+// CAREEROS: the product name comes from the platform default (P2-T08); the upstream docs site is no longer linked.
+const APP_NAME = PLATFORM_DEFAULT_APP_NAME;
+const APP_SLUG = brandSlug(APP_NAME);
 
 export const handleOAuthAuthorizationServer = oauthProviderAuthServerMetadata(auth);
 export const handleOpenIdConfiguration = oauthProviderOpenIdConfigMetadata(auth);
@@ -38,15 +41,14 @@ export function handleAgentCatalog() {
 	const baseUrl = appUrl();
 	const catalog = {
 		specVersion: "1.0",
-		host: { displayName: "Reactive Resume", documentationUrl: DOCS_URL, logoUrl: `${baseUrl}/pwa-512x512.png` },
+		host: { displayName: APP_NAME, documentationUrl: `${baseUrl}/openapi.json`, logoUrl: `${baseUrl}/pwa-512x512.png` },
 		entries: [
 			{
-				identifier: `urn:air:${new URL(baseUrl).hostname}:mcp:reactive-resume`,
-				displayName: "Reactive Resume MCP server",
+				identifier: `urn:air:${new URL(baseUrl).hostname}:mcp:${APP_SLUG}`,
+				displayName: `${APP_NAME} MCP server`,
 				type: "application/mcp-server-card+json",
 				url: `${baseUrl}/.well-known/mcp/server-card.json`,
-				description:
-					"Reads and edits the user's resumes, cover letters and job applications in Reactive Resume, a free and open-source resume builder.",
+				description: `Reads and edits the user's resumes, cover letters and job applications in ${APP_NAME}.`,
 				tags: ["resume", "cover letter", "job applications", "careers"],
 				representativeQueries: [
 					"update my resume with my new job",
@@ -64,7 +66,7 @@ export function handleAgentCatalog() {
 }
 
 export function handleMcpServerCard() {
-	const card = buildMcpServerCard(appVersion);
+	const card = buildMcpServerCard(appVersion, { appName: APP_NAME, appUrl: appUrl() });
 
 	return Response.json(
 		{
@@ -107,12 +109,11 @@ function buildIntegrations() {
 
 	return {
 		version: 3,
-		summary:
-			"Reactive Resume is a free and open-source resume builder. Agents can read and edit a user's resumes, cover letters and job applications through the REST API or the MCP server.",
+		summary: `${APP_NAME} is a career workspace. Agents can read and edit a user's resumes, cover letters and job applications through the REST API or the MCP server.`,
 		credentials: {
 			"api-key": {
 				type: "api_key",
-				label: "Reactive Resume API key",
+				label: `${APP_NAME} API key`,
 				generateUrl: `${baseUrl}/dashboard/settings/ai`,
 				setup: [
 					"Open **Settings → AI & developer**, select **New key** in the **API keys** section, name it, choose when it expires, then copy it.",
@@ -122,19 +123,19 @@ function buildIntegrations() {
 			},
 			oauth: {
 				type: "oauth2",
-				label: "Reactive Resume OAuth",
+				label: `${APP_NAME} OAuth`,
 				setup: [
 					`OAuth authorization-code flow with dynamic client registration (RFC 7591). Clients discover the authorization server from \`${baseUrl}/.well-known/oauth-protected-resource\` (issuer \`${authorizationServer()}\`).`,
-					"The user signs in to Reactive Resume and approves the client on the consent screen; the resulting access token is sent as `Authorization: Bearer <token>`.",
+					`The user signs in to ${APP_NAME} and approves the client on the consent screen; the resulting access token is sent as \`Authorization: Bearer <token>\`.`,
 				].join("\n\n"),
 			},
 		},
 		surfaces: [
 			{
 				type: "http",
-				slug: "reactive-resume-api",
-				name: "Reactive Resume REST API",
-				docs: `${DOCS_URL}/guides/using-the-api`,
+				slug: `${APP_SLUG}-api`,
+				name: `${APP_NAME} REST API`,
+				docs: `${baseUrl}/openapi.json`,
 				basis,
 				spec: `${baseUrl}/openapi.json`,
 				url: `${baseUrl}/api/openapi`,
@@ -156,9 +157,9 @@ function buildIntegrations() {
 			},
 			{
 				type: "mcp",
-				slug: "reactive-resume-mcp",
-				name: "Reactive Resume MCP server",
-				docs: `${DOCS_URL}/guides/using-the-mcp-server`,
+				slug: `${APP_SLUG}-mcp`,
+				name: `${APP_NAME} MCP server`,
+				docs: `${baseUrl}/.well-known/mcp/server-card.json`,
 				basis,
 				url: `${baseUrl}/mcp`,
 				transports: ["streamable-http"],
@@ -188,13 +189,13 @@ export function handleApiCatalog() {
 			{
 				anchor: `${baseUrl}/api/openapi`,
 				"service-desc": [{ href: `${baseUrl}/openapi.json`, type: "application/vnd.oai.openapi+json" }],
-				"service-doc": [{ href: `${DOCS_URL}/guides/using-the-api`, type: "text/html" }],
+				"service-doc": [{ href: `${baseUrl}/openapi.json`, type: "text/html" }],
 				status: [{ href: `${baseUrl}/api/health`, type: "application/json" }],
 			},
 			{
 				anchor: `${baseUrl}/mcp`,
 				"service-desc": [{ href: `${baseUrl}/.well-known/mcp/server-card.json`, type: "application/json" }],
-				"service-doc": [{ href: `${DOCS_URL}/guides/using-the-mcp-server`, type: "text/html" }],
+				"service-doc": [{ href: `${baseUrl}/.well-known/mcp/server-card.json`, type: "text/html" }],
 			},
 		],
 	};

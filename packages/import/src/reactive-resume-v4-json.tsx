@@ -211,8 +211,7 @@ const isRecord = (value: unknown): value is Record<string, unknown> =>
 const hasV4Shape = (value: unknown): value is V4ResumeData =>
 	isRecord(value) && isRecord(value.basics) && isRecord(value.sections) && isRecord(value.metadata);
 
-const NOT_V4_MESSAGE =
-	"This file isn't a Reactive Resume v4 export. Choose a v4 JSON export, or pick the matching format.";
+const NOT_V4_MESSAGE = "This file isn't a v4 export. Choose a v4 JSON export, or pick the matching format.";
 
 type V4Item = { id?: string; visible?: boolean };
 type V4SectionHeader = { name?: string; columns?: number; visible?: boolean };

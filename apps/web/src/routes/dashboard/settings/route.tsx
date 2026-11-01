@@ -7,6 +7,7 @@ import { Icon } from "@reactive-resume/ui/components/icon";
 // CAREEROS: Members & invites entry for owners and admins (P1-T03)
 import { useCanManageMembers } from "@/features/organization/queries";
 import { popTransition } from "@/features/settings/root";
+import { getBrand } from "@/libs/brand";
 
 type Page = {
 	// CAREEROS: members route added (P1-T03)
@@ -29,14 +30,12 @@ const SETTINGS_PAGES: Page[] = [
 // CAREEROS: shown to owners and admins only; the server enforces the same rule (P1-T03)
 const MEMBERS_PAGE: Page = { to: "/dashboard/settings/members", icon: "user-plus", label: () => t`Members & invites` };
 
-// The project's own links: where to read up, see the code, help translate, report a problem or donate.
-const getProjectLinks = () => [
-	{ href: "https://docs.rxresu.me", label: t`Docs` },
-	{ href: "https://github.com/reactive-resume/reactive-resume", label: t`Source` },
-	{ href: "https://crowdin.com/project/reactive-resume", label: t`Translate` },
-	{ href: "https://github.com/reactive-resume/reactive-resume/issues", label: t`Report a bug` },
-	{ href: "https://opencollective.com/reactive-resume/donate", label: t`Donate` },
-];
+// CAREEROS: the upstream project links (docs, source, translation, bug tracker, donations) are gone. What remains is the
+// licenses page and, when the brand sets one, a support link.
+const getProjectLinks = () => {
+	const { supportUrl } = getBrand();
+	return supportUrl ? [{ href: supportUrl, label: t`Support` }] : [];
+};
 
 export const Route = createFileRoute("/dashboard/settings")({ component: RouteComponent });
 
@@ -66,11 +65,14 @@ function RouteComponent() {
 					))}
 				</div>
 				<p className="mt-auto px-2.5 text-xs leading-[18px] text-ink-3 max-lg:hidden">
-					<Trans>Reactive Resume {__APP_VERSION__} · MIT</Trans>
+					{getBrand().appName} {__APP_VERSION__}
 					<br />
-					{getProjectLinks().map((link, index) => (
+					<Link className="underline" to="/licenses">
+						<Trans>Open-source licenses</Trans>
+					</Link>
+					{getProjectLinks().map((link) => (
 						<Fragment key={link.href}>
-							{index > 0 && " · "}
+							{" · "}
 							<a className="underline" href={link.href} target="_blank" rel="noopener noreferrer">
 								{link.label}
 							</a>
