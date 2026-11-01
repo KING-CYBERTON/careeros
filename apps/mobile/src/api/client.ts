@@ -11,7 +11,10 @@ import { createORPCClient, onError } from "@orpc/client";
 import { RPCLink } from "@orpc/client/fetch";
 import { createTanstackQueryUtils } from "@orpc/tanstack-query";
 import { fetch as expoFetch } from "expo/fetch";
+import { isOrgHostNotMemberError } from "@reactive-resume/utils/org-host-error";
 import { authorizeAiRequest } from "./ai-consent";
+// CAREEROS: the account is not a member of the organization that owns this server address (P2-T03)
+import { markOrgHostBlocked } from "@/auth/org-host-block";
 import { getAccountScope, getCredentials, recoverFromUnauthorized, rejectCredentials } from "@/auth/session";
 
 /**
@@ -95,6 +98,7 @@ const createLink = (label: string) =>
 			// Logs the failure only: errors can carry request data, which must never reach the device log.
 			onError((error) => {
 				if (isAbort(error)) return;
+				if (isOrgHostNotMemberError(error)) markOrgHostBlocked();
 				console.warn(`[${label}]`, error instanceof Error ? error.name : "error");
 			}),
 		],

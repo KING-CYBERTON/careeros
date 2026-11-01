@@ -5,6 +5,8 @@ import { RPCLink } from "@orpc/client/fetch";
 import { BatchLinkPlugin } from "@orpc/client/plugins";
 import { createTanstackQueryUtils } from "@orpc/tanstack-query";
 import { rpcFetch } from "./fetch";
+// CAREEROS: a user who is not a member of this address's organization sees the join or switch page (P2-T03)
+import { handleOrgHostError } from "./org-host";
 
 const getRpcUrl = () => `${window.location.origin}/api/rpc`;
 
@@ -21,6 +23,7 @@ export const client: RouterClient<typeof router> = createORPCClient(
 		interceptors: [
 			onError((error) => {
 				if (error instanceof DOMException && error.name === "AbortError") return;
+				handleOrgHostError(error);
 				console.warn("[oRPC client]", error);
 			}),
 		],
@@ -34,6 +37,7 @@ export const streamClient: RouterClient<typeof router> = createORPCClient(
 		interceptors: [
 			onError((error) => {
 				if (error instanceof DOMException && error.name === "AbortError") return;
+				handleOrgHostError(error);
 				console.warn("[oRPC stream client]", error);
 			}),
 		],

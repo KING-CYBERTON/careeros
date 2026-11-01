@@ -739,6 +739,10 @@ msgstr "{now} · ଟାଇପ୍ କରାଯାଇଛି"
 msgid "{open, plural, one {# thing to review.} other {# things to review.}}"
 msgstr "{open, plural, one {ସମୀକ୍ଷା କରିବାକୁ # ଜିନିଷ |} other {ସମୀକ୍ଷା କରିବାକୁ # ଜିନିଷଗୁଡିକ |}}"
 
+#: src/features/auth/pages/organization-access.tsx
+msgid "{organizationName} is invite only."
+msgstr ""
+
 #: src/features/resume/editor/chrome.tsx
 #: src/routes/builder/$resumeId/-components/document-details.tsx
 msgid "{pageCount, plural, one {# page} other {# pages}}"
@@ -3774,6 +3778,10 @@ msgstr "ଫାଇଲ୍ ଆମଦାନି କରିପାରିଲା ନାହ
 msgid "Couldn't import the file. Try again, or start blank."
 msgstr "ଫାଇଲ୍ ଆମଦାନି କରିହେଲା ନାହିଁ। ପୁଣି ଚେଷ୍ଟା କରନ୍ତୁ, କିମ୍ବା ଖାଲିରୁ ଆରମ୍ଭ କରନ୍ତୁ।"
 
+#: src/features/auth/pages/organization-access.tsx
+msgid "Couldn't join. Try again."
+msgstr ""
+
 #: src/features/auth/pages/error.tsx
 msgid "Couldn't link that provider account. Try again."
 msgstr "ସେହି ପ୍ରଦାନକାରୀ ଆକାଉଣ୍ଟ ଲିଙ୍କ୍ କରିହେଲା ନାହିଁ। ପୁଣି ଚେଷ୍ଟା କରନ୍ତୁ।"
@@ -4082,6 +4090,7 @@ msgid "Couldn't sign in. Try again."
 msgstr "ସାଇନ୍ ଇନ୍ କରିହେଲା ନାହିଁ। ପୁଣି ଚେଷ୍ଟା କରନ୍ତୁ।"
 
 #. Fallback toast when signing out fails
+#: src/features/auth/pages/organization-access.tsx
 #: src/features/settings/account/page.tsx
 #: src/features/user/dropdown-menu.tsx
 msgid "Couldn't sign out. Try again."
@@ -6136,6 +6145,7 @@ msgstr "ଘରକୁ ଯାଆନ୍ତୁ"
 #: src/components/layout/error-screen.tsx
 #: src/components/layout/not-found-screen.tsx
 #: src/features/auth/pages/accept-invitation.tsx
+#: src/features/auth/pages/organization-access.tsx
 #: src/routes/_home/-sections/header.tsx
 msgid "Go to dashboard"
 msgstr "ଡ୍ୟାଶବୋର୍ଡକୁ ଯାଆନ୍ତୁ"
@@ -6905,6 +6915,10 @@ msgstr "Discordରେ ଯୋଗ ଦିଅନ୍ତୁ"
 #: src/features/homepage/sections.tsx
 msgid "Join the Discord community"
 msgstr "Discord ସମୁଦାୟରେ ଯୋଗ ଦିଅନ୍ତୁ"
+
+#: src/features/auth/pages/organization-access.tsx
+msgid "Join this organization"
+msgstr ""
 
 #: src/features/resume/import/read-file.ts
 msgid "JSON read"
@@ -11979,6 +11993,7 @@ msgstr "ସାଇଡ୍ ବାର୍ ଗୁଡିକ ପ୍ରାୟତ last ଶ
 #: src/features/auth/components/guest-banner.tsx
 #: src/features/auth/pages/accept-invitation.tsx
 #: src/features/auth/pages/login.tsx
+#: src/features/auth/pages/organization-access.tsx
 #: src/features/homepage/footer.tsx
 msgid "Sign in"
 msgstr "ସାଇନ୍ ଇନ୍ କରନ୍ତୁ"
@@ -11994,6 +12009,10 @@ msgstr "ଏବେ ସାଇନ୍ ଇନ୍ କରନ୍ତୁ"
 msgid "Sign in or create an account with the email address that received the invitation to join."
 msgstr ""
 
+#: src/features/auth/pages/organization-access.tsx
+msgid "Sign in to continue"
+msgstr ""
+
 #. Title on the login page
 #: src/features/auth/pages/login.tsx
 msgid "Sign in to your account"
@@ -12004,6 +12023,7 @@ msgid "Sign in with your fingerprint, face or device PIN"
 msgstr "ଆପଣଙ୍କର ଫିଙ୍ଗର ପ୍ରିଣ୍ଟ, ମୁହଁ କିମ୍ବା ଡିଭାଇସ୍ PIN ସହିତ ସାଇନ୍ ଇନ୍ କରନ୍ତୁ |"
 
 #. User menu action to sign out of current account
+#: src/features/auth/pages/organization-access.tsx
 #: src/features/settings/account/page.tsx
 #: src/features/user/dropdown-menu.tsx
 msgid "Sign out"
@@ -13299,6 +13319,18 @@ msgstr "ଭାବୁଛି"
 #: src/features/assistant/conversation.tsx
 msgid "Thinking…"
 msgstr "ଭାବୁଛି…"
+
+#: src/features/auth/pages/organization-access.tsx
+msgid "This account isn't part of {organizationName} yet. Join it, or sign out and use a different account."
+msgstr ""
+
+#: src/features/auth/pages/organization-access.tsx
+msgid "This account isn't part of {organizationName}. Ask its administrator for an invitation, or sign out and use a different account."
+msgstr ""
+
+#: src/features/auth/pages/organization-access.tsx
+msgid "This address has no organization"
+msgstr ""
 
 #: src/features/career/workspace/answer-library.tsx
 msgid "This application"
@@ -15029,6 +15061,10 @@ msgstr "ଆପଣ ଏହାକୁ ସର୍ବଦା “ଆଜି”ରେ ଦ�
 msgid "You’ll own our <0>design systems</0>, run <1>user research</1> with customers and hold a high bar for <2>accessibility</2>, working in a <3>cross-functional</3> team."
 msgstr "ଆପଣ ଆମର <0>ଡିଜାଇନ୍ ପ୍ରଣାଳୀର</0> ଦାୟିତ୍ୱ ନେବେ, ଗ୍ରାହକଙ୍କ ସହ <1>ବ୍ୟବହାରକାରୀ ଗବେଷଣା</1> କରିବେ ଏବଂ <3>ବିଭିନ୍ନ ବିଭାଗର ମିଳିତ</3> ଦଳରେ କାମ କରି <2>ସୁଗମତାର</2> ଉଚ୍ଚ ମାନ ରଖିବେ।"
 
+#: src/features/auth/pages/organization-access.tsx
+msgid "You're a member of {organizationName}"
+msgstr ""
+
 #: src/features/auth/pages/accept-invitation.tsx
 msgid "You're invited"
 msgstr ""
@@ -15036,6 +15072,10 @@ msgstr ""
 #: src/features/career/workspace/shell.tsx
 msgid "You're looking at a saved version. It can't be edited."
 msgstr "ଆପଣ ଏକ ସେଭ୍ ହୋଇଥିବା ସଂସ୍କରଣ ଦେଖୁଛନ୍ତି। ଏହାକୁ ସମ୍ପାଦନ କରିହେବ ନାହିଁ।"
+
+#: src/features/auth/pages/organization-access.tsx
+msgid "You're not a member of {organizationName}"
+msgstr ""
 
 #: src/features/resume/builder/draft.ts
 msgid "You're offline. Reconnect to save your changes before leaving."

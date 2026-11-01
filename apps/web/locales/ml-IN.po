@@ -739,6 +739,10 @@ msgstr "{now} · ടൈപ്പ് ചെയ്തത്"
 msgid "{open, plural, one {# thing to review.} other {# things to review.}}"
 msgstr "{open, plural, one {# അവലോകനം ചെയ്യേണ്ട കാര്യം.} other {# അവലോകനം ചെയ്യേണ്ട കാര്യങ്ങൾ.}}"
 
+#: src/features/auth/pages/organization-access.tsx
+msgid "{organizationName} is invite only."
+msgstr ""
+
 #: src/features/resume/editor/chrome.tsx
 #: src/routes/builder/$resumeId/-components/document-details.tsx
 msgid "{pageCount, plural, one {# page} other {# pages}}"
@@ -3774,6 +3778,10 @@ msgstr "ഫയൽ ഇറക്കുമതി ചെയ്യാനായില�
 msgid "Couldn't import the file. Try again, or start blank."
 msgstr "ഫയൽ ഇമ്പോർട്ട് ചെയ്യാനായില്ല. വീണ്ടും ശ്രമിക്കുക, അല്ലെങ്കിൽ ശൂന്യമായി തുടങ്ങുക."
 
+#: src/features/auth/pages/organization-access.tsx
+msgid "Couldn't join. Try again."
+msgstr ""
+
 #: src/features/auth/pages/error.tsx
 msgid "Couldn't link that provider account. Try again."
 msgstr "ആ ദാതാവിന്റെ അക്കൗണ്ട് ലിങ്ക് ചെയ്യാനായില്ല. വീണ്ടും ശ്രമിക്കുക."
@@ -4082,6 +4090,7 @@ msgid "Couldn't sign in. Try again."
 msgstr "സൈൻ ഇൻ ചെയ്യാനായില്ല. വീണ്ടും ശ്രമിക്കുക."
 
 #. Fallback toast when signing out fails
+#: src/features/auth/pages/organization-access.tsx
 #: src/features/settings/account/page.tsx
 #: src/features/user/dropdown-menu.tsx
 msgid "Couldn't sign out. Try again."
@@ -6136,6 +6145,7 @@ msgstr "വീട്ടിലേക്ക് പോകൂ"
 #: src/components/layout/error-screen.tsx
 #: src/components/layout/not-found-screen.tsx
 #: src/features/auth/pages/accept-invitation.tsx
+#: src/features/auth/pages/organization-access.tsx
 #: src/routes/_home/-sections/header.tsx
 msgid "Go to dashboard"
 msgstr "ഡാഷ്ബോർഡിലേക്കു പോകുക"
@@ -6904,6 +6914,10 @@ msgstr "Discord-ൽ ചേരുക"
 #: src/features/homepage/sections.tsx
 msgid "Join the Discord community"
 msgstr "Discord കമ്മ്യൂണിറ്റിയിൽ ചേരുക"
+
+#: src/features/auth/pages/organization-access.tsx
+msgid "Join this organization"
+msgstr ""
 
 #: src/features/resume/import/read-file.ts
 msgid "JSON read"
@@ -11977,6 +11991,7 @@ msgstr "സൈഡ്‌ബാറുകൾ പലപ്പോഴും അവസ�
 #: src/features/auth/components/guest-banner.tsx
 #: src/features/auth/pages/accept-invitation.tsx
 #: src/features/auth/pages/login.tsx
+#: src/features/auth/pages/organization-access.tsx
 #: src/features/homepage/footer.tsx
 msgid "Sign in"
 msgstr "സൈൻ ഇൻ"
@@ -11992,6 +12007,10 @@ msgstr "ഇപ്പോൾ സൈൻ ഇൻ ചെയ്യുക"
 msgid "Sign in or create an account with the email address that received the invitation to join."
 msgstr ""
 
+#: src/features/auth/pages/organization-access.tsx
+msgid "Sign in to continue"
+msgstr ""
+
 #. Title on the login page
 #: src/features/auth/pages/login.tsx
 msgid "Sign in to your account"
@@ -12002,6 +12021,7 @@ msgid "Sign in with your fingerprint, face or device PIN"
 msgstr "നിങ്ങളുടെ വിരലടയാളം, മുഖം അല്ലെങ്കിൽ ഉപകരണ പിൻ ഉപയോഗിച്ച് സൈൻ ഇൻ ചെയ്യുക"
 
 #. User menu action to sign out of current account
+#: src/features/auth/pages/organization-access.tsx
 #: src/features/settings/account/page.tsx
 #: src/features/user/dropdown-menu.tsx
 msgid "Sign out"
@@ -13297,6 +13317,18 @@ msgstr "ചിന്തിക്കുന്നു"
 #: src/features/assistant/conversation.tsx
 msgid "Thinking…"
 msgstr "ചിന്തിക്കുന്നു..."
+
+#: src/features/auth/pages/organization-access.tsx
+msgid "This account isn't part of {organizationName} yet. Join it, or sign out and use a different account."
+msgstr ""
+
+#: src/features/auth/pages/organization-access.tsx
+msgid "This account isn't part of {organizationName}. Ask its administrator for an invitation, or sign out and use a different account."
+msgstr ""
+
+#: src/features/auth/pages/organization-access.tsx
+msgid "This address has no organization"
+msgstr ""
 
 #: src/features/career/workspace/answer-library.tsx
 msgid "This application"
@@ -15026,6 +15058,10 @@ msgstr "ഇത് എല്ലായ്പ്പോഴും “ഇന്ന്�
 msgid "You’ll own our <0>design systems</0>, run <1>user research</1> with customers and hold a high bar for <2>accessibility</2>, working in a <3>cross-functional</3> team."
 msgstr "നിങ്ങൾ ഞങ്ങളുടെ <0>ഡിസൈൻ സിസ്റ്റങ്ങളുടെ</0> ചുമതല വഹിക്കുകയും ഉപഭോക്താക്കളുമായി <1>ഉപയോക്തൃ ഗവേഷണം</1> നടത്തുകയും <3>വിവിധ വിഭാഗങ്ങൾ ചേർന്ന</3> ടീമിൽ പ്രവർത്തിച്ച് <2>പ്രവേശനക്ഷമതയുടെ</2> ഉയർന്ന നിലവാരം ഉറപ്പാക്കുകയും ചെയ്യും."
 
+#: src/features/auth/pages/organization-access.tsx
+msgid "You're a member of {organizationName}"
+msgstr ""
+
 #: src/features/auth/pages/accept-invitation.tsx
 msgid "You're invited"
 msgstr ""
@@ -15033,6 +15069,10 @@ msgstr ""
 #: src/features/career/workspace/shell.tsx
 msgid "You're looking at a saved version. It can't be edited."
 msgstr "നിങ്ങൾ ഒരു സംരക്ഷിച്ച പതിപ്പാണ് കാണുന്നത്. ഇത് എഡിറ്റ് ചെയ്യാനാവില്ല."
+
+#: src/features/auth/pages/organization-access.tsx
+msgid "You're not a member of {organizationName}"
+msgstr ""
 
 #: src/features/resume/builder/draft.ts
 msgid "You're offline. Reconnect to save your changes before leaving."
