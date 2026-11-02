@@ -1,0 +1,34 @@
+{
+	"name": "@careeros/job-discovery",
+	"version": "0.0.0",
+	"type": "module",
+	"private": true,
+	"exports": {
+		".": "./src/index.ts"
+	},
+	"scripts": {
+		"typecheck": "tsrs --noEmit",
+		"test": "vp test run --passWithNoTests",
+		"test:coverage": "vp test run --coverage --passWithNoTests",
+		"test:ci": "vp test run --reporter=default --reporter=github-actions --reporter=json --reporter=junit --outputFile.json=reports/vitest-results.json --outputFile.junit=reports/vitest-junit.xml --passWithNoTests"
+	},
+	"dependencies": {
+		"@careeros/tenancy": "workspace:*",
+		"@reactive-resume/db": "workspace:*",
+		"@reactive-resume/utils": "workspace:*",
+		"drizzle-orm": "catalog:",
+		"sanitize-html": "^2.18.1",
+		"zod": "catalog:"
+	},
+	"devDependencies": {
+		"@careeros/testing": "workspace:*",
+		"@reactive-resume/config": "workspace:*",
+		"@types/node": "catalog:",
+		"@types/pg": "catalog:",
+		"@types/sanitize-html": "^2.16.2",
+		"pg": "catalog:",
+		"tsrs": "catalog:",
+		"typescript": "catalog:",
+		"vite-plus": "catalog:"
+	}
+}
