@@ -191,6 +191,41 @@ describe.skipIf(!configured)("organization hosts: sign-up, sessions and trusted 
 			expect(await activeOrgs(email)).toEqual([rows[0]?.organization_id]);
 		});
 
+		// CAREEROS (P3-T01): the organization table has plan and status columns the plugin does not know. Creating an
+		// organization, as the signup hook and through the plugin's own endpoint, must still work as `careeros_app`, and
+		// the organization starts on the personal plan, active, with a subscription row.
+		it("creates organizations through the plugin on the personal plan, with a subscription row (P3-T01)", async () => {
+			const { email, response } = signUp(PLATFORM, "planner");
+			const signedUp = await response;
+			expect(signedUp.status).toBe(200);
+			const cookie = signedUp.headers
+				.getSetCookie()
+				.map((value) => value.split(";")[0])
+				.join("; ");
+			const created = await auth.api.createOrganization({
+				body: { name: "Plan org", slug: `plan-${run}` },
+				headers: new Headers({ cookie }),
+			});
+			const personal = (await memberships(email)).find((row) => row.slug.startsWith("u-"));
+			expect(personal).toBeDefined();
+			for (const organizationId of [created.id, personal?.organization_id]) {
+				const { rows } = await owner.query(
+					`SELECT o.plan_id, o.status, o.status_changed_at, s.plan_id AS subscription_plan, s.status AS subscription_status
+					   FROM organization o JOIN subscription s ON s.organization_id = o.id WHERE o.id = $1`,
+					[organizationId],
+				);
+				expect(rows).toEqual([
+					{
+						plan_id: "personal",
+						status: "active",
+						status_changed_at: null,
+						subscription_plan: "personal",
+						subscription_status: "none",
+					},
+				]);
+			}
+		});
+
 		it("ignores X-Forwarded-Host while TRUST_FORWARDED_HOST is off", async () => {
 			const { email, response } = (() => {
 				const suffix = randomUUID().slice(0, 8);

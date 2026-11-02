@@ -70,6 +70,9 @@ describe.skipIf(!configured)("the isolation registry on the migrated schema", ()
 			"storage_cleanup_job",
 			"organization_branding",
 			"organization_settings",
+			"subscription",
+			"feature_flag",
+			"audit_log",
 			"organization_domain",
 		]);
 	});
@@ -123,6 +126,11 @@ describe.skipIf(!configured)("the isolation registry on the migrated schema", ()
 			"organization_domain_cf_cleanup",
 			"organization_settings",
 		]);
+		// CAREEROS (P3-T01): subscription, feature_flag and audit_log are registered; plan is a global table.
+		const registeredNames = new Set(isolationRegistry.map((entry) => entry.table));
+		for (const table of ["subscription", "feature_flag", "audit_log"])
+			expect(registeredNames.has(table), `${table} is registered`).toBe(true);
+		expect(globalTables.map((entry) => entry.table)).toContain("plan");
 		expect(pendingTenantTables).toEqual([]);
 	});
 

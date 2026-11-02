@@ -1322,6 +1322,9 @@ importers:
       '@aws-sdk/client-s3':
         specifier: ^3.1160.0
         version: 3.1160.0
+      '@careeros/billing':
+        specifier: workspace:*
+        version: link:../billing
       '@careeros/tenancy':
         specifier: workspace:*
         version: link:../tenancy
@@ -1522,6 +1525,46 @@ importers:
       '@types/react':
         specifier: 'catalog:'
         version: 19.3.0
+      pg:
+        specifier: 'catalog:'
+        version: 8.23.1
+      tsrs:
+        specifier: 'catalog:'
+        version: 0.18.0-ts7.1.0-dev.20260929
+      typescript:
+        specifier: 'catalog:'
+        version: 7.0.2
+      vite-plus:
+        specifier: 'catalog:'
+        version: 1.3.0(@types/node@26.6.6)(@vitest/coverage-v8@5.0.5)(@vitest/ui@5.0.5)(esbuild@0.28.2)(happy-dom@21.0.4)(jiti@2.7.0)(playwright@1.64.1)(terser@5.51.2)(tsx@4.23.15)(typescript@7.0.2)(yaml@2.9.1)
+
+  packages/billing:
+    dependencies:
+      '@careeros/tenancy':
+        specifier: workspace:*
+        version: link:../tenancy
+      '@reactive-resume/db':
+        specifier: workspace:*
+        version: link:../db
+      '@reactive-resume/utils':
+        specifier: workspace:*
+        version: link:../utils
+      drizzle-orm:
+        specifier: 'catalog:'
+        version: 1.0.0-rc.4(@cloudflare/workers-types@5.20261029.1)(@types/pg@8.23.1)(expo-sqlite@58.0.14(expo@58.0.21)(react-native@0.88.1(@babel/core@7.29.7(supports-color@7.2.0))(@react-native/metro-config@0.88.1(@babel/core@7.29.7(supports-color@7.2.0))(supports-color@7.2.0))(@types/react@19.3.0)(react@19.3.1)(supports-color@7.2.0))(react@19.3.1))(pg@8.23.1)(zod@4.6.7)
+    devDependencies:
+      '@careeros/testing':
+        specifier: workspace:*
+        version: link:../careeros-testing
+      '@reactive-resume/config':
+        specifier: workspace:*
+        version: link:../config
+      '@types/node':
+        specifier: 'catalog:'
+        version: 26.6.6
+      '@types/pg':
+        specifier: 'catalog:'
+        version: 8.23.1
       pg:
         specifier: 'catalog:'
         version: 8.23.1
