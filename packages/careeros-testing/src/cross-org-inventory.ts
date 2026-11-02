@@ -179,6 +179,8 @@ export const NO_TENANT_ID: Record<string, string> = {
 		"takes no tenant id: public, addressed by organization slug, returns only public fields",
 	"GET /organization/settings": "takes no tenant id: the caller's own organization",
 	"PATCH /organization/settings": "takes no tenant id: the caller's own organization",
+	"GET /organization/domains": "takes no tenant id: lists the caller's own organization's domains (P2-T06)",
+	"POST /organization/domains": "takes no tenant id: adds a domain to the caller's own organization (P2-T06)",
 	"GET /organization/host": "takes no tenant id: the organization is the request host's, never an input (P2-T03)",
 	"POST /organization/join": "takes no tenant id: joins the request host's organization, never an input (P2-T03)",
 	"GET /documents": "takes no tenant id: lists the caller's own documents",
@@ -246,6 +248,7 @@ export const ID_KINDS = [
 	"savedItem",
 	"transcript",
 	"apiKey",
+	"orgDomain",
 ] as const;
 export type IdKind = (typeof ID_KINDS)[number];
 export type SeedIds = Record<IdKind, string>;
@@ -270,6 +273,7 @@ const PREFIX_KIND: [RegExp, IdKind][] = [
 	[/^\/career\/saved(\/|$)/, "savedItem"],
 	[/^\/career\/voice\/transcripts(\/|$)/, "transcript"],
 	[/^\/auth\/api-keys/, "apiKey"],
+	[/^\/organization\/domains(\/|$)/, "orgDomain"],
 ];
 
 /** Operations whose bare `id` cannot be told from the path alone. */

@@ -1,6 +1,6 @@
-import { currentHost, withOrgContext, type HostContext } from "@careeros/tenancy";
+import { currentHost, type HostContext } from "@careeros/tenancy";
 import { ORPCError } from "@orpc/server";
-import { and, eq } from "drizzle-orm";
+import { and, eq, sql } from "drizzle-orm";
 import { db } from "@reactive-resume/db/client";
 import * as schema from "@reactive-resume/db/schema";
 
@@ -25,16 +25,15 @@ async function isMember(organizationId: string, userId: string): Promise<boolean
 	return row !== undefined;
 }
 
-/** Settings are tenant data, so they are read inside the host organization's own scope. */
-function hasOpenSignup(organizationId: string): Promise<boolean> {
-	return withOrgContext(organizationId, async () => {
-		const [row] = await db
-			.select({ openSignup: schema.organizationSettings.openSignup })
-			.from(schema.organizationSettings)
-			.where(eq(schema.organizationSettings.organizationId, organizationId))
-			.limit(1);
-		return row?.openSignup === true;
-	});
+/**
+ * CAREEROS (P2-T06, Q94): whether the organization lets anyone join. The caller is usually not a member yet, so no
+ * organization scope is opened for them: a definer function answers one boolean for the host's organization.
+ */
+async function hasOpenSignup(organizationId: string): Promise<boolean> {
+	const { rows } = await db.execute<{ open: boolean | null }>(
+		sql`select careeros_org_open_signup(${organizationId}::text) as open`,
+	);
+	return rows[0]?.open === true;
 }
 
 /** Whether the caller is a member of the host organization and whether anyone may join it. */

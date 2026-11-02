@@ -53,6 +53,11 @@ vi.mock("@reactive-resume/api/features/storage/cleanup", () => ({
 	reportStorageCleanupSummary: vi.fn(),
 }));
 vi.mock("@reactive-resume/api/features/auth-handoff", () => ({ purgeExpiredHandoffs: vi.fn(async () => 0) }));
+// CAREEROS (P2-T06): the scheduled handler also runs the organization domain checks
+vi.mock("@reactive-resume/api/features/org-domain", async (importOriginal) => ({
+	...(await importOriginal<typeof import("@reactive-resume/api/features/org-domain")>()),
+	runOrgDomainJobs: vi.fn(async () => ({ checked: 0, failed: 0, cleaned: 0 })),
+}));
 vi.mock("@reactive-resume/api/features/agent/streams", () => ({
 	configureAgentStreamLifetime: (lifetime: (promise: Promise<unknown>) => void) => {
 		mocks.lifetime = lifetime;

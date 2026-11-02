@@ -4,6 +4,7 @@ import {
 	matchOrgHost,
 	normalizeHostname,
 	parseHost,
+	INACTIVE_ORG_HOST,
 	parseOrgHostPattern,
 	type HostOrg,
 } from "./host";
@@ -180,6 +181,41 @@ describe("host resolver", () => {
 			organizationId: "org-acme",
 		});
 		expect(await resolve(request("jobs.other.org"))).toEqual({ kind: "unknown", matchesOrgPattern: false });
+	});
+
+	// CAREEROS (P2-T06): a host an organization holds that is not active fails closed, and a status change drops the cache.
+	it("answers 404-shaped unknown for a custom-domain host an organization holds that is not active", async () => {
+		const customDomainOrg = vi.fn(async (hostname: string) =>
+			hostname === "pending.acme.org" ? INACTIVE_ORG_HOST : null,
+		);
+		const { resolve } = makeResolver({ customDomainOrg });
+		expect(await resolve(request("pending.acme.org"))).toEqual({ kind: "unknown", matchesOrgPattern: true });
+		expect(await resolve(request("nobody.acme.org"))).toEqual({ kind: "unknown", matchesOrgPattern: false });
+		// Also when organization subdomains are off: the host is still not the platform.
+		const noPattern = makeResolver({ customDomainOrg, orgHostPattern: undefined }).resolve;
+		expect(await noPattern(request("pending.acme.org"))).toEqual({ kind: "unknown", matchesOrgPattern: true });
+		expect(await noPattern(request("nobody.acme.org"))).toEqual({ kind: "platform" });
+	});
+
+	it("drops a custom-domain answer on bust by host name, in either direction", async () => {
+		let answer: HostOrg | typeof INACTIVE_ORG_HOST | null = acme;
+		const customDomainOrg = vi.fn(async () => answer);
+		const { resolve } = makeResolver({ customDomainOrg });
+		expect(await resolve(request("jobs.acme.org"))).toMatchObject({ kind: "org", via: "custom" });
+		answer = INACTIVE_ORG_HOST;
+		expect(await resolve(request("jobs.acme.org"))).toMatchObject({ kind: "org" });
+		resolve.bust({ hostname: "jobs.acme.org" });
+		expect(await resolve(request("jobs.acme.org"))).toEqual({ kind: "unknown", matchesOrgPattern: true });
+		answer = acme;
+		resolve.bust({ hostname: "jobs.acme.org" });
+		expect(await resolve(request("jobs.acme.org"))).toMatchObject({ kind: "org" });
+		// Busting by organization drops an active custom host, and never trips over an inactive one.
+		answer = INACTIVE_ORG_HOST;
+		resolve.bust({ organizationId: "org-acme" });
+		expect(await resolve(request("jobs.acme.org"))).toEqual({ kind: "unknown", matchesOrgPattern: true });
+		resolve.bust({ organizationId: "org-acme" });
+		expect(await resolve(request("jobs.acme.org"))).toEqual({ kind: "unknown", matchesOrgPattern: true });
+		expect(customDomainOrg).toHaveBeenCalledTimes(4);
 	});
 
 	describe("cache", () => {

@@ -6,3 +6,4 @@
 - P2-T02: each organization's name, logo, favicon, colours and font are served in the app shell, the manifest and the mobile app; unknown organization addresses show a "not set up yet" page
 - P2-T05: social and OIDC sign-in on organization hosts through a one-time, host-bound handoff (`/api/careeros/handoff/*`, `/auth/handoff` pages)
 - P2-T04: every email (invitation, verify, reset, change-email, career notification) is sent in the organization's brand, with its sender name and reply-to; links stay on the host the flow started on
+- P2-T06: organizations serve the product on their own domain (`organization_domain`, TXT verification, Cloudflare for SaaS, daily takeover check); `hasOpenSignup` answered by a definer function (Q94)

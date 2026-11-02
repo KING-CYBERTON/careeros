@@ -24,6 +24,10 @@ export type HostContext =
 
 export type HostOrg = { organizationId: string; slug: string };
 
+/** CAREEROS (P2-T06): what a custom-domain lookup answers for a host an organization holds that is not active. */
+export const INACTIVE_ORG_HOST = { inactive: true } as const;
+type CustomHostAnswer = HostOrg | typeof INACTIVE_ORG_HOST | null;
+
 export type HostResolverConfig = {
 	/** Host names of APP_URL and APP_ALIAS_URL (plus development loopback names). */
 	platformHosts: ReadonlySet<string>;
@@ -34,8 +38,12 @@ export type HostResolverConfig = {
 	protocol?: "http:" | "https:" | undefined;
 	/** Looks an organization up by slug. */
 	lookupBySlug: (slug: string) => Promise<HostOrg | null>;
-	/** T06 plugs verified organization custom domains in here. Never returns the per-user resume custom domains. */
-	customDomainOrg?: ((hostname: string) => Promise<HostOrg | null>) | undefined;
+	/**
+	 * Verified organization custom domains (P2-T06). Never the per-user resume custom domains. It answers the
+	 * organization of an ACTIVE domain, `INACTIVE_ORG_HOST` for a host an organization holds that is not active (pending,
+	 * failed, removing: it must fail closed, not fall back to the platform), or `null` for a host nobody holds.
+	 */
+	customDomainOrg?: ((hostname: string) => Promise<HostOrg | typeof INACTIVE_ORG_HOST | null>) | undefined;
 	now?: (() => number) | undefined;
 	ttlMs?: number | undefined;
 	maxEntries?: number | undefined;
@@ -97,11 +105,15 @@ export function matchOrgHost(hostname: string, pattern: OrgHostPattern): string 
 	return SLUG.test(slug) ? slug : null;
 }
 
-type CacheEntry = { org: HostOrg | null; expires: number };
+type CacheEntry = { org: CustomHostAnswer; expires: number };
 
 export type HostResolver = ((request: Request) => Promise<HostContext>) & {
-	/** Drops cached lookups for a slug and for an organization (after its slug changed). */
-	bust: (target: { slug?: string | undefined; organizationId?: string | undefined }) => void;
+	/** Drops cached lookups for a slug, a host name and an organization (after its slug or a custom domain changed). */
+	bust: (target: {
+		slug?: string | undefined;
+		hostname?: string | undefined;
+		organizationId?: string | undefined;
+	}) => void;
 };
 
 /** A resolver over `config`. Positive and negative slug lookups are cached in this process for 60 s, 10,000 entries. */
@@ -113,7 +125,7 @@ export function createHostResolver(config: HostResolverConfig): HostResolver {
 	const protocol = config.protocol ?? "https:";
 	const cache = new Map<string, CacheEntry>();
 
-	const cached = async (key: string, load: () => Promise<HostOrg | null>): Promise<HostOrg | null> => {
+	const cached = async (key: string, load: () => Promise<CustomHostAnswer>): Promise<CustomHostAnswer> => {
 		const hit = cache.get(key);
 		if (hit && hit.expires > now()) return hit.org;
 		const org = await load();
@@ -152,7 +164,7 @@ export function createHostResolver(config: HostResolverConfig): HostResolver {
 		const origin = new URL(`${protocol}//${hostname}${port ? `:${port}` : ""}`).origin;
 		const slug = pattern ? matchOrgHost(hostname, pattern) : null;
 		if (slug) {
-			const org = await cached(`slug:${slug}`, () => config.lookupBySlug(slug));
+			const org = (await cached(`slug:${slug}`, () => config.lookupBySlug(slug))) as HostOrg | null;
 			return org
 				? { kind: "org", organizationId: org.organizationId, slug: org.slug, via: "subdomain", hostname, origin }
 				: { kind: "unknown", matchesOrgPattern: true };
@@ -160,20 +172,35 @@ export function createHostResolver(config: HostResolverConfig): HostResolver {
 		if (config.customDomainOrg) {
 			const custom = config.customDomainOrg;
 			const org = await cached(`host:${hostname}`, () => custom(hostname));
-			if (org) {
+			if (org && "organizationId" in org) {
 				return { kind: "org", organizationId: org.organizationId, slug: org.slug, via: "custom", hostname, origin };
 			}
+			// CAREEROS (P2-T06): an organization holds this host but it is not active (pending, failed, removing). It
+			// answers like a pattern-shaped host nobody owns: 404, never the platform's rules.
+			if (org) return { kind: "unknown", matchesOrgPattern: true };
 		}
 		// Without organization hosts configured, an unrecognised host is left alone, as in Phase 1.
 		return pattern ? { kind: "unknown", matchesOrgPattern: false } : { kind: "platform" };
 	};
 
 	return Object.assign(resolver, {
-		bust: ({ slug, organizationId }: { slug?: string | undefined; organizationId?: string | undefined }) => {
+		bust: ({
+			slug,
+			hostname,
+			organizationId,
+		}: {
+			slug?: string | undefined;
+			hostname?: string | undefined;
+			organizationId?: string | undefined;
+		}) => {
 			for (const [key, entry] of cache) {
 				if (
 					(slug !== undefined && key === `slug:${slug}`) ||
-					(organizationId && entry.org?.organizationId === organizationId)
+					(hostname !== undefined && key === `host:${hostname}`) ||
+					(organizationId &&
+						entry.org !== null &&
+						"organizationId" in entry.org &&
+						entry.org.organizationId === organizationId)
 				)
 					cache.delete(key);
 			}
@@ -188,6 +215,28 @@ export async function lookupOrgBySlug(slug: string): Promise<HostOrg | null> {
 	);
 	const row = rows[0];
 	return row ? { organizationId: row.organization_id, slug: row.slug } : null;
+}
+
+/**
+ * CAREEROS (P2-T06): whether organization custom domains are switched on. They need the Cloudflare for SaaS settings;
+ * without them no domain can become active, and the host lookup is not even attempted.
+ */
+export function orgCustomDomainsEnabled(): boolean {
+	return Boolean(env.CF_SAAS_API_TOKEN && env.CF_ZONE_ID && env.CF_SAAS_CNAME_TARGET);
+}
+
+/**
+ * CAREEROS (P2-T06): the organization of a custom domain, through the definer functions (no session or organization
+ * needed). Only an `active` domain answers with its organization; any other status answers `INACTIVE_ORG_HOST`.
+ */
+export async function lookupOrgByCustomHost(hostname: string): Promise<HostOrg | typeof INACTIVE_ORG_HOST | null> {
+	const { rows } = await db.execute<{ organization_id: string | null; slug: string | null; registered: boolean }>(
+		sql`select o.organization_id, o.slug, careeros_org_domain_is_registered(${hostname}::text) as registered
+			from (select 1) as one left join careeros_org_for_custom_host(${hostname}::text) as o on true`,
+	);
+	const row = rows[0];
+	if (row?.organization_id && row.slug) return { organizationId: row.organization_id, slug: row.slug };
+	return row?.registered ? INACTIVE_ORG_HOST : null;
 }
 
 /** The host names the platform itself answers on: APP_URL, APP_ALIAS_URL, and loopback names outside production. */
@@ -214,9 +263,9 @@ function getDefaultResolver(): HostResolver {
 		trustForwardedHost: env.TRUST_FORWARDED_HOST,
 		protocol: new URL(env.APP_URL).protocol === "http:" ? "http:" : "https:",
 		lookupBySlug: lookupOrgBySlug,
-		// T06: verified organization custom domains. The per-user resume domains (`custom_domain`, Traefik provider)
-		// are never organization hosts, so this stays empty until that task lands.
-		customDomainOrg: undefined,
+		// CAREEROS (P2-T06): active organization custom domains. The per-user resume domains (`custom_domain`, Traefik
+		// provider) are never organization hosts. Off without the Cloudflare for SaaS settings.
+		customDomainOrg: orgCustomDomainsEnabled() ? lookupOrgByCustomHost : undefined,
 	});
 	return defaultResolver;
 }
@@ -227,7 +276,11 @@ export function resolveHost(request: Request): Promise<HostContext> {
 }
 
 /** Drops cached host lookups after an organization's slug changed (the 60 s cache would otherwise keep the old one). */
-export function bustHostCache(target: { slug?: string | undefined; organizationId?: string | undefined }): void {
+export function bustHostCache(target: {
+	slug?: string | undefined;
+	hostname?: string | undefined;
+	organizationId?: string | undefined;
+}): void {
 	defaultResolver?.bust(target);
 }
 

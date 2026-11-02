@@ -161,7 +161,7 @@ async function seedUserIn(orgId: string, db: pg.Pool): Promise<string> {
 /**
  * Every tenant table (one with an `organization_id` column) must be registered here. The five resume tables are
  * registered by P1-T04, the two cover letter tables by P1-T05 and the four application tables by P1-T06, the eleven career tables by P1-T07, the six assistant and AI tables by P1-T08 and
- * the three remaining ones by P1-T09 and the two branding ones by P2-T01. The route
+ * the three remaining ones by P1-T09, the two branding ones by P2-T01 and the organization domain one by P2-T06. The route
  * groups' API checks are attached by `packages/api` (it needs the router), which runs `runApiIsolationCheck` with this
  * entry's seed.
  */
@@ -539,6 +539,19 @@ export const isolationRegistry: readonly RegistryEntry[] = [
 			return orgId;
 		},
 	},
+	// CAREEROS (P2-T06): organization custom domains. The hostname is unique across all organizations, so a seed gets its own.
+	{
+		table: "organization_domain",
+		seed: async (orgId, db) => {
+			await ensureOrganization(db, orgId);
+			const id = `iso-domain-${randomUUID()}`;
+			await db.query(
+				`INSERT INTO organization_domain (id, organization_id, hostname, verification_token) VALUES ($1, $2, $1 || '.example.test', 'token')`,
+				[id, orgId],
+			);
+			return id;
+		},
+	},
 ];
 
 export type AllowListEntry = { table: string; schema?: string; reason: string };
@@ -605,6 +618,11 @@ export const globalTables: readonly AllowListEntry[] = [
 	{
 		table: "released_username",
 		reason: "Global username reservations: a username is unique across all organizations",
+	},
+	{
+		table: "organization_domain_cf_cleanup",
+		reason:
+			"P2-T06: Cloudflare custom hostnames of deleted organizations, queued by a trigger and drained by the polling job. It holds an opaque Cloudflare id and a host name, no tenant data, and has no organization_id because the organization is already gone",
 	},
 ];
 

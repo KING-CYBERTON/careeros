@@ -48,6 +48,15 @@ export function normalizeHostname(input: string): string | null {
 	return ascii;
 }
 
+// CAREEROS (P2-T06): the `careeros_custom_domain_guard` trigger raises this when an organization holds the hostname.
+function orgHoldsHostname(error: unknown): boolean {
+	for (let current: unknown = error, depth = 0; current instanceof Error && depth < 5; depth++) {
+		if (current.message.includes("careeros_org_domain:hostname_taken")) return true;
+		current = current.cause;
+	}
+	return false;
+}
+
 const lookup = <T>(query: Promise<T[]>) => query.catch(() => [] as T[]);
 
 const txtValue = (token: string) => `rx-verify=${token}`;
@@ -144,7 +153,16 @@ export const customDomainService = {
 			// CAREEROS: the tenant column comes from the request's organization, never from the client (P1-T09)
 			.values({ organizationId: requireOrgId(), userId, ...values })
 			.onConflictDoUpdate({ target: [schema.customDomain.organizationId, schema.customDomain.userId], set: values })
-			.returning();
+			.returning()
+			// CAREEROS (P2-T06, D7): a trigger refuses a hostname an organization already holds as its custom domain.
+			.catch((error: unknown) => {
+				if (orgHoldsHostname(error))
+					throw new ORPCError("CONFLICT", {
+						message: "That domain isn't available.",
+						data: { code: "DOMAIN_UNAVAILABLE" },
+					});
+				throw error;
+			});
 		if (!domain) throw new ORPCError("INTERNAL_SERVER_ERROR");
 		return toStatus(domain);
 	},
@@ -157,40 +175,53 @@ export const customDomainService = {
 
 		const valid = await dnsPointsHere(domain.hostname, domain.verificationToken);
 		const now = new Date();
-		const updated = await db.transaction(async (tx) => {
-			const [current] = await tx
-				.select()
-				.from(schema.customDomain)
-				.where(
-					and(
-						eq(schema.customDomain.userId, userId),
-						eq(schema.customDomain.hostname, domain.hostname),
-						eq(schema.customDomain.verificationToken, domain.verificationToken),
-					),
-				)
-				.for("update");
-			if (!current)
-				throw new ORPCError("CONFLICT", { message: "The domain changed during verification. Verify it again." });
-			const failingSince = current.failingSince ?? now;
-			// CAREEROS: other claimants live in other organizations, which row-level security hides, while the verified
-			// hostname index is global. A definer function un-verifies them, for the current organization only (P1-T09).
-			if (valid)
-				await tx.execute(sql`select careeros_release_domain_claims(${domain.hostname}, ${requireOrgId()}, ${userId})`);
-			const [row] = await tx
-				.update(schema.customDomain)
-				.set(
-					valid
-						? { verifiedAt: current.verifiedAt ?? now, lastCheckedAt: now, failingSince: null }
-						: {
-								lastCheckedAt: now,
-								failingSince,
-								...(now.getTime() - failingSince.getTime() > GRACE_MS ? { verifiedAt: null } : {}),
-							},
-				)
-				.where(eq(schema.customDomain.userId, userId))
-				.returning();
-			return row;
-		});
+		// CAREEROS (P2-T06, Q121): the first to prove a hostname wins. The custom_domain guard trigger refuses a proof for
+		// a name an organization has already proven.
+		const updated = await db
+			.transaction(async (tx) => {
+				const [current] = await tx
+					.select()
+					.from(schema.customDomain)
+					.where(
+						and(
+							eq(schema.customDomain.userId, userId),
+							eq(schema.customDomain.hostname, domain.hostname),
+							eq(schema.customDomain.verificationToken, domain.verificationToken),
+						),
+					)
+					.for("update");
+				if (!current)
+					throw new ORPCError("CONFLICT", { message: "The domain changed during verification. Verify it again." });
+				const failingSince = current.failingSince ?? now;
+				// CAREEROS: other claimants live in other organizations, which row-level security hides, while the verified
+				// hostname index is global. A definer function un-verifies them, for the current organization only (P1-T09).
+				if (valid)
+					await tx.execute(
+						sql`select careeros_release_domain_claims(${domain.hostname}, ${requireOrgId()}, ${userId})`,
+					);
+				const [row] = await tx
+					.update(schema.customDomain)
+					.set(
+						valid
+							? { verifiedAt: current.verifiedAt ?? now, lastCheckedAt: now, failingSince: null }
+							: {
+									lastCheckedAt: now,
+									failingSince,
+									...(now.getTime() - failingSince.getTime() > GRACE_MS ? { verifiedAt: null } : {}),
+								},
+					)
+					.where(eq(schema.customDomain.userId, userId))
+					.returning();
+				return row;
+			})
+			.catch((error: unknown) => {
+				if (orgHoldsHostname(error))
+					throw new ORPCError("CONFLICT", {
+						message: "That domain isn't available.",
+						data: { code: "DOMAIN_UNAVAILABLE" },
+					});
+				throw error;
+			});
 		if (!updated) throw new ORPCError("NOT_FOUND");
 		return toStatus(updated);
 	},
