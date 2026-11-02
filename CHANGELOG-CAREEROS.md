@@ -9,3 +9,4 @@
 - P2-T06: organizations serve the product on their own domain (`organization_domain`, TXT verification, Cloudflare for SaaS, daily takeover check); `hasOpenSignup` answered by a definer function (Q94)
 - P2-C01: staging serves organization hosts and custom domains through the tunnel (`infra/staging/cloudflare.mjs`, `careeros-staging-cloudflare` workflow, optional organization host check after deploy)
 - P2-T07: owners and admins manage the organization's brand and custom domains from Settings → Branding and Domains on web and mobile; logo and favicon can be removed; the mobile sign-in screen is branded from the server address (`GET /branding/host`)
+- P2-C03: CI runs the organization-host, email-link and handoff database suites it had been skipping (Turborepo now passes `CAREEROS_TEST_*` to `auth` and `server`), and a guard fails any shard in which an `*.integration.test.ts` file skips a test
