@@ -75,12 +75,21 @@
 | 1 — Build | P2-T05     | [plans/P2-T05-auth-handoff.md](plans/P2-T05-auth-handoff.md)                                               | **Merged** · [review](reviews/P2-T05-review-1.md) (security review, one Low accepted)                                                          | [#51](https://github.com/KING-CYBERTON/careeros/pull/51) |
 | 1 — Build | P2-T04     | [plans/P2-T04-branded-emails.md](plans/P2-T04-branded-emails.md)                                           | **Merged** · [review](reviews/P2-T04-review-1.md)                                                                                              | [#52](https://github.com/KING-CYBERTON/careeros/pull/52) |
 | 1 — Build | P2-T06     | [plans/P2-T06-org-custom-domains.md](plans/P2-T06-org-custom-domains.md)                                   | **Merged** · [review](reviews/P2-T06-review-1.md) (two Mediums fixed before merge); live check waits on P2-C01 and the Cloudflare owner action | [#53](https://github.com/KING-CYBERTON/careeros/pull/53) |
-| 1 — Build | P2-T07     | [plans/P2-T07-branding-settings-ui.md](plans/P2-T07-branding-settings-ui.md)                               | Approved; Sonnet coding                                                                                                                        | —                                                        |
-| 2 — QA    | P2-Q01/Q02 | [plans/P2-Q01-Q02-host-isolation-and-branding-e2e.md](plans/P2-Q01-Q02-host-isolation-and-branding-e2e.md) | Approved; dispatch after P2-T07 merges                                                                                                         | —                                                        |
+| 1 — Build | P2-T07     | [plans/P2-T07-branding-settings-ui.md](plans/P2-T07-branding-settings-ui.md)                               | **Merged** · [review](reviews/P2-T07-review-1.md) (mobile join deferred, Q130)                                                                 | [#56](https://github.com/KING-CYBERTON/careeros/pull/56) |
+| 2 — QA    | P2-Q01/Q02 | [plans/P2-Q01-Q02-host-isolation-and-branding-e2e.md](plans/P2-Q01-Q02-host-isolation-and-branding-e2e.md) | **Merged** · [review](reviews/P2-Q01-Q02-review-1.md) (fuzz org-host pass 334/334 refused; not-set-up page fix)                                | [#59](https://github.com/KING-CYBERTON/careeros/pull/59) |
 | 3 — CI/CD | P2-C02     | [plans/cicd/P2-C02-branding-gate.md](plans/cicd/P2-C02-branding-gate.md)                                   | **Merged** · [review](reviews/P2-C02-review-1.md) (mobile node tests now in CI)                                                                | [#55](https://github.com/KING-CYBERTON/careeros/pull/55) |
-| 3 — CI/CD | P2-C01     | [plans/cicd/P2-C01-staging-org-hosts.md](plans/cicd/P2-C01-staging-org-hosts.md)                           | Approved; Sonnet coding. Live check waits on Stephen's Cloudflare actions                                                                      | —                                                        |
+| 3 — CI/CD | P2-C01     | [plans/cicd/P2-C01-staging-org-hosts.md](plans/cicd/P2-C01-staging-org-hosts.md)                           | **Merged** · [review](reviews/P2-C01-review-1.md). Live check waits on Stephen's Cloudflare actions                                            | [#58](https://github.com/KING-CYBERTON/careeros/pull/58) |
 
-All Phase 2 specs are written. After P2-T07, P2-Q01/Q02 and P2-C01 merge: the Phase 2 exit review (Opus security review, no open Critical or High) and the baseline refresh.
+All Phase 2 tasks are merged. P2-C03 (from exit review M1): [plans/cicd/P2-C03-run-skipped-db-suites.md](plans/cicd/P2-C03-run-skipped-db-suites.md), approved, Sonnet coding.
+
+## Phase 2 exit criteria (PRODUCT.md §13)
+
+- [ ] Two orgs on two hosts show distinct branding on every surface: proven in CI by P2-Q02 ([#59](https://github.com/KING-CYBERTON/careeros/pull/59)); the live staging check waits on the P2-C01 owner actions
+- [ ] A custom domain verifies, gets TLS and stops serving on removal: built and tested (T06, T07); the live check waits on Stephen enabling Cloudflare for SaaS and creating the two tokens
+- [x] Host decides the org; a session from A's host cannot act in B (P2-Q01: e2e plus the fuzz org-host pass, zero leaks)
+- [x] CI gate blocks upstream branding (P2-C02, [#55](https://github.com/KING-CYBERTON/careeros/pull/55))
+- [ ] Opus security review: [no Critical or High](reviews/P2-EXIT-security-review-1.md); sign-off waits on M1 (three database suites skip in CI), fixed by P2-C03. L1 recorded, L2 to the Phase 3 backlog
+- [x] BASELINE refreshed from develop run 41404157247 ([BASELINE.md](BASELINE.md#phase-2-exit-refresh): 3863 unit tests, 89 e2e, 43 skipped, see M1)
 
 ## Blockers
 
@@ -96,7 +105,7 @@ All Phase 2 specs are written. After P2-T07, P2-Q01/Q02 and P2-C01 merge: the Ph
 
 - `tests/e2e/specs/library-pagination.spec.ts:201`: root cause fixed in P0-Q03 (oRPC batching bypassed the test mock). Watch for a strict-mode "two alerts" failure; if seen, Opus specs a per-item batch response.
 - `assistant.spec.ts:118` (reaccept "CPACC") failed once and passed on re-run (T05 era); root-cause if it recurs.
-- Follow-ups: drop the old `careeros_due_storage_cleanup` overload in the first Phase 1b follow-on migration (Q74); make `bindGlobalPoolForTesting` throw in production (Q75); plan Q20 (`Promise.all` on one org-scoped client); Q03 F1 (custom-domain routes in the fuzz); exit review L1, L2 (Phase 2 hygiene).
+- Follow-ups: drop the old `careeros_due_storage_cleanup` overload in the first Phase 1b follow-on migration (Q74); make `bindGlobalPoolForTesting` throw in production (Q75); plan Q20 (`Promise.all` on one org-scoped client); Q03 F1 (custom-domain routes in the fuzz); exit review L1, L2 (Phase 2 hygiene). Phase 3 backlog from Phase 2: mobile join on org hosts (Q130), org-aware OAuth state (Q105), holding released org slugs (P2 exit L2), self-hosted brand fonts (Q101).
 - e2e specs doing raw SQL on tenant tables must use `withSeedPool` (P1-Q07); careeros_app sees nothing without an org context.
 
 ## Planning docs
@@ -168,3 +177,7 @@ _None yet._
 - P2-T06 Organization custom domains — [#53](https://github.com/KING-CYBERTON/careeros/pull/53), `0924094`
 - Docs sync 11 — [#54](https://github.com/KING-CYBERTON/careeros/pull/54), `dc6b8f0`
 - P2-C02 Branding gate and mobile node tests in CI — [#55](https://github.com/KING-CYBERTON/careeros/pull/55), `41085d3`
+- Docs sync 12 (P2-Q01/Q02 and P2-C01 specs) — [#57](https://github.com/KING-CYBERTON/careeros/pull/57), `f4125a1`
+- P2-C01 Staging org hosts and custom domains through the tunnel — [#58](https://github.com/KING-CYBERTON/careeros/pull/58), `d636cfb`
+- P2-Q01/Q02 Host isolation and branding e2e — [#59](https://github.com/KING-CYBERTON/careeros/pull/59), `a4beb8a`
+- P2-T07 Branding and domains settings, web and mobile — [#56](https://github.com/KING-CYBERTON/careeros/pull/56), `423c27f`

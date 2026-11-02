@@ -133,3 +133,52 @@ The e2e count includes the cross-org fuzz. It covers 157 id-taking operations an
 | `dsh-plugin-reactive-resume`  | 3          | 6            | 0      | 0       | 802ms             |
 | `@reactive-resume/pdf`        | 70         | 457          | 0      | 0       | 79.13s            |
 | `@reactive-resume/api`        | 99         | 1154         | 0      | 0       | 109.41s           |
+
+## Phase 2 exit refresh
+
+These numbers come from one green push run on `develop`. Nothing was re-run locally.
+
+- **Run:** [careeros-ci run 41404157247](https://github.com/KING-CYBERTON/careeros/actions/runs/41404157247), commit `423c27f` (P2-T07, #56), 2026-11-02.
+- **Source of the counts:** each package's Vitest summary and the Playwright summary in the job logs.
+
+| Job                                                                     | Duration                              | Result                                                 |
+| ----------------------------------------------------------------------- | ------------------------------------- | ------------------------------------------------------ |
+| changes                                                                 | 24s                                   | success                                                |
+| static (lint, format, boundaries, typecheck, branding gate, node tests) | 1m 2s                                 | success                                                |
+| unit (pdf)                                                              | 2m 10s                                | success                                                |
+| unit (api)                                                              | 3m 21s                                | success                                                |
+| unit (rest)                                                             | 3m 34s                                | success                                                |
+| e2e (`playwright test --workers=1`)                                     | 6m 7s                                 | success: 89 passed, 0 failed (Playwright reports 4.1m) |
+| **Wall clock**                                                          | **7m 14s** (07:06:39 to 07:13:53 UTC) | down from 9m 18s at the Phase 1 exit                   |
+
+The e2e count includes both fuzz specs. The cross-org fuzz covers 159 id-taking operations and 106 MCP tools, with 79 skips that each have a reason, plus the org-host pass: 334 requests, all refused by the host gate. The auth fuzz covers 22 organization endpoints.
+
+### Unit tests per package
+
+23 packages, 457 test files, **3863 tests passed** (Phase 1 exit: 3426). **43 tests skipped**, in three database suites: `auth` `org-host.integration.test.ts` (13) and `email-links.integration.test.ts` (6), and `server` `handoff.integration.test.ts` (24). Turborepo strict env mode hides the test database variables from these two packages. This is exit review finding M1, fixed by P2-C03.
+
+| Package                       | Test files     | Tests passed | Failed | Skipped | Duration (vitest) |
+| ----------------------------- | -------------- | ------------ | ------ | ------- | ----------------- |
+| `@reactive-resume/utils`      | 12             | 164          | 0      | 0       | 1.27s             |
+| `@reactive-resume/ui`         | 9              | 16           | 0      | 0       | 4.29s             |
+| `@careeros/testing`           | 2              | 16           | 0      | 0       | 1.49s             |
+| `@reactive-resume/schema`     | 16             | 145          | 0      | 0       | 2.00s             |
+| `@reactive-resume/fonts`      | 1              | 9            | 0      | 0       | 332ms             |
+| `@careeros/isolation-testing` | 2              | 61           | 0      | 0       | 1.82s             |
+| `@reactive-resume/resume`     | 24             | 230          | 0      | 0       | 3.47s             |
+| `@reactive-resume/ai`         | 2              | 8            | 0      | 0       | 412ms             |
+| `@reactive-resume/import`     | 7              | 76           | 0      | 0       | 1.83s             |
+| `@reactive-resume/odt`        | 1              | 22           | 0      | 0       | 419ms             |
+| `@reactive-resume/docx`       | 7              | 21           | 0      | 0       | 1.56s             |
+| `@reactive-resume/env`        | 2              | 66           | 0      | 0       | 467ms             |
+| `@reactive-resume/tooling`    | 13             | 116          | 0      | 0       | 7.73s             |
+| `@reactive-resume/db`         | 9              | 10           | 0      | 0       | 6.77s             |
+| `@reactive-resume/email`      | 2              | 36           | 0      | 0       | 811ms             |
+| `@careeros/tenancy`           | 5              | 103          | 0      | 0       | 3.22s             |
+| `@reactive-resume/auth`       | 16 (2 skipped) | 100          | 0      | **19**  | 11.21s            |
+| `web`                         | 108            | 562          | 0      | 0       | 56.77s            |
+| `@reactive-resume/mcp`        | 5              | 24           | 0      | 0       | 6.61s             |
+| `dsh-plugin-reactive-resume`  | 3              | 6            | 0      | 0       | 480ms             |
+| `server`                      | 35 (1 skipped) | 270          | 0      | **24**  | 17.49s            |
+| `@reactive-resume/api`        | 108            | 1342         | 0      | 0       | 126.98s           |
+| `@reactive-resume/pdf`        | 71             | 460          | 0      | 0       | 62.47s            |
