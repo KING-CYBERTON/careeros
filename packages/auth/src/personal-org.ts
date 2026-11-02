@@ -2,6 +2,8 @@ import { resolveHost } from "@careeros/tenancy";
 import { and, asc, eq, gt, inArray, isNull, ne, sql } from "drizzle-orm";
 import { db } from "@reactive-resume/db/client";
 import * as schema from "@reactive-resume/db/schema";
+// CAREEROS (P3-T02): seats are enforced on every path that adds a member
+import { hostOrganizationHasSeat } from "./organization-enforcement";
 
 // CareerOS (P1-T03, phase plan D6): until host-based organizations arrive in Phase 2, every user has at least one
 // organization. This file holds the logic; `packages/auth/src/config.ts` only calls into it.
@@ -60,6 +62,9 @@ export async function createPersonalOrganization(user: NewUser, context: SignUpC
 		// An invitation to the host organization follows the invitation flow (the user accepts it later). Otherwise
 		// `guardOrgHostSignUp` already let the user through because the organization has open signup.
 		if (await isInvitedSignUp(user, context, host.organizationId)) return;
+		// CAREEROS (P3-T02): the sign-up guard checked the seat before the account existed; seats may have filled since.
+		// The account stays, without a seat, and the join page of the host answers SEAT_LIMIT_REACHED.
+		if (!(await hostOrganizationHasSeat(host.organizationId))) return;
 		await db
 			.insert(schema.member)
 			.values({ organizationId: host.organizationId, userId: user.id, role: "member" })

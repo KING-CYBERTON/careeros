@@ -2,7 +2,7 @@ import type { E2EAccount } from "./data";
 import type { SeedIds } from "@careeros/testing/cross-org-inventory";
 import type { APIRequestContext, APIResponse, PlaywrightWorkerArgs } from "@playwright/test";
 import { startAiStub } from "./ai-stub";
-import { createInviteeAccount, deleteE2EOrganizations, markEmailVerified } from "./careeros-org";
+import { createInviteeAccount, deleteE2EOrganizations, markEmailVerified, setOrganizationPlan } from "./careeros-org";
 import { deleteE2EUser } from "./db";
 import { withSeedPool } from "./seed-db";
 
@@ -394,6 +394,9 @@ export async function createTwoOrgs(playwright: Playwright, baseURL: string, own
 
 		const extra = await seedRowsWithoutEndpoint(a, tag);
 
+		// P3-T02: both organizations start on the one-seat personal plan; Organization A invites below.
+		await setOrganizationPlan(a.organizationId, "pro");
+		await setOrganizationPlan(b.organizationId, "pro");
 		// P1-Q10: a second member (A2, role member) and a pending invitation in Organization A.
 		a2 = await signUp(playwright, baseURL, accountA2);
 		await markEmailVerified(accountA2);

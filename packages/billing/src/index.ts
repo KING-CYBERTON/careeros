@@ -9,6 +9,16 @@ export {
 	type EntitlementInputs,
 	type Entitlements,
 } from "./entitlements";
+export {
+	assertFeature,
+	assertSeatAvailable,
+	assertWritable,
+	EntitlementError,
+	hasFreeSeat,
+	SEAT_LIMIT_MESSAGE,
+	SUSPENDED_MESSAGE,
+	type EntitlementErrorCode,
+} from "./enforcement";
 export { BillingError, type BillingErrorCode } from "./errors";
 export {
 	FEATURE_DEFAULTS,

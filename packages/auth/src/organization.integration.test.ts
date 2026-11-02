@@ -16,6 +16,9 @@ vi.mock("@reactive-resume/db/client", () => ({
 		return fixture.db;
 	},
 	getPool: () => fixture.pool,
+	// P3-T02: the seat and suspension hooks read entitlements inside `withOrgContext`, which needs these two.
+	withDatabaseClient: <T>(_client: unknown, callback: () => T) => callback(),
+	withoutDatabaseScope: <T>(callback: () => T) => callback(),
 }));
 
 const migrationsFolder = fileURLToPath(new URL("../../../migrations", import.meta.url));
@@ -54,6 +57,9 @@ describe.skipIf(!process.env.COVER_LETTER_TEST_DATABASE_URL)("organization plugi
 		fixture.pool = pool;
 		fixture.db = drizzle({ client: pool, relations: authOrganizationRelations });
 		await migrate(fixture.db as Parameters<typeof migrate>[0], { migrationsFolder });
+		// P3-T02: these tests are about invitations, roles and membership, not seat limits (those are in
+		// organization-enforcement.integration.test.ts), so the one-seat personal plan gets no limit in this disposable database.
+		await pool.query("UPDATE plan SET seat_limit = NULL WHERE id = 'personal'");
 		({ auth } = await import("./config"));
 	}, 120_000);
 
