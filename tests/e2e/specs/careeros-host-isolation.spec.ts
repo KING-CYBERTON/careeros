@@ -269,15 +269,30 @@ test.describe("host isolation", () => {
 		expect(withSession.response.status()).toBe(404);
 		expect(withSession.body).not.toContain(markerA);
 
-		// The browser gets the 404 shell with the flag that makes the app show the neutral page. Drawing that page is not
-		// asserted: the host middleware also answers this shell for /assets/*.js, so the script never loads (docs/questions.md Q152).
+		// The browser gets the 404 shell and the built files it needs, so the app starts and draws the neutral page.
 		const context = await browser.newContext();
 		try {
 			const view = await context.newPage();
 			const response = await view.goto(`http://${host}/`, { waitUntil: "domcontentloaded" });
 			expect(response?.status()).toBe(404);
+			await expect(view.getByText("This address isn't set up yet")).toBeVisible({ timeout: 30_000 });
 			expect(await view.evaluate(() => (globalThis as { __ORG_NOT_FOUND__?: unknown }).__ORG_NOT_FOUND__)).toBe(true);
 			expect(await view.locator("body").innerText()).not.toContain(markerA);
+			// The static files are served on that host (P2-Q01 review, Q152), and API paths still are not.
+			const script = await send(playwright, baseURL, {
+				method: "GET",
+				host,
+				path: (await view.locator("script[src^='/assets/']").first().getAttribute("src")) ?? "/assets/none.js",
+			});
+			expect(script.response.status()).toBe(200);
+			expect(script.response.headers()["content-type"]).toMatch(/javascript/);
+			const upload = await send(playwright, baseURL, {
+				method: "GET",
+				path: "/api/branding-assets/x/logo-x.png",
+				host,
+			});
+			expect(upload.response.status()).toBe(404);
+			expect(upload.response.headers()["content-type"]).toMatch(/json/);
 		} finally {
 			await context.close();
 		}

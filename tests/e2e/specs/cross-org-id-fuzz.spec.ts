@@ -225,8 +225,9 @@ test("an id from another organization never reads, changes or links Organization
 			expect(findLeaks(await homeAnswer.text(), orgs.markers, orgs.foreignIds, [])).not.toEqual([]);
 			await home.dispose();
 
-			// A's own API key is an account-level credential, not tenant data (phase plan D8): its owner may delete it from any
-			// host, which would end the API-key mode below. That route is left out of this pass (docs/questions.md Q153).
+			// Left out of this pass on purpose: API keys belong to the account, not to an organization (phase plan D8), so the
+			// owner may delete their own key from any host, B's included (confirmed in the P2-Q01 review, Q153). It touches
+			// only A's own key, no tenant data, and would remove the key the API-key mode below needs.
 			const hostPlanned = planned.filter((plan) => plan.operation.key !== "DELETE /auth/api-keys/{keyId}");
 			for (const [mode, headers, refusal] of [
 				["org host cookie", { cookie: aCookie }, "ORG_HOST_NOT_MEMBER"],
