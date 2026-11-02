@@ -15,6 +15,8 @@ export * from "./organization";
 export * from "./branding";
 // CAREEROS: the social and OIDC sign-in handoff between a platform host and an organization host (P2-T05)
 export * from "./auth-handoff";
+// CAREEROS: the Job Clipper's device codes and host-bound tokens (P5-T02)
+export * from "./clipper";
 // CAREEROS: organization custom domains served through Cloudflare for SaaS (P2-T06)
 export * from "./organization-domain";
 // CAREEROS: plans, subscriptions, feature flags and the audit log (P3-T01)
