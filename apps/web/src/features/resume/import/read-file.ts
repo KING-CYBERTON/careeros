@@ -1,7 +1,9 @@
 import type { ResumeData } from "@reactive-resume/schema/resume/data";
 import { t } from "@lingui/core/macro";
 import { parseJSONResume } from "@reactive-resume/import/json-resume";
+// CAREEROS: careeros-branding-allow: import parser module name, an importer for the upstream file format
 import { parseReactiveResumeJSON } from "@reactive-resume/import/reactive-resume-json";
+// CAREEROS: careeros-branding-allow: import parser module name, an importer for the upstream file format
 import { parseReactiveResumeV4JSON } from "@reactive-resume/import/reactive-resume-v4-json";
 import { convertLegacyStylesheet, needsLegacyStyleConversion } from "@reactive-resume/pdf/semantic-legacy";
 import { forEachDatedEntry, hasUnreadableDateText } from "@reactive-resume/schema/resume/dates";
@@ -117,7 +119,9 @@ export async function detectImportKind(file: File): Promise<ImportKind | null> {
 export function parseResumeJson(text: string, kind: ResumeJsonKind): ResumeData {
 	const parsed = JSON.parse(text);
 	const data = parsed?.data && !parsed.sections && !parsed.metadata ? JSON.stringify(parsed.data) : text;
+	// CAREEROS: careeros-branding-allow: import parser function name, an importer for the upstream file format
 	if (kind === "reactive-resume-json") return withLegacyStylesConverted(parseReactiveResumeJSON(data));
+	// CAREEROS: careeros-branding-allow: import parser function name, an importer for the upstream file format
 	if (kind === "reactive-resume-v4-json") return parseReactiveResumeV4JSON(data);
 	return parseJSONResume(data);
 }

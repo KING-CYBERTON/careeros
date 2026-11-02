@@ -102,6 +102,14 @@ jobs:
       - name: Typecheck (mobile excluded)
         run: pnpm exec turbo run typecheck --filter=!mobile
 
+      # CAREEROS: P2-C02. Upstream product names and brand links must not come back (docs/CODING-STANDARDS.md, "Branding gate").
+      - name: Check upstream branding
+        run: node tooling/careeros/branding-gate.mjs
+
+      # CAREEROS: P2-C02. The mobile node tests and the gate's own tests; they were not run in CI before.
+      - name: Node tests (mobile scripts and tooling)
+        run: node --test tooling/careeros/*.test.mjs apps/mobile/scripts/*.test.mjs
+
   # CAREEROS: P1-C05. Unit tests are sharded across runners; each shard runs its turbo tasks serially, because
   # concurrent suites on one 4-vCPU runner caused cold-import timeouts. The aggregate job `unit` keeps the check name.
   unit-shard:

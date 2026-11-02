@@ -1,10 +1,13 @@
 import type { ExpoConfig } from "expo/config";
 
 // The official host. Universal Links, App Links and the OAuth callback (`/auth/native-callback`) verify against it.
+// CAREEROS: careeros-branding-allow: native app host, release blocker until the native identity is set (Q80)
 const host = "rxresu.me";
+// CAREEROS: careeros-branding-allow: native permission text, release blocker until the native identity is set (Q80)
 const microphonePermission = "Reactive Resume records your answers when you practise for an interview.";
 
 const config: ExpoConfig = {
+	// CAREEROS: careeros-branding-allow: native app name, release blocker until the native identity is set (Q80)
 	name: "Reactive Resume",
 	slug: "reactive-resume",
 	platforms: process.env.EXPO_MOBILE_WEB_PREVIEW === "1" ? ["ios", "android", "web"] : ["ios", "android"],
@@ -137,7 +140,9 @@ const config: ExpoConfig = {
 		[
 			"expo-image-picker",
 			{
+				// CAREEROS: careeros-branding-allow: native permission text, release blocker until the native identity is set (Q80)
 				photosPermission: "Reactive Resume uses your photos to set the picture on your resume.",
+				// CAREEROS: careeros-branding-allow: native permission text, release blocker until the native identity is set (Q80)
 				cameraPermission: "Reactive Resume uses your camera to take a profile photo.",
 				microphonePermission,
 			},

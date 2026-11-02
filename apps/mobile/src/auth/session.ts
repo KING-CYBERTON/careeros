@@ -39,6 +39,7 @@ import {
 	storeKey,
 } from "./oauth";
 
+// CAREEROS: careeros-branding-allow: native app host, release blocker until the native identity is set (Q80)
 export const DEFAULT_SERVER = "https://rxresu.me";
 
 /**
