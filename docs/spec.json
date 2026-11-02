@@ -42867,6 +42867,353 @@
 						"source": "curl --request POST \"https://rxresu.me/api/openapi/branding/logo\" --header \"x-api-key: <api-key>\" --form \"file=@<file>\""
 					}
 				]
+			},
+			"delete": {
+				"operationId": "deleteBrandingLogo",
+				"summary": "Remove the organization's logo",
+				"description": "Removes the current logo, so the platform default shows again, and queues the file for deletion. NOT_FOUND when there is none. Only an owner or admin can do this. Requires authentication.",
+				"tags": [
+					"Branding"
+				],
+				"requestBody": {
+					"required": false,
+					"content": {
+						"application/json": {
+							"schema": {
+								"type": "object"
+							}
+						}
+					}
+				},
+				"responses": {
+					"200": {
+						"description": "OK",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"appName": {
+											"anyOf": [
+												{
+													"type": "string"
+												},
+												{
+													"type": "null"
+												}
+											],
+											"description": "The product name shown in the app. Null uses the platform default."
+										},
+										"primaryColor": {
+											"anyOf": [
+												{
+													"type": "string"
+												},
+												{
+													"type": "null"
+												}
+											],
+											"description": "A #rrggbb colour."
+										},
+										"secondaryColor": {
+											"anyOf": [
+												{
+													"type": "string"
+												},
+												{
+													"type": "null"
+												}
+											],
+											"description": "A #rrggbb colour."
+										},
+										"font": {
+											"anyOf": [
+												{
+													"enum": [
+														"Figtree",
+														"Inter",
+														"IBM Plex Sans",
+														"Roboto",
+														"Open Sans",
+														"Lato",
+														"Merriweather",
+														"Lora"
+													],
+													"type": "string"
+												},
+												{
+													"type": "null"
+												}
+											]
+										},
+										"supportUrl": {
+											"anyOf": [
+												{
+													"type": "string"
+												},
+												{
+													"type": "null"
+												}
+											]
+										},
+										"termsUrl": {
+											"anyOf": [
+												{
+													"type": "string"
+												},
+												{
+													"type": "null"
+												}
+											]
+										},
+										"privacyUrl": {
+											"anyOf": [
+												{
+													"type": "string"
+												},
+												{
+													"type": "null"
+												}
+											]
+										},
+										"logoUrl": {
+											"anyOf": [
+												{
+													"type": "string"
+												},
+												{
+													"type": "null"
+												}
+											],
+											"description": "Where the logo is served, or null when none was uploaded."
+										},
+										"faviconUrl": {
+											"anyOf": [
+												{
+													"type": "string"
+												},
+												{
+													"type": "null"
+												}
+											],
+											"description": "Where the favicon is served, or null when none was uploaded."
+										},
+										"emailFromName": {
+											"anyOf": [
+												{
+													"type": "string"
+												},
+												{
+													"type": "null"
+												}
+											],
+											"description": "The sender name on emails the organization sends."
+										},
+										"emailReplyTo": {
+											"anyOf": [
+												{
+													"type": "string"
+												},
+												{
+													"type": "null"
+												}
+											],
+											"description": "The Reply-To address on emails the organization sends."
+										},
+										"updatedAt": {
+											"type": "string",
+											"format": "date-time",
+											"x-native-type": "date"
+										}
+									},
+									"required": [
+										"appName",
+										"primaryColor",
+										"secondaryColor",
+										"font",
+										"supportUrl",
+										"termsUrl",
+										"privacyUrl",
+										"logoUrl",
+										"faviconUrl",
+										"emailFromName",
+										"emailReplyTo",
+										"updatedAt"
+									]
+								}
+							}
+						}
+					},
+					"403": {
+						"description": "403",
+						"content": {
+							"application/json": {
+								"schema": {
+									"oneOf": [
+										{
+											"type": "object",
+											"properties": {
+												"defined": {
+													"const": true
+												},
+												"code": {
+													"const": "FORBIDDEN"
+												},
+												"status": {
+													"const": 403
+												},
+												"message": {
+													"type": "string",
+													"default": "Only an owner or admin of the organization can do this."
+												},
+												"data": {}
+											},
+											"required": [
+												"defined",
+												"code",
+												"status",
+												"message"
+											]
+										},
+										{
+											"type": "object",
+											"properties": {
+												"defined": {
+													"const": false
+												},
+												"code": {
+													"type": "string"
+												},
+												"status": {
+													"type": "number"
+												},
+												"message": {
+													"type": "string"
+												},
+												"data": {}
+											},
+											"required": [
+												"defined",
+												"code",
+												"status",
+												"message"
+											]
+										}
+									]
+								}
+							}
+						}
+					},
+					"404": {
+						"description": "404",
+						"content": {
+							"application/json": {
+								"schema": {
+									"oneOf": [
+										{
+											"type": "object",
+											"properties": {
+												"defined": {
+													"const": true
+												},
+												"code": {
+													"const": "NOT_FOUND"
+												},
+												"status": {
+													"const": 404
+												},
+												"message": {
+													"type": "string",
+													"default": "The organization has no logo."
+												},
+												"data": {}
+											},
+											"required": [
+												"defined",
+												"code",
+												"status",
+												"message"
+											]
+										},
+										{
+											"type": "object",
+											"properties": {
+												"defined": {
+													"const": false
+												},
+												"code": {
+													"type": "string"
+												},
+												"status": {
+													"type": "number"
+												},
+												"message": {
+													"type": "string"
+												},
+												"data": {}
+											},
+											"required": [
+												"defined",
+												"code",
+												"status",
+												"message"
+											]
+										}
+									]
+								}
+							}
+						}
+					},
+					"default": {
+						"description": "Structured API error. See status and code; do not branch on message text.",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"required": [
+										"defined",
+										"code",
+										"status",
+										"message"
+									],
+									"properties": {
+										"defined": {
+											"type": "boolean"
+										},
+										"code": {
+											"type": "string"
+										},
+										"status": {
+											"type": "integer"
+										},
+										"message": {
+											"type": "string"
+										},
+										"data": {}
+									}
+								}
+							}
+						}
+					}
+				},
+				"security": [
+					{
+						"apiKey": []
+					},
+					{
+						"bearerAuth": []
+					},
+					{
+						"cookieAuth": []
+					}
+				],
+				"x-codeSamples": [
+					{
+						"lang": "bash",
+						"label": "cURL",
+						"source": "curl --request DELETE \"https://careeros.example/api/openapi/branding/logo\" --header \"x-api-key: <api-key>\" --header \"Content-Type: application/json\" --data '{}'"
+					}
+				]
 			}
 		},
 		"/branding/favicon": {
@@ -43027,6 +43374,353 @@
 						"lang": "bash",
 						"label": "cURL",
 						"source": "curl --request POST \"https://rxresu.me/api/openapi/branding/favicon\" --header \"x-api-key: <api-key>\" --form \"file=@<file>\""
+					}
+				]
+			},
+			"delete": {
+				"operationId": "deleteBrandingFavicon",
+				"summary": "Remove the organization's favicon",
+				"description": "Removes the current favicon, so the platform default shows again, and queues the file for deletion. NOT_FOUND when there is none. Only an owner or admin can do this. Requires authentication.",
+				"tags": [
+					"Branding"
+				],
+				"requestBody": {
+					"required": false,
+					"content": {
+						"application/json": {
+							"schema": {
+								"type": "object"
+							}
+						}
+					}
+				},
+				"responses": {
+					"200": {
+						"description": "OK",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"appName": {
+											"anyOf": [
+												{
+													"type": "string"
+												},
+												{
+													"type": "null"
+												}
+											],
+											"description": "The product name shown in the app. Null uses the platform default."
+										},
+										"primaryColor": {
+											"anyOf": [
+												{
+													"type": "string"
+												},
+												{
+													"type": "null"
+												}
+											],
+											"description": "A #rrggbb colour."
+										},
+										"secondaryColor": {
+											"anyOf": [
+												{
+													"type": "string"
+												},
+												{
+													"type": "null"
+												}
+											],
+											"description": "A #rrggbb colour."
+										},
+										"font": {
+											"anyOf": [
+												{
+													"enum": [
+														"Figtree",
+														"Inter",
+														"IBM Plex Sans",
+														"Roboto",
+														"Open Sans",
+														"Lato",
+														"Merriweather",
+														"Lora"
+													],
+													"type": "string"
+												},
+												{
+													"type": "null"
+												}
+											]
+										},
+										"supportUrl": {
+											"anyOf": [
+												{
+													"type": "string"
+												},
+												{
+													"type": "null"
+												}
+											]
+										},
+										"termsUrl": {
+											"anyOf": [
+												{
+													"type": "string"
+												},
+												{
+													"type": "null"
+												}
+											]
+										},
+										"privacyUrl": {
+											"anyOf": [
+												{
+													"type": "string"
+												},
+												{
+													"type": "null"
+												}
+											]
+										},
+										"logoUrl": {
+											"anyOf": [
+												{
+													"type": "string"
+												},
+												{
+													"type": "null"
+												}
+											],
+											"description": "Where the logo is served, or null when none was uploaded."
+										},
+										"faviconUrl": {
+											"anyOf": [
+												{
+													"type": "string"
+												},
+												{
+													"type": "null"
+												}
+											],
+											"description": "Where the favicon is served, or null when none was uploaded."
+										},
+										"emailFromName": {
+											"anyOf": [
+												{
+													"type": "string"
+												},
+												{
+													"type": "null"
+												}
+											],
+											"description": "The sender name on emails the organization sends."
+										},
+										"emailReplyTo": {
+											"anyOf": [
+												{
+													"type": "string"
+												},
+												{
+													"type": "null"
+												}
+											],
+											"description": "The Reply-To address on emails the organization sends."
+										},
+										"updatedAt": {
+											"type": "string",
+											"format": "date-time",
+											"x-native-type": "date"
+										}
+									},
+									"required": [
+										"appName",
+										"primaryColor",
+										"secondaryColor",
+										"font",
+										"supportUrl",
+										"termsUrl",
+										"privacyUrl",
+										"logoUrl",
+										"faviconUrl",
+										"emailFromName",
+										"emailReplyTo",
+										"updatedAt"
+									]
+								}
+							}
+						}
+					},
+					"403": {
+						"description": "403",
+						"content": {
+							"application/json": {
+								"schema": {
+									"oneOf": [
+										{
+											"type": "object",
+											"properties": {
+												"defined": {
+													"const": true
+												},
+												"code": {
+													"const": "FORBIDDEN"
+												},
+												"status": {
+													"const": 403
+												},
+												"message": {
+													"type": "string",
+													"default": "Only an owner or admin of the organization can do this."
+												},
+												"data": {}
+											},
+											"required": [
+												"defined",
+												"code",
+												"status",
+												"message"
+											]
+										},
+										{
+											"type": "object",
+											"properties": {
+												"defined": {
+													"const": false
+												},
+												"code": {
+													"type": "string"
+												},
+												"status": {
+													"type": "number"
+												},
+												"message": {
+													"type": "string"
+												},
+												"data": {}
+											},
+											"required": [
+												"defined",
+												"code",
+												"status",
+												"message"
+											]
+										}
+									]
+								}
+							}
+						}
+					},
+					"404": {
+						"description": "404",
+						"content": {
+							"application/json": {
+								"schema": {
+									"oneOf": [
+										{
+											"type": "object",
+											"properties": {
+												"defined": {
+													"const": true
+												},
+												"code": {
+													"const": "NOT_FOUND"
+												},
+												"status": {
+													"const": 404
+												},
+												"message": {
+													"type": "string",
+													"default": "The organization has no favicon."
+												},
+												"data": {}
+											},
+											"required": [
+												"defined",
+												"code",
+												"status",
+												"message"
+											]
+										},
+										{
+											"type": "object",
+											"properties": {
+												"defined": {
+													"const": false
+												},
+												"code": {
+													"type": "string"
+												},
+												"status": {
+													"type": "number"
+												},
+												"message": {
+													"type": "string"
+												},
+												"data": {}
+											},
+											"required": [
+												"defined",
+												"code",
+												"status",
+												"message"
+											]
+										}
+									]
+								}
+							}
+						}
+					},
+					"default": {
+						"description": "Structured API error. See status and code; do not branch on message text.",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"required": [
+										"defined",
+										"code",
+										"status",
+										"message"
+									],
+									"properties": {
+										"defined": {
+											"type": "boolean"
+										},
+										"code": {
+											"type": "string"
+										},
+										"status": {
+											"type": "integer"
+										},
+										"message": {
+											"type": "string"
+										},
+										"data": {}
+									}
+								}
+							}
+						}
+					}
+				},
+				"security": [
+					{
+						"apiKey": []
+					},
+					{
+						"bearerAuth": []
+					},
+					{
+						"cookieAuth": []
+					}
+				],
+				"x-codeSamples": [
+					{
+						"lang": "bash",
+						"label": "cURL",
+						"source": "curl --request DELETE \"https://careeros.example/api/openapi/branding/favicon\" --header \"x-api-key: <api-key>\" --header \"Content-Type: application/json\" --data '{}'"
 					}
 				]
 			}
@@ -129591,6 +130285,375 @@
 						"lang": "bash",
 						"label": "cURL",
 						"source": "curl --request DELETE \"https://rxresu.me/api/openapi/files\" --header \"x-api-key: <api-key>\" --header \"Content-Type: application/json\" --data '{\n  \"filename\": \"<string>\"\n}'"
+					}
+				]
+			}
+		},
+		"/branding/host": {
+			"get": {
+				"operationId": "getPublicBrandingForHost",
+				"summary": "Get the public branding of this address",
+				"description": "Returns the branding anyone may see before signing in for the address the request was sent to: the organization's on its own address, the platform default (every field null) elsewhere. Never returns the sender name or settings. No authentication required.",
+				"tags": [
+					"Branding"
+				],
+				"parameters": [],
+				"responses": {
+					"200": {
+						"description": "OK",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"organizationId": {
+											"anyOf": [
+												{
+													"type": "string"
+												},
+												{
+													"type": "null"
+												}
+											]
+										},
+										"slug": {
+											"anyOf": [
+												{
+													"type": "string"
+												},
+												{
+													"type": "null"
+												}
+											]
+										},
+										"appName": {
+											"anyOf": [
+												{
+													"type": "string"
+												},
+												{
+													"type": "null"
+												}
+											],
+											"description": "The product name shown in the app. Null uses the platform default."
+										},
+										"primaryColor": {
+											"anyOf": [
+												{
+													"type": "string"
+												},
+												{
+													"type": "null"
+												}
+											],
+											"description": "A #rrggbb colour."
+										},
+										"secondaryColor": {
+											"anyOf": [
+												{
+													"type": "string"
+												},
+												{
+													"type": "null"
+												}
+											],
+											"description": "A #rrggbb colour."
+										},
+										"font": {
+											"anyOf": [
+												{
+													"enum": [
+														"Figtree",
+														"Inter",
+														"IBM Plex Sans",
+														"Roboto",
+														"Open Sans",
+														"Lato",
+														"Merriweather",
+														"Lora"
+													],
+													"type": "string"
+												},
+												{
+													"type": "null"
+												}
+											]
+										},
+										"supportUrl": {
+											"anyOf": [
+												{
+													"type": "string"
+												},
+												{
+													"type": "null"
+												}
+											]
+										},
+										"termsUrl": {
+											"anyOf": [
+												{
+													"type": "string"
+												},
+												{
+													"type": "null"
+												}
+											]
+										},
+										"privacyUrl": {
+											"anyOf": [
+												{
+													"type": "string"
+												},
+												{
+													"type": "null"
+												}
+											]
+										},
+										"logoUrl": {
+											"anyOf": [
+												{
+													"type": "string"
+												},
+												{
+													"type": "null"
+												}
+											]
+										},
+										"faviconUrl": {
+											"anyOf": [
+												{
+													"type": "string"
+												},
+												{
+													"type": "null"
+												}
+											]
+										}
+									},
+									"required": [
+										"organizationId",
+										"slug",
+										"appName",
+										"primaryColor",
+										"secondaryColor",
+										"font",
+										"supportUrl",
+										"termsUrl",
+										"privacyUrl",
+										"logoUrl",
+										"faviconUrl"
+									]
+								}
+							}
+						}
+					},
+					"default": {
+						"description": "Structured API error. See status and code; do not branch on message text.",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"required": [
+										"defined",
+										"code",
+										"status",
+										"message"
+									],
+									"properties": {
+										"defined": {
+											"type": "boolean"
+										},
+										"code": {
+											"type": "string"
+										},
+										"status": {
+											"type": "integer"
+										},
+										"message": {
+											"type": "string"
+										},
+										"data": {}
+									}
+								}
+							}
+						}
+					}
+				},
+				"security": [],
+				"x-codeSamples": [
+					{
+						"lang": "bash",
+						"label": "cURL",
+						"source": "curl \"https://careeros.example/api/openapi/branding/host\""
+					}
+				]
+			}
+		},
+		"/organization/domains/info": {
+			"get": {
+				"operationId": "getOrganizationDomainInfo",
+				"summary": "Get the organization's address and whether custom domains are available",
+				"description": "Returns the organization's own address on the platform (always works), whether this server can add custom domains at all, and how many an organization may have. Only an owner or admin can do this. Requires authentication.",
+				"tags": [
+					"Organization"
+				],
+				"parameters": [],
+				"responses": {
+					"200": {
+						"description": "OK",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"subdomainHost": {
+											"anyOf": [
+												{
+													"type": "string"
+												},
+												{
+													"type": "null"
+												}
+											],
+											"description": "The organization's address, or null when none is configured."
+										},
+										"subdomainUrl": {
+											"anyOf": [
+												{
+													"type": "string"
+												},
+												{
+													"type": "null"
+												}
+											]
+										},
+										"domainsConfigured": {
+											"type": "boolean"
+										},
+										"domainLimit": {
+											"type": "integer",
+											"minimum": -9007199254740991,
+											"maximum": 9007199254740991
+										}
+									},
+									"required": [
+										"subdomainHost",
+										"subdomainUrl",
+										"domainsConfigured",
+										"domainLimit"
+									]
+								}
+							}
+						}
+					},
+					"403": {
+						"description": "403",
+						"content": {
+							"application/json": {
+								"schema": {
+									"oneOf": [
+										{
+											"type": "object",
+											"properties": {
+												"defined": {
+													"const": true
+												},
+												"code": {
+													"const": "FORBIDDEN"
+												},
+												"status": {
+													"const": 403
+												},
+												"message": {
+													"type": "string",
+													"default": "Only an owner or admin of the organization can do this."
+												},
+												"data": {}
+											},
+											"required": [
+												"defined",
+												"code",
+												"status",
+												"message"
+											]
+										},
+										{
+											"type": "object",
+											"properties": {
+												"defined": {
+													"const": false
+												},
+												"code": {
+													"type": "string"
+												},
+												"status": {
+													"type": "number"
+												},
+												"message": {
+													"type": "string"
+												},
+												"data": {}
+											},
+											"required": [
+												"defined",
+												"code",
+												"status",
+												"message"
+											]
+										}
+									]
+								}
+							}
+						}
+					},
+					"default": {
+						"description": "Structured API error. See status and code; do not branch on message text.",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"required": [
+										"defined",
+										"code",
+										"status",
+										"message"
+									],
+									"properties": {
+										"defined": {
+											"type": "boolean"
+										},
+										"code": {
+											"type": "string"
+										},
+										"status": {
+											"type": "integer"
+										},
+										"message": {
+											"type": "string"
+										},
+										"data": {}
+									}
+								}
+							}
+						}
+					}
+				},
+				"security": [
+					{
+						"apiKey": []
+					},
+					{
+						"bearerAuth": []
+					},
+					{
+						"cookieAuth": []
+					}
+				],
+				"x-codeSamples": [
+					{
+						"lang": "bash",
+						"label": "cURL",
+						"source": "curl \"https://careeros.example/api/openapi/organization/domains/info\" --header \"x-api-key: <api-key>\""
 					}
 				]
 			}
