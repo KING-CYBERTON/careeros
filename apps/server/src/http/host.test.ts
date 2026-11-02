@@ -12,8 +12,14 @@ vi.mock("@careeros/tenancy", async () => {
 		currentHost: () => store.getStore(),
 	};
 });
+// CAREEROS (P2-Q01): `serveWebDistStatic` stands in for the built files: only /assets/app.js and /icon/light.svg exist.
 vi.mock("../static/web", () => ({
 	handleUnknownOrgHost: async () => new Response("<html>shell</html>", { status: 404 }),
+	serveWebDistStatic: async (c: { req: { path: string } }, next: () => Promise<void>) => {
+		if (["/assets/app.js", "/icon/light.svg"].includes(c.req.path)) return new Response("file", { status: 200 });
+		await next();
+		return undefined;
+	},
 }));
 
 const { hostMiddleware } = await import("./host");
@@ -70,6 +76,34 @@ describe("hostMiddleware", () => {
 		const response = await makeApp().request("https://nobody.test/auth/login");
 		expect(response.status).toBe(404);
 		expect(await response.text()).toContain("shell");
+		expect(mocks.seen).not.toHaveBeenCalled();
+	});
+
+	it("serves the built web files on such a host, so the not-set-up page can start, and nothing else", async () => {
+		mocks.resolveHost.mockResolvedValue({ kind: "unknown", matchesOrgPattern: true });
+		const app = makeApp();
+		const script = await app.request("https://nobody.test/assets/app.js");
+		expect(script.status).toBe(200);
+		expect(await script.text()).toBe("file");
+		expect((await app.request("https://nobody.test/icon/light.svg")).status).toBe(200);
+		// A static path with no file is a plain 404, not the shell (a script request must not get HTML).
+		const missing = await app.request("https://nobody.test/assets/missing.js");
+		expect(missing.status).toBe(404);
+		expect(await missing.text()).toBe("Not Found");
+		// Everything with organization data or behaviour is still closed, including look-alikes.
+		for (const path of [
+			"/api/branding-assets/org_a/logo-x.png",
+			"/api/rpc/resume/list",
+			"/manifest.webmanifest",
+			"/uploads/x.png",
+			"/assets",
+			"/assetsx/app.js",
+			"/some-user/some-resume",
+		]) {
+			const response = await app.request(`https://nobody.test${path}`);
+			expect(response.status, path).toBe(404);
+			expect(await response.text(), path).not.toBe("file");
+		}
 		expect(mocks.seen).not.toHaveBeenCalled();
 	});
 

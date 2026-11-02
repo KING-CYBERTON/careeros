@@ -1,6 +1,14 @@
 import { afterAll, beforeAll, describe, expect, it } from "vite-plus/test";
 import { createOrgIds, createPools, type TestPools } from "@careeros/testing";
-import { isolationRegistry, registerIsolationSuite, runCoverageCheck, runUnclassifiedTablesCheck } from "./index";
+import {
+	globalTables,
+	isolationRegistry,
+	pendingTenantTables,
+	registerIsolationSuite,
+	runCoverageCheck,
+	runUnclassifiedTablesCheck,
+	tenancyAllowList,
+} from "./index";
 
 // P1-T04: the real registry (the five resume tables) against the migrated public schema, as `careeros_app`.
 // Skipped only when the CAREEROS_TEST_* variables are absent; CI sets them.
@@ -77,6 +85,45 @@ describe.skipIf(!configured)("the isolation registry on the migrated schema", ()
 	it("classifies every table in public: registered, global or pending", async () => {
 		const result = await runUnclassifiedTablesCheck(pools.app, isolationRegistry);
 		expect(result.failures).toEqual([]);
+	});
+
+	// P2-Q01: every Phase 2 table has a decision, and each one exists in the migrated schema. The tenant tables are
+	// registered (RLS and isolation checks run on them); the pre-authentication handoff table and the Cloudflare cleanup
+	// queue are the two deliberate exceptions, each on a list with its reason. Nothing is left pending.
+	it("accounts for every Phase 2 table and leaves the pending list empty", async () => {
+		const registered = new Set(isolationRegistry.map((entry) => entry.table));
+		const allowed = new Set(tenancyAllowList.map((entry) => entry.table));
+		const global = new Set(globalTables.map((entry) => entry.table));
+		for (const table of ["organization_branding", "organization_settings", "organization_domain"])
+			expect(registered.has(table), `${table} is registered`).toBe(true);
+		expect(allowed.has("auth_handoff"), "auth_handoff is on the tenancy allow-list").toBe(true);
+		expect(global.has("organization_domain_cf_cleanup"), "the Cloudflare cleanup queue is a global table").toBe(true);
+		for (const reason of [...tenancyAllowList, ...globalTables].filter((entry) =>
+			["auth_handoff", "organization_domain_cf_cleanup"].includes(entry.table),
+		))
+			expect(reason.reason.length, `${reason.table} has a reason`).toBeGreaterThan(20);
+
+		const { rows } = await pools.owner.query<{ table_name: string }>(
+			`select table_name from information_schema.tables
+			 where table_schema = 'public' and table_name = any($1::text[])`,
+			[
+				[
+					"organization_branding",
+					"organization_settings",
+					"organization_domain",
+					"organization_domain_cf_cleanup",
+					"auth_handoff",
+				],
+			],
+		);
+		expect(rows.map((row) => row.table_name).sort()).toEqual([
+			"auth_handoff",
+			"organization_branding",
+			"organization_domain",
+			"organization_domain_cf_cleanup",
+			"organization_settings",
+		]);
+		expect(pendingTenantTables).toEqual([]);
 	});
 
 	it("fails a table nobody classified", async () => {
