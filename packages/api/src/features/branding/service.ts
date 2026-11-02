@@ -1,7 +1,7 @@
 import type { BrandingAsset } from "./assets";
 import type { BrandingUpdate } from "./schemas";
 import { randomUUID } from "node:crypto";
-import { requireOrgId } from "@careeros/tenancy";
+import { currentHost, requireOrgId, type HostContext } from "@careeros/tenancy";
 import { ORPCError } from "@orpc/server";
 import { and, eq, sql } from "drizzle-orm";
 import { db } from "@reactive-resume/db/client";
@@ -130,6 +130,35 @@ export async function replaceBrandingAsset(userId: string, kind: AssetKind, asse
 	return { url: brandingAssetUrl(organizationId, key) ?? "", contentType: asset.contentType };
 }
 
+/**
+ * CAREEROS (P2-T07, Q77): removes the logo or favicon. The key is nulled and the file queued for cleanup in one
+ * transaction, as a replacement does. NOT_FOUND when the organization has none to remove.
+ */
+export async function removeBrandingAsset(userId: string, kind: AssetKind) {
+	const organizationId = await requireOrganizationAdmin(userId);
+	const column = kind === "logo" ? "logoStorageKey" : "faviconStorageKey";
+	const { previous, row } = await db.transaction(async (tx) => {
+		const [current] = await tx
+			.select()
+			.from(schema.organizationBranding)
+			.where(eq(schema.organizationBranding.organizationId, organizationId))
+			.limit(1)
+			.for("update");
+		const old = current?.[column] ?? null;
+		if (!old) throw new ORPCError("NOT_FOUND", { message: `This organization has no ${kind} to remove.` });
+		const [updated] = await tx
+			.update(schema.organizationBranding)
+			.set({ [column]: null, updatedAt: new Date(), updatedBy: userId })
+			.where(eq(schema.organizationBranding.organizationId, organizationId))
+			.returning();
+		await enqueueStorageCleanup(tx, organizationId, [old]);
+		return { previous: old, row: updated };
+	});
+	bustPublicBranding(organizationId);
+	await runStorageCleanup({ ownerId: organizationId, storageKeys: [previous] }).catch(() => undefined);
+	return toBranding(organizationId, row);
+}
+
 export async function getSettings() {
 	const organizationId = requireOrgId();
 	const [row] = await db
@@ -202,6 +231,29 @@ export function getCachedPublicBranding(organizationId: string) {
 }
 
 export type PublicBranding = NonNullable<Awaited<ReturnType<typeof getPublicBrandingBySlug>>>;
+
+/**
+ * CAREEROS (P2-T07, Q95): the public branding of the request's host, for a client that has no session yet (the mobile
+ * sign-in screen). The organization comes from the resolved host, never from the caller. The platform host and any
+ * host that is not an organization's answer with the platform default (every field null).
+ */
+export async function getPublicBrandingForHost(host: HostContext | undefined = currentHost()) {
+	const empty = {
+		organizationId: null,
+		slug: null,
+		appName: null,
+		logoUrl: null,
+		faviconUrl: null,
+		primaryColor: null,
+		secondaryColor: null,
+		font: null,
+		supportUrl: null,
+		termsUrl: null,
+		privacyUrl: null,
+	};
+	if (host?.kind !== "org") return empty;
+	return (await getCachedPublicBranding(host.organizationId)) ?? empty;
+}
 
 /**
  * The stored asset behind a public branding URL, or `null`. Only the file the branding currently points at is public:

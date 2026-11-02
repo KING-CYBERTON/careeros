@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vite-plus/test";
 import { BRANDING_FONTS } from "@reactive-resume/db/schema";
+import { BRANDING_FONT_NAMES } from "@reactive-resume/utils/brand";
 import { brandingUpdateSchema, isHttpsUrl, settingsUpdateSchema } from "./schemas";
 
 const parses = (input: unknown) => brandingUpdateSchema.safeParse(input).success;
@@ -75,5 +76,12 @@ describe("settingsUpdateSchema", () => {
 		expect(settingsUpdateSchema.safeParse({ openSignup: true }).success).toBe(true);
 		expect(settingsUpdateSchema.safeParse({}).success).toBe(true);
 		expect(settingsUpdateSchema.safeParse({ openSignup: "yes" }).success).toBe(false);
+	});
+});
+
+// CAREEROS (P2-T07): clients choose from a copy of the font list; it must stay equal to the database's.
+describe("BRANDING_FONT_NAMES", () => {
+	it("equals BRANDING_FONTS", () => {
+		expect([...BRANDING_FONT_NAMES]).toEqual([...BRANDING_FONTS]);
 	});
 });

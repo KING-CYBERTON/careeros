@@ -1,7 +1,7 @@
 import z from "zod";
 import { protectedProcedure } from "../../context";
 import { accountRateLimit } from "../../middleware/rate-limit";
-import { addDomain, listDomains, recheckDomain, removeDomain } from "./service";
+import { addDomain, getDomainInfo, listDomains, recheckDomain, removeDomain } from "./service";
 
 // CAREEROS (P2-T06): organization custom domains. Owners and admins of the current organization only; the
 // organization is the request's, never an input, and a domain id of another organization is NOT_FOUND (row-level security).
@@ -43,6 +43,29 @@ const domainSchema = z.object({
 const idInput = z.object({ id: z.string().min(1).max(100).describe("The domain's id.") });
 
 export const organizationDomainRouter = {
+	// CAREEROS (P2-T07): the subdomain address and whether custom domains are set up, for the Domains screen.
+	info: protectedProcedure
+		.route({
+			...route,
+			method: "GET",
+			path: "/organization/domains/info",
+			operationId: "getOrganizationDomainInfo",
+			summary: "Get the organization's address and whether custom domains are available",
+			description:
+				"Returns the organization's own address on the platform (always works), whether this server can add custom domains at all, and how many an organization may have. Only an owner or admin can do this. Requires authentication.",
+		})
+		.input(z.object({}).optional())
+		.errors(forbidden)
+		.output(
+			z.object({
+				subdomainHost: z.string().nullable().describe("The organization's address, or null when none is configured."),
+				subdomainUrl: z.string().nullable(),
+				domainsConfigured: z.boolean(),
+				domainLimit: z.number().int(),
+			}),
+		)
+		.handler(({ context }) => getDomainInfo(context.user.id)),
+
 	list: protectedProcedure
 		.route({
 			...route,

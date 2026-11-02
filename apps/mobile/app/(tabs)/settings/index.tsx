@@ -5,6 +5,8 @@ import { openBrowserAsync } from "expo-web-browser";
 import { View } from "react-native";
 // CAREEROS (P2-T02): the brand follows the organization the server belongs to
 import { useBrand } from "@/branding/store";
+// CAREEROS (P2-T07): Branding and Domains rows for owners and admins
+import { useOrganizationAdmin } from "@/features/branding/access";
 import { SettingsGroup, SettingsPage } from "@/features/settings/layout";
 import { useProfile } from "@/features/settings/queries";
 import { SignOutRow } from "@/features/settings/sign-out";
@@ -20,6 +22,7 @@ export default function SettingsScreen() {
 	const openLink = (url: string) => {
 		void openBrowserAsync(url).catch(() => showToast({ message: t`Couldn't open the browser. Try again.` }));
 	};
+	const canManageBrand = useOrganizationAdmin() === "allowed";
 	const theme = useThemePreference();
 	const appearance = { system: t`System`, light: t`Light`, dark: t`Dark` }[theme];
 	return (
@@ -43,6 +46,18 @@ export default function SettingsScreen() {
 				/>
 				<ListRow title={t`AI & developer`} leading="robot" chevron onPress={() => router.push(routes.settings("ai"))} />
 			</SettingsGroup>
+			{/* CAREEROS (P2-T07): shown to owners and admins only; the API enforces the same rule. */}
+			{canManageBrand ? (
+				<SettingsGroup title={t`Organization`}>
+					<ListRow
+						title={t`Branding`}
+						leading="palette"
+						chevron
+						onPress={() => router.push(routes.settings("branding"))}
+					/>
+					<ListRow title={t`Domains`} leading="globe" chevron onPress={() => router.push(routes.settings("domains"))} />
+				</SettingsGroup>
+			) : null}
 			<SettingsGroup>
 				<SignOutRow switchServer />
 			</SettingsGroup>

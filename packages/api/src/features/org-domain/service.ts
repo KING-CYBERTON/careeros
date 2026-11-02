@@ -190,3 +190,26 @@ export async function removeDomain(userId: string, id: string) {
 	// Without Cloudflare configured the row stays `removing` (it no longer resolves) until the job can delete it.
 	await startRemoval(organizationId, id, defaultProcessDeps());
 }
+
+/**
+ * CAREEROS (P2-T07): what the Domains screen needs besides the list. The address that always works comes from
+ * `ORG_HOST_PATTERN` and the organization's own slug (read in its scope); whether domains can be added at all depends
+ * on the server's Cloudflare settings.
+ */
+export async function getDomainInfo(userId: string) {
+	const organizationId = await requireOrganizationAdmin(userId);
+	const [organization] = await db
+		.select({ slug: schema.organization.slug })
+		.from(schema.organization)
+		.where(eq(schema.organization.id, organizationId))
+		.limit(1);
+	const pattern = parseOrgHostPattern(env.ORG_HOST_PATTERN);
+	const subdomainHost = pattern && organization?.slug ? `${pattern.prefix}${organization.slug}${pattern.suffix}` : null;
+	const appUrl = new URL(env.APP_URL);
+	return {
+		subdomainHost,
+		subdomainUrl: subdomainHost ? `${appUrl.protocol}//${subdomainHost}${appUrl.port ? `:${appUrl.port}` : ""}` : null,
+		domainsConfigured: isOrgDomainsConfigured(),
+		domainLimit: schema.ORGANIZATION_DOMAIN_LIMIT,
+	};
+}

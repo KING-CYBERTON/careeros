@@ -8,6 +8,7 @@ import {
 	brandingSchema,
 	brandingUpdateSchema,
 	faviconUploadSchema,
+	hostBrandingSchema,
 	logoUploadSchema,
 	publicBrandingSchema,
 	publicBySlugInput,
@@ -18,7 +19,9 @@ import {
 import {
 	getBranding,
 	getPublicBrandingBySlug,
+	getPublicBrandingForHost,
 	getSettings,
+	removeBrandingAsset,
 	requireOrganizationAdmin,
 	replaceBrandingAsset,
 	updateBranding,
@@ -97,6 +100,55 @@ export const brandingRouter = {
 			await requireOrganizationAdmin(context.user.id);
 			return replaceBrandingAsset(context.user.id, "favicon", await validateFavicon(input.file));
 		}),
+
+	// CAREEROS (P2-T07, Q77): remove the logo or favicon.
+	deleteLogo: protectedProcedure
+		.route({
+			...route,
+			method: "DELETE",
+			path: "/branding/logo",
+			operationId: "deleteBrandingLogo",
+			summary: "Remove the organization's logo",
+			description:
+				"Removes the current logo, so the platform default shows again, and queues the file for deletion. NOT_FOUND when there is none. Only an owner or admin can do this. Requires authentication.",
+		})
+		.input(z.object({}).optional())
+		.use(accountRateLimit)
+		.errors({ ...forbidden, NOT_FOUND: { status: 404, message: "The organization has no logo." } })
+		.output(brandingSchema)
+		.handler(({ context }) => removeBrandingAsset(context.user.id, "logo")),
+
+	deleteFavicon: protectedProcedure
+		.route({
+			...route,
+			method: "DELETE",
+			path: "/branding/favicon",
+			operationId: "deleteBrandingFavicon",
+			summary: "Remove the organization's favicon",
+			description:
+				"Removes the current favicon, so the platform default shows again, and queues the file for deletion. NOT_FOUND when there is none. Only an owner or admin can do this. Requires authentication.",
+		})
+		.input(z.object({}).optional())
+		.use(accountRateLimit)
+		.errors({ ...forbidden, NOT_FOUND: { status: 404, message: "The organization has no favicon." } })
+		.output(brandingSchema)
+		.handler(({ context }) => removeBrandingAsset(context.user.id, "favicon")),
+
+	// CAREEROS (P2-T07, Q95): the branding of the address the request came to, for the mobile sign-in screen.
+	publicForHost: publicProcedure
+		.route({
+			...route,
+			method: "GET",
+			path: "/branding/host",
+			operationId: "getPublicBrandingForHost",
+			summary: "Get the public branding of this address",
+			description:
+				"Returns the branding anyone may see before signing in for the address the request was sent to: the organization's on its own address, the platform default (every field null) elsewhere. Never returns the sender name or settings. No authentication required.",
+		})
+		.input(z.object({}).optional())
+		.use(brandingPublicRateLimit)
+		.output(hostBrandingSchema)
+		.handler(({ context }) => getPublicBrandingForHost(context.host)),
 
 	publicBySlug: publicProcedure
 		.route({

@@ -51,6 +51,8 @@ import { Route as DashboardSettingsIndexRouteImport } from "./routes/dashboard/s
 import { Route as DashboardSettingsAccountRouteImport } from "./routes/dashboard/settings/account";
 import { Route as DashboardSettingsAiRouteImport } from "./routes/dashboard/settings/ai";
 import { Route as DashboardSettingsApiKeysRouteImport } from "./routes/dashboard/settings/api-keys";
+import { Route as DashboardSettingsBrandingRouteImport } from "./routes/dashboard/settings/branding";
+import { Route as DashboardSettingsDomainsRouteImport } from "./routes/dashboard/settings/domains";
 import { Route as DashboardSettingsIntegrationsRouteRouteImport } from "./routes/dashboard/settings/integrations/route";
 import { Route as DashboardSettingsJobSearchRouteImport } from "./routes/dashboard/settings/job-search";
 import { Route as DashboardSettingsMembersRouteImport } from "./routes/dashboard/settings/members";
@@ -278,6 +280,18 @@ const DashboardSettingsApiKeysRoute =
     path: "/api-keys",
     getParentRoute: () => DashboardSettingsRouteRoute,
   } as any);
+const DashboardSettingsBrandingRoute =
+  DashboardSettingsBrandingRouteImport.update({
+    id: "/branding",
+    path: "/branding",
+    getParentRoute: () => DashboardSettingsRouteRoute,
+  } as any);
+const DashboardSettingsDomainsRoute =
+  DashboardSettingsDomainsRouteImport.update({
+    id: "/domains",
+    path: "/domains",
+    getParentRoute: () => DashboardSettingsRouteRoute,
+  } as any);
 const DashboardSettingsIntegrationsRouteRoute =
   DashboardSettingsIntegrationsRouteRouteImport.update({
     id: "/integrations",
@@ -382,6 +396,8 @@ export interface FileRoutesByFullPath {
   "/dashboard/settings/account": typeof DashboardSettingsAccountRoute;
   "/dashboard/settings/ai": typeof DashboardSettingsAiRoute;
   "/dashboard/settings/api-keys": typeof DashboardSettingsApiKeysRoute;
+  "/dashboard/settings/branding": typeof DashboardSettingsBrandingRoute;
+  "/dashboard/settings/domains": typeof DashboardSettingsDomainsRoute;
   "/dashboard/settings/job-search": typeof DashboardSettingsJobSearchRoute;
   "/dashboard/settings/members": typeof DashboardSettingsMembersRoute;
   "/dashboard/settings/preferences": typeof DashboardSettingsPreferencesRoute;
@@ -430,6 +446,8 @@ export interface FileRoutesByTo {
   "/dashboard/settings/account": typeof DashboardSettingsAccountRoute;
   "/dashboard/settings/ai": typeof DashboardSettingsAiRoute;
   "/dashboard/settings/api-keys": typeof DashboardSettingsApiKeysRoute;
+  "/dashboard/settings/branding": typeof DashboardSettingsBrandingRoute;
+  "/dashboard/settings/domains": typeof DashboardSettingsDomainsRoute;
   "/dashboard/settings/job-search": typeof DashboardSettingsJobSearchRoute;
   "/dashboard/settings/members": typeof DashboardSettingsMembersRoute;
   "/dashboard/settings/preferences": typeof DashboardSettingsPreferencesRoute;
@@ -486,6 +504,8 @@ export interface FileRoutesById {
   "/dashboard/settings/account": typeof DashboardSettingsAccountRoute;
   "/dashboard/settings/ai": typeof DashboardSettingsAiRoute;
   "/dashboard/settings/api-keys": typeof DashboardSettingsApiKeysRoute;
+  "/dashboard/settings/branding": typeof DashboardSettingsBrandingRoute;
+  "/dashboard/settings/domains": typeof DashboardSettingsDomainsRoute;
   "/dashboard/settings/job-search": typeof DashboardSettingsJobSearchRoute;
   "/dashboard/settings/members": typeof DashboardSettingsMembersRoute;
   "/dashboard/settings/preferences": typeof DashboardSettingsPreferencesRoute;
@@ -542,6 +562,8 @@ export interface FileRouteTypes {
     | "/dashboard/settings/account"
     | "/dashboard/settings/ai"
     | "/dashboard/settings/api-keys"
+    | "/dashboard/settings/branding"
+    | "/dashboard/settings/domains"
     | "/dashboard/settings/job-search"
     | "/dashboard/settings/members"
     | "/dashboard/settings/preferences"
@@ -590,6 +612,8 @@ export interface FileRouteTypes {
     | "/dashboard/settings/account"
     | "/dashboard/settings/ai"
     | "/dashboard/settings/api-keys"
+    | "/dashboard/settings/branding"
+    | "/dashboard/settings/domains"
     | "/dashboard/settings/job-search"
     | "/dashboard/settings/members"
     | "/dashboard/settings/preferences"
@@ -645,6 +669,8 @@ export interface FileRouteTypes {
     | "/dashboard/settings/account"
     | "/dashboard/settings/ai"
     | "/dashboard/settings/api-keys"
+    | "/dashboard/settings/branding"
+    | "/dashboard/settings/domains"
     | "/dashboard/settings/job-search"
     | "/dashboard/settings/members"
     | "/dashboard/settings/preferences"
@@ -968,6 +994,20 @@ declare module "@tanstack/react-router" {
       preLoaderRoute: typeof DashboardSettingsApiKeysRouteImport;
       parentRoute: typeof DashboardSettingsRouteRoute;
     };
+    "/dashboard/settings/branding": {
+      id: "/dashboard/settings/branding";
+      path: "/branding";
+      fullPath: "/dashboard/settings/branding";
+      preLoaderRoute: typeof DashboardSettingsBrandingRouteImport;
+      parentRoute: typeof DashboardSettingsRouteRoute;
+    };
+    "/dashboard/settings/domains": {
+      id: "/dashboard/settings/domains";
+      path: "/domains";
+      fullPath: "/dashboard/settings/domains";
+      preLoaderRoute: typeof DashboardSettingsDomainsRouteImport;
+      parentRoute: typeof DashboardSettingsRouteRoute;
+    };
     "/dashboard/settings/integrations": {
       id: "/dashboard/settings/integrations";
       path: "/integrations";
@@ -1164,6 +1204,8 @@ interface DashboardSettingsRouteRouteChildren {
   DashboardSettingsAccountRoute: typeof DashboardSettingsAccountRoute;
   DashboardSettingsAiRoute: typeof DashboardSettingsAiRoute;
   DashboardSettingsApiKeysRoute: typeof DashboardSettingsApiKeysRoute;
+  DashboardSettingsBrandingRoute: typeof DashboardSettingsBrandingRoute;
+  DashboardSettingsDomainsRoute: typeof DashboardSettingsDomainsRoute;
   DashboardSettingsJobSearchRoute: typeof DashboardSettingsJobSearchRoute;
   DashboardSettingsMembersRoute: typeof DashboardSettingsMembersRoute;
   DashboardSettingsPreferencesRoute: typeof DashboardSettingsPreferencesRoute;
@@ -1179,6 +1221,8 @@ const DashboardSettingsRouteRouteChildren: DashboardSettingsRouteRouteChildren =
     DashboardSettingsAccountRoute: DashboardSettingsAccountRoute,
     DashboardSettingsAiRoute: DashboardSettingsAiRoute,
     DashboardSettingsApiKeysRoute: DashboardSettingsApiKeysRoute,
+    DashboardSettingsBrandingRoute: DashboardSettingsBrandingRoute,
+    DashboardSettingsDomainsRoute: DashboardSettingsDomainsRoute,
     DashboardSettingsJobSearchRoute: DashboardSettingsJobSearchRoute,
     DashboardSettingsMembersRoute: DashboardSettingsMembersRoute,
     DashboardSettingsPreferencesRoute: DashboardSettingsPreferencesRoute,

@@ -55,6 +55,12 @@ export const publicBrandingSchema = z.object({
 	faviconUrl: z.string().nullable(),
 });
 
+/** CAREEROS (P2-T07): the public branding of the request's host. All fields are null on the platform default. */
+export const hostBrandingSchema = publicBrandingSchema.extend({
+	organizationId: z.string().nullable(),
+	slug: z.string().nullable(),
+});
+
 /** Every field is optional: send only what changes. `null` resets a field to the platform default. */
 export const brandingUpdateSchema = z.object({
 	appName: text(60).nullable().optional(),

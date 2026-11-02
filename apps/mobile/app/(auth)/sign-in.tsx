@@ -9,6 +9,7 @@ import { getFlags, isAllowedServer, toOrigin } from "@/auth/oauth";
 import { useSession } from "@/auth/session";
 import { useSignIn } from "@/auth/use-sign-in";
 // CAREEROS (P2-T02): the organization's name, logo and link, as last seen on this server
+import { useHostBranding } from "@/branding/host";
 import { useStoredBrand } from "@/branding/store";
 import { routes } from "@/routes";
 import { Banner, Button, Card, ListRow, Screen, Text, useTheme } from "@/ui";
@@ -28,6 +29,8 @@ export default function SignInScreen() {
 	const { size, space } = useTheme();
 	const server = useTargetServer();
 	const host = hostOf(server);
+	// CAREEROS (P2-T07, Q95): ask the server which organization this address belongs to, so a first sign-in is branded too
+	useHostBranding(server);
 	const brand = useStoredBrand(server);
 	const { attempt, start, cancel, reset } = useSignIn();
 	const flags = useQuery({ queryKey: ["auth", "flags", server], queryFn: () => getFlags(server) });

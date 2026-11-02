@@ -638,4 +638,135 @@ describe.skipIf(!configured)("organization branding and settings", () => {
 			expect(rows.rows).toEqual([{ organization_id: ids.orgB, logo_storage_key: null }]);
 		});
 	});
+
+	// P2-T07 (Q77): removing the logo or favicon.
+	describe("removing assets", () => {
+		const keyOf = async (org: string, column: "logo_storage_key" | "favicon_storage_key") =>
+			(await owner.query(`SELECT ${column} AS key FROM organization_branding WHERE organization_id = $1`, [org]))
+				.rows[0].key as string | null;
+
+		it("nulls the key, queues and runs the cleanup, and busts the public cache", async () => {
+			await invoke(
+				branding.uploadLogo,
+				upload("l.png", await png("#336699"), "image/png"),
+				asUser(ids.ownerA, ids.orgA),
+			);
+			const key = (await keyOf(ids.orgA, "logo_storage_key")) ?? "";
+			expect(storage.has(key)).toBe(true);
+			// Warm the cache, then remove: the next read must not return the logo.
+			await inApp(() => service.getCachedPublicBranding(ids.orgA));
+			const result = await invoke<{ logoUrl: string | null }>(
+				branding.deleteLogo,
+				undefined,
+				asUser(ids.adminA, ids.orgA),
+			);
+			expect(result.logoUrl).toBeNull();
+			expect(await keyOf(ids.orgA, "logo_storage_key")).toBeNull();
+			expect(storage.has(key)).toBe(false);
+			expect(await count(`SELECT count(*) AS n FROM storage_cleanup_job WHERE organization_id = $1`, [ids.orgA])).toBe(
+				0,
+			);
+			expect((await inApp(() => service.getCachedPublicBranding(ids.orgA)))?.logoUrl).toBeNull();
+		});
+
+		it("keeps the cleanup job when the storage delete fails", async () => {
+			await invoke(
+				branding.uploadFavicon,
+				upload("f.png", await png("#000000"), "image/png"),
+				asUser(ids.ownerA, ids.orgA),
+			);
+			const key = (await keyOf(ids.orgA, "favicon_storage_key")) ?? "";
+			const { getStorageService } = await import("../storage/service");
+			const original = getStorageService().delete;
+			getStorageService().delete = async () => {
+				throw new Error("storage unavailable");
+			};
+			try {
+				await invoke(branding.deleteFavicon, undefined, asUser(ids.ownerA, ids.orgA));
+			} finally {
+				getStorageService().delete = original;
+			}
+			expect(await keyOf(ids.orgA, "favicon_storage_key")).toBeNull();
+			const jobs = await owner.query(`SELECT storage_key FROM storage_cleanup_job WHERE organization_id = $1`, [
+				ids.orgA,
+			]);
+			expect(jobs.rows).toEqual([{ storage_key: key }]);
+			await owner.query(`DELETE FROM storage_cleanup_job WHERE organization_id = $1`, [ids.orgA]);
+		});
+
+		it("refuses a member and an outsider", async () => {
+			await invoke(
+				branding.uploadLogo,
+				upload("l.png", await png("#336699"), "image/png"),
+				asUser(ids.ownerA, ids.orgA),
+			);
+			const key = await keyOf(ids.orgA, "logo_storage_key");
+			for (const procedure of [branding.deleteLogo, branding.deleteFavicon]) {
+				await expect(invoke(procedure, undefined, asUser(ids.memberA, ids.orgA))).rejects.toMatchObject({
+					code: "FORBIDDEN",
+				});
+				await expect(invoke(procedure, undefined, asUser(ids.ownerB, ids.orgA))).rejects.toMatchObject({
+					code: "FORBIDDEN",
+				});
+			}
+			expect(await keyOf(ids.orgA, "logo_storage_key")).toBe(key);
+		});
+
+		it("only ever acts on the caller's organization: another organization's delete is NOT_FOUND and leaves A's logo", async () => {
+			const key = await keyOf(ids.orgA, "logo_storage_key");
+			expect(key).not.toBeNull();
+			await expect(invoke(branding.deleteLogo, undefined, asUser(ids.ownerB, ids.orgB))).rejects.toMatchObject({
+				code: "NOT_FOUND",
+			});
+			expect(await keyOf(ids.orgA, "logo_storage_key")).toBe(key);
+			expect(storage.has(key ?? "")).toBe(true);
+		});
+	});
+
+	// P2-T07 (Q95): the public, host-scoped lookup for the mobile sign-in screen.
+	describe("branding of the request host", () => {
+		const onHost = (organizationId: string, slug: string) => ({
+			...anonymous,
+			host: {
+				kind: "org" as const,
+				organizationId,
+				slug,
+				via: "subdomain" as const,
+				hostname: `${slug}.orgs.test`,
+				origin: `https://${slug}.orgs.test`,
+			},
+		});
+
+		it("returns A's public fields on A's host and B's on B's, never the sender name", async () => {
+			await invoke(
+				branding.update,
+				{ emailFromName: "Secret Sender", emailReplyTo: "reply@a.example" },
+				asUser(ids.ownerA, ids.orgA),
+			);
+			await invoke(branding.update, { appName: "Beta Co" }, asUser(ids.ownerB, ids.orgB));
+			const a = await invoke<Record<string, unknown>>(branding.publicForHost, undefined, onHost(ids.orgA, ids.orgA));
+			expect(a).toMatchObject({ organizationId: ids.orgA, slug: ids.orgA, appName: "Acme Co" });
+			const b = await invoke<Record<string, unknown>>(branding.publicForHost, undefined, onHost(ids.orgB, ids.orgB));
+			expect(b).toMatchObject({ organizationId: ids.orgB, appName: "Beta Co" });
+			for (const result of [a, b]) {
+				expect(result).not.toHaveProperty("emailFromName");
+				expect(result).not.toHaveProperty("emailReplyTo");
+				expect(JSON.stringify(result)).not.toContain("Secret Sender");
+				expect(JSON.stringify(result)).not.toContain("reply@a.example");
+			}
+		});
+
+		it("answers the platform default on the platform host and on an unknown host", async () => {
+			for (const context of [
+				anonymous,
+				{ ...anonymous, host: { kind: "platform" as const } },
+				{ ...anonymous, host: { kind: "unknown" as const, matchesOrgPattern: true } },
+			]) {
+				const result = await invoke<Record<string, unknown>>(branding.publicForHost, undefined, context);
+				expect(result.organizationId).toBeNull();
+				expect(result.appName).toBeNull();
+				expect(result.logoUrl).toBeNull();
+			}
+		});
+	});
 });
