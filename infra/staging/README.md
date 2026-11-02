@@ -142,7 +142,7 @@ git push origin v0.0.1
 ```
 
 3. Pushing the tag runs `careeros-image.yml`, which publishes `ghcr.io/king-cyberton/careeros:<version>` (and the other aliases it documents). Nothing else publishes: the upstream `docker-publish.yml` is switched off in this repository by an `if: github.repository == 'amruthpillai/reactive-resume'` guard on each job, and `tooling/careeros/release-guard.test.mjs` fails CI if any non-`careeros-*` workflow could run on a tag push without that guard.
-4. Promotion to `main` and production is Phase 4 and is not covered here.
+4. Promotion to `main` and production comes with the production environment in Phase 6 and is not covered here.
 
 ## Database roles
 
