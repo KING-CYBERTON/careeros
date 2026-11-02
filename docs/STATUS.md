@@ -2,7 +2,7 @@
 
 > Written by Opus after every plan, review and merge. Every thread reads this file first.
 
-**Current phase:** Phases 0, 1 and 2 meet their exit criteria (staging verified live by Stephen on 2026-11-02). Tags wait on Stephen's go and the release-path decision. Next: Phase 3
+**Current phase:** Phases 0, 1 and 2 meet their exit criteria (staging verified live by Stephen on 2026-11-02). P2-C04 merged in #64; tags `v0.0.1`, `v0.1.0`, `v0.2.0` wait on Stephen pushing them (this session cannot push tags). 3 — Admin & Billing: [phase plan](plans/P3-PHASE-PLAN.md), D1, D2 prices and D10 open with Stephen. Go-to-market release (Stephen, D11): [GTM plan](plans/GTM-PLAN.md) runs job discovery, the clipper and launch basics alongside Phase 3
 **Current version:** none yet (first tag will be `0.0.1` at Phase 0 exit)
 **Base:** Reactive Resume v6.0.10, upstream commit `a69e48318aab3c1c3ea57d2c0467710ef0d8342f` (2026-10-31)
 **Last updated:** 2026-11-02 by Opus (Thread 1)
