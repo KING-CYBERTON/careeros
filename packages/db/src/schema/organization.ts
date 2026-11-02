@@ -1,23 +1,43 @@
-import { defineRelations } from "drizzle-orm";
+import { defineRelations, sql } from "drizzle-orm";
 import * as pg from "drizzle-orm/pg-core";
 import { generateId } from "@reactive-resume/utils/string";
 import { account, session, user } from "./auth";
+import { ORGANIZATION_STATUSES, plan } from "./billing";
 
 // Tables for the Better Auth `organization` plugin (CareerOS tenancy, P1-T01). They define tenancy rather than hold
 // tenant-scoped data; Better Auth's membership checks control access.
 
-export const organization = pg.pgTable("organization", {
-	id: pg
-		.text("id")
-		.notNull()
-		.primaryKey()
-		.$defaultFn(() => generateId()),
-	name: pg.text("name").notNull(),
-	slug: pg.text("slug").notNull().unique(),
-	logo: pg.text("logo"),
-	metadata: pg.text("metadata"),
-	createdAt: pg.timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
-});
+export const organization = pg.pgTable(
+	"organization",
+	{
+		id: pg
+			.text("id")
+			.notNull()
+			.primaryKey()
+			.$defaultFn(() => generateId()),
+		name: pg.text("name").notNull(),
+		slug: pg.text("slug").notNull().unique(),
+		logo: pg.text("logo"),
+		metadata: pg.text("metadata"),
+		createdAt: pg.timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
+		// CAREEROS (P3-T01, phase plan D3): the plan and status of the organization. Better Auth's organization plugin does not
+		// know these columns and ignores them. The app role cannot change them (a trigger in the P3-T01 migration refuses it);
+		// only the definer function `careeros_set_org_plan` writes them.
+		status: pg.text("status").notNull().default("active"),
+		planId: pg
+			.text("plan_id")
+			.notNull()
+			.default("personal")
+			.references(() => plan.id),
+		statusChangedAt: pg.timestamp("status_changed_at", { withTimezone: true }),
+	},
+	(t) => [
+		pg.check(
+			"organization_status_check",
+			sql`${t.status} in (${sql.raw(ORGANIZATION_STATUSES.map((status) => `'${status}'`).join(", "))})`,
+		),
+	],
+);
 
 export const member = pg.pgTable(
 	"member",
