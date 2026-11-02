@@ -98,6 +98,9 @@ async function seedRowsWithoutEndpoint(a: Party, tag: string) {
 		transcript: `xorga-voice-${tag}`,
 		// CAREEROS (P2-T06): an organization custom domain. The e2e server has no Cloudflare settings, so no endpoint can add one.
 		orgDomain: `xorga-domain-${tag}`,
+		// CAREEROS (P4-T01): a job discovery automation and a posting it found.
+		jobSource: `xorga-source-${tag}`,
+		discoveredJob: `xorga-posting-${tag}`,
 	};
 	await withSeedPool(async (pool) => {
 		await pool.query(
@@ -127,6 +130,25 @@ async function seedRowsWithoutEndpoint(a: Party, tag: string) {
 			`insert into organization_domain (id, organization_id, hostname, verification_token, created_by)
 			 values ($1, $2, $3, $4, $5)`,
 			[ids.orgDomain, a.organizationId, `xorga-${tag}.orgdomains.example.test`, `xorga${tag}domaintoken`, a.userId],
+		);
+		await pool.query(`insert into job_source (id, organization_id, user_id, name) values ($1, $2, $3, $4)`, [
+			ids.jobSource,
+			a.organizationId,
+			a.userId,
+			`Xorga${tag} automation`,
+		]);
+		await pool.query(
+			`insert into discovered_job (id, organization_id, user_id, job_source_id, source, external_id, board_token, title, company, url, local_score)
+			 values ($1, $2, $3, $4, 'greenhouse', $1, 'xorga', $5, $6, $7, 50)`,
+			[
+				ids.discoveredJob,
+				a.organizationId,
+				a.userId,
+				ids.jobSource,
+				`Xorga${tag} posting`,
+				`Xorga${tag} Company`,
+				`https://example.test/xorga-${tag}`,
+			],
 		);
 		// Custom domains are switched off on the e2e server (no 412-free endpoint), so the row goes in directly.
 		await pool.query(
@@ -179,6 +201,16 @@ export async function createTwoOrgs(playwright: Playwright, baseURL: string, own
 	try {
 		a = await signUp(playwright, baseURL, accountA);
 		b = await signUp(playwright, baseURL, accountB);
+		// CAREEROS (P4-T01): the personal plan lacks job_discovery, so both organizations get the feature through an
+		// organization feature flag. The discovery gate stays on; the fuzz then reaches the ownership checks behind it.
+		await withSeedPool(async (pool) => {
+			for (const party of [a, b])
+				await pool.query(
+					`insert into feature_flag (id, organization_id, key, enabled) values ($1, $2, 'job_discovery', true)
+					 on conflict do nothing`,
+					[`xorga-flag-${tag}-${party.organizationId}`, party.organizationId],
+				);
+		});
 		const api = (path: string) => `/api/openapi${path}`;
 		const text = (what: string) => `Xorga${tag} ${what}`;
 
@@ -470,6 +502,8 @@ export async function createTwoOrgs(playwright: Playwright, baseURL: string, own
 			transcript: extra.transcript,
 			apiKey,
 			orgDomain: extra.orgDomain,
+			jobSource: extra.jobSource,
+			discoveredJob: extra.discoveredJob,
 		};
 		const missing = Object.entries(ids).filter(([, value]) => !value);
 		if (missing.length > 0)
