@@ -16,7 +16,7 @@ on:
           - org-dns
           - org-dns-remove
       slug:
-        description: "Organization slug (org-dns and org-dns-remove only)"
+        description: "Organization slug. Used by org-dns and org-dns-remove only; ignored (with a notice) by the other commands"
         required: false
         type: string
       apply:
@@ -67,6 +67,12 @@ jobs:
         run: |
           set -euo pipefail
           args=("$COMMAND")
-          if [[ -n "${SLUG:-}" ]]; then args+=("$SLUG"); fi
+          # P2-C04: only org-dns and org-dns-remove take a slug; a filled box must not break the other commands.
+          if [[ -n "${SLUG:-}" ]]; then
+            case "$COMMAND" in
+              org-dns | org-dns-remove) args+=("$SLUG") ;;
+              *) echo "::notice::The slug '$SLUG' was ignored: '$COMMAND' takes no slug." ;;
+            esac
+          fi
           if [[ "$APPLY" == "true" ]]; then args+=("--apply"); fi
           node infra/staging/cloudflare.mjs "${args[@]}"

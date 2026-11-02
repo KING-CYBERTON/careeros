@@ -27,7 +27,8 @@ jobs:
     name: deploy to staging
     runs-on: [self-hosted, staging]
     environment: staging
-    timeout-minutes: 30
+    # P2-C04: the first pull of a new image on a small server can take a long time.
+    timeout-minutes: 60
     if: >-
       github.event_name != 'workflow_run' ||
       (github.event.workflow_run.conclusion == 'success' &&
