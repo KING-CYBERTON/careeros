@@ -12,6 +12,8 @@ import {
 	OVERRIDES,
 	readOperations,
 } from "@careeros/testing/cross-org-inventory";
+import { ORG_HOST_PATTERN, orgHostsConfigured } from "../fixtures/org-hosts";
+import { withSeedPool } from "../fixtures/seed-db";
 import { expect, test } from "../fixtures/test";
 import { createTwoOrgs, snapshotOrgA } from "../fixtures/two-orgs";
 
@@ -185,6 +187,88 @@ test("an id from another organization never reads, changes or links Organization
 		}
 		expect(controlTool, "an id-taking MCP tool called as A with A's own id must return A's data").toBeDefined();
 
+		// P2-Q01 (step 3b, run before the snapshot of Organization A because A's key usage columns change when it is verified): the same inventory on Organization B's own host (an organization host), with A's credentials and A's
+		// ids. The platform-host pass above is unchanged. Host-based tenancy must refuse A everywhere on B's host: the
+		// answer is the join-or-switch refusal (ORG_HOST_NOT_MEMBER) for a session and ORG_HOST_KEY_MISMATCH for A's
+		// API key, and none of A's data comes back. Needs ORG_HOST_PATTERN on the e2e server (the CI job sets it).
+		let hostRefusals = 0;
+		let hostRequests = 0;
+		if (orgHostsConfigured()) {
+			const port = new URL(root).port || "80";
+			const slugs = await withSeedPool(async (pool) => {
+				const { rows } = await pool.query<{ id: string; slug: string }>(
+					"select id, slug from organization where id = any($1::text[])",
+					[[orgs.a.organizationId, orgs.b.organizationId]],
+				);
+				return Object.fromEntries(rows.map((row) => [row.id, row.slug]));
+			});
+			const hostOf = (organizationId: string) => `${slugs[organizationId]}.orgs.test:${port}`;
+			const bHost = hostOf(orgs.b.organizationId);
+			const aHost = hostOf(orgs.a.organizationId);
+			expect(slugs[orgs.a.organizationId], "Organization A's slug").toBeTruthy();
+			expect(slugs[orgs.b.organizationId], "Organization B's slug").toBeTruthy();
+			const aCookie = (await orgs.a.session.storageState()).cookies
+				.filter((cookie) => cookie.name.includes("session_token"))
+				.map((cookie) => `${cookie.name}=${cookie.value}`)
+				.join("; ");
+			expect(aCookie, "A's session cookie").not.toBe("");
+			const hostContext = (host: string, headers: Record<string, string>) =>
+				playwright.request.newContext({
+					baseURL: root,
+					extraHTTPHeaders: { host, origin: `http://${host}`, ...headers },
+				});
+
+			// Control: A's credentials on A's own host return A's data, so the scanner can see it in such an answer.
+			const home = await hostContext(aHost, { cookie: aCookie });
+			const homeAnswer = await home.get(`/api/openapi/resumes/${orgs.ids.resume}`, { failOnStatusCode: false });
+			expect(homeAnswer.status(), "A's own resume on A's host").toBe(200);
+			expect(findLeaks(await homeAnswer.text(), orgs.markers, orgs.foreignIds, [])).not.toEqual([]);
+			await home.dispose();
+
+			// Left out of this pass on purpose: API keys belong to the account, not to an organization (phase plan D8), so the
+			// owner may delete their own key from any host, B's included (confirmed in the P2-Q01 review, Q153). It touches
+			// only A's own key, no tenant data, and would remove the key the API-key mode below needs.
+			const hostPlanned = planned.filter((plan) => plan.operation.key !== "DELETE /auth/api-keys/{keyId}");
+			for (const [mode, headers, refusal] of [
+				["org host cookie", { cookie: aCookie }, "ORG_HOST_NOT_MEMBER"],
+				["org host api key", { "x-api-key": orgs.aApiKey }, "ORG_HOST_KEY_MISMATCH"],
+			] as const) {
+				const request = await hostContext(bHost, headers);
+				try {
+					await pool(hostPlanned, 6, async (plan) => {
+						const label = `${plan.label} [${mode}]`;
+						try {
+							const response = await send(request, plan.built);
+							const text = await response.text();
+							hostRequests += 1;
+							const leaks = findLeaks(text, orgs.markers, orgs.foreignIds, plan.built.sentIds);
+							if (leaks.length > 0)
+								return void failures.push(
+									`${label}: ${response.status()} carries Organization A's ${leaks.join(", ")}`,
+								);
+							if (response.status() === 403 && text.includes(refusal)) return void (hostRefusals += 1);
+							// Anything else must be a refusal too: never a success that returns or changes data.
+							if (response.status() >= 200 && response.status() < 300 && !plan.allowedEmpty)
+								failures.push(`${label}: succeeded on B's host with A's credentials (${response.status()})`);
+							else if (response.status() >= 200 && response.status() < 300 && !isEmptyResult(parse(text)))
+								failures.push(
+									`${label}: ${response.status()} is not an empty result on B's host: ${text.slice(0, 200)}`,
+								);
+						} catch (error) {
+							failures.push(`${label}: request failed: ${(error as Error).message.slice(0, 200)}`);
+						}
+					});
+				} finally {
+					await request.dispose();
+				}
+			}
+			// The pass must have reached the host gate, not been turned away earlier for being malformed.
+			expect(hostRefusals, "requests refused by the organization host gate").toBeGreaterThan(hostPlanned.length);
+		} else {
+			// Not a silent pass: the CI e2e job always sets the pattern, so this only happens on a local run without it.
+			console.log(`cross-org fuzz: org-host pass NOT RUN, the e2e server needs ORG_HOST_PATTERN=${ORG_HOST_PATTERN}`);
+		}
+
 		const before = await snapshotOrgA(orgs);
 		const publicBefore = await orgs.anonymous.get(publicPage);
 		expect(publicBefore.status(), "Organization A's public resume page without a session").toBe(200);
@@ -289,7 +373,7 @@ test("an id from another organization never reads, changes or links Organization
 			if (before[key] !== after[key]) failures.push(`Organization A changed: ${key}`);
 
 		console.log(
-			`cross-org fuzz: ${fuzzed.length} id-taking operations, ${planned.length} requests per mode, ${mcpPlans.length} MCP tools, ${Object.keys(NO_TENANT_ID).length} skipped`,
+			`cross-org fuzz: ${fuzzed.length} id-taking operations, ${planned.length} requests per mode, ${mcpPlans.length} MCP tools, ${Object.keys(NO_TENANT_ID).length} skipped; org-host pass: ${hostRequests} requests, ${hostRefusals} refused by the host gate`,
 		);
 		expect(failures, failures.join("\n")).toEqual([]);
 	} finally {

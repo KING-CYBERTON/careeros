@@ -2,7 +2,13 @@
 import type { HostContext } from "@careeros/tenancy";
 import type { MiddlewareHandler } from "hono";
 import { resolveHost, runWithHost } from "@careeros/tenancy";
-import { handleUnknownOrgHost, type ReadWebFile } from "../static/web";
+import { handleUnknownOrgHost, serveWebDistStatic, type ReadWebFile } from "../static/web";
+
+// Files of the built web app that carry no organization data: the fingerprinted bundle, the platform's own pictures and
+// fonts, and the icons. They are the same for every host, and the not-set-up page needs them to start. Nothing else is
+// let through: not an API path, an upload, a branding asset, a manifest or a public resume.
+const STATIC_WEB_FILE =
+	/^\/(?:assets|icon|logo|fonts|illustrations|doodles|photos|sounds|templates|opengraph)\/[^?#]+$|^\/(?:favicon\.(?:ico|svg)|apple-touch-icon-180x180\.png|pwa-(?:64x64|192x192|512x512)\.png|maskable-icon-512x512\.png)$/;
 
 export type HostVariables = { host: HostContext };
 
@@ -22,6 +28,11 @@ export function hostMiddleware(readWebFile?: ReadWebFile): MiddlewareHandler<{ V
 				return c.json({ defined: false, code: "NOT_FOUND", status: 404, message: "Not found" }, 404, {
 					"Cache-Control": "no-store",
 				});
+			}
+			// The not-set-up page is a client-rendered app: it needs the built files to start, and they hold no organization data.
+			if (STATIC_WEB_FILE.test(pathname) && serveWebDistStatic && !pathname.includes("..")) {
+				const file = await serveWebDistStatic(c, () => Promise.resolve());
+				return file ?? new Response("Not Found", { status: 404, headers: { "Cache-Control": "no-store" } });
 			}
 			return handleUnknownOrgHost(readWebFile);
 		}
