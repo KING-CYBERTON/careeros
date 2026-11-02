@@ -107,8 +107,9 @@ jobs:
         run: node tooling/careeros/branding-gate.mjs
 
       # CAREEROS: P2-C02. The mobile node tests and the gate's own tests; they were not run in CI before.
+      # P2-C01 adds the staging Cloudflare script's self-test.
       - name: Node tests (mobile scripts and tooling)
-        run: node --test tooling/careeros/*.test.mjs apps/mobile/scripts/*.test.mjs
+        run: node --test infra/staging/*.test.mjs tooling/careeros/*.test.mjs apps/mobile/scripts/*.test.mjs
 
   # CAREEROS: P1-C05. Unit tests are sharded across runners; each shard runs its turbo tasks serially, because
   # concurrent suites on one 4-vCPU runner caused cold-import timeouts. The aggregate job `unit` keeps the check name.
