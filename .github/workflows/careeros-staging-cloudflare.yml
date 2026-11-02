@@ -1,0 +1,71 @@
+# CAREEROS: P2-C01 — manage the Cloudflare tunnel ingress, SaaS fallback origin and organization DNS records for
+# staging. Manual only; the `staging` environment's required reviewers apply. Dry run unless `apply` is ticked.
+name: careeros-staging-cloudflare
+
+on:
+  workflow_dispatch:
+    inputs:
+      command:
+        description: "What to run"
+        required: true
+        type: choice
+        options:
+          - status
+          - tunnel-ingress
+          - fallback-origin
+          - org-dns
+          - org-dns-remove
+      slug:
+        description: "Organization slug (org-dns and org-dns-remove only)"
+        required: false
+        type: string
+      apply:
+        description: "Perform the changes (otherwise a dry run only prints the plan)"
+        required: false
+        type: boolean
+        default: false
+
+permissions:
+  contents: read
+
+# One run at a time; never cancel one that is running.
+concurrency:
+  group: careeros-staging-cloudflare
+  cancel-in-progress: false
+
+jobs:
+  cloudflare:
+    name: cloudflare (${{ inputs.command }})
+    runs-on: ubuntu-latest
+    environment: staging
+    timeout-minutes: 10
+    steps:
+      - name: Check out source
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Set up Node.js
+        uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version-file: ".nvmrc"
+
+      # The script names any missing secret or variable and exits before it makes an API call.
+      - name: Run
+        env:
+          COMMAND: ${{ inputs.command }}
+          SLUG: ${{ inputs.slug }}
+          APPLY: ${{ inputs.apply }}
+          CF_STAGING_INFRA_TOKEN: ${{ secrets.CF_STAGING_INFRA_TOKEN }}
+          CF_SAAS_API_TOKEN: ${{ secrets.CF_SAAS_API_TOKEN }}
+          CF_ACCOUNT_ID: ${{ vars.CF_ACCOUNT_ID }}
+          CF_ZONE_ID: ${{ vars.CF_ZONE_ID }}
+          CF_TUNNEL_ID: ${{ vars.CF_TUNNEL_ID }}
+          STAGING_HOST: ${{ vars.STAGING_HOST }}
+          ORG_HOST_PATTERN: ${{ vars.ORG_HOST_PATTERN }}
+        run: |
+          set -euo pipefail
+          args=("$COMMAND")
+          if [[ -n "${SLUG:-}" ]]; then args+=("$SLUG"); fi
+          if [[ "$APPLY" == "true" ]]; then args+=("--apply"); fi
+          node infra/staging/cloudflare.mjs "${args[@]}"

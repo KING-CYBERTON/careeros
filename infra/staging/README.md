@@ -171,6 +171,49 @@ The roles must be `rolsuper = f` and `rolbypassrls = f`. The same SQL is used in
 
 Database migrations are forward-only in Phase 0: a rollback restores the old app image but does not undo schema changes.
 
+## Org hosts and custom domains (P2-C01)
+
+Organizations are served at `https://<slug>-careeros.ayopa.co.ke` (organization hosts) and, once verified, on their own domain (Cloudflare for SaaS custom hostnames). Both arrive at the same `cloudflared` container and the same app container; the app decides the organization from the `Host` header. A host the app does not know gets the "not set up yet" page with status 404.
+
+A DNS wildcard must be a whole label, so `*-careeros.ayopa.co.ke` cannot exist. Each organization host therefore gets its own proxied CNAME to the tunnel, created by `infra/staging/cloudflare.mjs`. Universal SSL covers these first-level names at no cost.
+
+### Owner actions, in order
+
+Never paste a token into chat, an issue, a pull request or git.
+
+1. In Cloudflare, enable **Cloudflare for SaaS** (SSL/TLS -> Custom Hostnames) on the `ayopa.co.ke` zone.
+2. Create two scoped API tokens, with exactly these permissions and nothing more:
+   - `CF_SAAS_API_TOKEN`: zone `ayopa.co.ke`, **SSL and Certificates: Edit**. The running app uses it (T06).
+   - `CF_STAGING_INFRA_TOKEN`: account permission **Cloudflare Tunnel: Edit**, zone permission **DNS: Edit** on `ayopa.co.ke`. Only the GitHub workflow uses it.
+3. On the server, add to `/opt/careeros/staging/.env`: `CF_SAAS_API_TOKEN`, `CF_ZONE_ID` and `CF_SAAS_CNAME_TARGET=careeros-saas-origin.ayopa.co.ke`. Redeploy so the app reads them.
+4. In GitHub **Settings -> Environments -> staging** add the secrets `CF_STAGING_INFRA_TOKEN` and `CF_SAAS_API_TOKEN`, and the variables `CF_ACCOUNT_ID`, `CF_ZONE_ID`, `CF_TUNNEL_ID`, `STAGING_HOST` (already set) and `ORG_HOST_PATTERN` (`{slug}-careeros.ayopa.co.ke`). `CF_STAGING_INFRA_TOKEN` stays on GitHub only, never on the server or in the app. Optionally set `STAGING_ORG_SMOKE_HOST` (an organization host that exists) so each deploy also checks that host's `/api/health`.
+5. Run **Actions -> careeros-staging-cloudflare -> Run workflow** for each command below. Run each one first as a dry run (leave `apply` off), read the plan, then run it again with `apply` ticked:
+   1. `tunnel-ingress`
+   2. `fallback-origin`
+   3. `org-dns` with `slug` set to each test organization
+
+   The environment's required reviewers must approve each run.
+
+The same script runs locally with the settings in the environment: `node infra/staging/cloudflare.mjs <command> [slug] [--apply]`. It is a dry run unless `--apply` is given, never prints a token, and each command only changes what differs.
+
+### The tunnel ingress is owned by the script
+
+`tunnel-ingress` sets the tunnel configuration to exactly two rules: `STAGING_HOST` -> `http://app:3000`, then a catch-all -> `http://app:3000`. The catch-all lets organization hosts and custom hostnames through (a remotely managed tunnel answers 404 for a host without a rule). **Do not edit the tunnel's public hostnames in the Cloudflare dashboard any more**; the next `tunnel-ingress` run would overwrite them.
+
+### Check it
+
+1. Run `status`. It shows the two ingress rules, the fallback origin and its status (it should become `active`) and the managed organization records.
+2. Open `https://<slug>-careeros.ayopa.co.ke`. You should see the organization's name and favicon. A name with no record does not resolve; a name with a record but no organization shows the "not set up yet" page (404).
+
+### Test a custom domain
+
+Add the domain to a test organization through the API (`POST /organization/domains` on the OpenAPI endpoint, or the settings page once P2-T07 ships). The response lists the DNS records the customer must add: a TXT record that proves ownership, then a CNAME to `careeros-saas-origin.ayopa.co.ke`. When the TXT record is found and Cloudflare issues the certificate, the T06 polling job moves the domain to `active` (within a few minutes); `status` does not list custom domains, so look at the domain's status in the organization settings or API. Then open the domain: it serves the organization's brand.
+
+### Remove an organization host or a custom domain
+
+- Organization host: run `org-dns-remove` with the slug. It deletes only a record that carries the comment `careeros-staging-managed` and whose name matches `ORG_HOST_PATTERN`; it never deletes in bulk.
+- Custom domain: remove it in the organization's domain settings (`DELETE /organization/domains/{id}`, which also removes the Cloudflare custom hostname), then ask the customer to delete their CNAME and TXT records. A removed domain stops being served within about a minute.
+
 ## Security notes
 
 - No container publishes host ports; only `cloudflared` makes outbound connections.
