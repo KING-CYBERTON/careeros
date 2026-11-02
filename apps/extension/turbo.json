@@ -1,0 +1,11 @@
+{
+	"extends": ["//"],
+	// CAREEROS: P5-T01. The browser extension may depend on browser-safe packages only; the boundary rules are in the
+	// root turbo.json under `app:extension`.
+	"tags": ["app:extension", "runtime:browser"],
+	"tasks": {
+		"build": {
+			"env": ["$TURBO_EXTENDS$", "EXTENSION_DEV_HTTP_HOSTS"]
+		}
+	}
+}
