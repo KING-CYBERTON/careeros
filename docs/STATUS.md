@@ -80,7 +80,7 @@
 | 3 — CI/CD | P2-C02     | [plans/cicd/P2-C02-branding-gate.md](plans/cicd/P2-C02-branding-gate.md)                                   | **Merged** · [review](reviews/P2-C02-review-1.md) (mobile node tests now in CI)                                                                | [#55](https://github.com/KING-CYBERTON/careeros/pull/55) |
 | 3 — CI/CD | P2-C01     | [plans/cicd/P2-C01-staging-org-hosts.md](plans/cicd/P2-C01-staging-org-hosts.md)                           | **Merged** · [review](reviews/P2-C01-review-1.md). Live check waits on Stephen's Cloudflare actions                                            | [#58](https://github.com/KING-CYBERTON/careeros/pull/58) |
 
-All Phase 2 tasks are merged. P2-C03 (from exit review M1): [plans/cicd/P2-C03-run-skipped-db-suites.md](plans/cicd/P2-C03-run-skipped-db-suites.md), approved, Sonnet coding.
+All Phase 2 tasks are merged. P2-C03 (from exit review M1, [spec](plans/cicd/P2-C03-run-skipped-db-suites.md)) merged in [#61](https://github.com/KING-CYBERTON/careeros/pull/61). Only the live staging checks remain before the `0.2.0` tag.
 
 ## Phase 2 exit criteria (PRODUCT.md §13)
 
@@ -88,7 +88,7 @@ All Phase 2 tasks are merged. P2-C03 (from exit review M1): [plans/cicd/P2-C03-r
 - [ ] A custom domain verifies, gets TLS and stops serving on removal: built and tested (T06, T07); the live check waits on Stephen enabling Cloudflare for SaaS and creating the two tokens
 - [x] Host decides the org; a session from A's host cannot act in B (P2-Q01: e2e plus the fuzz org-host pass, zero leaks)
 - [x] CI gate blocks upstream branding (P2-C02, [#55](https://github.com/KING-CYBERTON/careeros/pull/55))
-- [ ] Opus security review: [no Critical or High](reviews/P2-EXIT-security-review-1.md); sign-off waits on M1 (three database suites skip in CI), fixed by P2-C03. L1 recorded, L2 to the Phase 3 backlog
+- [x] Opus security review: [signed off](reviews/P2-EXIT-security-review-1.md), no Critical or High; M1 closed by P2-C03 ([#61](https://github.com/KING-CYBERTON/careeros/pull/61)). L1 recorded, L2 to the Phase 3 backlog
 - [x] BASELINE refreshed from develop run 41404157247 ([BASELINE.md](BASELINE.md#phase-2-exit-refresh): 3863 unit tests, 89 e2e, 43 skipped, see M1)
 
 ## Blockers
@@ -181,3 +181,5 @@ _None yet._
 - P2-C01 Staging org hosts and custom domains through the tunnel — [#58](https://github.com/KING-CYBERTON/careeros/pull/58), `d636cfb`
 - P2-Q01/Q02 Host isolation and branding e2e — [#59](https://github.com/KING-CYBERTON/careeros/pull/59), `a4beb8a`
 - P2-T07 Branding and domains settings, web and mobile — [#56](https://github.com/KING-CYBERTON/careeros/pull/56), `423c27f`
+- Docs sync 13 (Phase 2 exit review, baseline, P2-C03 spec) — [#60](https://github.com/KING-CYBERTON/careeros/pull/60), `436e1b9`
+- P2-C03 Database suites run in CI, skipped-suite guard — [#61](https://github.com/KING-CYBERTON/careeros/pull/61), `efe4ae2`

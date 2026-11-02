@@ -1,7 +1,7 @@
 # Phase 2 exit: Opus security review 1
 
 **Reviewer:** Opus (Thread 1), 2026-11-02. **Scope:** `develop` at `423c27f` (after #59 and #56), covering P2-T01 to T08, P2-C01, P2-C02 and P2-Q01/Q02.
-**Verdict:** No Critical or High findings. One Medium (M1) gates sign-off, as P1's M1 did: three security-relevant database suites have never run in CI. Spec P2-C03 fixes it. Phase 2 exit (tag `0.2.0`) also waits on the live staging checks for criteria 1 and 2, which need Stephen's Cloudflare and staging actions.
+**Verdict:** No Critical or High findings. **Signed off** on 2026-11-02: M1 closed by P2-C03 ([#61](https://github.com/KING-CYBERTON/careeros/pull/61)). Its CI run shows `auth` 119 and `server` 294 tests passed with 0 skipped, and the new guard read 20 reports, with 188 integration tests run and 0 skipped. Phase 2 exit (tag `0.2.0`) still waits on the live staging checks for criteria 1 and 2, which need Stephen's Cloudflare and staging actions.
 
 ## Method
 
