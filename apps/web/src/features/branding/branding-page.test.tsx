@@ -54,16 +54,6 @@ vi.mock("@/libs/orpc/client", () => {
 		},
 	};
 });
-vi.mock("@reactive-resume/utils/brand", async (importOriginal) => {
-	const original = await importOriginal<typeof import("@reactive-resume/utils/brand")>();
-	return {
-		...original,
-		// The computed foreground always reaches 4.5:1, so a failing colour needs the check forced.
-		primaryContrast: (color: string) =>
-			color === "#777777" ? { ratio: 3.9, foreground: "#ffffff", passes: false } : original.primaryContrast(color),
-	};
-});
-
 i18n.loadAndActivate({ locale: "en", messages: {} });
 const { BrandingSettings } = await import("./branding-page");
 
@@ -104,14 +94,17 @@ it("shows a validation message and does not save an invalid colour or link", asy
 	expect((screen.getByRole("button", { name: "Save changes" }) as HTMLButtonElement).disabled).toBe(true);
 });
 
-it("warns when text on the primary colour does not reach AA", async () => {
+it("warns when the primary colour is hard to see on white, and not for a strong one", async () => {
 	renderPage();
 	const primary = await screen.findByLabelText("Primary colour");
 	expect(screen.queryByTestId("contrast-warning")).toBeNull();
-	fireEvent.change(primary, { target: { value: "#777777" } });
-	expect(screen.getByTestId("contrast-warning").textContent).toContain("3.9:1");
+	fireEvent.change(primary, { target: { value: "#ffff00" } });
+	expect(screen.getByTestId("contrast-warning").textContent).toContain(
+		"This colour may be hard to see on a white background.",
+	);
+	fireEvent.change(primary, { target: { value: "#1a56db" } });
+	expect(screen.queryByTestId("contrast-warning")).toBeNull();
 });
-
 it("saves only what changed, with the colour in lower case", async () => {
 	renderPage();
 	fireEvent.change(await screen.findByLabelText("App name"), { target: { value: "Acme Careers" } });

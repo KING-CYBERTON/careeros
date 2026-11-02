@@ -6,17 +6,12 @@ import * as ImagePicker from "expo-image-picker";
 import { Stack } from "expo-router";
 import { useState } from "react";
 import { View } from "react-native";
-import {
-	BRANDING_FONT_NAMES,
-	brandPreviewVars,
-	isHexColor,
-	primaryContrast,
-	readableForeground,
-} from "@reactive-resume/utils/brand";
+import { BRANDING_FONT_NAMES, brandPreviewVars, isHexColor, readableForeground } from "@reactive-resume/utils/brand";
 import {
 	APP_NAME_MAX,
 	buildPatch,
 	formFromBranding,
+	primaryOnWhite,
 	validateForm,
 	type BrandingForm,
 	type FormError,
@@ -129,7 +124,7 @@ function BrandingEditor() {
 		}
 	};
 	const primary = current.primaryColor.trim();
-	const contrast = isHexColor(primary) ? primaryContrast(primary) : null;
+	const onWhite = primaryOnWhite(primary);
 
 	return (
 		<>
@@ -166,13 +161,7 @@ function BrandingEditor() {
 				error={message(errors.primaryColor)}
 				onChange={(value) => set("primaryColor", value)}
 			/>
-			{contrast && !contrast.passes ? (
-				<Banner
-					tone="warn"
-					title={t`Text on this colour is hard to read`}
-					message={t`The contrast is ${contrast.ratio.toFixed(1)}:1; accessible text needs at least 4.5:1.`}
-				/>
-			) : null}
+			{onWhite?.hard ? <Banner tone="warn" message={t`This colour may be hard to see on a white background.`} /> : null}
 			<ColorInput
 				label={t`Secondary colour`}
 				value={current.secondaryColor}

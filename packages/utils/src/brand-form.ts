@@ -1,6 +1,12 @@
 // CAREEROS (P2-T07): the branding form as plain data, shared by the web and mobile settings screens and tested without React. The server checks every
 // rule again; these only give the person an answer before they save.
-import { BRANDING_FONT_NAMES, isHexColor, isHttpsUrl, isSingleEmailAddress } from "@reactive-resume/utils/brand";
+import {
+	BRANDING_FONT_NAMES,
+	contrastRatio,
+	isHexColor,
+	isHttpsUrl,
+	isSingleEmailAddress,
+} from "@reactive-resume/utils/brand";
 
 export const APP_NAME_MAX = 60;
 export const SENDER_NAME_MAX = 80;
@@ -106,4 +112,18 @@ export function recheckWaitSeconds(lastCheckedAt: Date | string | null, now: num
 	if (!lastCheckedAt) return 0;
 	const elapsed = now - new Date(lastCheckedAt).getTime();
 	return Math.max(0, Math.ceil((60_000 - elapsed) / 1000));
+}
+
+/** WCAG AA for large text and UI components. */
+export const WHITE_BACKGROUND_MIN_CONTRAST = 3;
+
+/**
+ * Whether the primary colour is hard to see on a white background (contrast below 3:1). Only a valid `#rrggbb` colour
+ * is judged; anything else returns `null` (the form shows its own error). Web and mobile show the same warning.
+ */
+export function primaryOnWhite(primary: string): { ratio: number; hard: boolean } | null {
+	const value = primary.trim();
+	if (!isHexColor(value)) return null;
+	const ratio = contrastRatio(value, "#ffffff");
+	return { ratio, hard: ratio < WHITE_BACKGROUND_MIN_CONTRAST };
 }

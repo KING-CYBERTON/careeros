@@ -1,5 +1,12 @@
 import { describe, expect, it } from "vite-plus/test";
-import { buildPatch, formFromBranding, recheckWaitSeconds, validateForm, type BrandingData } from "./brand-form";
+import {
+	buildPatch,
+	formFromBranding,
+	primaryOnWhite,
+	recheckWaitSeconds,
+	validateForm,
+	type BrandingData,
+} from "./brand-form";
 
 const empty: BrandingData = {
 	appName: null,
@@ -66,5 +73,18 @@ describe("recheckWaitSeconds", () => {
 		expect(recheckWaitSeconds(null, now)).toBe(0);
 		expect(recheckWaitSeconds(new Date(now - 20_000), now)).toBe(40);
 		expect(recheckWaitSeconds(new Date(now - 61_000), now)).toBe(0);
+	});
+});
+
+describe("primaryOnWhite", () => {
+	it("flags a colour with less than 3:1 contrast on white, and passes a strong one", () => {
+		expect(primaryOnWhite("#ffff00")?.hard).toBe(true);
+		expect(primaryOnWhite("#FFFF00")?.hard).toBe(true);
+		expect(primaryOnWhite("#1a56db")?.hard).toBe(false);
+		expect(primaryOnWhite("#000000")?.ratio).toBeCloseTo(21, 0);
+	});
+
+	it("does not judge a value that is not #rrggbb", () => {
+		for (const value of ["", "yellow", "#ff0", "#ffff0"]) expect(primaryOnWhite(value)).toBeNull();
 	});
 });

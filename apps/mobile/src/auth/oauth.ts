@@ -9,6 +9,7 @@ import { getBrand } from "@reactive-resume/utils/brand";
 export const scopes = ["openid", "profile", "email", "offline_access", "api:read", "api:write", "api:delete"];
 
 /** The host the app is associated with (Universal Links, App Links). The OAuth callback lands there for every server. */
+// CAREEROS: careeros-branding-allow: native app host, release blocker until the native identity is set (Q80)
 const appHost = "rxresu.me";
 
 /**
@@ -104,10 +105,12 @@ export async function discover(origin: string): Promise<Discovery> {
 
 	const metadata = (await getJson(`${origin}/.well-known/oauth-authorization-server`).catch(async () => {
 		// A server that predates app sign-in still answers its flags.
+		// CAREEROS: careeros-branding-allow: local variable name, not shown to users
 		const isReactiveResume = await getJson(`${origin}/api/openapi/flags`).then(
 			() => true,
 			() => false,
 		);
+		// CAREEROS: careeros-branding-allow: local variable name, not shown to users
 		throw new ServerError(isReactiveResume ? "outdated" : "unreachable");
 	})) as Metadata | null;
 

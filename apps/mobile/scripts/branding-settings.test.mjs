@@ -123,6 +123,8 @@ test("the settings screen shows Branding and Domains only to owners and admins, 
 	])
 		assert.ok(branding.includes(call), call);
 	assert.match(branding, /useOrganizationAdmin/);
+	assert.match(branding, /primaryOnWhite/);
+	assert.match(branding, /This colour may be hard to see on a white background\./);
 	const domains = source("../src/features/branding/domains-screen.tsx");
 	for (const call of [
 		"client.organizationDomain.add",

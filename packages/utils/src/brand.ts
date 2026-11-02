@@ -181,9 +181,6 @@ export const BRANDING_FONT_NAMES = [
 	"Lora",
 ] as const;
 
-/** WCAG AA for normal text. */
-export const AA_CONTRAST = 4.5;
-
 /** An https URL without credentials, at most 2048 characters. The same rule as the branding API and its CHECKs. */
 export function isHttpsUrl(value: unknown): value is string {
 	if (typeof value !== "string" || !value.startsWith("https://") || value.length > 2048) return false;
@@ -193,16 +190,6 @@ export function isHttpsUrl(value: unknown): value is string {
 	} catch {
 		return false;
 	}
-}
-
-/**
- * How well the text colour the UI puts on `primary` (`readableForeground`) reads on it. `passes` is false below
- * `minimum` (WCAG AA, 4.5:1, unless given).
- */
-export function primaryContrast(primary: string, minimum: number = AA_CONTRAST) {
-	const foreground = readableForeground(primary);
-	const ratio = contrastRatio(primary, foreground);
-	return { ratio, foreground, passes: ratio >= minimum };
 }
 
 /**

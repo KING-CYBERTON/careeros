@@ -9,12 +9,13 @@ import { Label } from "@reactive-resume/ui/components/label";
 import { NativeSelect } from "@reactive-resume/ui/components/native-select";
 import { Skeleton } from "@reactive-resume/ui/components/skeleton";
 import { toast } from "@reactive-resume/ui/components/toast";
-import { BRANDING_FONT_NAMES, isHexColor, primaryContrast } from "@reactive-resume/utils/brand";
+import { BRANDING_FONT_NAMES } from "@reactive-resume/utils/brand";
 import {
 	APP_NAME_MAX,
 	buildPatch,
 	colorInputValue,
 	formFromBranding,
+	primaryOnWhite,
 	validateForm,
 	type BrandingData,
 	type BrandingForm,
@@ -157,7 +158,7 @@ function BrandingEditor({ stored }: BrandingEditorProps) {
 	const invalid = Object.keys(errors).length > 0;
 
 	const primary = form.primaryColor.trim();
-	const contrast = isHexColor(primary) ? primaryContrast(primary) : null;
+	const onWhite = primaryOnWhite(primary);
 	const previewName = form.appName.trim() || getBrandName();
 
 	const save = () => {
@@ -246,17 +247,11 @@ function BrandingEditor({ stored }: BrandingEditorProps) {
 					error={errorText(errors.primaryColor)}
 					onChange={(value) => set("primaryColor", value)}
 				/>
-				{contrast && !contrast.passes && (
+				{onWhite?.hard && (
 					<Alert variant="warn" data-testid="contrast-warning">
 						<Icon name="warning" />
-						<AlertTitle>
-							<Trans>Text on this colour is hard to read</Trans>
-						</AlertTitle>
 						<AlertDescription>
-							<Trans>
-								The contrast is {contrast.ratio.toFixed(1)}:1; accessible text needs at least 4.5:1. Choose a lighter or
-								darker primary colour.
-							</Trans>
+							<Trans>This colour may be hard to see on a white background.</Trans>
 						</AlertDescription>
 					</Alert>
 				)}

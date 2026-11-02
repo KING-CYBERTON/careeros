@@ -7,7 +7,6 @@ import {
 	isHttpsUrl,
 	isSingleEmailAddress,
 	mixHex,
-	primaryContrast,
 	readableForeground,
 	relativeLuminance,
 } from "./brand";
@@ -134,14 +133,6 @@ describe("branding settings helpers", () => {
 			null,
 		])
 			expect(isHttpsUrl(bad)).toBe(false);
-	});
-
-	it("reports the contrast of the primary colour against its computed foreground", () => {
-		const dark = primaryContrast("#1a56db");
-		expect(dark.foreground).toBe("#ffffff");
-		expect(dark.passes).toBe(true);
-		// The foreground is always the better of black and white, so only a stricter minimum can fail.
-		expect(primaryContrast("#777777", 7).passes).toBe(false);
 	});
 
 	it("builds the preview variables from valid colours only", () => {
