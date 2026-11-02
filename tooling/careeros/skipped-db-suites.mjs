@@ -1,7 +1,10 @@
 // CAREEROS: P2-C03. Fails CI when a database integration suite is silently skipped.
 // Reads the JUnit reports that `test:ci` writes to <package>/reports/vitest-junit.xml and fails if any test case in a
 // file matching *.integration.test.ts is skipped, unless the file is on ALLOWLIST with a reason.
-// Plain Node, no dependencies. Usage: node tooling/careeros/skipped-db-suites.mjs [repoRoot]
+// Also fails when a package that contains guarded files has no JUnit report (a test:ci without the JUnit reporter).
+// Plain Node, no dependencies.
+// Usage: node tooling/careeros/skipped-db-suites.mjs [repoRoot] [--include=packages/a,apps/b] [--exclude=packages/c]
+// --include / --exclude limit the packages checked to the ones the shard ran.
 import { existsSync, readdirSync, readFileSync, statSync } from "node:fs";
 import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -13,9 +16,54 @@ import { fileURLToPath } from "node:url";
  */
 export const ALLOWLIST = [];
 
+/**
+ * Database-backed test files that are not named *.integration.test.ts but skip when a *_TEST_DATABASE_URL is unset
+ * (found with a grep for skipIf/runIf on those variables). They are guarded like the integration files.
+ */
+export const EXTRA_GUARDED = [
+	"packages/api/src/features/auth/account-storage.test.ts",
+	"packages/careeros-testing/src/index.test.ts",
+	"packages/careeros-testing/src/isolated-db.test.ts",
+];
+
 export const MIN_REASON_LENGTH = 10;
 const INTEGRATION_FILE = /\.integration\.test\.tsx?$/;
 const GROUPS = ["packages", "apps"];
+
+/** True for a repo-relative path the guard watches. */
+export function isGuarded(file, extra = EXTRA_GUARDED) {
+	return INTEGRATION_FILE.test(file) || extra.includes(file);
+}
+
+function sourceFiles(directory, found = []) {
+	if (!existsSync(directory)) return found;
+	for (const entry of readdirSync(directory, { withFileTypes: true })) {
+		if (entry.name === "node_modules" || entry.name === "reports" || entry.name === "dist") continue;
+		const path = join(directory, entry.name);
+		if (entry.isDirectory()) sourceFiles(path, found);
+		else if (entry.isFile()) found.push(path);
+	}
+	return found;
+}
+
+/** Package directories (for example "packages/auth") that contain at least one guarded file. */
+export function guardedPackages(root, extra = EXTRA_GUARDED) {
+	const packages = new Set();
+	for (const group of GROUPS) {
+		const groupDirectory = join(root, group);
+		if (!existsSync(groupDirectory)) continue;
+		for (const entry of readdirSync(groupDirectory, { withFileTypes: true })) {
+			if (!entry.isDirectory()) continue;
+			const directory = `${group}/${entry.name}`;
+			const prefix = join(root, directory) + "/";
+			const hasGuarded = sourceFiles(join(root, directory, "src")).some((path) =>
+				isGuarded(`${directory}/${path.slice(prefix.length)}`, extra),
+			);
+			if (hasGuarded) packages.add(directory);
+		}
+	}
+	return packages;
+}
 
 function decode(text) {
 	return text
@@ -89,14 +137,19 @@ function reportFiles(root) {
  * `skipped` lists skipped cases in integration files that are not allowlisted, `ran` counts integration test cases that
  * ran (not skipped), `allowed` counts skipped cases excused by the allowlist.
  */
-export function checkSkipped(root, allowlist = ALLOWLIST) {
+export function checkSkipped(root, allowlist = ALLOWLIST, options = {}) {
+	const extra = options.extra ?? EXTRA_GUARDED;
+	const inScope = (directory) =>
+		(!options.include || options.include.includes(directory)) && !(options.exclude ?? []).includes(directory);
 	const errors = validateAllowlist(allowlist);
 	const allowed = new Set(allowlist.map((entry) => entry?.file));
 	const skipped = [];
 	let reports = 0;
 	let ran = 0;
 	let allowedCount = 0;
+	const reportedPackages = new Set();
 	for (const report of reportFiles(root)) {
+		if (!inScope(report.directory)) continue;
 		let cases;
 		try {
 			cases = parseTestCases(readFileSync(report.path, "utf8"));
@@ -105,9 +158,10 @@ export function checkSkipped(root, allowlist = ALLOWLIST) {
 			continue;
 		}
 		reports += 1;
+		reportedPackages.add(report.directory);
 		for (const testCase of cases) {
-			if (!INTEGRATION_FILE.test(testCase.file)) continue;
 			const file = `${report.directory}/${testCase.file}`;
+			if (!isGuarded(file, extra)) continue;
 			if (!testCase.skipped) {
 				ran += 1;
 			} else if (allowed.has(file)) {
@@ -117,12 +171,31 @@ export function checkSkipped(root, allowlist = ALLOWLIST) {
 			}
 		}
 	}
-	return { skipped, errors, reports, ran, allowed: allowedCount };
+	const missing = [...guardedPackages(root, extra)].filter(
+		(directory) => inScope(directory) && !reportedPackages.has(directory),
+	);
+	for (const directory of missing) {
+		errors.push(
+			`${directory} contains database test files but test:ci wrote no JUnit report under ${directory}/reports in this shard; the guard cannot see whether they ran`,
+		);
+	}
+	return { skipped, errors, reports, ran, allowed: allowedCount, missing };
 }
 
 function main() {
-	const root = resolve(process.argv[2] ?? join(dirname(fileURLToPath(import.meta.url)), "..", ".."));
-	const { skipped, errors, reports, ran, allowed } = checkSkipped(root);
+	const args = process.argv.slice(2);
+	const list = (name) =>
+		args
+			.find((a) => a.startsWith(`--${name}=`))
+			?.slice(name.length + 3)
+			.split(",")
+			.filter(Boolean);
+	const positional = args.find((a) => !a.startsWith("--"));
+	const root = resolve(positional ?? join(dirname(fileURLToPath(import.meta.url)), "..", ".."));
+	const { skipped, errors, reports, ran, allowed } = checkSkipped(root, ALLOWLIST, {
+		include: list("include"),
+		exclude: list("exclude"),
+	});
 	for (const item of skipped) console.error(`SKIPPED ${item.file}: ${item.name}`);
 	for (const message of errors) console.error(message);
 	console.log(

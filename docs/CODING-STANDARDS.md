@@ -49,5 +49,5 @@ CI (`static` job) runs `node tooling/careeros/branding-gate.mjs`. It fails when 
 ## 7. Database suites must run in CI
 
 - Turborepo strict env mode hides every variable a task does not list. A package whose tests read a `*_TEST_DATABASE_URL` (or any `CAREEROS_TEST_*` variable) must list it in the `env` arrays of its `turbo.json` for `test`, `test:ci` and `test:coverage`, or the suite skips without failing.
-- `tooling/careeros/skipped-db-suites.mjs` runs in every unit shard after the tests. It reads the JUnit reports under each package's `reports/` and fails if any test in a `*.integration.test.ts` file is skipped.
+- `tooling/careeros/skipped-db-suites.mjs` runs in every unit shard after the tests. It reads the JUnit reports under each package's `reports/` and fails if any test in a `*.integration.test.ts` file, or in a file on the script's `EXTRA_GUARDED` list (database-backed tests with another name), is skipped, or if a package with such files wrote no JUnit report in that shard. A new database-backed test that is not named `*.integration.test.ts` must be added to `EXTRA_GUARDED`.
 - A suite may skip in CI only if its file is in the script's `ALLOWLIST` with a reason of at least 10 characters, and a question in `docs/questions.md` explains why. The list starts empty.

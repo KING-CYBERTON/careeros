@@ -1,7 +1,7 @@
 import assert from "node:assert/strict";
 import { mkdirSync, mkdtempSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
-import { join } from "node:path";
+import { dirname, join } from "node:path";
 import { test } from "node:test";
 import { checkSkipped, parseTestCases, validateAllowlist } from "./skipped-db-suites.mjs";
 
@@ -16,12 +16,16 @@ function junit(file, cases) {
 	return `<?xml version="1.0" encoding="UTF-8" ?>\n<testsuites name="vitest tests" tests="${cases.length}">\n<testsuite name="${file}" tests="${cases.length}" skipped="0">\n${body}\n</testsuite>\n</testsuites>\n`;
 }
 
-function withReports(reports, run) {
+function withReports(reports, run, sources = []) {
 	const root = mkdtempSync(join(tmpdir(), "skipped-db-"));
 	try {
 		for (const [dir, xml] of Object.entries(reports)) {
 			mkdirSync(join(root, dir, "reports"), { recursive: true });
 			writeFileSync(join(root, dir, "reports", "vitest-junit.xml"), xml);
+		}
+		for (const source of sources) {
+			mkdirSync(dirname(join(root, source)), { recursive: true });
+			writeFileSync(join(root, source), "");
 		}
 		return run(root);
 	} finally {
@@ -102,4 +106,43 @@ test("reports are read from apps and packages, and a missing reports directory i
 	assert.equal(result.reports, 2);
 	assert.equal(result.skipped.length, 1);
 	assert.equal(checkSkipped("/nonexistent-root", []).reports, 0);
+});
+
+test("fails on a skipped listed file that is not named integration", () => {
+	const result = withReports(
+		{ "packages/careeros-testing": junit("src/index.test.ts", [{ name: "x", skipped: true }]) },
+		(root) => checkSkipped(root, []),
+	);
+	assert.deepEqual(result.skipped, [{ file: "packages/careeros-testing/src/index.test.ts", name: "x" }]);
+	const other = withReports(
+		{ "packages/careeros-testing": junit("src/other.test.ts", [{ name: "x", skipped: true }]) },
+		(root) => checkSkipped(root, []),
+	);
+	assert.deepEqual(other.skipped, []);
+});
+
+test("a package with guarded files but no report is an error", () => {
+	const result = withReports(
+		{ "packages/db": junit("src/a.test.ts", [{ name: "x" }]) },
+		(root) => checkSkipped(root, []),
+		["packages/auth/src/a.integration.test.ts", "packages/db/src/a.test.ts"],
+	);
+	assert.deepEqual(result.missing, ["packages/auth"]);
+	assert.match(result.errors[0], /packages\/auth .*no JUnit report/);
+});
+
+test("a listed non-integration file also needs its package's report", () => {
+	const result = withReports({}, (root) => checkSkipped(root, []), [
+		"packages/api/src/features/auth/account-storage.test.ts",
+	]);
+	assert.deepEqual(result.missing, ["packages/api"]);
+});
+
+test("include and exclude limit the missing-report check to the shard's packages", () => {
+	const sources = ["packages/auth/src/a.integration.test.ts", "packages/api/src/b.integration.test.ts"];
+	const run = (options) => withReports({}, (root) => checkSkipped(root, [], options), sources).missing;
+	assert.deepEqual(run({}), ["packages/api", "packages/auth"]);
+	assert.deepEqual(run({ include: ["packages/api"] }), ["packages/api"]);
+	assert.deepEqual(run({ exclude: ["packages/api"] }), ["packages/auth"]);
+	assert.deepEqual(run({ include: ["packages/pdf"] }), []);
 });

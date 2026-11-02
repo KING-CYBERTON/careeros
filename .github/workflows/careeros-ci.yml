@@ -125,10 +125,13 @@ jobs:
         include:
           - shard: pdf
             filter: --filter=@reactive-resume/pdf
+            guard: --include=packages/pdf
           - shard: api
             filter: --filter=@reactive-resume/api
+            guard: --include=packages/api
           - shard: rest
             filter: --filter=!mobile --filter=!@reactive-resume/pdf --filter=!@reactive-resume/api
+            guard: --exclude=packages/pdf,packages/api,apps/mobile
     env:
       APP_URL: http://localhost:3000
       PORT: "3000"
@@ -244,9 +247,11 @@ jobs:
 
       # CAREEROS: P2-C03. Fails when a *.integration.test.ts file skipped any test (for example because Turborepo strict
       # env mode hid the database URLs from a package). Reads the JUnit reports test:ci wrote. Allowlist is in the script.
+      # Each shard checks only the packages its turbo filter ran (matrix.guard), so a package run in another shard is
+      # not reported as missing a report.
       - name: Fail on skipped database suites
         if: needs.changes.outputs.code == 'true'
-        run: node tooling/careeros/skipped-db-suites.mjs
+        run: node tooling/careeros/skipped-db-suites.mjs ${{ matrix.guard }}
 
       # CAREEROS: P1-C02. Per-package counts on the run page. The script catches its own errors and exits 0.
       - name: Test summary
