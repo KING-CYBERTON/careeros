@@ -110,6 +110,27 @@ jobs:
             fi
           fi
 
+      # CAREEROS: P2-C01. Optional check that an organization host reaches the same build through the tunnel.
+      - name: Organization host check
+        env:
+          IMAGE_TAG: ${{ steps.plan.outputs.tag }}
+          ORG_SMOKE_HOST: ${{ vars.STAGING_ORG_SMOKE_HOST }}
+        run: |
+          set -euo pipefail
+          if [[ -z "${ORG_SMOKE_HOST:-}" ]]; then
+            echo "::notice::STAGING_ORG_SMOKE_HOST is not set; skipping the organization host check."
+            exit 0
+          fi
+          body="$(curl --fail --silent --show-error --retry 10 --retry-delay 6 --retry-all-errors --max-time 20 "https://$ORG_SMOKE_HOST/api/health")"
+          echo "$body"
+          if [[ "$IMAGE_TAG" == sha-* ]]; then
+            expected="${IMAGE_TAG#sha-}"
+            if ! grep -q "\"revision\":\"$expected\"" <<<"$body"; then
+              echo "::error::https://$ORG_SMOKE_HOST/api/health does not report revision $expected."
+              exit 1
+            fi
+          fi
+
       - name: Set up Node.js (for the smoke test)
         uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
         with:
