@@ -1,5 +1,14 @@
-import type { APIResponse, PlaywrightWorkerArgs } from "@playwright/test";
 import { randomUUID } from "node:crypto";
+import {
+	cookieHeader,
+	cookiePairs,
+	makeOrgHost,
+	ORG_HOST_LAUNCH_OPTIONS,
+	ORG_HOST_PATTERN,
+	orgHostsConfigured,
+	send,
+	type OrgHost,
+} from "../fixtures/org-hosts";
 import { withSeedPool } from "../fixtures/seed-db";
 import { expect, test } from "../fixtures/test";
 
@@ -9,60 +18,12 @@ import { expect, test } from "../fixtures/test";
 // a provider callback. The server needs ORG_HOST_PATTERN={slug}.orgs.test (the CI e2e job sets it; no test host on
 // localhost matches it, so every other spec is unaffected). Organization hosts are reached with a Host header for the
 // API checks and with a Chromium host-resolver rule for the browser check.
-const PATTERN = "{slug}.orgs.test";
+// The host helpers live in fixtures/org-hosts.ts (P2-Q01), shared with the host isolation and branding specs.
 test.skip(
-	process.env.ORG_HOST_PATTERN !== PATTERN || !process.env.GOOGLE_CLIENT_ID,
-	`needs the server to run with ORG_HOST_PATTERN=${PATTERN} and a Google client id (any placeholder)`,
+	!orgHostsConfigured() || !process.env.GOOGLE_CLIENT_ID,
+	`needs the server to run with ORG_HOST_PATTERN=${ORG_HOST_PATTERN} and a Google client id (any placeholder)`,
 );
-test.use({ launchOptions: { args: ["--host-resolver-rules=MAP *.orgs.test 127.0.0.1"] } });
-
-type Playwright = PlaywrightWorkerArgs["playwright"];
-
-type Org = { id: string; slug: string; host: string; origin: string };
-
-const cookiePairs = (response: APIResponse) =>
-	response
-		.headersArray()
-		.filter((header) => header.name.toLowerCase() === "set-cookie")
-		.map((header) => header.value);
-
-const cookieHeader = (lines: string[]) =>
-	lines
-		.map((line) => line.split(";", 1)[0] ?? "")
-		.filter((pair) => !pair.endsWith("="))
-		.join("; ");
-
-/** One request to an organization host (or the platform), with exactly the cookies and headers given. */
-async function send(
-	playwright: Playwright,
-	baseURL: string,
-	options: {
-		method: "GET" | "POST";
-		path: string;
-		host?: string;
-		origin?: string;
-		cookie?: string;
-		data?: unknown;
-	},
-) {
-	const context = await playwright.request.newContext({
-		baseURL,
-		extraHTTPHeaders: {
-			...(options.host ? { host: options.host } : {}),
-			...(options.origin ? { origin: options.origin } : {}),
-			...(options.cookie ? { cookie: options.cookie } : {}),
-		},
-	});
-	try {
-		const response =
-			options.method === "GET"
-				? await context.get(options.path, { maxRedirects: 0, failOnStatusCode: false })
-				: await context.post(options.path, { data: options.data ?? {}, maxRedirects: 0, failOnStatusCode: false });
-		return { response, body: await response.text() };
-	} finally {
-		await context.dispose();
-	}
-}
+test.use({ launchOptions: ORG_HOST_LAUNCH_OPTIONS });
 
 test("an organization host signs a member in through begin, issue and redeem, once, on its own host", async ({
 	account,
@@ -73,17 +34,8 @@ test("an organization host signs a member in through begin, issue and redeem, on
 	const baseURL = String(testInfo.project.use.baseURL ?? "http://localhost:3000");
 	const port = new URL(baseURL).port || "80";
 	const tag = randomUUID().slice(0, 8);
-	const makeOrg = (label: string): Org => {
-		const slug = `h5${label}${tag}`;
-		return {
-			id: `h5-${label}-${tag}`,
-			slug,
-			host: `${slug}.orgs.test:${port}`,
-			origin: `http://${slug}.orgs.test:${port}`,
-		};
-	};
-	const orgA = makeOrg("a");
-	const orgB = makeOrg("b");
+	const orgA = makeOrgHost("h5", "a", tag, port);
+	const orgB = makeOrgHost("h5", "b", tag, port);
 
 	try {
 		await withSeedPool(async (pool) => {
@@ -116,7 +68,7 @@ test("an organization host signs a member in through begin, issue and redeem, on
 			return id;
 		});
 
-		const begin = async (org: Org, extra: { origin?: string } = {}) => {
+		const begin = async (org: OrgHost, extra: { origin?: string } = {}) => {
 			const { response, body } = await send(playwright, baseURL, {
 				method: "POST",
 				path: "/api/careeros/handoff/begin",
@@ -152,7 +104,7 @@ test("an organization host signs a member in through begin, issue and redeem, on
 		const token = fragment.get("token") ?? "";
 		expect(token.length).toBeGreaterThanOrEqual(43);
 
-		const redeem = (org: Org, cookie: string | undefined) =>
+		const redeem = (org: OrgHost, cookie: string | undefined) =>
 			send(playwright, baseURL, {
 				method: "POST",
 				path: "/api/careeros/handoff/redeem",

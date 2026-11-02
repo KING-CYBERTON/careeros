@@ -290,3 +290,12 @@ No new environment variables. Mobile: no change. The native app signs in on the 
 | `.github/workflows/careeros-ci.yml` (`static` job)                                                                                               | P2-C02 | Two steps: the branding gate and the node tests (`tooling/careeros`, `apps/mobile/scripts`)                                                                                                                                                                                                                   |
 
 New environment variables: `CF_SAAS_API_TOKEN`, `CF_ZONE_ID`, `CF_SAAS_CNAME_TARGET` (all optional; with any unset the feature is off). Mobile: no change (no UI in this task; T07 adds the settings screens for web and mobile).
+
+## P2-Q01 and P2-Q02: host isolation and branding e2e
+
+| File / setting         | Task           | What changed and why                                                                                                                                                                                           |
+| ---------------------- | -------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `playwright.config.ts` | P2-Q02         | The web server's output is also copied to `E2E_SERVER_LOG` (`2>&1 \| tee`, default `<tmpdir>/careeros-e2e-server.log`), so the specs can read the logged email recipient and subject. No other setting changes |
+| `tests/e2e/README.md`  | P2-Q01, P2-Q02 | Documents the organization-host specs, their helpers and the server log                                                                                                                                        |
+
+New CareerOS test files only otherwise: `tests/e2e/specs/careeros-host-isolation.spec.ts`, `careeros-branding.spec.ts`, `tests/e2e/fixtures/{org-hosts,server-log}.ts`, `tests/e2e/fixtures/branding/*.png`. Edited CareerOS files: `careeros-auth-handoff.spec.ts` (imports the shared helpers), `cross-org-id-fuzz.spec.ts` (org-host pass), `packages/isolation-testing/src/registry.integration.test.ts` (Phase 2 table assertions).
