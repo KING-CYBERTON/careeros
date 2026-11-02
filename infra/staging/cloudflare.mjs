@@ -9,7 +9,6 @@ import { fileURLToPath } from "node:url";
 const API = "https://api.cloudflare.com/client/v4";
 /** Comment on every DNS record this script creates; `org-dns-remove` deletes only records that carry it. */
 export const MANAGED_COMMENT = "careeros-staging-managed";
-const FALLBACK_LABEL = "careeros-saas-origin";
 const ORIGIN_SERVICE = "http://app:3000";
 // Mirrors SLUG in packages/tenancy/src/host.ts (the rule the app uses to read an organization slug out of a host).
 const SLUG = /^[a-z0-9-]{1,63}$/;
@@ -27,7 +26,7 @@ const REQUIRED = {
 		"CF_SAAS_API_TOKEN",
 		"CF_ZONE_ID",
 		"CF_TUNNEL_ID",
-		"STAGING_HOST",
+		"CF_SAAS_CNAME_TARGET",
 		"ORG_HOST_PATTERN",
 	],
 	"org-dns": ["CF_STAGING_INFRA_TOKEN", "CF_ZONE_ID", "CF_TUNNEL_ID", "ORG_HOST_PATTERN"],
@@ -66,6 +65,10 @@ export function matchOrgHost(hostname, pattern) {
 export function buildOrgHost(slug, pattern) {
 	if (typeof slug !== "string" || !SLUG.test(slug)) {
 		throw new UserError("Invalid slug: use 1 to 63 characters from a-z, 0-9 and hyphen.");
+	}
+	// A DNS label cannot start or end with a hyphen (stricter than the app's SLUG rule; Q160).
+	if (slug.startsWith("-") || slug.endsWith("-")) {
+		throw new UserError("Invalid slug: it cannot start or end with a hyphen.");
 	}
 	const host = `${pattern.prefix}${slug}${pattern.suffix}`;
 	if (host.split(".")[0].length > MAX_LABEL) {
@@ -183,17 +186,10 @@ async function ensureCname(ctx, name) {
 	await write(ctx, "PATCH", `${base}/${existing.id}`, env.CF_STAGING_INFRA_TOKEN, wanted);
 }
 
-/** The fallback origin name: `careeros-saas-origin` in the parent domain of STAGING_HOST. */
-function fallbackName(stagingHost) {
-	const dot = stagingHost.indexOf(".");
-	if (dot < 1 || dot === stagingHost.length - 1)
-		throw new UserError("STAGING_HOST must be a host name with a parent domain.");
-	return `${FALLBACK_LABEL}${stagingHost.slice(dot)}`;
-}
-
 async function fallbackOrigin(ctx) {
 	const { cf, env, say, pattern } = ctx;
-	const name = fallbackName(env.STAGING_HOST);
+	// The same value the app hands to customers as the CNAME target, so the two cannot drift (Q162).
+	const name = env.CF_SAAS_CNAME_TARGET;
 	if (matchOrgHost(name, pattern)) {
 		throw new UserError(`${name} matches ORG_HOST_PATTERN and would be read as an organization host; refusing.`);
 	}
@@ -303,6 +299,10 @@ export async function main(argv, env, io = {}) {
 	const pattern = env.ORG_HOST_PATTERN ? parsePattern(env.ORG_HOST_PATTERN) : null;
 	if (REQUIRED[command].includes("ORG_HOST_PATTERN") && !pattern) {
 		fail("Invalid setting: ORG_HOST_PATTERN must contain exactly one {slug} and form a valid host name.");
+		return 1;
+	}
+	if (env.CF_SAAS_CNAME_TARGET && !HOST.test(env.CF_SAAS_CNAME_TARGET)) {
+		fail("Invalid setting: CF_SAAS_CNAME_TARGET is not a valid host name.");
 		return 1;
 	}
 	if (env.STAGING_HOST && !HOST.test(env.STAGING_HOST)) {

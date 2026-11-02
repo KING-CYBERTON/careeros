@@ -12,6 +12,7 @@ const ENV = {
 	CF_ZONE_ID: "zone-placeholder",
 	CF_TUNNEL_ID: "tunnel-placeholder",
 	STAGING_HOST: "careeros-staging.example.test",
+	CF_SAAS_CNAME_TARGET: "careeros-saas-origin.example.test",
 	ORG_HOST_PATTERN: "{slug}-careeros.example.test",
 };
 
@@ -142,7 +143,7 @@ test("fallback-origin refuses a name that matches the pattern", async () => {
 });
 
 test("org-dns rejects an invalid slug and a label over 63 characters", async () => {
-	for (const slug of ["Acme", "a.b", "a_b", "", "x".repeat(64), "x".repeat(60)]) {
+	for (const slug of ["Acme", "a.b", "a_b", "", "x".repeat(64), "x".repeat(60), "-a", "a-", "-"]) {
 		const state = fakeCloudflare();
 		const { code, err } = await run(["org-dns", slug, "--apply"], state);
 		assert.equal(code, 1, `slug "${slug}"`);

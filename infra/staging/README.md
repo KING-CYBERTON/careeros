@@ -186,13 +186,15 @@ Never paste a token into chat, an issue, a pull request or git.
    - `CF_SAAS_API_TOKEN`: zone `ayopa.co.ke`, **SSL and Certificates: Edit**. The running app uses it (T06).
    - `CF_STAGING_INFRA_TOKEN`: account permission **Cloudflare Tunnel: Edit**, zone permission **DNS: Edit** on `ayopa.co.ke`. Only the GitHub workflow uses it.
 3. On the server, add to `/opt/careeros/staging/.env`: `CF_SAAS_API_TOKEN`, `CF_ZONE_ID` and `CF_SAAS_CNAME_TARGET=careeros-saas-origin.ayopa.co.ke`. Redeploy so the app reads them.
-4. In GitHub **Settings -> Environments -> staging** add the secrets `CF_STAGING_INFRA_TOKEN` and `CF_SAAS_API_TOKEN`, and the variables `CF_ACCOUNT_ID`, `CF_ZONE_ID`, `CF_TUNNEL_ID`, `STAGING_HOST` (already set) and `ORG_HOST_PATTERN` (`{slug}-careeros.ayopa.co.ke`). `CF_STAGING_INFRA_TOKEN` stays on GitHub only, never on the server or in the app. Optionally set `STAGING_ORG_SMOKE_HOST` (an organization host that exists) so each deploy also checks that host's `/api/health`.
+4. In GitHub **Settings -> Environments -> staging** add the secrets `CF_STAGING_INFRA_TOKEN` and `CF_SAAS_API_TOKEN`, and the variables `CF_ACCOUNT_ID`, `CF_ZONE_ID`, `CF_TUNNEL_ID`, `STAGING_HOST` (already set), `ORG_HOST_PATTERN` (`{slug}-careeros.ayopa.co.ke`) and `CF_SAAS_CNAME_TARGET` (`careeros-saas-origin.ayopa.co.ke`, the same value as in the server `.env`; `fallback-origin` creates the fallback origin with exactly this name and refuses one that matches `ORG_HOST_PATTERN`). `CF_STAGING_INFRA_TOKEN` stays on GitHub only, never on the server or in the app. Optionally set `STAGING_ORG_SMOKE_HOST` (an organization host that exists) so each deploy also checks that host's `/api/health`.
 5. Run **Actions -> careeros-staging-cloudflare -> Run workflow** for each command below. Run each one first as a dry run (leave `apply` off), read the plan, then run it again with `apply` ticked:
    1. `tunnel-ingress`
    2. `fallback-origin`
    3. `org-dns` with `slug` set to each test organization
 
    The environment's required reviewers must approve each run.
+
+A dry run (no `apply`) only reads from Cloudflare, but it does read, so it needs the real tokens and settings; with a setting missing the run fails by name before any call. Slugs cannot start or end with a hyphen.
 
 The same script runs locally with the settings in the environment: `node infra/staging/cloudflare.mjs <command> [slug] [--apply]`. It is a dry run unless `--apply` is given, never prints a token, and each command only changes what differs.
 

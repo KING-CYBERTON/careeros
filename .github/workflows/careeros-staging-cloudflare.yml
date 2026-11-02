@@ -62,6 +62,7 @@ jobs:
           CF_ZONE_ID: ${{ vars.CF_ZONE_ID }}
           CF_TUNNEL_ID: ${{ vars.CF_TUNNEL_ID }}
           STAGING_HOST: ${{ vars.STAGING_HOST }}
+          CF_SAAS_CNAME_TARGET: ${{ vars.CF_SAAS_CNAME_TARGET }}
           ORG_HOST_PATTERN: ${{ vars.ORG_HOST_PATTERN }}
         run: |
           set -euo pipefail
