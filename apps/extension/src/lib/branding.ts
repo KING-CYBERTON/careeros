@@ -46,15 +46,28 @@ export type BrandingResult = { ok: true; branding: OrgBranding } | { ok: false; 
 // eslint-disable-next-line no-control-regex -- control characters never belong in a name shown in the header.
 const CONTROL_CHARACTERS = /[\u0000-\u001f\u007f]/g;
 
-/** A logo address that is on `origin` over https (or the origin's own http in a development build), else null. */
+/**
+ * The server builds a logo address from its platform address (APP_URL), not from the organization's own host, so the
+ * address the answer carries is on another origin than the one the user entered. The logo is a branding asset the
+ * organization's own address serves at the same path, so only that path is taken and it is loaded from the entered origin.
+ */
+const ASSET_PATH =
+	/^\/api\/branding-assets\/[A-Za-z0-9_-]{1,64}\/(?:logo|favicon)-[0-9a-f-]{36}\.(?:png|webp|svg|ico)$/;
+
+/**
+ * A logo address on `origin`, over https (or the origin's own http in a development build), else null. An address on
+ * the entered origin is kept as it is; a branding asset path from any other origin is rebuilt on the entered origin.
+ */
 export function sameOriginLogo(value: unknown, origin: string, devHttpHosts: readonly string[]): string | null {
 	if (typeof value !== "string" || value === "" || value.length > 2048) return null;
 	try {
 		const base = new URL(origin);
+		if (base.protocol !== "https:" && !(base.protocol === "http:" && isDevHttpHost(base.hostname, devHttpHosts)))
+			return null;
 		const url = new URL(value, base);
-		if (url.origin !== base.origin || url.username !== "" || url.password !== "") return null;
-		if (url.protocol === "https:") return url.toString();
-		return url.protocol === "http:" && isDevHttpHost(url.hostname, devHttpHosts) ? url.toString() : null;
+		if (url.username !== "" || url.password !== "") return null;
+		if (url.origin === base.origin) return url.toString();
+		return ASSET_PATH.test(url.pathname) ? new URL(url.pathname, base).toString() : null;
 	} catch {
 		return null;
 	}

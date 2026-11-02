@@ -100,8 +100,18 @@ describe("sameOriginLogo", () => {
 		expect(sameOriginLogo(`${ORIGIN}/logo.png`, ORIGIN, [])).toBe(`${ORIGIN}/logo.png`);
 	});
 
+	it("rebuilds a branding asset address from the platform address on the entered origin", () => {
+		const asset = "/api/branding-assets/org_1/logo-0c8c3d5a-7f0e-4a4e-9b86-7ad1d0a5f0aa.png";
+		expect(sameOriginLogo(`https://app.example.com${asset}`, ORIGIN, [])).toBe(`${ORIGIN}${asset}`);
+		expect(sameOriginLogo(`http://localhost:3000${asset}`, "http://acme.orgs.test:3000", ["*.orgs.test"])).toBe(
+			`http://acme.orgs.test:3000${asset}`,
+		);
+		expect(sameOriginLogo(`http://localhost:3000${asset}`, "http://acme.orgs.test:3000", [])).toBeNull();
+	});
+
 	it.each([
 		["another host", "https://cdn.example.net/logo.png"],
+		["another host with a path that is not a branding asset", "https://app.example.com/api/uploads/x/logo.png"],
 		["a look-alike host", "https://careers.example.org.evil.test/logo.png"],
 		["user info", "https://user@careers.example.org/logo.png"],
 		["a protocol-relative address on another host", "//evil.test/logo.png"],
