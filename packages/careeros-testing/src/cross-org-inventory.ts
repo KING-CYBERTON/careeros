@@ -184,6 +184,13 @@ export const NO_TENANT_ID: Record<string, string> = {
 	"GET /organization/entitlements": "takes no tenant id: the caller's own organization (P3-T01)",
 	"GET /organization/audit":
 		"takes no tenant id: the caller's own organization; the cursor is an opaque position in its own log (P3-T01)",
+	"GET /billing": "takes no tenant id: the caller's own organization (P3-T04)",
+	"POST /billing/trial": "takes no tenant id: the caller's own organization (P3-T04)",
+	"POST /billing/checkout":
+		"takes no tenant id: the caller's own organization; the body names a plan, an interval and a seat count (P3-T04)",
+	"POST /billing/seats": "takes no tenant id: the caller's own organization; the body is a seat count (P3-T04)",
+	"POST /billing/cancel": "takes no tenant id: the caller's own organization (P3-T04)",
+	"POST /billing/portal": "takes no tenant id: the caller's own organization (P3-T04)",
 	"GET /organization/settings": "takes no tenant id: the caller's own organization",
 	"PATCH /organization/settings": "takes no tenant id: the caller's own organization",
 	"GET /organization/domains/info": "takes no tenant id: the caller's own organization's address (P2-T07)",
@@ -223,8 +230,13 @@ export const NO_TENANT_ID: Record<string, string> = {
 	"DELETE /files": "takes no tenant id: deletes by a path in the caller's own storage",
 };
 
-/** Skip-list entries whose only ids are item ids inside an imported document, so they are allowed to carry id fields. */
+/**
+ * Skip-list entries whose only ids are item ids inside an imported document, so they are allowed to carry id fields.
+ * P3-T04: also `POST /billing/checkout`, whose `planId` names a row of the global `plan` table (a price list shared by
+ * every organization), not a tenant row.
+ */
 export const ITEM_IDS_ONLY = new Set([
+	"POST /billing/checkout",
 	"POST /resumes/import",
 	"POST /resumes/imports",
 	"POST /cover-letters/import",

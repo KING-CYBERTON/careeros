@@ -35,6 +35,9 @@ import { handleWebApp, handleWebManifest, isProfilePath, isPublicResumePath, ser
 import { handleAlias } from "./alias";
 import { handleAppleAppSiteAssociation, handleAndroidAssetLinks } from "./app-links";
 import { handleAuth, handleOAuth } from "./auth";
+// CAREEROS: payment provider webhook and the fake provider's test page (P3-T04)
+import { handleFakeCheckoutDecision, handleFakeCheckoutPage } from "./billing-fake";
+import { BILLING_WEBHOOK_MAX_BYTES, handleBillingWebhook } from "./billing-webhook";
 import { handleCareerJobs } from "./career-jobs";
 import { handleCustomDomain, handleTraefikProvider } from "./custom-domain";
 // CAREEROS: social and OIDC sign-in on organization hosts through a one-time handoff (P2-T05)
@@ -129,6 +132,9 @@ export function createApp(options: AppOptions = {}) {
 	app.use("/api/storage/stage", limitBody(64 * 1024));
 	// CAREEROS (P2-T05): the handoff bodies are two short strings
 	app.use("/api/careeros/handoff/*", limitBody(8 * 1024));
+	// CAREEROS (P3-T04): a provider event is a small JSON document; the fake test page posts two short strings
+	app.use("/api/billing/webhook/*", limitBody(BILLING_WEBHOOK_MAX_BYTES));
+	app.use("/api/billing/fake/*", limitBody(8 * 1024));
 
 	app.post("/api/storage/stage", (c) => prepareStagedBody(c.req.raw));
 	app.all("/api/rpc/*", (c) => withStagedBody(c.req.raw, (request) => handleRpc(request, client(c), c.get("host"))));
@@ -140,6 +146,12 @@ export function createApp(options: AppOptions = {}) {
 	);
 	app.get("/api/careeros/handoff/issue", (c) => handleHandoffIssue(c.req.raw, c.get("host"), client(c)));
 	app.post("/api/careeros/handoff/redeem", (c) => handleHandoffRedeem(c.req.raw, c.get("host"), client(c)));
+	// CAREEROS (P3-T04, D9): platform host only, signature first; the fake provider's test page exists only for BILLING_PROVIDER=fake
+	app.post("/api/billing/webhook/:provider", (c) =>
+		handleBillingWebhook(c.req.raw, c.get("host"), c.req.param("provider"), client(c)),
+	);
+	app.get("/api/billing/fake/checkout", (c) => handleFakeCheckoutPage(c.req.raw, c.get("host"), client(c)));
+	app.post("/api/billing/fake/decision", (c) => handleFakeCheckoutDecision(c.req.raw, c.get("host"), client(c)));
 	app.get("/api/auth/oauth", (c) => handleOAuth(c.req.raw));
 	app.all("/api/auth/*", (c) => handleAuth(c.req.raw, client(c)));
 	app.get("/api/health", () => handleHealth());

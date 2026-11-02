@@ -114,5 +114,10 @@ BEGIN
 	IF to_regclass('public.audit_log') IS NOT NULL THEN
 		REVOKE UPDATE, DELETE, TRUNCATE ON TABLE public.audit_log FROM careeros_app;
 	END IF;
+	-- P3-T04: billing_event is reached only through careeros_record_billing_event (a definer function); the app role has
+	-- no privilege on the table at all.
+	IF to_regclass('public.billing_event') IS NOT NULL THEN
+		REVOKE ALL ON TABLE public.billing_event FROM careeros_app;
+	END IF;
 END
 $$;
