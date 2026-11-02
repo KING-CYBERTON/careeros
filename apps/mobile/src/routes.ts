@@ -5,7 +5,8 @@ import type { WorkspaceTab } from "@reactive-resume/schema/career";
 export type BuilderPane = "write" | "page" | "design" | "check" | "share";
 export type LetterPane = "write" | "page" | "design";
 export type CareerPane = "today" | "coach" | "knowledge" | "offers";
-export type SettingsPane = "account" | "preferences" | "ai";
+// CAREEROS (P2-T07): branding and domains panes
+export type SettingsPane = "account" | "preferences" | "ai" | "branding" | "domains";
 export type ApplicationTab = WorkspaceTab;
 /** The Applications tab's views; List is the tab's index. */
 export type ApplicationsView = "list" | "board" | "calendar" | "insights";
