@@ -158,10 +158,21 @@ async function seedUserIn(orgId: string, db: pg.Pool): Promise<string> {
 	return userId;
 }
 
+/** CAREEROS (P4-T01): a job discovery automation (and its owner) in `orgId`, inserted by the owner pool. */
+async function seedJobSource(orgId: string, db: pg.Pool): Promise<{ userId: string; sourceId: string }> {
+	const userId = await seedUser(orgId, db);
+	const sourceId = `iso-source-${randomUUID()}`;
+	await db.query(
+		`INSERT INTO job_source (id, organization_id, user_id, name) VALUES ($1, $2, $3, 'Isolation automation')`,
+		[sourceId, orgId, userId],
+	);
+	return { userId, sourceId };
+}
+
 /**
  * Every tenant table (one with an `organization_id` column) must be registered here. The five resume tables are
  * registered by P1-T04, the two cover letter tables by P1-T05 and the four application tables by P1-T06, the eleven career tables by P1-T07, the six assistant and AI tables by P1-T08 and
- * the three remaining ones by P1-T09, the two branding ones by P2-T01 and the organization domain one by P2-T06. The route
+ * the three remaining ones by P1-T09, the two branding ones by P2-T01, the organization domain one by P2-T06 and the three job discovery ones by P4-T01. The route
  * groups' API checks are attached by `packages/api` (it needs the router), which runs `runApiIsolationCheck` with this
  * entry's seed.
  */
@@ -548,6 +559,37 @@ export const isolationRegistry: readonly RegistryEntry[] = [
 			await db.query(
 				`INSERT INTO organization_domain (id, organization_id, hostname, verification_token) VALUES ($1, $2, $1 || '.example.test', 'token')`,
 				[id, orgId],
+			);
+			return id;
+		},
+	},
+	// CAREEROS (P4-T01): job discovery. A run and a posting both point at an automation of the same owner.
+	{
+		table: "job_source",
+		seed: async (orgId, db) => (await seedJobSource(orgId, db)).sourceId,
+	},
+	{
+		table: "discovery_run",
+		seed: async (orgId, db) => {
+			const { sourceId } = await seedJobSource(orgId, db);
+			const id = `iso-run-${randomUUID()}`;
+			await db.query(`INSERT INTO discovery_run (id, organization_id, job_source_id) VALUES ($1, $2, $3)`, [
+				id,
+				orgId,
+				sourceId,
+			]);
+			return id;
+		},
+	},
+	{
+		table: "discovered_job",
+		seed: async (orgId, db) => {
+			const { userId, sourceId } = await seedJobSource(orgId, db);
+			const id = `iso-posting-${randomUUID()}`;
+			await db.query(
+				`INSERT INTO discovered_job (id, organization_id, user_id, job_source_id, source, external_id, board_token, title, company, url, local_score)
+				 VALUES ($1, $2, $3, $4, 'greenhouse', $1, 'isolation', 'Isolation role', 'Isolation Co', 'https://example.test/' || $1, 50)`,
+				[id, orgId, userId, sourceId],
 			);
 			return id;
 		},

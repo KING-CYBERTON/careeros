@@ -71,6 +71,9 @@ describe.skipIf(!configured)("the isolation registry on the migrated schema", ()
 			"organization_branding",
 			"organization_settings",
 			"organization_domain",
+			"job_source",
+			"discovery_run",
+			"discovered_job",
 		]);
 	});
 

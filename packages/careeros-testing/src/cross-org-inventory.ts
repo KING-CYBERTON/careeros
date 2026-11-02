@@ -188,6 +188,9 @@ export const NO_TENANT_ID: Record<string, string> = {
 	"POST /organization/domains": "takes no tenant id: adds a domain to the caller's own organization (P2-T06)",
 	"GET /organization/host": "takes no tenant id: the organization is the request host's, never an input (P2-T03)",
 	"POST /organization/join": "takes no tenant id: joins the request host's organization, never an input (P2-T03)",
+	"GET /discovery/sources": "takes no tenant id: lists the caller's own automations (P4-T01)",
+	"POST /discovery/sources": "takes no tenant id: creates an automation for the caller (P4-T01)",
+	"GET /discovery/jobs": "takes no tenant id: lists the caller's own discovered jobs (P4-T01)",
 	"GET /documents": "takes no tenant id: lists the caller's own documents",
 	"GET /documents/page": "takes no tenant id: lists the caller's own documents",
 	"GET /documents/counts": "takes no tenant id: counts the caller's own documents",
@@ -254,6 +257,9 @@ export const ID_KINDS = [
 	"transcript",
 	"apiKey",
 	"orgDomain",
+	// CAREEROS (P4-T01): job discovery
+	"jobSource",
+	"discoveredJob",
 ] as const;
 export type IdKind = (typeof ID_KINDS)[number];
 export type SeedIds = Record<IdKind, string>;
@@ -279,6 +285,8 @@ const PREFIX_KIND: [RegExp, IdKind][] = [
 	[/^\/career\/voice\/transcripts(\/|$)/, "transcript"],
 	[/^\/auth\/api-keys/, "apiKey"],
 	[/^\/organization\/domains(\/|$)/, "orgDomain"],
+	[/^\/discovery\/sources(\/|$)/, "jobSource"],
+	[/^\/discovery\/jobs(\/|$)/, "discoveredJob"],
 ];
 
 /** Operations whose bare `id` cannot be told from the path alone. */
@@ -315,6 +323,7 @@ const FIELD_KIND: Record<string, IdKind> = {
 	keyId: "apiKey",
 	scheduleId: "schedule",
 	answerId: "answer",
+	jobSourceId: "jobSource",
 	// Not tenant ids: the client's own correlation values, sent so the request still validates.
 	sessionId: "resume",
 	toolCallId: "message",
