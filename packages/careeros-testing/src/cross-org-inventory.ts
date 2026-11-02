@@ -175,6 +175,10 @@ export const NO_TENANT_ID: Record<string, string> = {
 	"PATCH /branding": "takes no tenant id: the caller's own organization",
 	"POST /branding/logo": "takes no tenant id: the caller's own organization",
 	"POST /branding/favicon": "takes no tenant id: the caller's own organization",
+	"DELETE /branding/logo": "takes no tenant id: the caller's own organization (P2-T07)",
+	"DELETE /branding/favicon": "takes no tenant id: the caller's own organization (P2-T07)",
+	"GET /branding/host":
+		"takes no tenant id: public, the request host's organization, returns only public fields (P2-T07)",
 	"GET /branding/public/{slug}":
 		"takes no tenant id: public, addressed by organization slug, returns only public fields",
 	"GET /organization/settings": "takes no tenant id: the caller's own organization",
