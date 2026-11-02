@@ -3,6 +3,9 @@ import Constants from "expo-constants";
 import { useRouter } from "expo-router";
 import { openBrowserAsync } from "expo-web-browser";
 import { View } from "react-native";
+import { resolveLegalLinks } from "@reactive-resume/utils/legal-links";
+// CAREEROS (P6-T01): the platform's legal pages are the default links, on the server the app is signed in to
+import { useSession } from "@/auth/session";
 // CAREEROS (P2-T02): the brand follows the organization the server belongs to
 import { useBrand } from "@/branding/store";
 // CAREEROS (P2-T07): Branding and Domains rows for owners and admins
@@ -18,7 +21,11 @@ export default function SettingsScreen() {
 	const { t } = useLingui();
 	const { space } = useTheme();
 	const profile = useProfile();
-	const { appName, supportUrl, privacyUrl, termsUrl } = useBrand();
+	const brand = useBrand();
+	const { appName, supportUrl } = brand;
+	const { server } = useSession();
+	// CAREEROS (P6-T01): the organization's own links win; otherwise the server's /privacy and /terms pages.
+	const legal = resolveLegalLinks(brand, server);
 	const openLink = (url: string) => {
 		void openBrowserAsync(url).catch(() => showToast({ message: t`Couldn't open the browser. Try again.` }));
 	};
@@ -68,12 +75,13 @@ export default function SettingsScreen() {
 				</SettingsGroup>
 			) : null}
 			<SettingsGroup title={t`Legal`}>
-				{privacyUrl ? (
-					<ListRow title={t`Privacy policy`} leading="shield-check" external onPress={() => openLink(privacyUrl)} />
-				) : null}
-				{termsUrl ? (
-					<ListRow title={t`Terms of service`} leading="scroll" external onPress={() => openLink(termsUrl)} />
-				) : null}
+				<ListRow
+					title={t`Privacy policy`}
+					leading="shield-check"
+					external
+					onPress={() => openLink(legal.privacy.href)}
+				/>
+				<ListRow title={t`Terms of service`} leading="scroll" external onPress={() => openLink(legal.terms.href)} />
 				<ListRow
 					title={t`Open-source licenses`}
 					leading="file-text"

@@ -1,7 +1,10 @@
 // CAREEROS (P6-T01, G10): the legal drafts are bundled at build time from docs/legal; nothing is fetched at runtime.
 // The production Docker build copies docs/legal into the build stage (Dockerfile) and turbo hashes it for `web#build`.
+// @boundaries-ignore the legal drafts live in the repository's docs/, outside any workspace package
 import dpaSource from "../../../../../docs/legal/dpa.md?raw";
+// @boundaries-ignore the legal drafts live in the repository's docs/, outside any workspace package
 import privacySource from "../../../../../docs/legal/privacy.md?raw";
+// @boundaries-ignore the legal drafts live in the repository's docs/, outside any workspace package
 import termsSource from "../../../../../docs/legal/terms.md?raw";
 
 export type LegalDocumentId = "terms" | "privacy" | "dpa";
