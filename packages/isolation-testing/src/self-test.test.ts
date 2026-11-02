@@ -263,6 +263,7 @@ describe("coverage check", () => {
 			"feature_flag",
 			"audit_log",
 			"organization_domain",
+			"ai_usage",
 		]);
 	});
 });

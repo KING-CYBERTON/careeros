@@ -19,3 +19,5 @@ export * from "./auth-handoff";
 export * from "./organization-domain";
 // CAREEROS: plans, subscriptions, feature flags and the audit log (P3-T01)
 export * from "./billing";
+// CAREEROS: AI usage metering (P3-T03)
+export * from "./ai-usage";

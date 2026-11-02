@@ -74,6 +74,7 @@ describe.skipIf(!configured)("the isolation registry on the migrated schema", ()
 			"feature_flag",
 			"audit_log",
 			"organization_domain",
+			"ai_usage",
 		]);
 	});
 

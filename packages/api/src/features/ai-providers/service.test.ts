@@ -129,6 +129,8 @@ describe("aiProvidersService", () => {
 				{ type: "eq", left: "ai_provider.enabled", right: true },
 				{ type: "eq", left: "ai_provider.test_status", right: "success" },
 				{ type: "ne", left: "ai_provider.id", right: "server-ai:org_test:user-1" },
+				// CAREEROS (P3-T03): the platform reference row is never one of the member's own providers
+				{ type: "ne", left: "ai_provider.id", right: "platform-ai:org_test:user-1" },
 			],
 		});
 		expect(queryState.orderByArgs).toEqual([
