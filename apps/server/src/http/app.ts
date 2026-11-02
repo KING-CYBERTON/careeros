@@ -37,6 +37,8 @@ import { handleAppleAppSiteAssociation, handleAndroidAssetLinks } from "./app-li
 import { handleAuth, handleOAuth } from "./auth";
 import { handleCareerJobs } from "./career-jobs";
 import { handleCustomDomain, handleTraefikProvider } from "./custom-domain";
+// CAREEROS (P5-T01): CORS for the extension's read of the host-branding route
+import { EXTENSION_CORS_PATH, extensionBrandingCors } from "./extension-cors";
 // CAREEROS: social and OIDC sign-in on organization hosts through a one-time handoff (P2-T05)
 import { handleHandoffBegin, handleHandoffIssue, handleHandoffRedeem, handleHandoffRequest } from "./handoff";
 import { handleHealth } from "./health";
@@ -122,6 +124,8 @@ export function createApp(options: AppOptions = {}) {
 				);
 			},
 		});
+	// CAREEROS (P5-T01): the browser extension reads this one public route cross-origin; no other route gets CORS.
+	app.use(EXTENSION_CORS_PATH, extensionBrandingCors);
 	app.use("/api/openapi/*", limitBody(40 * 1024 * 1024));
 	// Hono's `/x/*` also matches `/x`, so each wildcard below covers its base path too.
 	app.use("/api/rpc/*", limitBody(160 * 1024 * 1024));

@@ -312,3 +312,27 @@ it.each([
 	expect(response.headers.get("cache-control")).toBe("no-store");
 	expect(handler).not.toHaveBeenCalled();
 });
+
+// CAREEROS (P5-T01): the extension reads the host-branding route cross-origin, and only that route.
+describe("extension CORS", () => {
+	const extension = "chrome-extension://abcdefghijklmnopabcdefghijklmnop";
+
+	it("allows an extension page to read /api/openapi/branding/host", async () => {
+		const { createApp } = await import("./app");
+		const response = await createApp().request("http://localhost:3000/api/openapi/branding/host", {
+			headers: { origin: extension },
+		});
+		expect(await response.text()).toBe("openapi");
+		expect(response.headers.get("access-control-allow-origin")).toBe(extension);
+		expect(response.headers.get("access-control-allow-credentials")).toBeNull();
+		expect(mocks.handleOpenApi).toHaveBeenCalledOnce();
+	});
+
+	it("adds no CORS headers to other API routes", async () => {
+		const { createApp } = await import("./app");
+		const response = await createApp().request("http://localhost:3000/api/openapi/branding", {
+			headers: { origin: extension },
+		});
+		expect(response.headers.get("access-control-allow-origin")).toBeNull();
+	});
+});
