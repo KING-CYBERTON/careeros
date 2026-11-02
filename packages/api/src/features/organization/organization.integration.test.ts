@@ -181,6 +181,22 @@ describe.skipIf(!configured)("organization entitlements and audit log (API)", ()
 			expect(other.items.map((item) => item.action)).not.toContain("test.entry_01");
 		});
 
+		it("does not return the ip of an entry", async () => {
+			await owner.query(
+				`INSERT INTO audit_log (organization_id, action, ip) VALUES ($1, 'test.with_ip', '203.0.113.9')`,
+				[ids.orgA],
+			);
+			const page = await invoke<{ items: Record<string, unknown>[] }>(
+				router.audit,
+				{ limit: 100 },
+				asUser(ids.ownerA, ids.orgA),
+			);
+			const entry = page.items.find((item) => item.action === "test.with_ip");
+			expect(entry).toBeDefined();
+			expect(entry).not.toHaveProperty("ip");
+			expect(JSON.stringify(page)).not.toContain("203.0.113.9");
+		});
+
 		it("is for owners and admins only", async () => {
 			await expect(invoke(router.audit, {}, asUser(ids.memberA, ids.orgA))).rejects.toMatchObject({
 				code: "FORBIDDEN",

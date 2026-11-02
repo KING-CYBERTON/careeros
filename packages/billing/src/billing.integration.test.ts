@@ -143,6 +143,17 @@ describe.skipIf(!configured)("plans, subscriptions, flags, audit log and entitle
 				for (const key of billing.FEATURE_KEYS)
 					if (plan.id !== "personal") expect(typeof plan.features[key]).toBe("boolean");
 			expect(byId.get("enterprise")?.features.sso).toBe(true);
+			const models = await ownerRows<{ id: string; pricing_model: string }>(`SELECT id, pricing_model FROM plan`);
+			expect(Object.fromEntries(models.map((row) => [row.id, row.pricing_model]))).toEqual({
+				personal: "flat",
+				trial: "flat",
+				starter: "flat",
+				pro: "per_seat",
+				enterprise: "flat",
+			});
+			await expect(owner.query(`UPDATE plan SET pricing_model = 'tiered' WHERE id = 'pro'`)).rejects.toMatchObject({
+				code: "23514",
+			});
 			expect(byId.get("pro")?.features.sso).toBe(false);
 		});
 
@@ -623,6 +634,16 @@ describe.skipIf(!configured)("plans, subscriptions, flags, audit log and entitle
 					`DELETE FROM feature_flag WHERE key IN ('beta_ui', 'job_discovery', 'custom_domain', 'only_global')`,
 				);
 			}
+		});
+
+		it("limits seats to the paid seats while a provider subscription is live, else to the plan", async () => {
+			// orgC is on the starter plan (limit 50) with no provider.
+			await setPlan(ids.orgC, "starter", "active");
+			expect((await inScope(ids.orgC, () => billing.getEntitlements(ids.orgC))).seatLimit).toBe(50);
+			await setSubscription(ids.orgC, { provider: "manual", status: "active", seats: 7 });
+			expect((await inScope(ids.orgC, () => billing.getEntitlements(ids.orgC))).seatLimit).toBe(7);
+			await setSubscription(ids.orgC, { status: "canceled" });
+			expect((await inScope(ids.orgC, () => billing.getEntitlements(ids.orgC))).seatLimit).toBe(50);
 		});
 
 		it("is read-only when suspended and reports isFeatureEnabled", async () => {

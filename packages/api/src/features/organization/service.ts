@@ -43,7 +43,6 @@ export async function listAuditLog(userId: string, input: AuditListInput) {
 			targetType: schema.auditLog.targetType,
 			targetId: schema.auditLog.targetId,
 			metadata: schema.auditLog.metadata,
-			ip: schema.auditLog.ip,
 			createdAt: schema.auditLog.createdAt,
 			cursorTime,
 		})

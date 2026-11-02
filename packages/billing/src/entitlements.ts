@@ -13,7 +13,7 @@ export type Entitlements = {
 	planId: string;
 	/** The organization's status: `trial`, `active`, `past_due` or `suspended`. */
 	status: string;
-	/** Null means unlimited. */
+	/** The effective limit (see `effectiveSeatLimit`). Null means unlimited. */
 	seatLimit: number | null;
 	/** Members plus pending invitations that have not expired. */
 	seatsUsed: number;
@@ -30,7 +30,12 @@ export type Entitlements = {
 export type EntitlementInputs = {
 	status: string;
 	planId: string;
+	/** `plan.seat_limit`; null means unlimited. */
 	seatLimit: number | null;
+	/** `subscription.status`; `none` when the organization has no subscription row. */
+	subscriptionStatus: string;
+	/** `subscription.provider`; `none` when the organization has no subscription row. */
+	subscriptionProvider: string;
 	aiCreditsPerSeat: number;
 	planFeatures: Record<string, unknown>;
 	/** `subscription.seats`; 1 when the organization has no subscription row. */
@@ -52,12 +57,37 @@ export function aiCreditsTotal(aiCreditsPerSeat: number, seatsPaid: number, memb
 	return aiCreditsPerSeat * Math.max(seatsPaid, memberCount);
 }
 
+/** Length of a trial in days (PRODUCT.md 8.8). The `plan` table has no column for it; T04's state machine uses this. */
+export const TRIAL_DAYS = 14;
+
+const LIVE_SUBSCRIPTION_STATUSES: readonly string[] = ["active", "trialing", "past_due"];
+
+/**
+ * The seat limit that applies (Q194): the seats the organization pays for (`subscription.seats`) while it has a
+ * live subscription, that is a status of active, trialing or past_due with a provider other than `none`. Otherwise
+ * the plan's own `seat_limit`, where null means unlimited.
+ */
+export function effectiveSeatLimit(input: {
+	planSeatLimit: number | null;
+	seatsPaid: number;
+	subscriptionStatus: string;
+	subscriptionProvider: string;
+}): number | null {
+	const live = LIVE_SUBSCRIPTION_STATUSES.includes(input.subscriptionStatus) && input.subscriptionProvider !== "none";
+	return live ? input.seatsPaid : input.planSeatLimit;
+}
+
 /** Pure part of `getEntitlements`: no database, so the maths and the flag order are unit-testable. */
 export function buildEntitlements(input: EntitlementInputs): Entitlements {
 	return {
 		planId: input.planId,
 		status: input.status,
-		seatLimit: input.seatLimit,
+		seatLimit: effectiveSeatLimit({
+			planSeatLimit: input.seatLimit,
+			seatsPaid: input.seatsPaid,
+			subscriptionStatus: input.subscriptionStatus,
+			subscriptionProvider: input.subscriptionProvider,
+		}),
 		seatsUsed: input.memberCount + input.pendingInvitationCount,
 		aiCreditsPerSeat: input.aiCreditsPerSeat,
 		aiCreditsTotal: aiCreditsTotal(input.aiCreditsPerSeat, input.seatsPaid, input.memberCount),
@@ -86,7 +116,12 @@ function loadEntitlements(orgId: string): Promise<Entitlements> {
 		if (!plan) throw new BillingError("plan_not_found", `Plan ${org.planId} does not exist.`);
 
 		const [subscription] = await db
-			.select({ seats: schema.subscription.seats, overage: schema.subscription.aiOverageAllowed })
+			.select({
+				seats: schema.subscription.seats,
+				overage: schema.subscription.aiOverageAllowed,
+				status: schema.subscription.status,
+				provider: schema.subscription.provider,
+			})
 			.from(schema.subscription)
 			.where(eq(schema.subscription.organizationId, orgId))
 			.limit(1);
@@ -124,6 +159,8 @@ function loadEntitlements(orgId: string): Promise<Entitlements> {
 			status: org.status,
 			planId: org.planId,
 			seatLimit: plan.seatLimit,
+			subscriptionStatus: subscription?.status ?? "none",
+			subscriptionProvider: subscription?.provider ?? "none",
 			aiCreditsPerSeat: plan.aiCreditsPerSeat,
 			planFeatures: plan.features,
 			seatsPaid: subscription?.seats ?? 1,

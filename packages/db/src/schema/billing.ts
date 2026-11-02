@@ -30,26 +30,33 @@ export const KEY_PATTERN = "^[a-z][a-z0-9_.]{1,63}$";
 const list = (values: readonly string[]) => sql.raw(values.map((value) => `'${value}'`).join(", "));
 
 /** Global, not tenant-scoped. Prices are nullable: null means "contact us". */
-export const plan = pg.pgTable("plan", {
-	id: pg.text("id").notNull().primaryKey(),
-	name: pg.text("name").notNull(),
-	priceMonthlyUsdCents: pg.integer("price_monthly_usd_cents"),
-	priceAnnualUsdCents: pg.integer("price_annual_usd_cents"),
-	priceMonthlyKes: pg.integer("price_monthly_kes"),
-	priceAnnualKes: pg.integer("price_annual_kes"),
-	/** Null means unlimited. */
-	seatLimit: pg.integer("seat_limit"),
-	aiCreditsPerSeat: pg.integer("ai_credits_per_seat").notNull().default(0),
-	/** A map of feature key to boolean. */
-	features: pg
-		.jsonb("features")
-		.$type<Record<string, boolean>>()
-		.notNull()
-		.default(sql`'{}'::jsonb`),
-	active: pg.boolean("active").notNull().default(true),
-	createdAt: pg.timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
-	updatedAt: pg.timestamp("updated_at", { withTimezone: true }).notNull().defaultNow(),
-});
+export const plan = pg.pgTable(
+	"plan",
+	{
+		id: pg.text("id").notNull().primaryKey(),
+		name: pg.text("name").notNull(),
+		/** `flat`: one price per organization. `per_seat`: the price is per seat. */
+		pricingModel: pg.text("pricing_model").notNull().default("flat"),
+		priceMonthlyUsdCents: pg.integer("price_monthly_usd_cents"),
+		priceAnnualUsdCents: pg.integer("price_annual_usd_cents"),
+		/** KES prices are whole shillings (integers), not minor units. */
+		priceMonthlyKes: pg.integer("price_monthly_kes"),
+		priceAnnualKes: pg.integer("price_annual_kes"),
+		/** Null means unlimited. */
+		seatLimit: pg.integer("seat_limit"),
+		aiCreditsPerSeat: pg.integer("ai_credits_per_seat").notNull().default(0),
+		/** A map of feature key to boolean. */
+		features: pg
+			.jsonb("features")
+			.$type<Record<string, boolean>>()
+			.notNull()
+			.default(sql`'{}'::jsonb`),
+		active: pg.boolean("active").notNull().default(true),
+		createdAt: pg.timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
+		updatedAt: pg.timestamp("updated_at", { withTimezone: true }).notNull().defaultNow(),
+	},
+	(t) => [pg.check("plan_pricing_model_check", sql`${t.pricingModel} in ('flat', 'per_seat')`)],
+);
 
 /** One row per organization. The app role reads it; only definer functions write it. */
 export const subscription = pg.pgTable(

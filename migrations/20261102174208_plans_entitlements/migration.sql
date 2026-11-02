@@ -42,6 +42,7 @@ CREATE TABLE "feature_flag" (
 CREATE TABLE "plan" (
 	"id" text PRIMARY KEY,
 	"name" text NOT NULL,
+	"pricing_model" text DEFAULT 'flat' NOT NULL,
 	"price_monthly_usd_cents" integer,
 	"price_annual_usd_cents" integer,
 	"price_monthly_kes" integer,
@@ -51,9 +52,15 @@ CREATE TABLE "plan" (
 	"features" jsonb DEFAULT '{}' NOT NULL,
 	"active" boolean DEFAULT true NOT NULL,
 	"created_at" timestamp with time zone DEFAULT now() NOT NULL,
-	"updated_at" timestamp with time zone DEFAULT now() NOT NULL
+	"updated_at" timestamp with time zone DEFAULT now() NOT NULL,
+	CONSTRAINT "plan_pricing_model_check" CHECK ("pricing_model" in ('flat', 'per_seat'))
 );
 --> statement-breakpoint
+COMMENT ON COLUMN "plan"."pricing_model" IS 'flat: one price per organization. per_seat: the price is per seat.';--> statement-breakpoint
+COMMENT ON COLUMN "plan"."price_monthly_kes" IS 'Whole Kenyan shillings (integer), not minor units.';--> statement-breakpoint
+COMMENT ON COLUMN "plan"."price_annual_kes" IS 'Whole Kenyan shillings (integer), not minor units.';--> statement-breakpoint
+COMMENT ON COLUMN "plan"."price_monthly_usd_cents" IS 'US cents.';--> statement-breakpoint
+COMMENT ON COLUMN "plan"."price_annual_usd_cents" IS 'US cents.';--> statement-breakpoint
 CREATE TABLE "subscription" (
 	"organization_id" text PRIMARY KEY,
 	"plan_id" text NOT NULL,
@@ -85,25 +92,25 @@ CREATE UNIQUE INDEX "feature_flag_org_key_key" ON "feature_flag" (coalesce("orga
 CREATE INDEX "subscription_plan_idx" ON "subscription" ("plan_id");--> statement-breakpoint
 -- 1. Seed the five plans (D2). The plans must exist before the foreign keys to them are added below.
 -- ALL PRICES AND AI CREDIT AMOUNTS ARE PLACEHOLDERS until Stephen sets them (PRODUCT.md section 15.4, D2); they are
--- data, so changing them needs no code. USD amounts are in cents; KES amounts are in whole shillings (Q191).
--- The trial lasts 14 days (PRODUCT.md 8.8); the plan has no column for that, so T04's state machine holds the number (Q192).
+-- data, so changing them needs no code. USD amounts are in cents; KES amounts are in whole shillings; pro is priced per seat, the others flat (pricing_model).
+-- The trial lasts 14 days (PRODUCT.md 8.8); the plan has no column for that: TRIAL_DAYS in @careeros/billing holds the number.
 -- Feature keys come from PRODUCT.md section 11: custom_domain, job_discovery, admin_analytics, email_templates, sso,
 -- platform_ai. A key missing from a plan's features resolves to the code default (D4).
-INSERT INTO "plan" ("id", "name", "price_monthly_usd_cents", "price_annual_usd_cents", "price_monthly_kes", "price_annual_kes", "seat_limit", "ai_credits_per_seat", "features") VALUES
+INSERT INTO "plan" ("id", "name", "pricing_model", "price_monthly_usd_cents", "price_annual_usd_cents", "price_monthly_kes", "price_annual_kes", "seat_limit", "ai_credits_per_seat", "features") VALUES
 	-- Personal: the free plan of the personal org made at signup. One seat, a small AI quota, no admin features.
-	('personal', 'Personal', 0, 0, 0, 0, 1, 50,
+	('personal', 'Personal', 'flat', 0, 0, 0, 0, 1, 50,
 		'{"custom_domain": false, "job_discovery": false, "admin_analytics": false, "email_templates": false, "sso": false, "platform_ai": true}'),
 	-- Trial: 5 seats for 14 days, the Pro feature set without SSO. Not sold, so no prices.
-	('trial', 'Trial', 0, 0, 0, 0, 5, 100,
+	('trial', 'Trial', 'flat', 0, 0, 0, 0, 5, 100,
 		'{"custom_domain": true, "job_discovery": true, "admin_analytics": true, "email_templates": true, "sso": false, "platform_ai": true}'),
 	-- Starter: coaches and small agencies, up to 50 seats, a flat price per organization (PLACEHOLDER).
-	('starter', 'Starter', 4900, 49000, 6500, 65000, 50, 100,
+	('starter', 'Starter', 'flat', 4900, 49000, 6500, 65000, 50, 100,
 		'{"custom_domain": false, "job_discovery": false, "admin_analytics": false, "email_templates": false, "sso": false, "platform_ai": true}'),
 	-- Pro: priced per seat (PLACEHOLDER), no seat limit.
-	('pro', 'Pro', 1200, 12000, 1500, 15000, NULL, 300,
+	('pro', 'Pro', 'per_seat', 1200, 12000, 1500, 15000, NULL, 300,
 		'{"custom_domain": true, "job_discovery": true, "admin_analytics": true, "email_templates": true, "sso": false, "platform_ai": true}'),
 	-- Enterprise: annual contract, prices on request (null means contact us), no seat limit.
-	('enterprise', 'Enterprise', NULL, NULL, NULL, NULL, NULL, 1000,
+	('enterprise', 'Enterprise', 'flat', NULL, NULL, NULL, NULL, NULL, 1000,
 		'{"custom_domain": true, "job_discovery": true, "admin_analytics": true, "email_templates": true, "sso": true, "platform_ai": true}')
 ON CONFLICT ("id") DO NOTHING;--> statement-breakpoint
 ALTER TABLE "organization" ADD CONSTRAINT "organization_plan_id_plan_id_fkey" FOREIGN KEY ("plan_id") REFERENCES "plan"("id");--> statement-breakpoint

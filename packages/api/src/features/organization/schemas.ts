@@ -31,7 +31,6 @@ export const auditEntrySchema = z.object({
 	targetType: z.string().nullable(),
 	targetId: z.string().nullable(),
 	metadata: z.record(z.string(), z.unknown()),
-	ip: z.string().nullable(),
 	createdAt: z.date(),
 });
 

@@ -12,6 +12,10 @@ Plans, entitlements and the audit trail for CareerOS (Phase 3, P3-T01). Reads on
 
 The organization's flag, then the plan's `features`, then the global flag, then the code default (off). The first source with an opinion wins, including an explicit `false`.
 
+## Seat limit and trial length
+
+`seatLimit` is `subscription.seats` while the subscription is active, trialing or past_due and its provider is not `none`; otherwise it is `plan.seat_limit` (null means unlimited). `TRIAL_DAYS` (14) is the trial length for T04. `plan.pricing_model` is `flat` (one price per organization) or `per_seat`; KES prices are whole shillings.
+
 ## AI credit pool (consumed by P3-T03)
 
 `aiCreditsTotal = plan.ai_credits_per_seat x max(subscription.seats, member count)`. Pending invitations do not enlarge the pool. `seatsUsed` is members plus pending, unexpired invitations.

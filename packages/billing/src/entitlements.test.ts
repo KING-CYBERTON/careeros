@@ -1,5 +1,11 @@
 import { describe, expect, it, vi } from "vite-plus/test";
-import { aiCreditsTotal, buildEntitlements, type EntitlementInputs } from "./entitlements";
+import {
+	aiCreditsTotal,
+	buildEntitlements,
+	effectiveSeatLimit,
+	TRIAL_DAYS,
+	type EntitlementInputs,
+} from "./entitlements";
 import { hasEntitlementsCache, memoizeInRequest, runWithEntitlementsCache } from "./request-cache";
 
 vi.mock("@reactive-resume/db/client", () => ({ db: {} }));
@@ -8,6 +14,8 @@ const base: EntitlementInputs = {
 	status: "active",
 	planId: "pro",
 	seatLimit: null,
+	subscriptionStatus: "none",
+	subscriptionProvider: "none",
 	aiCreditsPerSeat: 300,
 	planFeatures: { custom_domain: true },
 	seatsPaid: 10,
@@ -56,6 +64,45 @@ describe("entitlement maths", () => {
 		expect(entitlements.features.custom_domain).toBe(false);
 		expect(entitlements.features.sso).toBe(true);
 		expect(entitlements.features.job_discovery).toBe(false);
+	});
+});
+
+describe("effective seat limit", () => {
+	it("is the paid seats while a provider subscription is active, trialing or past_due", () => {
+		for (const subscriptionStatus of ["active", "trialing", "past_due"])
+			for (const planSeatLimit of [50, null])
+				expect(
+					effectiveSeatLimit({ planSeatLimit, seatsPaid: 12, subscriptionStatus, subscriptionProvider: "manual" }),
+				).toBe(12);
+		const entitlements = buildEntitlements({
+			...base,
+			seatLimit: 50,
+			seatsPaid: 12,
+			subscriptionStatus: "active",
+			subscriptionProvider: "paystack",
+		});
+		expect(entitlements.seatLimit).toBe(12);
+	});
+
+	it("is the plan's limit otherwise, and null means unlimited", () => {
+		const plan = { planSeatLimit: 50, seatsPaid: 12 };
+		expect(effectiveSeatLimit({ ...plan, subscriptionStatus: "active", subscriptionProvider: "none" })).toBe(50);
+		for (const subscriptionStatus of ["none", "canceled"])
+			expect(effectiveSeatLimit({ ...plan, subscriptionStatus, subscriptionProvider: "manual" })).toBe(50);
+		expect(
+			effectiveSeatLimit({
+				planSeatLimit: null,
+				seatsPaid: 12,
+				subscriptionStatus: "none",
+				subscriptionProvider: "none",
+			}),
+		).toBeNull();
+		expect(buildEntitlements({ ...base, seatLimit: 50 }).seatLimit).toBe(50);
+		expect(buildEntitlements(base).seatLimit).toBeNull();
+	});
+
+	it("defines the trial length", () => {
+		expect(TRIAL_DAYS).toBe(14);
 	});
 });
 
