@@ -91,6 +91,31 @@ All Phase 2 tasks are merged. P2-C03 (from exit review M1, [spec](plans/cicd/P2-
 - [x] Opus security review: [signed off](reviews/P2-EXIT-security-review-1.md), no Critical or High; M1 closed by P2-C03 ([#61](https://github.com/KING-CYBERTON/careeros/pull/61)). L1 recorded, L2 to the Phase 3 backlog
 - [x] BASELINE refreshed from develop run 41404157247 ([BASELINE.md](BASELINE.md#phase-2-exit-refresh): 3863 unit tests, 89 e2e, 43 skipped, see M1)
 
+## Phase 3 and go-to-market tasks
+
+| Task           | Spec                                                                                   | State                                             | PR                                                       |
+| -------------- | -------------------------------------------------------------------------------------- | ------------------------------------------------- | -------------------------------------------------------- |
+| P3-T01         | [plans/P3-T01-plans-entitlements-tables.md](plans/P3-T01-plans-entitlements-tables.md) | **Merged** · [review](reviews/P3-T01-review-1.md) | [#67](https://github.com/KING-CYBERTON/careeros/pull/67) |
+| P3-T02         | [plans/P3-T02-entitlement-enforcement.md](plans/P3-T02-entitlement-enforcement.md)     | In build                                          | —                                                        |
+| P3-T03         | [plans/P3-T03-ai-metering.md](plans/P3-T03-ai-metering.md)                             | In build                                          | —                                                        |
+| P3-T04         | [plans/P3-T04-billing-core.md](plans/P3-T04-billing-core.md)                           | In build                                          | —                                                        |
+| P3-T05, P3-T06 | —                                                                                      | Wait on D1 (payment provider) and D10             | —                                                        |
+| P3-T07         | [plans/P3-T07-super-admin-console.md](plans/P3-T07-super-admin-console.md)             | Approved; starts after T03                        | —                                                        |
+| P3-T08         | [plans/P3-T08-org-admin-console.md](plans/P3-T08-org-admin-console.md)                 | Approved; starts after T02                        | —                                                        |
+| P4-T01         | [plans/P4-T01-discovery-data-fetchers.md](plans/P4-T01-discovery-data-fetchers.md)     | **Merged** · [review](reviews/P4-T01-review-1.md) | [#68](https://github.com/KING-CYBERTON/careeros/pull/68) |
+| P4-T02         | [plans/P4-T02-discovery-runs-ai-review.md](plans/P4-T02-discovery-runs-ai-review.md)   | Approved; starts after P3-T03                     | —                                                        |
+| P5-T01         | [plans/P5-T01-extension-scaffold.md](plans/P5-T01-extension-scaffold.md)               | **Merged** · [review](reviews/P5-T01-review-1.md) | [#66](https://github.com/KING-CYBERTON/careeros/pull/66) |
+| P5-T02         | [plans/P5-T02-clipper-sign-in.md](plans/P5-T02-clipper-sign-in.md)                     | In build                                          | —                                                        |
+| P6-T01         | [plans/P6-T01-legal-pages.md](plans/P6-T01-legal-pages.md)                             | In review · [review](reviews/P6-T01-review-1.md)  | [#73](https://github.com/KING-CYBERTON/careeros/pull/73) |
+
+### Waiting on Stephen (Phase 3 and go-to-market)
+
+- **D1:** the payment provider (recommended: Paystack). **D2:** real prices. **D10:** mobile shows billing read-only.
+- The AI quota per plan, a Daraja account and Paybill if M-Pesa goes direct, and the first customer segment.
+- **G8:** production hosting. A Chrome Web Store developer account and a Microsoft Partner Center account for the clipper.
+- **G10:** approve the legal drafts in `docs/legal/` (the `[TO CONFIRM]` items need the operator's details or a lawyer) before launch.
+- Push the tags `v0.0.1`, `v0.1.0` and `v0.2.0`.
+
 ## Blockers
 
 - **Owner actions (Stephen)**, the session proxy blocks repo-settings writes: (1) default branch → `develop`; (2) branch protection on `develop` and `main` (require PR, checks `static`, `unit`, `e2e`, up to date, no force-push/deletion; `main` restricted to Opus release merges); (3) enable secret scanning, push protection and Dependabot alerts; (4) for Phase 2, enable Cloudflare for SaaS on `ayopa.co.ke` and add a scoped API token (SSL and Certificates: Edit) as the `CF_SAAS_API_TOKEN` repository and staging secret; P2-C01's runbook (`infra/staging/README.md`) lists the rest: a second token `CF_STAGING_INFRA_TOKEN` (Tunnel edit, DNS edit) as a `staging` environment secret only, and the `CF_ACCOUNT_ID`, `CF_ZONE_ID`, `CF_TUNNEL_ID` variables.
