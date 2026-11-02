@@ -107,7 +107,8 @@ jobs:
         run: node tooling/careeros/branding-gate.mjs
 
       # CAREEROS: P2-C02. The mobile node tests and the gate's own tests; they were not run in CI before.
-      # P2-C01 adds the staging Cloudflare script's self-test.
+      # P2-C01 adds the staging Cloudflare script's self-test. P2-C03 adds the skipped-database-suites guard's self-test
+      # (it is picked up by the tooling/careeros glob).
       - name: Node tests (mobile scripts and tooling)
         run: node --test infra/staging/*.test.mjs tooling/careeros/*.test.mjs apps/mobile/scripts/*.test.mjs
 
@@ -240,6 +241,12 @@ jobs:
       - name: Run unit tests (${{ matrix.shard }} shard)
         if: needs.changes.outputs.code == 'true'
         run: pnpm exec turbo run test:ci --concurrency=1 ${{ matrix.filter }}
+
+      # CAREEROS: P2-C03. Fails when a *.integration.test.ts file skipped any test (for example because Turborepo strict
+      # env mode hid the database URLs from a package). Reads the JUnit reports test:ci wrote. Allowlist is in the script.
+      - name: Fail on skipped database suites
+        if: needs.changes.outputs.code == 'true'
+        run: node tooling/careeros/skipped-db-suites.mjs
 
       # CAREEROS: P1-C02. Per-package counts on the run page. The script catches its own errors and exits 0.
       - name: Test summary
