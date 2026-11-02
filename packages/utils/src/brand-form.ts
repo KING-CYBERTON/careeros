@@ -1,4 +1,4 @@
-// CAREEROS (P2-T07): the branding form as plain data, so its rules are tested without React. The server checks every
+// CAREEROS (P2-T07): the branding form as plain data, shared by the web and mobile settings screens and tested without React. The server checks every
 // rule again; these only give the person an answer before they save.
 import { BRANDING_FONT_NAMES, isHexColor, isHttpsUrl, isSingleEmailAddress } from "@reactive-resume/utils/brand";
 
@@ -100,3 +100,10 @@ export function buildPatch(form: BrandingForm, stored: BrandingData): BrandingPa
 /** Whether `value` is a colour the native colour input can show. */
 export const colorInputValue = (value: string, fallback: string): string =>
 	isHexColor(value.trim()) ? value.trim().toLowerCase() : fallback;
+
+/** Seconds left until a manual domain recheck is allowed again (one a minute per domain), or 0. */
+export function recheckWaitSeconds(lastCheckedAt: Date | string | null, now: number = Date.now()): number {
+	if (!lastCheckedAt) return 0;
+	const elapsed = now - new Date(lastCheckedAt).getTime();
+	return Math.max(0, Math.ceil((60_000 - elapsed) / 1000));
+}

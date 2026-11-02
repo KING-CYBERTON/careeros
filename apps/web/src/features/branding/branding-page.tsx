@@ -10,7 +10,6 @@ import { NativeSelect } from "@reactive-resume/ui/components/native-select";
 import { Skeleton } from "@reactive-resume/ui/components/skeleton";
 import { toast } from "@reactive-resume/ui/components/toast";
 import { BRANDING_FONT_NAMES, isHexColor, primaryContrast } from "@reactive-resume/utils/brand";
-import { RequireBrandingAdmin } from "./access";
 import {
 	APP_NAME_MAX,
 	buildPatch,
@@ -20,7 +19,8 @@ import {
 	type BrandingData,
 	type BrandingForm,
 	type FormError,
-} from "./form";
+} from "@reactive-resume/utils/brand-form";
+import { RequireBrandingAdmin } from "./access";
 import { BrandPreview } from "./preview";
 import { useBranding, useBrandingMutations } from "./queries";
 import { PageHeader } from "@/components/layout/page-header";

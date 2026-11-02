@@ -51,10 +51,3 @@ export function failureText(reason: string | null): string | null {
 			return t`Something went wrong while checking this domain. Remove it and add it again.`;
 	}
 }
-
-/** Seconds left until a manual recheck is allowed again (one a minute per domain), or 0. */
-export function recheckWaitSeconds(lastCheckedAt: Date | string | null, now: number = Date.now()): number {
-	if (!lastCheckedAt) return 0;
-	const elapsed = now - new Date(lastCheckedAt).getTime();
-	return Math.max(0, Math.ceil((60_000 - elapsed) / 1000));
-}

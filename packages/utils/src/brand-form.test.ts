@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vite-plus/test";
-import { buildPatch, formFromBranding, validateForm, type BrandingData } from "./form";
+import { buildPatch, formFromBranding, recheckWaitSeconds, validateForm, type BrandingData } from "./brand-form";
 
 const empty: BrandingData = {
 	appName: null,
@@ -57,5 +57,14 @@ describe("buildPatch", () => {
 		const form = { ...formFromBranding(stored), appName: "  Acme Co ", primaryColor: "", secondaryColor: "#FFCC00" };
 		expect(buildPatch(form, stored)).toEqual({ appName: "Acme Co", primaryColor: null, secondaryColor: "#ffcc00" });
 		expect(buildPatch(formFromBranding(stored), stored)).toEqual({});
+	});
+});
+
+describe("recheckWaitSeconds", () => {
+	it("counts down the minute since the last check", () => {
+		const now = Date.parse("2026-11-02T10:00:00Z");
+		expect(recheckWaitSeconds(null, now)).toBe(0);
+		expect(recheckWaitSeconds(new Date(now - 20_000), now)).toBe(40);
+		expect(recheckWaitSeconds(new Date(now - 61_000), now)).toBe(0);
 	});
 });
