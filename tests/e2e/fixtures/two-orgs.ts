@@ -201,6 +201,16 @@ export async function createTwoOrgs(playwright: Playwright, baseURL: string, own
 	try {
 		a = await signUp(playwright, baseURL, accountA);
 		b = await signUp(playwright, baseURL, accountB);
+		// CAREEROS (P4-T01): the personal plan lacks job_discovery, so both organizations get the feature through an
+		// organization feature flag. The discovery gate stays on; the fuzz then reaches the ownership checks behind it.
+		await withSeedPool(async (pool) => {
+			for (const party of [a, b])
+				await pool.query(
+					`insert into feature_flag (id, organization_id, key, enabled) values ($1, $2, 'job_discovery', true)
+					 on conflict do nothing`,
+					[`xorga-flag-${tag}-${party.organizationId}`, party.organizationId],
+				);
+		});
 		const api = (path: string) => `/api/openapi${path}`;
 		const text = (what: string) => `Xorga${tag} ${what}`;
 

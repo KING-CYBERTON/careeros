@@ -3,12 +3,15 @@ import type z from "zod";
 import { DiscoveryError, runDiscovery } from "@careeros/job-discovery";
 import { requireOrgId } from "@careeros/tenancy";
 import { ORPCError } from "@orpc/server";
-import { and, desc, eq, isNull, lt, or, sql } from "drizzle-orm";
+import { and, count, desc, eq, isNull, lt, or, sql } from "drizzle-orm";
 import { db } from "@reactive-resume/db/client";
 import { discoveredJob, jobSource } from "@reactive-resume/db/schema";
 
 /** `runNow` may start one run per automation in this many minutes (P4-T01 requirement 8). */
 export const RUN_NOW_COOLDOWN_MINUTES = 10;
+
+/** Automations one user may keep in one organization (Q228). */
+export const MAX_SOURCES_PER_USER = 20;
 
 type Source = z.infer<typeof sourceSchema>;
 type Job = z.infer<typeof jobSchema>;
@@ -40,12 +43,28 @@ export const discoveryService = {
 		},
 
 		async create(userId: string, input: z.infer<typeof sourceCreateSchema>): Promise<Source> {
-			const [row] = await db
-				.insert(jobSource)
-				.values({ ...input, organizationId: requireOrgId(), userId })
-				.returning();
-			if (!row) throw new ORPCError("INTERNAL_SERVER_ERROR");
-			return row;
+			const organizationId = requireOrgId();
+			// The cap is checked and the row inserted under one advisory lock per user and organization, so two
+			// parallel creates cannot both pass the check (Q228).
+			return await db.transaction(async (tx) => {
+				await tx.execute(sql`select pg_advisory_xact_lock(hashtext(${`job_source:${organizationId}:${userId}`}))`);
+				const [existing] = await tx
+					.select({ total: count() })
+					.from(jobSource)
+					.where(and(eq(jobSource.organizationId, organizationId), eq(jobSource.userId, userId)));
+				if ((existing?.total ?? 0) >= MAX_SOURCES_PER_USER) {
+					throw new ORPCError("BAD_REQUEST", {
+						message: `You can have at most ${MAX_SOURCES_PER_USER} automations. Delete one to add another.`,
+						data: { code: "AUTOMATION_LIMIT_REACHED", limit: MAX_SOURCES_PER_USER },
+					});
+				}
+				const [row] = await tx
+					.insert(jobSource)
+					.values({ ...input, organizationId, userId })
+					.returning();
+				if (!row) throw new ORPCError("INTERNAL_SERVER_ERROR");
+				return row;
+			});
 		},
 
 		async update(userId: string, input: z.infer<typeof sourceUpdateSchema>): Promise<Source> {

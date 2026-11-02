@@ -17,8 +17,8 @@ const id = z.object({ id: z.string().min(1) });
 
 // CAREEROS (P4-T01): job discovery. Every procedure requires the plan feature `job_discovery` and reads or writes only
 // the caller's own rows in the current organization.
-const discoveryProcedure = protectedProcedure.use(({ next }) => {
-	requireJobDiscoveryFeature();
+const discoveryProcedure = protectedProcedure.use(async ({ next }) => {
+	await requireJobDiscoveryFeature();
 	return next();
 });
 

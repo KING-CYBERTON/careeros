@@ -38,10 +38,17 @@ describe.skipIf(!configured)("discovery API", () => {
 	const ids = {
 		orgA: `dapi-org-a-${run}`,
 		orgB: `dapi-org-b-${run}`,
+		// No flag and the default plan: job_discovery is off here.
+		orgC: `dapi-org-c-${run}`,
 		userA: `dapi-user-a-${run}`,
 		userA2: `dapi-user-a2-${run}`,
 		userB: `dapi-user-b-${run}`,
+		userC: `dapi-user-c-${run}`,
+		// Two users that only exercise the cap of 20 automations (Q228).
+		capA: `dapi-cap-a-${run}`,
+		capB: `dapi-cap-b-${run}`,
 	};
+	const allUsers = [ids.userA, ids.userA2, ids.userB, ids.userC, ids.capA, ids.capB];
 	let owner: Pool;
 	let app: Pool;
 
@@ -72,6 +79,7 @@ describe.skipIf(!configured)("discovery API", () => {
 	const alice = () => as(ids.userA, ids.orgA);
 	const alice2 = () => as(ids.userA2, ids.orgA);
 	const bob = () => as(ids.userB, ids.orgB);
+	const carol = () => as(ids.userC, ids.orgC);
 
 	const input = {
 		name: "Backend roles",
@@ -88,11 +96,19 @@ describe.skipIf(!configured)("discovery API", () => {
 	beforeAll(async () => {
 		owner = new Pool({ connectionString: process.env.CAREEROS_TEST_DATABASE_URL });
 		app = new Pool({ connectionString: process.env.CAREEROS_TEST_APP_DATABASE_URL });
-		await owner.query(`INSERT INTO organization (id, name, slug) VALUES ($1, 'A', $1), ($2, 'B', $2)`, [
+		await owner.query(`INSERT INTO organization (id, name, slug) VALUES ($1, 'A', $1), ($2, 'B', $2), ($3, 'C', $3)`, [
 			ids.orgA,
 			ids.orgB,
+			ids.orgC,
 		]);
-		for (const id of [ids.userA, ids.userA2, ids.userB])
+		// The gate reads getEntitlements: the default plan lacks job_discovery, so organizations A and B get it from an
+		// organization feature flag (the proper table, not a bypass). Organization C has none.
+		for (const org of [ids.orgA, ids.orgB])
+			await owner.query(
+				`INSERT INTO feature_flag (id, organization_id, key, enabled) VALUES ($1, $2, 'job_discovery', true)`,
+				[`dapi-flag-${org}`, org],
+			);
+		for (const id of allUsers)
 			await owner.query(
 				`INSERT INTO "user" (id, name, email, username, display_username) VALUES ($1, $1, $1 || '@example.test', $1, $1)`,
 				[id],
@@ -101,6 +117,10 @@ describe.skipIf(!configured)("discovery API", () => {
 			["m-a", ids.orgA, ids.userA],
 			["m-a2", ids.orgA, ids.userA2],
 			["m-b", ids.orgB, ids.userB],
+			["m-c", ids.orgC, ids.userC],
+			["m-cap-a", ids.orgA, ids.capA],
+			["m-cap-a-b", ids.orgB, ids.capA],
+			["m-cap-b", ids.orgA, ids.capB],
 		] as const)
 			await owner.query(`INSERT INTO member (id, organization_id, user_id, role) VALUES ($1, $2, $3, 'owner')`, [
 				`${member}-${run}`,
@@ -110,9 +130,46 @@ describe.skipIf(!configured)("discovery API", () => {
 	}, 60_000);
 
 	afterAll(async () => {
-		await owner?.query(`DELETE FROM organization WHERE id = ANY($1::text[])`, [[ids.orgA, ids.orgB]]);
-		await owner?.query(`DELETE FROM "user" WHERE id = ANY($1::text[])`, [[ids.userA, ids.userA2, ids.userB]]);
+		await owner?.query(`DELETE FROM organization WHERE id = ANY($1::text[])`, [[ids.orgA, ids.orgB, ids.orgC]]);
+		await owner?.query(`DELETE FROM "user" WHERE id = ANY($1::text[])`, [allUsers]);
 		await Promise.all([owner?.end(), app?.end()]);
+	});
+
+	describe("plan gate", () => {
+		const refused = (promise: Promise<unknown>) =>
+			expect(promise).rejects.toMatchObject({
+				code: "FORBIDDEN",
+				data: { code: "FEATURE_NOT_IN_PLAN", feature: "job_discovery" },
+			});
+
+		it("refuses every procedure for an organization whose plan lacks job_discovery", async () => {
+			await refused(call(() => carol().sources.list()));
+			await refused(call(() => carol().sources.create({ name: "Nope" })));
+			await refused(call(() => carol().sources.update({ id: "x", name: "Nope" })));
+			await refused(call(() => carol().sources.delete({ id: "x" })));
+			await refused(call(() => carol().runNow({ jobSourceId: "x" })));
+			await refused(call(() => carol().jobs.list({ limit: 10, offset: 0 })));
+			await refused(call(() => carol().jobs.dismiss({ id: "x" })));
+			expect(
+				(await owner.query(`select count(*)::int as n from job_source where organization_id = $1`, [ids.orgC])).rows[0],
+			).toEqual({ n: 0 });
+		});
+
+		it("refuses when the organization flag is explicitly off, even on a plan that has the feature", async () => {
+			await owner.query(`UPDATE organization SET plan_id = 'pro' WHERE id = $1`, [ids.orgC]);
+			try {
+				expect(await call(() => carol().sources.list())).toEqual([]);
+				await owner.query(
+					`INSERT INTO feature_flag (id, organization_id, key, enabled) VALUES ($1, $2, 'job_discovery', false)`,
+					[`dapi-flag-off-${ids.orgC}`, ids.orgC],
+				);
+				await refused(call(() => carol().sources.list()));
+			} finally {
+				await owner.query(`DELETE FROM feature_flag WHERE organization_id = $1`, [ids.orgC]);
+				await owner.query(`UPDATE organization SET plan_id = 'personal' WHERE id = $1`, [ids.orgC]);
+			}
+			await refused(call(() => carol().sources.list()));
+		});
 	});
 
 	describe("automations", () => {
@@ -193,6 +250,46 @@ describe.skipIf(!configured)("discovery API", () => {
 				}),
 			);
 			expect(created.boards).toHaveLength(100);
+		});
+
+		it("caps automations at 20 per user per organization", async () => {
+			const capped = (userId: string, orgId: string) => as(userId, orgId);
+			for (let index = 0; index < 20; index++)
+				await call(() => capped(ids.capA, ids.orgA).sources.create({ name: `Cap ${index}` }));
+			const refusal = call(() => capped(ids.capA, ids.orgA).sources.create({ name: "Cap 20" }));
+			await expectCode(refusal, "BAD_REQUEST");
+			await expect(refusal).rejects.toMatchObject({ data: { code: "AUTOMATION_LIMIT_REACHED", limit: 20 } });
+
+			// The cap is per user and per organization.
+			await call(() => capped(ids.userA2, ids.orgA).sources.create({ name: "Other user" }));
+			await call(() => capped(ids.capA, ids.orgB).sources.create({ name: "Other organization" }));
+
+			// Deleting one frees a slot.
+			const [first] = await call(() => capped(ids.capA, ids.orgA).sources.list());
+			if (!first) throw new Error("no automation");
+			await call(() => capped(ids.capA, ids.orgA).sources.delete({ id: first.id }));
+			await call(() => capped(ids.capA, ids.orgA).sources.create({ name: "After delete" }));
+			await expectCode(
+				call(() => capped(ids.capA, ids.orgA).sources.create({ name: "Over again" })),
+				"BAD_REQUEST",
+			);
+		});
+
+		it("holds the cap when creates run in parallel", async () => {
+			const results = await Promise.allSettled(
+				Array.from({ length: 25 }, (_, index) =>
+					call(() => as(ids.capB, ids.orgA).sources.create({ name: `Parallel ${index}` })),
+				),
+			);
+			expect(results.filter((result) => result.status === "fulfilled")).toHaveLength(20);
+			expect(
+				(
+					await owner.query(`select count(*)::int as n from job_source where user_id = $1 and organization_id = $2`, [
+						ids.capB,
+						ids.orgA,
+					])
+				).rows[0],
+			).toEqual({ n: 20 });
 		});
 
 		it("keeps another user's and another organization's automations out of sight and out of reach", async () => {
