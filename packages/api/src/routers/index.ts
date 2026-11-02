@@ -9,6 +9,8 @@ import { brandingRouter, settingsRouter } from "../features/branding/router";
 import { careerRouter } from "../features/career/router";
 import { coverLettersRouter } from "../features/cover-letters/router";
 import { customDomainRouter } from "../features/custom-domain/router";
+// CAREEROS: job discovery (P4-T01)
+import { discoveryRouter } from "../features/discovery/router";
 import { documentsRouter } from "../features/documents/router";
 import { flagsRouter } from "../features/flags/router";
 // CAREEROS: organization custom domains (P2-T06)
@@ -34,6 +36,8 @@ export default {
 	career: careerRouter,
 	coverLetters: coverLettersRouter,
 	customDomain: customDomainRouter,
+	// CAREEROS: job discovery (P4-T01)
+	discovery: discoveryRouter,
 	documents: documentsRouter,
 	flags: flagsRouter,
 	// CAREEROS: read-only entitlements and audit log of the organization (P3-T01)

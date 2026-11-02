@@ -3,7 +3,8 @@
 	"ui": "stream",
 	"boundaries": {
 		"dependencies": {
-			"deny": ["web", "server"]
+			// CAREEROS: P5-T01. The extension is an app, so no package may import it.
+			"deny": ["web", "server", "extension"]
 		},
 		"implicitDependencies": [
 			"vite-plus",
@@ -15,6 +16,13 @@
 			"app:server": {
 				"dependencies": {
 					"deny": ["app:web", "runtime:browser"]
+				}
+			},
+			// CAREEROS: P5-T01. The browser extension may depend only on browser-safe and environment-neutral packages
+			// (@reactive-resume/ui, @reactive-resume/utils, @reactive-resume/schema), never on server packages or other apps.
+			"app:extension": {
+				"dependencies": {
+					"allow": ["runtime:browser", "runtime:universal", "@reactive-resume/config"]
 				}
 			},
 			"app:mobile": {

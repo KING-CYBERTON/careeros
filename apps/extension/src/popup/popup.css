@@ -1,0 +1,14 @@
+@import "@reactive-resume/ui/globals.css";
+
+/* The popup is a 360 px column; the browser sizes the window to its content. */
+html,
+body {
+	margin: 0;
+	min-width: 360px;
+	background: var(--bg);
+}
+
+/* The serif display face is left out of the extension package (see vite.config.ts), so headings use the UI face. */
+h1 {
+	font-family: var(--font-ui);
+}

@@ -1,0 +1,33 @@
+{
+	"name": "extension",
+	"version": "0.1.0",
+	"type": "module",
+	"private": true,
+	"scripts": {
+		"build": "vp build",
+		"dev": "vp build --watch --mode development",
+		"pack": "vp build && node scripts/pack.mjs",
+		"typecheck": "tsrs --noEmit",
+		"test": "vp test run --passWithNoTests",
+		"test:coverage": "vp test run --coverage --passWithNoTests",
+		"test:ci": "vp test run --reporter=default --reporter=github-actions --reporter=json --reporter=junit --outputFile.json=reports/vitest-results.json --outputFile.junit=reports/vitest-junit.xml --passWithNoTests"
+	},
+	"dependencies": {
+		"@reactive-resume/ui": "workspace:*",
+		"@reactive-resume/utils": "workspace:*",
+		"react": "catalog:",
+		"react-dom": "19.3.1"
+	},
+	"devDependencies": {
+		"@reactive-resume/config": "workspace:*",
+		"@tailwindcss/vite": "^4.3.3",
+		"@types/node": "catalog:",
+		"@types/react": "catalog:",
+		"@types/react-dom": "catalog:",
+		"@vitejs/plugin-react": "^6.1.2",
+		"fflate": "catalog:",
+		"tsrs": "catalog:",
+		"typescript": "catalog:",
+		"vite-plus": "catalog:"
+	}
+}
