@@ -126,7 +126,23 @@ docker compose -p careeros_staging -f compose.staging.yml logs --tail 100 cloudf
 
 `ps` must show no published host ports. The GitHub run log shows each deploy step.
 
+Slow first pull: on a slow connection the first pull of a new image can take a long time (the deploy job allows 60 minutes). Pre-pull it once as `deploy` with `docker pull ghcr.io/king-cyberton/careeros:sha-<sha>`, then re-run the workflow.
+
 Runner trouble: `sudo ./svc.sh status` inside `/home/deploy/actions-runner`, and check the runner is **Idle** in GitHub settings.
+
+## Cutting a release
+
+1. Pick the `develop` commit that passed CI (all `careeros-ci` jobs green).
+2. Tag it with an annotated tag named `vMAJOR.MINOR.PATCH`, for example `v0.0.1`, and push the tag:
+
+```sh
+git checkout develop && git pull
+git tag -a v0.0.1 -m "CareerOS 0.0.1" <sha>
+git push origin v0.0.1
+```
+
+3. Pushing the tag runs `careeros-image.yml`, which publishes `ghcr.io/king-cyberton/careeros:<version>` (and the other aliases it documents). Nothing else publishes: the upstream `docker-publish.yml` is switched off in this repository by an `if: github.repository == 'amruthpillai/reactive-resume'` guard on each job, and `tooling/careeros/release-guard.test.mjs` fails CI if any non-`careeros-*` workflow could run on a tag push without that guard.
+4. Promotion to `main` and production comes with the production environment in Phase 6 and is not covered here.
 
 ## Database roles
 

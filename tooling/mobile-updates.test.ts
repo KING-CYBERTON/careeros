@@ -40,10 +40,25 @@ it.each([
 	if (!expression) throw new Error("Mobile OTA caller condition is missing");
 	expect(
 		runInNewContext(expression, {
+			// CAREEROS: P2-C04. The job's `if:` starts with the upstream-only repository guard.
+			github: { repository: "amruthpillai/reactive-resume" },
 			cancelled: () => cancelled,
 			needs: { publish: { result, outputs: { mobile_ota } } },
 		}),
 	).toBe(expected);
+});
+
+// CAREEROS: P2-C04. In CareerOS the upstream publisher never starts the OTA job.
+it("never runs the OTA job outside the upstream repository", () => {
+	const expression = workflow.match(/  mobile-ota-update:\n[\s\S]*?    if: \$\{\{ (.+) \}\}/)?.[1];
+	if (!expression) throw new Error("Mobile OTA caller condition is missing");
+	expect(
+		runInNewContext(expression, {
+			github: { repository: "KING-CYBERTON/careeros" },
+			cancelled: () => false,
+			needs: { publish: { result: "success", outputs: { mobile_ota: "true" } } },
+		}),
+	).toBe(false);
 });
 
 const healthy = { service: "reactive-resume", status: "healthy", revision: commit };
