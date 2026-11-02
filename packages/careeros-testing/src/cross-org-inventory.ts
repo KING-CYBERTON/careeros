@@ -183,6 +183,7 @@ export const NO_TENANT_ID: Record<string, string> = {
 		"takes no tenant id: public, addressed by organization slug, returns only public fields",
 	"GET /organization/settings": "takes no tenant id: the caller's own organization",
 	"PATCH /organization/settings": "takes no tenant id: the caller's own organization",
+	"GET /organization/domains/info": "takes no tenant id: the caller's own organization's address (P2-T07)",
 	"GET /organization/domains": "takes no tenant id: lists the caller's own organization's domains (P2-T06)",
 	"POST /organization/domains": "takes no tenant id: adds a domain to the caller's own organization (P2-T06)",
 	"GET /organization/host": "takes no tenant id: the organization is the request host's, never an input (P2-T03)",

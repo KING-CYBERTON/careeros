@@ -215,6 +215,26 @@ describe.skipIf(!configured)("organization custom domains (real Postgres)", () =
 			expect(await rowByHost(host("nope"))).toBeUndefined();
 		});
 
+		it("tells an owner or admin the organization's own address and the limits, and refuses a member (P2-T07)", async () => {
+			const slug = String((await owner.query(`SELECT slug FROM organization WHERE id = $1`, [A.org])).rows[0].slug);
+			const info = await invoke<{ subdomainHost: string | null; domainsConfigured: boolean; domainLimit: number }>(
+				router.info,
+				undefined,
+				asAdminA(),
+			);
+			expect(info).toMatchObject({
+				subdomainHost: `${slug}-orgs.example.test`,
+				domainsConfigured: true,
+				domainLimit: 5,
+			});
+			await expect(invoke(router.info, undefined, asUser(A.member, A.org))).rejects.toMatchObject({
+				code: "FORBIDDEN",
+			});
+			// Another organization's slug never shows up for A.
+			const other = String((await owner.query(`SELECT slug FROM organization WHERE id = $1`, [B.org])).rows[0].slug);
+			expect(JSON.stringify(info)).not.toContain(other);
+		});
+
 		it("normalizes the name and refuses what is not a public domain", async () => {
 			await expect(add("  HTTPS://Normal.Acme.Example.Test/path?x=1 ")).resolves.toMatchObject({
 				hostname: "normal.acme.example.test",
