@@ -5,7 +5,7 @@
 **Current phase:** 0 — Setup (exit waits on owner actions) · 1 — Multi-tenancy complete in code; exit waits only on staging verification (owner actions) · 2 — White-label in progress
 **Current version:** none yet (first tag will be `0.0.1` at Phase 0 exit)
 **Base:** Reactive Resume v6.0.10, upstream commit `a69e48318aab3c1c3ea57d2c0467710ef0d8342f` (2026-10-31)
-**Last updated:** 2026-11-01 (late evening) by Opus (Thread 1)
+**Last updated:** 2026-11-02 by Opus (Thread 1)
 
 ## Phase 0 exit criteria (PRODUCT.md §13)
 
@@ -66,15 +66,18 @@
 
 ## Phase 2 tasks
 
-| Thread    | Task ID | Spec                                                                                 | Status                                                                                         | Branch / PR                                              |
-| --------- | ------- | ------------------------------------------------------------------------------------ | ---------------------------------------------------------------------------------------------- | -------------------------------------------------------- |
-| 1 — Build | P2-T01  | [plans/P2-T01-branding-tables.md](plans/P2-T01-branding-tables.md)                   | **Merged** · [review](reviews/P2-T01-review-1.md)                                              | [#46](https://github.com/KING-CYBERTON/careeros/pull/46) |
-| 1 — Build | P2-T08  | [plans/P2-T08-remove-upstream-branding.md](plans/P2-T08-remove-upstream-branding.md) | **Merged** · [review](reviews/P2-T08-review-1.md) (mobile native hosts: release blocker noted) | [#47](https://github.com/KING-CYBERTON/careeros/pull/47) |
-| 1 — Build | P2-T03  | (committed with the PR)                                                              | In review; CI running                                                                          | [#48](https://github.com/KING-CYBERTON/careeros/pull/48) |
-| 1 — Build | P2-T02  | [plans/P2-T02-branding-injection.md](plans/P2-T02-branding-injection.md)             | Approved; starts after T03 merges                                                              | —                                                        |
-| 1 — Build | P2-T04  | [plans/P2-T04-branded-emails.md](plans/P2-T04-branded-emails.md)                     | Approved; starts after T03 merges                                                              | —                                                        |
+| Thread    | Task ID | Spec                                                                                 | Status                                                                                                                                         | Branch / PR                                              |
+| --------- | ------- | ------------------------------------------------------------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------- |
+| 1 — Build | P2-T01  | [plans/P2-T01-branding-tables.md](plans/P2-T01-branding-tables.md)                   | **Merged** · [review](reviews/P2-T01-review-1.md)                                                                                              | [#46](https://github.com/KING-CYBERTON/careeros/pull/46) |
+| 1 — Build | P2-T08  | [plans/P2-T08-remove-upstream-branding.md](plans/P2-T08-remove-upstream-branding.md) | **Merged** · [review](reviews/P2-T08-review-1.md) (mobile native hosts: release blocker noted)                                                 | [#47](https://github.com/KING-CYBERTON/careeros/pull/47) |
+| 1 — Build | P2-T03  | [plans/P2-T03-host-org-resolution.md](plans/P2-T03-host-org-resolution.md)           | **Merged** · [review](reviews/P2-T03-review-1.md)                                                                                              | [#48](https://github.com/KING-CYBERTON/careeros/pull/48) |
+| 1 — Build | P2-T02  | [plans/P2-T02-branding-injection.md](plans/P2-T02-branding-injection.md)             | **Merged** · [review](reviews/P2-T02-review-1.md)                                                                                              | [#50](https://github.com/KING-CYBERTON/careeros/pull/50) |
+| 1 — Build | P2-T05  | [plans/P2-T05-auth-handoff.md](plans/P2-T05-auth-handoff.md)                         | **Merged** · [review](reviews/P2-T05-review-1.md) (security review, one Low accepted)                                                          | [#51](https://github.com/KING-CYBERTON/careeros/pull/51) |
+| 1 — Build | P2-T04  | [plans/P2-T04-branded-emails.md](plans/P2-T04-branded-emails.md)                     | **Merged** · [review](reviews/P2-T04-review-1.md)                                                                                              | [#52](https://github.com/KING-CYBERTON/careeros/pull/52) |
+| 1 — Build | P2-T06  | [plans/P2-T06-org-custom-domains.md](plans/P2-T06-org-custom-domains.md)             | **Merged** · [review](reviews/P2-T06-review-1.md) (two Mediums fixed before merge); live check waits on P2-C01 and the Cloudflare owner action | [#53](https://github.com/KING-CYBERTON/careeros/pull/53) |
+| 1 — Build | P2-T07  | [plans/P2-T07-branding-settings-ui.md](plans/P2-T07-branding-settings-ui.md)         | Approved; Sonnet coding                                                                                                                        | —                                                        |
 
-Next specs: P2-T05 (auth handoff), P2-T06 (org custom domains, Cloudflare for SaaS), P2-T07 (branding settings UI), P2-Q01, P2-Q02, P2-C01 (DNS and tunnel routing), P2-C02 (branding grep gate).
+Next specs: P2-Q01 (host isolation e2e), P2-Q02 (branding e2e, two orgs and two hosts), P2-C01 (staging DNS, wildcard tunnel route, Cloudflare for SaaS fallback origin, secrets), P2-C02 (upstream-branding grep gate, plus the mobile node tests in CI).
 
 ## Blockers
 
@@ -152,3 +155,9 @@ _None yet._
 - D2/D3 decisions — [#45](https://github.com/KING-CYBERTON/careeros/pull/45), `8088d15`
 - P2-T01 Branding and settings tables — [#46](https://github.com/KING-CYBERTON/careeros/pull/46), `f22f60b`
 - P2-T08 Remove upstream branding, licenses page — [#47](https://github.com/KING-CYBERTON/careeros/pull/47), `aa6bec9`
+- Docs sync 10 (Phase 2 status, T02 and T04 specs) — [#49](https://github.com/KING-CYBERTON/careeros/pull/49), `7b95bd4`
+- P2-T03 Host decides the organization — [#48](https://github.com/KING-CYBERTON/careeros/pull/48), `2f03941`
+- P2-T02 Branding in the app shell — [#50](https://github.com/KING-CYBERTON/careeros/pull/50), `dd4122f`
+- P2-T05 Auth handoff for social and OIDC sign-in — [#51](https://github.com/KING-CYBERTON/careeros/pull/51), `85b1bc7`
+- P2-T04 Branded emails — [#52](https://github.com/KING-CYBERTON/careeros/pull/52), `629def9`
+- P2-T06 Organization custom domains — [#53](https://github.com/KING-CYBERTON/careeros/pull/53), `0924094`
