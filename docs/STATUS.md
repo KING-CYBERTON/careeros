@@ -80,7 +80,7 @@
 | 3 — CI/CD | P2-C02     | [plans/cicd/P2-C02-branding-gate.md](plans/cicd/P2-C02-branding-gate.md)                                   | **Merged** · [review](reviews/P2-C02-review-1.md) (mobile node tests now in CI)                                                                | [#55](https://github.com/KING-CYBERTON/careeros/pull/55) |
 | 3 — CI/CD | P2-C01     | [plans/cicd/P2-C01-staging-org-hosts.md](plans/cicd/P2-C01-staging-org-hosts.md)                           | **Merged** · [review](reviews/P2-C01-review-1.md). Live check waits on Stephen's Cloudflare actions                                            | [#58](https://github.com/KING-CYBERTON/careeros/pull/58) |
 
-All Phase 2 tasks are merged. P2-C03 (from exit review M1, [spec](plans/cicd/P2-C03-run-skipped-db-suites.md)) merged in [#61](https://github.com/KING-CYBERTON/careeros/pull/61). The live staging checks passed on 2026-11-02 (Stephen). Only the tags remain.
+All Phase 2 tasks are merged. P2-C03 (from exit review M1, [spec](plans/cicd/P2-C03-run-skipped-db-suites.md)) merged in [#61](https://github.com/KING-CYBERTON/careeros/pull/61). The live staging checks passed on 2026-11-02 (Stephen). Only the tags remain. Before the first `v*` tag, P2-C04 ([spec](plans/cicd/P2-C04-release-path.md)) switches off the inherited upstream publish workflow and fixes the staging workflow trips found during the bring-up.
 
 ## Phase 2 exit criteria (PRODUCT.md §13)
 
