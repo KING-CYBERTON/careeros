@@ -19,3 +19,5 @@ export * from "./auth-handoff";
 export * from "./organization-domain";
 // CAREEROS: job discovery automations, runs and discovered postings (P4-T01)
 export * from "./job-discovery";
+// CAREEROS: plans, subscriptions, feature flags and the audit log (P3-T01)
+export * from "./billing";

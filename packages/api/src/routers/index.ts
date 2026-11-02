@@ -17,6 +17,8 @@ import { flagsRouter } from "../features/flags/router";
 import { organizationDomainRouter } from "../features/org-domain/router";
 // CAREEROS: join or switch page of an organization host (P2-T03)
 import { organizationHostRouter } from "../features/organization-host/router";
+// CAREEROS: read-only entitlements and audit log of the organization (P3-T01)
+import { organizationRouter } from "../features/organization/router";
 import { resumeRouter } from "../features/resume/router";
 import { statisticsRouter } from "../features/statistics/router";
 import { storageRouter } from "../features/storage/router";
@@ -38,6 +40,8 @@ export default {
 	discovery: discoveryRouter,
 	documents: documentsRouter,
 	flags: flagsRouter,
+	// CAREEROS: read-only entitlements and audit log of the organization (P3-T01)
+	organization: organizationRouter,
 	// CAREEROS: join or switch page of an organization host (P2-T03)
 	organizationHost: organizationHostRouter,
 	// CAREEROS: organization custom domains (P2-T06)

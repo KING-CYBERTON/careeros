@@ -20,6 +20,8 @@ export type RegistryEntry = {
 	/**
 	 * CAREEROS (P2-T01): every organization owns exactly one row of this table from the moment it exists (a trigger
 	 * creates it). The check then expects Org B to see no row of ANOTHER organization, not no row at all.
+	 * CAREEROS (P3-T01): also for a table whose rows with a NULL organization are global and visible to every organization
+	 * on purpose (`feature_flag`); a global row is nobody else's row, so it is not counted.
 	 */
 	rowPerOrganization?: boolean;
 	/** Inserts one row owned by `orgId` using the owner pool (setup only) and returns its id. */
@@ -550,6 +552,51 @@ export const isolationRegistry: readonly RegistryEntry[] = [
 			return orgId;
 		},
 	},
+	// CAREEROS (P3-T01): the subscription is one row per organization (the primary key is the organization id), created by
+	// a trigger with the organization. The seed updates it (or inserts, if the organization already existed without one).
+	{
+		table: "subscription",
+		idColumn: "organization_id",
+		rowPerOrganization: true,
+		seed: async (orgId, db) => {
+			await ensureOrganization(db, orgId);
+			await db.query(
+				`INSERT INTO subscription (organization_id, plan_id, provider, seats) VALUES ($1, 'personal', 'manual', 3)
+				 ON CONFLICT (organization_id) DO UPDATE SET provider = excluded.provider, seats = excluded.seats`,
+				[orgId],
+			);
+			return orgId;
+		},
+	},
+	// CAREEROS (P3-T01): feature flags have a NULL organization for a global flag, which every organization reads. The
+	// check counts only rows of ANOTHER organization (`rowPerOrganization`), so global flags are not mistaken for a leak.
+	{
+		table: "feature_flag",
+		rowPerOrganization: true,
+		seed: async (orgId, db) => {
+			await ensureOrganization(db, orgId);
+			const id = `iso-flag-${randomUUID()}`;
+			await db.query(
+				`INSERT INTO feature_flag (id, organization_id, key, enabled) VALUES ($1, $2, 'isolation_probe', true)`,
+				[id, orgId],
+			);
+			return id;
+		},
+	},
+	// CAREEROS (P3-T01): the audit log. Rows with a NULL organization are platform rows that the app role cannot read at
+	// all, so only the organization's own rows are ever visible.
+	{
+		table: "audit_log",
+		seed: async (orgId, db) => {
+			await ensureOrganization(db, orgId);
+			const id = `iso-audit-${randomUUID()}`;
+			await db.query(`INSERT INTO audit_log (id, organization_id, action) VALUES ($1, $2, 'isolation.probe')`, [
+				id,
+				orgId,
+			]);
+			return id;
+		},
+	},
 	// CAREEROS (P2-T06): organization custom domains. The hostname is unique across all organizations, so a seed gets its own.
 	{
 		table: "organization_domain",
@@ -660,6 +707,11 @@ export const globalTables: readonly AllowListEntry[] = [
 	{
 		table: "released_username",
 		reason: "Global username reservations: a username is unique across all organizations",
+	},
+	{
+		table: "plan",
+		reason:
+			"P3-T01: the catalogue of plans (price, seat limit, AI credits, features). Global like a price list: it has no organization_id, every role may read it, and only the owner role writes it (SELECT-only policy and grants for careeros_app). It holds no tenant data",
 	},
 	{
 		table: "organization_domain_cf_cleanup",
