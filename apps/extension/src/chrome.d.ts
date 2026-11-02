@@ -10,6 +10,7 @@ declare const chrome: {
 	};
 	permissions: {
 		request(permissions: { origins?: string[]; permissions?: string[] }): Promise<boolean>;
+		getAll(): Promise<{ origins?: string[] }>;
 		remove(permissions: { origins?: string[]; permissions?: string[] }): Promise<boolean>;
 	};
 	runtime: {

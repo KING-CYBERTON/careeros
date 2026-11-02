@@ -14,7 +14,8 @@ export const strings = {
 	connect: "Connect",
 	checking: "Checking…",
 	waitingForPermission: "Waiting for your permission…",
-	permissionNote: "Your browser asks to let Job Clipper reach this one address. It never asks for all websites.",
+	permissionNote:
+		"After you confirm, your browser asks to let Job Clipper reach this one address. It never asks for all websites.",
 
 	confirmTitle: "Is this your organization?",
 	confirm: "Yes, connect",
@@ -30,7 +31,8 @@ export const strings = {
 
 	saveFailed: "Could not save the connection. Try again.",
 
-	permissionDenied: "Permission was not granted, so Job Clipper cannot check this address. Try again and choose Allow.",
+	permissionDenied:
+		"Permission was not granted, so Job Clipper cannot connect to this organization. Choose Yes, connect and allow access.",
 	address: {
 		empty: "Enter your organization's address.",
 		invalid: "That does not look like a web address.",

@@ -1,5 +1,5 @@
-import { describe, expect, it } from "vite-plus/test";
-import { readConnection } from "./storage";
+import { afterEach, describe, expect, it, vi } from "vite-plus/test";
+import { readConnection, releaseStrayOrigins } from "./storage";
 
 const stored = (overrides: Record<string, unknown> = {}) => ({
 	origin: "https://careers.example.org",
@@ -30,5 +30,30 @@ describe("readConnection", () => {
 	it("drops a logo from another origin and a colour that is not #rrggbb", () => {
 		const result = readConnection(stored({ logoUrl: "https://evil.test/logo.png", primaryColor: "red" }), []);
 		expect(result).toEqual(stored({ logoUrl: null, primaryColor: null }));
+	});
+});
+
+describe("releaseStrayOrigins", () => {
+	afterEach(() => vi.unstubAllGlobals());
+
+	it("gives back every host permission that is held", async () => {
+		const remove = vi.fn().mockResolvedValue(true);
+		vi.stubGlobal("chrome", {
+			permissions: { getAll: vi.fn().mockResolvedValue({ origins: ["https://careers.example.org/*"] }), remove },
+		});
+		await releaseStrayOrigins();
+		expect(remove).toHaveBeenCalledExactlyOnceWith({ origins: ["https://careers.example.org/*"] });
+	});
+
+	it("does nothing when no host permission is held", async () => {
+		const remove = vi.fn();
+		vi.stubGlobal("chrome", { permissions: { getAll: vi.fn().mockResolvedValue({}), remove } });
+		await releaseStrayOrigins();
+		expect(remove).not.toHaveBeenCalled();
+	});
+
+	it("does not throw when the browser refuses", async () => {
+		vi.stubGlobal("chrome", { permissions: { getAll: vi.fn().mockRejectedValue(new Error("no")), remove: vi.fn() } });
+		await expect(releaseStrayOrigins()).resolves.toBeUndefined();
 	});
 });

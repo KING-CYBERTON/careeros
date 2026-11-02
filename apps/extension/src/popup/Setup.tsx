@@ -12,44 +12,27 @@ import { releaseOrigin, requestOrigin, saveConnection } from "../lib/storage";
 import { OrgMark } from "./OrgMark";
 import { strings } from "./strings";
 
-type Step =
-	| { kind: "enter" }
-	| { kind: "permission" }
-	| { kind: "checking" }
-	| { kind: "confirm"; origin: string; branding: OrgBranding };
+type Step = { kind: "enter" } | { kind: "checking" } | { kind: "confirm"; origin: string; branding: OrgBranding };
 
 type SetupProps = {
 	onConnected: (connection: Connection) => void;
 };
 
-/** First run: the user enters the organization's address, the browser asks for that one origin, the popup shows who it is. */
+/** First run: the user enters the organization's address, the popup shows who it is, and the browser is asked for that one origin only after the user confirms. */
 export function Setup(props: SetupProps) {
 	const inputId = useId();
 	const errorId = useId();
 	const [value, setValue] = useState("");
 	const [step, setStep] = useState<Step>({ kind: "enter" });
 	const [error, setError] = useState<string | null>(null);
+	const [asking, setAsking] = useState(false);
 
-	// The permission request is the first call of this function, with no await before it: the browser only shows its prompt
-	// for a click.
+	// The branding check needs no host permission: the server answers extension origins (CORS). The permission is asked
+	// for only after the user confirms the organization.
 	async function check(origin: string) {
-		setStep({ kind: "permission" });
-		let granted = false;
-		try {
-			granted = await requestOrigin(origin);
-		} catch {
-			granted = false;
-		}
-		if (!granted) {
-			setError(strings.permissionDenied);
-			setStep({ kind: "enter" });
-			return;
-		}
-
 		setStep({ kind: "checking" });
 		const result = await fetchHostBranding(origin, DEV_HTTP_HOSTS);
 		if (!result.ok) {
-			await releaseOrigin(origin);
 			setError(strings.branding[result.reason]);
 			setStep({ kind: "enter" });
 			return;
@@ -69,7 +52,22 @@ export function Setup(props: SetupProps) {
 		void check(address.origin);
 	}
 
+	// The permission request is the first call of this function, with no await before it: the browser only shows its
+	// prompt for a click. The connection is stored only after the permission is granted.
 	async function confirm(origin: string, branding: OrgBranding) {
+		setError(null);
+		setAsking(true);
+		let granted = false;
+		try {
+			granted = await requestOrigin(origin);
+		} catch {
+			granted = false;
+		}
+		if (!granted) {
+			setAsking(false);
+			setError(strings.permissionDenied);
+			return;
+		}
 		const connection: Connection = {
 			origin,
 			orgName: branding.orgName,
@@ -79,14 +77,15 @@ export function Setup(props: SetupProps) {
 		try {
 			await saveConnection(connection);
 		} catch {
+			await releaseOrigin(origin);
+			setAsking(false);
 			setError(strings.saveFailed);
 			return;
 		}
 		props.onConnected(connection);
 	}
 
-	async function goBack(origin: string) {
-		await releaseOrigin(origin);
+	function goBack() {
 		setError(null);
 		setStep({ kind: "enter" });
 	}
@@ -105,7 +104,7 @@ export function Setup(props: SetupProps) {
 				</div>
 				{error ? <Alert variant="error">{error}</Alert> : null}
 				<div className="flex gap-2">
-					<Button variant="secondary" onClick={() => void goBack(origin)}>
+					<Button variant="secondary" disabled={asking} onClick={goBack}>
 						{strings.back}
 					</Button>
 					<Button className="flex-1" onClick={() => void confirm(origin, branding)}>
@@ -146,11 +145,7 @@ export function Setup(props: SetupProps) {
 				</Alert>
 			) : null}
 			<Button type="submit" loading={busy}>
-				{step.kind === "permission"
-					? strings.waitingForPermission
-					: step.kind === "checking"
-						? strings.checking
-						: strings.connect}
+				{step.kind === "checking" ? strings.checking : strings.connect}
 			</Button>
 			<p className="text-xs leading-4 text-ink-3">{strings.permissionNote}</p>
 		</form>

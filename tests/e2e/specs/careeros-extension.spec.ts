@@ -15,8 +15,8 @@ import { expect, test } from "../fixtures/test";
 // reaches organization hosts through a host-resolver rule.
 //
 // What the test cannot do: click the browser's own "allow access to this site" prompt, which is not part of the page.
-// The test replaces `chrome.permissions.request` in the popup with one that answers yes. The popup's request to the
-// organization then relies on the server's CORS for extension origins (apps/server/src/http/extension-cors.ts), which
+// The test replaces `chrome.permissions.request` in the popup with one that answers yes. The popup's check of the
+// organization (which comes before any permission request) relies on the server's CORS for extension origins (apps/server/src/http/extension-cors.ts), which
 // is what this test proves for the real server.
 test.skip(
 	!orgHostsConfigured(),
@@ -93,9 +93,13 @@ test.describe("job clipper extension", () => {
 		await page.setViewportSize({ width: 360, height: 600 });
 		// The browser's permission prompt is not driveable; see the note at the top of this file.
 		await page.addInitScript(() => {
-			const extensionApi = (globalThis as unknown as { chrome: { permissions: { request: () => Promise<boolean> } } })
-				.chrome;
-			extensionApi.permissions.request = () => Promise.resolve(true);
+			type Api = { permissions: { request: (request: { origins: string[] }) => Promise<boolean> } };
+			const scope = globalThis as unknown as { chrome: Api; permissionRequests: string[][] };
+			scope.permissionRequests = [];
+			scope.chrome.permissions.request = (request) => {
+				scope.permissionRequests.push(request.origins);
+				return Promise.resolve(true);
+			};
 		});
 		await page.goto(`chrome-extension://${extensionId}/popup.html`);
 		return page;
@@ -122,6 +126,10 @@ test.describe("job clipper extension", () => {
 		await page.getByRole("button", { name: "Connect" }).click();
 
 		await expect(page.getByRole("heading", { name: "Is this your organization?" })).toBeVisible();
+		// The check needed no host permission: none was asked for before the user confirms.
+		expect(
+			await page.evaluate(() => (globalThis as unknown as { permissionRequests: string[][] }).permissionRequests),
+		).toEqual([]);
 		await expect(page.getByText(SEED.appName)).toBeVisible();
 		await expect(page.getByText(orgs.a.origin)).toBeVisible();
 		const logo = page.getByRole("img", { name: `${SEED.appName} logo` });
@@ -132,6 +140,10 @@ test.describe("job clipper extension", () => {
 
 		await page.getByRole("button", { name: "Yes, connect" }).click();
 		await expect(page.getByRole("heading", { name: SEED.appName })).toBeVisible();
+		// Asked for exactly the one origin, after the confirmation.
+		expect(
+			await page.evaluate(() => (globalThis as unknown as { permissionRequests: string[][] }).permissionRequests),
+		).toEqual([[`${orgs.a.origin}/*`]]);
 		await expect(page.getByText("Connected to")).toBeVisible();
 		// The header takes the organization's colour.
 		await expect(page.locator("header")).toHaveCSS("background-color", "rgb(200, 40, 60)");

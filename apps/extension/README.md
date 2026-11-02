@@ -31,26 +31,26 @@ A production build reaches no http address at all.
 
 **Edge:** open `edge://extensions`, turn on Developer mode, choose Load unpacked, and pick `apps/extension/dist`.
 
-Click the toolbar icon, enter your organization's address (for example `careers.example.org`), allow access when the browser asks, check the name and logo, and choose Yes, connect. Change organization in the popup forgets the connection and gives the access back.
+Click the toolbar icon, enter your organization's address (for example `careers.example.org`), check the name and logo, choose Yes, connect, and allow access when the browser asks. Change organization in the popup forgets the connection and gives the access back.
 
 ## Permissions
 
 The manifest asks for exactly these. A test checks them.
 
-| Permission                                   | Why                                                                                                                                                                                                       |
-| -------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `activeTab`                                  | Read the page the user is on, only after they click the extension (P5-T03).                                                                                                                               |
-| `storage`                                    | Keep the connected organization and, later, the sign-in token in `chrome.storage.local`.                                                                                                                  |
-| `scripting`                                  | Inject the small reader that finds the job posting on the active page (P5-T03).                                                                                                                           |
-| `optional_host_permissions: ["https://*/*"]` | Not granted at install. The popup asks the browser for the one organization origin the user enters, when they enter it, and gives it back on Change organization. It never asks for all websites at once. |
+| Permission                                   | Why                                                                                                                                                                                                                              |
+| -------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `activeTab`                                  | Read the page the user is on, only after they click the extension (P5-T03).                                                                                                                                                      |
+| `storage`                                    | Keep the connected organization and, later, the sign-in token in `chrome.storage.local`.                                                                                                                                         |
+| `scripting`                                  | Inject the small reader that finds the job posting on the active page (P5-T03).                                                                                                                                                  |
+| `optional_host_permissions: ["https://*/*"]` | Not granted at install. The popup asks the browser for the one organization origin the user enters, once they have confirmed the organization, and gives it back on Change organization. It never asks for all websites at once. |
 
 There are no `host_permissions` and no content scripts. Extension pages run under a strict content security policy: scripts from the extension only, no `eval`, no remote code, https images and connections only.
 
 ## How the address is checked
 
 1. The address is normalized to an origin: a host or an https URL, lowercase, no path. `http` is refused, except for the hosts a development build lists.
-2. The browser asks for access to that origin.
-3. The popup calls `GET <origin>/api/openapi/branding/host` (no cookies, no redirects). The answer must have the CareerOS shape and name an organization. The name is shown as text, the logo only if it is on the same origin, and the colour only if it is `#rrggbb`.
+2. The popup calls `GET <origin>/api/openapi/branding/host` (no cookies, no redirects). The answer must have the CareerOS shape and name an organization (this needs no host permission: the server answers extension origins). The name is shown as text, the logo only if it is on the same origin, and the colour only if it is `#rrggbb`.
+3. The user confirms; only then does the browser ask for access to that origin, and the connection is stored after it is granted. A popup that closes in between leaves no access behind: the next open gives back any stray host permission.
 4. The server answers extension origins for that one route (`apps/server/src/http/extension-cors.ts`).
 
 ## Layout

@@ -2,7 +2,7 @@ import type { Connection } from "../lib/storage";
 import { useEffect, useState } from "react";
 import { accentTokens } from "@reactive-resume/utils/brand";
 import { DEV_HTTP_HOSTS } from "../lib/config";
-import { loadConnection } from "../lib/storage";
+import { loadConnection, releaseStrayOrigins } from "../lib/storage";
 import { Connected } from "./Connected";
 import { Setup } from "./Setup";
 import { strings } from "./strings";
@@ -28,7 +28,9 @@ export function App() {
 	useEffect(() => {
 		let active = true;
 		loadConnection(DEV_HTTP_HOSTS)
-			.then((connection) => {
+			.then(async (connection) => {
+				// Not connected: no host permission may be left over from a setup that did not finish.
+				if (!connection) await releaseStrayOrigins();
 				if (active) setState(connection ? { kind: "connected", connection } : { kind: "setup" });
 			})
 			.catch(() => {

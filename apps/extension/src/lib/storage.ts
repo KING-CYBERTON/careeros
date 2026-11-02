@@ -59,3 +59,16 @@ export async function releaseOrigin(origin: string): Promise<void> {
 		// The permission was never granted, or is already gone.
 	}
 }
+
+/**
+ * Gives back every host permission the extension holds. Called when there is no stored connection: a popup that closed
+ * after the browser granted access but before the connection was saved must not leave access behind.
+ */
+export async function releaseStrayOrigins(): Promise<void> {
+	try {
+		const { origins } = await chrome.permissions.getAll();
+		if (origins && origins.length > 0) await chrome.permissions.remove({ origins });
+	} catch {
+		// Nothing to give back, or the browser refused; the next open tries again.
+	}
+}
