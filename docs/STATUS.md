@@ -2,14 +2,14 @@
 
 > Written by Opus after every plan, review and merge. Every thread reads this file first.
 
-**Current phase:** 0 — Setup (exit waits on owner actions) · 1 — Multi-tenancy complete in code; exit waits only on staging verification (owner actions) · 2 — White-label in progress
+**Current phase:** Phases 0, 1 and 2 meet their exit criteria (staging verified live by Stephen on 2026-11-02). Tags wait on Stephen's go and the release-path decision. Next: Phase 3
 **Current version:** none yet (first tag will be `0.0.1` at Phase 0 exit)
 **Base:** Reactive Resume v6.0.10, upstream commit `a69e48318aab3c1c3ea57d2c0467710ef0d8342f` (2026-10-31)
 **Last updated:** 2026-11-02 by Opus (Thread 1)
 
 ## Phase 0 exit criteria (PRODUCT.md §13)
 
-- [ ] Upstream app runs in staging (P0-C03 merged; waits on Stephen: VPS runbook and default branch = `develop`)
+- [x] App runs in staging (P0-C03): https://careeros-staging.ayopa.co.ke deployed by `careeros-deploy-staging` on Stephen's VPS, 2026-11-02; default branch is `develop`
 - [x] CI green on `develop` (all PRs since C01b green on static, unit, e2e)
 - [x] All three threads operational (T01, Q01, C01 each completed the §1.3 loop)
 
@@ -62,7 +62,7 @@
 - [x] Cross-org ID fuzz passes (P1-Q03)
 - [x] Opus security sign-off: [signed off](reviews/P1-EXIT-security-review-1.md), with no Critical or High findings; M1 closed by P1-Q10 ([#42](https://github.com/KING-CYBERTON/careeros/pull/42))
 - [x] BASELINE refreshed from develop run 41320943973 ([BASELINE.md](BASELINE.md#phase-1-exit-refresh-p1-c02): 3426 unit tests, 63 e2e)
-- [ ] Staging verified with the database role split (waits on Stephen: VPS runbook, default branch = `develop`)
+- [x] Staging verified with the database role split: the app migrates as `careeros_owner` and serves as `careeros_app` (`db_bootstrap` sets both roles on every deploy), 2026-11-02
 
 ## Phase 2 tasks
 
@@ -80,12 +80,12 @@
 | 3 — CI/CD | P2-C02     | [plans/cicd/P2-C02-branding-gate.md](plans/cicd/P2-C02-branding-gate.md)                                   | **Merged** · [review](reviews/P2-C02-review-1.md) (mobile node tests now in CI)                                                                | [#55](https://github.com/KING-CYBERTON/careeros/pull/55) |
 | 3 — CI/CD | P2-C01     | [plans/cicd/P2-C01-staging-org-hosts.md](plans/cicd/P2-C01-staging-org-hosts.md)                           | **Merged** · [review](reviews/P2-C01-review-1.md). Live check waits on Stephen's Cloudflare actions                                            | [#58](https://github.com/KING-CYBERTON/careeros/pull/58) |
 
-All Phase 2 tasks are merged. P2-C03 (from exit review M1, [spec](plans/cicd/P2-C03-run-skipped-db-suites.md)) merged in [#61](https://github.com/KING-CYBERTON/careeros/pull/61). Only the live staging checks remain before the `0.2.0` tag.
+All Phase 2 tasks are merged. P2-C03 (from exit review M1, [spec](plans/cicd/P2-C03-run-skipped-db-suites.md)) merged in [#61](https://github.com/KING-CYBERTON/careeros/pull/61). The live staging checks passed on 2026-11-02 (Stephen). Only the tags remain. Before the first `v*` tag, P2-C04 ([spec](plans/cicd/P2-C04-release-path.md)) switches off the inherited upstream publish workflow and fixes the staging workflow trips found during the bring-up.
 
 ## Phase 2 exit criteria (PRODUCT.md §13)
 
-- [ ] Two orgs on two hosts show distinct branding on every surface: proven in CI by P2-Q02 ([#59](https://github.com/KING-CYBERTON/careeros/pull/59)); the live staging check waits on the P2-C01 owner actions
-- [ ] A custom domain verifies, gets TLS and stops serving on removal: built and tested (T06, T07); the live check waits on Stephen enabling Cloudflare for SaaS and creating the two tokens
+- [x] Two orgs on two hosts show distinct branding on every surface: proven in CI by P2-Q02 ([#59](https://github.com/KING-CYBERTON/careeros/pull/59)) and checked live on staging org hosts by Stephen, 2026-11-02
+- [x] A custom domain verifies, gets TLS and stops serving on removal: built and tested (T06, T07); Cloudflare for SaaS enabled and checked live on staging by Stephen, 2026-11-02
 - [x] Host decides the org; a session from A's host cannot act in B (P2-Q01: e2e plus the fuzz org-host pass, zero leaks)
 - [x] CI gate blocks upstream branding (P2-C02, [#55](https://github.com/KING-CYBERTON/careeros/pull/55))
 - [x] Opus security review: [signed off](reviews/P2-EXIT-security-review-1.md), no Critical or High; M1 closed by P2-C03 ([#61](https://github.com/KING-CYBERTON/careeros/pull/61)). L1 recorded, L2 to the Phase 3 backlog
@@ -105,7 +105,7 @@ All Phase 2 tasks are merged. P2-C03 (from exit review M1, [spec](plans/cicd/P2-
 
 - `tests/e2e/specs/library-pagination.spec.ts:201`: root cause fixed in P0-Q03 (oRPC batching bypassed the test mock). Watch for a strict-mode "two alerts" failure; if seen, Opus specs a per-item batch response.
 - `assistant.spec.ts:118` (reaccept "CPACC") failed once and passed on re-run (T05 era); root-cause if it recurs.
-- Follow-ups: drop the old `careeros_due_storage_cleanup` overload in the first Phase 1b follow-on migration (Q74); make `bindGlobalPoolForTesting` throw in production (Q75); plan Q20 (`Promise.all` on one org-scoped client); Q03 F1 (custom-domain routes in the fuzz); exit review L1, L2 (Phase 2 hygiene). Phase 3 backlog from Phase 2: mobile join on org hosts (Q130), org-aware OAuth state (Q105), holding released org slugs (P2 exit L2), self-hosted brand fonts (Q101).
+- Follow-ups: drop the old `careeros_due_storage_cleanup` overload in the first Phase 1b follow-on migration (Q74); make `bindGlobalPoolForTesting` throw in production (Q75); plan Q20 (`Promise.all` on one org-scoped client); Q03 F1 (custom-domain routes in the fuzz); exit review L1, L2 (Phase 2 hygiene). Phase 3 backlog from Phase 2: mobile join on org hosts (Q130), org-aware OAuth state (Q105), holding released org slugs (P2 exit L2), self-hosted brand fonts (Q101). From the staging bring-up: no screen to rename an org's address (slug) or create another org; the Domains page says "your address above" when no address is shown; `careeros-staging-cloudflare` should ignore the slug input for commands that take none; the deploy job's 30-minute limit and the 25 MB smoke upload are tight for a small home-lab server.
 - e2e specs doing raw SQL on tenant tables must use `withSeedPool` (P1-Q07); careeros_app sees nothing without an org context.
 
 ## Planning docs
