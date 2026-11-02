@@ -35,3 +35,13 @@ Status: **Approved** (Opus, 2026-10-31). Applies to all code Sonnet writes. PROD
 
 - Opus owns `docs/STATUS.md`, `docs/plans/**`, `docs/test-plans/**`, `docs/reviews/**`, `docs/ESCALATIONS.md`, `docs/RELEASE-1.0.0.md`.
 - Sonnet may append questions to `docs/questions.md` and update `docs/UPSTREAM_PATCHES.md`, `README`/runbooks named in a spec, and `CHANGELOG-CAREEROS.md`.
+
+## 6. Branding gate
+
+CI (`static` job) runs `node tooling/careeros/branding-gate.mjs`. It fails when an upstream product name or brand link appears in user-visible code.
+
+- **Blocked** (case-insensitive): `Reactive Resume`, `ReactiveResume`, `rxresu.me`, `rxresume`, `rx.cv`, OlaCV, the upstream author's name and email, and the upstream GitHub, GitHub Sponsors, Discord, Open Collective, Crowdin, Context7, LinkedIn and subreddit links.
+- **Scanned:** web `src`, `index.html`, `public` and `locales/*.po`; mobile `app`, `src`, `locales` and `app.config.ts`; `apps/server/src/static`; `packages/email/src`, `packages/pdf/src`, `packages/ui/src`.
+- **Never matched:** `@reactive-resume/` import specifiers, test files, `docs/**`, `NOTICE`, `LICENSE*`, `CHANGELOG*.md`, and lines that are only a code comment. The licenses pages are allowed by path; the gate checks that `packages/utils/src/notice.ts` still holds the MIT attribution and that both pages still render it.
+- **Allow:** add a comment `careeros-branding-allow: <reason>` on the same line or the line before, with a reason of at least 10 characters (identifiers, importer names, and native names that wait for the mobile release blocker). The gate prints how many allowances it used.
+- **Why:** the MIT licence requires the notice, not the upstream brand. A white-label product must not show the upstream name, donation prompts or links to customers.

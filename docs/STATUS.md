@@ -89,6 +89,8 @@ Next specs: P2-Q01 (host isolation e2e), P2-Q02 (branding e2e, two orgs and two 
 
 ## Watch list
 
+- **Release blocker (mobile, Q80):** the native app identity still uses the upstream host and name (`apps/mobile/app.config.ts`, `oauth.ts`, `session.ts`, `apps/web/src/features/auth/native-callback.ts`). These lines carry `careeros-branding-allow` until §15.1 settles the product name and native identity. No store build ships before then.
+
 - `tests/e2e/specs/library-pagination.spec.ts:201`: root cause fixed in P0-Q03 (oRPC batching bypassed the test mock). Watch for a strict-mode "two alerts" failure; if seen, Opus specs a per-item batch response.
 - `assistant.spec.ts:118` (reaccept "CPACC") failed once and passed on re-run (T05 era); root-cause if it recurs.
 - Follow-ups: drop the old `careeros_due_storage_cleanup` overload in the first Phase 1b follow-on migration (Q74); make `bindGlobalPoolForTesting` throw in production (Q75); plan Q20 (`Promise.all` on one org-scoped client); Q03 F1 (custom-domain routes in the fuzz); exit review L1, L2 (Phase 2 hygiene).

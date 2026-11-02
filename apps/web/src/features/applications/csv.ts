@@ -251,6 +251,7 @@ export function mapCsvToApplications(table: string[][], mapping?: readonly (CsvF
 	const fieldFor = mapping ?? autoMapHeaders(headers);
 	const recognized = [...new Set(fieldFor.filter((f): f is CsvField => !!f))];
 	// Older exports also carry an Archived column.
+	// CAREEROS: careeros-branding-allow: local name of the import-format check, not shown to users
 	const isReactiveResumeExport = ["Stage History", "Timeline", "Created At", "Updated At"].every((header) =>
 		headers.includes(header),
 	);
@@ -266,6 +267,7 @@ export function mapCsvToApplications(table: string[][], mapping?: readonly (CsvF
 		raw.forEach((rawValue, i) => {
 			const field = fieldFor[i];
 			if (!field) return;
+			// CAREEROS: careeros-branding-allow: local name of the import-format check, not shown to users
 			const value = (isReactiveResumeExport ? stripFormulaGuard(rawValue) : rawValue).trim();
 			if (!value) return;
 			if (field === "tags") record.tags = parseTags(value);
