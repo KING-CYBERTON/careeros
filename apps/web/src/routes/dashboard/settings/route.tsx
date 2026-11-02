@@ -15,7 +15,10 @@ type Page = {
 		| "/dashboard/settings/account"
 		| "/dashboard/settings/preferences"
 		| "/dashboard/settings/ai"
-		| "/dashboard/settings/members";
+		| "/dashboard/settings/members"
+		// CAREEROS (P2-T07)
+		| "/dashboard/settings/branding"
+		| "/dashboard/settings/domains";
 	icon: IconName;
 	label: () => string;
 };
@@ -30,6 +33,12 @@ const SETTINGS_PAGES: Page[] = [
 // CAREEROS: shown to owners and admins only; the server enforces the same rule (P1-T03)
 const MEMBERS_PAGE: Page = { to: "/dashboard/settings/members", icon: "user-plus", label: () => t`Members & invites` };
 
+// CAREEROS (P2-T07): branding and domains, for owners and admins only; the API enforces the same rule
+const BRANDING_PAGES: Page[] = [
+	{ to: "/dashboard/settings/branding", icon: "palette", label: () => t`Branding` },
+	{ to: "/dashboard/settings/domains", icon: "globe", label: () => t`Domains` },
+];
+
 // CAREEROS: the upstream project links (docs, source, translation, bug tracker, donations) are gone. What remains is the
 // licenses page and, when the brand sets one, a support link.
 const getProjectLinks = () => {
@@ -42,8 +51,8 @@ export const Route = createFileRoute("/dashboard/settings")({ component: RouteCo
 function RouteComponent() {
 	const pathname = useRouterState({ select: (state) => state.location.pathname });
 	const isRoot = pathname.replace(/\/$/, "") === "/dashboard/settings";
-	// CAREEROS (P1-T03)
-	const pages = useCanManageMembers() ? [...SETTINGS_PAGES, MEMBERS_PAGE] : SETTINGS_PAGES;
+	// CAREEROS (P1-T03, P2-T07)
+	const pages = useCanManageMembers() ? [...SETTINGS_PAGES, MEMBERS_PAGE, ...BRANDING_PAGES] : SETTINGS_PAGES;
 
 	return (
 		<div className="grid min-h-full content-start sm:h-svh sm:min-h-0 sm:grid-rows-[auto_minmax(0,1fr)] sm:overflow-hidden lg:grid-cols-[220px_minmax(0,1fr)] lg:grid-rows-1 lg:content-stretch">

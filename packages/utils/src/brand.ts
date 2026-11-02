@@ -163,3 +163,66 @@ const SINGLE_EMAIL = /^[^@\s\u0000-\u001f\u007f<>,;]+@[^@\s\u0000-\u001f\u007f<>
 export function isSingleEmailAddress(value: unknown): value is string {
 	return typeof value === "string" && value.length <= 254 && SINGLE_EMAIL.test(value);
 }
+
+// CAREEROS (P2-T07): pieces the branding settings screens (web and mobile) share.
+
+/**
+ * The fonts an organization may choose. Mirrors `BRANDING_FONTS` in `@reactive-resume/db/schema`, which clients cannot
+ * import; an API test keeps the two equal.
+ */
+export const BRANDING_FONT_NAMES = [
+	"Figtree",
+	"Inter",
+	"IBM Plex Sans",
+	"Roboto",
+	"Open Sans",
+	"Lato",
+	"Merriweather",
+	"Lora",
+] as const;
+
+/** WCAG AA for normal text. */
+export const AA_CONTRAST = 4.5;
+
+/** An https URL without credentials, at most 2048 characters. The same rule as the branding API and its CHECKs. */
+export function isHttpsUrl(value: unknown): value is string {
+	if (typeof value !== "string" || !value.startsWith("https://") || value.length > 2048) return false;
+	try {
+		const url = new URL(value);
+		return url.protocol === "https:" && url.username === "" && url.password === "" && url.hostname !== "";
+	} catch {
+		return false;
+	}
+}
+
+/**
+ * How well the text colour the UI puts on `primary` (`readableForeground`) reads on it. `passes` is false below
+ * `minimum` (WCAG AA, 4.5:1, unless given).
+ */
+export function primaryContrast(primary: string, minimum: number = AA_CONTRAST) {
+	const foreground = readableForeground(primary);
+	const ratio = contrastRatio(primary, foreground);
+	return { ratio, foreground, passes: ratio >= minimum };
+}
+
+/**
+ * The CSS custom properties the app sets from a brand (the same tokens `renderBrandCss` writes on the server), for a
+ * live preview: `--accent`, `--accent-hover`, `--on-accent`, `--accent-soft`, `--accent-text` for the light desk, and
+ * `--brand-secondary` and `--brand-on-secondary`. Invalid or missing colours leave their tokens out.
+ */
+export function brandPreviewVars(primary: string | null | undefined, secondary: string | null | undefined) {
+	const vars: Record<string, string> = {};
+	if (isHexColor(primary)) {
+		const { light } = accentTokens(primary);
+		vars["--accent"] = light.accent;
+		vars["--accent-hover"] = light.accentHover;
+		vars["--on-accent"] = light.onAccent;
+		vars["--accent-soft"] = light.accentSoft;
+		vars["--accent-text"] = light.accentText;
+	}
+	if (isHexColor(secondary)) {
+		vars["--brand-secondary"] = secondary.toLowerCase();
+		vars["--brand-on-secondary"] = readableForeground(secondary);
+	}
+	return vars;
+}

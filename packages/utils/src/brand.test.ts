@@ -1,10 +1,13 @@
 import { describe, expect, it } from "vite-plus/test";
 import {
+	brandPreviewVars,
 	contrastRatio,
 	ensureContrast,
 	isHexColor,
+	isHttpsUrl,
 	isSingleEmailAddress,
 	mixHex,
+	primaryContrast,
 	readableForeground,
 	relativeLuminance,
 } from "./brand";
@@ -115,5 +118,38 @@ describe("isSingleEmailAddress", () => {
 		])
 			expect(isSingleEmailAddress(bad)).toBe(false);
 		expect(isSingleEmailAddress(undefined)).toBe(false);
+	});
+});
+
+// CAREEROS (P2-T07)
+describe("branding settings helpers", () => {
+	it("checks https links the way the API does", () => {
+		expect(isHttpsUrl("https://acme.example/help")).toBe(true);
+		for (const bad of [
+			"http://acme.example",
+			"https://user:pw@acme.example",
+			"javascript:alert(1)",
+			"https://",
+			"",
+			null,
+		])
+			expect(isHttpsUrl(bad)).toBe(false);
+	});
+
+	it("reports the contrast of the primary colour against its computed foreground", () => {
+		const dark = primaryContrast("#1a56db");
+		expect(dark.foreground).toBe("#ffffff");
+		expect(dark.passes).toBe(true);
+		// The foreground is always the better of black and white, so only a stricter minimum can fail.
+		expect(primaryContrast("#777777", 7).passes).toBe(false);
+	});
+
+	it("builds the preview variables from valid colours only", () => {
+		const vars = brandPreviewVars("#1A56DB", "#ffcc00");
+		expect(vars["--accent"]).toBe("#1a56db");
+		expect(vars["--on-accent"]).toBe("#ffffff");
+		expect(vars["--brand-secondary"]).toBe("#ffcc00");
+		expect(vars["--brand-on-secondary"]).toBe("#000000");
+		expect(brandPreviewVars("red", null)).toEqual({});
 	});
 });
