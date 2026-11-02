@@ -94,3 +94,25 @@ BEGIN
 	END LOOP;
 END
 $$;
+
+-- P3-T01: tables the app role must not write. The blanket GRANT above gives it all four privileges on every table, so
+-- take them back here, after it, on every run. The row-level security policies of these tables already deny the writes
+-- (the migration defines a policy per command); this keeps the grants honest too. plan is read-only, subscription and
+-- feature_flag are written only by definer functions and the platform, and audit_log is append-only (INSERT stays).
+-- Skipped for tables a database does not have yet (this script can run before the migration).
+DO $$
+BEGIN
+	IF to_regclass('public.plan') IS NOT NULL THEN
+		REVOKE INSERT, UPDATE, DELETE, TRUNCATE ON TABLE public.plan FROM careeros_app;
+	END IF;
+	IF to_regclass('public.subscription') IS NOT NULL THEN
+		REVOKE INSERT, UPDATE, DELETE, TRUNCATE ON TABLE public.subscription FROM careeros_app;
+	END IF;
+	IF to_regclass('public.feature_flag') IS NOT NULL THEN
+		REVOKE INSERT, UPDATE, DELETE, TRUNCATE ON TABLE public.feature_flag FROM careeros_app;
+	END IF;
+	IF to_regclass('public.audit_log') IS NOT NULL THEN
+		REVOKE UPDATE, DELETE, TRUNCATE ON TABLE public.audit_log FROM careeros_app;
+	END IF;
+END
+$$;

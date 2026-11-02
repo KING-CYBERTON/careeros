@@ -181,6 +181,9 @@ export const NO_TENANT_ID: Record<string, string> = {
 		"takes no tenant id: public, the request host's organization, returns only public fields (P2-T07)",
 	"GET /branding/public/{slug}":
 		"takes no tenant id: public, addressed by organization slug, returns only public fields",
+	"GET /organization/entitlements": "takes no tenant id: the caller's own organization (P3-T01)",
+	"GET /organization/audit":
+		"takes no tenant id: the caller's own organization; the cursor is an opaque position in its own log (P3-T01)",
 	"GET /organization/settings": "takes no tenant id: the caller's own organization",
 	"PATCH /organization/settings": "takes no tenant id: the caller's own organization",
 	"GET /organization/domains/info": "takes no tenant id: the caller's own organization's address (P2-T07)",

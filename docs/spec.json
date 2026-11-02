@@ -130657,6 +130657,475 @@
 					}
 				]
 			}
+		},
+		"/organization/entitlements": {
+			"get": {
+				"operationId": "getOrganizationEntitlements",
+				"summary": "Get what the organization is allowed",
+				"description": "Returns the current organization's plan, status, seat limit and use, AI credits, the resolved feature flags and whether it is read-only (suspended). Any member can read it. Requires authentication.",
+				"tags": [
+					"Organization"
+				],
+				"parameters": [],
+				"responses": {
+					"200": {
+						"description": "OK",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"planId": {
+											"type": "string",
+											"description": "The plan the organization is on, for example `personal` or `pro`."
+										},
+										"status": {
+											"enum": [
+												"trial",
+												"active",
+												"past_due",
+												"suspended"
+											],
+											"type": "string"
+										},
+										"seatLimit": {
+											"anyOf": [
+												{
+													"type": "integer",
+													"minimum": -9007199254740991,
+													"maximum": 9007199254740991
+												},
+												{
+													"type": "null"
+												}
+											],
+											"description": "Null means unlimited."
+										},
+										"seatsUsed": {
+											"type": "integer",
+											"minimum": -9007199254740991,
+											"maximum": 9007199254740991,
+											"description": "Members plus pending invitations that have not expired."
+										},
+										"aiCreditsPerSeat": {
+											"type": "integer",
+											"minimum": -9007199254740991,
+											"maximum": 9007199254740991
+										},
+										"aiCreditsTotal": {
+											"type": "integer",
+											"minimum": -9007199254740991,
+											"maximum": 9007199254740991,
+											"description": "The pooled credits: credits per seat times max(seats paid, members)."
+										},
+										"features": {
+											"type": "object",
+											"propertyNames": {
+												"type": "string"
+											},
+											"additionalProperties": {
+												"type": "boolean"
+											},
+											"description": "Every feature with the plan's flags and overrides applied."
+										},
+										"overageAllowed": {
+											"type": "boolean",
+											"description": "Whether AI calls may continue past the credits."
+										},
+										"readOnly": {
+											"type": "boolean",
+											"description": "True while the organization is suspended: it can read and export, not write."
+										}
+									},
+									"required": [
+										"planId",
+										"status",
+										"seatLimit",
+										"seatsUsed",
+										"aiCreditsPerSeat",
+										"aiCreditsTotal",
+										"features",
+										"overageAllowed",
+										"readOnly"
+									]
+								}
+							}
+						}
+					},
+					"default": {
+						"description": "Structured API error. See status and code; do not branch on message text.",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"required": [
+										"defined",
+										"code",
+										"status",
+										"message"
+									],
+									"properties": {
+										"defined": {
+											"type": "boolean"
+										},
+										"code": {
+											"type": "string"
+										},
+										"status": {
+											"type": "integer"
+										},
+										"message": {
+											"type": "string"
+										},
+										"data": {}
+									}
+								}
+							}
+						}
+					}
+				},
+				"security": [
+					{
+						"apiKey": []
+					},
+					{
+						"bearerAuth": []
+					},
+					{
+						"cookieAuth": []
+					}
+				],
+				"x-codeSamples": [
+					{
+						"lang": "bash",
+						"label": "cURL",
+						"source": "curl \"https://careeros.example/api/openapi/organization/entitlements\" --header \"x-api-key: <api-key>\""
+					}
+				]
+			}
+		},
+		"/organization/audit": {
+			"get": {
+				"operationId": "listOrganizationAuditLog",
+				"summary": "List the organization's audit log",
+				"description": "Returns the current organization's audit entries, newest first, a page at a time. Only an owner or admin can read it. Requires authentication.",
+				"tags": [
+					"Organization"
+				],
+				"parameters": [
+					{
+						"name": "limit",
+						"in": "query",
+						"schema": {
+							"type": "integer",
+							"minimum": 1,
+							"maximum": 100,
+							"description": "Entries per page (1 to 100). Defaults to 50."
+						},
+						"allowEmptyValue": true,
+						"allowReserved": true
+					},
+					{
+						"name": "cursor",
+						"in": "query",
+						"schema": {
+							"type": "string",
+							"maxLength": 128,
+							"description": "The `nextCursor` of the previous page. Omit for the newest entries."
+						},
+						"allowEmptyValue": true,
+						"allowReserved": true
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "OK",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"items": {
+											"type": "array",
+											"items": {
+												"type": "object",
+												"properties": {
+													"id": {
+														"type": "string"
+													},
+													"action": {
+														"type": "string",
+														"description": "A dotted lowercase name such as `org.plan_changed`."
+													},
+													"actorUserId": {
+														"anyOf": [
+															{
+																"type": "string"
+															},
+															{
+																"type": "null"
+															}
+														],
+														"description": "Null for the system, or when the user has been deleted."
+													},
+													"impersonatorUserId": {
+														"anyOf": [
+															{
+																"type": "string"
+															},
+															{
+																"type": "null"
+															}
+														],
+														"description": "Set when a platform admin acted as the actor (impersonation)."
+													},
+													"targetType": {
+														"anyOf": [
+															{
+																"type": "string"
+															},
+															{
+																"type": "null"
+															}
+														]
+													},
+													"targetId": {
+														"anyOf": [
+															{
+																"type": "string"
+															},
+															{
+																"type": "null"
+															}
+														]
+													},
+													"metadata": {
+														"type": "object",
+														"propertyNames": {
+															"type": "string"
+														},
+														"additionalProperties": {}
+													},
+													"ip": {
+														"anyOf": [
+															{
+																"type": "string"
+															},
+															{
+																"type": "null"
+															}
+														]
+													},
+													"createdAt": {
+														"type": "string",
+														"format": "date-time",
+														"x-native-type": "date"
+													}
+												},
+												"required": [
+													"id",
+													"action",
+													"actorUserId",
+													"impersonatorUserId",
+													"targetType",
+													"targetId",
+													"metadata",
+													"ip",
+													"createdAt"
+												]
+											}
+										},
+										"nextCursor": {
+											"anyOf": [
+												{
+													"type": "string"
+												},
+												{
+													"type": "null"
+												}
+											],
+											"description": "Pass as `cursor` for the next (older) page; null on the last page."
+										}
+									},
+									"required": [
+										"items",
+										"nextCursor"
+									]
+								}
+							}
+						}
+					},
+					"400": {
+						"description": "400",
+						"content": {
+							"application/json": {
+								"schema": {
+									"oneOf": [
+										{
+											"type": "object",
+											"properties": {
+												"defined": {
+													"const": true
+												},
+												"code": {
+													"const": "BAD_REQUEST"
+												},
+												"status": {
+													"const": 400
+												},
+												"message": {
+													"type": "string",
+													"default": "The cursor is not valid."
+												},
+												"data": {}
+											},
+											"required": [
+												"defined",
+												"code",
+												"status",
+												"message"
+											]
+										},
+										{
+											"type": "object",
+											"properties": {
+												"defined": {
+													"const": false
+												},
+												"code": {
+													"type": "string"
+												},
+												"status": {
+													"type": "number"
+												},
+												"message": {
+													"type": "string"
+												},
+												"data": {}
+											},
+											"required": [
+												"defined",
+												"code",
+												"status",
+												"message"
+											]
+										}
+									]
+								}
+							}
+						}
+					},
+					"403": {
+						"description": "403",
+						"content": {
+							"application/json": {
+								"schema": {
+									"oneOf": [
+										{
+											"type": "object",
+											"properties": {
+												"defined": {
+													"const": true
+												},
+												"code": {
+													"const": "FORBIDDEN"
+												},
+												"status": {
+													"const": 403
+												},
+												"message": {
+													"type": "string",
+													"default": "Only an owner or admin of the organization can do this."
+												},
+												"data": {}
+											},
+											"required": [
+												"defined",
+												"code",
+												"status",
+												"message"
+											]
+										},
+										{
+											"type": "object",
+											"properties": {
+												"defined": {
+													"const": false
+												},
+												"code": {
+													"type": "string"
+												},
+												"status": {
+													"type": "number"
+												},
+												"message": {
+													"type": "string"
+												},
+												"data": {}
+											},
+											"required": [
+												"defined",
+												"code",
+												"status",
+												"message"
+											]
+										}
+									]
+								}
+							}
+						}
+					},
+					"default": {
+						"description": "Structured API error. See status and code; do not branch on message text.",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"required": [
+										"defined",
+										"code",
+										"status",
+										"message"
+									],
+									"properties": {
+										"defined": {
+											"type": "boolean"
+										},
+										"code": {
+											"type": "string"
+										},
+										"status": {
+											"type": "integer"
+										},
+										"message": {
+											"type": "string"
+										},
+										"data": {}
+									}
+								}
+							}
+						}
+					}
+				},
+				"security": [
+					{
+						"apiKey": []
+					},
+					{
+						"bearerAuth": []
+					},
+					{
+						"cookieAuth": []
+					}
+				],
+				"x-codeSamples": [
+					{
+						"lang": "bash",
+						"label": "cURL",
+						"source": "curl \"https://careeros.example/api/openapi/organization/audit\" --header \"x-api-key: <api-key>\""
+					}
+				]
+			}
 		}
 	},
 	"externalDocs": {
