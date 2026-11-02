@@ -1,0 +1,16 @@
+{
+	"extends": ["//"],
+	"tags": ["runtime:server", "role:api"],
+	"tasks": {
+		"test": {
+			"env": ["$TURBO_EXTENDS$", "CAREEROS_TEST_*"]
+		},
+		"test:coverage": {
+			"env": ["$TURBO_EXTENDS$", "CAREEROS_TEST_*"]
+		},
+		"test:ci": {
+			"cache": false,
+			"env": ["$TURBO_EXTENDS$", "CAREEROS_TEST_*"]
+		}
+	}
+}

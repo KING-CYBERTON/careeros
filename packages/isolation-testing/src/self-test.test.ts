@@ -263,6 +263,9 @@ describe("coverage check", () => {
 			"feature_flag",
 			"audit_log",
 			"organization_domain",
+			"job_source",
+			"discovery_run",
+			"discovered_job",
 			"ai_usage",
 		]);
 	});
