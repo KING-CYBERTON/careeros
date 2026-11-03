@@ -40,11 +40,20 @@ The manifest asks for exactly these. A test checks them.
 | Permission                                   | Why                                                                                                                                                                                                                              |
 | -------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `activeTab`                                  | Read the page the user is on, only after they click the extension (P5-T03).                                                                                                                                                      |
-| `storage`                                    | Keep the connected organization and, later, the sign-in token in `chrome.storage.local`.                                                                                                                                         |
+| `storage`                                    | Keep the connected organization, the sign-in token and a pending sign-in in `chrome.storage.local`.                                                                                                                              |
 | `scripting`                                  | Inject the small reader that finds the job posting on the active page (P5-T03).                                                                                                                                                  |
 | `optional_host_permissions: ["https://*/*"]` | Not granted at install. The popup asks the browser for the one organization origin the user enters, once they have confirmed the organization, and gives it back on Change organization. It never asks for all websites at once. |
 
 There are no `host_permissions` and no content scripts. Extension pages run under a strict content security policy: scripts from the extension only, no `eval`, no remote code, https images and connections only.
+
+## Signing in (P5-T02)
+
+1. **Sign in** asks `POST <origin>/api/auth/device/code` for a code (client id `careeros-job-clipper`, no cookies). The popup shows the code and an **Open approval page** button that opens `<origin>/device?user_code=...` in a new tab.
+2. The member signs in on that page, checks the code and the organization, and approves. The popup polls `POST <origin>/api/auth/device/clipper/token` at the server's interval, 5 seconds slower after each `slow_down`, until the code is approved, denied or expired (10 minutes).
+3. The answer is a clipper token. It is stored in `chrome.storage.local` together with its origin and is sent only as `Authorization: Bearer` to that origin (`authorizedRequest` refuses any other, never follows redirects, never sends cookies). The server stores only its hash.
+4. **Sign out** revokes the token on the server (`/api/auth/device/clipper/revoke`) and deletes it here. **Change organization** does both and also forgets the connection. A token the server no longer knows (revoked, expired, member removed) returns the popup to signed out.
+
+Polling runs while the popup is open (a Manifest V3 service worker cannot keep a timer); a pending sign-in is kept in storage and resumes when the popup is opened again. The manifest permissions are unchanged. Sign-in works only on an organization host (its subdomain or active custom domain); on any other address the popup says the address does not support sign-in. A token works only on that organization's hosts and only for `clipper.whoami`, `branding.publicForHost` and `applications.create`. Members see and revoke their sign-ins under Settings on web and mobile.
 
 ## How the address is checked
 
