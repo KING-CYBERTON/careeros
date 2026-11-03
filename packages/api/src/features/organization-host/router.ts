@@ -1,6 +1,7 @@
 import { ORPCError } from "@orpc/server";
 import z from "zod";
 import { protectedProcedureWithoutOrg } from "../../context";
+import { enforceOrganizationStatus } from "../../middleware/entitlements";
 import { accountRateLimit } from "../../middleware/rate-limit";
 import { getHostStatus, joinHostOrganization } from "./service";
 
@@ -44,6 +45,9 @@ export const organizationHostRouter = {
 		})
 		.input(z.object({}).optional())
 		.use(accountRateLimit)
+		// CAREEROS (P3-T02): joining adds a member, so a suspended organization refuses it (ORG_SUSPENDED); a full one
+		// refuses it in the service (SEAT_LIMIT_REACHED).
+		.use(enforceOrganizationStatus)
 		.errors({
 			NOT_FOUND: { status: 404, message: "This address does not belong to an organization." },
 			FORBIDDEN: { status: 403, message: "This organization is invite only." },

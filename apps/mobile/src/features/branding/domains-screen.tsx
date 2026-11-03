@@ -9,6 +9,8 @@ import { useOrganizationAdmin } from "./access";
 import { canRecheck, errorCode, needsRecords, type DomainStatus } from "./logic";
 import { client, orpc, type RouterOutput } from "@/api/client";
 import { useSession } from "@/auth/session";
+// CAREEROS (P3-T02)
+import { useEntitlements } from "@/features/organization/entitlements";
 import { Banner, Button, Card, ConfirmDialog, Screen, Skeleton, Text, TextField, showToast, useTheme } from "@/ui";
 
 /** Settings → Domains for owners and admins. The API checks the role on every call; the gate here is a convenience. */
@@ -45,7 +47,9 @@ function DomainsBody() {
 		refetchInterval: (query) =>
 			query.state.data?.some((d) => d.status === "pending" || d.status === "verified") ? 30_000 : false,
 	});
-	if (info.isPending || domains.isPending) return <Skeleton height={160} />;
+	// CAREEROS (P3-T02)
+	const entitlements = useEntitlements();
+	if (info.isPending || domains.isPending || entitlements.isPending) return <Skeleton height={160} />;
 	if (info.isError || domains.isError)
 		return (
 			<Banner
@@ -73,7 +77,15 @@ function DomainsBody() {
 				</Card>
 			) : null}
 
-			{info.data.domainsConfigured ? (
+			{/* CAREEROS (P3-T02): custom domains are a plan feature; the server refuses the add without it */}
+			{entitlements.data?.features.custom_domain !== true ? (
+				<Banner
+					tone="info"
+					icon="lock"
+					title={t`Custom domains are available on Pro`}
+					message={t`Your address above keeps working. Ask your administrator to upgrade the plan to add your own domain.`}
+				/>
+			) : info.data.domainsConfigured ? (
 				<AddDomain count={domains.data.length} limit={info.data.domainLimit} />
 			) : (
 				<Banner

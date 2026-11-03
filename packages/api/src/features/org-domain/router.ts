@@ -1,5 +1,6 @@
 import z from "zod";
 import { protectedProcedure } from "../../context";
+import { requireFeature } from "../../middleware/entitlements";
 import { accountRateLimit } from "../../middleware/rate-limit";
 import { addDomain, getDomainInfo, listDomains, recheckDomain, removeDomain } from "./service";
 
@@ -93,6 +94,8 @@ export const organizationDomainRouter = {
 		})
 		.input(z.object({ hostname: z.string().min(1).max(260).describe("A domain such as careers.example.com.") }))
 		.use(accountRateLimit)
+		// CAREEROS (P3-T02): custom domains are a plan feature (`custom_domain`); removing one stays open to every plan
+		.use(requireFeature("custom_domain"))
 		.errors({
 			...forbidden,
 			...notConfigured,
@@ -114,6 +117,8 @@ export const organizationDomainRouter = {
 		})
 		.input(idInput)
 		.use(accountRateLimit)
+		// CAREEROS (P3-T02): custom domains are a plan feature (`custom_domain`); removing one stays open to every plan
+		.use(requireFeature("custom_domain"))
 		.errors({
 			...forbidden,
 			...notFound,

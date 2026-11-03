@@ -50,6 +50,7 @@ import { createGithubProfileMapper, createProfileMapper, isUsernameReserved } fr
 import { guardOrgHostSignUp } from "./org-host";
 // CAREEROS: organization plugin options (P1-T01)
 import { organizationOptions } from "./organization";
+import { withSeatLimitErrorsFactory } from "./organization-enforcement";
 // CAREEROS: personal organization at signup, default active organization, owner-only role changes (P1-T03)
 import { organizationRules } from "./organization-rules";
 import {
@@ -453,7 +454,8 @@ const getAuthConfig = () => {
 		baseURL: authBaseUrl,
 		secret: env.AUTH_SECRET,
 
-		database: drizzleAdapter(db, { schema, provider: "pg" }),
+		// CAREEROS (P3-T02): the seat-limit trigger's refusal becomes SEAT_LIMIT_REACHED, not a 500.
+		database: withSeatLimitErrorsFactory(drizzleAdapter(db, { schema, provider: "pg" })),
 
 		telemetry: { enabled: false },
 		// CAREEROS (P2-T03, D5): Better Auth 1.7 accepts a function here, called with the request. The platform origins

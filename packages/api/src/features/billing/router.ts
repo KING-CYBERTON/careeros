@@ -13,18 +13,7 @@ import {
 import { cancelSubscription, changeSeats, createCheckout, customerPortal, getBilling, startTrial } from "./service";
 
 // CAREEROS (P3-T04): billing for organization owners; owners and admins can read. Write procedures are owner only.
-//
-// TODO(P3-T02): add the five procedures below to T02's suspended-org allow-list when that task merges (a suspended
-// organization must be able to pay to get out of suspension). T02 had not merged when this was written, so the
-// allow-list does not exist yet and is not created here; see docs/questions.md Q242. `BILLING_PROCEDURE_PATHS` names them.
-export const BILLING_PROCEDURE_PATHS = [
-	"GET /billing",
-	"POST /billing/trial",
-	"POST /billing/checkout",
-	"POST /billing/seats",
-	"POST /billing/cancel",
-	"POST /billing/portal",
-] as const;
+// A suspended organization may still call the five write procedures: they are in SUSPENDED_ORG_ALLOWED_WRITES.
 
 const route = { tags: ["Billing"] };
 const ownerOnly = { FORBIDDEN: { status: 403, message: "Only the owner of the organization can do this." } };

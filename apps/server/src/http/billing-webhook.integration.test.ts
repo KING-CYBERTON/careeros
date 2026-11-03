@@ -437,6 +437,24 @@ describe.skipIf(!configured)("billing webhook and the fake provider", () => {
 			expect((await rest(second.cookie, "/billing/cancel", "POST", {})).status).toBe(403);
 		}, 60_000);
 
+		it("lets a suspended organization's owner check out (fake provider) while another write is refused with ORG_SUSPENDED", async () => {
+			const user = await platformUser("suspended");
+			await owner.query(`UPDATE organization SET status = 'suspended' WHERE id = $1`, [user.orgId]);
+			const refused = await rest(user.cookie, "/resumes", "POST", { name: "Blocked" });
+			expect(refused.status).toBe(403);
+			expect(JSON.stringify(await refused.json())).toContain("ORG_SUSPENDED");
+			expect((await rest(user.cookie, "/billing")).status).toBe(200);
+			const checkout = await rest(user.cookie, "/billing/checkout", "POST", {
+				planId: "starter",
+				interval: "month",
+				seats: 2,
+			});
+			expect(checkout.status).toBe(200);
+			expect(new URL(((await checkout.json()) as { redirectUrl: string }).redirectUrl).pathname).toBe(
+				"/api/billing/fake/checkout",
+			);
+		}, 60_000);
+
 		it("answers 404 for the test page on an organization host and for a forged or expired session", async () => {
 			const user = await platformUser("page");
 			const checkout = await rest(user.cookie, "/billing/checkout", "POST", {

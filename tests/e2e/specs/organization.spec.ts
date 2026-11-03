@@ -1,5 +1,10 @@
 import { createAuthenticatedContext } from "../fixtures/auth";
-import { createInviteeAccount, deleteE2EOrganizations, markEmailVerified } from "../fixtures/careeros-org";
+import {
+	createInviteeAccount,
+	deleteE2EOrganizations,
+	markEmailVerified,
+	setAccountOrganizationPlan,
+} from "../fixtures/careeros-org";
 import { deleteE2EUser } from "../fixtures/db";
 import { expect, test } from "../fixtures/test";
 
@@ -20,6 +25,8 @@ test("an owner invites a user, who accepts and sees both organizations, and the 
 		// The invitee signs up on their own, so they start with a personal workspace.
 		const inviteeContext = await createAuthenticatedContext(browser, inviteeRequest, invitee, baseURL);
 		await markEmailVerified(invitee);
+		// P3-T02: a personal workspace has one seat and cannot invite, so the owner's workspace gets a plan with room.
+		await setAccountOrganizationPlan(account, "pro");
 
 		await owner.goto("/dashboard/settings/members");
 		await expect(owner.getByRole("heading", { name: "Members & invites" })).toBeVisible();

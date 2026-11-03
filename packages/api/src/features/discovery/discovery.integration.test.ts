@@ -7,6 +7,8 @@ import { discoveryRouter } from "./router";
 
 // This suite needs the real organization scope, not the fixed one from vitest.org.setup.ts.
 vi.mock("@careeros/tenancy", async (importOriginal) => importOriginal());
+// CAREEROS (P3-T02): the shared setup stubs billing; the plan gate here reads the real entitlements.
+vi.mock("@careeros/billing", async (importOriginal) => importOriginal());
 
 // No test reaches a real job board: the run uses a fixed loader.
 vi.mock("@careeros/job-discovery", async (importOriginal) => {
