@@ -10,7 +10,7 @@
 //
 // An unknown model has no entry and is refused (`AiModelNotPricedError`): the platform key never records a call at zero.
 
-/** Prompts above this many input tokens use the model's `longPrompt` prices when it has them. */
+/** Prices in USD per million tokens. */
 type PriceRates = { input: number; output: number; cachedInput: number };
 
 export type ModelPrice = PriceRates & {

@@ -14,7 +14,7 @@ import { generateText, streamText } from "ai";
 const PLATFORM_KEY = "sk-ant-test-placeholder-not-a-secret";
 
 const mocks = vi.hoisted(() => ({
-	recordUsage: vi.fn(async () => undefined),
+	recordUsage: vi.fn(async (_record: unknown) => undefined),
 	assertWithinQuota: vi.fn(async () => ({})),
 }));
 vi.mock("@reactive-resume/env/server", () => ({
@@ -146,7 +146,7 @@ describe("the AI call sites", () => {
 		const used = new Set<string>();
 		for (const [file, source] of sources) {
 			if (file.startsWith("ai-providers/") || file === "ai/platform.ts") continue;
-			for (const match of source.matchAll(/feature:\s*"([a-z_.]+)"/g)) used.add(match[1] ?? "");
+			for (const match of source.matchAll(/feature:\s*"([a-z_]+\.[a-z_.]+)"/g)) used.add(match[1] ?? "");
 			for (const match of source.matchAll(/(?:getRunnableProvider\([^,]+,|resolveModel\([^,]+,)\s*"([a-z_.]+)"/g))
 				used.add(match[1] ?? "");
 		}

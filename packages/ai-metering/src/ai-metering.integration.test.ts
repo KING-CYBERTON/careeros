@@ -33,7 +33,8 @@ describe.skipIf(!configured)("AI metering", () => {
 	let tenancy: typeof import("@careeros/tenancy");
 
 	const inApp = <T>(fn: () => T) => withDatabasePool(app, fn);
-	const inScope = <T>(orgId: string, fn: () => Promise<T>) => inApp(async () => tenancy.withOrgContext(orgId, fn));
+	const inScope = <T>(orgId: string, fn: () => PromiseLike<T>) =>
+		inApp(async () => tenancy.withOrgContext(orgId, async () => await fn()));
 	const ownerRows = async <T extends Record<string, unknown>>(sql: string, params: unknown[] = []) =>
 		(await owner.query<T>(sql, params)).rows;
 	const asApp = (orgId: string, sql: string, params: unknown[] = []) =>
