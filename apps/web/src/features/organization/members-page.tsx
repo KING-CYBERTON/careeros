@@ -19,6 +19,7 @@ import { SettingsSection } from "@/features/settings/section";
 import { useConfirm } from "@/hooks/use-confirm";
 import { authClient } from "@/libs/auth/client";
 import { getReadableErrorMessage } from "@/libs/error-message";
+import { orpc } from "@/libs/orpc/client";
 
 type InviteRole = "admin" | "member";
 
@@ -56,7 +57,7 @@ export function MembersSettings() {
 				</Alert>
 			) : (
 				<>
-					<InviteSection />
+					<InviteOrNotice />
 					<MembersSection myRole={data.me.role} myMemberId={data.me.id} />
 					<InvitationsSection />
 				</>
@@ -66,6 +67,35 @@ export function MembersSettings() {
 }
 
 const inviteSchema = z.object({ email: z.email().toLowerCase() });
+
+/** CAREEROS (P3-T02): the plan and seats of the active organization, for the seat note and the personal explanation. */
+function useSeats() {
+	const { data } = useQuery(orpc.organization.entitlements.queryOptions());
+	return data;
+}
+
+/**
+ * CAREEROS (P3-T02): a personal workspace has one seat, so it cannot invite. The page says so and points to creating an
+ * organization (the create-organization screen is Phase 3 backlog). The server refuses the invitation either way.
+ */
+function InviteOrNotice() {
+	const seats = useSeats();
+	if (seats?.planId !== "personal") return <InviteSection />;
+	return (
+		<Alert variant="info" data-testid="personal-workspace-notice">
+			<Icon name="user-circle" />
+			<AlertTitle>
+				<Trans>A personal workspace has one seat</Trans>
+			</AlertTitle>
+			<AlertDescription>
+				<Trans>
+					You can't invite people to your personal workspace. To work with a team, create an organization and invite
+					them there.
+				</Trans>
+			</AlertDescription>
+		</Alert>
+	);
+}
 
 function InviteSection() {
 	const emailId = useId();
@@ -95,12 +125,24 @@ function InviteSection() {
 		setEmail("");
 		toast.add({ description: t`Invitation sent to ${parsed.data.email}` });
 		await queryClient.invalidateQueries({ queryKey: organizationKeys.invitations(organizationId) });
+		await queryClient.invalidateQueries({ queryKey: orpc.organization.entitlements.key() });
 	};
+
+	const seats = useSeats();
 
 	return (
 		<SettingsSection
 			title={<Trans>Invite someone</Trans>}
-			description={<Trans>They get an email with a link that is valid for 7 days.</Trans>}
+			description={
+				seats && seats.seatLimit !== null ? (
+					<Trans>
+						They get an email with a link that is valid for 7 days. {seats.seatsUsed} of {seats.seatLimit} seats are
+						used, counting pending invitations.
+					</Trans>
+				) : (
+					<Trans>They get an email with a link that is valid for 7 days.</Trans>
+				)
+			}
 		>
 			<form
 				className="flex flex-wrap items-end gap-3"
@@ -148,7 +190,11 @@ function MembersSection({ myRole, myMemberId }: MembersSectionProps) {
 	const organizationId = useActiveOrganizationId();
 	const { data } = useMembers();
 	const members = data?.members ?? [];
-	const refresh = () => queryClient.invalidateQueries({ queryKey: organizationKeys.members(organizationId) });
+	const refresh = async () => {
+		await queryClient.invalidateQueries({ queryKey: organizationKeys.members(organizationId) });
+		// CAREEROS (P3-T02): a removed member frees a seat at once
+		await queryClient.invalidateQueries({ queryKey: orpc.organization.entitlements.key() });
+	};
 
 	const changeRole = async (memberId: string, role: InviteRole) => {
 		const { error } = await authClient.organization.updateMemberRole({ memberId, role });
@@ -251,6 +297,8 @@ function InvitationsSection() {
 			return;
 		}
 		await queryClient.invalidateQueries({ queryKey: organizationKeys.invitations(organizationId) });
+		// CAREEROS (P3-T02): a cancelled invitation frees its seat at once
+		await queryClient.invalidateQueries({ queryKey: orpc.organization.entitlements.key() });
 	};
 
 	return (

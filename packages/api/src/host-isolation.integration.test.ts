@@ -6,6 +6,8 @@ import { Pool } from "pg";
 
 // Real organization scope and real Better Auth, not the fixed ones from vitest.org.setup.ts.
 vi.mock("@careeros/tenancy", async (importOriginal) => importOriginal());
+// P3-T02: real entitlements, not the active-organization stand-in of vitest.org.setup.ts.
+vi.mock("@careeros/billing", async (importOriginal) => importOriginal());
 vi.mock("@reactive-resume/email/transport", () => ({ sendEmail: vi.fn(async () => undefined) }));
 
 // P2-T03: the request host decides the organization, end to end through `protectedProcedure`: real sessions, real API
@@ -75,6 +77,8 @@ describe.skipIf(!configured)("host isolation through protectedProcedure", () => 
 		restorePool = client.bindGlobalPoolForTesting(app);
 		for (const org of [orgA, orgB, orgC]) {
 			await owner.query(`INSERT INTO organization (id, name, slug) VALUES ($1, $1, $2)`, [org.id, org.slug]);
+			// P3-T02: a new organization starts on the one-seat personal plan; these tests sign several people up to it.
+			await owner.query(`SELECT careeros_set_org_plan($1, 'pro', 'active', NULL, 'test fixture')`, [org.id]);
 			await owner.query(`UPDATE organization_branding SET app_name = $2 WHERE organization_id = $1`, [
 				org.id,
 				org.appName,

@@ -16,6 +16,9 @@ import { authorizeAiRequest } from "./ai-consent";
 // CAREEROS: the account is not a member of the organization that owns this server address (P2-T03)
 import { markOrgHostBlocked } from "@/auth/org-host-block";
 import { getAccountScope, getCredentials, recoverFromUnauthorized, rejectCredentials } from "@/auth/session";
+// CAREEROS (P3-T02): a refusal for the organization's plan or status reads the same wherever it is raised
+import { entitlementErrorMessage } from "@/features/organization/entitlement-message";
+import { showToast } from "@/ui/overlays";
 
 /**
  * Per-call context. `scope` binds a call to one account (the draft store's scope, `JSON.stringify([server, user id])`):
@@ -99,6 +102,9 @@ const createLink = (label: string) =>
 			onError((error) => {
 				if (isAbort(error)) return;
 				if (isOrgHostNotMemberError(error)) markOrgHostBlocked();
+				// CAREEROS (P3-T02): SEAT_LIMIT_REACHED, ORG_SUSPENDED and FEATURE_NOT_IN_PLAN get a readable toast
+				const entitlementMessage = entitlementErrorMessage(error);
+				if (entitlementMessage) showToast({ message: entitlementMessage });
 				console.warn(`[${label}]`, error instanceof Error ? error.name : "error");
 			}),
 		],

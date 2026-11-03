@@ -20,6 +20,7 @@ import { GuestBanner } from "@/features/auth/components/guest-banner";
 import { useCommandPaletteStore } from "@/features/command-palette/store";
 // CAREEROS: organization switcher and the no-organization notice (P1-T03)
 import { NoOrganizationNotice } from "@/features/organization/no-organization-notice";
+import { SuspendedBanner } from "@/features/organization/suspended-banner";
 import { OrganizationSwitcher } from "@/features/organization/switcher";
 import { isEditableElementFocused } from "@/features/resume/builder/draft";
 import { UserDropdownMenu } from "@/features/user/dropdown-menu";
@@ -115,6 +116,8 @@ export function AppShell({ children }: AppShellProps) {
 			</a>
 			{breakpoint !== "mobile" && (breakpoint === "tablet" ? <Rail /> : <Sidebar />)}
 			<main id="main-content" className="min-w-0">
+				{/* CAREEROS (P3-T02): a suspended organization is read-only; the server refuses the writes */}
+				<SuspendedBanner />
 				<GuestBanner />
 				{/* CAREEROS (P1-T03): the sidebar carries the switcher on desktop; tablets and phones get it here */}
 				<NoOrganizationNotice />

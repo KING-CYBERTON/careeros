@@ -1,5 +1,6 @@
 import { t } from "@lingui/core/macro";
 import { Trans } from "@lingui/react/macro";
+import { useRouteContext } from "@tanstack/react-router";
 import { useEffect, useId, useState } from "react";
 import { Alert, AlertDescription, AlertTitle } from "@reactive-resume/ui/components/alert";
 import { Badge } from "@reactive-resume/ui/components/badge";
@@ -35,6 +36,10 @@ export function DomainsSettings() {
 function DomainsBody() {
 	const info = useDomainInfo();
 	const domains = useDomains();
+	// CAREEROS (P3-T02, phase plan D4): custom domains are a plan feature. The server refuses adding one without it
+	// (FEATURE_NOT_IN_PLAN); this only swaps the form for a note.
+	const { flags } = useRouteContext({ strict: false });
+	const customDomainInPlan = flags?.features?.custom_domain === true;
 	if (info.isLoading || domains.isLoading) return <Skeleton className="h-48 rounded-xl" />;
 	if (info.error || domains.error || !info.data || !domains.data)
 		return (
@@ -64,7 +69,19 @@ function DomainsBody() {
 				</SettingsSection>
 			)}
 
-			{info.data.domainsConfigured ? (
+			{!customDomainInPlan ? (
+				<Alert variant="info" data-testid="domains-not-in-plan">
+					<Icon name="lock" />
+					<AlertTitle>
+						<Trans>Custom domains are available on Pro</Trans>
+					</AlertTitle>
+					<AlertDescription>
+						<Trans>
+							Your address above keeps working. Ask your administrator to upgrade the plan to add your own domain.
+						</Trans>
+					</AlertDescription>
+				</Alert>
+			) : info.data.domainsConfigured ? (
 				<AddDomain count={domains.data.length} limit={info.data.domainLimit} />
 			) : (
 				<Alert data-testid="domains-not-configured">

@@ -1,5 +1,7 @@
 import type { Locale } from "@reactive-resume/utils/locale";
 import type { User } from "better-auth";
+// CAREEROS (P3-T02): one request-scoped entitlements cache, opened per protected procedure
+import { runWithEntitlementsCache } from "@careeros/billing";
 // CAREEROS: tenant context for every protected procedure (P1-T02)
 import {
 	currentHost,
@@ -18,6 +20,8 @@ import { user } from "@reactive-resume/db/schema";
 import { env } from "@reactive-resume/env/server";
 // CAREEROS (P5-T02): clipper token resolution and its procedure allow-list
 import { assertClipperProcedureAllowed, resolveClipperAuthentication } from "./features/clipper/scope";
+// CAREEROS (P3-T02): suspended organizations are read-only (phase plan D3)
+import { enforceOrganizationStatus } from "./middleware/entitlements";
 
 export type RequestPermission = "read" | "write" | "delete";
 export type RequestAuthentication = {
@@ -231,20 +235,26 @@ export function toHostError(error: unknown): unknown {
 }
 
 // CAREEROS: resolves the organization and runs the handler inside withOrgContext (P1-T02)
-export const protectedProcedure = protectedProcedureWithoutOrg.use(async ({ context, next }) => {
-	// CAREEROS (P2-T03): the host decides the organization on organization hosts; headers, query and body never do.
-	const organizationId = context.authentication
-		? await resolveOrgForAuthentication(context.authentication, context.host ?? currentHost()).catch(
-				(error: unknown) => {
-					throw toHostError(error);
-				},
-			)
-		: undefined;
-	const nextContext = { ...context, organizationId: organizationId as string | undefined };
-	if (!organizationId) {
-		// CAREEROS: enforcement is on since P1-T04 (see ORG_CONTEXT_REQUIRED). The branch below stays for the constant's `false` state.
-		if (ORG_CONTEXT_REQUIRED) throw new ORPCError("FORBIDDEN", { message: "No active organization" });
-		return next({ context: nextContext });
-	}
-	return withOrgContext(organizationId, () => Promise.resolve(next({ context: nextContext })));
-});
+export const protectedProcedure = protectedProcedureWithoutOrg
+	.use(async ({ context, next }) => {
+		// CAREEROS (P2-T03): the host decides the organization on organization hosts; headers, query and body never do.
+		const organizationId = context.authentication
+			? await resolveOrgForAuthentication(context.authentication, context.host ?? currentHost()).catch(
+					(error: unknown) => {
+						throw toHostError(error);
+					},
+				)
+			: undefined;
+		const nextContext = { ...context, organizationId: organizationId as string | undefined };
+		if (!organizationId) {
+			// CAREEROS: enforcement is on since P1-T04 (see ORG_CONTEXT_REQUIRED). The branch below stays for the constant's `false` state.
+			if (ORG_CONTEXT_REQUIRED) throw new ORPCError("FORBIDDEN", { message: "No active organization" });
+			return next({ context: nextContext });
+		}
+		// CAREEROS (P3-T02, Q197): entitlements are read once per request and shared by every gate below.
+		return runWithEntitlementsCache(() =>
+			withOrgContext(organizationId, () => Promise.resolve(next({ context: nextContext }))),
+		);
+	})
+	// CAREEROS (P3-T02): after the organization is resolved, a suspended organization may not write (phase plan D3).
+	.use(enforceOrganizationStatus);

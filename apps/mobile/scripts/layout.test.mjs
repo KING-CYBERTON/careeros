@@ -534,6 +534,8 @@ const { DocumentsLibrary } = load("features/documents/library.tsx", {
 	"./pending": { usePendingDocuments: () => pendingDocuments },
 	"./queries": { useDocumentOperations: () => ({ busy: false }) },
 	"./thumbnail": { Thumbnail: "Thumbnail" },
+	// CAREEROS (P3-T02): the suspended banner is drawn by its own module; this test is about the list.
+	"@/features/organization/entitlements": { SuspendedBanner: () => null },
 	"@/api/client": {
 		client: {},
 		orpc: {
