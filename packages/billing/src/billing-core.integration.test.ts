@@ -18,6 +18,7 @@ describe.skipIf(!configured)("billing core: events, trials, jobs and manual paym
 	const run = randomUUID().slice(0, 8);
 	const ids = {
 		admin: `bc-admin-${run}`,
+		bannedAdmin: `bc-banned-admin-${run}`,
 		ownerA: `bc-owner-a-${run}`,
 		member1: `bc-member-1-${run}`,
 		member2: `bc-member-2-${run}`,
@@ -123,8 +124,8 @@ describe.skipIf(!configured)("billing core: events, trials, jobs and manual paym
 		app = new Pool({ connectionString: database.appUrl });
 		for (const user of Object.values(ids))
 			await owner.query(
-				`INSERT INTO "user" (id, name, email, username, display_username) VALUES ($1, $1, $1 || '@example.test', $1, $1)`,
-				[user],
+				`INSERT INTO "user" (id, name, email, username, display_username, role, banned) VALUES ($1, $1, $1 || '@example.test', $1, $1, $2, $3)`,
+				[user, user === ids.admin || user === ids.bannedAdmin ? "admin" : "user", user === ids.bannedAdmin],
 			);
 		billing = await import("./index");
 	}, 180_000);
@@ -567,7 +568,29 @@ describe.skipIf(!configured)("billing core: events, trials, jobs and manual paym
 				await expect(inApp(() => billing.recordManualPayment(bad))).rejects.toThrow();
 		});
 
-		it("may be called by the app role, which is why the platform-admin check lives in P3-T07", async () => {
+		it("refuses an actor who is not a platform admin, is banned or does not exist, and writes nothing", async () => {
+			for (const actorUserId of [ids.ownerA, ids.bannedAdmin, `bc-nobody-${run}`]) {
+				const orgId = await newOrg(2);
+				const before = await state(orgId);
+				const p = payment(orgId, { actorUserId });
+				await expect(inApp(() => billing.recordManualPayment(p))).rejects.toThrow("platform admin");
+				expect(await state(orgId)).toEqual(before);
+				expect(await auditActions(orgId)).not.toContain("billing.manual_payment");
+				expect(await ownerRows(`SELECT 1 FROM billing_event WHERE organization_id = $1`, [orgId])).toHaveLength(0);
+				const direct = await app
+					.query(
+						`SELECT careeros_record_manual_payment($1, 'starter', 3, 'month', now(), now() + interval '30 days', 100, 'USD', $2, $3)`,
+						[orgId, `direct-bad-${run}`, actorUserId],
+					)
+					.then(
+						() => "ok",
+						(error: Error) => error.message,
+					);
+				expect(direct).toContain("platform admin");
+			}
+		});
+
+		it("may be called by the app role, as long as the actor is a platform admin", async () => {
 			const orgId = await newOrg();
 			const { rows } = await app.query(
 				`SELECT careeros_record_manual_payment($1, 'starter', 3, 'month', now(), now() + interval '30 days', 100, 'USD', $2, $3) AS applied`,

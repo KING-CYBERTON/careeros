@@ -84,7 +84,8 @@ $$;--> statement-breakpoint
 -- packages/billing/src/state.ts; a test keeps the two equal) with provider `manual`, records the event as
 -- (manual, manual:<org>:<reference>) so a reference is applied once, and writes an audit row. Returns true when applied,
 -- false when the reference was recorded before. A period that ends before the one already held raises: an admin who
--- types an old period should be told, not silently ignored. It checks nothing about the CALLER: P3-T07 does.
+-- types an old period should be told, not silently ignored. The actor must be an existing, not banned platform admin
+-- (public."user".role = 'admin', the Better Auth admin plugin role); P3-T07 adds the 2FA and host checks on top.
 CREATE OR REPLACE FUNCTION public.careeros_record_manual_payment(
 	p_org_id text, p_plan_id text, p_seats integer, p_interval text, p_period_start timestamptz, p_period_end timestamptz,
 	p_amount bigint, p_currency text, p_reference text, p_actor_user_id text
@@ -99,6 +100,12 @@ DECLARE
 BEGIN
 	IF p_actor_user_id IS NULL THEN
 		RAISE EXCEPTION 'careeros_record_manual_payment: a manual payment is recorded by a person';
+	END IF;
+	-- CAREEROS: the app role may call this function, so the function itself refuses anyone who is not a platform admin.
+	IF NOT EXISTS (
+		SELECT 1 FROM public."user" WHERE id = p_actor_user_id AND role = 'admin' AND COALESCE(banned, false) = false
+	) THEN
+		RAISE EXCEPTION 'careeros_record_manual_payment: the actor is not a platform admin';
 	END IF;
 	IF p_reference IS NULL OR btrim(p_reference) = '' OR length(p_reference) > 128 OR p_reference !~ '^[A-Za-z0-9_.:/# -]+$' THEN
 		RAISE EXCEPTION 'careeros_record_manual_payment: invalid reference';

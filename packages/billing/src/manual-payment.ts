@@ -5,7 +5,7 @@ import { BillingError } from "./errors";
 
 // CAREEROS (P3-T04): a payment recorded by a platform admin (an institution paying by invoice). The work is done by the
 // definer function `careeros_record_manual_payment`, which applies the same transition as `payment.succeeded` with
-// provider `manual` and writes the audit row. The procedure that calls this is part of P3-T07 (platform admins only);
+// provider `manual` and writes the audit row. The database function refuses an actor who is not a non-banned platform admin; the procedure that calls this is part of P3-T07 (which adds 2FA and host checks);
 // this wrapper does not check who the caller is.
 
 export type ManualPaymentInput = {
