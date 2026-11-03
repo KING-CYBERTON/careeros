@@ -28,13 +28,15 @@ const count = (value: number | undefined) =>
 
 /** Token counts from whatever usage shape the SDK reports. Missing numbers count as zero. */
 export function tokenUsageOf(usage: ReportedUsage | undefined): TokenUsage {
-	if (!usage) return { inputTokens: 0, outputTokens: 0, cachedInputTokens: 0 };
+	if (!usage) return { inputTokens: 0, outputTokens: 0, cachedInputTokens: 0, cacheWriteTokens: 0 };
 	const input = usage.inputTokens;
 	const output = usage.outputTokens;
 	// The V4 usage keeps the totals and the split. Some providers report only the split.
 	const inputTokens = count(input.total) || count(input.noCache) + count(input.cacheRead) + count(input.cacheWrite);
 	const outputTokens = count(output.total) || count(output.text) + count(output.reasoning);
-	return { inputTokens, outputTokens, cachedInputTokens: Math.min(count(input.cacheRead), inputTokens) };
+	const cachedInputTokens = Math.min(count(input.cacheRead), inputTokens);
+	const cacheWriteTokens = Math.min(count(input.cacheWrite), inputTokens - cachedInputTokens);
+	return { inputTokens, outputTokens, cachedInputTokens, cacheWriteTokens };
 }
 
 export type MeterOptions = {
@@ -98,6 +100,18 @@ export function meterLanguageModel<M extends Parameters<typeof wrapLanguageModel
 			const finish = async () => {
 				if (recorded) return;
 				recorded = true;
+				// The stream ended before the provider reported usage (abandoned or failed): the row is zero tokens, and this
+				// line lets us see how often that happens.
+				if (!usage)
+					console.warn(
+						JSON.stringify({
+							evt: "ai_usage.no_usage_report",
+							organizationId,
+							feature: metering.feature,
+							source: metering.source,
+							model: options.modelId,
+						}),
+					);
 				await record(tokenUsageOf(usage));
 			};
 			const metered = new ReadableStream<StreamPart>({

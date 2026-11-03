@@ -65,6 +65,14 @@ function load(path) {
 	return module.exports;
 }
 modules["./ai-consent"] = load("src/api/ai-consent.ts");
+// CAREEROS (P3-T03): client.ts shows the AI allowance notices through this module, which needs the toast UI; the
+// store-review checks are about consent, so the notices are faked here.
+modules["./ai-quota"] = {
+	noticeAiQuotaWarning: () => {},
+	noticeAiQuotaExceeded: () => {},
+	showAiQuotaWarning: () => {},
+	createAiQuotaWatcher: () => ({ afterCall: () => {} }),
+};
 // P2-T03: client.ts reports an organization-host block through this module, so it is loaded for real.
 modules["@/auth/org-host-block"] = load("src/auth/org-host-block.ts");
 const { client, streamClient, rest } = load("src/api/client.ts");

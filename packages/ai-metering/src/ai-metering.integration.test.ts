@@ -196,6 +196,7 @@ describe.skipIf(!configured)("AI metering", () => {
 
 		it("still records a stream the reader abandons after tokens were produced", async () => {
 			await clearUsage(ids.orgA);
+			const warn = vi.spyOn(console, "warn").mockImplementation(() => undefined);
 			const { stream } = await inScope(ids.orgA, () =>
 				meter(streaming({ input: 10, output: 10 }), "platform").doStream({ prompt: [] } as never),
 			);
@@ -211,6 +212,9 @@ describe.skipIf(!configured)("AI metering", () => {
 				output_tokens: 0,
 				credits: 0,
 			});
+			// A stream that ends with no usage report leaves a warning line, so we can see how often it happens.
+			expect(warn).toHaveBeenCalledWith(expect.stringContaining('"evt":"ai_usage.no_usage_report"'));
+			warn.mockRestore();
 		});
 
 		it("records a stream that fails midway, once", async () => {

@@ -5,8 +5,16 @@ import { priceFor } from "./prices";
 /** One credit is one US cent, that is 10,000 millionths of a dollar. */
 export const MICRO_USD_PER_CREDIT = 10_000;
 
-/** Token counts of one call. `inputTokens` is the total prompt size; `cachedInputTokens` is the part read from cache. */
-export type TokenUsage = { inputTokens: number; outputTokens: number; cachedInputTokens: number };
+/**
+ * Token counts of one call. `inputTokens` is the total prompt size; `cachedInputTokens` is the part read from cache and
+ * `cacheWriteTokens` the part written to it (charged at the cache-write rate).
+ */
+export type TokenUsage = {
+	inputTokens: number;
+	outputTokens: number;
+	cachedInputTokens: number;
+	cacheWriteTokens?: number | undefined;
+};
 
 export type CallCost = { costUsdMicros: number; credits: number };
 
@@ -27,14 +35,16 @@ export function costOfCall(model: string, usage: TokenUsage): CallCost {
 	const inputTokens = nonNegativeInt(usage.inputTokens);
 	const outputTokens = nonNegativeInt(usage.outputTokens);
 	const cachedInputTokens = Math.min(nonNegativeInt(usage.cachedInputTokens), inputTokens);
+	const cacheWriteTokens = Math.min(nonNegativeInt(usage.cacheWriteTokens ?? 0), inputTokens - cachedInputTokens);
 	const rates = price.longPrompt && inputTokens > price.longPrompt.aboveInputTokens ? price.longPrompt : price;
 
 	// 1 USD per million tokens is exactly 1 millionth of a dollar per token. Prices are held in thousandths of that so
 	// the sum is an exact integer; the only rounding is the final round up to a whole millionth.
 	const milli = (usdPerMTok: number) => Math.round(usdPerMTok * 1000);
 	const thousandths =
-		(inputTokens - cachedInputTokens) * milli(rates.input) +
+		(inputTokens - cachedInputTokens - cacheWriteTokens) * milli(rates.input) +
 		cachedInputTokens * milli(rates.cachedInput) +
+		cacheWriteTokens * milli(rates.cacheWrite) +
 		outputTokens * milli(rates.output);
 	const costUsdMicros = Math.ceil(thousandths / 1000);
 	return { costUsdMicros, credits: creditsForCostMicros(costUsdMicros) };

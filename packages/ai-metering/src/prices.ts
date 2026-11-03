@@ -6,12 +6,13 @@
 //   claude-haiku-5-5   input $0.10, output $0.50 per million tokens for prompts of 100K tokens or fewer, and
 //                      $0.50 / $2.50 above that. The reference lists no cache-read price for this model; the 10% of
 //                      the input price that every other current model uses is assumed (Q201).
-// Cache writes are charged at the input price (the spec's table has input, output and cached only; see Q201).
+//   Cache writes (5-minute cache) cost 1.25 x the input price in every tier, so claude-sonnet-5-5 is $2.50 and
+//   claude-haiku-5-5 is $0.125 ($0.625 above 100K tokens) per million tokens (Q201, confirmed in review).
 //
 // An unknown model has no entry and is refused (`AiModelNotPricedError`): the platform key never records a call at zero.
 
 /** Prices in USD per million tokens. */
-type PriceRates = { input: number; output: number; cachedInput: number };
+type PriceRates = { input: number; output: number; cachedInput: number; cacheWrite: number };
 
 export type ModelPrice = PriceRates & {
 	/** Prices for a prompt longer than `aboveInputTokens`. */
@@ -19,12 +20,13 @@ export type ModelPrice = PriceRates & {
 };
 
 export const PRICES_USD_PER_MTOK: Readonly<Record<string, ModelPrice>> = {
-	"claude-sonnet-5-5": { input: 2, output: 10, cachedInput: 0.2 },
+	"claude-sonnet-5-5": { input: 2, output: 10, cachedInput: 0.2, cacheWrite: 2.5 },
 	"claude-haiku-5-5": {
 		input: 0.1,
 		output: 0.5,
 		cachedInput: 0.01,
-		longPrompt: { aboveInputTokens: 100_000, input: 0.5, output: 2.5, cachedInput: 0.05 },
+		cacheWrite: 0.125,
+		longPrompt: { aboveInputTokens: 100_000, input: 0.5, output: 2.5, cachedInput: 0.05, cacheWrite: 0.625 },
 	},
 };
 

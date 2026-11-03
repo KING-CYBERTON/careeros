@@ -156,6 +156,20 @@ describe("the AI call sites", () => {
 		for (const feature of used) expect(AI_FEATURE_KEYS).toContain(feature);
 	});
 
+	it("meter every path that is not a member's own key: the platform and the server-managed AI", () => {
+		const providers = sources.get("ai-providers/service.ts") ?? "";
+		// Every resolution of the operator's AI goes through serverRunnable (priced, quota-checked, source "platform").
+		const serverUses = [...providers.matchAll(/if \(global\) return ([\w]+)\(/g)].map((match) => match[1]);
+		expect(serverUses.length).toBeGreaterThanOrEqual(2);
+		expect(new Set(serverUses)).toEqual(new Set(["serverRunnable"]));
+		// Only a member's saved key is metered as `own_key`.
+		const ownKeyLines = providers.split("\n").filter((line) => line.includes('source: "own_key"'));
+		expect(ownKeyLines.length).toBeGreaterThan(0);
+		expect(providers).not.toMatch(/withMetering\(global,[^)]*own_key/);
+		// Voice cannot be metered, so it refuses both.
+		expect(sources.get("career/voice.ts")).toMatch(/provider\.managed \|\| provider\.platform/);
+	});
+
 	it("leave voice without a platform model", async () => {
 		const { AI_VOICE_MODELS } = await import("@reactive-resume/ai/types");
 		// The platform provider is Anthropic. A connection that offers no voice model is refused by the voice routes

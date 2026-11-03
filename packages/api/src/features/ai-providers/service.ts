@@ -2,7 +2,13 @@ import type { AIProvider } from "@reactive-resume/ai/types";
 import type { DbOrTx } from "@reactive-resume/db/client";
 import { createHmac } from "node:crypto";
 // CAREEROS (P3-T03): the platform Claude provider and the metering of every call
-import { assertWithinQuota, type AiFeature, type Metering } from "@careeros/ai-metering";
+import {
+	AiModelNotPricedError,
+	assertWithinQuota,
+	priceFor,
+	type AiFeature,
+	type Metering,
+} from "@careeros/ai-metering";
 // CAREEROS: saved connections belong to an organization; writers set it from the active scope (P1-T08)
 import { requireOrgId } from "@careeros/tenancy";
 import { ORPCError } from "@orpc/client";
@@ -245,6 +251,30 @@ async function platformRunnable(userId: string, feature: AiFeature | undefined) 
 	);
 }
 
+/**
+ * The operator's server-managed AI (the `AI_PROVIDER` env path). In CareerOS that key is the operator's money, so it is
+ * metered like the platform provider: priced (an unpriced model is refused), counted against the organization's quota
+ * and refused at 100%. It needs a feature to be metered under, so a caller without one cannot use it.
+ */
+async function serverRunnable<T extends { model: string }>(
+	global: T,
+	input: { userId: string; feature?: AiFeature | undefined },
+) {
+	if (!input.feature)
+		throw new ORPCError("BAD_REQUEST", { message: "This feature can't use the AI set up by your server." });
+	try {
+		priceFor(global.model);
+	} catch (error) {
+		if (error instanceof AiModelNotPricedError)
+			throw new ORPCError("BAD_REQUEST", {
+				message: "The AI model set up by your server has no price, so it can't be used.",
+			});
+		throw error;
+	}
+	await assertWithinQuota(requireOrgId());
+	return withMetering(global, { ...input, source: "platform" });
+}
+
 export const aiProvidersService = {
 	list: async (input: { userId: string }) => {
 		const global = await serverProvider(input.userId);
@@ -299,8 +329,7 @@ export const aiProvidersService = {
 
 	getRunnableById: async (input: { id: string; userId: string; feature?: AiFeature | undefined }) => {
 		const global = await serverProvider(input.userId);
-		// CAREEROS (P3-T03): the operator's own AI is not the platform's; its calls are logged at zero cost
-		if (global) return withMetering(global, { ...input, source: "own_key" });
+		if (global) return serverRunnable(global, input);
 		if (input.id === platformProviderId(requireOrgId(), input.userId))
 			return platformRunnable(input.userId, input.feature);
 		assertCredentialEncryptionConfigured();
@@ -322,7 +351,7 @@ export const aiProvidersService = {
 
 	getDefaultRunnable: async (input: { userId: string; feature?: AiFeature | undefined }) => {
 		const global = await serverProvider(input.userId);
-		if (global) return withMetering(global, { ...input, source: "own_key" });
+		if (global) return serverRunnable(global, input);
 		// CAREEROS (P3-T03): the platform is only a fallback for a member with no provider of their own. It needs no
 		// ENCRYPTION_SECRET, so a server without one can still serve the included AI.
 		if (!env.ENCRYPTION_SECRET?.trim() && input.feature && (await platformAiAvailable(requireOrgId())))
