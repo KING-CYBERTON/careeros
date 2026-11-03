@@ -73,7 +73,7 @@ async function* streamLetterDraft(
 		throw new ORPCError("BAD_REQUEST", { message: "Link the letter to a resume or an application first." });
 	}
 
-	const provider = await aiProvidersService.getDefaultRunnable({ userId });
+	const provider = await aiProvidersService.getDefaultRunnable({ userId, feature: "cover_letter.draft" });
 	if (!provider) {
 		throw new ORPCError("BAD_REQUEST", { message: "No AI provider is set up. Add one in Settings to draft letters." });
 	}
@@ -87,6 +87,8 @@ async function* streamLetterDraft(
 			model: provider.model,
 			apiKey: provider.apiKey,
 			...(provider.baseURL ? { baseURL: provider.baseURL } : {}),
+			// CAREEROS (P3-T03)
+			metering: provider.metering,
 		}),
 		system: letterDraftSystemPrompt,
 		prompt: buildLetterDraftPrompt({

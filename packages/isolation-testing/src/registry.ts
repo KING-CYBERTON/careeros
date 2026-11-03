@@ -641,6 +641,19 @@ export const isolationRegistry: readonly RegistryEntry[] = [
 			return id;
 		},
 	},
+	// CAREEROS (P3-T03): AI usage metering. The app role can read and insert, never change or delete.
+	{
+		table: "ai_usage",
+		seed: async (orgId, db) => {
+			await ensureOrganization(db, orgId);
+			const id = `iso-aiusage-${randomUUID()}`;
+			await db.query(
+				`INSERT INTO ai_usage (id, organization_id, source, feature, provider, model) VALUES ($1, $2, 'own_key', 'resume.improve', 'anthropic', 'isolation-probe')`,
+				[id, orgId],
+			);
+			return id;
+		},
+	},
 ];
 
 export type AllowListEntry = { table: string; schema?: string; reason: string };

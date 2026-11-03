@@ -25,6 +25,10 @@ const procedure = protectedProcedure.use(aiVoiceRateLimit);
 /** The connection for one voice job, refused unless it offers that model (see `AI_VOICE_MODELS`). */
 async function voiceConnection(userId: string, id: string, kind: "transcription" | "speech", model: string) {
 	const provider = await aiProvidersService.getRunnableById({ userId, id });
+	// CAREEROS (P3-T03): voice calls cannot be metered, so they run only on the member's own key: never on the platform
+	// provider (it has no voice models) and never on the operator's server-managed AI.
+	if (provider.managed || provider.platform)
+		throw new ORPCError("BAD_REQUEST", { message: "Voice needs a connection of your own." });
 	if (provider.id !== id || !AI_VOICE_MODELS[provider.provider]?.[kind].includes(model))
 		throw new ORPCError("BAD_REQUEST", {
 			message:

@@ -77,6 +77,7 @@ describe.skipIf(!configured)("the isolation registry on the migrated schema", ()
 			"job_source",
 			"discovery_run",
 			"discovered_job",
+			"ai_usage",
 		]);
 	});
 

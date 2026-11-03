@@ -1,5 +1,6 @@
 import { agentRouter } from "../features/agent/router";
 import { aiProvidersRouter } from "../features/ai-providers/router";
+import { aiUsageRouter } from "../features/ai-usage/router";
 import { aiRouter } from "../features/ai/router";
 import { applicationProfileRouter } from "../features/application-profile/router";
 import { applicationsRouter } from "../features/applications/router";
@@ -28,6 +29,8 @@ export default {
 	applicationProfile: applicationProfileRouter,
 	ai: aiRouter,
 	aiProviders: aiProvidersRouter,
+	// CAREEROS (P3-T03): organization AI usage summary (owner or admin)
+	aiUsage: aiUsageRouter,
 	agent: agentRouter,
 	applications: applicationsRouter,
 	auth: authRouter,

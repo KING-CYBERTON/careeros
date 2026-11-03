@@ -1007,8 +1007,10 @@ export const agentService = {
 				? await aiProvidersService.getRunnableById({
 						id: input.aiProviderId,
 						userId: input.userId,
+						// CAREEROS (P3-T03)
+						feature: "agent.turn",
 					})
-				: await aiProvidersService.getDefaultRunnable({ userId: input.userId });
+				: await aiProvidersService.getDefaultRunnable({ userId: input.userId, feature: "agent.turn" });
 			if (!provider)
 				throw new ORPCError("BAD_REQUEST", {
 					message: "Test and turn on an AI provider in Settings → AI & developer first.",
@@ -1094,7 +1096,12 @@ export const agentService = {
 			await getThread({ id: input.id, userId: input.userId });
 			// Renaming needs no working connection; switching models checks the new one.
 			const provider = input.aiProviderId
-				? await aiProvidersService.getRunnableById({ id: input.aiProviderId, userId: input.userId })
+				? await aiProvidersService.getRunnableById({
+						id: input.aiProviderId,
+						userId: input.userId,
+						// CAREEROS (P3-T03)
+						feature: "agent.turn",
+					})
 				: null;
 
 			const [updated] = await db
@@ -1231,6 +1238,8 @@ export const agentService = {
 				aiProvidersService.getRunnableById({
 					id: thread.aiProviderId,
 					userId: input.userId,
+					// CAREEROS (P3-T03)
+					feature: "agent.turn",
 				}),
 				getUnlinkedMessageAttachments({
 					ids: input.attachmentIds ?? [],
@@ -1433,6 +1442,8 @@ export const agentService = {
 						model: runnableProvider.model,
 						apiKey: runnableProvider.apiKey,
 						baseURL: runnableProvider.baseURL ?? "",
+						// CAREEROS (P3-T03): every assistant turn is recorded in ai_usage
+						metering: runnableProvider.metering,
 					}),
 				});
 
