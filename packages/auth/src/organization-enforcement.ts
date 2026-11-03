@@ -1,4 +1,12 @@
-import { assertSeatAvailable, assertWritable, EntitlementError, getEntitlements, hasFreeSeat } from "@careeros/billing";
+import {
+	assertSeatAvailable,
+	assertWritable,
+	EntitlementError,
+	getEntitlements,
+	hasFreeSeat,
+	isSeatLimitDatabaseError,
+	seatLimitError,
+} from "@careeros/billing";
 import { APIError } from "better-auth/api";
 
 // CAREEROS (P3-T02, phase plan D3): the seat and suspension rules for the paths that add a member or change an
@@ -15,7 +23,9 @@ import { APIError } from "better-auth/api";
 // Blocked for a suspended organization (read-only): invitation, accept, add member and role change.
 
 /** Better Auth's error for an entitlement refusal: FORBIDDEN with the code clients act on. */
-export function toAuthError(error: unknown): unknown {
+export function toAuthError(raised: unknown): unknown {
+	// The database trigger is the race-safe backstop for the seat limit: its refusal reads like the early check's.
+	const error = isSeatLimitDatabaseError(raised) ? seatLimitError() : raised;
 	if (!(error instanceof EntitlementError)) return error;
 	return APIError.from("FORBIDDEN", { code: error.code, message: error.message });
 }
@@ -80,3 +90,47 @@ export const organizationEnforcementHooks = {
 		await assertOrganizationWritable(organization.id);
 	},
 };
+
+type AdapterLike = {
+	create?: (...args: never[]) => Promise<unknown>;
+	transaction?: (...args: never[]) => Promise<unknown>;
+};
+
+/**
+ * Wraps a Better Auth database adapter so the seat-limit trigger's refusal (see `isSeatLimitDatabaseError`) reaches the
+ * client as FORBIDDEN `SEAT_LIMIT_REACHED` instead of a 500. Better Auth rethrows any error that is not an APIError,
+ * and no hook sees it, so the translation has to sit at the adapter. The early check in the hooks gives the same
+ * answer without a race; this covers the requests that lose one. Only `create` (member and invitation inserts) and
+ * the adapters Better Auth gets inside `transaction` are wrapped.
+ */
+export function withSeatLimitErrors<T extends object>(adapter: T): T {
+	return new Proxy(adapter, {
+		get(target, property, receiver) {
+			const value = Reflect.get(target, property, receiver) as unknown;
+			if (typeof value !== "function") return value;
+			if (property === "create") {
+				return async (...args: unknown[]) => {
+					try {
+						return await (value as (...a: unknown[]) => Promise<unknown>).apply(target, args);
+					} catch (error) {
+						throw toAuthError(error);
+					}
+				};
+			}
+			if (property === "transaction") {
+				return (callback: (trx: AdapterLike) => Promise<unknown>) =>
+					(value as (cb: (trx: AdapterLike) => Promise<unknown>) => Promise<unknown>).call(target, (trx) =>
+						callback(withSeatLimitErrors(trx)),
+					);
+			}
+			return value.bind(target);
+		},
+	});
+}
+
+/** `withSeatLimitErrors` for a Better Auth adapter factory such as `drizzleAdapter(...)`. */
+export function withSeatLimitErrorsFactory<Options, Adapter extends object>(
+	factory: (options: Options) => Adapter,
+): (options: Options) => Adapter {
+	return (options) => withSeatLimitErrors(factory(options));
+}

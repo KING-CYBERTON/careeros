@@ -1,3 +1,4 @@
+import { isSeatLimitDatabaseError } from "@careeros/billing";
 import { resolveHost } from "@careeros/tenancy";
 import { and, asc, eq, gt, inArray, isNull, ne, sql } from "drizzle-orm";
 import { db } from "@reactive-resume/db/client";
@@ -65,10 +66,16 @@ export async function createPersonalOrganization(user: NewUser, context: SignUpC
 		// CAREEROS (P3-T02): the sign-up guard checked the seat before the account existed; seats may have filled since.
 		// The account stays, without a seat, and the join page of the host answers SEAT_LIMIT_REACHED.
 		if (!(await hostOrganizationHasSeat(host.organizationId))) return;
-		await db
-			.insert(schema.member)
-			.values({ organizationId: host.organizationId, userId: user.id, role: "member" })
-			.onConflictDoNothing();
+		try {
+			await db
+				.insert(schema.member)
+				.values({ organizationId: host.organizationId, userId: user.id, role: "member" })
+				.onConflictDoNothing();
+		} catch (error) {
+			// The database trigger refuses a member past the seat limit even when requests race (the check above is early).
+			if (isSeatLimitDatabaseError(error)) return;
+			throw error;
+		}
 		await db
 			.update(schema.session)
 			.set({ activeOrganizationId: host.organizationId })

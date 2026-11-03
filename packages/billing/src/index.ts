@@ -15,7 +15,10 @@ export {
 	assertWritable,
 	EntitlementError,
 	hasFreeSeat,
+	isSeatLimitDatabaseError,
 	SEAT_LIMIT_MESSAGE,
+	SEAT_LIMIT_SQLSTATE,
+	seatLimitError,
 	SUSPENDED_MESSAGE,
 	type EntitlementErrorCode,
 } from "./enforcement";

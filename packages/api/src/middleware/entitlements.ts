@@ -1,6 +1,13 @@
 import type { FeatureKey } from "@careeros/billing";
 import type { HostContext } from "@careeros/tenancy";
-import { assertFeature, assertWritable, EntitlementError, getEntitlements } from "@careeros/billing";
+import {
+	assertFeature,
+	assertWritable,
+	EntitlementError,
+	getEntitlements,
+	isSeatLimitDatabaseError,
+	seatLimitError,
+} from "@careeros/billing";
 import { currentHost } from "@careeros/tenancy";
 import { ORPCError, os } from "@orpc/server";
 
@@ -15,7 +22,9 @@ type EntitlementContext = {
 const gate = os.$context<EntitlementContext>();
 
 /** Maps an entitlement refusal to the oRPC error clients know: FORBIDDEN (403) with a stable `data.code`. */
-export function toEntitlementORPCError(error: unknown): unknown {
+export function toEntitlementORPCError(raised: unknown): unknown {
+	// The database trigger is the race-safe backstop for the seat limit: its refusal reads like the early check's.
+	const error = isSeatLimitDatabaseError(raised) ? seatLimitError() : raised;
 	if (!(error instanceof EntitlementError)) return error;
 	return new ORPCError("FORBIDDEN", {
 		status: 403,

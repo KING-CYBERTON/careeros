@@ -52,6 +52,27 @@ export function assertWritable(entitlements: Pick<Entitlements, "readOnly">): vo
 	if (entitlements.readOnly) throw new EntitlementError("ORG_SUSPENDED", SUSPENDED_MESSAGE);
 }
 
+/**
+ * The SQLSTATE the database trigger `careeros_enforce_seat_limit` raises when a member or a pending invitation would
+ * pass the seat limit (migration `seat_limit_triggers`). It is the backstop for requests that race the early check.
+ */
+export const SEAT_LIMIT_SQLSTATE = "CS001";
+
+/** Whether `error`, or a cause behind it (Drizzle wraps driver errors), is the seat-limit trigger refusing. */
+export function isSeatLimitDatabaseError(error: unknown): boolean {
+	let current: unknown = error;
+	for (let depth = 0; depth < 5 && typeof current === "object" && current !== null; depth++) {
+		if ((current as { code?: unknown }).code === SEAT_LIMIT_SQLSTATE) return true;
+		current = (current as { cause?: unknown }).cause;
+	}
+	return false;
+}
+
+/** The error to raise for a refusal by the seat-limit trigger. */
+export function seatLimitError(): EntitlementError {
+	return new EntitlementError("SEAT_LIMIT_REACHED", SEAT_LIMIT_MESSAGE);
+}
+
 /** Refuses with `FEATURE_NOT_IN_PLAN` unless the resolved feature map has `key` on. An unknown key is off. */
 export function assertFeature(entitlements: Pick<Entitlements, "features">, key: string): void {
 	if (entitlements.features[key] === true) return;

@@ -283,6 +283,26 @@ describe.skipIf(!configured)("entitlement enforcement through protectedProcedure
 			expect(rowCount).toBe(0);
 		});
 
+		it("lets exactly one of several simultaneous joins take the last seat (race-safe)", async () => {
+			const org = await open("starter");
+			const first = await signUp("rj0");
+			await as({ cookie: first.cookie }, hostOf(org.id)).organizationHost.join();
+			const people = await Promise.all(["rj1", "rj2", "rj3", "rj4", "rj5", "rj6"].map((label) => signUp(label)));
+
+			const results = await Promise.allSettled(
+				people.map((person) => as({ cookie: person.cookie }, hostOf(org.id)).organizationHost.join()),
+			);
+			expect(results.filter((result) => result.status === "fulfilled")).toHaveLength(1);
+			for (const result of results) {
+				if (result.status === "rejected")
+					expect(result.reason).toMatchObject({ code: "FORBIDDEN", data: { code: "SEAT_LIMIT_REACHED" } });
+			}
+			const { rows } = await owner.query<{ n: string }>(`SELECT count(*) AS n FROM member WHERE organization_id = $1`, [
+				org.id,
+			]);
+			expect(Number(rows[0]?.n)).toBe(3);
+		});
+
 		it("answers ORG_SUSPENDED while the organization is suspended", async () => {
 			const org = await open("pro", "suspended");
 			const person = await signUp("sj");

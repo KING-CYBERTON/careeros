@@ -319,4 +319,124 @@ describe.skipIf(!configured)("seat limit and suspension on the organization endp
 			expect(await userExists(attempt.email)).toBe(false);
 		});
 	});
+
+	// P3-T02 review 1: the early check in the hooks is check-then-insert, so requests that arrive together can all pass
+	// it. The database trigger `careeros_enforce_seat_limit` serializes them per organization.
+	describe("concurrent requests (the database trigger)", () => {
+		const CONCURRENCY = 8;
+		const SETTING = "app.current_org_id";
+
+		const insertUsers = async (count: number) => {
+			const ids = Array.from({ length: count }, () => `cc-${randomUUID()}`);
+			for (const id of ids)
+				await owner.query(
+					`INSERT INTO "user" (id, name, email, username, display_username) VALUES ($1, $1, $1 || '@example.test', $1, $1)`,
+					[id],
+				);
+			return ids;
+		};
+		/** Runs `sql` as the application role inside the organization's scope, in its own transaction. */
+		const asApp = async (organizationId: string, sql: string, values: unknown[]) => {
+			const client = await app.connect();
+			try {
+				await client.query("BEGIN");
+				await client.query(`SELECT set_config('${SETTING}', $1, true)`, [organizationId]);
+				await client.query(sql, values);
+				await client.query("COMMIT");
+				return "ok" as const;
+			} catch (error) {
+				await client.query("ROLLBACK").catch(() => undefined);
+				return (error as { code?: string }).code ?? "error";
+			} finally {
+				client.release();
+			}
+		};
+		const joinAsMember = (organizationId: string, userId: string) =>
+			asApp(organizationId, `INSERT INTO member (id, organization_id, user_id, role) VALUES ($1, $2, $3, 'member')`, [
+				`m-${randomUUID()}`,
+				organizationId,
+				userId,
+			]);
+		const inviteRaw = (organizationId: string, inviterId: string) =>
+			asApp(
+				organizationId,
+				`INSERT INTO invitation (id, organization_id, email, role, status, expires_at, inviter_id)
+				 VALUES ($1, $2, $3, 'member', 'pending', now() + interval '1 day', $4)`,
+				[`i-${randomUUID()}`, organizationId, `raw-${randomUUID()}@example.test`, inviterId],
+			);
+
+		it("lets exactly one of several simultaneous invitations take the last seat", async () => {
+			const founder = await signUp("cinviter");
+			const org = await createOrganization(founder, "starter");
+			// Limit 3: the founder and one invitation use two, so one seat is left.
+			expect((await invite(founder, org, `held-${run}@example.test`)).status).toBe(200);
+
+			const responses = await Promise.all(
+				Array.from({ length: CONCURRENCY }, (_, index) => invite(founder, org, `race-${index}-${run}@example.test`)),
+			);
+			const statuses = responses.map((response) => response.status);
+			expect(statuses.filter((status) => status === 200)).toHaveLength(1);
+			for (const response of responses.filter((value) => value.status !== 200)) {
+				expect(response.status).toBe(403);
+				expect(await code(response)).toBe("SEAT_LIMIT_REACHED");
+			}
+			expect(await seatsUsed(org)).toBe(3);
+		});
+
+		it("lets exactly one of several simultaneous member inserts take the last seat", async () => {
+			const founder = await signUp("cjoiner");
+			const org = await createOrganization(founder, "starter");
+			expect((await invite(founder, org, `held2-${run}@example.test`)).status).toBe(200);
+			const users = await insertUsers(CONCURRENCY);
+
+			const results = await Promise.all(users.map((userId) => joinAsMember(org, userId)));
+			expect(results.filter((result) => result === "ok")).toHaveLength(1);
+			expect(results.filter((result) => result === "CS001")).toHaveLength(CONCURRENCY - 1);
+			expect(await seatsUsed(org)).toBe(3);
+		});
+
+		it("lets exactly one of a mix of simultaneous members and invitations take the last seat", async () => {
+			const founder = await signUp("cmixed");
+			const org = await createOrganization(founder, "starter");
+			expect((await invite(founder, org, `held3-${run}@example.test`)).status).toBe(200);
+			const users = await insertUsers(CONCURRENCY / 2);
+
+			const results = await Promise.all([
+				...users.map((userId) => joinAsMember(org, userId)),
+				...users.map(() => inviteRaw(org, founder.userId)),
+			]);
+			expect(results.filter((result) => result === "ok")).toHaveLength(1);
+			expect(await seatsUsed(org)).toBe(3);
+		});
+
+		it("keeps accepting an invitation a swap, even when several are accepted at once", async () => {
+			const founder = await signUp("cacceptor");
+			const first = await signUp("cfirst");
+			const second = await signUp("csecond");
+			const org = await createOrganization(founder, "starter");
+			expect((await invite(founder, org, first.email)).status).toBe(200);
+			expect((await invite(founder, org, second.email)).status).toBe(200);
+			expect(await seatsUsed(org)).toBe(3);
+
+			const [a, b] = await Promise.all([
+				accept(first, await invitationId(org, first.email)),
+				accept(second, await invitationId(org, second.email)),
+			]);
+			expect(a.status).toBe(200);
+			expect(b.status).toBe(200);
+			expect(await seatsUsed(org)).toBe(3);
+		});
+
+		it("does not limit the owner role, which migrations and platform functions use", async () => {
+			const founder = await signUp("cowner");
+			const org = await createOrganization(founder, "personal");
+			const [extra] = await insertUsers(1);
+			await owner.query(`INSERT INTO member (id, organization_id, user_id, role) VALUES ($1, $2, $3, 'member')`, [
+				`m-${randomUUID()}`,
+				org,
+				extra,
+			]);
+			expect(await seatsUsed(org)).toBe(2);
+		});
+	});
 });
