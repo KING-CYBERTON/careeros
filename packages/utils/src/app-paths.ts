@@ -13,6 +13,10 @@ export const RESERVED_SEGMENTS = [
 	"resume-templates",
 	// CAREEROS: the public open-source licenses page (P2-T08).
 	"licenses",
+	// CAREEROS: the public terms, privacy and data processing pages (P6-T01).
+	"terms",
+	"privacy",
+	"dpa",
 ] as const;
 
 /** Whether `pathname` is in one of the signed-in app's sections. */
