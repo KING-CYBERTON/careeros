@@ -15,8 +15,11 @@ import { Route as AuthRouteRouteImport } from "./routes/auth/route";
 import { Route as DashboardRouteRouteImport } from "./routes/dashboard/route";
 import { Route as HomeIndexRouteImport } from "./routes/_home/index";
 import { Route as HomeAtsCheckerRouteImport } from "./routes/_home/ats-checker";
+import { Route as HomeDpaRouteImport } from "./routes/_home/dpa";
 import { Route as HomeLicensesRouteImport } from "./routes/_home/licenses";
+import { Route as HomePrivacyRouteImport } from "./routes/_home/privacy";
 import { Route as HomeResumeTemplatesRouteImport } from "./routes/_home/resume-templates";
+import { Route as HomeTermsRouteImport } from "./routes/_home/terms";
 import { Route as AgentIndexRouteImport } from "./routes/agent/index";
 import { Route as AgentThreadIdRouteImport } from "./routes/agent/$threadId";
 import { Route as AgentNewRouteImport } from "./routes/agent/new";
@@ -94,14 +97,29 @@ const HomeAtsCheckerRoute = HomeAtsCheckerRouteImport.update({
   path: "/ats-checker",
   getParentRoute: () => HomeRouteRoute,
 } as any);
+const HomeDpaRoute = HomeDpaRouteImport.update({
+  id: "/dpa",
+  path: "/dpa",
+  getParentRoute: () => HomeRouteRoute,
+} as any);
 const HomeLicensesRoute = HomeLicensesRouteImport.update({
   id: "/licenses",
   path: "/licenses",
   getParentRoute: () => HomeRouteRoute,
 } as any);
+const HomePrivacyRoute = HomePrivacyRouteImport.update({
+  id: "/privacy",
+  path: "/privacy",
+  getParentRoute: () => HomeRouteRoute,
+} as any);
 const HomeResumeTemplatesRoute = HomeResumeTemplatesRouteImport.update({
   id: "/resume-templates",
   path: "/resume-templates",
+  getParentRoute: () => HomeRouteRoute,
+} as any);
+const HomeTermsRoute = HomeTermsRouteImport.update({
+  id: "/terms",
+  path: "/terms",
   getParentRoute: () => HomeRouteRoute,
 } as any);
 const AgentIndexRoute = AgentIndexRouteImport.update({
@@ -368,8 +386,11 @@ export interface FileRoutesByFullPath {
   "/dashboard/career": typeof DashboardCareerRouteRouteWithChildren;
   "/dashboard/settings": typeof DashboardSettingsRouteRouteWithChildren;
   "/ats-checker": typeof HomeAtsCheckerRoute;
+  "/dpa": typeof HomeDpaRoute;
   "/licenses": typeof HomeLicensesRoute;
+  "/privacy": typeof HomePrivacyRoute;
   "/resume-templates": typeof HomeResumeTemplatesRoute;
+  "/terms": typeof HomeTermsRoute;
   "/agent/$threadId": typeof AgentThreadIdRoute;
   "/agent/new": typeof AgentNewRoute;
   "/auth/consent": typeof AuthConsentRoute;
@@ -417,8 +438,11 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   "/ats-checker": typeof HomeAtsCheckerRoute;
+  "/dpa": typeof HomeDpaRoute;
   "/licenses": typeof HomeLicensesRoute;
+  "/privacy": typeof HomePrivacyRoute;
   "/resume-templates": typeof HomeResumeTemplatesRoute;
+  "/terms": typeof HomeTermsRoute;
   "/agent/$threadId": typeof AgentThreadIdRoute;
   "/agent/new": typeof AgentNewRoute;
   "/auth/consent": typeof AuthConsentRoute;
@@ -475,8 +499,11 @@ export interface FileRoutesById {
   "/dashboard/career": typeof DashboardCareerRouteRouteWithChildren;
   "/dashboard/settings": typeof DashboardSettingsRouteRouteWithChildren;
   "/_home/ats-checker": typeof HomeAtsCheckerRoute;
+  "/_home/dpa": typeof HomeDpaRoute;
   "/_home/licenses": typeof HomeLicensesRoute;
+  "/_home/privacy": typeof HomePrivacyRoute;
   "/_home/resume-templates": typeof HomeResumeTemplatesRoute;
+  "/_home/terms": typeof HomeTermsRoute;
   "/agent/$threadId": typeof AgentThreadIdRoute;
   "/agent/new": typeof AgentNewRoute;
   "/auth/consent": typeof AuthConsentRoute;
@@ -534,8 +561,11 @@ export interface FileRouteTypes {
     | "/dashboard/career"
     | "/dashboard/settings"
     | "/ats-checker"
+    | "/dpa"
     | "/licenses"
+    | "/privacy"
     | "/resume-templates"
+    | "/terms"
     | "/agent/$threadId"
     | "/agent/new"
     | "/auth/consent"
@@ -583,8 +613,11 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo;
   to:
     | "/ats-checker"
+    | "/dpa"
     | "/licenses"
+    | "/privacy"
     | "/resume-templates"
+    | "/terms"
     | "/agent/$threadId"
     | "/agent/new"
     | "/auth/consent"
@@ -640,8 +673,11 @@ export interface FileRouteTypes {
     | "/dashboard/career"
     | "/dashboard/settings"
     | "/_home/ats-checker"
+    | "/_home/dpa"
     | "/_home/licenses"
+    | "/_home/privacy"
     | "/_home/resume-templates"
+    | "/_home/terms"
     | "/agent/$threadId"
     | "/agent/new"
     | "/auth/consent"
@@ -742,6 +778,13 @@ declare module "@tanstack/react-router" {
       preLoaderRoute: typeof HomeAtsCheckerRouteImport;
       parentRoute: typeof HomeRouteRoute;
     };
+    "/_home/dpa": {
+      id: "/_home/dpa";
+      path: "/dpa";
+      fullPath: "/dpa";
+      preLoaderRoute: typeof HomeDpaRouteImport;
+      parentRoute: typeof HomeRouteRoute;
+    };
     "/_home/licenses": {
       id: "/_home/licenses";
       path: "/licenses";
@@ -749,11 +792,25 @@ declare module "@tanstack/react-router" {
       preLoaderRoute: typeof HomeLicensesRouteImport;
       parentRoute: typeof HomeRouteRoute;
     };
+    "/_home/privacy": {
+      id: "/_home/privacy";
+      path: "/privacy";
+      fullPath: "/privacy";
+      preLoaderRoute: typeof HomePrivacyRouteImport;
+      parentRoute: typeof HomeRouteRoute;
+    };
     "/_home/resume-templates": {
       id: "/_home/resume-templates";
       path: "/resume-templates";
       fullPath: "/resume-templates";
       preLoaderRoute: typeof HomeResumeTemplatesRouteImport;
+      parentRoute: typeof HomeRouteRoute;
+    };
+    "/_home/terms": {
+      id: "/_home/terms";
+      path: "/terms";
+      fullPath: "/terms";
+      preLoaderRoute: typeof HomeTermsRouteImport;
       parentRoute: typeof HomeRouteRoute;
     };
     "/agent/": {
@@ -1090,15 +1147,21 @@ declare module "@tanstack/react-router" {
 
 interface HomeRouteRouteChildren {
   HomeAtsCheckerRoute: typeof HomeAtsCheckerRoute;
+  HomeDpaRoute: typeof HomeDpaRoute;
   HomeLicensesRoute: typeof HomeLicensesRoute;
+  HomePrivacyRoute: typeof HomePrivacyRoute;
   HomeResumeTemplatesRoute: typeof HomeResumeTemplatesRoute;
+  HomeTermsRoute: typeof HomeTermsRoute;
   HomeIndexRoute: typeof HomeIndexRoute;
 }
 
 const HomeRouteRouteChildren: HomeRouteRouteChildren = {
   HomeAtsCheckerRoute: HomeAtsCheckerRoute,
+  HomeDpaRoute: HomeDpaRoute,
   HomeLicensesRoute: HomeLicensesRoute,
+  HomePrivacyRoute: HomePrivacyRoute,
   HomeResumeTemplatesRoute: HomeResumeTemplatesRoute,
+  HomeTermsRoute: HomeTermsRoute,
   HomeIndexRoute: HomeIndexRoute,
 };
 

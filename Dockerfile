@@ -30,6 +30,8 @@ RUN --mount=type=cache,id=pnpm-store,target=/pnpm/store,sharing=locked \
 COPY --from=pruner /app/out/full/ ./
 # The server build bundles the published agent skills, which live outside any workspace package and so outside the prune.
 COPY --from=pruner /app/plugins/reactive-resume/skills ./plugins/reactive-resume/skills
+# CAREEROS (P6-T01): the web build bundles the legal drafts (terms, privacy, DPA), which live outside any workspace package.
+COPY --from=pruner /app/docs/legal ./docs/legal
 # Turbo hashes these root files as a checkout has them; prune rewrites package.json and leaves the rest out.
 # .gitignore keeps node_modules out of the hashes, as git does.
 COPY --from=pruner /app/package.json /app/.gitignore /app/vite.config.ts /app/vitest.setup.ts /app/vitest.shared.mts ./

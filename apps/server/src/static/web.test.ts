@@ -54,6 +54,31 @@ describe("web app fallback classification", () => {
 		},
 	);
 
+	// CAREEROS (P6-T01): the draft legal pages are served (not a 404), on the platform host and on an organization host,
+	// and stay out of search engines until approved.
+	it.each(["/terms", "/privacy", "/dpa"])("serves the draft legal page %s as the app shell, noindex", async (path) => {
+		vi.mocked(fs.readFile).mockResolvedValue('<html><head></head><body><div id="app"></div></body></html>');
+		const platform = await handleWebApp(new Request(`https://example.com${path}`));
+		expect(platform.status).toBe(200);
+		expect(platform.headers.get("X-Robots-Tag")).toContain("noindex");
+		expect(await platform.text()).toContain('<div id="app"></div>');
+
+		const org = await handleWebApp(
+			new Request(`https://acme.example.com${path}`),
+			undefined,
+			{ kind: "org", organizationId: "org_1", origin: "https://acme.example.com" } as never,
+			async () => null,
+		);
+		expect(org.status).toBe(200);
+	});
+
+	it("keeps the legal pages out of the resume address space", () => {
+		for (const path of ["/terms", "/privacy", "/dpa"]) {
+			expect(isProfilePath(path)).toBe(false);
+			expect(isPublicResumePath(`${path}/anything`)).toBe(false);
+		}
+	});
+
 	it("injects canonical metadata and structured data into tracking-parameter root requests only", async () => {
 		vi.mocked(fs.readFile).mockResolvedValue(`
 			<!doctype html>
