@@ -106,7 +106,7 @@ All Phase 2 tasks are merged. P2-C03 (from exit review M1, [spec](plans/cicd/P2-
 | P4-T02         | [plans/P4-T02-discovery-runs-ai-review.md](plans/P4-T02-discovery-runs-ai-review.md)   | Approved; starts after P3-T03                     | —                                                        |
 | P5-T01         | [plans/P5-T01-extension-scaffold.md](plans/P5-T01-extension-scaffold.md)               | **Merged** · [review](reviews/P5-T01-review-1.md) | [#66](https://github.com/KING-CYBERTON/careeros/pull/66) |
 | P5-T02         | [plans/P5-T02-clipper-sign-in.md](plans/P5-T02-clipper-sign-in.md)                     | In build                                          | —                                                        |
-| P6-T01         | [plans/P6-T01-legal-pages.md](plans/P6-T01-legal-pages.md)                             | In review · [review](reviews/P6-T01-review-1.md)  | [#73](https://github.com/KING-CYBERTON/careeros/pull/73) |
+| P6-T01         | [plans/P6-T01-legal-pages.md](plans/P6-T01-legal-pages.md)                             | **Merged** · [review](reviews/P6-T01-review-1.md) | [#73](https://github.com/KING-CYBERTON/careeros/pull/73) |
 
 ### Waiting on Stephen (Phase 3 and go-to-market)
 
