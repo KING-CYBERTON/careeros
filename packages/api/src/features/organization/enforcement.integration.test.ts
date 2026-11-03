@@ -18,7 +18,7 @@ const PASSWORD = "correct-horse-battery";
 const PLATFORM = "localhost:3000";
 
 // oxlint-disable-next-line typescript/no-explicit-any -- the test clients are built from dotted paths, so their shape is not known statically.
-type Loose = Record<string, any>;
+type Loose = any;
 
 type Credential = { cookie: string } | { apiKey: string };
 
@@ -35,7 +35,7 @@ describe.skipIf(!configured)("entitlement enforcement through protectedProcedure
 	type Client = Loose;
 	let allowedClient: Client;
 	const makeClient = (router: object, context: () => Promise<Record<string, unknown>>) =>
-		createRouterClient(router as never, { context }) as never as Client;
+		createRouterClient(router as never, { context: context as never }) as never as Client;
 	/** Builds `{ a: { b: stub } }` for each dotted path, so a stub sits at the router path the allow-list names. */
 	const nest = (paths: Iterable<string>, make: () => unknown) => {
 		const root: Loose = {};
@@ -167,7 +167,7 @@ describe.skipIf(!configured)("entitlement enforcement through protectedProcedure
 			const org = await makeOrganization("pro", "suspended");
 			const { default: routers } = await import("../../routers/index");
 			const mcp = createRouterClient(routers as never, {
-				context: () => ({
+				context: (() => ({
 					locale: "en-US",
 					reqHeaders: new Headers(),
 					authentication: {
@@ -176,7 +176,7 @@ describe.skipIf(!configured)("entitlement enforcement through protectedProcedure
 						permissions: ["read", "write", "delete"],
 						apiKeyId: org.apiKeyId,
 					},
-				}),
+				})) as never,
 			}) as never as Loose;
 			await expect(mcp.branding.get()).resolves.toBeTruthy();
 			await expect(mcp.branding.update({ appName: "ViaMcp" })).rejects.toMatchObject({
