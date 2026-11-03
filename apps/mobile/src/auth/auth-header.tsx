@@ -3,6 +3,7 @@ import { useLingui } from "@lingui/react/macro";
 import { Image } from "expo-image";
 import { openBrowserAsync } from "expo-web-browser";
 import { View } from "react-native";
+import { resolveLegalLinks } from "@reactive-resume/utils/legal-links";
 import { useBrand } from "@/branding/store";
 import { Button, Text, showToast, useTheme } from "@/ui";
 
@@ -47,25 +48,46 @@ export function AuthHeader({ subtitle, brand }: AuthHeaderProps) {
 type PrivacyPolicyLinkProps = {
 	/** CAREEROS (P2-T02): the brand whose policy is linked; the app's current one when absent. */
 	brand?: BrandInfo | undefined;
+	/** CAREEROS (P6-T01): the server the platform's pages are on, when the brand has no policy of its own. */
+	server: string;
 };
 
-export function PrivacyPolicyLink({ brand }: PrivacyPolicyLinkProps) {
+function useOpenLink() {
+	const { t } = useLingui();
+	return (url: string) => {
+		void openBrowserAsync(url).catch(() => showToast({ message: t`Couldn't open the browser. Try again.` }));
+	};
+}
+
+export function PrivacyPolicyLink({ brand, server }: PrivacyPolicyLinkProps) {
 	const { t } = useLingui();
 	const current = useBrand();
-	// CAREEROS: the link goes to the brand's privacy policy; with none set, the link is not shown (P2-T08).
-	const { privacyUrl } = brand ?? current;
-	if (!privacyUrl) return null;
+	const openLink = useOpenLink();
+	// CAREEROS (P6-T01): the brand's own privacy policy, else the server's /privacy page (P2-T08 hid the link instead).
+	const { privacy } = resolveLegalLinks(brand ?? current, server);
 	return (
 		<View style={{ alignSelf: "center" }}>
-			<Button
-				label={t`Privacy policy`}
-				variant="link"
-				onPress={() => {
-					void openBrowserAsync(privacyUrl).catch(() =>
-						showToast({ message: t`Couldn't open the browser. Try again.` }),
-					);
-				}}
-			/>
+			<Button label={t`Privacy policy`} variant="link" onPress={() => openLink(privacy.href)} />
+		</View>
+	);
+}
+
+/** CAREEROS (P6-T01): "By creating an account you agree to the Terms and the Privacy policy", with both pages linked. */
+export function SignUpLegalNotice({ brand, server }: PrivacyPolicyLinkProps) {
+	const { t } = useLingui();
+	const { space } = useTheme();
+	const current = useBrand();
+	const openLink = useOpenLink();
+	const { terms, privacy } = resolveLegalLinks(brand ?? current, server);
+	return (
+		<View style={{ alignItems: "center", gap: space.s1 }}>
+			<Text variant="callout" color="ink3" align="center">
+				{t`By creating an account you agree to the Terms and the Privacy policy.`}
+			</Text>
+			<View style={{ flexDirection: "row", justifyContent: "center", gap: space.s2 }}>
+				<Button label={t`Terms`} variant="link" onPress={() => openLink(terms.href)} />
+				<Button label={t`Privacy policy`} variant="link" onPress={() => openLink(privacy.href)} />
+			</View>
 		</View>
 	);
 }
