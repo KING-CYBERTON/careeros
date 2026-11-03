@@ -57,6 +57,9 @@ const prerenderRoot = `${staticRoot}-prerender`;
  */
 // CAREEROS: /licenses added (P2-T08).
 const indexableAppPaths = new Set(["/ats-checker", "/resume-templates", "/licenses"]);
+// CAREEROS (P6-T01, G10): the legal pages are public app pages. They are drafts until the owner approves them, so they are
+// served as the app shell without a 404 but marked noindex; move them into `indexableAppPaths` on approval (Q282).
+export const legalAppPaths = new Set(["/terms", "/privacy", "/dpa"]);
 const reservedPublicResumeSegments = new Set<string>(RESERVED_SEGMENTS);
 
 function isAssetPath(pathname: string): boolean {
@@ -304,7 +307,8 @@ function getFallbackResponseHeaders(pathname: string) {
 	if (pathname === "/" || indexableAppPaths.has(pathname)) {
 		return { "Content-Type": "text/html; charset=UTF-8", ...BASE_SECURITY_HEADERS };
 	}
-	if (isAppSectionPath(pathname)) {
+	if (isAppSectionPath(pathname) || legalAppPaths.has(pathname)) {
+		// CAREEROS (P6-T01): the draft legal pages share the app sections' headers (shell, noindex).
 		return {
 			"Content-Type": "text/html; charset=UTF-8",
 			"X-Robots-Tag": "noindex, follow",

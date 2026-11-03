@@ -4,7 +4,7 @@ import { useQuery } from "@tanstack/react-query";
 import { ObserveInteractiveMarker } from "expo-observe";
 import { useRouter, useLocalSearchParams } from "expo-router";
 import { ActivityIndicator, ScrollView, View } from "react-native";
-import { AuthHeader, PrivacyPolicyLink, hostOf } from "@/auth/auth-header";
+import { AuthHeader, PrivacyPolicyLink, SignUpLegalNotice, hostOf } from "@/auth/auth-header";
 import { getFlags, isAllowedServer, toOrigin } from "@/auth/oauth";
 import { useSession } from "@/auth/session";
 import { useSignIn } from "@/auth/use-sign-in";
@@ -101,9 +101,13 @@ export default function SignInScreen() {
 								/>
 							) : null}
 							{flags.data?.disableSignups ? null : (
-								<Text variant="callout" color="ink3" align="center">
-									{t`Sign in or create an account in the browser, with email, a passkey, Google, GitHub or LinkedIn. You come back here when you're done.`}
-								</Text>
+								<>
+									<Text variant="callout" color="ink3" align="center">
+										{t`Sign in or create an account in the browser, with email, a passkey, Google, GitHub or LinkedIn. You come back here when you're done.`}
+									</Text>
+									{/* CAREEROS (P6-T01): sign-up consent notice with links to the terms and privacy policy. */}
+									<SignUpLegalNotice brand={brand} server={server} />
+								</>
 							)}
 						</View>
 					</>
@@ -125,7 +129,7 @@ export default function SignInScreen() {
 					/>
 				</Card>
 			) : null}
-			<PrivacyPolicyLink brand={brand} />
+			<PrivacyPolicyLink brand={brand} server={server} />
 		</Screen>
 	);
 }
