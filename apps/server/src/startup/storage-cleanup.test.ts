@@ -15,11 +15,16 @@ vi.mock("@reactive-resume/api/features/org-domain", async (importOriginal) => ({
 	runOrgDomainJobs: orgDomains,
 }));
 
+// CAREEROS (P3-T04): the billing deadlines run in the same pass
+const billing = vi.hoisted(() => vi.fn<() => Promise<void>>());
+vi.mock("@reactive-resume/api/features/billing", () => ({ runScheduledBillingWork: billing }));
+
 const purge = vi.hoisted(() => vi.fn<() => Promise<number>>());
 vi.mock("@reactive-resume/api/features/auth-handoff", () => ({ purgeExpiredHandoffs: purge }));
 
 beforeEach(() => {
 	purge.mockReset().mockResolvedValue(0);
+	billing.mockReset().mockResolvedValue(undefined);
 	orgDomains.mockReset().mockResolvedValue({ checked: 0, failed: 0, cleaned: 0 });
 	vi.useFakeTimers();
 	run.mockReset().mockResolvedValue({ completed: 0, missing: 0, failed: 0, partial: 0, abandoned: 0 });
@@ -91,6 +96,23 @@ it("runs the organization domain checks each tick and logs a failure without sto
 		expect(JSON.stringify(log.mock.calls)).not.toContain("private cloudflare detail");
 		await vi.advanceTimersByTimeAsync(60_000);
 		expect(orgDomains).toHaveBeenCalledTimes(2);
+	} finally {
+		await scheduler.stop();
+	}
+});
+
+// CAREEROS (P3-T04)
+it("runs the billing work each tick and logs a failure without stopping the scheduler", async () => {
+	const log = vi.spyOn(console, "error").mockImplementation(() => {});
+	billing.mockRejectedValueOnce(new Error("private billing detail"));
+	const scheduler = startStorageCleanupScheduler();
+	try {
+		await vi.advanceTimersByTimeAsync(0);
+		expect(billing).toHaveBeenCalledTimes(1);
+		expect(log).toHaveBeenCalledWith("[billing] Scheduled work failed.");
+		expect(JSON.stringify(log.mock.calls)).not.toContain("private billing detail");
+		await vi.advanceTimersByTimeAsync(60_000);
+		expect(billing).toHaveBeenCalledTimes(2);
 	} finally {
 		await scheduler.stop();
 	}

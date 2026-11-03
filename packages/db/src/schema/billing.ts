@@ -15,7 +15,8 @@ export type PlanId = (typeof PLAN_IDS)[number];
 export const ORGANIZATION_STATUSES = ["trial", "active", "past_due", "suspended"] as const;
 export type OrganizationStatus = (typeof ORGANIZATION_STATUSES)[number];
 
-export const SUBSCRIPTION_PROVIDERS = ["none", "manual", "paystack", "stripe", "mpesa"] as const;
+// CAREEROS (P3-T04): `fake` is the test provider (never accepted in production, see packages/env).
+export const SUBSCRIPTION_PROVIDERS = ["none", "manual", "paystack", "stripe", "mpesa", "fake"] as const;
 export type SubscriptionProvider = (typeof SUBSCRIPTION_PROVIDERS)[number];
 
 export const SUBSCRIPTION_STATUSES = ["trialing", "active", "past_due", "canceled", "none"] as const;
@@ -145,5 +146,40 @@ export const auditLog = pg.pgTable(
 	(t) => [
 		pg.check("audit_log_action_check", sql`${t.action} ~ ${sql.raw(`'${KEY_PATTERN}'`)}`),
 		pg.index("audit_log_org_created_idx").on(t.organizationId, t.createdAt.desc()),
+	],
+);
+
+// CAREEROS (P3-T04, phase plan D9): what the provider events did. `duplicate` is never stored (a duplicate adds no row);
+// it is the answer of the intake and is listed so the CHECK and the code share one vocabulary.
+export const BILLING_EVENT_OUTCOMES = ["applied", "duplicate", "ignored", "error"] as const;
+export type BillingEventOutcome = (typeof BILLING_EVENT_OUTCOMES)[number];
+
+/**
+ * Global, not tenant-scoped: provider ids and normalized fields only, never card data. The app role has no privilege on
+ * it at all; the definer function `careeros_record_billing_event` is the only way in (the unique key on
+ * (provider, provider_event_id) makes a repeated event a no-op). `organization_id` names the organization the verified
+ * metadata pointed at; it is not a foreign key, so an event for a deleted organization can still be recorded.
+ */
+export const billingEvent = pg.pgTable(
+	"billing_event",
+	{
+		id: pg
+			.text("id")
+			.notNull()
+			.primaryKey()
+			.default(sql`gen_random_uuid()::text`),
+		provider: pg.text("provider").notNull(),
+		providerEventId: pg.text("provider_event_id").notNull(),
+		organizationId: pg.text("organization_id"),
+		type: pg.text("type").notNull(),
+		receivedAt: pg.timestamp("received_at", { withTimezone: true }).notNull().defaultNow(),
+		processedAt: pg.timestamp("processed_at", { withTimezone: true }),
+		outcome: pg.text("outcome").notNull(),
+		error: pg.text("error"),
+	},
+	(t) => [
+		pg.uniqueIndex("billing_event_provider_event_key").on(t.provider, t.providerEventId),
+		pg.index("billing_event_org_received_idx").on(t.organizationId, t.receivedAt.desc()),
+		pg.check("billing_event_outcome_check", sql`${t.outcome} in (${list(BILLING_EVENT_OUTCOMES)})`),
 	],
 );

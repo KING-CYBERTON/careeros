@@ -23,6 +23,8 @@ beforeEach(() => {
 		"CF_SAAS_API_TOKEN",
 		"CF_ZONE_ID",
 		"CF_SAAS_CNAME_TARGET",
+		"BILLING_PROVIDER",
+		"BILLING_FAKE_SECRET",
 	])
 		vi.stubEnv(name, undefined);
 });
@@ -268,6 +270,43 @@ describe("Cloudflare for SaaS configuration", () => {
 		["CF_SAAS_CNAME_TARGET", "https://customers.example.com"],
 	])("rejects an invalid %s", async (name, value) => {
 		vi.stubEnv(name, value);
+		vi.spyOn(console, "error").mockImplementation(() => {});
+		await expect(import("./server")).rejects.toThrow("Invalid environment variables");
+	});
+});
+
+// CAREEROS (P3-T04): the billing provider setting.
+describe("billing provider configuration", () => {
+	const secret = "a-fake-secret-of-16+chars";
+
+	it("defaults to none, which turns billing off", async () => {
+		expect((await import("./server")).env.BILLING_PROVIDER).toBe("none");
+	});
+
+	it("accepts fake with its secret outside production", async () => {
+		vi.stubEnv("NODE_ENV", "test");
+		vi.stubEnv("BILLING_PROVIDER", "fake");
+		vi.stubEnv("BILLING_FAKE_SECRET", secret);
+		expect((await import("./server")).env.BILLING_PROVIDER).toBe("fake");
+	});
+
+	it("refuses fake when NODE_ENV is production", async () => {
+		vi.stubEnv("NODE_ENV", "production");
+		// Production has its own requirements; satisfy them so only the fake provider is wrong.
+		vi.stubEnv("AUTH_SECRET", "a".repeat(40));
+		vi.stubEnv("BILLING_PROVIDER", "fake");
+		vi.stubEnv("BILLING_FAKE_SECRET", secret);
+		await expect(import("./server")).rejects.toThrow("refused when NODE_ENV=production");
+	});
+
+	it("refuses fake without its secret", async () => {
+		vi.stubEnv("NODE_ENV", "test");
+		vi.stubEnv("BILLING_PROVIDER", "fake");
+		await expect(import("./server")).rejects.toThrow("requires BILLING_FAKE_SECRET");
+	});
+
+	it("rejects an unknown provider", async () => {
+		vi.stubEnv("BILLING_PROVIDER", "paypal");
 		vi.spyOn(console, "error").mockImplementation(() => {});
 		await expect(import("./server")).rejects.toThrow("Invalid environment variables");
 	});
