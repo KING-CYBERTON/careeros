@@ -31,6 +31,9 @@ const sessions = {
 };
 const modules = {
 	"@/auth/session": sessions,
+	// CAREEROS (P3-T02): the API client reports entitlement errors as a toast; these tests are about AI consent.
+	"@/features/organization/entitlement-message": { entitlementErrorMessage: () => null },
+	"@/ui/overlays": { showToast: () => {} },
 	"@lingui/core/macro": { t: (parts, ...values) => String.raw({ raw: parts }, ...values) },
 	"react-native": {
 		Alert: {

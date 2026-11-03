@@ -1,8 +1,27 @@
 import { plural, t } from "@lingui/core/macro";
 import { ORPCError } from "@orpc/client";
 import { toast } from "@reactive-resume/ui/components/toast";
+// CAREEROS (P3-T02): the plan and status refusals of the server
+import { entitlementErrorCode } from "@reactive-resume/utils/entitlement-error";
+
+/** CAREEROS (P3-T02): readable text for SEAT_LIMIT_REACHED, ORG_SUSPENDED and FEATURE_NOT_IN_PLAN (oRPC or Better Auth). */
+export function getEntitlementErrorMessage(error: unknown): string | undefined {
+	switch (entitlementErrorCode(error)) {
+		case "SEAT_LIMIT_REACHED":
+			return t`This organization has no free seats. Remove a member or an invitation, or ask the owner to add seats.`;
+		case "ORG_SUSPENDED":
+			return t`This organization is suspended. You can view and export your data. Contact your administrator.`;
+		case "FEATURE_NOT_IN_PLAN":
+			return t`This feature is not part of your organization's plan.`;
+		default:
+			return undefined;
+	}
+}
 
 export function getReadableErrorMessage(error: unknown, fallback: string): string {
+	// CAREEROS (P3-T02)
+	const entitlementMessage = getEntitlementErrorMessage(error);
+	if (entitlementMessage) return entitlementMessage;
 	// A font download failed (see `assertPdfFonts`).
 	if (error instanceof Error && error.cause === "pdf-text-loss") return t`Fonts could not be loaded. Try again.`;
 	if (error instanceof ORPCError && error.code === "BAD_REQUEST") {
@@ -40,6 +59,9 @@ export function getOrpcErrorMessage(
 	},
 ): string {
 	if (!(error instanceof ORPCError)) return getReadableErrorMessage(error, options.fallback);
+	// CAREEROS (P3-T02): a plan or status refusal reads the same wherever it is raised
+	const entitlementMessage = getEntitlementErrorMessage(error);
+	if (entitlementMessage) return entitlementMessage;
 	if (error.code === "AI_CREDENTIAL_DECRYPTION_FAILED")
 		return t`The saved provider key can't be decrypted. Enter the key again in Settings → AI & developer.`;
 	// CAREEROS (P3-T03): the organization's AI allowance is used up. Shown wherever an AI action fails.

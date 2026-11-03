@@ -9,6 +9,8 @@ import { InvitationEmail } from "@reactive-resume/email/templates/auth";
 import { sendEmail } from "@reactive-resume/email/transport";
 // CAREEROS: branded emails (P2-T04)
 import { buildEmailContext } from "./email-brand";
+// CAREEROS (P3-T02): seats and suspension are enforced on the server
+import { organizationEnforcementHooks } from "./organization-enforcement";
 
 /** Invitations stay valid for 7 days (P1-T01). */
 export const INVITATION_EXPIRES_IN_SECONDS = 60 * 60 * 24 * 7;
@@ -34,6 +36,8 @@ export const organizationOptions = {
 		},
 	},
 	organizationHooks: {
+		// CAREEROS (P3-T02): seat limit and suspension (create invitation, accept, add member, role change)
+		...organizationEnforcementHooks,
 		// CAREEROS (P2-T03): the host cache (60 s) must not keep answering to a slug the organization no longer has.
 		afterUpdateOrganization: ({ organization }) => {
 			if (organization) bustHostCache({ organizationId: organization.id, slug: organization.slug });

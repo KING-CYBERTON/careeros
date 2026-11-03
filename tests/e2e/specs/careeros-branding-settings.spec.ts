@@ -1,6 +1,6 @@
 import { randomUUID } from "node:crypto";
 import { createAuthenticatedContext } from "../fixtures/auth";
-import { createInviteeAccount, deleteE2EOrganizations } from "../fixtures/careeros-org";
+import { createInviteeAccount, deleteE2EOrganizations, setAccountOrganizationPlan } from "../fixtures/careeros-org";
 import { deleteE2EUser } from "../fixtures/db";
 import { withSeedPool } from "../fixtures/seed-db";
 import { expect, test } from "../fixtures/test";
@@ -113,6 +113,8 @@ test("the Domains screen shows the organization's address, and says so when cust
 	authPage: page,
 	account,
 }) => {
+	// P3-T02: custom domains are a Pro feature; on the personal plan the screen shows an "available on Pro" note instead.
+	await setAccountOrganizationPlan(account, "pro");
 	const org = await organizationOf(account.email);
 	await page.goto("/dashboard/settings/domains");
 	await expect(page.getByRole("heading", { name: "Domains" })).toBeVisible();

@@ -1,8 +1,10 @@
+import { assertSeatAvailable, getEntitlements } from "@careeros/billing";
 import { currentHost, type HostContext } from "@careeros/tenancy";
 import { ORPCError } from "@orpc/server";
 import { and, eq, sql } from "drizzle-orm";
 import { db } from "@reactive-resume/db/client";
 import * as schema from "@reactive-resume/db/schema";
+import { toEntitlementORPCError } from "../../middleware/entitlements";
 
 // CAREEROS (P2-T03): the "join or switch" page of an organization host. The organization is always the host's, taken
 // from the resolved host; no input names one.
@@ -54,12 +56,28 @@ export async function joinHostOrganization(userId: string, host: HostContext | u
 			message: "This organization is invite only. Ask its administrator for an invitation.",
 			data: { code: "ORG_SIGNUP_CLOSED" },
 		});
+	// CAREEROS (P3-T02): an open-signup join takes a seat like an accepted invitation does. A member who is already in
+	// gets the CONFLICT below, not a seat error, so check membership first.
+	if (await isMember(orgHost.organizationId, userId)) {
+		// The seat trigger runs before the unique index is checked, so a member of a full organization is answered here.
+		throw new ORPCError("CONFLICT", { message: "You are already a member of this organization." });
+	} else {
+		try {
+			assertSeatAvailable(await getEntitlements(orgHost.organizationId));
+		} catch (error) {
+			throw toEntitlementORPCError(error);
+		}
+	}
 	// The unique (organization, user) index settles a race between two requests: the loser inserts nothing.
+	// CAREEROS (P3-T02): the database trigger refuses a member past the seat limit even when requests race.
 	const inserted = await db
 		.insert(schema.member)
 		.values({ organizationId: orgHost.organizationId, userId, role: "member" })
 		.onConflictDoNothing()
-		.returning({ id: schema.member.id });
+		.returning({ id: schema.member.id })
+		.catch((error: unknown) => {
+			throw toEntitlementORPCError(error);
+		});
 	if (inserted.length === 0)
 		throw new ORPCError("CONFLICT", { message: "You are already a member of this organization." });
 	return { slug: orgHost.slug, isMember: true as const };

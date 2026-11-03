@@ -1,7 +1,6 @@
 import type { orpc } from "@/libs/orpc/client";
 import type { Theme } from "@/libs/theme";
 import type { IconProps } from "@phosphor-icons/react";
-import type { FeatureFlags } from "@reactive-resume/api/features/flags";
 import type { AuthSession } from "@reactive-resume/auth/types";
 import type { Locale } from "@reactive-resume/utils/locale";
 import type { QueryClient } from "@tanstack/react-query";
@@ -28,7 +27,8 @@ import { CommandPalette } from "@/features/command-palette";
 import { useDocumentWebMcpTools } from "@/features/documents/webmcp";
 import { ThemeProvider } from "@/features/theme/provider";
 import { ConfirmDialogProvider } from "@/hooks/use-confirm";
-import { loadRootContext } from "@/libs/root-context";
+// CAREEROS (P3-T02): flags now carry the organization's resolved features
+import { loadRootContext, type RootFlags } from "@/libs/root-context";
 import { getHomepageMeta } from "@/libs/seo";
 
 type RouterContext = {
@@ -37,7 +37,7 @@ type RouterContext = {
 	orpc: typeof orpc;
 	queryClient: QueryClient;
 	session: AuthSession | null;
-	flags: FeatureFlags;
+	flags: RootFlags;
 };
 
 // CAREEROS: donation toast removed (P2-T08).

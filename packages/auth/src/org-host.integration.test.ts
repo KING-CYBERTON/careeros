@@ -101,8 +101,11 @@ describe.skipIf(!configured)("organization hosts: sign-up, sessions and trusted 
 		await owner.query(
 			`INSERT INTO "user" (id, name, email, username, display_username) VALUES ('inviter', 'Inviter', 'inviter@example.test', 'inviter', 'inviter')`,
 		);
-		for (const org of Object.values(orgs))
+		for (const org of Object.values(orgs)) {
 			await owner.query(`INSERT INTO organization (id, name, slug) VALUES ($1, $1, $2)`, [org.id, org.slug]);
+			// P3-T02: a new organization starts on the one-seat personal plan; these sign-ups need room to join.
+			await owner.query(`SELECT careeros_set_org_plan($1, 'pro', 'active', NULL, 'test fixture')`, [org.id]);
+		}
 		await owner.query(`UPDATE organization_settings SET open_signup = true WHERE organization_id = $1`, [orgs.open.id]);
 		({ auth } = await import("./config"));
 		tenancy = await import("@careeros/tenancy");
