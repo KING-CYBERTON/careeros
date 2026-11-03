@@ -2,6 +2,7 @@ import { resolveHost } from "@careeros/tenancy";
 import { APIError } from "better-auth/api";
 import { sql } from "drizzle-orm";
 import { db } from "@reactive-resume/db/client";
+import { assertOrganizationAcceptsMember } from "./organization-enforcement";
 import { isInvitedSignUp } from "./personal-org";
 
 // CAREEROS (P2-T03, phase plan D6): sign-up on an organization host. `config.ts` calls `guardOrgHostSignUp` before a
@@ -34,7 +35,12 @@ export async function guardOrgHostSignUp(user: NewUser, context: HookContext): P
 	if (!context?.request) return;
 	const host = await resolveHost(context.request);
 	if (host.kind !== "org") return;
-	if (await hasOpenSignup(host.organizationId)) return;
+	if (await hasOpenSignup(host.organizationId)) {
+		// CAREEROS (P3-T02): an open-signup join takes a seat, and a suspended organization takes nobody. Refusing here
+		// means no account is created for a join that cannot happen.
+		await assertOrganizationAcceptsMember(host.organizationId);
+		return;
+	}
 	if (await isInvitedSignUp({ id: user.id ?? "", email: user.email }, context, host.organizationId)) return;
 	throw new APIError("FORBIDDEN", { message: ORG_SIGNUP_CLOSED_MESSAGE, code: "ORG_SIGNUP_CLOSED" });
 }

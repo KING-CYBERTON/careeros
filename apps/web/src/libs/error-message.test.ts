@@ -1,7 +1,7 @@
 import { beforeEach, describe, expect, it } from "vite-plus/test";
 import { i18n } from "@lingui/core";
 import { ORPCError } from "@orpc/client";
-import { getReadableErrorMessage, getResumeErrorMessage } from "./error-message";
+import { getOrpcErrorMessage, getReadableErrorMessage, getResumeErrorMessage } from "./error-message";
 
 beforeEach(() => {
 	i18n.load("en", {});
@@ -61,5 +61,23 @@ describe("getResumeErrorMessage", () => {
 	it("falls back to generic message for unmapped orpc error", () => {
 		const error = new ORPCError("UNKNOWN_ERROR");
 		expect(getResumeErrorMessage(error)).toBe("Something went wrong. Please try again.");
+	});
+});
+
+describe("entitlement refusals (P3-T02)", () => {
+	it.each([
+		["SEAT_LIMIT_REACHED", "no free seats"],
+		["ORG_SUSPENDED", "is suspended"],
+		["FEATURE_NOT_IN_PLAN", "not part of your organization's plan"],
+	])("reads %s from an oRPC error and from a Better Auth error", (code, text) => {
+		const orpc = new ORPCError("FORBIDDEN", { message: "server text", data: { code } });
+		expect(getReadableErrorMessage(orpc, "fallback")).toContain(text);
+		expect(getOrpcErrorMessage(orpc, { fallback: "fallback" })).toContain(text);
+		expect(getReadableErrorMessage({ code, message: "server text", status: 403 }, "fallback")).toContain(text);
+	});
+
+	it("leaves other FORBIDDEN errors alone", () => {
+		const other = new ORPCError("FORBIDDEN", { message: "Only owners can do this.", data: { code: "OTHER" } });
+		expect(getReadableErrorMessage(other, "fallback")).toBe("Only owners can do this.");
 	});
 });
