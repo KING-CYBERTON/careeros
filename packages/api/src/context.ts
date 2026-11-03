@@ -16,12 +16,17 @@ import { getTrustedOrigins } from "@reactive-resume/auth/trusted-origins";
 import { db } from "@reactive-resume/db/client";
 import { user } from "@reactive-resume/db/schema";
 import { env } from "@reactive-resume/env/server";
+// CAREEROS (P5-T02): clipper token resolution and its procedure allow-list
+import { assertClipperProcedureAllowed, resolveClipperAuthentication } from "./features/clipper/scope";
 
 export type RequestPermission = "read" | "write" | "delete";
 export type RequestAuthentication = {
 	user: User;
-	method: "apiKey" | "bearer" | "session";
+	// CAREEROS (P5-T02): "clipper" is a Job Clipper token, host-bound and limited to the allow-list in features/clipper/scope.ts.
+	method: "apiKey" | "bearer" | "session" | "clipper";
 	permissions: readonly RequestPermission[];
+	/** CAREEROS (P5-T02): the clipper token's organization and expiry; only set for clipper authentication. */
+	clipper?: { tokenId: string; organizationId: string; expiresAt: string } | undefined;
 	/** CAREEROS: the session's active organization; only set for session authentication (P1-T02). */
 	activeOrganizationId?: string | null | undefined;
 	/** CAREEROS: the verified API key's id; only set for API-key authentication (P1-T02). */
@@ -94,7 +99,14 @@ export async function resolveAuthenticationFromRequestHeaders(
 	headers: Headers,
 	// CAREEROS (P2-T03): an organization host also trusts its own origin; falls back to the host the server adapter registered.
 	host: HostContext | undefined = currentHost(),
+	// CAREEROS (P5-T02): only the oRPC procedures opt in (publicProcedure), where the allow-list is enforced. Every other
+	// caller (MCP, uploads, PDF routes) never sees a clipper token as a credential.
+	options: { allowClipper?: boolean } = {},
 ): Promise<RequestAuthentication | null> {
+	if (options.allowClipper) {
+		const clipper = await resolveClipperAuthentication(headers, host, findActiveUser);
+		if (clipper) return clipper;
+	}
 	const apiKey = headers.get("x-api-key");
 	if (apiKey) {
 		const authentication = await getAuthenticationFromApiKey(apiKey);
@@ -143,11 +155,15 @@ const base = os.$context<ORPCContext>();
 
 export const publicProcedure = base
 	.route({ spec: (operation) => ({ ...operation, security: [] }) })
-	.use(async ({ context, next }) => {
+	.use(async ({ context, next, path }) => {
 		const authentication =
 			context.authentication === undefined
-				? await resolveAuthenticationFromRequestHeaders(context.reqHeaders, context.host ?? currentHost())
+				? await resolveAuthenticationFromRequestHeaders(context.reqHeaders, context.host ?? currentHost(), {
+						allowClipper: true,
+					})
 				: context.authentication;
+		// CAREEROS (P5-T02): a clipper token reaches only the allow-listed procedures; every other one answers 403.
+		assertClipperProcedureAllowed(authentication, path);
 
 		return next({
 			context: {

@@ -13,6 +13,7 @@ import { Route as HomeRouteRouteImport } from "./routes/_home/route";
 import { Route as AgentRouteRouteImport } from "./routes/agent/route";
 import { Route as AuthRouteRouteImport } from "./routes/auth/route";
 import { Route as DashboardRouteRouteImport } from "./routes/dashboard/route";
+import { Route as DeviceRouteRouteImport } from "./routes/device/route";
 import { Route as HomeIndexRouteImport } from "./routes/_home/index";
 import { Route as HomeAtsCheckerRouteImport } from "./routes/_home/ats-checker";
 import { Route as HomeLicensesRouteImport } from "./routes/_home/licenses";
@@ -37,6 +38,7 @@ import { Route as DashboardCareerRouteRouteImport } from "./routes/dashboard/car
 import { Route as DashboardCoverLettersRouteImport } from "./routes/dashboard/cover-letters";
 import { Route as DashboardSettingsRouteRouteImport } from "./routes/dashboard/settings/route";
 import { Route as DashboardTrashRouteImport } from "./routes/dashboard/trash";
+import { Route as DeviceIndexRouteImport } from "./routes/device/index";
 import { Route as AuthAcceptInvitationInvitationIdRouteImport } from "./routes/auth/accept-invitation.$invitationId";
 import { Route as AuthHandoffIndexRouteImport } from "./routes/auth/handoff.index";
 import { Route as AuthHandoffRedeemRouteImport } from "./routes/auth/handoff.redeem";
@@ -82,6 +84,11 @@ const AuthRouteRoute = AuthRouteRouteImport.update({
 const DashboardRouteRoute = DashboardRouteRouteImport.update({
   id: "/dashboard",
   path: "/dashboard",
+  getParentRoute: () => rootRouteImport,
+} as any);
+const DeviceRouteRoute = DeviceRouteRouteImport.update({
+  id: "/device",
+  path: "/device",
   getParentRoute: () => rootRouteImport,
 } as any);
 const HomeIndexRoute = HomeIndexRouteImport.update({
@@ -203,6 +210,11 @@ const DashboardTrashRoute = DashboardTrashRouteImport.update({
   id: "/trash",
   path: "/trash",
   getParentRoute: () => DashboardRouteRoute,
+} as any);
+const DeviceIndexRoute = DeviceIndexRouteImport.update({
+  id: "/",
+  path: "/",
+  getParentRoute: () => DeviceRouteRoute,
 } as any);
 const AuthAcceptInvitationInvitationIdRoute =
   AuthAcceptInvitationInvitationIdRouteImport.update({
@@ -364,6 +376,7 @@ export interface FileRoutesByFullPath {
   "/agent": typeof AgentRouteRouteWithChildren;
   "/auth": typeof AuthRouteRouteWithChildren;
   "/dashboard": typeof DashboardRouteRouteWithChildren;
+  "/device": typeof DeviceRouteRouteWithChildren;
   "/builder/$resumeId": typeof BuilderResumeIdRouteRouteWithChildren;
   "/dashboard/career": typeof DashboardCareerRouteRouteWithChildren;
   "/dashboard/settings": typeof DashboardSettingsRouteRouteWithChildren;
@@ -387,6 +400,7 @@ export interface FileRoutesByFullPath {
   "/agent/": typeof AgentIndexRoute;
   "/auth/": typeof AuthIndexRoute;
   "/dashboard/": typeof DashboardIndexRoute;
+  "/device/": typeof DeviceIndexRoute;
   "/dashboard/career/knowledge": typeof DashboardCareerKnowledgeRouteRouteWithChildren;
   "/dashboard/settings/integrations": typeof DashboardSettingsIntegrationsRouteRoute;
   "/auth/accept-invitation/$invitationId": typeof AuthAcceptInvitationInvitationIdRoute;
@@ -437,6 +451,7 @@ export interface FileRoutesByTo {
   "/agent": typeof AgentIndexRoute;
   "/auth": typeof AuthIndexRoute;
   "/dashboard": typeof DashboardIndexRoute;
+  "/device": typeof DeviceIndexRoute;
   "/dashboard/career/knowledge": typeof DashboardCareerKnowledgeRouteRouteWithChildren;
   "/dashboard/settings/integrations": typeof DashboardSettingsIntegrationsRouteRoute;
   "/auth/accept-invitation/$invitationId": typeof AuthAcceptInvitationInvitationIdRoute;
@@ -471,6 +486,7 @@ export interface FileRoutesById {
   "/agent": typeof AgentRouteRouteWithChildren;
   "/auth": typeof AuthRouteRouteWithChildren;
   "/dashboard": typeof DashboardRouteRouteWithChildren;
+  "/device": typeof DeviceRouteRouteWithChildren;
   "/builder/$resumeId": typeof BuilderResumeIdRouteRouteWithChildren;
   "/dashboard/career": typeof DashboardCareerRouteRouteWithChildren;
   "/dashboard/settings": typeof DashboardSettingsRouteRouteWithChildren;
@@ -495,6 +511,7 @@ export interface FileRoutesById {
   "/agent/": typeof AgentIndexRoute;
   "/auth/": typeof AuthIndexRoute;
   "/dashboard/": typeof DashboardIndexRoute;
+  "/device/": typeof DeviceIndexRoute;
   "/dashboard/career/knowledge": typeof DashboardCareerKnowledgeRouteRouteWithChildren;
   "/dashboard/settings/integrations": typeof DashboardSettingsIntegrationsRouteRoute;
   "/auth/accept-invitation/$invitationId": typeof AuthAcceptInvitationInvitationIdRoute;
@@ -530,6 +547,7 @@ export interface FileRouteTypes {
     | "/agent"
     | "/auth"
     | "/dashboard"
+    | "/device"
     | "/builder/$resumeId"
     | "/dashboard/career"
     | "/dashboard/settings"
@@ -553,6 +571,7 @@ export interface FileRouteTypes {
     | "/agent/"
     | "/auth/"
     | "/dashboard/"
+    | "/device/"
     | "/dashboard/career/knowledge"
     | "/dashboard/settings/integrations"
     | "/auth/accept-invitation/$invitationId"
@@ -603,6 +622,7 @@ export interface FileRouteTypes {
     | "/agent"
     | "/auth"
     | "/dashboard"
+    | "/device"
     | "/dashboard/career/knowledge"
     | "/dashboard/settings/integrations"
     | "/auth/accept-invitation/$invitationId"
@@ -636,6 +656,7 @@ export interface FileRouteTypes {
     | "/agent"
     | "/auth"
     | "/dashboard"
+    | "/device"
     | "/builder/$resumeId"
     | "/dashboard/career"
     | "/dashboard/settings"
@@ -660,6 +681,7 @@ export interface FileRouteTypes {
     | "/agent/"
     | "/auth/"
     | "/dashboard/"
+    | "/device/"
     | "/dashboard/career/knowledge"
     | "/dashboard/settings/integrations"
     | "/auth/accept-invitation/$invitationId"
@@ -694,6 +716,7 @@ export interface RootRouteChildren {
   AgentRouteRoute: typeof AgentRouteRouteWithChildren;
   AuthRouteRoute: typeof AuthRouteRouteWithChildren;
   DashboardRouteRoute: typeof DashboardRouteRouteWithChildren;
+  DeviceRouteRoute: typeof DeviceRouteRouteWithChildren;
   BuilderResumeIdRouteRoute: typeof BuilderResumeIdRouteRouteWithChildren;
   BuilderLetterCoverLetterIdRoute: typeof BuilderLetterCoverLetterIdRoute;
 }
@@ -726,6 +749,13 @@ declare module "@tanstack/react-router" {
       path: "/dashboard";
       fullPath: "/dashboard";
       preLoaderRoute: typeof DashboardRouteRouteImport;
+      parentRoute: typeof rootRouteImport;
+    };
+    "/device": {
+      id: "/device";
+      path: "/device";
+      fullPath: "/device";
+      preLoaderRoute: typeof DeviceRouteRouteImport;
       parentRoute: typeof rootRouteImport;
     };
     "/_home/": {
@@ -895,6 +925,13 @@ declare module "@tanstack/react-router" {
       fullPath: "/dashboard/trash";
       preLoaderRoute: typeof DashboardTrashRouteImport;
       parentRoute: typeof DashboardRouteRoute;
+    };
+    "/device/": {
+      id: "/device/";
+      path: "/";
+      fullPath: "/device/";
+      preLoaderRoute: typeof DeviceIndexRouteImport;
+      parentRoute: typeof DeviceRouteRoute;
     };
     "/auth/accept-invitation/$invitationId": {
       id: "/auth/accept-invitation/$invitationId";
@@ -1264,6 +1301,18 @@ const DashboardRouteRouteWithChildren = DashboardRouteRoute._addFileChildren(
   DashboardRouteRouteChildren,
 );
 
+interface DeviceRouteRouteChildren {
+  DeviceIndexRoute: typeof DeviceIndexRoute;
+}
+
+const DeviceRouteRouteChildren: DeviceRouteRouteChildren = {
+  DeviceIndexRoute: DeviceIndexRoute,
+};
+
+const DeviceRouteRouteWithChildren = DeviceRouteRoute._addFileChildren(
+  DeviceRouteRouteChildren,
+);
+
 interface BuilderResumeIdRouteRouteChildren {
   BuilderResumeIdIndexRoute: typeof BuilderResumeIdIndexRoute;
 }
@@ -1280,6 +1329,7 @@ const rootRouteChildren: RootRouteChildren = {
   AgentRouteRoute: AgentRouteRouteWithChildren,
   AuthRouteRoute: AuthRouteRouteWithChildren,
   DashboardRouteRoute: DashboardRouteRouteWithChildren,
+  DeviceRouteRoute: DeviceRouteRouteWithChildren,
   BuilderResumeIdRouteRoute: BuilderResumeIdRouteRouteWithChildren,
   BuilderLetterCoverLetterIdRoute: BuilderLetterCoverLetterIdRoute,
 };

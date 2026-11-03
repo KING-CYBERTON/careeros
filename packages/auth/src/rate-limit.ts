@@ -66,3 +66,15 @@ export const authRateLimitStorage: NonNullable<BetterAuthOptions["rateLimit"]>["
 				},
 			}
 		: undefined;
+
+/**
+ * CAREEROS (P5-T02): spends one try of a rolling budget keyed by `key` (for example a device code), in the same storage
+ * as Better Auth's own limits: Redis or Cloudflare coordination when configured, else this process's memory.
+ */
+export async function consumeAuthRateLimit(
+	key: string,
+	rule: { window: number; max: number },
+): Promise<{ allowed: boolean; retryAfter: number | null }> {
+	if (authRateLimitStorage?.consume) return await authRateLimitStorage.consume(key, rule);
+	return consumeLocally(key, rule);
+}
