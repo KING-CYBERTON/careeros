@@ -29,6 +29,8 @@ describe("clipper procedure allow-list", () => {
 		expect([...CLIPPER_ALLOWED_PROCEDURES].sort()).toEqual([
 			"applications.create",
 			"branding.publicForHost",
+			"clipper.cleanup",
+			"clipper.findByUrl",
 			"clipper.whoami",
 		]);
 	});
@@ -36,6 +38,9 @@ describe("clipper procedure allow-list", () => {
 	it("lets a clipper token call an allowed procedure", () => {
 		expect(() => assertClipperProcedureAllowed({ method: "clipper" }, ["clipper", "whoami"])).not.toThrow();
 		expect(() => assertClipperProcedureAllowed({ method: "clipper" }, ["applications", "create"])).not.toThrow();
+		// P5-T03
+		expect(() => assertClipperProcedureAllowed({ method: "clipper" }, ["clipper", "findByUrl"])).not.toThrow();
+		expect(() => assertClipperProcedureAllowed({ method: "clipper" }, ["clipper", "cleanup"])).not.toThrow();
 	});
 
 	it.each([

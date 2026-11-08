@@ -335,4 +335,35 @@ describe("extension CORS", () => {
 		});
 		expect(response.headers.get("access-control-allow-origin")).toBeNull();
 	});
+
+	// P5-T03: clipping a job reaches the server from the popup with a bearer token and no cookie.
+	it("answers the preflight of the clipping routes for an extension page, with no credentials header", async () => {
+		const { createApp } = await import("./app");
+		for (const [path, method] of [
+			["/api/openapi/clipper/find-by-url", "GET"],
+			["/api/openapi/clipper/cleanup", "POST"],
+			["/api/openapi/applications", "POST"],
+		] as const) {
+			const response = await createApp().request(`http://localhost:3000${path}`, {
+				method: "OPTIONS",
+				headers: {
+					origin: extension,
+					"access-control-request-method": method,
+					"access-control-request-headers": "authorization,content-type",
+				},
+			});
+			expect(response.status, path).toBe(204);
+			expect(response.headers.get("access-control-allow-origin"), path).toBe(extension);
+			expect(response.headers.get("access-control-allow-credentials"), path).toBeNull();
+		}
+	});
+
+	it("gives a web page of another origin no CORS headers on the clipping routes", async () => {
+		const { createApp } = await import("./app");
+		const response = await createApp().request("http://localhost:3000/api/openapi/applications", {
+			method: "OPTIONS",
+			headers: { origin: "https://evil.example", "access-control-request-method": "POST" },
+		});
+		expect(response.headers.get("access-control-allow-origin")).toBeNull();
+	});
 });

@@ -13,12 +13,16 @@ import { auth } from "@reactive-resume/auth/config";
 /**
  * The oRPC procedure paths a clipper token may call. `clipper.whoami` answers the member's name and avatar, the
  * organization's name and the token's expiry; `branding.publicForHost` is the organization's public branding;
- * `applications.create` saves a clipped job (P5-T03). Anything else answers 403.
+ * `applications.create` saves a clipped job (P5-T03). Also P5-T03: `clipper.findByUrl` answers whether the member already
+ * saved the job (an id and a title, the member's own applications only) and `clipper.cleanup` is the optional, metered AI
+ * tidy (platform provider only). Anything else answers 403.
  */
 export const CLIPPER_ALLOWED_PROCEDURES: ReadonlySet<string> = new Set([
 	"clipper.whoami",
 	"branding.publicForHost",
 	"applications.create",
+	"clipper.findByUrl",
+	"clipper.cleanup",
 ]);
 
 /** The permissions a clipper token carries: it can read and write what the allow-list reaches, and never delete. */

@@ -16,6 +16,14 @@ declare const chrome: {
 	// P5-T02: opens the member's approval page in a new tab. Creating a tab needs no extra permission.
 	tabs: {
 		create(properties: { url: string }): Promise<unknown>;
+		// P5-T03: the tab the member is looking at. Its `url` is visible only after the member invokes the extension
+		// (`activeTab`), and the reader runs only in that tab.
+		query(query: { active: boolean; currentWindow: boolean }): Promise<{ id?: number; url?: string }[]>;
+	};
+	// P5-T03: injects the one small reader into the active tab (`scripting` + `activeTab`). The function is serialized, so
+	// it must not use anything outside itself.
+	scripting: {
+		executeScript<Result>(injection: { target: { tabId: number }; func: () => Result }): Promise<{ result?: Result }[]>;
 	};
 	runtime: {
 		getManifest(): { version: string; name: string };
