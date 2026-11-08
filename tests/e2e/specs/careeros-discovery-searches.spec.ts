@@ -13,18 +13,28 @@ test("a member creates, edits, pauses and deletes a job search from the Jobs pag
 }) => {
 	const organizationId = await accountOrganizationId(account);
 	const flagId = `e2e-discovery-flag-${organizationId}`;
-	const setFeature = async (enabled: boolean) =>
+	// Organization flags win over the plan, so each state is stated explicitly: the personal plan includes platform AI,
+	// and the test must not depend on that. `null` removes the flag and leaves the plan to decide.
+	const setFeatures = async (discovery: boolean | null, ai: boolean | null) =>
 		withSeedPool(async (pool) => {
-			await pool.query(`delete from feature_flag where id = $1`, [flagId]);
-			if (enabled)
-				await pool.query(
-					`insert into feature_flag (id, organization_id, key, enabled) values ($1, $2, 'job_discovery', true)`,
-					[flagId, organizationId],
-				);
+			for (const [key, value] of [
+				["job_discovery", discovery],
+				["platform_ai", ai],
+			] as const) {
+				const id = `${flagId}-${key}`;
+				await pool.query(`delete from feature_flag where id = $1`, [id]);
+				if (value !== null)
+					await pool.query(`insert into feature_flag (id, organization_id, key, enabled) values ($1, $2, $3, $4)`, [
+						id,
+						organizationId,
+						key,
+						value,
+					]);
+			}
 		});
 
 	try {
-		await setFeature(true);
+		await setFeatures(true, false);
 		await page.goto("/dashboard/career/jobs");
 		await expect(page.getByRole("heading", { name: "Searches", exact: true })).toBeVisible();
 		await expect(page.getByText(/You have no searches yet/)).toBeVisible();
@@ -46,7 +56,7 @@ test("a member creates, edits, pauses and deletes a job search from the Jobs pag
 		await expect(form.getByLabel("Board 1 source")).toHaveValue("lever");
 		await expect(form.getByLabel("Board 1 name or link")).toHaveValue("acme-e2e");
 		await form.getByLabel("Schedule", { exact: true }).selectOption("weekly");
-		// The personal plan has no platform AI, so the AI field is not offered.
+		// The organization has no platform AI (flag off), so the AI field is not offered.
 		await expect(form.getByLabel("Jobs to score with AI per run")).toHaveCount(0);
 		await form.getByRole("button", { name: "Create search" }).click();
 
@@ -101,12 +111,20 @@ test("a member creates, edits, pauses and deletes a job search from the Jobs pag
 		// The job it found stays in the queue.
 		await expect(page.getByRole("link", { name: "Senior Product Manager" })).toBeVisible();
 
+		// With platform AI the field is offered, with the credits note.
+		await setFeatures(true, true);
+		await page.reload();
+		await page.getByRole("button", { name: "New search" }).click();
+		const withAi = page.getByRole("form", { name: "New search" });
+		await expect(withAi.getByLabel("Jobs to score with AI per run")).toBeVisible();
+		await expect(withAi.getByText(/uses AI credits/)).toBeVisible();
+
 		// Without the plan feature the section is read-only.
-		await setFeature(false);
+		await setFeatures(null, null);
 		await page.reload();
 		await expect(page.getByText(/plan doesn't include job discovery/)).toBeVisible();
 		await expect(page.getByRole("button", { name: "New search" })).toHaveCount(0);
 	} finally {
-		await setFeature(false);
+		await setFeatures(null, null);
 	}
 });
