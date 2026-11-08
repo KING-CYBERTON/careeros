@@ -679,6 +679,18 @@ export const tenancyAllowList: readonly AllowListEntry[] = [
 		reason:
 			"P2-T05: pre-authentication, platform-global like Better Auth's verification table (same class: global, no tenant data, no row level security). It carries organization_id only to name the organization a sign-in is for, so it sits on this list, not the globalTables one, which is for tables without that column. It is read and written before any session or organization context exists and holds only hashes and ten-minute rows",
 	},
+	// CAREEROS (P5-T02): the Job Clipper sign-in. Both are pre-authentication, platform-global tables like auth_handoff:
+	// the device code is redeemed and the token verified before any session or organization context exists.
+	{
+		table: "device_code",
+		reason:
+			"P5-T02: Better Auth device-authorization plugin table (pre-authentication, platform-global like auth_handoff and the verification table). organization_id only names the organization whose host the code was requested on; ten-minute rows, reached through the plugin's adapter calls, and every use is checked against the request host's organization and the approver's membership",
+	},
+	{
+		table: "clipper_token",
+		reason:
+			"P5-T02: Job Clipper sign-in tokens (pre-authentication, platform-global like apikey). Holds the SHA-256 of the token, never the token. organization_id is checked against the request host's organization on every use (a token on another organization's host, the platform host or a custom domain of another organization is refused) and the member must still belong to it; reached only through the careeros-clipper plugin's adapter calls",
+	},
 	// CAREEROS (P3-T04, phase plan D9)
 	{
 		table: "billing_event",

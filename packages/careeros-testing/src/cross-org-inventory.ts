@@ -204,6 +204,9 @@ export const NO_TENANT_ID: Record<string, string> = {
 	"GET /discovery/sources": "takes no tenant id: lists the caller's own automations (P4-T01)",
 	"POST /discovery/sources": "takes no tenant id: creates an automation for the caller (P4-T01)",
 	"GET /discovery/jobs": "takes no tenant id: lists the caller's own discovered jobs (P4-T01)",
+	// CAREEROS (P5-T02): the clipper sign-in. The token itself names the organization; no request names another.
+	"GET /clipper/whoami": "takes no tenant id: answers for the token's own organization and host (P5-T02)",
+	"GET /clipper/tokens": "takes no tenant id: lists the caller's own Job Clipper sign-ins (P5-T02)",
 	"GET /documents": "takes no tenant id: lists the caller's own documents",
 	"GET /documents/page": "takes no tenant id: lists the caller's own documents",
 	"GET /documents/counts": "takes no tenant id: counts the caller's own documents",
@@ -278,6 +281,8 @@ export const ID_KINDS = [
 	// CAREEROS (P4-T01): job discovery
 	"jobSource",
 	"discoveredJob",
+	// CAREEROS (P5-T02): a Job Clipper sign-in
+	"clipperToken",
 ] as const;
 export type IdKind = (typeof ID_KINDS)[number];
 export type SeedIds = Record<IdKind, string>;
@@ -305,6 +310,7 @@ const PREFIX_KIND: [RegExp, IdKind][] = [
 	[/^\/organization\/domains(\/|$)/, "orgDomain"],
 	[/^\/discovery\/sources(\/|$)/, "jobSource"],
 	[/^\/discovery\/jobs(\/|$)/, "discoveredJob"],
+	[/^\/clipper\/tokens(\/|$)/, "clipperToken"],
 ];
 
 /** Operations whose bare `id` cannot be told from the path alone. */

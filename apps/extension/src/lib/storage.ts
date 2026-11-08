@@ -39,7 +39,8 @@ export async function saveConnection(connection: Connection): Promise<void> {
 
 /** Forgets the organization and gives back its host permission. */
 export async function clearConnection(origin: string): Promise<void> {
-	await chrome.storage.local.remove(KEY);
+	// P5-T02: the sign-in belongs to the organization, so it goes with it.
+	await chrome.storage.local.remove([KEY, "session", "deviceFlow"]);
 	await releaseOrigin(origin);
 }
 
