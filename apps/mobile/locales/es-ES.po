@@ -33,6 +33,11 @@ msgstr "“{0}” movido a la Papelera"
 msgid "“{0}” stops being your primary resume."
 msgstr "«{0}» dejará de ser tu currículum principal."
 
+#. placeholder {0}: selected?.label ?? ""
+#: src/features/settings/clipper-sign-ins.tsx
+msgid "“{0}” stops working. You can sign in again from the extension."
+msgstr ""
+
 #. placeholder {0}: purge?.documents[0]?.name
 #: src/features/documents/library.tsx
 msgid "“{0}” will be deleted for good and can't be restored."
@@ -2092,6 +2097,10 @@ msgstr "Actualización del resumen activada · {next}"
 msgid "Briefing refresh paused"
 msgstr "Actualización del informe en pausa"
 
+#: src/features/settings/clipper-sign-ins.tsx
+msgid "Browsers where you signed in to the Job Clipper extension. You sign in from the extension on a computer."
+msgstr ""
+
 #: src/features/ai/web-access.tsx
 msgid "Built-in reader"
 msgstr "Lector incorporado"
@@ -3137,6 +3146,10 @@ msgstr "No se pudo cargar esto. Comprueba tu conexión y vuelve a intentarlo."
 msgid "Couldn't load versions."
 msgstr "No se pudieron cargar las versiones."
 
+#: src/features/settings/clipper-sign-ins.tsx
+msgid "Couldn't load your Job Clipper sign-ins."
+msgstr ""
+
 #: app/(tabs)/settings/account.tsx
 msgid "Couldn't load your profile."
 msgstr "No se pudo cargar tu perfil."
@@ -3169,6 +3182,7 @@ msgid "Couldn't open the browser. Try again."
 msgstr "No se pudo abrir el navegador. Intentar otra vez."
 
 #: src/features/career/today.tsx
+#: src/features/discovery/review-queue.tsx
 msgid "Couldn't open the posting. Try again."
 msgstr "No se pudo abrir el anuncio. Inténtalo de nuevo."
 
@@ -3243,6 +3257,10 @@ msgstr "No se pudo reproducir este currículum."
 #: src/features/settings/api-keys.tsx
 msgid "Couldn't revoke the key. Try again."
 msgstr "No se pudo revocar la clave. Intentar otra vez."
+
+#: src/features/settings/clipper-sign-ins.tsx
+msgid "Couldn't revoke the sign-in. Try again."
+msgstr ""
 
 #: src/features/career/facts.tsx
 #: src/features/career/hooks.ts
@@ -3934,6 +3952,7 @@ msgstr "Descarta tus ediciones sin conexión y carga la versión guardada."
 msgid "Discard your offline edits?"
 msgstr "¿Descartar tus ediciones sin conexión?"
 
+#: src/features/discovery/review-queue.tsx
 #: src/features/letters/write.tsx
 #: src/ui/layout.tsx
 msgid "Dismiss"
@@ -3941,6 +3960,10 @@ msgstr "Descartar"
 
 #: src/features/career/today.tsx
 msgid "Dismiss selected"
+msgstr ""
+
+#: src/features/discovery/review-queue.tsx
+msgid "Dismissed"
 msgstr ""
 
 #: src/features/career/role-suggestions.tsx
@@ -5452,6 +5475,10 @@ msgstr "JavaScript"
 msgid "Job"
 msgstr "Trabajo"
 
+#: src/features/settings/clipper-sign-ins.tsx
+msgid "Job Clipper sign-ins"
+msgstr ""
+
 #: src/features/application-detail/sheets.tsx
 #: src/features/workspace/preparation.tsx
 msgid "Job description"
@@ -5485,6 +5512,7 @@ msgstr "La búsqueda de empleo no está configurada en este servidor. Pega un en
 msgid "Job search pipeline"
 msgstr "Proceso de búsqueda de empleo"
 
+#: app/(tabs)/career/_layout.tsx
 #: src/features/search/search-screen.tsx
 msgid "Jobs"
 msgstr "Empleos"
@@ -6039,6 +6067,10 @@ msgstr ""
 msgid "Loading saved version…"
 msgstr "Cargando versión guardada…"
 
+#: src/features/settings/clipper-sign-ins.tsx
+msgid "Loading sign-ins…"
+msgstr ""
+
 #: src/features/ai/web-access.tsx
 msgid "Loading web access…"
 msgstr "Cargando acceso web…"
@@ -6255,6 +6287,16 @@ msgstr "Marcado como leído"
 #: src/features/letters/design.tsx
 msgid "Match “{resumeName}”"
 msgstr "Ajustar a «{resumeName}»"
+
+#. placeholder {0}: scoreOf(job)
+#: src/features/discovery/review-queue.tsx
+msgid "Match {0}"
+msgstr ""
+
+#. placeholder {0}: scoreOf(job)
+#: src/features/discovery/review-queue.tsx
+msgid "Match {0} (quick)"
+msgstr ""
 
 #: src/features/search/search-screen.tsx
 msgid "Match system theme"
@@ -6602,11 +6644,13 @@ msgstr "Red"
 
 #: src/features/career/preferences.tsx
 #: src/features/settings/api-keys.tsx
+#: src/features/settings/clipper-sign-ins.tsx
 msgid "Never"
 msgstr "Nunca"
 
 #: app/_layout.tsx
 #: app/(tabs)/_layout.tsx
+#: src/features/discovery/review-queue.tsx
 #: src/features/documents/library.tsx
 #: src/shell/app-tabs.tsx
 msgid "New"
@@ -6646,6 +6690,10 @@ msgstr "Nuevo documento"
 #: src/features/write/section-sheet.tsx
 msgid "New page"
 msgstr "Nueva pagina"
+
+#: src/features/discovery/review-queue.tsx
+msgid "New postings show up here after an automation runs."
+msgstr ""
 
 #: src/features/career/today.tsx
 msgid "New roles from your search"
@@ -6766,6 +6814,10 @@ msgstr "Sin fecha"
 msgid "No dates were found."
 msgstr "No se encontraron fechas."
 
+#: src/features/discovery/review-queue.tsx
+msgid "No dismissed jobs"
+msgstr ""
+
 #: src/features/workspace/tabs/apply.tsx
 msgid "no documents"
 msgstr ""
@@ -6797,6 +6849,10 @@ msgstr "Ningún dato coincide"
 #: src/features/write/pickers.tsx
 msgid "No icons match."
 msgstr "Ningún ícono coincide."
+
+#: src/features/settings/clipper-sign-ins.tsx
+msgid "No Job Clipper sign-ins yet."
+msgstr ""
 
 #: src/features/documents/new-document.tsx
 msgid "No job yet"
@@ -6888,6 +6944,10 @@ msgstr "Sin resultados"
 #: src/features/letters/write.tsx
 msgid "No resume"
 msgstr "Sin currículum"
+
+#: src/features/discovery/review-queue.tsx
+msgid "No saved jobs yet"
+msgstr ""
 
 #: src/auth/messages.ts
 msgid "No server answered at this address. Check the spelling, or ask your administrator whether the server allows app sign-in."
@@ -7094,6 +7154,10 @@ msgstr "Nada que arreglar"
 msgid "Nothing to fix. The remaining pages were simply not covered by this report."
 msgstr "Nada que corregir. Las páginas restantes simplemente no están cubiertas por este informe."
 
+#: src/features/discovery/review-queue.tsx
+msgid "Nothing to review"
+msgstr ""
+
 #: src/features/career/preferences.tsx
 msgid "Notice period (weeks)"
 msgstr "Preaviso (semanas)"
@@ -7296,6 +7360,7 @@ msgstr "Abra la configuración de IA"
 #: src/features/applications-board/board-screen.tsx
 #: src/features/applications/list-screen.tsx
 #: src/features/check/job-match.tsx
+#: src/features/discovery/review-queue.tsx
 msgid "Open application"
 msgstr "Abrir candidatura"
 
@@ -7819,6 +7884,10 @@ msgstr "Anuncio"
 msgid "Postings can change or close. Publication date unknown; search coverage is incomplete."
 msgstr ""
 
+#: src/features/discovery/review-queue.tsx
+msgid "Postings your automations found, best match first. Save one to your applications, or dismiss it and it never comes back."
+msgstr ""
+
 #: src/features/workspace/parts.tsx
 #: src/features/workspace/tabs/practise.tsx
 #: src/features/workspace/tabs/prepare.tsx
@@ -8202,6 +8271,7 @@ msgstr "Leer licencia"
 
 #: src/features/applications/add-sheet.tsx
 #: src/features/career/today.tsx
+#: src/features/discovery/review-queue.tsx
 msgid "Read posting"
 msgstr "Leer anuncio de empleo"
 
@@ -9023,6 +9093,7 @@ msgid "Reviewing needs an AI connection. What you write here stays on this devic
 msgstr "La revisión necesita una conexión de IA. Lo que escribas aquí permanecerá en este dispositivo hasta entonces."
 
 #: src/features/settings/api-keys.tsx
+#: src/features/settings/clipper-sign-ins.tsx
 msgid "Revoke"
 msgstr "Revocar"
 
@@ -9030,13 +9101,25 @@ msgstr "Revocar"
 msgid "Revoke API key?"
 msgstr "¿Revocar la clave API?"
 
+#: src/features/settings/clipper-sign-ins.tsx
+msgid "Revoke Job Clipper sign-in?"
+msgstr ""
+
 #: src/features/settings/api-keys.tsx
 msgid "Revoke key"
 msgstr "Revocar clave"
 
+#: src/features/settings/clipper-sign-ins.tsx
+msgid "Revoke sign-in"
+msgstr ""
+
 #: src/features/settings/api-keys.tsx
 msgid "Revoke this API key"
 msgstr "Revocar esta clave API"
+
+#: src/features/settings/clipper-sign-ins.tsx
+msgid "Revoke this Job Clipper sign-in"
+msgstr ""
 
 #: src/features/check/writing.tsx
 msgid "Rewrite accepted"
@@ -9260,6 +9343,10 @@ msgstr "Guardar estas condiciones de la oferta para comparar"
 msgid "Save this story to Knowledge?"
 msgstr "¿Guardar esta historia en Conocimiento?"
 
+#: src/features/discovery/review-queue.tsx
+msgid "Save to applications"
+msgstr ""
+
 #: src/features/workspace/tabs/fit.tsx
 msgid "Save to Knowledge"
 msgstr "Guardar en Conocimiento"
@@ -9274,6 +9361,7 @@ msgstr "Guarda tu versión como documento nuevo y conserva la otra aquí."
 
 #: src/features/applications/stages.ts
 #: src/features/career/preferences.tsx
+#: src/features/discovery/review-queue.tsx
 #: src/shell/builder-chrome.tsx
 msgid "Saved"
 msgstr "Guardado"
@@ -9323,6 +9411,10 @@ msgstr "Guardado en Conocimiento, solo para esta candidatura."
 #: src/features/workspace/tabs/practise.tsx
 msgid "Saved to Saved · Practice"
 msgstr "Guardado en Guardado · Práctica"
+
+#: src/features/discovery/review-queue.tsx
+msgid "Saved to your applications"
+msgstr ""
 
 #: src/features/applications/add-sheet.tsx
 msgid "Saving the job. Wait for confirmation before making another change."
@@ -9815,6 +9907,10 @@ msgstr "Mostrar iconos"
 msgid "Show in search engines"
 msgstr "Mostrar en buscadores"
 
+#: src/features/discovery/review-queue.tsx
+msgid "Show jobs"
+msgstr ""
+
 #: src/features/ai/provider-editor.tsx
 msgid "Show key"
 msgstr "Mostrar clave"
@@ -9826,6 +9922,7 @@ msgstr "Mostrar enlace en el título"
 #: app/(tabs)/settings/preferences.tsx
 #: src/features/application-detail/interview-sheet.tsx
 #: src/features/career/today.tsx
+#: src/features/discovery/review-queue.tsx
 msgid "Show more"
 msgstr "Mostrar más"
 
@@ -9974,9 +10071,19 @@ msgstr "Inicio de sesión y seguridad"
 msgid "Sign-in didn't complete"
 msgstr "El inicio de sesión no se completó"
 
+#: src/features/settings/clipper-sign-ins.tsx
+msgid "Sign-in revoked. The extension stops working on its next request."
+msgstr ""
+
 #: src/features/letters/write.tsx
 msgid "Sign-off"
 msgstr "Despedida"
+
+#. placeholder {0}: date(token.createdAt)
+#. placeholder {1}: date(token.lastUsedAt)
+#: src/features/settings/clipper-sign-ins.tsx
+msgid "Signed in {0} · Last used {1}"
+msgstr ""
 
 #. placeholder {0}: hostOf(server)
 #: src/auth/session-gate.tsx
@@ -11459,6 +11566,7 @@ msgstr "Pruebe {suggestion}"
 #: src/features/branding/domains-screen.tsx
 #: src/features/letters/write.tsx
 #: src/features/settings/api-keys.tsx
+#: src/features/settings/clipper-sign-ins.tsx
 #: src/features/workspace/parts.tsx
 #: src/features/workspace/preparation.tsx
 #: src/features/workspace/shell.tsx
@@ -12552,6 +12660,10 @@ msgstr "Sus viñetas están dibujadas con caracteres inusuales."
 #: src/draft/conflict-sheet.tsx
 msgid "Your changes on this device will be replaced by the saved version."
 msgstr "Sus cambios en este dispositivo serán reemplazados por la versión guardada."
+
+#: src/features/settings/profile.tsx
+msgid "Your cohort"
+msgstr ""
 
 #: src/features/ats-checker/messages.ts
 msgid "Your contact details are not on the first page."

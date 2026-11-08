@@ -12,6 +12,8 @@ export const AI_FEATURES = {
 	"cover_letter.draft": { fast: false, label: "Cover letter drafts" },
 	"applications.ai": { fast: false, label: "Application tools" },
 	"applications.extract": { fast: true, label: "Read a job posting" },
+	// CAREEROS (P4-T02): the AI match of a discovery run scores one found job against the member's preferences.
+	"discovery.match": { fast: true, label: "Job matching" },
 } as const satisfies Record<string, { fast: boolean; label: string }>;
 
 export type AiFeature = keyof typeof AI_FEATURES;

@@ -33,6 +33,11 @@ msgstr "「{0}」をゴミ箱に移動しました"
 msgid "“{0}” stops being your primary resume."
 msgstr "「{0}」はプライマリレジュメではなくなります。"
 
+#. placeholder {0}: selected?.label ?? ""
+#: src/features/settings/clipper-sign-ins.tsx
+msgid "“{0}” stops working. You can sign in again from the extension."
+msgstr ""
+
 #. placeholder {0}: purge?.documents[0]?.name
 #: src/features/documents/library.tsx
 msgid "“{0}” will be deleted for good and can't be restored."
@@ -2092,6 +2097,10 @@ msgstr "ブリーフィングの更新がオンになっています · {next}"
 msgid "Briefing refresh paused"
 msgstr "ブリーフィングの自動更新を一時停止中"
 
+#: src/features/settings/clipper-sign-ins.tsx
+msgid "Browsers where you signed in to the Job Clipper extension. You sign in from the extension on a computer."
+msgstr ""
+
 #: src/features/ai/web-access.tsx
 msgid "Built-in reader"
 msgstr "内蔵リーダー"
@@ -3137,6 +3146,10 @@ msgstr "これを読み込めませんでした。接続を確認して、もう
 msgid "Couldn't load versions."
 msgstr "バージョンをロードできませんでした。"
 
+#: src/features/settings/clipper-sign-ins.tsx
+msgid "Couldn't load your Job Clipper sign-ins."
+msgstr ""
+
 #: app/(tabs)/settings/account.tsx
 msgid "Couldn't load your profile."
 msgstr "プロフィールを読み込めませんでした。"
@@ -3169,6 +3182,7 @@ msgid "Couldn't open the browser. Try again."
 msgstr "ブラウザを開けませんでした。もう一度やり直してください。"
 
 #: src/features/career/today.tsx
+#: src/features/discovery/review-queue.tsx
 msgid "Couldn't open the posting. Try again."
 msgstr "求人情報を開けませんでした。もう一度お試しください。"
 
@@ -3243,6 +3257,10 @@ msgstr "このレジュメをレンダリングできませんでした。"
 #: src/features/settings/api-keys.tsx
 msgid "Couldn't revoke the key. Try again."
 msgstr "キーを取り消すことができませんでした。もう一度やり直してください。"
+
+#: src/features/settings/clipper-sign-ins.tsx
+msgid "Couldn't revoke the sign-in. Try again."
+msgstr ""
 
 #: src/features/career/facts.tsx
 #: src/features/career/hooks.ts
@@ -3934,6 +3952,7 @@ msgstr "オフライン編集を破棄し、保存されたバージョンをロ
 msgid "Discard your offline edits?"
 msgstr "オフライン編集を破棄しますか?"
 
+#: src/features/discovery/review-queue.tsx
 #: src/features/letters/write.tsx
 #: src/ui/layout.tsx
 msgid "Dismiss"
@@ -3941,6 +3960,10 @@ msgstr "閉じる"
 
 #: src/features/career/today.tsx
 msgid "Dismiss selected"
+msgstr ""
+
+#: src/features/discovery/review-queue.tsx
+msgid "Dismissed"
 msgstr ""
 
 #: src/features/career/role-suggestions.tsx
@@ -5452,6 +5475,10 @@ msgstr "JavaScript"
 msgid "Job"
 msgstr "仕事"
 
+#: src/features/settings/clipper-sign-ins.tsx
+msgid "Job Clipper sign-ins"
+msgstr ""
+
 #: src/features/application-detail/sheets.tsx
 #: src/features/workspace/preparation.tsx
 msgid "Job description"
@@ -5485,6 +5512,7 @@ msgstr "このサーバーでは求人検索が設定されていません。代
 msgid "Job search pipeline"
 msgstr "求人応募パイプライン"
 
+#: app/(tabs)/career/_layout.tsx
 #: src/features/search/search-screen.tsx
 msgid "Jobs"
 msgstr "求人情報"
@@ -6039,6 +6067,10 @@ msgstr ""
 msgid "Loading saved version…"
 msgstr "保存済みの版を読み込み中…"
 
+#: src/features/settings/clipper-sign-ins.tsx
+msgid "Loading sign-ins…"
+msgstr ""
+
 #: src/features/ai/web-access.tsx
 msgid "Loading web access…"
 msgstr "Web アクセスを読み込み中…"
@@ -6255,6 +6287,16 @@ msgstr "既読にしました"
 #: src/features/letters/design.tsx
 msgid "Match “{resumeName}”"
 msgstr "「{resumeName}」に合わせる"
+
+#. placeholder {0}: scoreOf(job)
+#: src/features/discovery/review-queue.tsx
+msgid "Match {0}"
+msgstr ""
+
+#. placeholder {0}: scoreOf(job)
+#: src/features/discovery/review-queue.tsx
+msgid "Match {0} (quick)"
+msgstr ""
 
 #: src/features/search/search-screen.tsx
 msgid "Match system theme"
@@ -6602,11 +6644,13 @@ msgstr "ネットワーク"
 
 #: src/features/career/preferences.tsx
 #: src/features/settings/api-keys.tsx
+#: src/features/settings/clipper-sign-ins.tsx
 msgid "Never"
 msgstr "一度もない"
 
 #: app/_layout.tsx
 #: app/(tabs)/_layout.tsx
+#: src/features/discovery/review-queue.tsx
 #: src/features/documents/library.tsx
 #: src/shell/app-tabs.tsx
 msgid "New"
@@ -6646,6 +6690,10 @@ msgstr "新しいドキュメント"
 #: src/features/write/section-sheet.tsx
 msgid "New page"
 msgstr "新しいページ"
+
+#: src/features/discovery/review-queue.tsx
+msgid "New postings show up here after an automation runs."
+msgstr ""
 
 #: src/features/career/today.tsx
 msgid "New roles from your search"
@@ -6766,6 +6814,10 @@ msgstr "日付なし"
 msgid "No dates were found."
 msgstr "日付が見つかりませんでした。"
 
+#: src/features/discovery/review-queue.tsx
+msgid "No dismissed jobs"
+msgstr ""
+
 #: src/features/workspace/tabs/apply.tsx
 msgid "no documents"
 msgstr ""
@@ -6797,6 +6849,10 @@ msgstr "一致する事実はありません"
 #: src/features/write/pickers.tsx
 msgid "No icons match."
 msgstr "一致するアイコンはありません。"
+
+#: src/features/settings/clipper-sign-ins.tsx
+msgid "No Job Clipper sign-ins yet."
+msgstr ""
 
 #: src/features/documents/new-document.tsx
 msgid "No job yet"
@@ -6888,6 +6944,10 @@ msgstr "結果はありません"
 #: src/features/letters/write.tsx
 msgid "No resume"
 msgstr "履歴書なし"
+
+#: src/features/discovery/review-queue.tsx
+msgid "No saved jobs yet"
+msgstr ""
 
 #: src/auth/messages.ts
 msgid "No server answered at this address. Check the spelling, or ask your administrator whether the server allows app sign-in."
@@ -7094,6 +7154,10 @@ msgstr "修正するものは何もありません"
 msgid "Nothing to fix. The remaining pages were simply not covered by this report."
 msgstr "修正すべき点はありません。残りのページは単にこのレポートの対象外でした。"
 
+#: src/features/discovery/review-queue.tsx
+msgid "Nothing to review"
+msgstr ""
+
 #: src/features/career/preferences.tsx
 msgid "Notice period (weeks)"
 msgstr "退職の事前通知期間（週）"
@@ -7296,6 +7360,7 @@ msgstr "AI設定を開く"
 #: src/features/applications-board/board-screen.tsx
 #: src/features/applications/list-screen.tsx
 #: src/features/check/job-match.tsx
+#: src/features/discovery/review-queue.tsx
 msgid "Open application"
 msgstr "この応募類を開く"
 
@@ -7819,6 +7884,10 @@ msgstr "求人情報"
 msgid "Postings can change or close. Publication date unknown; search coverage is incomplete."
 msgstr ""
 
+#: src/features/discovery/review-queue.tsx
+msgid "Postings your automations found, best match first. Save one to your applications, or dismiss it and it never comes back."
+msgstr ""
+
 #: src/features/workspace/parts.tsx
 #: src/features/workspace/tabs/practise.tsx
 #: src/features/workspace/tabs/prepare.tsx
@@ -8202,6 +8271,7 @@ msgstr "ライセンスを読む"
 
 #: src/features/applications/add-sheet.tsx
 #: src/features/career/today.tsx
+#: src/features/discovery/review-queue.tsx
 msgid "Read posting"
 msgstr "求人情報を読む"
 
@@ -9023,6 +9093,7 @@ msgid "Reviewing needs an AI connection. What you write here stays on this devic
 msgstr "レビューには AI 接続が必要です。ここに書いた内容は、それまでこのデバイスに残ります。"
 
 #: src/features/settings/api-keys.tsx
+#: src/features/settings/clipper-sign-ins.tsx
 msgid "Revoke"
 msgstr "取り消す"
 
@@ -9030,13 +9101,25 @@ msgstr "取り消す"
 msgid "Revoke API key?"
 msgstr "APIキーを取り消しますか?"
 
+#: src/features/settings/clipper-sign-ins.tsx
+msgid "Revoke Job Clipper sign-in?"
+msgstr ""
+
 #: src/features/settings/api-keys.tsx
 msgid "Revoke key"
 msgstr "キーを取り消す"
 
+#: src/features/settings/clipper-sign-ins.tsx
+msgid "Revoke sign-in"
+msgstr ""
+
 #: src/features/settings/api-keys.tsx
 msgid "Revoke this API key"
 msgstr "この API キーを取り消します"
+
+#: src/features/settings/clipper-sign-ins.tsx
+msgid "Revoke this Job Clipper sign-in"
+msgstr ""
 
 #: src/features/check/writing.tsx
 msgid "Rewrite accepted"
@@ -9260,6 +9343,10 @@ msgstr "比較するためにこのオファー条件を保存"
 msgid "Save this story to Knowledge?"
 msgstr "このエピソードをナレッジに保存しますか？"
 
+#: src/features/discovery/review-queue.tsx
+msgid "Save to applications"
+msgstr ""
+
 #: src/features/workspace/tabs/fit.tsx
 msgid "Save to Knowledge"
 msgstr "ナレッジに保存"
@@ -9274,6 +9361,7 @@ msgstr "バージョンを新しい書類として保存します。バージョ
 
 #: src/features/applications/stages.ts
 #: src/features/career/preferences.tsx
+#: src/features/discovery/review-queue.tsx
 #: src/shell/builder-chrome.tsx
 msgid "Saved"
 msgstr "保存済み"
@@ -9323,6 +9411,10 @@ msgstr "この応募専用としてナレッジに保存しました。"
 #: src/features/workspace/tabs/practise.tsx
 msgid "Saved to Saved · Practice"
 msgstr "「保存済み」に保存しました · 練習"
+
+#: src/features/discovery/review-queue.tsx
+msgid "Saved to your applications"
+msgstr ""
 
 #: src/features/applications/add-sheet.tsx
 msgid "Saving the job. Wait for confirmation before making another change."
@@ -9815,6 +9907,10 @@ msgstr "アイコンを表示"
 msgid "Show in search engines"
 msgstr "検索エンジンに表示"
 
+#: src/features/discovery/review-queue.tsx
+msgid "Show jobs"
+msgstr ""
+
 #: src/features/ai/provider-editor.tsx
 msgid "Show key"
 msgstr "キーを表示"
@@ -9826,6 +9922,7 @@ msgstr "タイトルにリンクを表示する"
 #: app/(tabs)/settings/preferences.tsx
 #: src/features/application-detail/interview-sheet.tsx
 #: src/features/career/today.tsx
+#: src/features/discovery/review-queue.tsx
 msgid "Show more"
 msgstr "もっと見る"
 
@@ -9974,9 +10071,19 @@ msgstr "サインインとセキュリティ"
 msgid "Sign-in didn't complete"
 msgstr "サインインが完了しませんでした"
 
+#: src/features/settings/clipper-sign-ins.tsx
+msgid "Sign-in revoked. The extension stops working on its next request."
+msgstr ""
+
 #: src/features/letters/write.tsx
 msgid "Sign-off"
 msgstr "結びの言葉"
+
+#. placeholder {0}: date(token.createdAt)
+#. placeholder {1}: date(token.lastUsedAt)
+#: src/features/settings/clipper-sign-ins.tsx
+msgid "Signed in {0} · Last used {1}"
+msgstr ""
 
 #. placeholder {0}: hostOf(server)
 #: src/auth/session-gate.tsx
@@ -11459,6 +11566,7 @@ msgstr "{suggestion} をお試しください"
 #: src/features/branding/domains-screen.tsx
 #: src/features/letters/write.tsx
 #: src/features/settings/api-keys.tsx
+#: src/features/settings/clipper-sign-ins.tsx
 #: src/features/workspace/parts.tsx
 #: src/features/workspace/preparation.tsx
 #: src/features/workspace/shell.tsx
@@ -12552,6 +12660,10 @@ msgstr "箇条書きに一般的でない文字が使われています。"
 #: src/draft/conflict-sheet.tsx
 msgid "Your changes on this device will be replaced by the saved version."
 msgstr "このデバイスで行った変更は、保存されたバージョンに置き換えられます。"
+
+#: src/features/settings/profile.tsx
+msgid "Your cohort"
+msgstr ""
 
 #: src/features/ats-checker/messages.ts
 msgid "Your contact details are not on the first page."

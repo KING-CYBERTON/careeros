@@ -101,6 +101,8 @@ async function seedRowsWithoutEndpoint(a: Party, tag: string) {
 		// CAREEROS (P4-T01): a job discovery automation and a posting it found.
 		jobSource: `xorga-source-${tag}`,
 		discoveredJob: `xorga-posting-${tag}`,
+		// CAREEROS (P3-T08): a cohort of Organization A. The marker is in its name so any echo is detected.
+		cohort: `xorga-cohort-${tag}`,
 		// CAREEROS (P5-T02): one of A's Job Clipper sign-ins. Only a hash goes in, as in production.
 		clipperToken: `xorga-clipper-${tag}`,
 	};
@@ -133,6 +135,11 @@ async function seedRowsWithoutEndpoint(a: Party, tag: string) {
 			 values ($1, $2, $3, $4, $5)`,
 			[ids.orgDomain, a.organizationId, `xorga-${tag}.orgdomains.example.test`, `xorga${tag}domaintoken`, a.userId],
 		);
+		await pool.query(`insert into cohort (id, organization_id, name) values ($1, $2, $3)`, [
+			ids.cohort,
+			a.organizationId,
+			`Xorga${tag} cohort`,
+		]);
 		await pool.query(`insert into job_source (id, organization_id, user_id, name) values ($1, $2, $3, $4)`, [
 			ids.jobSource,
 			a.organizationId,
@@ -514,6 +521,9 @@ export async function createTwoOrgs(playwright: Playwright, baseURL: string, own
 			orgDomain: extra.orgDomain,
 			jobSource: extra.jobSource,
 			discoveredJob: extra.discoveredJob,
+			// CAREEROS (P3-T08)
+			cohort: extra.cohort,
+			member: authOrg.memberId,
 			clipperToken: extra.clipperToken,
 		};
 		const missing = Object.entries(ids).filter(([, value]) => !value);

@@ -85,3 +85,24 @@ export function sanitizeDescription(value: unknown): string {
 		},
 	}).trim();
 }
+
+/**
+ * CAREEROS (P4-T02): readable plain text from a sanitized description, for the model and for the tracker's description
+ * field (which is plain text). Block ends become line breaks, list items get a dash, every other tag is dropped and the
+ * basic entities are decoded; the result is cut to `max` characters. Never returns markup.
+ */
+export function descriptionToText(html: string, max = 20_000): string {
+	const withBreaks = html
+		.slice(0, MAX_DESCRIPTION_INPUT)
+		.replace(/<(?:ul|ol)\b[^>]*>/gi, "\n")
+		.replace(/<li\b[^>]*>/gi, "- ")
+		.replace(/<\/(p|h[1-6]|ul|ol|li)\s*>/gi, "\n")
+		.replace(/<br\s*\/?>/gi, "\n");
+	const stripped = sanitizeHtml(withBreaks, { allowedTags: [], allowedAttributes: {} });
+	return dropControlCharacters(decodeBasicEntities(stripped))
+		.replace(/[ \t]+/g, " ")
+		.replace(/ *\n */g, "\n")
+		.replace(/\n{3,}/g, "\n\n")
+		.trim()
+		.slice(0, max);
+}

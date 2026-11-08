@@ -41,6 +41,7 @@ vi.mock("@careeros/billing", async (importOriginal) => {
 				aiCreditsTotal: 300,
 				features: Object.fromEntries(original.FEATURE_KEYS.map((key) => [key, true])),
 				overageAllowed: false,
+				discoveryAiTopN: 25,
 				readOnly: false,
 			}),
 		),

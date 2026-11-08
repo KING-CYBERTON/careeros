@@ -33,6 +33,11 @@ msgstr "\"{0}\" flyttet til papirkurven"
 msgid "“{0}” stops being your primary resume."
 msgstr "“{0}” er ikke længere dit primære CV."
 
+#. placeholder {0}: selected?.label ?? ""
+#: src/features/settings/clipper-sign-ins.tsx
+msgid "“{0}” stops working. You can sign in again from the extension."
+msgstr ""
+
 #. placeholder {0}: purge?.documents[0]?.name
 #: src/features/documents/library.tsx
 msgid "“{0}” will be deleted for good and can't be restored."
@@ -2092,6 +2097,10 @@ msgstr "Briefing-opdatering er aktiveret · {next}"
 msgid "Briefing refresh paused"
 msgstr "Opdatering af briefing er sat på pause"
 
+#: src/features/settings/clipper-sign-ins.tsx
+msgid "Browsers where you signed in to the Job Clipper extension. You sign in from the extension on a computer."
+msgstr ""
+
 #: src/features/ai/web-access.tsx
 msgid "Built-in reader"
 msgstr "Indbygget læser"
@@ -3137,6 +3146,10 @@ msgstr "Kunne ikke indlæse dette. Tjek din forbindelse, og prøv igen."
 msgid "Couldn't load versions."
 msgstr "Kunne ikke indlæse versioner."
 
+#: src/features/settings/clipper-sign-ins.tsx
+msgid "Couldn't load your Job Clipper sign-ins."
+msgstr ""
+
 #: app/(tabs)/settings/account.tsx
 msgid "Couldn't load your profile."
 msgstr "Kunne ikke indlæse din profil."
@@ -3169,6 +3182,7 @@ msgid "Couldn't open the browser. Try again."
 msgstr "Kunne ikke åbne browseren. Prøv igen."
 
 #: src/features/career/today.tsx
+#: src/features/discovery/review-queue.tsx
 msgid "Couldn't open the posting. Try again."
 msgstr "Kunne ikke åbne jobopslaget. Prøv igen."
 
@@ -3243,6 +3257,10 @@ msgstr "Kunne ikke gengive dette CV."
 #: src/features/settings/api-keys.tsx
 msgid "Couldn't revoke the key. Try again."
 msgstr "Kunne ikke tilbagekalde nøglen. Prøv igen."
+
+#: src/features/settings/clipper-sign-ins.tsx
+msgid "Couldn't revoke the sign-in. Try again."
+msgstr ""
 
 #: src/features/career/facts.tsx
 #: src/features/career/hooks.ts
@@ -3934,6 +3952,7 @@ msgstr "Kassér dine offline redigeringer og indlæs den gemte version."
 msgid "Discard your offline edits?"
 msgstr "Vil du kassere dine offline redigeringer?"
 
+#: src/features/discovery/review-queue.tsx
 #: src/features/letters/write.tsx
 #: src/ui/layout.tsx
 msgid "Dismiss"
@@ -3941,6 +3960,10 @@ msgstr "Afskedige"
 
 #: src/features/career/today.tsx
 msgid "Dismiss selected"
+msgstr ""
+
+#: src/features/discovery/review-queue.tsx
+msgid "Dismissed"
 msgstr ""
 
 #: src/features/career/role-suggestions.tsx
@@ -5452,6 +5475,10 @@ msgstr "JavaScript"
 msgid "Job"
 msgstr "Job"
 
+#: src/features/settings/clipper-sign-ins.tsx
+msgid "Job Clipper sign-ins"
+msgstr ""
+
 #: src/features/application-detail/sheets.tsx
 #: src/features/workspace/preparation.tsx
 msgid "Job description"
@@ -5485,6 +5512,7 @@ msgstr "Jobsøgning er ikke konfigureret på denne server. Indsæt i stedet et l
 msgid "Job search pipeline"
 msgstr "Jobsøgningspipeline"
 
+#: app/(tabs)/career/_layout.tsx
 #: src/features/search/search-screen.tsx
 msgid "Jobs"
 msgstr "Job"
@@ -6039,6 +6067,10 @@ msgstr ""
 msgid "Loading saved version…"
 msgstr "Indlæser gemt version…"
 
+#: src/features/settings/clipper-sign-ins.tsx
+msgid "Loading sign-ins…"
+msgstr ""
+
 #: src/features/ai/web-access.tsx
 msgid "Loading web access…"
 msgstr "Indlæser webadgang…"
@@ -6255,6 +6287,16 @@ msgstr "Markeret som læst"
 #: src/features/letters/design.tsx
 msgid "Match “{resumeName}”"
 msgstr "Match “{resumeName}”"
+
+#. placeholder {0}: scoreOf(job)
+#: src/features/discovery/review-queue.tsx
+msgid "Match {0}"
+msgstr ""
+
+#. placeholder {0}: scoreOf(job)
+#: src/features/discovery/review-queue.tsx
+msgid "Match {0} (quick)"
+msgstr ""
 
 #: src/features/search/search-screen.tsx
 msgid "Match system theme"
@@ -6602,11 +6644,13 @@ msgstr "Netværk"
 
 #: src/features/career/preferences.tsx
 #: src/features/settings/api-keys.tsx
+#: src/features/settings/clipper-sign-ins.tsx
 msgid "Never"
 msgstr "Aldrig"
 
 #: app/_layout.tsx
 #: app/(tabs)/_layout.tsx
+#: src/features/discovery/review-queue.tsx
 #: src/features/documents/library.tsx
 #: src/shell/app-tabs.tsx
 msgid "New"
@@ -6646,6 +6690,10 @@ msgstr "Nyt dokument"
 #: src/features/write/section-sheet.tsx
 msgid "New page"
 msgstr "Ny side"
+
+#: src/features/discovery/review-queue.tsx
+msgid "New postings show up here after an automation runs."
+msgstr ""
 
 #: src/features/career/today.tsx
 msgid "New roles from your search"
@@ -6766,6 +6814,10 @@ msgstr "Ingen dato"
 msgid "No dates were found."
 msgstr "Der blev ikke fundet nogen datoer."
 
+#: src/features/discovery/review-queue.tsx
+msgid "No dismissed jobs"
+msgstr ""
+
 #: src/features/workspace/tabs/apply.tsx
 msgid "no documents"
 msgstr ""
@@ -6797,6 +6849,10 @@ msgstr "Ingen fakta matcher"
 #: src/features/write/pickers.tsx
 msgid "No icons match."
 msgstr "Ingen ikoner matcher."
+
+#: src/features/settings/clipper-sign-ins.tsx
+msgid "No Job Clipper sign-ins yet."
+msgstr ""
 
 #: src/features/documents/new-document.tsx
 msgid "No job yet"
@@ -6888,6 +6944,10 @@ msgstr "Ingen resultater"
 #: src/features/letters/write.tsx
 msgid "No resume"
 msgstr "Intet CV"
+
+#: src/features/discovery/review-queue.tsx
+msgid "No saved jobs yet"
+msgstr ""
 
 #: src/auth/messages.ts
 msgid "No server answered at this address. Check the spelling, or ask your administrator whether the server allows app sign-in."
@@ -7094,6 +7154,10 @@ msgstr "Intet at rette"
 msgid "Nothing to fix. The remaining pages were simply not covered by this report."
 msgstr "Intet at rette. De resterende sider var simpelthen ikke dækket af denne rapport."
 
+#: src/features/discovery/review-queue.tsx
+msgid "Nothing to review"
+msgstr ""
+
 #: src/features/career/preferences.tsx
 msgid "Notice period (weeks)"
 msgstr "Opsigelsesvarsel (uger)"
@@ -7296,6 +7360,7 @@ msgstr "Åbn AI-indstillingerne"
 #: src/features/applications-board/board-screen.tsx
 #: src/features/applications/list-screen.tsx
 #: src/features/check/job-match.tsx
+#: src/features/discovery/review-queue.tsx
 msgid "Open application"
 msgstr "Åbn ansøgning"
 
@@ -7819,6 +7884,10 @@ msgstr "Jobopslag"
 msgid "Postings can change or close. Publication date unknown; search coverage is incomplete."
 msgstr ""
 
+#: src/features/discovery/review-queue.tsx
+msgid "Postings your automations found, best match first. Save one to your applications, or dismiss it and it never comes back."
+msgstr ""
+
 #: src/features/workspace/parts.tsx
 #: src/features/workspace/tabs/practise.tsx
 #: src/features/workspace/tabs/prepare.tsx
@@ -8202,6 +8271,7 @@ msgstr "Læs licens"
 
 #: src/features/applications/add-sheet.tsx
 #: src/features/career/today.tsx
+#: src/features/discovery/review-queue.tsx
 msgid "Read posting"
 msgstr "Læs stillingsopslaget"
 
@@ -9023,6 +9093,7 @@ msgid "Reviewing needs an AI connection. What you write here stays on this devic
 msgstr "Gennemgang kræver en AI-forbindelse. Det du skriver her bliver på denne enhed indtil da."
 
 #: src/features/settings/api-keys.tsx
+#: src/features/settings/clipper-sign-ins.tsx
 msgid "Revoke"
 msgstr "Tilbagekald"
 
@@ -9030,13 +9101,25 @@ msgstr "Tilbagekald"
 msgid "Revoke API key?"
 msgstr "Tilbagekalde API nøgle?"
 
+#: src/features/settings/clipper-sign-ins.tsx
+msgid "Revoke Job Clipper sign-in?"
+msgstr ""
+
 #: src/features/settings/api-keys.tsx
 msgid "Revoke key"
 msgstr "Tilbagekald nøgle"
 
+#: src/features/settings/clipper-sign-ins.tsx
+msgid "Revoke sign-in"
+msgstr ""
+
 #: src/features/settings/api-keys.tsx
 msgid "Revoke this API key"
 msgstr "Tilbagekald denne API-nøgle"
+
+#: src/features/settings/clipper-sign-ins.tsx
+msgid "Revoke this Job Clipper sign-in"
+msgstr ""
 
 #: src/features/check/writing.tsx
 msgid "Rewrite accepted"
@@ -9260,6 +9343,10 @@ msgstr "Gem disse tilbudsvilkår til sammenligning"
 msgid "Save this story to Knowledge?"
 msgstr "Gem denne historie i Viden?"
 
+#: src/features/discovery/review-queue.tsx
+msgid "Save to applications"
+msgstr ""
+
 #: src/features/workspace/tabs/fit.tsx
 msgid "Save to Knowledge"
 msgstr "Gem i Viden"
@@ -9274,6 +9361,7 @@ msgstr "Gem din version som et nyt dokument, og behold deres her."
 
 #: src/features/applications/stages.ts
 #: src/features/career/preferences.tsx
+#: src/features/discovery/review-queue.tsx
 #: src/shell/builder-chrome.tsx
 msgid "Saved"
 msgstr "Gemt"
@@ -9323,6 +9411,10 @@ msgstr "Gemt i Viden, privat for denne ansøgning."
 #: src/features/workspace/tabs/practise.tsx
 msgid "Saved to Saved · Practice"
 msgstr "Gemt under Gemt · Øvelse"
+
+#: src/features/discovery/review-queue.tsx
+msgid "Saved to your applications"
+msgstr ""
 
 #: src/features/applications/add-sheet.tsx
 msgid "Saving the job. Wait for confirmation before making another change."
@@ -9815,6 +9907,10 @@ msgstr "Vis ikoner"
 msgid "Show in search engines"
 msgstr "Vis i søgemaskiner"
 
+#: src/features/discovery/review-queue.tsx
+msgid "Show jobs"
+msgstr ""
+
 #: src/features/ai/provider-editor.tsx
 msgid "Show key"
 msgstr "Vis nøgle"
@@ -9826,6 +9922,7 @@ msgstr "Vis link i titel"
 #: app/(tabs)/settings/preferences.tsx
 #: src/features/application-detail/interview-sheet.tsx
 #: src/features/career/today.tsx
+#: src/features/discovery/review-queue.tsx
 msgid "Show more"
 msgstr "Vis mere"
 
@@ -9974,9 +10071,19 @@ msgstr "Log ind og sikkerhed"
 msgid "Sign-in didn't complete"
 msgstr "Login blev ikke gennemført"
 
+#: src/features/settings/clipper-sign-ins.tsx
+msgid "Sign-in revoked. The extension stops working on its next request."
+msgstr ""
+
 #: src/features/letters/write.tsx
 msgid "Sign-off"
 msgstr "Afslutning"
+
+#. placeholder {0}: date(token.createdAt)
+#. placeholder {1}: date(token.lastUsedAt)
+#: src/features/settings/clipper-sign-ins.tsx
+msgid "Signed in {0} · Last used {1}"
+msgstr ""
 
 #. placeholder {0}: hostOf(server)
 #: src/auth/session-gate.tsx
@@ -11459,6 +11566,7 @@ msgstr "Prøv {suggestion}"
 #: src/features/branding/domains-screen.tsx
 #: src/features/letters/write.tsx
 #: src/features/settings/api-keys.tsx
+#: src/features/settings/clipper-sign-ins.tsx
 #: src/features/workspace/parts.tsx
 #: src/features/workspace/preparation.tsx
 #: src/features/workspace/shell.tsx
@@ -12552,6 +12660,10 @@ msgstr "Dine punkter er tegnet med usædvanlige tegn."
 #: src/draft/conflict-sheet.tsx
 msgid "Your changes on this device will be replaced by the saved version."
 msgstr "Dine ændringer på denne enhed vil blive erstattet af den gemte version."
+
+#: src/features/settings/profile.tsx
+msgid "Your cohort"
+msgstr ""
 
 #: src/features/ats-checker/messages.ts
 msgid "Your contact details are not on the first page."

@@ -21,6 +21,17 @@ export const auditListInput = z.object({
 		.max(128)
 		.optional()
 		.describe("The `nextCursor` of the previous page. Omit for the newest entries."),
+	// CAREEROS (P3-T08): the Org Admin console filters its audit view by action.
+	action: z
+		.string()
+		.regex(/^[a-z][a-z0-9_.]{1,63}$/)
+		.optional()
+		.describe("Only entries with exactly this action, for example `cohort.created`."),
+});
+
+// CAREEROS (P3-T08): the signed-in member's own cohort, for the profile (web and mobile). Any member can read it.
+export const myCohortSchema = z.object({
+	cohortName: z.string().nullable().describe("The member's cohort in the current organization, or null."),
 });
 
 export const auditEntrySchema = z.object({

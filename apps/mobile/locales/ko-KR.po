@@ -33,6 +33,11 @@ msgstr "“{0}”가 휴지통으로 이동되었습니다."
 msgid "“{0}” stops being your primary resume."
 msgstr "“{0}” 이력서가 더 이상 대표 이력서가 아니게 됩니다."
 
+#. placeholder {0}: selected?.label ?? ""
+#: src/features/settings/clipper-sign-ins.tsx
+msgid "“{0}” stops working. You can sign in again from the extension."
+msgstr ""
+
 #. placeholder {0}: purge?.documents[0]?.name
 #: src/features/documents/library.tsx
 msgid "“{0}” will be deleted for good and can't be restored."
@@ -2092,6 +2097,10 @@ msgstr "브리핑 새로 고침 켜짐 · {next}"
 msgid "Briefing refresh paused"
 msgstr "브리핑 새로 고침 일시 중지됨"
 
+#: src/features/settings/clipper-sign-ins.tsx
+msgid "Browsers where you signed in to the Job Clipper extension. You sign in from the extension on a computer."
+msgstr ""
+
 #: src/features/ai/web-access.tsx
 msgid "Built-in reader"
 msgstr "내장 리더"
@@ -3137,6 +3146,10 @@ msgstr "로드할 수 없습니다. 연결을 확인하고 다시 시도하세�
 msgid "Couldn't load versions."
 msgstr "버전을 로드할 수 없습니다."
 
+#: src/features/settings/clipper-sign-ins.tsx
+msgid "Couldn't load your Job Clipper sign-ins."
+msgstr ""
+
 #: app/(tabs)/settings/account.tsx
 msgid "Couldn't load your profile."
 msgstr "프로필을 로드할 수 없습니다."
@@ -3169,6 +3182,7 @@ msgid "Couldn't open the browser. Try again."
 msgstr "브라우저를 열 수 없습니다. 다시 시도해 보세요."
 
 #: src/features/career/today.tsx
+#: src/features/discovery/review-queue.tsx
 msgid "Couldn't open the posting. Try again."
 msgstr "채용 공고를 열 수 없습니다. 다시 시도해 보세요."
 
@@ -3243,6 +3257,10 @@ msgstr "이 이력서를 렌더링할 수 없습니다."
 #: src/features/settings/api-keys.tsx
 msgid "Couldn't revoke the key. Try again."
 msgstr "키를 취소할 수 없습니다. 다시 시도해 보세요."
+
+#: src/features/settings/clipper-sign-ins.tsx
+msgid "Couldn't revoke the sign-in. Try again."
+msgstr ""
 
 #: src/features/career/facts.tsx
 #: src/features/career/hooks.ts
@@ -3934,6 +3952,7 @@ msgstr "오프라인 편집 내용을 취소하고 저장된 버전을 로드하
 msgid "Discard your offline edits?"
 msgstr "오프라인 수정사항을 삭제하시겠습니까?"
 
+#: src/features/discovery/review-queue.tsx
 #: src/features/letters/write.tsx
 #: src/ui/layout.tsx
 msgid "Dismiss"
@@ -3941,6 +3960,10 @@ msgstr "해고하다"
 
 #: src/features/career/today.tsx
 msgid "Dismiss selected"
+msgstr ""
+
+#: src/features/discovery/review-queue.tsx
+msgid "Dismissed"
 msgstr ""
 
 #: src/features/career/role-suggestions.tsx
@@ -5452,6 +5475,10 @@ msgstr "JavaScript"
 msgid "Job"
 msgstr "직업"
 
+#: src/features/settings/clipper-sign-ins.tsx
+msgid "Job Clipper sign-ins"
+msgstr ""
+
 #: src/features/application-detail/sheets.tsx
 #: src/features/workspace/preparation.tsx
 msgid "Job description"
@@ -5485,6 +5512,7 @@ msgstr "이 서버에는 채용 검색이 설정되어 있지 않습니다. 대�
 msgid "Job search pipeline"
 msgstr "구직 파이프라인"
 
+#: app/(tabs)/career/_layout.tsx
 #: src/features/search/search-screen.tsx
 msgid "Jobs"
 msgstr "일자리"
@@ -6039,6 +6067,10 @@ msgstr ""
 msgid "Loading saved version…"
 msgstr "저장된 버전 불러오는 중…"
 
+#: src/features/settings/clipper-sign-ins.tsx
+msgid "Loading sign-ins…"
+msgstr ""
+
 #: src/features/ai/web-access.tsx
 msgid "Loading web access…"
 msgstr "웹 액세스 로드 중…"
@@ -6255,6 +6287,16 @@ msgstr "읽음으로 표시됨"
 #: src/features/letters/design.tsx
 msgid "Match “{resumeName}”"
 msgstr "“{resumeName}”에 맞추기"
+
+#. placeholder {0}: scoreOf(job)
+#: src/features/discovery/review-queue.tsx
+msgid "Match {0}"
+msgstr ""
+
+#. placeholder {0}: scoreOf(job)
+#: src/features/discovery/review-queue.tsx
+msgid "Match {0} (quick)"
+msgstr ""
 
 #: src/features/search/search-screen.tsx
 msgid "Match system theme"
@@ -6602,11 +6644,13 @@ msgstr "네트워크"
 
 #: src/features/career/preferences.tsx
 #: src/features/settings/api-keys.tsx
+#: src/features/settings/clipper-sign-ins.tsx
 msgid "Never"
 msgstr "절대"
 
 #: app/_layout.tsx
 #: app/(tabs)/_layout.tsx
+#: src/features/discovery/review-queue.tsx
 #: src/features/documents/library.tsx
 #: src/shell/app-tabs.tsx
 msgid "New"
@@ -6646,6 +6690,10 @@ msgstr "새 문서"
 #: src/features/write/section-sheet.tsx
 msgid "New page"
 msgstr "새 페이지"
+
+#: src/features/discovery/review-queue.tsx
+msgid "New postings show up here after an automation runs."
+msgstr ""
 
 #: src/features/career/today.tsx
 msgid "New roles from your search"
@@ -6766,6 +6814,10 @@ msgstr "날짜 없음"
 msgid "No dates were found."
 msgstr "날짜를 찾을 수 없습니다."
 
+#: src/features/discovery/review-queue.tsx
+msgid "No dismissed jobs"
+msgstr ""
+
 #: src/features/workspace/tabs/apply.tsx
 msgid "no documents"
 msgstr ""
@@ -6797,6 +6849,10 @@ msgstr "일치하는 사실이 없습니다."
 #: src/features/write/pickers.tsx
 msgid "No icons match."
 msgstr "일치하는 아이콘이 없습니다."
+
+#: src/features/settings/clipper-sign-ins.tsx
+msgid "No Job Clipper sign-ins yet."
+msgstr ""
 
 #: src/features/documents/new-document.tsx
 msgid "No job yet"
@@ -6888,6 +6944,10 @@ msgstr "결과 없음"
 #: src/features/letters/write.tsx
 msgid "No resume"
 msgstr "이력서 없음"
+
+#: src/features/discovery/review-queue.tsx
+msgid "No saved jobs yet"
+msgstr ""
 
 #: src/auth/messages.ts
 msgid "No server answered at this address. Check the spelling, or ask your administrator whether the server allows app sign-in."
@@ -7094,6 +7154,10 @@ msgstr "고칠 것이 없습니다"
 msgid "Nothing to fix. The remaining pages were simply not covered by this report."
 msgstr "수정할 항목이 없습니다. 나머지 페이지는 이 보고서에서 다루지 않았을 뿐입니다."
 
+#: src/features/discovery/review-queue.tsx
+msgid "Nothing to review"
+msgstr ""
+
 #: src/features/career/preferences.tsx
 msgid "Notice period (weeks)"
 msgstr "퇴사 통보 기간(주)"
@@ -7296,6 +7360,7 @@ msgstr "AI 설정 열기"
 #: src/features/applications-board/board-screen.tsx
 #: src/features/applications/list-screen.tsx
 #: src/features/check/job-match.tsx
+#: src/features/discovery/review-queue.tsx
 msgid "Open application"
 msgstr "지원 내역 열기"
 
@@ -7819,6 +7884,10 @@ msgstr "채용 공고"
 msgid "Postings can change or close. Publication date unknown; search coverage is incomplete."
 msgstr ""
 
+#: src/features/discovery/review-queue.tsx
+msgid "Postings your automations found, best match first. Save one to your applications, or dismiss it and it never comes back."
+msgstr ""
+
 #: src/features/workspace/parts.tsx
 #: src/features/workspace/tabs/practise.tsx
 #: src/features/workspace/tabs/prepare.tsx
@@ -8202,6 +8271,7 @@ msgstr "라이선스 읽기"
 
 #: src/features/applications/add-sheet.tsx
 #: src/features/career/today.tsx
+#: src/features/discovery/review-queue.tsx
 msgid "Read posting"
 msgstr "채용 공고 읽기"
 
@@ -9023,6 +9093,7 @@ msgid "Reviewing needs an AI connection. What you write here stays on this devic
 msgstr "리뷰에는 AI 연결이 필요합니다. 여기에 작성한 내용은 그때까지 이 기기에 유지됩니다."
 
 #: src/features/settings/api-keys.tsx
+#: src/features/settings/clipper-sign-ins.tsx
 msgid "Revoke"
 msgstr "취소"
 
@@ -9030,13 +9101,25 @@ msgstr "취소"
 msgid "Revoke API key?"
 msgstr "API 키를 취소하시겠습니까?"
 
+#: src/features/settings/clipper-sign-ins.tsx
+msgid "Revoke Job Clipper sign-in?"
+msgstr ""
+
 #: src/features/settings/api-keys.tsx
 msgid "Revoke key"
 msgstr "키 취소"
 
+#: src/features/settings/clipper-sign-ins.tsx
+msgid "Revoke sign-in"
+msgstr ""
+
 #: src/features/settings/api-keys.tsx
 msgid "Revoke this API key"
 msgstr "이 API 키 취소"
+
+#: src/features/settings/clipper-sign-ins.tsx
+msgid "Revoke this Job Clipper sign-in"
+msgstr ""
 
 #: src/features/check/writing.tsx
 msgid "Rewrite accepted"
@@ -9260,6 +9343,10 @@ msgstr "비교할 수 있도록 이 오퍼 조건 저장"
 msgid "Save this story to Knowledge?"
 msgstr "이 이야기를 지식에 저장할까요?"
 
+#: src/features/discovery/review-queue.tsx
+msgid "Save to applications"
+msgstr ""
+
 #: src/features/workspace/tabs/fit.tsx
 msgid "Save to Knowledge"
 msgstr "지식에 저장"
@@ -9274,6 +9361,7 @@ msgstr "내 버전은 새 문서로 저장하고 여기에 상대 버전을 유�
 
 #: src/features/applications/stages.ts
 #: src/features/career/preferences.tsx
+#: src/features/discovery/review-queue.tsx
 #: src/shell/builder-chrome.tsx
 msgid "Saved"
 msgstr "저장됨"
@@ -9323,6 +9411,10 @@ msgstr "이 지원 건 전용으로 지식에 저장했습니다."
 #: src/features/workspace/tabs/practise.tsx
 msgid "Saved to Saved · Practice"
 msgstr "저장됨 · 연습에 저장됨"
+
+#: src/features/discovery/review-queue.tsx
+msgid "Saved to your applications"
+msgstr ""
 
 #: src/features/applications/add-sheet.tsx
 msgid "Saving the job. Wait for confirmation before making another change."
@@ -9815,6 +9907,10 @@ msgstr "아이콘 표시"
 msgid "Show in search engines"
 msgstr "검색 엔진에 표시"
 
+#: src/features/discovery/review-queue.tsx
+msgid "Show jobs"
+msgstr ""
+
 #: src/features/ai/provider-editor.tsx
 msgid "Show key"
 msgstr "키 표시"
@@ -9826,6 +9922,7 @@ msgstr "제목에 링크 표시"
 #: app/(tabs)/settings/preferences.tsx
 #: src/features/application-detail/interview-sheet.tsx
 #: src/features/career/today.tsx
+#: src/features/discovery/review-queue.tsx
 msgid "Show more"
 msgstr "더 보기"
 
@@ -9974,9 +10071,19 @@ msgstr "로그인 및 보안"
 msgid "Sign-in didn't complete"
 msgstr "로그인이 완료되지 않았습니다"
 
+#: src/features/settings/clipper-sign-ins.tsx
+msgid "Sign-in revoked. The extension stops working on its next request."
+msgstr ""
+
 #: src/features/letters/write.tsx
 msgid "Sign-off"
 msgstr "맺음말"
+
+#. placeholder {0}: date(token.createdAt)
+#. placeholder {1}: date(token.lastUsedAt)
+#: src/features/settings/clipper-sign-ins.tsx
+msgid "Signed in {0} · Last used {1}"
+msgstr ""
 
 #. placeholder {0}: hostOf(server)
 #: src/auth/session-gate.tsx
@@ -11459,6 +11566,7 @@ msgstr "{suggestion}를 사용해 보세요"
 #: src/features/branding/domains-screen.tsx
 #: src/features/letters/write.tsx
 #: src/features/settings/api-keys.tsx
+#: src/features/settings/clipper-sign-ins.tsx
 #: src/features/workspace/parts.tsx
 #: src/features/workspace/preparation.tsx
 #: src/features/workspace/shell.tsx
@@ -12552,6 +12660,10 @@ msgstr "항목이 특이한 문자로 표시되어 있습니다."
 #: src/draft/conflict-sheet.tsx
 msgid "Your changes on this device will be replaced by the saved version."
 msgstr "이 기기의 변경사항은 저장된 버전으로 대체됩니다."
+
+#: src/features/settings/profile.tsx
+msgid "Your cohort"
+msgstr ""
 
 #: src/features/ats-checker/messages.ts
 msgid "Your contact details are not on the first page."

@@ -4,7 +4,8 @@ import type { WorkspaceTab } from "@reactive-resume/schema/career";
 
 export type BuilderPane = "write" | "page" | "design" | "check" | "share";
 export type LetterPane = "write" | "page" | "design";
-export type CareerPane = "today" | "coach" | "knowledge" | "offers";
+// CAREEROS (P4-T02): the jobs pane (discovery review queue)
+export type CareerPane = "today" | "coach" | "knowledge" | "jobs" | "offers";
 // CAREEROS (P2-T07): branding and domains panes
 export type SettingsPane = "account" | "preferences" | "ai" | "branding" | "domains";
 export type ApplicationTab = WorkspaceTab;

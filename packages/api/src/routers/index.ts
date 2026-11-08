@@ -18,6 +18,8 @@ import { customDomainRouter } from "../features/custom-domain/router";
 import { discoveryRouter } from "../features/discovery/router";
 import { documentsRouter } from "../features/documents/router";
 import { flagsRouter } from "../features/flags/router";
+// CAREEROS: Org Admin console (P3-T08)
+import { orgAdminRouter } from "../features/org-admin/router";
 // CAREEROS: organization custom domains (P2-T06)
 import { organizationDomainRouter } from "../features/org-domain/router";
 // CAREEROS: join or switch page of an organization host (P2-T03)
@@ -53,6 +55,8 @@ export default {
 	flags: flagsRouter,
 	// CAREEROS: read-only entitlements and audit log of the organization (P3-T01)
 	organization: organizationRouter,
+	// CAREEROS: Org Admin console, cohorts, bulk invites, analytics (P3-T08)
+	orgAdmin: orgAdminRouter,
 	// CAREEROS: join or switch page of an organization host (P2-T03)
 	organizationHost: organizationHostRouter,
 	// CAREEROS: organization custom domains (P2-T06)

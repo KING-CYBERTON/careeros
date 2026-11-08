@@ -1,8 +1,8 @@
 import z from "zod";
 import { protectedProcedure } from "../../context";
 import { accountRateLimit } from "../../middleware/rate-limit";
-import { auditListInput, auditListSchema, entitlementsSchema } from "./schemas";
-import { getOrganizationEntitlements, listAuditLog } from "./service";
+import { auditListInput, auditListSchema, entitlementsSchema, myCohortSchema } from "./schemas";
+import { getMyCohort, getOrganizationEntitlements, listAuditLog } from "./service";
 
 // CAREEROS (P3-T01): read-only in this task. The write paths (plan, seats, flags) arrive with T04 and T07.
 
@@ -22,6 +22,21 @@ export const organizationRouter = {
 		.input(z.object({}).optional())
 		.output(entitlementsSchema)
 		.handler(() => getOrganizationEntitlements()),
+
+	// CAREEROS (P3-T08): any member can read the name of their own cohort (the profile on web and mobile).
+	myCohort: protectedProcedure
+		.route({
+			...route,
+			method: "GET",
+			path: "/organization/my-cohort",
+			operationId: "getMyOrganizationCohort",
+			summary: "Get the caller's own cohort",
+			description:
+				"Returns the name of the cohort the caller belongs to in the current organization, or null. Any member can read it. Requires authentication.",
+		})
+		.input(z.object({}).optional())
+		.output(myCohortSchema)
+		.handler(({ context }) => getMyCohort(context.user.id)),
 
 	audit: protectedProcedure
 		.route({

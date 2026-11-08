@@ -2,6 +2,8 @@ export { audit, type AuditContext, type AuditTarget } from "./audit";
 export {
 	aiCreditsTotal,
 	buildEntitlements,
+	DEFAULT_DISCOVERY_AI_TOP_N,
+	discoveryAiTopNCap,
 	effectiveSeatLimit,
 	TRIAL_DAYS,
 	getEntitlements,

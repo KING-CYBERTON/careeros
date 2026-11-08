@@ -18,13 +18,16 @@ export const INVITATION_EXPIRES_IN_SECONDS = 60 * 60 * 24 * 7;
 /**
  * Options for the Better Auth organization plugin. Roles are the plugin defaults (`owner`, `admin`, `member`) and the
  * creator becomes `owner`. `cohortId` and `invitedBy` are CareerOS member fields (PRODUCT.md §6.2); the cohort table
- * arrives in Phase 3, so `cohortId` has no foreign key yet.
+ * arrived in P3-T08 (a composite foreign key onto it).
  */
 export const organizationOptions = {
 	creatorRole: "owner",
 	// Interim rule (phase plan D6); P1-T03 decides where organizations are created.
 	allowUserToCreateOrganization: true,
 	invitationExpiresIn: INVITATION_EXPIRES_IN_SECONDS,
+	// CAREEROS (P3-T08): the plugin allows 100 pending invitations per organization by default, which would stop a bulk
+	// upload of up to 500 rows. The seat limit (hooks and trigger) is what bounds invitations; this is only a ceiling.
+	invitationLimit: 1000,
 	schema: {
 		member: {
 			additionalFields: {
@@ -46,6 +49,15 @@ export const organizationOptions = {
 		// The plugin does not know who invited the member; record the inviter once the invitation is accepted.
 		afterAcceptInvitation: async ({ invitation, member }) => {
 			await db.update(schema.member).set({ invitedBy: invitation.inviterId }).where(eq(schema.member.id, member.id));
+			// CAREEROS (P3-T08): a bulk invitation can name a cohort; the new member joins it. The column is not a Better
+			// Auth field, so it is read from the row. The composite key keeps the cohort inside this organization.
+			const [named] = await db
+				.select({ cohortId: schema.invitation.cohortId })
+				.from(schema.invitation)
+				.where(eq(schema.invitation.id, invitation.id))
+				.limit(1);
+			if (named?.cohortId)
+				await db.update(schema.member).set({ cohortId: named.cohortId }).where(eq(schema.member.id, member.id));
 		},
 	},
 	// CAREEROS (P2-T04): branded by the inviting organization and linked to its own host when it has one.

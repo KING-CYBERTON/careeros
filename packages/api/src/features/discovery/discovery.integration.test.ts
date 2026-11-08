@@ -28,7 +28,12 @@ vi.mock("@careeros/job-discovery", async (importOriginal) => {
 				descriptionHtml: "<p>TypeScript</p>",
 			})),
 		);
-	return { ...actual, runDiscovery: (id: string) => actual.runDiscovery(id, { loadBoard }) };
+	// P4-T02: `runNow` answers early and carries the run out in the background with `executeDiscovery`.
+	return {
+		...actual,
+		executeDiscovery: (begun: Parameters<typeof actual.executeDiscovery>[0], options?: Record<string, unknown>) =>
+			actual.executeDiscovery(begun, { ...options, loadBoard }),
+	};
 });
 
 // P4-T01: the discovery API through the real router, as `careeros_app`. Skipped only when the CAREEROS_TEST_* variables
@@ -91,6 +96,15 @@ describe.skipIf(!configured)("discovery API", () => {
 	};
 	const expectCode = async (promise: Promise<unknown>, code: string) => {
 		await expect(promise).rejects.toMatchObject({ code });
+	};
+	/** `runNow` answers while the run is still going; this waits until the run row is closed. */
+	const settled = async (runId: string) => {
+		for (let i = 0; i < 100; i++) {
+			const { rows } = await owner.query(`select status from discovery_run where id = $1`, [runId]);
+			if (rows[0] && rows[0].status !== "running") return;
+			await new Promise((resolve) => setTimeout(resolve, 50));
+		}
+		throw new Error("the run did not finish");
 	};
 	const allowRunNow = (id: string) =>
 		owner.query(`update job_source set last_run_at = now() - interval '11 minutes' where id = $1`, [id]);
@@ -184,9 +198,13 @@ describe.skipIf(!configured)("discovery API", () => {
 				remote: "any",
 				schedule: "daily",
 				aiTopN: 10,
-				nextRunAt: null,
+				// P4-T02: a daily automation has its next run set on create, 24 hours to 24.5 hours from now.
 				lastRunAt: null,
+				lastScheduledRunAt: null,
 			});
+			const wait = (created.nextRunAt?.getTime() ?? 0) - Date.now();
+			expect(wait).toBeGreaterThan(24 * 3600_000 - 60_000);
+			expect(wait).toBeLessThanOrEqual(24 * 3600_000 + 30 * 60_000);
 
 			const full = await call(() => alice().sources.create(input));
 			const listed = await call(() => alice().sources.list());
@@ -335,9 +353,14 @@ describe.skipIf(!configured)("discovery API", () => {
 				}),
 			);
 			sourceId = created.id;
-			const summary = await call(() => alice().runNow({ jobSourceId: sourceId }));
+			const started = await call(() => alice().runNow({ jobSourceId: sourceId }));
+			// Answers as soon as the run is recorded as running.
+			expect(started).toMatchObject({ status: "running", fetched: 0, aiMatched: 0 });
+			await settled(started.runId);
+			const [summary] = await call(() => alice().runs.list({ jobSourceId: sourceId }));
 			expect(summary).toMatchObject({
 				status: "succeeded",
+				trigger: "manual",
 				fetched: 6,
 				new: 6,
 				duplicate: 0,
@@ -355,7 +378,9 @@ describe.skipIf(!configured)("discovery API", () => {
 				"TOO_MANY_REQUESTS",
 			);
 			await allowRunNow(sourceId);
-			const summary = await call(() => alice().runNow({ jobSourceId: sourceId }));
+			const started = await call(() => alice().runNow({ jobSourceId: sourceId }));
+			await settled(started.runId);
+			const [summary] = await call(() => alice().runs.list({ jobSourceId: sourceId }));
 			expect(summary).toMatchObject({ new: 0, duplicate: 6 });
 		});
 
@@ -386,8 +411,10 @@ describe.skipIf(!configured)("discovery API", () => {
 			expect(await call(() => alice().jobs.list({ status: "dismissed", limit: 50, offset: 0 }))).toHaveLength(1);
 
 			await allowRunNow(sourceId);
-			const summary = await call(() => alice().runNow({ jobSourceId: sourceId }));
-			expect(summary.new).toBe(0);
+			const started = await call(() => alice().runNow({ jobSourceId: sourceId }));
+			await settled(started.runId);
+			const [summary] = await call(() => alice().runs.list({ jobSourceId: sourceId }));
+			expect(summary?.new).toBe(0);
 			const stored = (await owner.query(`select status from discovered_job where id = $1`, [first.id])).rows[0];
 			expect(stored).toEqual({ status: "dismissed" });
 			expect(await call(() => alice().jobs.list({ status: "new", limit: 50, offset: 0 }))).toHaveLength(5);
@@ -425,12 +452,156 @@ describe.skipIf(!configured)("discovery API", () => {
 				call(() => alice().runNow({ jobSourceId: created.id })),
 			]);
 			expect(results.filter((result) => result.status === "fulfilled")).toHaveLength(1);
+			const won = results.find((result) => result.status === "fulfilled") as PromiseFulfilledResult<{ runId: string }>;
+			await settled(won.value.runId);
 			const rejected = results.find((result) => result.status === "rejected") as PromiseRejectedResult;
 			expect(rejected.reason).toMatchObject({ code: "TOO_MANY_REQUESTS" });
 			expect(
 				(await owner.query(`select count(*)::int as n from discovery_run where job_source_id = $1`, [created.id]))
 					.rows[0],
 			).toEqual({ n: 1 });
+		});
+	});
+	describe("review queue and accept (P4-T02)", () => {
+		const posting = async (suffix: string, local: number, ai: number | null, owner_ = ids.userA, org = ids.orgA) => {
+			const id = `dq-${suffix}-${run}`;
+			await owner.query(
+				`insert into discovered_job (id, organization_id, user_id, source, external_id, board_token, title, company, location, url, description_html, local_score, ai_score, ai_summary)
+				 values ($1, $2, $3, 'lever', $1, 'queue', $4, 'Queue Co', 'Nairobi', $5, '<p>Build <strong>APIs</strong></p><ul><li>TypeScript</li></ul>', $6, $7, $8)`,
+				[
+					id,
+					org,
+					owner_,
+					`Role ${suffix}`,
+					`https://example.test/queue/${suffix}`,
+					local,
+					ai,
+					ai === null ? null : "Fits well.",
+				],
+			);
+			return id;
+		};
+
+		it("sorts by AI score, then local score, then newest, and pages", async () => {
+			const lowLocalHighAi = await posting("s1", 10, 90);
+			const highLocalNoAi = await posting("s2", 99, null);
+			const midLocalMidAi = await posting("s3", 50, 60);
+			const sameLocal = await posting("s4", 99, null);
+			const listed = await call(() => alice().jobs.list({ limit: 100, offset: 0, status: "new" }));
+			const order = listed.map((job) => job.id).filter((id) => id.startsWith("dq-s"));
+			expect(order.slice(0, 2)).toEqual([lowLocalHighAi, midLocalMidAi]);
+			// No AI score: after every scored job, by local score, then newest first.
+			expect(order.slice(2)).toEqual([sameLocal, highLocalNoAi]);
+			expect(listed[0]).not.toHaveProperty("descriptionHtml");
+			const page = await call(() => alice().jobs.list({ limit: 1, offset: 1, status: "new" }));
+			expect(page.map((job) => job.id)).toEqual([listed[1]?.id]);
+		});
+
+		it("gets one job with its sanitized description, only for its owner", async () => {
+			const id = await posting("g1", 40, null);
+			const job = await call(() => alice().jobs.get({ id }));
+			expect(job.descriptionHtml).toContain("<strong>APIs</strong>");
+			for (const stranger of [alice2, bob])
+				await expectCode(
+					call(() => stranger().jobs.get({ id })),
+					"NOT_FOUND",
+				);
+		});
+
+		it("accepts into the tracker once, and again answers with the same application", async () => {
+			const id = await posting("a1", 70, 80);
+			const first = await call(() => alice().jobs.accept({ id }));
+			expect(first.job).toMatchObject({ status: "accepted", applicationId: first.applicationId });
+			const again = await call(() => alice().jobs.accept({ id }));
+			expect(again.applicationId).toBe(first.applicationId);
+			const apps = await owner.query(`select * from application where source_url = $1`, [
+				"https://example.test/queue/a1",
+			]);
+			expect(apps.rows).toHaveLength(1);
+			expect(apps.rows[0]).toMatchObject({
+				id: first.applicationId,
+				organization_id: ids.orgA,
+				user_id: ids.userA,
+				company: "Queue Co",
+				role: "Role a1",
+				location: "Nairobi",
+				status: "saved",
+				source: "discovery",
+				tags: ["queue"],
+			});
+			expect(apps.rows[0].job_description).toBe("Build APIs\n\n- TypeScript");
+			await expectCode(
+				call(() => alice().jobs.dismiss({ id })),
+				"CONFLICT",
+			);
+		});
+
+		it("lets only one of two simultaneous accepts create an application", async () => {
+			const id = await posting("a2", 70, null);
+			const [one, two] = await Promise.all([
+				call(() => alice().jobs.accept({ id })),
+				call(() => alice().jobs.accept({ id })),
+			]);
+			expect(one.applicationId).toBe(two.applicationId);
+			const apps = await owner.query(`select id from application where source_url = $1`, [
+				"https://example.test/queue/a2",
+			]);
+			expect(apps.rows).toHaveLength(1);
+		});
+
+		it("accepts a dismissed job", async () => {
+			const id = await posting("a3", 70, null);
+			await call(() => alice().jobs.dismiss({ id }));
+			const accepted = await call(() => alice().jobs.accept({ id }));
+			expect(accepted.job.status).toBe("accepted");
+		});
+
+		it("adopts an application that was created but never linked, instead of adding a second", async () => {
+			const id = await posting("a4", 70, null);
+			const first = await call(() => alice().jobs.accept({ id }));
+			await owner.query(
+				`update discovered_job set status = 'new', application_id = null, accepted_at = null where id = $1`,
+				[id],
+			);
+			const second = await call(() => alice().jobs.accept({ id }));
+			expect(second.applicationId).toBe(first.applicationId);
+		});
+
+		it("refuses a stranger, a suspended organization and an organization without the feature", async () => {
+			const id = await posting("a5", 70, null);
+			for (const stranger of [alice2, bob])
+				await expectCode(
+					call(() => stranger().jobs.accept({ id })),
+					"NOT_FOUND",
+				);
+			const bobJob = await posting("a6", 70, null, ids.userB, ids.orgB);
+			await owner.query(`update organization set status = 'suspended' where id = $1`, [ids.orgB]);
+			try {
+				await expectCode(
+					call(() => bob().jobs.accept({ id: bobJob })),
+					"FORBIDDEN",
+				);
+			} finally {
+				await owner.query(`update organization set status = 'active' where id = $1`, [ids.orgB]);
+			}
+			await expectCode(
+				call(() => carol().jobs.accept({ id })),
+				"FORBIDDEN",
+			);
+			const none = await owner.query(`select count(*)::int as n from application where source_url = $1`, [
+				"https://example.test/queue/a5",
+			]);
+			expect(none.rows[0]).toEqual({ n: 0 });
+		});
+
+		it("clears the link, not the job, when the application is deleted", async () => {
+			const id = await posting("a7", 70, null);
+			const { applicationId } = await call(() => alice().jobs.accept({ id }));
+			await owner.query(`delete from application where id = $1`, [applicationId]);
+			const row = (
+				await owner.query(`select status, application_id, organization_id from discovered_job where id = $1`, [id])
+			).rows[0];
+			expect(row).toEqual({ status: "accepted", application_id: null, organization_id: ids.orgA });
 		});
 	});
 });

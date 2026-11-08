@@ -62,3 +62,13 @@ describe("feature resolution order (D4)", () => {
 		expect(resolved.sso).toBe(false);
 	});
 });
+
+// CAREEROS (P4-T02): `discovery_ai_top_n` is a number on the plan, not a feature flag
+describe("discovery_ai_top_n", () => {
+	it("is not a feature key and stays out of the resolved feature map", () => {
+		expect(isFeatureKey("discovery_ai_top_n")).toBe(false);
+		expect(resolveFeatures(inputs({ plan: { discovery_ai_top_n: 10, custom_domain: true } }))).not.toHaveProperty(
+			"discovery_ai_top_n",
+		);
+	});
+});

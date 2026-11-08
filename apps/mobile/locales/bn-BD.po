@@ -33,6 +33,11 @@ msgstr "\"{0}\" ট্র্যাশে সরানো হয়েছে৷"
 msgid "“{0}” stops being your primary resume."
 msgstr "“{0}” আর আপনার প্রধান জীবনবৃত্তান্ত থাকবে না।"
 
+#. placeholder {0}: selected?.label ?? ""
+#: src/features/settings/clipper-sign-ins.tsx
+msgid "“{0}” stops working. You can sign in again from the extension."
+msgstr ""
+
 #. placeholder {0}: purge?.documents[0]?.name
 #: src/features/documents/library.tsx
 msgid "“{0}” will be deleted for good and can't be restored."
@@ -2092,6 +2097,10 @@ msgstr "ব্রিফিং রিফ্রেশ চালু আছে · {n
 msgid "Briefing refresh paused"
 msgstr "ব্রিফিং রিফ্রেশ বিরতিতে"
 
+#: src/features/settings/clipper-sign-ins.tsx
+msgid "Browsers where you signed in to the Job Clipper extension. You sign in from the extension on a computer."
+msgstr ""
+
 #: src/features/ai/web-access.tsx
 msgid "Built-in reader"
 msgstr "অন্তর্নির্মিত পাঠক"
@@ -3137,6 +3146,10 @@ msgstr "এটি লোড করা যায়নি। আপনার স�
 msgid "Couldn't load versions."
 msgstr "সংস্করণ লোড করা যায়নি।"
 
+#: src/features/settings/clipper-sign-ins.tsx
+msgid "Couldn't load your Job Clipper sign-ins."
+msgstr ""
+
 #: app/(tabs)/settings/account.tsx
 msgid "Couldn't load your profile."
 msgstr "আপনার প্রোফাইল লোড করা যায়নি."
@@ -3169,6 +3182,7 @@ msgid "Couldn't open the browser. Try again."
 msgstr "ব্রাউজার খুলতে পারেনি। আবার চেষ্টা করুন"
 
 #: src/features/career/today.tsx
+#: src/features/discovery/review-queue.tsx
 msgid "Couldn't open the posting. Try again."
 msgstr "চাকরির বিজ্ঞপ্তিটি খোলা যায়নি। আবার চেষ্টা করুন।"
 
@@ -3243,6 +3257,10 @@ msgstr "এই জীবনবৃত্তান্ত রেন্ডার ক
 #: src/features/settings/api-keys.tsx
 msgid "Couldn't revoke the key. Try again."
 msgstr "কীটি প্রত্যাহার করা যায়নি। আবার চেষ্টা করুন"
+
+#: src/features/settings/clipper-sign-ins.tsx
+msgid "Couldn't revoke the sign-in. Try again."
+msgstr ""
 
 #: src/features/career/facts.tsx
 #: src/features/career/hooks.ts
@@ -3934,6 +3952,7 @@ msgstr "আপনার অফলাইন সম্পাদনাগুলি 
 msgid "Discard your offline edits?"
 msgstr "আপনার অফলাইন সম্পাদনাগুলি বাতিল করবেন?"
 
+#: src/features/discovery/review-queue.tsx
 #: src/features/letters/write.tsx
 #: src/ui/layout.tsx
 msgid "Dismiss"
@@ -3941,6 +3960,10 @@ msgstr "খারিজ করুন"
 
 #: src/features/career/today.tsx
 msgid "Dismiss selected"
+msgstr ""
+
+#: src/features/discovery/review-queue.tsx
+msgid "Dismissed"
 msgstr ""
 
 #: src/features/career/role-suggestions.tsx
@@ -5452,6 +5475,10 @@ msgstr "JavaScript"
 msgid "Job"
 msgstr "চাকরি"
 
+#: src/features/settings/clipper-sign-ins.tsx
+msgid "Job Clipper sign-ins"
+msgstr ""
+
 #: src/features/application-detail/sheets.tsx
 #: src/features/workspace/preparation.tsx
 msgid "Job description"
@@ -5485,6 +5512,7 @@ msgstr "এই সার্ভারে চাকরি খোঁজা কন�
 msgid "Job search pipeline"
 msgstr "চাকরি খোঁজার পাইপলাইন"
 
+#: app/(tabs)/career/_layout.tsx
 #: src/features/search/search-screen.tsx
 msgid "Jobs"
 msgstr "চাকরি"
@@ -6039,6 +6067,10 @@ msgstr ""
 msgid "Loading saved version…"
 msgstr "সংরক্ষিত সংস্করণ লোড হচ্ছে…"
 
+#: src/features/settings/clipper-sign-ins.tsx
+msgid "Loading sign-ins…"
+msgstr ""
+
 #: src/features/ai/web-access.tsx
 msgid "Loading web access…"
 msgstr "ওয়েব অ্যাক্সেস লোড হচ্ছে..."
@@ -6255,6 +6287,16 @@ msgstr "পড়া হয়েছে বলে চিহ্নিত"
 #: src/features/letters/design.tsx
 msgid "Match “{resumeName}”"
 msgstr "“{resumeName}”-এর সঙ্গে মেলান"
+
+#. placeholder {0}: scoreOf(job)
+#: src/features/discovery/review-queue.tsx
+msgid "Match {0}"
+msgstr ""
+
+#. placeholder {0}: scoreOf(job)
+#: src/features/discovery/review-queue.tsx
+msgid "Match {0} (quick)"
+msgstr ""
 
 #: src/features/search/search-screen.tsx
 msgid "Match system theme"
@@ -6602,11 +6644,13 @@ msgstr "নেটওয়ার্ক"
 
 #: src/features/career/preferences.tsx
 #: src/features/settings/api-keys.tsx
+#: src/features/settings/clipper-sign-ins.tsx
 msgid "Never"
 msgstr "কখনই না"
 
 #: app/_layout.tsx
 #: app/(tabs)/_layout.tsx
+#: src/features/discovery/review-queue.tsx
 #: src/features/documents/library.tsx
 #: src/shell/app-tabs.tsx
 msgid "New"
@@ -6646,6 +6690,10 @@ msgstr "নতুন নথি"
 #: src/features/write/section-sheet.tsx
 msgid "New page"
 msgstr "নতুন পাতা"
+
+#: src/features/discovery/review-queue.tsx
+msgid "New postings show up here after an automation runs."
+msgstr ""
 
 #: src/features/career/today.tsx
 msgid "New roles from your search"
@@ -6766,6 +6814,10 @@ msgstr "তারিখ নেই"
 msgid "No dates were found."
 msgstr "কোনো তারিখ পাওয়া যায়নি।"
 
+#: src/features/discovery/review-queue.tsx
+msgid "No dismissed jobs"
+msgstr ""
+
 #: src/features/workspace/tabs/apply.tsx
 msgid "no documents"
 msgstr ""
@@ -6797,6 +6849,10 @@ msgstr "কোনো তথ্য মিলছে না"
 #: src/features/write/pickers.tsx
 msgid "No icons match."
 msgstr "কোনো আইকন মেলে না।"
+
+#: src/features/settings/clipper-sign-ins.tsx
+msgid "No Job Clipper sign-ins yet."
+msgstr ""
 
 #: src/features/documents/new-document.tsx
 msgid "No job yet"
@@ -6888,6 +6944,10 @@ msgstr "কোন ফলাফল নেই"
 #: src/features/letters/write.tsx
 msgid "No resume"
 msgstr "জীবনবৃত্তান্ত নেই"
+
+#: src/features/discovery/review-queue.tsx
+msgid "No saved jobs yet"
+msgstr ""
 
 #: src/auth/messages.ts
 msgid "No server answered at this address. Check the spelling, or ask your administrator whether the server allows app sign-in."
@@ -7094,6 +7154,10 @@ msgstr "ঠিক করার কিছুই নেই"
 msgid "Nothing to fix. The remaining pages were simply not covered by this report."
 msgstr "ঠিক করার কিছু নেই। বাকি পৃষ্ঠাগুলো কেবল এই রিপোর্টে কভার করা হয়নি।"
 
+#: src/features/discovery/review-queue.tsx
+msgid "Nothing to review"
+msgstr ""
+
 #: src/features/career/preferences.tsx
 msgid "Notice period (weeks)"
 msgstr "নোটিশ পিরিয়ড (সপ্তাহ)"
@@ -7296,6 +7360,7 @@ msgstr "AI সেটিংস খুলুন"
 #: src/features/applications-board/board-screen.tsx
 #: src/features/applications/list-screen.tsx
 #: src/features/check/job-match.tsx
+#: src/features/discovery/review-queue.tsx
 msgid "Open application"
 msgstr "আবেদন খুলুন"
 
@@ -7819,6 +7884,10 @@ msgstr "চাকরির বিজ্ঞপ্তি"
 msgid "Postings can change or close. Publication date unknown; search coverage is incomplete."
 msgstr ""
 
+#: src/features/discovery/review-queue.tsx
+msgid "Postings your automations found, best match first. Save one to your applications, or dismiss it and it never comes back."
+msgstr ""
+
 #: src/features/workspace/parts.tsx
 #: src/features/workspace/tabs/practise.tsx
 #: src/features/workspace/tabs/prepare.tsx
@@ -8202,6 +8271,7 @@ msgstr "লাইসেন্স পড়ুন"
 
 #: src/features/applications/add-sheet.tsx
 #: src/features/career/today.tsx
+#: src/features/discovery/review-queue.tsx
 msgid "Read posting"
 msgstr "চাকরির পোস্টিং পড়ুন"
 
@@ -9023,6 +9093,7 @@ msgid "Reviewing needs an AI connection. What you write here stays on this devic
 msgstr "পর্যালোচনার জন্য একটি AI সংযোগ প্রয়োজন৷ আপনি এখানে যা লিখছেন তা এই ডিভাইসে ততক্ষণ পর্যন্ত থাকবে।"
 
 #: src/features/settings/api-keys.tsx
+#: src/features/settings/clipper-sign-ins.tsx
 msgid "Revoke"
 msgstr "প্রত্যাহার করুন"
 
@@ -9030,13 +9101,25 @@ msgstr "প্রত্যাহার করুন"
 msgid "Revoke API key?"
 msgstr "API কী প্রত্যাহার করবেন?"
 
+#: src/features/settings/clipper-sign-ins.tsx
+msgid "Revoke Job Clipper sign-in?"
+msgstr ""
+
 #: src/features/settings/api-keys.tsx
 msgid "Revoke key"
 msgstr "কী প্রত্যাহার করুন"
 
+#: src/features/settings/clipper-sign-ins.tsx
+msgid "Revoke sign-in"
+msgstr ""
+
 #: src/features/settings/api-keys.tsx
 msgid "Revoke this API key"
 msgstr "এই API কী প্রত্যাহার করুন"
+
+#: src/features/settings/clipper-sign-ins.tsx
+msgid "Revoke this Job Clipper sign-in"
+msgstr ""
 
 #: src/features/check/writing.tsx
 msgid "Rewrite accepted"
@@ -9260,6 +9343,10 @@ msgstr "তুলনা করতে অফারের এই শর্তগ�
 msgid "Save this story to Knowledge?"
 msgstr "এই ঘটনাটি জ্ঞানভান্ডারে সংরক্ষণ করবেন?"
 
+#: src/features/discovery/review-queue.tsx
+msgid "Save to applications"
+msgstr ""
+
 #: src/features/workspace/tabs/fit.tsx
 msgid "Save to Knowledge"
 msgstr "জ্ঞানভান্ডারে সংরক্ষণ করুন"
@@ -9274,6 +9361,7 @@ msgstr "আপনারটি নতুন নথি হিসেবে সং�
 
 #: src/features/applications/stages.ts
 #: src/features/career/preferences.tsx
+#: src/features/discovery/review-queue.tsx
 #: src/shell/builder-chrome.tsx
 msgid "Saved"
 msgstr "সংরক্ষিত"
@@ -9323,6 +9411,10 @@ msgstr "জ্ঞানভান্ডারে সংরক্ষিত হয�
 #: src/features/workspace/tabs/practise.tsx
 msgid "Saved to Saved · Practice"
 msgstr "সংরক্ষিত ট্যাবে সংরক্ষিত হয়েছে · অনুশীলন"
+
+#: src/features/discovery/review-queue.tsx
+msgid "Saved to your applications"
+msgstr ""
 
 #: src/features/applications/add-sheet.tsx
 msgid "Saving the job. Wait for confirmation before making another change."
@@ -9815,6 +9907,10 @@ msgstr "আইকন দেখান"
 msgid "Show in search engines"
 msgstr "সার্চ ইঞ্জিনে দেখান"
 
+#: src/features/discovery/review-queue.tsx
+msgid "Show jobs"
+msgstr ""
+
 #: src/features/ai/provider-editor.tsx
 msgid "Show key"
 msgstr "কী দেখান"
@@ -9826,6 +9922,7 @@ msgstr "শিরোনামে লিঙ্ক দেখান"
 #: app/(tabs)/settings/preferences.tsx
 #: src/features/application-detail/interview-sheet.tsx
 #: src/features/career/today.tsx
+#: src/features/discovery/review-queue.tsx
 msgid "Show more"
 msgstr "আরও দেখান"
 
@@ -9974,9 +10071,19 @@ msgstr "সাইন ইন এবং নিরাপত্তা"
 msgid "Sign-in didn't complete"
 msgstr "সাইন ইন সম্পূর্ণ হয়নি"
 
+#: src/features/settings/clipper-sign-ins.tsx
+msgid "Sign-in revoked. The extension stops working on its next request."
+msgstr ""
+
 #: src/features/letters/write.tsx
 msgid "Sign-off"
 msgstr "সমাপনী"
+
+#. placeholder {0}: date(token.createdAt)
+#. placeholder {1}: date(token.lastUsedAt)
+#: src/features/settings/clipper-sign-ins.tsx
+msgid "Signed in {0} · Last used {1}"
+msgstr ""
 
 #. placeholder {0}: hostOf(server)
 #: src/auth/session-gate.tsx
@@ -11459,6 +11566,7 @@ msgstr "চেষ্টা করুন {suggestion}"
 #: src/features/branding/domains-screen.tsx
 #: src/features/letters/write.tsx
 #: src/features/settings/api-keys.tsx
+#: src/features/settings/clipper-sign-ins.tsx
 #: src/features/workspace/parts.tsx
 #: src/features/workspace/preparation.tsx
 #: src/features/workspace/shell.tsx
@@ -12552,6 +12660,10 @@ msgstr "আপনার বুলেটগুলো অস্বাভাবি�
 #: src/draft/conflict-sheet.tsx
 msgid "Your changes on this device will be replaced by the saved version."
 msgstr "এই ডিভাইসে আপনার পরিবর্তনগুলি সংরক্ষিত সংস্করণ দ্বারা প্রতিস্থাপিত হবে৷"
+
+#: src/features/settings/profile.tsx
+msgid "Your cohort"
+msgstr ""
 
 #: src/features/ats-checker/messages.ts
 msgid "Your contact details are not on the first page."

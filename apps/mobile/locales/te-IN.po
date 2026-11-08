@@ -33,6 +33,11 @@ msgstr "“{0}” ట్రాష్‌కి తరలించబడింద�
 msgid "“{0}” stops being your primary resume."
 msgstr "“{0}” ఇకపై మీ ప్రాథమిక రెజ్యూమ్ కాదు."
 
+#. placeholder {0}: selected?.label ?? ""
+#: src/features/settings/clipper-sign-ins.tsx
+msgid "“{0}” stops working. You can sign in again from the extension."
+msgstr ""
+
 #. placeholder {0}: purge?.documents[0]?.name
 #: src/features/documents/library.tsx
 msgid "“{0}” will be deleted for good and can't be restored."
@@ -2092,6 +2097,10 @@ msgstr "బ్రీఫింగ్ రిఫ్రెష్ ఆన్ చేయ
 msgid "Briefing refresh paused"
 msgstr "బ్రీఫింగ్ రిఫ్రెష్ నిలిపివేయబడింది"
 
+#: src/features/settings/clipper-sign-ins.tsx
+msgid "Browsers where you signed in to the Job Clipper extension. You sign in from the extension on a computer."
+msgstr ""
+
 #: src/features/ai/web-access.tsx
 msgid "Built-in reader"
 msgstr "అంతర్నిర్మిత రీడర్"
@@ -3137,6 +3146,10 @@ msgstr "దీన్ని లోడ్ చేయడం సాధ్యపడల
 msgid "Couldn't load versions."
 msgstr "సంస్కరణలను లోడ్ చేయడం సాధ్యపడలేదు."
 
+#: src/features/settings/clipper-sign-ins.tsx
+msgid "Couldn't load your Job Clipper sign-ins."
+msgstr ""
+
 #: app/(tabs)/settings/account.tsx
 msgid "Couldn't load your profile."
 msgstr "మీ ప్రొఫైల్‌ను లోడ్ చేయడం సాధ్యపడలేదు."
@@ -3169,6 +3182,7 @@ msgid "Couldn't open the browser. Try again."
 msgstr "బ్రౌజర్‌ని తెరవడం సాధ్యపడలేదు. మళ్లీ ప్రయత్నించండి."
 
 #: src/features/career/today.tsx
+#: src/features/discovery/review-queue.tsx
 msgid "Couldn't open the posting. Try again."
 msgstr "ఉద్యోగ పోస్టింగ్‌ను తెరవడం సాధ్యపడలేదు. మళ్ళీ ప్రయత్నించండి."
 
@@ -3243,6 +3257,10 @@ msgstr "ఈ రెజ్యూమ్ని రెండర్ చేయడం �
 #: src/features/settings/api-keys.tsx
 msgid "Couldn't revoke the key. Try again."
 msgstr "కీని ఉపసంహరించుకోవడం సాధ్యపడలేదు. మళ్లీ ప్రయత్నించండి."
+
+#: src/features/settings/clipper-sign-ins.tsx
+msgid "Couldn't revoke the sign-in. Try again."
+msgstr ""
 
 #: src/features/career/facts.tsx
 #: src/features/career/hooks.ts
@@ -3934,6 +3952,7 @@ msgstr "మీ ఆఫ్‌లైన్ సవరణలను విస్మర
 msgid "Discard your offline edits?"
 msgstr "మీ ఆఫ్‌లైన్ సవరణలను విస్మరించాలా?"
 
+#: src/features/discovery/review-queue.tsx
 #: src/features/letters/write.tsx
 #: src/ui/layout.tsx
 msgid "Dismiss"
@@ -3941,6 +3960,10 @@ msgstr "కొట్టివేయండి"
 
 #: src/features/career/today.tsx
 msgid "Dismiss selected"
+msgstr ""
+
+#: src/features/discovery/review-queue.tsx
+msgid "Dismissed"
 msgstr ""
 
 #: src/features/career/role-suggestions.tsx
@@ -5452,6 +5475,10 @@ msgstr "JavaScript"
 msgid "Job"
 msgstr "ఉద్యోగం"
 
+#: src/features/settings/clipper-sign-ins.tsx
+msgid "Job Clipper sign-ins"
+msgstr ""
+
 #: src/features/application-detail/sheets.tsx
 #: src/features/workspace/preparation.tsx
 msgid "Job description"
@@ -5485,6 +5512,7 @@ msgstr "ఈ సర్వర్‌లో ఉద్యోగ శోధన కా�
 msgid "Job search pipeline"
 msgstr "ఉద్యోగ శోధన పైప్‌లైన్"
 
+#: app/(tabs)/career/_layout.tsx
 #: src/features/search/search-screen.tsx
 msgid "Jobs"
 msgstr "ఉద్యోగాలు"
@@ -6039,6 +6067,10 @@ msgstr ""
 msgid "Loading saved version…"
 msgstr "సేవ్ చేసిన వెర్షన్‌ను లోడ్ చేస్తోంది…"
 
+#: src/features/settings/clipper-sign-ins.tsx
+msgid "Loading sign-ins…"
+msgstr ""
+
 #: src/features/ai/web-access.tsx
 msgid "Loading web access…"
 msgstr "వెబ్ యాక్సెస్ లోడ్ అవుతోంది…"
@@ -6255,6 +6287,16 @@ msgstr "చదివినట్లు గుర్తించబడింద�
 #: src/features/letters/design.tsx
 msgid "Match “{resumeName}”"
 msgstr "“{resumeName}”తో సరిపోల్చండి"
+
+#. placeholder {0}: scoreOf(job)
+#: src/features/discovery/review-queue.tsx
+msgid "Match {0}"
+msgstr ""
+
+#. placeholder {0}: scoreOf(job)
+#: src/features/discovery/review-queue.tsx
+msgid "Match {0} (quick)"
+msgstr ""
 
 #: src/features/search/search-screen.tsx
 msgid "Match system theme"
@@ -6602,11 +6644,13 @@ msgstr "నెట్‌వర్క్"
 
 #: src/features/career/preferences.tsx
 #: src/features/settings/api-keys.tsx
+#: src/features/settings/clipper-sign-ins.tsx
 msgid "Never"
 msgstr "ఎప్పుడూ"
 
 #: app/_layout.tsx
 #: app/(tabs)/_layout.tsx
+#: src/features/discovery/review-queue.tsx
 #: src/features/documents/library.tsx
 #: src/shell/app-tabs.tsx
 msgid "New"
@@ -6646,6 +6690,10 @@ msgstr "కొత్త పత్రం"
 #: src/features/write/section-sheet.tsx
 msgid "New page"
 msgstr "కొత్త పేజీ"
+
+#: src/features/discovery/review-queue.tsx
+msgid "New postings show up here after an automation runs."
+msgstr ""
 
 #: src/features/career/today.tsx
 msgid "New roles from your search"
@@ -6766,6 +6814,10 @@ msgstr "తేదీ లేదు"
 msgid "No dates were found."
 msgstr "తేదీలు కనుగొనబడలేదు."
 
+#: src/features/discovery/review-queue.tsx
+msgid "No dismissed jobs"
+msgstr ""
+
 #: src/features/workspace/tabs/apply.tsx
 msgid "no documents"
 msgstr ""
@@ -6797,6 +6849,10 @@ msgstr "వాస్తవాలు సరిపోలలేదు"
 #: src/features/write/pickers.tsx
 msgid "No icons match."
 msgstr "చిహ్నాలు ఏవీ సరిపోలలేదు."
+
+#: src/features/settings/clipper-sign-ins.tsx
+msgid "No Job Clipper sign-ins yet."
+msgstr ""
 
 #: src/features/documents/new-document.tsx
 msgid "No job yet"
@@ -6888,6 +6944,10 @@ msgstr "ఫలితాలు లేవు"
 #: src/features/letters/write.tsx
 msgid "No resume"
 msgstr "రెజ్యూమే లేదు"
+
+#: src/features/discovery/review-queue.tsx
+msgid "No saved jobs yet"
+msgstr ""
 
 #: src/auth/messages.ts
 msgid "No server answered at this address. Check the spelling, or ask your administrator whether the server allows app sign-in."
@@ -7094,6 +7154,10 @@ msgstr "సరిదిద్దడానికి ఏమీ లేదు"
 msgid "Nothing to fix. The remaining pages were simply not covered by this report."
 msgstr "సరిచేయాల్సింది ఏమీ లేదు. మిగిలిన పేజీలు ఈ రిపోర్ట్‌లో కవర్ కాలేదు, అంతే."
 
+#: src/features/discovery/review-queue.tsx
+msgid "Nothing to review"
+msgstr ""
+
 #: src/features/career/preferences.tsx
 msgid "Notice period (weeks)"
 msgstr "నోటీసు వ్యవధి (వారాలు)"
@@ -7296,6 +7360,7 @@ msgstr "AI సెట్టింగ్‌లను తెరవండి"
 #: src/features/applications-board/board-screen.tsx
 #: src/features/applications/list-screen.tsx
 #: src/features/check/job-match.tsx
+#: src/features/discovery/review-queue.tsx
 msgid "Open application"
 msgstr "దరఖాస్తును తెరవండి"
 
@@ -7819,6 +7884,10 @@ msgstr "ఉద్యోగ ప్రకటన"
 msgid "Postings can change or close. Publication date unknown; search coverage is incomplete."
 msgstr ""
 
+#: src/features/discovery/review-queue.tsx
+msgid "Postings your automations found, best match first. Save one to your applications, or dismiss it and it never comes back."
+msgstr ""
+
 #: src/features/workspace/parts.tsx
 #: src/features/workspace/tabs/practise.tsx
 #: src/features/workspace/tabs/prepare.tsx
@@ -8202,6 +8271,7 @@ msgstr "లైసెన్స్ చదవండి"
 
 #: src/features/applications/add-sheet.tsx
 #: src/features/career/today.tsx
+#: src/features/discovery/review-queue.tsx
 msgid "Read posting"
 msgstr "జాబ్ పోస్టింగ్ చదవండి"
 
@@ -9023,6 +9093,7 @@ msgid "Reviewing needs an AI connection. What you write here stays on this devic
 msgstr "సమీక్షించడానికి AI కనెక్షన్ అవసరం. మీరు ఇక్కడ వ్రాసేది అప్పటి వరకు ఈ పరికరంలో ఉంటుంది."
 
 #: src/features/settings/api-keys.tsx
+#: src/features/settings/clipper-sign-ins.tsx
 msgid "Revoke"
 msgstr "ఉపసంహరించుకోండి"
 
@@ -9030,13 +9101,25 @@ msgstr "ఉపసంహరించుకోండి"
 msgid "Revoke API key?"
 msgstr "API కీని ఉపసంహరించాలా?"
 
+#: src/features/settings/clipper-sign-ins.tsx
+msgid "Revoke Job Clipper sign-in?"
+msgstr ""
+
 #: src/features/settings/api-keys.tsx
 msgid "Revoke key"
 msgstr "కీని ఉపసంహరించండి"
 
+#: src/features/settings/clipper-sign-ins.tsx
+msgid "Revoke sign-in"
+msgstr ""
+
 #: src/features/settings/api-keys.tsx
 msgid "Revoke this API key"
 msgstr "ఈ API కీని ఉపసంహరించుకోండి"
+
+#: src/features/settings/clipper-sign-ins.tsx
+msgid "Revoke this Job Clipper sign-in"
+msgstr ""
 
 #: src/features/check/writing.tsx
 msgid "Rewrite accepted"
@@ -9260,6 +9343,10 @@ msgstr "పోల్చడానికి ఈ ఆఫర్ నిబంధనల
 msgid "Save this story to Knowledge?"
 msgstr "ఈ అనుభవ కథనాన్ని నాలెడ్జ్‌లో సేవ్ చేయాలా?"
 
+#: src/features/discovery/review-queue.tsx
+msgid "Save to applications"
+msgstr ""
+
 #: src/features/workspace/tabs/fit.tsx
 msgid "Save to Knowledge"
 msgstr "నాలెడ్జ్‌లో సేవ్ చేయి"
@@ -9274,6 +9361,7 @@ msgstr "మీ సంస్కరణను కొత్త పత్రంగా
 
 #: src/features/applications/stages.ts
 #: src/features/career/preferences.tsx
+#: src/features/discovery/review-queue.tsx
 #: src/shell/builder-chrome.tsx
 msgid "Saved"
 msgstr "సేవ్ చేయబడింది"
@@ -9323,6 +9411,10 @@ msgstr "నాలెడ్జ్‌లో సేవ్ చేయబడింద�
 #: src/features/workspace/tabs/practise.tsx
 msgid "Saved to Saved · Practice"
 msgstr "‘సేవ్ చేయబడింది’ · సాధనలో సేవ్ చేయబడింది"
+
+#: src/features/discovery/review-queue.tsx
+msgid "Saved to your applications"
+msgstr ""
 
 #: src/features/applications/add-sheet.tsx
 msgid "Saving the job. Wait for confirmation before making another change."
@@ -9815,6 +9907,10 @@ msgstr "చిహ్నాలను చూపండి"
 msgid "Show in search engines"
 msgstr "శోధన ఇంజిన్‌లలో చూపించు"
 
+#: src/features/discovery/review-queue.tsx
+msgid "Show jobs"
+msgstr ""
+
 #: src/features/ai/provider-editor.tsx
 msgid "Show key"
 msgstr "కీ చూపించు"
@@ -9826,6 +9922,7 @@ msgstr "శీర్షికలో లింక్ చూపించు"
 #: app/(tabs)/settings/preferences.tsx
 #: src/features/application-detail/interview-sheet.tsx
 #: src/features/career/today.tsx
+#: src/features/discovery/review-queue.tsx
 msgid "Show more"
 msgstr "మరింత చూపించు"
 
@@ -9974,9 +10071,19 @@ msgstr "సైన్-ఇన్ & భద్రత"
 msgid "Sign-in didn't complete"
 msgstr "సైన్ ఇన్ పూర్తి కాలేదు"
 
+#: src/features/settings/clipper-sign-ins.tsx
+msgid "Sign-in revoked. The extension stops working on its next request."
+msgstr ""
+
 #: src/features/letters/write.tsx
 msgid "Sign-off"
 msgstr "ముగింపు వాక్యం"
+
+#. placeholder {0}: date(token.createdAt)
+#. placeholder {1}: date(token.lastUsedAt)
+#: src/features/settings/clipper-sign-ins.tsx
+msgid "Signed in {0} · Last used {1}"
+msgstr ""
 
 #. placeholder {0}: hostOf(server)
 #: src/auth/session-gate.tsx
@@ -11459,6 +11566,7 @@ msgstr "{suggestion}ని ప్రయత్నించండి"
 #: src/features/branding/domains-screen.tsx
 #: src/features/letters/write.tsx
 #: src/features/settings/api-keys.tsx
+#: src/features/settings/clipper-sign-ins.tsx
 #: src/features/workspace/parts.tsx
 #: src/features/workspace/preparation.tsx
 #: src/features/workspace/shell.tsx
@@ -12552,6 +12660,10 @@ msgstr "మీ బుల్లెట్లు అసాధారణ అక్ష
 #: src/draft/conflict-sheet.tsx
 msgid "Your changes on this device will be replaced by the saved version."
 msgstr "ఈ పరికరంలో మీ మార్పులు సేవ్ చేయబడిన సంస్కరణతో భర్తీ చేయబడతాయి."
+
+#: src/features/settings/profile.tsx
+msgid "Your cohort"
+msgstr ""
 
 #: src/features/ats-checker/messages.ts
 msgid "Your contact details are not on the first page."
