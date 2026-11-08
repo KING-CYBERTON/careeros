@@ -5,7 +5,9 @@ import * as schema from "@reactive-resume/db/schema";
 
 // CAREEROS (P3-T04): reads of the `plan` table. Global (no organization), readable by every role.
 
-const columns = {
+// Built on first use, not at import: the package index imports this file, and tests that mock the schema module
+// must still be able to import `@careeros/billing`.
+const columns = () => ({
 	id: schema.plan.id,
 	pricingModel: schema.plan.pricingModel,
 	seatLimit: schema.plan.seatLimit,
@@ -14,10 +16,10 @@ const columns = {
 	priceAnnualUsdCents: schema.plan.priceAnnualUsdCents,
 	priceMonthlyKes: schema.plan.priceMonthlyKes,
 	priceAnnualKes: schema.plan.priceAnnualKes,
-};
+});
 
 export async function loadPlanPrices(planId: string): Promise<PlanPrices | null> {
-	const [row] = await db.select(columns).from(schema.plan).where(eq(schema.plan.id, planId)).limit(1);
+	const [row] = await db.select(columns()).from(schema.plan).where(eq(schema.plan.id, planId)).limit(1);
 	return row ?? null;
 }
 
@@ -27,7 +29,7 @@ export type PlanListing = PlanPrices & { name: string; aiCreditsPerSeat: number;
 export async function listActivePlans(): Promise<PlanListing[]> {
 	return await db
 		.select({
-			...columns,
+			...columns(),
 			name: schema.plan.name,
 			aiCreditsPerSeat: schema.plan.aiCreditsPerSeat,
 			features: schema.plan.features,
