@@ -1,41 +1,28 @@
-import z from "zod";
+import type { BoardSource, RemotePreference } from "@careeros/discovery-form";
 
-/** The public job board APIs discovery can read (GTM-PLAN G1). Adzuna is v1.1. */
-export const BOARD_SOURCES = ["greenhouse", "lever", "lever_eu", "ashby"] as const;
-export type BoardSource = (typeof BOARD_SOURCES)[number];
-
-export const REMOTE_PREFERENCES = ["any", "remote", "onsite", "hybrid"] as const;
-export type RemotePreference = (typeof REMOTE_PREFERENCES)[number];
+// CAREEROS (P4-T03): the search rules (sources, schedules, token pattern, board schemas) moved to
+// `@careeros/discovery-form` so the web and mobile forms validate with the same code. They are re-exported here.
+export {
+	BOARD_SOURCES,
+	BOARD_TOKEN_PATTERN,
+	MAX_BOARDS_PER_SOURCE,
+	REMOTE_PREFERENCES,
+	SCHEDULES,
+	boardListSchema,
+	boardRefSchema,
+	boardTokenSchema,
+} from "@careeros/discovery-form";
+export type { BoardRef, BoardSource, DiscoverySchedule, RemotePreference } from "@careeros/discovery-form";
 
 /** How a posting describes where the work happens. `null` when the board does not say. */
 export const JOB_REMOTE_KINDS = ["remote", "onsite", "hybrid"] as const;
 export type JobRemoteKind = (typeof JOB_REMOTE_KINDS)[number];
-
-export const SCHEDULES = ["daily", "weekly", "paused"] as const;
-export type DiscoverySchedule = (typeof SCHEDULES)[number];
 
 export const JOB_STATUSES = ["new", "accepted", "dismissed"] as const;
 export type DiscoveredJobStatus = (typeof JOB_STATUSES)[number];
 
 export const RUN_STATUSES = ["running", "succeeded", "failed", "partial"] as const;
 export type DiscoveryRunStatus = (typeof RUN_STATUSES)[number];
-
-/** A job board named by its token. Never a URL: a board is looked up, not addressed (G1). */
-export const BOARD_TOKEN_PATTERN = /^[a-z0-9][a-z0-9_-]{0,99}$/i;
-export const MAX_BOARDS_PER_SOURCE = 100;
-
-export const boardTokenSchema = z
-	.string()
-	.trim()
-	.regex(BOARD_TOKEN_PATTERN, "A board token is letters, digits, hyphens and underscores (at most 100).");
-
-export const boardRefSchema = z.object({
-	source: z.enum(BOARD_SOURCES),
-	token: boardTokenSchema,
-});
-export type BoardRef = z.infer<typeof boardRefSchema>;
-
-export const boardListSchema = z.array(boardRefSchema).max(MAX_BOARDS_PER_SOURCE);
 
 /** One posting as every fetcher returns it: already plain text where text is expected, HTML sanitized. */
 export type NormalizedJob = {

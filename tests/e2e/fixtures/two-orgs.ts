@@ -48,6 +48,8 @@ export type TwoOrgs = {
 	aResume: { username: string; slug: string; name: string };
 	/** Text that appears only in Organization A's rows. */
 	markers: string[];
+	/** CAREEROS (P5-T03): the posting address of Organization A's seeded application. */
+	aPostingUrl: string;
 	/** Every id of Organization A's rows, for scanning responses. */
 	foreignIds: string[];
 	dispose: () => Promise<void>;
@@ -303,6 +305,8 @@ export async function createTwoOrgs(playwright: Playwright, baseURL: string, own
 					resumeId: resume,
 					coverLetterId: letter,
 					jobDescription: text("posting"),
+					// CAREEROS (P5-T03): a posting address of Organization A, so the Job Clipper duplicate check can be asked for it as B.
+					sourceUrl: `https://xorga${tag}.example.test/jobs/1`,
 				},
 			}),
 			"application",
@@ -543,6 +547,7 @@ export async function createTwoOrgs(playwright: Playwright, baseURL: string, own
 			ids,
 			aResume: { username: accountA.username, slug, name: text("resume") },
 			markers: [`xorga${tag}`],
+			aPostingUrl: `https://xorga${tag}.example.test/jobs/1`,
 			foreignIds: [
 				...new Set(Object.values(ids)),
 				a.organizationId,

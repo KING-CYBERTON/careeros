@@ -15,7 +15,30 @@ import { isProcedure } from "@orpc/server";
 vi.mock("@reactive-resume/auth/config", () => ({ auth: {}, verifyOAuthToken: vi.fn() }));
 
 // Procedures that no OpenAPI route serves; each takes no input that names a row.
-const RPC_ONLY = ["customDomain.suggestion", "resume.getRoot", "storage.deleteFile", "storage.uploadFile"];
+// CAREEROS (P3-T07): the console (`admin.*`), the announcement banner and the support-session banner are RPC only and `Internal`.
+const RPC_ONLY = [
+	"admin.announcements.end",
+	"admin.announcements.list",
+	"admin.announcements.save",
+	"admin.audit.list",
+	"admin.impersonation.start",
+	"admin.metrics",
+	"admin.orgs.get",
+	"admin.orgs.list",
+	"admin.orgs.setAiOverage",
+	"admin.orgs.setPlan",
+	"admin.orgs.setStatus",
+	"admin.payments.record",
+	"admin.plans",
+	"announcements.active",
+	"announcements.dismiss",
+	"customDomain.suggestion",
+	"impersonation.current",
+	"impersonation.end",
+	"resume.getRoot",
+	"storage.deleteFile",
+	"storage.uploadFile",
+];
 
 function walk(
 	node: unknown,

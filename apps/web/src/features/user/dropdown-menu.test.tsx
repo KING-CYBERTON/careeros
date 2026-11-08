@@ -10,15 +10,17 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 type SignOutOptions = { fetchOptions: { onSuccess: () => void } };
 
 const router = vi.hoisted(() => ({ invalidate: vi.fn(), navigate: vi.fn() }));
+// CAREEROS (P3-T07): the role of the signed-in user decides whether the console link shows
+const account = vi.hoisted(() => ({ role: "user" as string | null }));
 const signOut = vi.hoisted(() =>
 	vi.fn(({ fetchOptions }: SignOutOptions) => {
 		fetchOptions.onSuccess();
 	}),
 );
 
-vi.mock("@tanstack/react-router", () => ({ useRouter: () => router }));
+vi.mock("@tanstack/react-router", () => ({ useRouter: () => router, useRouteContext: () => ({ flags: undefined }) }));
 vi.mock("@/libs/auth/client", () => ({
-	authClient: { signOut, useSession: () => ({ data: { user: { id: "user-1" } } }) },
+	authClient: { signOut, useSession: () => ({ data: { user: { id: "user-1", role: account.role } } }) },
 }));
 vi.mock("@/features/theme/provider", () => ({ useTheme: () => ({ theme: "light", setTheme: vi.fn() }) }));
 vi.mock("@reactive-resume/ui/components/toast", () => ({ toast: { add: vi.fn(), close: vi.fn() } }));
@@ -64,5 +66,26 @@ describe("UserDropdownMenu", () => {
 
 		await waitFor(() => expect(router.invalidate).toHaveBeenCalled());
 		expect(queryClient.getQueryCache().getAll()).toHaveLength(0);
+	});
+
+	// CAREEROS (P3-T07)
+	it("shows the console link to a platform admin only", () => {
+		const renderMenu = () =>
+			render(
+				<I18nProvider i18n={i18n}>
+					<QueryClientProvider client={new QueryClient()}>
+						<UserDropdownMenu>{() => <button type="button" />}</UserDropdownMenu>
+					</QueryClientProvider>
+				</I18nProvider>,
+			);
+		account.role = "user";
+		const first = renderMenu();
+		expect(screen.queryByRole("button", { name: "Admin console" })).toBeNull();
+		first.unmount();
+		account.role = "support,admin";
+		renderMenu();
+		fireEvent.click(screen.getByRole("button", { name: "Admin console" }));
+		expect(router.navigate).toHaveBeenCalledWith({ to: "/admin" });
+		account.role = "user";
 	});
 });

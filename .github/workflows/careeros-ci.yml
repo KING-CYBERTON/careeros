@@ -26,6 +26,8 @@ jobs:
     timeout-minutes: 5
     outputs:
       code: ${{ steps.detect.outputs.code }}
+      # CAREEROS: P5-C01. true when the clipper, a package it imports, this workflow or the lockfiles changed.
+      extension: ${{ steps.detect.outputs.extension }}
     steps:
       - name: Check out source
         uses: actions/checkout@v7
@@ -43,7 +45,7 @@ jobs:
         run: |
           set -uo pipefail
           # Anything unclear falls back to code=true so no code change ever skips tests.
-          fallback() { echo "$1; running the full checks"; echo "code=true" >> "$GITHUB_OUTPUT"; exit 0; }
+          fallback() { echo "$1; running the full checks"; { echo "code=true"; echo "extension=true"; } >> "$GITHUB_OUTPUT"; exit 0; }
           case "$EVENT_NAME" in
             pull_request) base="$PR_BASE_SHA" ;;
             push) base="$PUSH_BEFORE_SHA" ;;
@@ -58,6 +60,13 @@ jobs:
           cat changed-files.txt
           result="$(bash tooling/ci/classify-changes.sh < changed-files.txt)" || fallback "classifier failed"
           echo "$result" | tee -a "$GITHUB_OUTPUT"
+          # CAREEROS: P5-C01. The clipper (apps/extension), the packages it imports (ui, utils and their config), the
+          # branding word list its pack checks reuse, this workflow, and the lockfile and workspace files.
+          if grep -Eq '^(apps/extension/|packages/(ui|utils|config)/|tooling/careeros/branding-gate\.mjs$|\.github/workflows/careeros-ci\.yml$|pnpm-lock\.yaml$|pnpm-workspace\.yaml$|package\.json$)' changed-files.txt; then
+            echo "extension=true" | tee -a "$GITHUB_OUTPUT"
+          else
+            echo "extension=false" | tee -a "$GITHUB_OUTPUT"
+          fi
 
   static:
     name: static
@@ -270,11 +279,60 @@ jobs:
           if-no-files-found: ignore
           retention-days: 14
 
+  # CAREEROS: P5-C01. Builds the Job Clipper and proves it packs (pack checks run inside `pack`). Like the unit shards,
+  # the job always reports, and every step is skipped when nothing the clipper depends on changed. The `unit` gate
+  # needs it, so it is part of a required check without a change to the repository settings.
+  extension:
+    name: extension
+    needs: changes
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Clipper unchanged
+        if: needs.changes.outputs.extension != 'true'
+        run: echo "no clipper change, build skipped"
+
+      - name: Check out source
+        if: needs.changes.outputs.extension == 'true'
+        uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+
+      - name: Install pnpm
+        if: needs.changes.outputs.extension == 'true'
+        uses: pnpm/action-setup@v6
+
+      - name: Set up Node.js
+        if: needs.changes.outputs.extension == 'true'
+        uses: actions/setup-node@v7
+        with:
+          node-version-file: ".nvmrc"
+          cache: "pnpm"
+
+      - name: Install dependencies
+        if: needs.changes.outputs.extension == 'true'
+        run: pnpm install --frozen-lockfile
+
+      # `run pack`, not `pack`: bare `pnpm pack` is pnpm's own command.
+      - name: Build and pack the clipper
+        if: needs.changes.outputs.extension == 'true'
+        run: pnpm --filter extension run pack
+
+      - name: Upload the clipper zip
+        if: needs.changes.outputs.extension == 'true'
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: job-clipper-zip
+          path: apps/extension/job-clipper-*.zip
+          if-no-files-found: error
+          retention-days: 14
+
   # CAREEROS: P1-C05. Stable check name for branch protection. Passes when every shard passed; a docs-only change
   # makes each shard succeed without running tests.
   unit:
     name: unit
-    needs: [changes, unit-shard]
+    # CAREEROS: P5-C01. `extension` is part of this gate.
+    needs: [changes, unit-shard, extension]
     if: always()
     runs-on: ubuntu-latest
     timeout-minutes: 5
@@ -283,10 +341,11 @@ jobs:
         env:
           CHANGES_RESULT: ${{ needs.changes.result }}
           SHARD_RESULT: ${{ needs.unit-shard.result }}
+          EXTENSION_RESULT: ${{ needs.extension.result }}
         run: |
-          echo "changes: $CHANGES_RESULT, unit shards: $SHARD_RESULT"
-          if [ "$CHANGES_RESULT" != "success" ] || [ "$SHARD_RESULT" != "success" ]; then
-            echo "unit shards did not all succeed" >&2
+          echo "changes: $CHANGES_RESULT, unit shards: $SHARD_RESULT, extension: $EXTENSION_RESULT"
+          if [ "$CHANGES_RESULT" != "success" ] || [ "$SHARD_RESULT" != "success" ] || [ "$EXTENSION_RESULT" != "success" ]; then
+            echo "unit shards or the extension job did not all succeed" >&2
             exit 1
           fi
 

@@ -944,6 +944,14 @@ msgstr "A accepts and R rejects the focused edit. ↑ and ↓ move between edits
 msgid "A backup of this letter. Imports back into {appName} as a letter."
 msgstr "A backup of this letter. Imports back into {appName} as a letter."
 
+#: src/features/platform-admin/announcements-page.tsx
+msgid "A banner every matching member sees until it ends."
+msgstr "A banner every matching member sees until it ends."
+
+#: src/features/discovery/search-messages.ts
+msgid "A board name has only letters, digits, hyphens and underscores."
+msgstr "A board name has only letters, digits, hyphens and underscores."
+
 #: src/features/resume/editor/check/issues.ts
 msgid "A city and country let roles be matched to where you are."
 msgstr "A city and country let roles be matched to where you are."
@@ -1032,6 +1040,10 @@ msgstr "A personal workspace has no admin area. Create an organization to manage
 msgid "A personal workspace has one seat"
 msgstr "A personal workspace has one seat"
 
+#: src/features/platform-admin/impersonation-banner.tsx
+msgid "A platform administrator is signed in as you for support."
+msgstr "A platform administrator is signed in as you for support."
+
 #: src/features/applications/components/detail/next-step-card.tsx
 msgid "A reminder to check in, shown as the next step until you do."
 msgstr "A reminder to check in, shown as the next step until you do."
@@ -1044,6 +1056,10 @@ msgstr "A role has no description"
 msgid "A saved offer"
 msgstr "A saved offer"
 
+#: src/features/discovery/searches.tsx
+msgid "A search looks at the job boards you choose, on a schedule, and adds postings that match to the queue below."
+msgstr "A search looks at the job boards you choose, on a schedule, and adds postings that match to the queue below."
+
 #: src/features/resume/editor/check/writing-tab.tsx
 msgid "A second opinion on your wording"
 msgstr "A second opinion on your wording"
@@ -1055,6 +1071,10 @@ msgstr "A short follow-up is usually fine now"
 #: src/features/career/coach-chat.tsx
 msgid "A story you've since deleted"
 msgstr "A story you've since deleted"
+
+#: src/features/platform-admin/organization-page.tsx
+msgid "A suspended organization can sign in and export, and cannot write."
+msgstr "A suspended organization can sign in and export, and cannot write."
 
 #: src/features/career/workspace/prepare.tsx
 msgid "A timed plan, your opening, the stories to bring and questions to ask. It becomes your checklist 10 minutes before the call."
@@ -1128,25 +1148,36 @@ msgstr "Account"
 
 #: src/features/career/knowledge/stories.tsx
 #: src/features/org-admin/audit-page.tsx
+#: src/features/platform-admin/audit-page.tsx
 msgid "Action"
 msgstr "Action"
+
+#: src/features/platform-admin/audit-page.tsx
+msgid "Action, for example admin.org_status_set"
+msgstr "Action, for example admin.org_status_set"
 
 #: src/features/settings/ai/api-keys.tsx
 msgid "Actions"
 msgstr "Actions"
 
 #: src/features/branding/domains.ts
+#: src/features/platform-admin/organizations-page.tsx
 #: src/features/settings/ai/web-access.tsx
 msgid "Active"
 msgstr "Active"
 
 #: src/features/org-admin/analytics-page.tsx
+#: src/features/platform-admin/metrics-page.tsx
 msgid "Active members"
 msgstr "Active members"
 
 #: src/features/applications/components/detail/activity.tsx
 msgid "Activity"
 msgstr "Activity"
+
+#: src/features/platform-admin/audit-page.tsx
+msgid "Actor"
+msgstr "Actor"
 
 #: src/features/applications/components/detail/activity.tsx
 #: src/features/applications/components/detail/contacts.tsx
@@ -1166,6 +1197,10 @@ msgstr "Add “{0}”"
 #: src/features/applications/components/import-applications-sheet.tsx
 msgid "Add “{0}” as a new stage"
 msgstr "Add “{0}” as a new stage"
+
+#: src/features/discovery/search-form.tsx
+msgid "Add a board"
+msgstr "Add a board"
 
 #: src/features/career/knowledge/search-regions-field.tsx
 msgid "Add a country"
@@ -1302,6 +1337,14 @@ msgstr "Add an interview to plan for it"
 #: src/features/command-palette/pages/navigation.tsx
 msgid "Add application"
 msgstr "Add application"
+
+#: src/features/discovery/search-messages.ts
+msgid "Add at most {MAX_TERMS} entries."
+msgstr "Add at most {MAX_TERMS} entries."
+
+#: src/features/discovery/search-messages.ts
+msgid "Add at most 100 boards."
+msgstr "Add at most 100 boards."
 
 #: src/features/settings/account/application-profile.tsx
 msgid "Add authorization country"
@@ -1534,6 +1577,10 @@ msgstr "Added to Knowledge as an experience."
 msgid "Added to Prepare"
 msgstr "Added to Prepare"
 
+#: src/features/discovery/chip-input.tsx
+msgid "Added: {label}"
+msgstr "Added: {label}"
+
 #: src/features/resume/share/address-field.tsx
 msgid "Address"
 msgstr "Address"
@@ -1561,6 +1608,10 @@ msgstr "Adjust fonts, colors, spacing and sections in the resume builder. Export
 #: src/features/organization/roles.ts
 msgid "Admin"
 msgstr "Admin"
+
+#: src/features/user/dropdown-menu.tsx
+msgid "Admin console"
+msgstr "Admin console"
 
 #: src/routes/builder/$resumeId/-components/design-panel.tsx
 msgid "Advanced"
@@ -1629,9 +1680,21 @@ msgstr "AI connections are unavailable."
 msgid "AI connections haven't loaded. Try again before generating."
 msgstr "AI connections haven't loaded. Try again before generating."
 
+#: src/features/platform-admin/metrics-page.tsx
+msgid "AI cost"
+msgstr "AI cost"
+
+#: src/features/platform-admin/metrics-page.tsx
+msgid "AI cost by organization"
+msgstr "AI cost by organization"
+
 #: src/features/applications/components/add-application-dialog.tsx
 msgid "AI couldn't fill the details. The posting is retained; complete the fields manually."
 msgstr "AI couldn't fill the details. The posting is retained; complete the fields manually."
+
+#: src/features/platform-admin/organizations-page.tsx
+msgid "AI credits"
+msgstr "AI credits"
 
 #: src/features/resume/share/format.ts
 msgid "AI edit"
@@ -1644,6 +1707,14 @@ msgstr "AI features that use the platform's model stay off until the next period
 #: src/features/career/schedule-sheet.tsx
 msgid "AI is optional. Review target roles in Knowledge, wait for Saved, then create a new schedule. Existing schedules keep this query until you edit and save it."
 msgstr "AI is optional. Review target roles in Knowledge, wait for Saved, then create a new schedule. Existing schedules keep this query until you edit and save it."
+
+#: src/features/platform-admin/organization-page.tsx
+msgid "AI overage"
+msgstr "AI overage"
+
+#: src/features/platform-admin/organization-page.tsx
+msgid "AI overage changed."
+msgstr "AI overage changed."
 
 #: src/features/command-palette/pages/navigation.tsx
 #: src/features/settings/ai/providers.tsx
@@ -1670,6 +1741,10 @@ msgstr "AI suggestions, not verified qualifications or hiring predictions. Sourc
 #: src/routes/dashboard/settings/route.tsx
 msgid "AI usage"
 msgstr "AI usage"
+
+#: src/features/platform-admin/organization-page.tsx
+msgid "AI usage this period"
+msgstr "AI usage this period"
 
 #: src/features/career/workspace/answer-library.tsx
 msgid "AI-assisted draft"
@@ -1726,6 +1801,10 @@ msgstr "All members"
 msgid "All of the pooled credits are used"
 msgstr "All of the pooled credits are used"
 
+#: src/features/platform-admin/organization-page.tsx
+msgid "All organizations"
+msgstr "All organizations"
+
 #: src/features/settings/account/data.tsx
 msgid "All your documents, applications, API keys and public links are deleted for good. This can't be undone."
 msgstr "All your documents, applications, API keys and public links are deleted for good. This can't be undone."
@@ -1733,6 +1812,14 @@ msgstr "All your documents, applications, API keys and public links are deleted 
 #: src/features/auth/pages/consent.tsx
 msgid "Allow access"
 msgstr "Allow access"
+
+#: src/features/platform-admin/organization-page.tsx
+msgid "Allow overage"
+msgstr "Allow overage"
+
+#: src/features/platform-admin/organization-page.tsx
+msgid "Allowed"
+msgstr "Allowed"
 
 #: src/features/ats-checker/messages.ts
 msgid "Almost none of your bullets carry a number."
@@ -1788,6 +1875,10 @@ msgstr "Also shows the icons on skills, profiles and interests."
 msgid "Amharic"
 msgstr "Amharic"
 
+#: src/features/platform-admin/organization-page.tsx
+msgid "Amount"
+msgstr "Amount"
+
 #: src/features/ats-checker/messages.ts
 msgid "An embedded font could not be read."
 msgstr "An embedded font could not be read."
@@ -1817,6 +1908,19 @@ msgstr "Analytics"
 #: src/features/applications/components/detail/contacts.tsx
 msgid "and {0} more"
 msgstr "and {0} more"
+
+#: src/features/platform-admin/announcements-page.tsx
+msgid "Announcement ended."
+msgstr "Announcement ended."
+
+#: src/features/platform-admin/announcements-page.tsx
+msgid "Announcement saved."
+msgstr "Announcement saved."
+
+#: src/features/platform-admin/announcements-page.tsx
+#: src/features/platform-admin/layout.tsx
+msgid "Announcements"
+msgstr "Announcements"
 
 #: src/features/branding/domains.ts
 msgid "Another account claimed this domain first."
@@ -1869,12 +1973,21 @@ msgid "Anthropic, Gemini, Ollama, OpenAI-compatible"
 msgstr "Anthropic, Gemini, Ollama, OpenAI-compatible"
 
 #: src/features/career/knowledge/preferences.tsx
+#: src/features/discovery/search-messages.ts
 msgid "Any"
 msgstr "Any"
 
 #: src/features/resume/editor/design/style-groups.tsx
 msgid "Any font, in Advanced"
 msgstr "Any font, in Advanced"
+
+#: src/features/platform-admin/organizations-page.tsx
+msgid "Any plan"
+msgstr "Any plan"
+
+#: src/features/platform-admin/organizations-page.tsx
+msgid "Any status"
+msgstr "Any status"
 
 #: src/features/resume/builder/password-dialog.tsx
 msgid "Anyone who opens the public URL will need this password."
@@ -2204,6 +2317,10 @@ msgstr "Ask, or describe a change…"
 msgid "Aspect ratio"
 msgstr "Aspect ratio"
 
+#: src/features/platform-admin/organization-page.tsx
+msgid "Assign a plan and, if needed, the seats on the subscription."
+msgstr "Assign a plan and, if needed, the seats on the subscription."
+
 #: src/features/org-admin/cohorts-page.tsx
 msgid "Assign members"
 msgstr "Assign members"
@@ -2222,6 +2339,10 @@ msgstr "Assistant conversations"
 #: src/features/settings/ai/web-access.tsx
 msgid "Assistant."
 msgstr "Assistant."
+
+#: src/features/platform-admin/organization-page.tsx
+msgid "At least 10 characters"
+msgstr "At least 10 characters"
 
 #: src/features/command-palette/pages/navigation.tsx
 msgid "ATS checker"
@@ -2258,6 +2379,8 @@ msgid "Attachment"
 msgstr "Attachment"
 
 #: src/features/org-admin/audit-page.tsx
+#: src/features/platform-admin/audit-page.tsx
+#: src/features/platform-admin/layout.tsx
 #: src/routes/dashboard/settings/route.tsx
 msgid "Audit log"
 msgstr "Audit log"
@@ -2332,6 +2455,10 @@ msgstr "Back to sign in"
 msgid "Back to stories"
 msgstr "Back to stories"
 
+#: src/features/platform-admin/layout.tsx
+msgid "Back to the app"
+msgstr "Back to the app"
+
 #: src/features/career/knowledge/stories.tsx
 #: src/features/career/workspace/apply.tsx
 msgid "Backed by"
@@ -2405,6 +2532,16 @@ msgstr "Blue"
 #: src/routes/dashboard/applications/index.tsx
 msgid "Board"
 msgstr "Board"
+
+#. placeholder {0}: index + 1
+#: src/features/discovery/search-form.tsx
+msgid "Board {0} name or link"
+msgstr "Board {0} name or link"
+
+#. placeholder {0}: index + 1
+#: src/features/discovery/search-form.tsx
+msgid "Board {0} source"
+msgstr "Board {0} source"
 
 #: src/routes/builder/$resumeId/-sidebar/right/sections/typography.tsx
 msgctxt "Body Text (paragraphs, lists, etc.)"
@@ -2563,6 +2700,7 @@ msgstr "Can software read your resume?"
 #: src/features/career/schedule-sheet.tsx
 #: src/features/career/workspace/fit.tsx
 #: src/features/career/workspace/preparation.tsx
+#: src/features/discovery/search-form.tsx
 #: src/features/documents/new-document-dialog.tsx
 #: src/features/organization/members-page.tsx
 #: src/features/resume/builder/password-dialog.tsx
@@ -2634,6 +2772,10 @@ msgstr "Change password"
 #: src/features/settings/account/profile.tsx
 msgid "Change photo"
 msgstr "Change photo"
+
+#: src/features/platform-admin/organization-page.tsx
+msgid "Change plan"
+msgstr "Change plan"
 
 #: src/features/applications/components/detail/next-step-card.tsx
 msgid "Change the follow-up…"
@@ -2757,6 +2899,10 @@ msgstr "Check the details"
 #: src/features/ats-checker/messages.ts
 msgid "Check the exported file contains everything you expect, and that all of it is selectable text."
 msgstr "Check the exported file contains everything you expect, and that all of it is selectable text."
+
+#: src/features/discovery/search-messages.ts
+msgid "Check this field."
+msgstr "Check this field."
 
 #: src/features/career/workspace/fit.tsx
 msgid "Check this role against your evidence"
@@ -3283,6 +3429,10 @@ msgstr "Connection: {text}"
 msgid "Connections bill speech separately and may use tokens on your account. Your browser's speech is free, but its maker may process the audio. The server keeps transcripts, never recordings."
 msgstr "Connections bill speech separately and may use tokens on your account. Your browser's speech is free, but its maker may process the audio. The server keeps transcripts, never recordings."
 
+#: src/features/platform-admin/layout.tsx
+msgid "Console"
+msgstr "Console"
+
 #: src/features/applications/components/application-detail-sheet.tsx
 msgid "Contact"
 msgstr "Contact"
@@ -3533,6 +3683,7 @@ msgid "Couldn't change the role. Try again."
 msgstr "Couldn't change the role. Try again."
 
 #: src/features/career/workspace/prepare.tsx
+#: src/features/discovery/searches.tsx
 msgid "Couldn't change the schedule. Try again."
 msgstr "Couldn't change the schedule. Try again."
 
@@ -3655,6 +3806,10 @@ msgstr "Couldn't delete this conversation. Try again."
 msgid "Couldn't delete this schedule. Try again."
 msgstr "Couldn't delete this schedule. Try again."
 
+#: src/features/discovery/searches.tsx
+msgid "Couldn't delete this search. Try again."
+msgstr "Couldn't delete this search. Try again."
+
 #: src/features/settings/account/data.tsx
 msgid "Couldn't delete your account. Try again."
 msgstr "Couldn't delete your account. Try again."
@@ -3687,6 +3842,10 @@ msgstr "Couldn't export. Try again."
 #: src/features/applications/components/application-form-sheet.tsx
 msgid "Couldn't fill in the fields. Try again, or fill them in yourself."
 msgstr "Couldn't fill in the fields. Try again, or fill them in yourself."
+
+#: src/features/discovery/search-form.tsx
+msgid "Couldn't find the board name in this link."
+msgstr "Couldn't find the board name in this link."
 
 #: src/features/career/knowledge/facts.tsx
 msgid "Couldn't forget that fact. Try again."
@@ -3747,6 +3906,10 @@ msgstr "Couldn't load AI usage"
 msgid "Couldn't load analytics"
 msgstr "Couldn't load analytics"
 
+#: src/features/platform-admin/announcements-page.tsx
+msgid "Couldn't load announcements"
+msgstr "Couldn't load announcements"
+
 #: src/routes/dashboard/applications/index.tsx
 msgid "Couldn't load applications. Try again."
 msgstr "Couldn't load applications. Try again."
@@ -3771,9 +3934,21 @@ msgstr "Couldn't load interviews. Retry"
 msgid "Couldn't load members"
 msgstr "Couldn't load members"
 
+#: src/features/platform-admin/metrics-page.tsx
+msgid "Couldn't load metrics"
+msgstr "Couldn't load metrics"
+
 #: src/features/settings/ai/web-access.tsx
 msgid "Couldn't load or save web access settings. Try again."
 msgstr "Couldn't load or save web access settings. Try again."
+
+#: src/features/platform-admin/organizations-page.tsx
+msgid "Couldn't load organizations"
+msgstr "Couldn't load organizations"
+
+#: src/features/platform-admin/audit-page.tsx
+msgid "Couldn't load the audit log"
+msgstr "Couldn't load the audit log"
 
 #: src/features/branding/branding-page.tsx
 msgid "Couldn't load the branding"
@@ -3782,6 +3957,10 @@ msgstr "Couldn't load the branding"
 #: src/features/ats-checker/checker.tsx
 msgid "Couldn't load the sample file. Try again."
 msgstr "Couldn't load the sample file. Try again."
+
+#: src/features/platform-admin/organization-page.tsx
+msgid "Couldn't load this organization"
+msgstr "Couldn't load this organization"
 
 #: src/features/applications/components/application-detail-sheet.tsx
 #: src/features/career/load-state.tsx
@@ -3796,6 +3975,10 @@ msgstr "Couldn't load your Job Clipper sign-ins."
 #: src/features/discovery/review-queue.tsx
 msgid "Couldn't load your jobs. Try again."
 msgstr "Couldn't load your jobs. Try again."
+
+#: src/features/discovery/searches.tsx
+msgid "Couldn't load your searches. Try again."
+msgstr "Couldn't load your searches. Try again."
 
 #: src/routes/dashboard/applications/index.tsx
 msgid "Couldn't load your stages, so the standard ones are shown. Try again."
@@ -4024,6 +4207,10 @@ msgstr "Couldn't save this role to Applications. Try again."
 msgid "Couldn't save this schedule. Try again."
 msgstr "Couldn't save this schedule. Try again."
 
+#: src/features/discovery/search-form.tsx
+msgid "Couldn't save this search. Try again."
+msgstr "Couldn't save this search. Try again."
+
 #: src/features/letters/store.ts
 #: src/features/resume/share/history-tab.tsx
 #: src/routes/builder/letter/-components/download-sheet.tsx
@@ -4112,6 +4299,10 @@ msgstr "Couldn't start recording. Choose an audio file, or type your answer."
 #: src/features/career/coach-thread.tsx
 msgid "Couldn't start the conversation. Try again."
 msgstr "Couldn't start the conversation. Try again."
+
+#: src/features/discovery/searches.tsx
+msgid "Couldn't start the run. Try again."
+msgstr "Couldn't start the run. Try again."
 
 #: src/features/career/role-suggestions.tsx
 msgid "Couldn't suggest roles. Try again or enter roles manually."
@@ -4347,11 +4538,16 @@ msgstr "Create key"
 msgid "Create one now"
 msgstr "Create one now"
 
+#: src/features/discovery/search-form.tsx
+msgid "Create search"
+msgstr "Create search"
+
 #: src/features/branding/domains.ts
 msgid "Create the two records below at your DNS provider. We check every few minutes."
 msgstr "Create the two records below at your DNS provider. We check every few minutes."
 
 #: src/features/documents/documents-page.tsx
+#: src/features/platform-admin/organization-page.tsx
 #: src/features/resume/share/format.ts
 #: src/features/settings/ai/api-keys.tsx
 #: src/routes/builder/$resumeId/-components/document-details.tsx
@@ -4371,6 +4567,10 @@ msgstr "Created {0}"
 #: src/features/documents/new-document-dialog.tsx
 msgid "Created and linked to {0}"
 msgstr "Created and linked to {0}"
+
+#: src/features/platform-admin/metrics-page.tsx
+msgid "Credits"
+msgstr "Credits"
 
 #: src/features/org-admin/ai-usage-page.tsx
 msgid "Credits your members have used of the organization's pooled allowance this period."
@@ -4394,6 +4594,7 @@ msgstr "CSV file"
 
 #: src/features/career/knowledge/preferences.tsx
 #: src/features/career/offer-entry.tsx
+#: src/features/platform-admin/organization-page.tsx
 #: src/features/settings/account/application-profile.tsx
 msgid "Currency"
 msgstr "Currency"
@@ -4463,6 +4664,10 @@ msgstr "Custom styles aren't applied. Fix these errors to apply them:"
 #: src/libs/locale.ts
 msgid "Czech"
 msgstr "Czech"
+
+#: src/features/discovery/search-messages.ts
+msgid "Daily"
+msgstr "Daily"
 
 #: src/features/career/today.tsx
 msgid "Daily at {clock} · next {next}"
@@ -4560,6 +4765,7 @@ msgstr "Degree"
 #: src/features/career/schedule-sheet.tsx
 #: src/features/career/workspace/answer-library.tsx
 #: src/features/career/workspace/saved.tsx
+#: src/features/discovery/searches.tsx
 #: src/features/resume/editor/write/entry-card.tsx
 #: src/features/resume/share/history-tab.tsx
 msgid "Delete"
@@ -4574,6 +4780,11 @@ msgstr "Delete “{0}” forever?"
 #: src/features/documents/document-actions.tsx
 msgid "Delete “{0}” now?"
 msgstr "Delete “{0}” now?"
+
+#. placeholder {0}: source.name
+#: src/features/discovery/searches.tsx
+msgid "Delete \"{0}\"?"
+msgstr "Delete \"{0}\"?"
 
 #. placeholder {0}: provider.label
 #: src/features/settings/ai/providers.tsx
@@ -4767,6 +4978,7 @@ msgid "Design reset to defaults"
 msgstr "Design reset to defaults"
 
 #: src/features/career/workspace/shell.tsx
+#: src/features/platform-admin/audit-page.tsx
 #: src/routes/builder/$resumeId/-components/document-menu.tsx
 msgid "Details"
 msgstr "Details"
@@ -4828,6 +5040,10 @@ msgstr "Disconnecting your {providerName} account…"
 #: src/routes/dashboard/applications/index.tsx
 msgid "Dismiss"
 msgstr "Dismiss"
+
+#: src/features/platform-admin/announcement-banner.tsx
+msgid "Dismiss announcement"
+msgstr "Dismiss announcement"
 
 #: src/features/career/today.tsx
 msgid "Dismiss selected"
@@ -5132,6 +5348,10 @@ msgstr "Dutch"
 msgid "Each answer you get feedback on is kept here, newest first."
 msgstr "Each answer you get feedback on is kept here, newest first."
 
+#: src/features/discovery/search-messages.ts
+msgid "Each entry can have at most {MAX_TERM_LENGTH} characters."
+msgstr "Each entry can have at most {MAX_TERM_LENGTH} characters."
+
 #: src/features/career/workspace/fit.tsx
 msgid "Each requirement in the posting is checked against the facts and stories in your Knowledge. Gaps show as missing evidence, never missing ability."
 msgstr "Each requirement in the posting is checked against the facts and stories in your Knowledge. Gaps show as missing evidence, never missing ability."
@@ -5153,6 +5373,7 @@ msgstr "earlier messages in this chat"
 #: src/features/career/knowledge/stories.tsx
 #: src/features/career/workspace/preparation.tsx
 #: src/features/career/workspace/shell.tsx
+#: src/features/discovery/searches.tsx
 #: src/features/resume/editor/write/basics-card.tsx
 #: src/features/settings/ai/providers.tsx
 msgid "Edit"
@@ -5235,6 +5456,10 @@ msgstr "Edit saved answer"
 #: src/features/career/schedule-sheet.tsx
 msgid "Edit schedule"
 msgstr "Edit schedule"
+
+#: src/features/discovery/search-form.tsx
+msgid "Edit search"
+msgstr "Edit search"
 
 #: src/features/resume/editor/check/issues.ts
 msgid "Edit the email"
@@ -5344,7 +5569,17 @@ msgstr "Empty trash…"
 msgid "End"
 msgstr "End"
 
+#: src/features/platform-admin/announcements-page.tsx
+#: src/features/platform-admin/impersonation-banner.tsx
+msgid "End now"
+msgstr "End now"
+
+#: src/features/platform-admin/announcements-page.tsx
+msgid "Ended"
+msgstr "Ended"
+
 #: src/features/org-admin/cohorts-page.tsx
+#: src/features/platform-admin/announcements-page.tsx
 msgid "Ends"
 msgstr "Ends"
 
@@ -5408,6 +5643,10 @@ msgstr "Enter a valid email address."
 msgid "Enter a web address, like example.com"
 msgstr "Enter a web address, like example.com"
 
+#: src/features/discovery/search-messages.ts
+msgid "Enter a whole number from 0 to {MAX_AI_TOP_N}."
+msgstr "Enter a whole number from 0 to {MAX_AI_TOP_N}."
+
 #: src/features/settings/ai/providers.tsx
 msgid "Enter any model ID supported by your endpoint."
 msgstr "Enter any model ID supported by your endpoint."
@@ -5424,6 +5663,10 @@ msgstr "Enter terms yourself. No AI request is made. Leave unknown amounts blank
 #: src/features/auth/pages/verify-2fa.tsx
 msgid "Enter the 6-digit code."
 msgstr "Enter the 6-digit code."
+
+#: src/features/discovery/search-messages.ts
+msgid "Enter the board name or paste its link."
+msgstr "Enter the board name or paste its link."
 
 #: src/features/resume/share/web-page-text.ts
 msgid "Enter the password the resume owner shared with you."
@@ -5500,6 +5743,18 @@ msgstr "Every day"
 #: src/features/resume/editor/check/issues.ts
 msgid "Every entry has dates in a form systems read, in order, and none in the future."
 msgstr "Every entry has dates in a form systems read, in order, and none in the future."
+
+#: src/features/platform-admin/audit-page.tsx
+msgid "Every organization and the platform, newest first."
+msgstr "Every organization and the platform, newest first."
+
+#: src/features/platform-admin/organizations-page.tsx
+msgid "Every organization on the platform. Opening one is recorded in the audit log."
+msgstr "Every organization on the platform. Opening one is recorded in the audit log."
+
+#: src/features/platform-admin/announcements-page.tsx
+msgid "Every plan"
+msgstr "Every plan"
 
 #: src/features/resume/editor/check/issues.ts
 msgid "Every role says what you did. Opinions on wording live in the Writing tab."
@@ -5636,6 +5891,7 @@ msgid "Facts, stories and preferences that are switched on in Knowledge"
 msgstr "Facts, stories and preferences that are switched on in Knowledge"
 
 #: src/features/branding/domains.ts
+#: src/features/discovery/searches.tsx
 #: src/features/settings/ai/providers.tsx
 msgid "Failed"
 msgstr "Failed"
@@ -5721,6 +5977,14 @@ msgstr "Finding sections"
 #: src/features/career/shared.tsx
 msgid "Finding what works"
 msgstr "Finding what works"
+
+#: src/features/discovery/searches.tsx
+msgid "Finished"
+msgstr "Finished"
+
+#: src/features/discovery/searches.tsx
+msgid "Finished with errors"
+msgstr "Finished with errors"
 
 #: src/libs/locale.ts
 msgid "Finnish"
@@ -5837,6 +6101,10 @@ msgstr "Fonts could not be loaded. Try again."
 #: src/routes/builder/letter/-components/write-panel.tsx
 msgid "For"
 msgstr "For"
+
+#: src/features/platform-admin/organization-page.tsx
+msgid "For a payment received outside a provider. The same reference is applied once."
+msgstr "For a payment received outside a provider. The same reference is applied once."
 
 #. placeholder {0}: domain.target
 #: src/features/resume/share/dns-records-dialog.tsx
@@ -5972,6 +6240,7 @@ msgstr "French"
 
 #: src/features/career/workspace/fit.tsx
 #: src/features/org-admin/analytics-page.tsx
+#: src/features/platform-admin/metrics-page.tsx
 #: src/routes/builder/letter/-components/write-panel.tsx
 msgid "From"
 msgstr "From"
@@ -6084,6 +6353,10 @@ msgstr "Give every role and qualification a date range."
 #: src/features/career/knowledge/stories.tsx
 msgid "Give the story a title before you can save."
 msgstr "Give the story a title before you can save."
+
+#: src/features/discovery/search-messages.ts
+msgid "Give this search a name."
+msgstr "Give this search a name."
 
 #: src/features/settings/account/application-profile.tsx
 msgid "Given name"
@@ -6270,6 +6543,10 @@ msgstr "Hide the photo"
 msgid "High"
 msgstr "High"
 
+#: src/features/platform-admin/metrics-page.tsx
+msgid "Highest first, with the revenue of the range beside it."
+msgstr "Highest first, with the revenue of the range beside it."
+
 #: src/features/branding/preview.tsx
 #: src/features/resume/editor/write/rich-text-editor-field.tsx
 msgid "Highlight"
@@ -6367,6 +6644,10 @@ msgstr "How your organization looks to its members."
 #: src/libs/locale.ts
 msgid "Hungarian"
 msgstr "Hungarian"
+
+#: src/features/discovery/search-messages.ts
+msgid "Hybrid"
+msgstr "Hybrid"
 
 #: src/routes/builder/$resumeId/-sidebar/right/sections/typography.tsx
 msgid "Hyphenation"
@@ -6548,6 +6829,10 @@ msgstr "Indonesian"
 msgid "Inferred"
 msgstr "Inferred"
 
+#: src/features/platform-admin/announcements-page.tsx
+msgid "Information"
+msgstr "Information"
+
 #: src/features/resume/editor/write/section-row.tsx
 msgid "Inline"
 msgstr "Inline"
@@ -6571,6 +6856,10 @@ msgstr "Interface language"
 #: src/features/settings/preferences.tsx
 msgid "Interface only. Each resume sets its own language in Design."
 msgstr "Interface only. Each resume sets its own language in Design."
+
+#: src/features/platform-admin/organization-page.tsx
+msgid "Interval"
+msgstr "Interval"
 
 #: src/features/applications/stages.ts
 #: src/features/career/schedule-sheet.tsx
@@ -6645,6 +6934,10 @@ msgstr "Invite someone"
 msgid "Invited"
 msgstr "Invited"
 
+#: src/features/platform-admin/organization-page.tsx
+msgid "Invoice or bank reference"
+msgstr "Invoice or bank reference"
+
 #: src/features/career/offers.tsx
 msgid "Is equity part of the offer?"
 msgstr "Is equity part of the offer?"
@@ -6703,6 +6996,11 @@ msgstr "Issues and Job match still work without AI."
 #: src/features/branding/domains.ts
 msgid "Issuing certificate"
 msgstr "Issuing certificate"
+
+#. placeholder {0}: formatDate(expiresAt)
+#: src/features/platform-admin/impersonation-banner.tsx
+msgid "It ends at {0}"
+msgstr "It ends at {0}"
 
 #: src/features/resume/editor/check/issues.ts
 msgid "It has entries but isn't placed on a page."
@@ -6765,6 +7063,10 @@ msgstr "Japanese"
 msgid "Job"
 msgstr "Job"
 
+#: src/features/discovery/search-form.tsx
+msgid "Job boards"
+msgstr "Job boards"
+
 #: src/features/auth/pages/device.tsx
 msgid "Job Clipper on {organizationName} can read your profile name and save jobs to your tracker."
 msgstr "Job Clipper on {organizationName} can read your profile name and save jobs to your tracker."
@@ -6807,6 +7109,10 @@ msgstr "Job search failed. Try again or paste a posting link."
 msgid "Job search pipeline"
 msgstr "Job search pipeline"
 
+#: src/features/discovery/search-form.tsx
+msgid "Job titles"
+msgstr "Job titles"
+
 #: src/features/command-palette/pages/navigation.tsx
 #: src/routes/dashboard/career/route.tsx
 msgid "Jobs"
@@ -6815,6 +7121,10 @@ msgstr "Jobs"
 #: src/features/discovery/review-queue.tsx
 msgid "Jobs found for you"
 msgstr "Jobs found for you"
+
+#: src/features/discovery/search-form.tsx
+msgid "Jobs to score with AI per run"
+msgstr "Jobs to score with AI per run"
 
 #. Example full name placeholder on registration form
 #: src/features/auth/pages/register.tsx
@@ -6961,6 +7271,7 @@ msgstr "Keyword layout"
 msgid "Keyword overlap: {0}"
 msgstr "Keyword overlap: {0}"
 
+#: src/features/discovery/search-form.tsx
 #: src/features/resume/editor/write/entries.tsx
 msgid "Keywords"
 msgstr "Keywords"
@@ -6968,6 +7279,10 @@ msgstr "Keywords"
 #: src/libs/locale.ts
 msgid "Khmer"
 msgstr "Khmer"
+
+#: src/features/platform-admin/announcements-page.tsx
+msgid "Kind"
+msgstr "Kind"
 
 #: src/features/letters/compose.ts
 msgid "Kind regards,"
@@ -7021,6 +7336,7 @@ msgid "Languages"
 msgstr "Languages"
 
 #: src/features/org-admin/analytics-page.tsx
+#: src/features/platform-admin/organizations-page.tsx
 msgid "Last active"
 msgstr "Last active"
 
@@ -7046,6 +7362,10 @@ msgstr "Last reviewed"
 #: src/features/settings/account/application-profile.tsx
 msgid "Last reviewed: {0}"
 msgstr "Last reviewed: {0}"
+
+#: src/features/discovery/searches.tsx
+msgid "Last run"
+msgstr "Last run"
 
 #. placeholder {0}: when(row.lastSeenAt)
 #: src/features/career/today.tsx
@@ -7156,6 +7476,10 @@ msgstr "Let's start with what you have"
 msgid "Lets the coach search public pages through your web search service"
 msgstr "Lets the coach search public pages through your web search service"
 
+#: src/features/platform-admin/organization-page.tsx
+msgid "Lets the organization use platform AI past its plan's credits."
+msgstr "Lets the organization use platform AI past its plan's credits."
+
 #: src/features/assistant/assistant-panel.tsx
 msgid "letter"
 msgstr "letter"
@@ -7211,6 +7535,10 @@ msgstr "Level"
 #: src/components/level/display.tsx
 msgid "Level {level} of 5"
 msgstr "Level {level} of 5"
+
+#: src/features/platform-admin/organization-page.tsx
+msgid "Lifts the suspension."
+msgstr "Lifts the suspension."
 
 #: src/features/ats-checker/messages.ts
 msgid "Ligatures can drop letters out of words such as \"workflow\"."
@@ -7491,6 +7819,7 @@ msgid "Location"
 msgstr "Location"
 
 #: src/features/career/coach-chat.tsx
+#: src/features/discovery/search-form.tsx
 msgid "Locations"
 msgstr "Locations"
 
@@ -7747,6 +8076,10 @@ msgstr "Members"
 msgid "Members & invites"
 msgstr "Members & invites"
 
+#: src/features/platform-admin/announcements-page.tsx
+msgid "Message (plain text, up to 1,000 characters)"
+msgstr "Message (plain text, up to 1,000 characters)"
+
 #: src/features/assistant/conversation.tsx
 msgid "Message the assistant"
 msgstr "Message the assistant"
@@ -7758,6 +8091,11 @@ msgstr "Message the coach"
 #: src/features/career/shared.tsx
 msgid "Messages"
 msgstr "Messages"
+
+#: src/features/platform-admin/layout.tsx
+#: src/features/platform-admin/metrics-page.tsx
+msgid "Metrics"
+msgstr "Metrics"
 
 #: src/features/career/workspace/practise.tsx
 msgid "Microphone blocked. Allow it in your browser settings, or type your answer."
@@ -7791,6 +8129,10 @@ msgstr "Model: {label}"
 #: src/features/settings/account/application-profile.tsx
 msgid "Month"
 msgstr "Month"
+
+#: src/features/platform-admin/organization-page.tsx
+msgid "Monthly"
+msgstr "Monthly"
 
 #: src/features/resume/editor/chrome/bar.tsx
 #: src/routes/builder/$resumeId/-components/document-menu.tsx
@@ -7955,12 +8297,17 @@ msgstr "Moved to {label}"
 msgid "Moves the application from {0}."
 msgstr "Moves the application from {0}."
 
+#: src/features/platform-admin/metrics-page.tsx
+msgid "MRR"
+msgstr "MRR"
+
 #. Label for full name input on registration form
 #: src/dialogs/resume/index.tsx
 #: src/features/applications/components/detail/contacts.tsx
 #: src/features/applications/components/interview-dialog.tsx
 #: src/features/applications/components/manage-lanes-sheet.tsx
 #: src/features/auth/pages/register.tsx
+#: src/features/discovery/search-form.tsx
 #: src/features/documents/document-card.tsx
 #: src/features/documents/documents-page.tsx
 #: src/features/documents/new-document-dialog.tsx
@@ -8074,6 +8421,10 @@ msgstr "Never"
 msgid "New"
 msgstr "New"
 
+#: src/features/platform-admin/announcements-page.tsx
+msgid "New announcement"
+msgstr "New announcement"
+
 #: src/features/settings/ai/api-keys.tsx
 msgid "New API key"
 msgstr "New API key"
@@ -8107,6 +8458,10 @@ msgstr "New document"
 msgid "New fact"
 msgstr "New fact"
 
+#: src/features/discovery/searches.tsx
+msgid "New jobs in the last run"
+msgstr "New jobs in the last run"
+
 #: src/features/settings/ai/api-keys.tsx
 msgid "New key"
 msgstr "New key"
@@ -8115,6 +8470,10 @@ msgstr "New key"
 #: src/features/org-admin/cohorts-page.tsx
 msgid "New name for {0}"
 msgstr "New name for {0}"
+
+#: src/features/platform-admin/metrics-page.tsx
+msgid "New organizations"
+msgstr "New organizations"
 
 #: src/features/resume/editor/write/entry-card.tsx
 #: src/routes/builder/$resumeId/-sidebar/right/sections/layout/pages.tsx
@@ -8139,6 +8498,11 @@ msgstr "New roles, reminders and finished briefings appear here."
 msgid "New schedule"
 msgstr "New schedule"
 
+#: src/features/discovery/search-form.tsx
+#: src/features/discovery/searches.tsx
+msgid "New search"
+msgstr "New search"
+
 #: src/features/resume/editor/write/entry-card.tsx
 msgid "New section"
 msgstr "New section"
@@ -8147,9 +8511,14 @@ msgstr "New section"
 msgid "New stage color"
 msgstr "New stage color"
 
+#: src/features/platform-admin/audit-page.tsx
+msgid "Newer"
+msgstr "Newer"
+
 #: src/features/documents/page-navigation.tsx
 #: src/features/org-admin/analytics-page.tsx
 #: src/features/org-admin/cohorts-page.tsx
+#: src/features/platform-admin/organizations-page.tsx
 msgid "Next"
 msgstr "Next"
 
@@ -8164,6 +8533,10 @@ msgstr "Next month"
 #: src/features/career/workspace/practise.tsx
 msgid "Next question"
 msgstr "Next question"
+
+#: src/features/discovery/searches.tsx
+msgid "Next run"
+msgstr "Next run"
 
 #: src/features/applications/components/detail/next-step-card.tsx
 #: src/features/applications/components/list-view.tsx
@@ -8289,6 +8662,7 @@ msgid "No email address was found."
 msgstr "No email address was found."
 
 #: src/features/org-admin/audit-page.tsx
+#: src/features/platform-admin/audit-page.tsx
 msgid "No entries."
 msgstr "No entries."
 
@@ -8356,6 +8730,10 @@ msgstr "No offers to compare yet"
 #: src/routes/builder/$resumeId/-components/editor-bar.tsx
 msgid "No open issues"
 msgstr "No open issues"
+
+#: src/features/platform-admin/organizations-page.tsx
+msgid "No organizations match."
+msgstr "No organizations match."
 
 #. placeholder {0}: categoryHint(lane)
 #: src/features/applications/components/manage-lanes-sheet.tsx
@@ -8491,6 +8869,11 @@ msgstr "None"
 msgid "None selected"
 msgstr "None selected"
 
+#: src/features/platform-admin/announcements-page.tsx
+#: src/features/platform-admin/organization-page.tsx
+msgid "None yet."
+msgstr "None yet."
+
 #: src/features/resume/editor/design/fit.ts
 #: src/features/resume/editor/design/style-groups.tsx
 msgid "Normal"
@@ -8507,6 +8890,10 @@ msgstr "Norwegian"
 #: src/features/org-admin/bulk-invite.tsx
 msgid "Not a valid email"
 msgstr "Not a valid email"
+
+#: src/features/platform-admin/organization-page.tsx
+msgid "Not allowed"
+msgstr "Not allowed"
 
 #: src/features/career/workspace/messages.tsx
 msgid "Not applied"
@@ -8568,6 +8955,10 @@ msgstr "Not recorded yet. Leave it blank until you can support it."
 #: src/features/settings/account/application-profile.tsx
 msgid "Not reviewed yet"
 msgstr "Not reviewed yet"
+
+#: src/features/discovery/searches.tsx
+msgid "Not run yet"
+msgstr "Not run yet"
 
 #: src/features/career/knowledge/preferences.tsx
 #: src/features/resume/editor/save-status.tsx
@@ -8757,6 +9148,14 @@ msgstr "Office days per week"
 msgid "Offline · saved on this device"
 msgstr "Offline · saved on this device"
 
+#: src/features/platform-admin/audit-page.tsx
+msgid "Older"
+msgstr "Older"
+
+#: src/features/discovery/search-messages.ts
+msgid "On-site"
+msgstr "On-site"
+
 #: src/features/resume/share/share-panel.tsx
 msgid "On. Anyone with the link can see your web page."
 msgstr "On. Anyone with the link can see your web page."
@@ -8798,6 +9197,10 @@ msgstr "One line"
 #: src/features/auth/pages/handoff-redeem.tsx
 msgid "One moment while we finish signing you in."
 msgstr "One moment while we finish signing you in."
+
+#: src/features/auth/pages/impersonate-redeem.tsx
+msgid "One moment."
+msgstr "One moment."
 
 #: src/features/templates/gallery.tsx
 msgid "One-column templates give hiring software a simple top-to-bottom reading order. Two-column templates put supporting details in a sidebar and leave more room for visual hierarchy. Choose for your content, then check the exported PDF."
@@ -8857,6 +9260,14 @@ msgstr "Only the first {MAX_IMPORT} rows import at once, leaving out {overflow}.
 #: src/features/ats-checker/messages.ts
 msgid "Only the first pages were checked."
 msgstr "Only the first pages were checked."
+
+#: src/features/platform-admin/announcements-page.tsx
+msgid "Only this organization (id, optional)"
+msgstr "Only this organization (id, optional)"
+
+#: src/features/platform-admin/announcements-page.tsx
+msgid "Only this plan"
+msgstr "Only this plan"
 
 #: src/features/resume/share/share-panel.tsx
 msgid "Only you see these"
@@ -9037,9 +9448,37 @@ msgid "Orange"
 msgstr "Orange"
 
 #: src/features/organization/switcher.tsx
+#: src/features/platform-admin/audit-page.tsx
+#: src/features/platform-admin/metrics-page.tsx
+#: src/features/platform-admin/organizations-page.tsx
 #: src/features/resume/editor/write/entries.tsx
 msgid "Organization"
 msgstr "Organization"
+
+#: src/features/platform-admin/audit-page.tsx
+msgid "Organization id"
+msgstr "Organization id"
+
+#: src/features/platform-admin/organization-page.tsx
+msgid "Organization reactivated."
+msgstr "Organization reactivated."
+
+#: src/features/platform-admin/organization-page.tsx
+msgid "Organization suspended."
+msgstr "Organization suspended."
+
+#: src/features/platform-admin/layout.tsx
+#: src/features/platform-admin/organizations-page.tsx
+msgid "Organizations"
+msgstr "Organizations"
+
+#: src/features/platform-admin/metrics-page.tsx
+msgid "Organizations by plan"
+msgstr "Organizations by plan"
+
+#: src/features/platform-admin/metrics-page.tsx
+msgid "Organizations by status"
+msgstr "Organizations by status"
 
 #: src/features/ats-checker/checker.tsx
 msgid "Original page"
@@ -9084,9 +9523,17 @@ msgstr "Outcome"
 msgid "Outdent"
 msgstr "Outdent"
 
+#: src/features/platform-admin/organization-page.tsx
+msgid "Overview"
+msgstr "Overview"
+
 #: src/features/organization/roles.ts
 msgid "Owner"
 msgstr "Owner"
+
+#: src/features/platform-admin/organization-page.tsx
+msgid "Owners"
+msgstr "Owners"
 
 #: src/features/branding/domains.ts
 msgid "Ownership is proven. The certificate is being issued; this usually takes a few minutes."
@@ -9130,6 +9577,7 @@ msgid "Page 1 · {formatLabel}"
 msgstr "Page 1 · {formatLabel}"
 
 #: src/components/layout/not-found-screen.tsx
+#: src/features/platform-admin/shared.tsx
 msgid "Page not found"
 msgstr "Page not found"
 
@@ -9275,6 +9723,15 @@ msgstr "Pasted posting"
 msgid "Pasting fills the fields automatically."
 msgstr "Pasting fills the fields automatically."
 
+#: src/features/discovery/searches.tsx
+msgid "Pause"
+msgstr "Pause"
+
+#: src/features/discovery/search-messages.ts
+#: src/features/discovery/searches.tsx
+msgid "Paused"
+msgstr "Paused"
+
 #: src/features/career/today.tsx
 msgid "Paused · {line}"
 msgstr "Paused · {line}"
@@ -9288,6 +9745,10 @@ msgstr "Paused schedules keep their settings."
 #: src/features/settings/account/application-profile.tsx
 msgid "Pay period"
 msgstr "Pay period"
+
+#: src/features/platform-admin/organization-page.tsx
+msgid "Payment recorded."
+msgstr "Payment recorded."
 
 #: src/features/resume/stylesheet/editor.tsx
 msgid "PDF styles support a subset of CSS. Rotation, dashed and dotted borders, and some layout properties are ignored."
@@ -9312,6 +9773,18 @@ msgstr "Per month"
 #: src/features/career/offer-entry.tsx
 msgid "Per year"
 msgstr "Per year"
+
+#: src/features/platform-admin/organization-page.tsx
+msgid "Period end"
+msgstr "Period end"
+
+#: src/features/platform-admin/organization-page.tsx
+msgid "Period ends"
+msgstr "Period ends"
+
+#: src/features/platform-admin/organization-page.tsx
+msgid "Period start"
+msgstr "Period start"
 
 #: src/features/settings/account/data.tsx
 msgid "Permanently removes everything. Export first if you want a copy."
@@ -9369,6 +9842,10 @@ msgstr "Pick members, then move them to a cohort or take them out of theirs."
 msgid "Pick one format and use it everywhere."
 msgstr "Pick one format and use it everywhere."
 
+#: src/features/discovery/search-form.tsx
+msgid "Pick the board and enter the company's board name, or paste the link to its job page. The name is the part after the host, for example jobs.lever.co/acme or boards.greenhouse.io/acme (acme)."
+msgstr "Pick the board and enter the company's board name, or paste the link to its job page. The name is the part after the host, for example jobs.lever.co/acme or boards.greenhouse.io/acme (acme)."
+
 #: src/features/career/workspace/prepare.tsx
 msgid "Pick two examples"
 msgstr "Pick two examples"
@@ -9393,9 +9870,18 @@ msgstr "Plain text (.txt)"
 msgid "Plain text with headings. Paste into application forms and notes."
 msgstr "Plain text with headings. Paste into application forms and notes."
 
+#: src/features/platform-admin/organization-page.tsx
+#: src/features/platform-admin/organizations-page.tsx
+msgid "Plan"
+msgstr "Plan"
+
 #: src/features/career/workspace/prepare.tsx
 msgid "Plan again"
 msgstr "Plan again"
+
+#: src/features/platform-admin/organization-page.tsx
+msgid "Plan changed."
+msgstr "Plan changed."
 
 #: src/features/career/workspace/prepare.tsx
 msgid "Plan my preparation"
@@ -9413,9 +9899,17 @@ msgstr "Plan your search, keep your evidence in one place, and decide between of
 msgid "Planning your week"
 msgstr "Planning your week"
 
+#: src/features/platform-admin/audit-page.tsx
+msgid "Platform"
+msgstr "Platform"
+
 #: src/features/branding/branding-page.tsx
 msgid "Platform default"
 msgstr "Platform default"
+
+#: src/features/platform-admin/audit-page.tsx
+msgid "Platform entries only"
+msgstr "Platform entries only"
 
 #: src/features/branding/branding-page.tsx
 msgid "PNG or ICO, up to 128 KB."
@@ -9610,6 +10104,10 @@ msgstr "Press <0>{RETURN_KEY}</0> to add or save the current keyword."
 msgid "Press <0>Enter</0> to open"
 msgstr "Press <0>Enter</0> to open"
 
+#: src/features/discovery/search-form.tsx
+msgid "Press Enter or comma to add. For example: Product Manager."
+msgstr "Press Enter or comma to add. For example: Product Manager."
+
 #: src/features/templates/gallery.tsx
 msgid "Preview {name} sample PDF"
 msgstr "Preview {name} sample PDF"
@@ -9631,6 +10129,7 @@ msgstr "Previewing {0} · click to apply"
 #: src/features/documents/page-navigation.tsx
 #: src/features/org-admin/analytics-page.tsx
 #: src/features/org-admin/cohorts-page.tsx
+#: src/features/platform-admin/organizations-page.tsx
 msgid "Previous"
 msgstr "Previous"
 
@@ -9771,6 +10270,10 @@ msgstr "Publications"
 msgid "Publish"
 msgstr "Publish"
 
+#: src/features/platform-admin/announcements-page.tsx
+msgid "Publish announcement"
+msgstr "Publish announcement"
+
 #: src/features/resume/share/share-panel.tsx
 msgid "Publish it to share a link that opens on any screen. Only you can see it until then."
 msgstr "Publish it to share a link that opens on any screen. Only you can see it until then."
@@ -9871,6 +10374,14 @@ msgstr "Re-export with fonts embedded, and check the text copies out cleanly."
 #: src/features/ats-checker/messages.ts
 msgid "Re-export with fonts embedded, then open the file and check that the text copies out cleanly."
 msgstr "Re-export with fonts embedded, then open the file and check that the text copies out cleanly."
+
+#: src/features/platform-admin/organization-page.tsx
+msgid "Reactivate"
+msgstr "Reactivate"
+
+#: src/features/platform-admin/organization-page.tsx
+msgid "Reactivate organization"
+msgstr "Reactivate organization"
 
 #. placeholder {0}: reader.label
 #: src/features/career/workspace/practise.tsx
@@ -10031,6 +10542,10 @@ msgstr "Ready"
 msgid "Reason"
 msgstr "Reason"
 
+#: src/features/platform-admin/organization-page.tsx
+msgid "Reason (recorded in the audit log)"
+msgstr "Reason (recorded in the audit log)"
+
 #: src/features/career/workspace/practise.tsx
 msgid "Recalled"
 msgstr "Recalled"
@@ -10039,9 +10554,21 @@ msgstr "Recalled"
 msgid "Recent"
 msgstr "Recent"
 
+#: src/features/platform-admin/announcements-page.tsx
+msgid "Recent announcements"
+msgstr "Recent announcements"
+
+#: src/features/platform-admin/organization-page.tsx
+msgid "Recent billing events"
+msgstr "Recent billing events"
+
 #: src/routes/builder/letter/-components/write-panel.tsx
 msgid "Recipient"
 msgstr "Recipient"
+
+#: src/features/platform-admin/organization-page.tsx
+msgid "Record a payment"
+msgstr "Record a payment"
 
 #: src/features/career/workspace/practise.tsx
 msgid "Record again"
@@ -10050,6 +10577,10 @@ msgstr "Record again"
 #: src/features/applications/components/add-application-dialog.tsx
 msgid "Record application"
 msgstr "Record application"
+
+#: src/features/platform-admin/organization-page.tsx
+msgid "Record payment"
+msgstr "Record payment"
 
 #: src/features/career/workspace/practise.tsx
 msgid "Record your answer"
@@ -10222,8 +10753,13 @@ msgstr "Reminders appear here. Email copies are optional and need a verified add
 
 #: src/features/career/knowledge/preferences.tsx
 #: src/features/career/offers.tsx
+#: src/features/discovery/search-messages.ts
 msgid "Remote"
 msgstr "Remote"
+
+#: src/features/discovery/search-form.tsx
+msgid "Remote preference"
+msgstr "Remote preference"
 
 #: src/features/applications/components/application-form-sheet.tsx
 msgid "Remote, Hybrid, a city…"
@@ -10231,6 +10767,7 @@ msgstr "Remote, Hybrid, a city…"
 
 #: src/features/branding/branding-page.tsx
 #: src/features/branding/domains-page.tsx
+#: src/features/discovery/search-form.tsx
 #: src/features/organization/members-page.tsx
 #: src/features/resume/share/custom-domain-field.tsx
 #: src/features/settings/account/security.tsx
@@ -10284,8 +10821,14 @@ msgid "Remove {name}?"
 msgstr "Remove {name}?"
 
 #: src/features/applications/components/application-detail-sheet.tsx
+#: src/features/discovery/chip-input.tsx
 msgid "Remove {value}"
 msgstr "Remove {value}"
+
+#. placeholder {0}: index + 1
+#: src/features/discovery/search-form.tsx
+msgid "Remove board {0}"
+msgstr "Remove board {0}"
 
 #: src/features/settings/ai/web-access.tsx
 msgid "Remove connection"
@@ -10586,6 +11129,7 @@ msgstr "resume"
 #: src/features/applications/components/application-form-sheet.tsx
 #: src/features/applications/components/list-view.tsx
 #: src/features/career/workspace/preparation.tsx
+#: src/features/discovery/searches.tsx
 #: src/features/documents/document-card.tsx
 #: src/routes/builder/letter/-components/write-panel.tsx
 msgid "Resume"
@@ -10701,6 +11245,18 @@ msgstr "Retrying…"
 #: src/features/career/workspace/answer-library.tsx
 msgid "Reuse scope"
 msgstr "Reuse scope"
+
+#: src/features/platform-admin/metrics-page.tsx
+msgid "Revenue"
+msgstr "Revenue"
+
+#: src/features/platform-admin/metrics-page.tsx
+msgid "Revenue and costs are shown per currency. Nothing is converted."
+msgstr "Revenue and costs are shown per currency. Nothing is converted."
+
+#: src/features/platform-admin/metrics-page.tsx
+msgid "Revenue in range"
+msgstr "Revenue in range"
 
 #: src/features/career/today.tsx
 #: src/features/career/workspace/debrief.tsx
@@ -10894,6 +11450,15 @@ msgstr "Rule"
 msgid "Run again"
 msgstr "Run again"
 
+#: src/features/discovery/searches.tsx
+msgid "Run now"
+msgstr "Run now"
+
+#: src/features/discovery/searches.tsx
+#: src/features/platform-admin/announcements-page.tsx
+msgid "Running"
+msgstr "Running"
+
 #: src/routes/builder/$resumeId/-components/page-canvas.tsx
 msgid "Runs onto page {next}"
 msgstr "Runs onto page {next}"
@@ -10965,6 +11530,7 @@ msgstr "Save as application…"
 #: src/dialogs/resume/index.tsx
 #: src/features/applications/components/application-form-sheet.tsx
 #: src/features/branding/branding-page.tsx
+#: src/features/discovery/search-form.tsx
 msgid "Save changes"
 msgstr "Save changes"
 
@@ -11168,6 +11734,10 @@ msgstr "Saving…"
 msgid "Scan the QR code with your authenticator app, or copy the secret and paste it into the app."
 msgstr "Scan the QR code with your authenticator app, or copy the secret and paste it into the app."
 
+#: src/features/discovery/search-form.tsx
+msgid "Schedule"
+msgstr "Schedule"
+
 #: src/features/applications/components/interview-dialog.tsx
 msgid "Schedule an interview"
 msgstr "Schedule an interview"
@@ -11191,6 +11761,10 @@ msgstr "Schedule interview"
 #: src/features/career/schedule-sheet.tsx
 msgid "Schedule saved"
 msgstr "Schedule saved"
+
+#: src/features/platform-admin/announcements-page.tsx
+msgid "Scheduled"
+msgstr "Scheduled"
 
 #: src/features/career/schedule-sheet.tsx
 msgid "Scheduled work is not available on this server. Ask your server administrator to configure it."
@@ -11231,6 +11805,10 @@ msgstr "Search and reading are set up for everyone here. Ask your administrator 
 msgid "Search applications"
 msgstr "Search applications"
 
+#: src/features/platform-admin/organizations-page.tsx
+msgid "Search by name or address"
+msgstr "Search by name or address"
+
 #. Accessible label for command palette search input
 #: src/features/command-palette/content.tsx
 msgid "Search commands"
@@ -11243,6 +11821,14 @@ msgstr "Search countries"
 #: src/features/documents/documents-page.tsx
 msgid "Search covers titles, tags and linked applications."
 msgstr "Search covers titles, tags and linked applications."
+
+#: src/features/discovery/search-form.tsx
+msgid "Search created."
+msgstr "Search created."
+
+#: src/features/discovery/searches.tsx
+msgid "Search deleted."
+msgstr "Search deleted."
 
 #: src/features/documents/documents-page.tsx
 msgid "Search documents"
@@ -11290,6 +11876,10 @@ msgstr "Search role, company or contact"
 msgid "Search saved answers"
 msgstr "Search saved answers"
 
+#: src/features/discovery/search-form.tsx
+msgid "Search saved."
+msgstr "Search saved."
+
 #: src/features/career/coach.tsx
 msgid "Search terms go to your web search service."
 msgstr "Search terms go to your web search service."
@@ -11327,6 +11917,10 @@ msgstr "Search…"
 msgid "Searched the web"
 msgstr "Searched the web"
 
+#: src/features/discovery/searches.tsx
+msgid "Searches"
+msgstr "Searches"
+
 #: src/features/settings/ai/web-access.tsx
 msgid "Searches and reads pages with {connectedProvider}, whichever AI provider you use."
 msgstr "Searches and reads pages with {connectedProvider}, whichever AI provider you use."
@@ -11350,6 +11944,15 @@ msgstr "Searching the web"
 #: src/features/assistant/conversation.tsx
 msgid "Searching the web…"
 msgstr "Searching the web…"
+
+#: src/features/platform-admin/organization-page.tsx
+#: src/features/platform-admin/organizations-page.tsx
+msgid "Seats"
+msgstr "Seats"
+
+#: src/features/platform-admin/organization-page.tsx
+msgid "Seats (leave empty to keep)"
+msgstr "Seats (leave empty to keep)"
 
 #: src/features/branding/preview.tsx
 msgid "Secondary"
@@ -11583,6 +12186,10 @@ msgstr "Set the document language when exporting."
 msgid "Set up discovery"
 msgstr "Set up discovery"
 
+#: src/features/platform-admin/layout.tsx
+msgid "Set up two-factor authentication"
+msgstr "Set up two-factor authentication"
+
 #: src/features/career/schedule-sheet.tsx
 msgid "Set up web search in Settings"
 msgstr "Set up web search in Settings"
@@ -11802,6 +12409,14 @@ msgstr "Sidebars are often read last, or mixed into the main column."
 msgid "Sign in"
 msgstr "Sign in"
 
+#: src/features/platform-admin/organization-page.tsx
+msgid "Sign in as"
+msgstr "Sign in as"
+
+#: src/features/platform-admin/organization-page.tsx
+msgid "Sign in as a member of this organization for up to 60 minutes. The member sees a banner and can end it. It is recorded in the organization's audit log and in the platform log."
+msgstr "Sign in as a member of this organization for up to 60 minutes. The member sees a banner and can end it. It is recorded in the organization's audit log and in the platform log."
+
 #. Call-to-action link from forgot-password page to login page
 #. Call-to-action link from registration page to login page
 #: src/features/auth/pages/forgot-password.tsx
@@ -11950,6 +12565,7 @@ msgstr "Size"
 msgid "Skill"
 msgstr "Skill"
 
+#: src/features/discovery/search-form.tsx
 #: src/libs/resume/section.tsx
 msgid "Skills"
 msgstr "Skills"
@@ -12035,6 +12651,10 @@ msgstr "Some text falls outside the page."
 #: src/features/ats-checker/messages.ts
 msgid "Some text is rotated."
 msgstr "Some text is rotated."
+
+#: src/features/platform-admin/shared.tsx
+msgid "Something went wrong"
+msgstr "Something went wrong"
 
 #: src/features/branding/domains.ts
 msgid "Something went wrong while checking this domain. Remove it and add it again."
@@ -12187,6 +12807,10 @@ msgstr "Start on a new page"
 msgid "Start on new page"
 msgstr "Start on new page"
 
+#: src/features/platform-admin/organization-page.tsx
+msgid "Start support session"
+msgstr "Start support session"
+
 #: src/features/ats-checker/messages.ts
 msgid "Start the resume with your name on its own line."
 msgstr "Start the resume with your name on its own line."
@@ -12220,7 +12844,12 @@ msgstr "Start your resume"
 msgid "Started"
 msgstr "Started"
 
+#: src/features/auth/pages/impersonate-redeem.tsx
+msgid "Starting the support session"
+msgstr "Starting the support session"
+
 #: src/features/org-admin/cohorts-page.tsx
+#: src/features/platform-admin/announcements-page.tsx
 msgid "Starts"
 msgstr "Starts"
 
@@ -12246,8 +12875,13 @@ msgid "Statistics"
 msgstr "Statistics"
 
 #: src/features/career/workspace/fit.tsx
+#: src/features/platform-admin/organizations-page.tsx
 msgid "Status"
 msgstr "Status"
+
+#: src/features/platform-admin/organization-page.tsx
+msgid "Status changed"
+msgstr "Status changed"
 
 #: src/features/documents/new-document-dialog.tsx
 msgid "Stay here"
@@ -12264,6 +12898,10 @@ msgstr "Step {0} of {1}"
 #: src/routes/builder/letter/-components/write-panel.tsx
 msgid "Stop"
 msgstr "Stop"
+
+#: src/features/platform-admin/organization-page.tsx
+msgid "Stop allowing overage"
+msgstr "Stop allowing overage"
 
 #: src/features/career/workspace/practise.tsx
 msgid "Stop audio"
@@ -12350,6 +12988,10 @@ msgstr "Submitted attached cover letter: {0}"
 msgid "Submitted attached resume: {0}"
 msgstr "Submitted attached resume: {0}"
 
+#: src/features/platform-admin/organization-page.tsx
+msgid "Subscription"
+msgstr "Subscription"
+
 #: src/features/career/workspace/prepare.tsx
 msgid "Success at 90 days · next step"
 msgstr "Success at 90 days · next step"
@@ -12393,6 +13035,10 @@ msgstr "Summary"
 msgid "Support"
 msgstr "Support"
 
+#: src/features/platform-admin/organization-page.tsx
+msgid "Support session"
+msgstr "Support session"
+
 #: src/features/career/shared.tsx
 #: src/features/career/workspace/debrief.tsx
 msgid "Supported"
@@ -12401,6 +13047,18 @@ msgstr "Supported"
 #: src/features/career/workspace/answer-library.tsx
 msgid "Supporting Knowledge facts and stories"
 msgstr "Supporting Knowledge facts and stories"
+
+#: src/features/platform-admin/organization-page.tsx
+msgid "Suspend"
+msgstr "Suspend"
+
+#: src/features/platform-admin/organization-page.tsx
+msgid "Suspend organization"
+msgstr "Suspend organization"
+
+#: src/features/platform-admin/organizations-page.tsx
+msgid "Suspended"
+msgstr "Suspended"
 
 #: src/features/career/offers.tsx
 msgid "Swap"
@@ -12712,6 +13370,10 @@ msgstr "That provider setup isn't valid. Check the base URL."
 msgid "That recording was empty or over 2 MB. Try a shorter answer."
 msgstr "That recording was empty or over 2 MB. Try a shorter answer."
 
+#: src/features/platform-admin/organization-page.tsx
+msgid "That reference was already recorded. Nothing changed."
+msgstr "That reference was already recorded. Nothing changed."
+
 #: src/features/auth/pages/error.tsx
 msgid "That sign-in provider is no longer available on this server. Use another sign-in method."
 msgstr "That sign-in provider is no longer available on this server. Use another sign-in method."
@@ -12727,6 +13389,14 @@ msgstr "The 20 members who used the most."
 #: src/libs/error-message.ts
 msgid "The address must contain only lowercase letters and numbers, separated by single dashes."
 msgstr "The address must contain only lowercase letters and numbers, separated by single dashes."
+
+#: src/features/platform-admin/announcements-page.tsx
+msgid "The announcement could not be ended."
+msgstr "The announcement could not be ended."
+
+#: src/features/platform-admin/announcements-page.tsx
+msgid "The announcement could not be saved."
+msgstr "The announcement could not be saved."
 
 #: src/features/auth/pages/error.tsx
 msgid "The application that sent you here made an invalid authorization request. Return to the application and try again."
@@ -12744,6 +13414,10 @@ msgstr "The assistant isn't set up on this server. Whoever runs it needs to set 
 msgid "The assistant uses your own key. Nothing is sent anywhere until you connect one."
 msgstr "The assistant uses your own key. Nothing is sent anywhere until you connect one."
 
+#: src/features/discovery/search-form.tsx
+msgid "The best matches of each run get an AI score and a short reason. Each scored job uses AI credits. Your plan may allow fewer. Enter 0 to skip AI."
+msgstr "The best matches of each run get an AI score and a short reason. Each scored job uses AI credits. Your plan may allow fewer. Enter 0 to skip AI."
+
 #: src/features/settings/ai/web-access.tsx
 msgid "The built-in reader remains active."
 msgstr "The built-in reader remains active."
@@ -12751,6 +13425,10 @@ msgstr "The built-in reader remains active."
 #: src/features/branding/domains.ts
 msgid "The certificate provider rejected this domain. Check that the CNAME record points where shown."
 msgstr "The certificate provider rejected this domain. Check that the CNAME record points where shown."
+
+#: src/features/platform-admin/organization-page.tsx
+msgid "The change could not be made."
+msgstr "The change could not be made."
 
 #: src/features/resume/editor/check/writing-tab.tsx
 msgid "The checks are mechanical. This asks a language model how a reader might react to your bullets and suggests rewrites. It isn't part of the score."
@@ -12775,6 +13453,10 @@ msgstr "The coach reads these for this application only."
 #: src/features/career/knowledge/facts.tsx
 msgid "The coach saves facts you state, and tells you. You can undo."
 msgstr "The coach saves facts you state, and tells you. You can undo."
+
+#: src/features/platform-admin/layout.tsx
+msgid "The console can change any organization. It stays closed until your account has two-factor authentication."
+msgstr "The console can change any organization. It stays closed until your account has two-factor authentication."
 
 #: src/features/documents/new-document-dialog.tsx
 msgid "The copy is linked to the application, so Check and the assistant use its posting."
@@ -12840,6 +13522,10 @@ msgstr "The letter matches the resume's design again"
 msgid "The line changed since you asked, so it wasn't replaced."
 msgstr "The line changed since you asked, so it wasn't replaced."
 
+#: src/features/auth/pages/impersonate-redeem.tsx
+msgid "The link has expired or was already used. Start the support session again from the console."
+msgstr "The link has expired or was already used. Start the support session again from the console."
+
 #: src/features/career/workspace/saved.tsx
 msgid "the message"
 msgstr "the message"
@@ -12876,6 +13562,10 @@ msgstr "The ownership TXT record is gone. Add it back, or remove the domain."
 msgid "The page had no job details to read. Fill in the role and company."
 msgstr "The page had no job details to read. Fill in the role and company."
 
+#: src/features/platform-admin/shared.tsx
+msgid "The page you are looking for does not exist."
+msgstr "The page you are looking for does not exist."
+
 #: src/components/layout/not-found-screen.tsx
 msgid "The page you're looking for may have been moved or no longer exists."
 msgstr "The page you're looking for may have been moved or no longer exists."
@@ -12887,6 +13577,10 @@ msgstr "The page's PDF couldn't be read. Edit anything to render it again."
 #: src/features/ats-checker/messages.ts
 msgid "The pages are pictures, with no text behind them."
 msgstr "The pages are pictures, with no text behind them."
+
+#: src/features/platform-admin/organization-page.tsx
+msgid "The payment could not be recorded."
+msgstr "The payment could not be recorded."
 
 #: src/features/branding/branding-page.tsx
 msgid "The platform default shows again."
@@ -12949,6 +13643,16 @@ msgstr "The resume as it is"
 msgid "The review couldn't finish. Try again."
 msgstr "The review couldn't finish. Try again."
 
+#. placeholder {0}: source.name
+#: src/features/discovery/searches.tsx
+msgid "The run of \"{0}\" failed."
+msgstr "The run of \"{0}\" failed."
+
+#. placeholder {0}: source.name
+#: src/features/discovery/searches.tsx
+msgid "The run of \"{0}\" finished: {found} new."
+msgstr "The run of \"{0}\" finished: {found} new."
+
 #: src/features/ats-checker/messages.ts
 msgid "The same line repeats on every page."
 msgstr "The same line repeats on every page."
@@ -12978,6 +13682,10 @@ msgstr "The score is capped because of a blocking problem: {0}"
 msgid "The score reflects how reliably text is extracted, not your chances."
 msgstr "The score reflects how reliably text is extracted, not your chances."
 
+#: src/features/discovery/searches.tsx
+msgid "The search and its run history are deleted. Jobs it already found stay in your queue."
+msgstr "The search and its run history are deleted. Jobs it already found stay in your queue."
+
 #: src/features/documents/trash-page.tsx
 msgid "The selected document will be deleted for good and can't be restored."
 msgstr "The selected document will be deleted for good and can't be restored."
@@ -13001,6 +13709,14 @@ msgstr "The service rejected the API key. Check the key and save it again."
 #: src/features/settings/ai/web-access.tsx
 msgid "The service's quota is used up. Check your plan with the service, or try again later."
 msgstr "The service's quota is used up. Check your plan with the service, or try again later."
+
+#: src/features/platform-admin/impersonation-banner.tsx
+msgid "The support session could not be ended."
+msgstr "The support session could not be ended."
+
+#: src/features/platform-admin/organization-page.tsx
+msgid "The support session could not start."
+msgstr "The support session could not start."
 
 #: src/features/settings/ai/providers.tsx
 msgid "The test didn't run. Try again."
@@ -13107,6 +13823,10 @@ msgstr "This application couldn't be opened."
 #: src/features/resume/editor/check/job-match.tsx
 msgid "This application has no posting saved yet. Paste it to match against it."
 msgstr "This application has no posting saved yet. Paste it to match against it."
+
+#: src/features/discovery/search-form.tsx
+msgid "This board isn't supported yet"
+msgstr "This board isn't supported yet"
 
 #: src/features/career/workspace/practise.tsx
 msgid "This browser can't record here. Choose an audio file, or type your answer."
@@ -13261,6 +13981,10 @@ msgstr "This month"
 msgid "This organization has no free seats. Remove a member or an invitation, or ask the owner to add seats."
 msgstr "This organization has no free seats. Remove a member or an invitation, or ask the owner to add seats."
 
+#: src/features/platform-admin/organization-page.tsx
+msgid "This organization has no owner to sign in as."
+msgstr "This organization has no owner to sign in as."
+
 #: src/features/organization/suspended-banner.tsx
 #: src/libs/error-message.ts
 msgid "This organization is suspended. You can view and export your data. Contact your administrator."
@@ -13386,6 +14110,10 @@ msgstr "This step is optional, but recommended."
 msgid "This story is unavailable or uses facts that are switched off."
 msgstr "This story is unavailable or uses facts that are switched off."
 
+#: src/features/auth/pages/impersonate-redeem.tsx
+msgid "This support link did not work"
+msgstr "This support link did not work"
+
 #: src/features/applications/components/interview-dialog.tsx
 msgid "This time does not exist in the selected timezone. Choose another time."
 msgstr "This time does not exist in the selected timezone. Choose another time."
@@ -13453,11 +14181,13 @@ msgid "Tip"
 msgstr "Tip"
 
 #: src/features/career/knowledge/stories.tsx
+#: src/features/platform-admin/announcements-page.tsx
 #: src/features/resume/editor/write/entries.tsx
 msgid "Title"
 msgstr "Title"
 
 #: src/features/org-admin/analytics-page.tsx
+#: src/features/platform-admin/metrics-page.tsx
 #: src/routes/builder/letter/-components/write-panel.tsx
 msgid "To"
 msgstr "To"
@@ -13534,6 +14264,10 @@ msgstr "Trash is empty"
 msgid "Trash was already empty"
 msgstr "Trash was already empty"
 
+#: src/features/platform-admin/organization-page.tsx
+msgid "Trial ends"
+msgstr "Trial ends"
+
 #: src/features/career/shared.tsx
 msgid "Trimming words"
 msgstr "Trimming words"
@@ -13559,6 +14293,7 @@ msgstr "Try a sample"
 #: src/features/career/workspace/preparation.tsx
 #: src/features/career/workspace/shell.tsx
 #: src/features/discovery/review-queue.tsx
+#: src/features/discovery/searches.tsx
 #: src/features/documents/library-error.tsx
 #: src/features/resume/editor/write/improve.tsx
 #: src/features/resume/preview/preview.browser.tsx
@@ -13572,6 +14307,7 @@ msgstr "Try again"
 #: src/features/branding/branding-page.tsx
 #: src/features/branding/domains-page.tsx
 #: src/features/org-admin/ai-usage-page.tsx
+#: src/features/platform-admin/shared.tsx
 msgid "Try again in a moment."
 msgstr "Try again in a moment."
 
@@ -13594,6 +14330,10 @@ msgstr "Try with a sample resume"
 #: src/libs/locale.ts
 msgid "Turkish"
 msgstr "Turkish"
+
+#: src/features/platform-admin/layout.tsx
+msgid "Turn it on to open the console"
+msgstr "Turn it on to open the console"
 
 #: src/features/ats-checker/messages.ts
 msgid "Turn off discretionary ligatures when exporting."
@@ -13668,6 +14408,10 @@ msgstr "Two-column with accent colors and clean typography; balanced choice for 
 #: src/dialogs/resume/template/data.ts
 msgid "Two-column, minimal with light gray sidebar and subtle icons; professional and understated for legal, finance, or executive roles."
 msgstr "Two-column, minimal with light gray sidebar and subtle icons; professional and understated for legal, finance, or executive roles."
+
+#: src/features/platform-admin/layout.tsx
+msgid "Two-factor authentication is required"
+msgstr "Two-factor authentication is required"
 
 #: src/features/auth/pages/verify-2fa.tsx
 #: src/features/command-palette/pages/navigation.tsx
@@ -13968,6 +14712,10 @@ msgstr "Use at least 8 characters."
 #: src/features/ats-checker/messages.ts
 msgid "Use at least 9pt."
 msgstr "Use at least 9pt."
+
+#: src/features/discovery/search-messages.ts
+msgid "Use at most {MAX_NAME_LENGTH} characters."
+msgstr "Use at most {MAX_NAME_LENGTH} characters."
 
 #: src/features/resume/share/address-field.tsx
 #: src/libs/error-message.ts
@@ -14292,6 +15040,7 @@ msgid "Waiting to hear back"
 msgstr "Waiting to hear back"
 
 #: src/features/ats-checker/messages.ts
+#: src/features/platform-admin/announcements-page.tsx
 msgid "Warning"
 msgstr "Warning"
 
@@ -14352,6 +15101,10 @@ msgstr "Web searches look for work here, up to three countries."
 #: src/features/resume/editor/write/basics-card.tsx
 msgid "Website"
 msgstr "Website"
+
+#: src/features/discovery/search-messages.ts
+msgid "Weekly"
+msgstr "Weekly"
 
 #: src/features/career/today.tsx
 msgid "Weekly at {clock} · next {next}"
@@ -14498,6 +15251,10 @@ msgstr "What's it for?"
 #: src/features/resume/editor/check/writing-tab.tsx
 msgid "What's working"
 msgstr "What's working"
+
+#: src/features/platform-admin/audit-page.tsx
+msgid "When"
+msgstr "When"
 
 #: src/features/career/offers.tsx
 msgid "When do they need your answer?"
@@ -14709,6 +15466,10 @@ msgstr "Written offer"
 msgid "Year"
 msgstr "Year"
 
+#: src/features/platform-admin/organization-page.tsx
+msgid "Yearly"
+msgstr "Yearly"
+
 #: src/features/settings/account/application-profile.tsx
 msgid "Yes"
 msgstr "Yes"
@@ -14752,6 +15513,10 @@ msgstr "You aren't a member of any organization yet. Open the invitation link in
 msgid "You can also sign in with your username."
 msgstr "You can also sign in with your username."
 
+#: src/features/discovery/search-form.tsx
+msgid "You can have at most {limit} searches. Delete one to add another."
+msgstr "You can have at most {limit} searches. Delete one to add another."
+
 #: src/features/resume/editor/save-status.tsx
 msgid "You can keep editing. Changes sync when you're back online. Download and Share need a connection."
 msgstr "You can keep editing. Changes sync when you're back online. Download and Share need a connection."
@@ -14783,6 +15548,10 @@ msgstr "You don't have a resume to copy yet. Import or create a resume first, th
 #: src/features/career/workspace/debrief.tsx
 msgid "You forgot this before, so it wasn't saved again."
 msgstr "You forgot this before, so it wasn't saved again."
+
+#: src/features/discovery/searches.tsx
+msgid "You have no searches yet. Add one with the job titles, skills and places you want, plus the company job boards to watch. It runs on its own, and the best matches show up in the queue."
+msgstr "You have no searches yet. Add one with the job titles, skills and places you want, plus the company job boards to watch. It runs on its own, and the best matches show up in the queue."
 
 #: src/features/organization/members-page.tsx
 msgid "You need to belong to an organization to manage its members."
@@ -15078,9 +15847,17 @@ msgstr "Your phone number changed on the resume. The letter updated too."
 msgid "Your phone number is written in an unusual shape."
 msgstr "Your phone number is written in an unusual shape."
 
+#: src/features/discovery/search-messages.ts
+msgid "Your plan allows at most {cap} jobs per run."
+msgstr "Your plan allows at most {cap} jobs per run."
+
 #: src/features/org-admin/ai-usage-page.tsx
 msgid "Your plan allows going over; extra use is billed."
 msgstr "Your plan allows going over; extra use is billed."
+
+#: src/features/discovery/searches.tsx
+msgid "Your plan doesn't include job discovery. Ask your administrator about upgrading."
+msgstr "Your plan doesn't include job discovery. Ask your administrator about upgrading."
 
 #: src/features/career/coach.tsx
 msgid "your preferences"

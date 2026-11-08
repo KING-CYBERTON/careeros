@@ -754,6 +754,10 @@ msgstr "24 hours before"
 msgid "A backup of this letter. Imports back into {appName} as a letter."
 msgstr "A backup of this letter. Imports back into {appName} as a letter."
 
+#: src/features/discovery/messages.ts
+msgid "A board name has only letters, digits, hyphens and underscores."
+msgstr "A board name has only letters, digits, hyphens and underscores."
+
 #: src/features/check/issues.ts
 msgid "A city and country let roles be matched to where you are."
 msgstr "A city and country let roles be matched to where you are."
@@ -829,6 +833,10 @@ msgstr "A reminder to check in, shown as the next step until you do."
 #: src/features/check/issues.ts
 msgid "A role has no description"
 msgstr "A role has no description"
+
+#: src/features/discovery/searches.tsx
+msgid "A search looks at the job boards you choose, on a schedule, and adds postings that match to the queue below."
+msgstr "A search looks at the job boards you choose, on a schedule, and adds postings that match to the queue below."
 
 #: src/features/check/writing.tsx
 msgid "A second opinion on your wording"
@@ -918,6 +926,10 @@ msgstr "Active"
 #: src/features/write/basics-screen.tsx
 msgid "Add"
 msgstr "Add"
+
+#: src/features/discovery/search-form.tsx
+msgid "Add a board"
+msgstr "Add a board"
 
 #: src/features/applications/lane-settings.tsx
 msgid "Add a compatible replacement lane first."
@@ -1035,6 +1047,14 @@ msgstr "Add an upcoming interview in Applications first."
 msgid "Add application"
 msgstr "Add application"
 
+#: src/features/discovery/messages.ts
+msgid "Add at most {MAX_TERMS} entries."
+msgstr "Add at most {MAX_TERMS} entries."
+
+#: src/features/discovery/messages.ts
+msgid "Add at most 100 boards."
+msgstr "Add at most 100 boards."
+
 #: src/features/settings/application-profile.tsx
 msgid "Add authorization country"
 msgstr "Add authorization country"
@@ -1116,6 +1136,10 @@ msgstr "Add offer"
 msgid "Add offer terms manually, or use optional AI extraction in Messages."
 msgstr "Add offer terms manually, or use optional AI extraction in Messages."
 
+#: src/features/discovery/search-form.tsx
+msgid "Add one at a time or separate them with commas."
+msgstr "Add one at a time or separate them with commas."
+
 #: src/features/ats-checker/messages.ts
 msgid "Add one link that shows your work."
 msgstr "Add one link that shows your work."
@@ -1123,6 +1147,10 @@ msgstr "Add one link that shows your work."
 #: src/features/ats-checker/messages.ts
 msgid "Add one with its country code; some application forms require it before you can submit."
 msgstr "Add one with its country code; some application forms require it before you can submit."
+
+#: src/features/discovery/searches.tsx
+msgid "Add one with the job titles, skills and places you want, plus the company job boards to watch. It runs on its own, and the best matches show up in the queue."
+msgstr "Add one with the job titles, skills and places you want, plus the company job boards to watch. It runs on its own, and the best matches show up in the queue."
 
 #: src/features/design/layout-screen.tsx
 msgid "Add page"
@@ -1538,6 +1566,7 @@ msgid "Answers copied"
 msgstr "Answers copied"
 
 #: src/features/career/preferences.tsx
+#: src/features/discovery/messages.ts
 msgid "Any"
 msgstr "Any"
 
@@ -2023,6 +2052,16 @@ msgstr "Blank fields mean unknown. Nothing is inferred from your resume. Self-id
 msgid "Board"
 msgstr "Board"
 
+#. placeholder {0}: index + 1
+#: src/features/discovery/search-form.tsx
+msgid "Board {0} name or link"
+msgstr "Board {0} name or link"
+
+#. placeholder {0}: index + 1
+#: src/features/discovery/search-form.tsx
+msgid "Board {0} source"
+msgstr "Board {0} source"
+
 #: src/features/design/advanced.tsx
 msgctxt "Body Text (paragraphs, lists, etc.)"
 msgid "Body"
@@ -2147,6 +2186,7 @@ msgstr "Can software read your resume?"
 #: src/features/ats-checker/checker.tsx
 #: src/features/check/parser.tsx
 #: src/features/check/writing.tsx
+#: src/features/discovery/search-form.tsx
 #: src/features/search/search-screen.tsx
 #: src/features/workspace/preparation.tsx
 #: src/features/workspace/tabs/fit.tsx
@@ -2325,6 +2365,10 @@ msgstr "Check the fields and try again. For unreadable links, paste the posting 
 #: src/features/documents/queries.ts
 msgid "Check the file or fields and try again."
 msgstr "Check the file or fields and try again."
+
+#: src/features/discovery/messages.ts
+msgid "Check this field."
+msgstr "Check this field."
 
 #: src/features/workspace/tabs/fit.tsx
 msgid "Check this role against your evidence"
@@ -2962,6 +3006,7 @@ msgstr "Couldn't attach the file. Try again."
 msgid "Couldn't change the language. Try again."
 msgstr "Couldn't change the language. Try again."
 
+#: src/features/discovery/searches.tsx
 #: src/features/workspace/tabs/prepare.tsx
 msgid "Couldn't change the schedule. Try again."
 msgstr "Couldn't change the schedule. Try again."
@@ -3036,10 +3081,18 @@ msgstr "Couldn't delete the conversation. Try again."
 msgid "Couldn't delete the interview. Try again."
 msgstr "Couldn't delete the interview. Try again."
 
+#: src/features/discovery/searches.tsx
+msgid "Couldn't delete this search. Try again."
+msgstr "Couldn't delete this search. Try again."
+
 #: src/features/settings/export.tsx
 #: src/features/share/download.tsx
 msgid "Couldn't export. Try again."
 msgstr "Couldn't export. Try again."
+
+#: src/features/discovery/search-form.tsx
+msgid "Couldn't find the board name in this link."
+msgstr "Couldn't find the board name in this link."
 
 #: src/features/application-detail/sections.tsx
 #: src/features/workspace/preparation.tsx
@@ -3161,6 +3214,10 @@ msgstr "Couldn't load your public address."
 #: src/features/letters/write.tsx
 msgid "Couldn't load your resumes."
 msgstr "Couldn't load your resumes."
+
+#: src/features/discovery/searches.tsx
+msgid "Couldn't load your searches. Check your connection and try again."
+msgstr "Couldn't load your searches. Check your connection and try again."
 
 #: app/(tabs)/settings/preferences.tsx
 msgid "Couldn't load your timezone."
@@ -3313,6 +3370,10 @@ msgstr "Couldn't save the theme. Try again."
 msgid "Couldn't save the timezone. Try again."
 msgstr "Couldn't save the timezone. Try again."
 
+#: src/features/discovery/search-form.tsx
+msgid "Couldn't save this search. Check your connection and try again."
+msgstr "Couldn't save this search. Check your connection and try again."
+
 #: src/features/letters/write.tsx
 msgid "Couldn't save your changes, so drafting didn't start. Nothing on the page changed."
 msgstr "Couldn't save your changes, so drafting didn't start. Nothing on the page changed."
@@ -3383,6 +3444,10 @@ msgstr "Couldn't start recording. Try again, or type your answer."
 #: src/features/assistant/chat-view.tsx
 msgid "Couldn't start the conversation. Try again."
 msgstr "Couldn't start the conversation. Try again."
+
+#: src/features/discovery/searches.tsx
+msgid "Couldn't start the run. Try again."
+msgstr "Couldn't start the run. Try again."
 
 #: src/features/career/role-suggestions.tsx
 msgid "Couldn't suggest roles. Try again or enter roles manually."
@@ -3533,6 +3598,10 @@ msgstr "Create copy"
 msgid "Create or import a resume first, then return to copy it for this job."
 msgstr "Create or import a resume first, then return to copy it for this job."
 
+#: src/features/discovery/search-form.tsx
+msgid "Create search"
+msgstr "Create search"
+
 #: src/features/branding/domains-screen.tsx
 msgid "Create the two records below at your DNS provider. We check every few minutes."
 msgstr "Create the two records below at your DNS provider. We check every few minutes."
@@ -3611,6 +3680,10 @@ msgstr "Custom styles aren't applied. Fix these errors to apply them:"
 #: src/features/settings/locale-names.ts
 msgid "Czech"
 msgstr "Czech"
+
+#: src/features/discovery/messages.ts
+msgid "Daily"
+msgstr "Daily"
 
 #. placeholder {0}: summary.peak
 #: src/features/share/link.tsx
@@ -3711,6 +3784,7 @@ msgstr "Default"
 msgid "Degree"
 msgstr "Degree"
 
+#: src/features/discovery/searches.tsx
 #: src/features/history/history.tsx
 #: src/features/letters/share.tsx
 #: src/features/workspace/answer-library.tsx
@@ -3723,6 +3797,11 @@ msgstr "Delete"
 #: src/features/documents/library.tsx
 msgid "Delete “{0}” forever?"
 msgstr "Delete “{0}” forever?"
+
+#. placeholder {0}: source.name
+#: src/features/discovery/searches.tsx
+msgid "Delete \"{0}\"?"
+msgstr "Delete \"{0}\"?"
 
 #. placeholder {0}: menu ? versionTitle(menu) : ""
 #: src/features/history/history.tsx
@@ -4219,6 +4298,10 @@ msgstr "Dutch"
 msgid "Each answer you get feedback on is kept here, newest first."
 msgstr "Each answer you get feedback on is kept here, newest first."
 
+#: src/features/discovery/messages.ts
+msgid "Each entry can have at most {MAX_TERM_LENGTH} characters."
+msgstr "Each entry can have at most {MAX_TERM_LENGTH} characters."
+
 #: src/features/workspace/tabs/fit.tsx
 msgid "Each requirement in the posting is checked against the facts and stories in your Knowledge. Gaps show as missing evidence, never missing ability."
 msgstr "Each requirement in the posting is checked against the facts and stories in your Knowledge. Gaps show as missing evidence, never missing ability."
@@ -4235,6 +4318,7 @@ msgstr "earlier messages in this chat"
 #: src/features/application-detail/sections.tsx
 #: src/features/career/stories.tsx
 #: src/features/career/today.tsx
+#: src/features/discovery/searches.tsx
 #: src/features/write/basics-screen.tsx
 msgid "Edit"
 msgstr "Edit"
@@ -4295,6 +4379,10 @@ msgstr "Edit saved answer"
 #: src/features/career/schedule-sheet.tsx
 msgid "Edit schedule"
 msgstr "Edit schedule"
+
+#: src/features/discovery/search-form.tsx
+msgid "Edit search"
+msgstr "Edit search"
 
 #: src/features/career/stories.tsx
 msgid "Edit STARR story"
@@ -4425,6 +4513,10 @@ msgstr "Enter a value."
 msgid "Enter a web address, like example.com"
 msgstr "Enter a web address, like example.com"
 
+#: src/features/discovery/messages.ts
+msgid "Enter a whole number from 0 to {MAX_AI_TOP_N}."
+msgstr "Enter a whole number from 0 to {MAX_AI_TOP_N}."
+
 #: src/features/career/preferences.tsx
 msgid "Enter a whole number from 0 to 52, or leave blank."
 msgstr "Enter a whole number from 0 to 52, or leave blank."
@@ -4444,6 +4536,10 @@ msgstr "Enter terms yourself. No AI request is made. Leave unknown amounts blank
 #: app/(auth)/server.tsx
 msgid "Enter the address you open {appName} at in a browser. The app checks it's a {appName} server that allows app sign-in before you continue."
 msgstr "Enter the address you open {appName} at in a browser. The app checks it's a {appName} server that allows app sign-in before you continue."
+
+#: src/features/discovery/messages.ts
+msgid "Enter the board name or paste its link."
+msgstr "Enter the board name or paste its link."
 
 #: src/features/letters/write.tsx
 msgid "Enter your details below. Choosing a resume replaces them and links its design."
@@ -4569,6 +4665,7 @@ msgstr "Facts"
 
 #: src/features/ai/provider-list.tsx
 #: src/features/branding/domains-screen.tsx
+#: src/features/discovery/searches.tsx
 msgid "Failed"
 msgstr "Failed"
 
@@ -4653,6 +4750,14 @@ msgstr "Finding what works"
 #: app/(auth)/sign-in.tsx
 msgid "Finish signing in in the browser"
 msgstr "Finish signing in in the browser"
+
+#: src/features/discovery/searches.tsx
+msgid "Finished"
+msgstr "Finished"
+
+#: src/features/discovery/searches.tsx
+msgid "Finished with errors"
+msgstr "Finished with errors"
 
 #: src/features/settings/locale-names.ts
 msgid "Finnish"
@@ -4922,6 +5027,10 @@ msgstr "Give every role and qualification a date range."
 msgid "Give the story a title before you can save."
 msgstr "Give the story a title before you can save."
 
+#: src/features/discovery/messages.ts
+msgid "Give this search a name."
+msgstr "Give this search a name."
+
 #: src/features/settings/application-profile.tsx
 msgid "Given name"
 msgstr "Given name"
@@ -5162,6 +5271,10 @@ msgstr "How well do I fit this role?"
 #: src/features/settings/locale-names.ts
 msgid "Hungarian"
 msgstr "Hungarian"
+
+#: src/features/discovery/messages.ts
+msgid "Hybrid"
+msgstr "Hybrid"
 
 #: src/features/design/advanced.tsx
 msgid "Hyphenation"
@@ -5475,6 +5588,10 @@ msgstr "JavaScript"
 msgid "Job"
 msgstr "Job"
 
+#: src/features/discovery/search-form.tsx
+msgid "Job boards"
+msgstr "Job boards"
+
 #: src/features/settings/clipper-sign-ins.tsx
 msgid "Job Clipper sign-ins"
 msgstr "Job Clipper sign-ins"
@@ -5512,10 +5629,22 @@ msgstr "Job search isn't configured on this server. Paste a posting link instead
 msgid "Job search pipeline"
 msgstr "Job search pipeline"
 
+#: src/features/discovery/search-form.tsx
+msgid "Job titles"
+msgstr "Job titles"
+
 #: app/(tabs)/career/_layout.tsx
 #: src/features/search/search-screen.tsx
 msgid "Jobs"
 msgstr "Jobs"
+
+#: src/features/discovery/review-queue.tsx
+msgid "Jobs found for you"
+msgstr "Jobs found for you"
+
+#: src/features/discovery/search-form.tsx
+msgid "Jobs to score with AI per run"
+msgstr "Jobs to score with AI per run"
 
 #: src/features/letters/share.tsx
 #: src/features/share/download.tsx
@@ -5615,6 +5744,7 @@ msgstr "Keyword layout"
 msgid "Keyword overlap: {0}"
 msgstr "Keyword overlap: {0}"
 
+#: src/features/discovery/search-form.tsx
 #: src/features/write/fields.ts
 msgid "Keywords"
 msgstr "Keywords"
@@ -5699,6 +5829,15 @@ msgstr "Last reviewed"
 #: src/features/settings/application-profile.tsx
 msgid "Last reviewed: {0}"
 msgstr "Last reviewed: {0}"
+
+#. placeholder {0}: date(latest.finishedAt ?? latest.startedAt)
+#: src/features/discovery/searches.tsx
+msgid "Last run: {0}"
+msgstr "Last run: {0}"
+
+#: src/features/discovery/searches.tsx
+msgid "Last run: not run yet"
+msgstr "Last run: not run yet"
 
 #. placeholder {0}: time.when(row.lastSeenAt)
 #: src/features/career/today.tsx
@@ -6104,6 +6243,10 @@ msgstr "Location"
 #: src/features/career/offers.tsx
 msgid "Location match is unknown."
 msgstr "Location match is unknown."
+
+#: src/features/discovery/search-form.tsx
+msgid "Locations"
+msgstr "Locations"
 
 #: src/features/documents/library.tsx
 msgid "Lock"
@@ -6559,6 +6702,7 @@ msgstr "Moving to Applied asks what you actually sent."
 
 #: src/features/ai/provider-editor.tsx
 #: src/features/application-detail/sheets.tsx
+#: src/features/discovery/search-form.tsx
 #: src/features/document-menu/index.tsx
 #: src/features/documents/document-sheets.tsx
 #: src/features/documents/library.tsx
@@ -6685,6 +6829,11 @@ msgstr "New cover letter instead"
 msgid "New document"
 msgstr "New document"
 
+#. placeholder {0}: latest.new
+#: src/features/discovery/searches.tsx
+msgid "New jobs in the last run: {0}"
+msgstr "New jobs in the last run: {0}"
+
 #: src/features/design/layout-screen.tsx
 #: src/features/write/entry-sheet.tsx
 #: src/features/write/section-sheet.tsx
@@ -6706,6 +6855,11 @@ msgstr "New roles, reminders and finished briefings appear here."
 #: src/features/career/schedule-sheet.tsx
 msgid "New schedule"
 msgstr "New schedule"
+
+#: src/features/discovery/search-form.tsx
+#: src/features/discovery/searches.tsx
+msgid "New search"
+msgstr "New search"
 
 #: src/features/write/entry-sheet.tsx
 msgid "New section"
@@ -6734,6 +6888,15 @@ msgstr "Next page"
 #: src/features/workspace/tabs/practise.tsx
 msgid "Next question"
 msgstr "Next question"
+
+#. placeholder {0}: date(source.nextRunAt)
+#: src/features/discovery/searches.tsx
+msgid "Next run: {0}"
+msgstr "Next run: {0}"
+
+#: src/features/discovery/searches.tsx
+msgid "Next run: paused"
+msgstr "Next run: paused"
 
 #: src/features/application-detail/sections.tsx
 #: src/features/applications/list-screen.tsx
@@ -6948,6 +7111,10 @@ msgstr "No resume"
 #: src/features/discovery/review-queue.tsx
 msgid "No saved jobs yet"
 msgstr "No saved jobs yet"
+
+#: src/features/discovery/searches.tsx
+msgid "No searches yet"
+msgstr "No searches yet"
 
 #: src/auth/messages.ts
 msgid "No server answered at this address. Check the spelling, or ask your administrator whether the server allows app sign-in."
@@ -7246,6 +7413,10 @@ msgstr "Offline. Edits are saved on this device and sync when you reconnect."
 #: src/features/career/today.tsx
 msgid "On"
 msgstr "On"
+
+#: src/features/discovery/messages.ts
+msgid "On-site"
+msgstr "On-site"
 
 #: src/features/share/link.tsx
 msgid "On. Anyone with the link can see your web page."
@@ -7672,7 +7843,12 @@ msgstr "Paste your key"
 msgid "Pasted description"
 msgstr "Pasted description"
 
+#: src/features/discovery/searches.tsx
+msgid "Pause"
+msgstr "Pause"
+
 #: src/features/career/today.tsx
+#: src/features/discovery/messages.ts
 msgid "Paused"
 msgstr "Paused"
 
@@ -7782,6 +7958,10 @@ msgstr "Pick a time after now."
 #: src/features/ats-checker/messages.ts
 msgid "Pick one format and use it everywhere."
 msgstr "Pick one format and use it everywhere."
+
+#: src/features/discovery/search-form.tsx
+msgid "Pick the board and enter the company's board name, or paste the link to its job page. The name is the part after the host, for example jobs.lever.co/acme or boards.greenhouse.io/acme (acme)."
+msgstr "Pick the board and enter the company's board name, or paste the link to its job page. The name is the part after the host, for example jobs.lever.co/acme or boards.greenhouse.io/acme (acme)."
 
 #: src/features/workspace/tabs/prepare.tsx
 msgid "Pick two examples"
@@ -8552,8 +8732,13 @@ msgstr "Reminders appear here. Email copies are optional and need a verified add
 
 #: src/features/career/offers.tsx
 #: src/features/career/preferences.tsx
+#: src/features/discovery/messages.ts
 msgid "Remote"
 msgstr "Remote"
+
+#: src/features/discovery/search-form.tsx
+msgid "Remote preference"
+msgstr "Remote preference"
 
 #: src/features/branding/branding-screen.tsx
 #: src/features/branding/domains-screen.tsx
@@ -8577,6 +8762,11 @@ msgstr "Remove {0}?"
 #: src/features/assistant/messages.tsx
 msgid "Remove {name}"
 msgstr "Remove {name}"
+
+#. placeholder {0}: index + 1
+#: src/features/discovery/search-form.tsx
+msgid "Remove board {0}"
+msgstr "Remove board {0}"
 
 #: src/features/ai/web-access.tsx
 msgid "Remove connection"
@@ -8854,6 +9044,7 @@ msgstr "Result"
 #: app/builder/[id]/_layout.tsx
 #: src/features/applications/add-sheet.tsx
 #: src/features/career/facts.tsx
+#: src/features/discovery/searches.tsx
 #: src/features/documents/library.tsx
 #: src/features/letters/write.tsx
 #: src/features/workspace/preparation.tsx
@@ -8934,6 +9125,7 @@ msgstr "Retrieved {0} using {1}. Retrieval time does not establish origin freshn
 #: src/features/check/screen.tsx
 #: src/features/check/writing.tsx
 #: src/features/design/design-pane.tsx
+#: src/features/discovery/searches.tsx
 #: src/features/documents/document-sheets.tsx
 #: src/features/documents/library.tsx
 #: src/features/documents/new-document.tsx
@@ -9189,6 +9381,14 @@ msgstr "Rule"
 msgid "Run again"
 msgstr "Run again"
 
+#: src/features/discovery/searches.tsx
+msgid "Run now"
+msgstr "Run now"
+
+#: src/features/discovery/searches.tsx
+msgid "Running"
+msgstr "Running"
+
 #. placeholder {0}: new Intl.DateTimeFormat(locale, { timeZone: timezone, dateStyle: "medium", timeStyle: "short" }).format(runAt)
 #: src/features/career/schedule-sheet.tsx
 msgid "Runs at {0}."
@@ -9263,6 +9463,7 @@ msgstr "Save another offer to compare"
 
 #: src/features/application-detail/sheets.tsx
 #: src/features/branding/branding-screen.tsx
+#: src/features/discovery/search-form.tsx
 msgid "Save changes"
 msgstr "Save changes"
 
@@ -9427,6 +9628,10 @@ msgstr "Saving the job. Wait for confirmation before making another change."
 msgid "Saving…"
 msgstr "Saving…"
 
+#: src/features/discovery/search-form.tsx
+msgid "Schedule"
+msgstr "Schedule"
+
 #: src/features/application-detail/interview-sheet.tsx
 #: src/features/application-detail/sections.tsx
 #: src/features/applications-board/calendar-screen.tsx
@@ -9492,6 +9697,14 @@ msgstr "Search commands"
 msgid "Search covers documents, applications, assistant conversations and actions."
 msgstr "Search covers documents, applications, assistant conversations and actions."
 
+#: src/features/discovery/search-form.tsx
+msgid "Search created"
+msgstr "Search created"
+
+#: src/features/discovery/searches.tsx
+msgid "Search deleted"
+msgstr "Search deleted"
+
 #: src/features/documents/library.tsx
 msgid "Search documents"
 msgstr "Search documents"
@@ -9532,6 +9745,10 @@ msgstr "Search languages"
 msgid "Search or run…"
 msgstr "Search or run…"
 
+#: src/features/discovery/search-form.tsx
+msgid "Search saved"
+msgstr "Search saved"
+
 #: src/features/workspace/answer-library.tsx
 msgid "Search saved answers"
 msgstr "Search saved answers"
@@ -9568,6 +9785,10 @@ msgstr "Search…"
 #: src/features/assistant/messages.tsx
 msgid "Searched the web"
 msgstr "Searched the web"
+
+#: src/features/discovery/searches.tsx
+msgid "Searches"
+msgstr "Searches"
 
 #: src/features/assistant/messages.tsx
 msgid "Searching the web…"
@@ -10123,6 +10344,7 @@ msgstr "Size"
 msgid "Skill"
 msgstr "Skill"
 
+#: src/features/discovery/search-form.tsx
 #: src/features/write/fields.ts
 msgid "Skills"
 msgstr "Skills"
@@ -10805,6 +11027,10 @@ msgstr "The assistant uses your AI provider's own web search where supported, an
 msgid "The assistant uses your own key. Nothing is sent anywhere until you connect one."
 msgstr "The assistant uses your own key. Nothing is sent anywhere until you connect one."
 
+#: src/features/discovery/search-form.tsx
+msgid "The best matches of each run get an AI score and a short reason. Each scored job uses AI credits. Your plan may allow fewer. Enter 0 to skip AI."
+msgstr "The best matches of each run get an AI score and a short reason. Each scored job uses AI credits. Your plan may allow fewer. Enter 0 to skip AI."
+
 #: src/features/ai/web-access.tsx
 msgid "The built-in reader remains active."
 msgstr "The built-in reader remains active."
@@ -10947,6 +11173,16 @@ msgstr "The rest of the file isn't in this report."
 msgid "The resume as it is"
 msgstr "The resume as it is"
 
+#. placeholder {0}: source.name
+#: src/features/discovery/searches.tsx
+msgid "The run of \"{0}\" failed."
+msgstr "The run of \"{0}\" failed."
+
+#. placeholder {0}: source.name
+#: src/features/discovery/searches.tsx
+msgid "The run of \"{0}\" finished: {found} new."
+msgstr "The run of \"{0}\" finished: {found} new."
+
 #: src/features/ats-checker/messages.ts
 msgid "The same line repeats on every page."
 msgstr "The same line repeats on every page."
@@ -10966,6 +11202,10 @@ msgstr "The score counts how reliably software reads your resume. It doesn't pre
 #: src/features/ats-checker/checker.tsx
 msgid "The score reflects how reliably text is extracted, not your chances."
 msgstr "The score reflects how reliably text is extracted, not your chances."
+
+#: src/features/discovery/searches.tsx
+msgid "The search and its run history are deleted. Jobs it already found stay in your queue."
+msgstr "The search and its run history are deleted. Jobs it already found stay in your queue."
 
 #: src/features/documents/library.tsx
 msgid "The selected documents will be deleted for good and can't be restored."
@@ -11085,6 +11325,10 @@ msgstr "This application couldn't be opened."
 #: src/features/check/job-match.tsx
 msgid "This application has no posting yet. Add one in Applications."
 msgstr "This application has no posting yet. Add one in Applications."
+
+#: src/features/discovery/search-form.tsx
+msgid "This board isn't supported yet"
+msgstr "This board isn't supported yet"
 
 #: src/features/applications/error.ts
 msgid "This changed elsewhere. Reload and try again."
@@ -11896,6 +12140,10 @@ msgstr "Use an http or https link."
 msgid "Use at least 9pt."
 msgstr "Use at least 9pt."
 
+#: src/features/discovery/messages.ts
+msgid "Use at most {MAX_NAME_LENGTH} characters."
+msgstr "Use at most {MAX_NAME_LENGTH} characters."
+
 #: src/features/document-menu/index.tsx
 #: src/features/documents/queries.ts
 #: src/features/share/link.tsx
@@ -12232,6 +12480,10 @@ msgstr "Web searches look for work here, up to three countries."
 msgid "Website"
 msgstr "Website"
 
+#: src/features/discovery/messages.ts
+msgid "Weekly"
+msgstr "Weekly"
+
 #: src/features/workspace/parts.tsx
 msgid "Weighing each requirement"
 msgstr "Weighing each requirement"
@@ -12533,6 +12785,10 @@ msgstr "You already use this for “{takenBy}”."
 msgid "You answered: {answer}"
 msgstr "You answered: {answer}"
 
+#: src/features/discovery/search-form.tsx
+msgid "You can have at most {limit} searches. Delete one to add another."
+msgstr "You can have at most {limit} searches. Delete one to add another."
+
 #: src/shell/builder-chrome.tsx
 msgid "You can keep editing. Changes sync when you're back online. PDF sharing works with cached fonts and images."
 msgstr "You can keep editing. Changes sync when you're back online. PDF sharing works with cached fonts and images."
@@ -12540,6 +12796,10 @@ msgstr "You can keep editing. Changes sync when you're back online. PDF sharing 
 #: src/features/workspace/tabs/apply.tsx
 msgid "You can keep up to 30 application questions."
 msgstr "You can keep up to 30 application questions."
+
+#: src/features/discovery/searches.tsx
+msgid "You can run a search by hand once every 10 minutes."
+msgstr "You can run a search by hand once every 10 minutes."
 
 #: app/(auth)/sign-in.tsx
 msgid "You can sign in with an account you already have."
@@ -12765,6 +13025,14 @@ msgstr "Your organization is served on this domain."
 #: src/features/ats-checker/messages.ts
 msgid "Your phone number is written in an unusual shape."
 msgstr "Your phone number is written in an unusual shape."
+
+#: src/features/discovery/messages.ts
+msgid "Your plan allows fewer jobs per run."
+msgstr "Your plan allows fewer jobs per run."
+
+#: src/features/discovery/searches.tsx
+msgid "Your plan doesn't include job discovery. Ask your administrator about upgrading."
+msgstr "Your plan doesn't include job discovery. Ask your administrator about upgrading."
 
 #: src/features/assistant/coach-screen.tsx
 msgid "your preferences"

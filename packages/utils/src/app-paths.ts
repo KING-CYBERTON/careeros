@@ -1,6 +1,7 @@
 /** The signed-in app's sections. On the alias domain (`APP_ALIAS_URL`) they move to `APP_URL`, where sign-in lives. */
 // CAREEROS (P5-T02): "device" is the Job Clipper approval page; as a section the server answers it and no username can take it.
-export const APP_SECTIONS = ["auth", "dashboard", "builder", "agent", "device"] as const;
+// CAREEROS (P3-T07): `admin` is the Super Admin console (platform host only; organization hosts answer 404).
+export const APP_SECTIONS = ["auth", "dashboard", "builder", "agent", "device", "admin"] as const;
 
 /** First path segments the app owns besides its sections: never a username, so never a resume's web page. */
 export const RESERVED_SEGMENTS = [
