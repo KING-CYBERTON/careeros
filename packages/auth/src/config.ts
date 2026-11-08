@@ -280,6 +280,14 @@ export async function linkAnonymousAccount({
 			throw error;
 		}
 
+		// CAREEROS (P4-T02, Q226): job discovery automations, their runs and the jobs they found belong to an
+		// organization too. The same narrow definer function pattern moves them into the account's oldest organization,
+		// after the applications the accepted jobs point at. At most 20 automations fit per user and organization; a job
+		// the target already has keeps the target's row (and its dismissed or accepted status).
+		await tx.execute(
+			sql`select careeros_move_guest_discovery(${fromUserId}, ${toUserId}, ${targetMembership?.organizationId ?? null})`,
+		);
+
 		// CAREEROS (P1-T08): saved AI connections, assistant conversations (with their messages, attachments and actions) and
 		// content reports belong to an organization too. The same narrow definer function pattern moves them into the
 		// account's oldest organization, after the documents and applications they point at. The guest's default

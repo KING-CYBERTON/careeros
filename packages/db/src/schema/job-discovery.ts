@@ -1,6 +1,7 @@
 import { sql } from "drizzle-orm";
 import * as pg from "drizzle-orm/pg-core";
 import { generateId } from "@reactive-resume/utils/string";
+import { application } from "./applications";
 import { user } from "./auth";
 import { organization } from "./organization";
 
@@ -14,6 +15,9 @@ export const DISCOVERY_REMOTE_PREFERENCES = ["any", "remote", "onsite", "hybrid"
 export const DISCOVERY_JOB_REMOTE_KINDS = ["remote", "onsite", "hybrid"] as const;
 export const DISCOVERY_SCHEDULES = ["daily", "weekly", "paused"] as const;
 export const DISCOVERY_RUN_STATUSES = ["running", "succeeded", "failed", "partial"] as const;
+/** CAREEROS (P4-T02): how a run started, and why its AI step did not run (or stopped). */
+export const DISCOVERY_RUN_TRIGGERS = ["manual", "scheduled"] as const;
+export const DISCOVERY_AI_SKIPPED_REASONS = ["no_platform_ai", "quota_exhausted", "provider_error"] as const;
 export const DISCOVERED_JOB_STATUSES = ["new", "accepted", "dismissed"] as const;
 
 const list = (values: readonly string[]) => sql.raw(values.map((value) => `'${value}'`).join(", "));
@@ -78,7 +82,10 @@ export const jobSource = pg.pgTable(
 			.default(sql`'[]'::jsonb`),
 		schedule: pg.text("schedule").$type<(typeof DISCOVERY_SCHEDULES)[number]>().notNull().default("daily"),
 		nextRunAt: pg.timestamp("next_run_at", { withTimezone: true }),
+		/** Set by manual runs only: the 10-minute limit of `runNow` reads it. */
 		lastRunAt: pg.timestamp("last_run_at", { withTimezone: true }),
+		/** CAREEROS (P4-T02): set when a scheduled run starts. Separate from `last_run_at`, so a scheduled run never blocks `runNow`. */
+		lastScheduledRunAt: pg.timestamp("last_scheduled_run_at", { withTimezone: true }),
 		aiTopN: pg.integer("ai_top_n").notNull().default(10),
 		createdAt: pg.timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
 		updatedAt: pg
@@ -118,13 +125,20 @@ export const discoveryRun = pg.pgTable(
 		organizationId: tenant(),
 		jobSourceId: pg.text("job_source_id").notNull(),
 		status: pg.text("status").$type<(typeof DISCOVERY_RUN_STATUSES)[number]>().notNull().default("running"),
+		/** CAREEROS (P4-T02) */
+		trigger: pg.text("trigger").$type<(typeof DISCOVERY_RUN_TRIGGERS)[number]>().notNull().default("manual"),
 		startedAt: pg.timestamp("started_at", { withTimezone: true }).notNull().defaultNow(),
 		finishedAt: pg.timestamp("finished_at", { withTimezone: true }),
 		fetched: pg.integer("fetched").notNull().default(0),
 		new: pg.integer("new").notNull().default(0),
 		duplicate: pg.integer("duplicate").notNull().default(0),
 		scored: pg.integer("scored").notNull().default(0),
+		/** The number of model calls made by this run; never more than `aiPlanned`. */
 		aiMatched: pg.integer("ai_matched").notNull().default(0),
+		/** CAREEROS (P4-T02): `min(ai_top_n, plan cap)` for this run, the most calls it may make. */
+		aiPlanned: pg.integer("ai_planned").notNull().default(0),
+		/** CAREEROS (P4-T02): set when the AI step was skipped or stopped early; the local scores stay. */
+		aiSkippedReason: pg.text("ai_skipped_reason").$type<(typeof DISCOVERY_AI_SKIPPED_REASONS)[number]>(),
 		/** Per board: source, token, a code, an HTTP status and a short reason. Never a response body. */
 		errors: pg
 			.jsonb("errors")
@@ -143,6 +157,12 @@ export const discoveryRun = pg.pgTable(
 			})
 			.onDelete("cascade"),
 		pg.check("discovery_run_status_check", sql`${t.status} in (${list(DISCOVERY_RUN_STATUSES)})`),
+		pg.check("discovery_run_trigger_check", sql`${t.trigger} in (${list(DISCOVERY_RUN_TRIGGERS)})`),
+		pg.check(
+			"discovery_run_ai_skipped_reason_check",
+			sql`${t.aiSkippedReason} is null or ${t.aiSkippedReason} in (${list(DISCOVERY_AI_SKIPPED_REASONS)})`,
+		),
+		pg.check("discovery_run_ai_planned_check", sql`${t.aiPlanned} >= 0 and ${t.aiMatched} <= ${t.aiPlanned}`),
 		pg.check(
 			"discovery_run_counts_check",
 			sql`${t.fetched} >= 0 and ${t.new} >= 0 and ${t.duplicate} >= 0 and ${t.scored} >= 0 and ${t.aiMatched} >= 0`,
@@ -178,6 +198,9 @@ export const discoveredJob = pg.pgTable(
 		aiSummary: pg.text("ai_summary"),
 		status: pg.text("status").$type<(typeof DISCOVERED_JOB_STATUSES)[number]>().notNull().default("new"),
 		firstSeenRunId: pg.text("first_seen_run_id"),
+		/** CAREEROS (P4-T02): the tracker application this job became when it was accepted. Cleared if that application is deleted. */
+		applicationId: pg.text("application_id"),
+		acceptedAt: pg.timestamp("accepted_at", { withTimezone: true }),
 		createdAt: pg.timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
 		updatedAt: pg
 			.timestamp("updated_at", { withTimezone: true })
@@ -203,6 +226,14 @@ export const discoveredJob = pg.pgTable(
 				foreignColumns: [discoveryRun.organizationId, discoveryRun.id],
 			})
 			.onDelete("set null"),
+		pg
+			.foreignKey({
+				name: "discovered_job_org_application_fkey",
+				columns: [t.organizationId, t.applicationId],
+				foreignColumns: [application.organizationId, application.id],
+			})
+			.onDelete("set null"),
+		pg.index("discovered_job_application_idx").on(t.organizationId, t.applicationId),
 		pg.check("discovered_job_source_check", sql`${t.source} in (${list(DISCOVERY_BOARD_SOURCES)})`),
 		pg.check(
 			"discovered_job_remote_check",

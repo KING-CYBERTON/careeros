@@ -49,6 +49,7 @@ import { Route as BuilderResumeIdIndexRouteImport } from "./routes/builder/$resu
 import { Route as BuilderLetterCoverLetterIdRouteImport } from "./routes/builder/letter/$coverLetterId";
 import { Route as DashboardApplicationsIndexRouteImport } from "./routes/dashboard/applications/index";
 import { Route as DashboardCareerIndexRouteImport } from "./routes/dashboard/career/index";
+import { Route as DashboardCareerJobsRouteImport } from "./routes/dashboard/career/jobs";
 import { Route as DashboardCareerKnowledgeRouteRouteImport } from "./routes/dashboard/career/knowledge/route";
 import { Route as DashboardCareerOffersRouteImport } from "./routes/dashboard/career/offers";
 import { Route as DashboardResumesIndexRouteImport } from "./routes/dashboard/resumes/index";
@@ -276,6 +277,11 @@ const DashboardCareerIndexRoute = DashboardCareerIndexRouteImport.update({
   path: "/",
   getParentRoute: () => DashboardCareerRouteRoute,
 } as any);
+const DashboardCareerJobsRoute = DashboardCareerJobsRouteImport.update({
+  id: "/jobs",
+  path: "/jobs",
+  getParentRoute: () => DashboardCareerRouteRoute,
+} as any);
 const DashboardCareerKnowledgeRouteRoute =
   DashboardCareerKnowledgeRouteRouteImport.update({
     id: "/knowledge",
@@ -454,6 +460,7 @@ export interface FileRoutesByFullPath {
   "/auth/accept-invitation/$invitationId": typeof AuthAcceptInvitationInvitationIdRoute;
   "/auth/handoff/redeem": typeof AuthHandoffRedeemRoute;
   "/builder/letter/$coverLetterId": typeof BuilderLetterCoverLetterIdRoute;
+  "/dashboard/career/jobs": typeof DashboardCareerJobsRoute;
   "/dashboard/career/offers": typeof DashboardCareerOffersRoute;
   "/dashboard/settings/account": typeof DashboardSettingsAccountRoute;
   "/dashboard/settings/ai": typeof DashboardSettingsAiRoute;
@@ -512,6 +519,7 @@ export interface FileRoutesByTo {
   "/auth/accept-invitation/$invitationId": typeof AuthAcceptInvitationInvitationIdRoute;
   "/auth/handoff/redeem": typeof AuthHandoffRedeemRoute;
   "/builder/letter/$coverLetterId": typeof BuilderLetterCoverLetterIdRoute;
+  "/dashboard/career/jobs": typeof DashboardCareerJobsRoute;
   "/dashboard/career/offers": typeof DashboardCareerOffersRoute;
   "/dashboard/settings/account": typeof DashboardSettingsAccountRoute;
   "/dashboard/settings/ai": typeof DashboardSettingsAiRoute;
@@ -579,6 +587,7 @@ export interface FileRoutesById {
   "/auth/accept-invitation/$invitationId": typeof AuthAcceptInvitationInvitationIdRoute;
   "/auth/handoff/redeem": typeof AuthHandoffRedeemRoute;
   "/builder/letter/$coverLetterId": typeof BuilderLetterCoverLetterIdRoute;
+  "/dashboard/career/jobs": typeof DashboardCareerJobsRoute;
   "/dashboard/career/offers": typeof DashboardCareerOffersRoute;
   "/dashboard/settings/account": typeof DashboardSettingsAccountRoute;
   "/dashboard/settings/ai": typeof DashboardSettingsAiRoute;
@@ -646,6 +655,7 @@ export interface FileRouteTypes {
     | "/auth/accept-invitation/$invitationId"
     | "/auth/handoff/redeem"
     | "/builder/letter/$coverLetterId"
+    | "/dashboard/career/jobs"
     | "/dashboard/career/offers"
     | "/dashboard/settings/account"
     | "/dashboard/settings/ai"
@@ -704,6 +714,7 @@ export interface FileRouteTypes {
     | "/auth/accept-invitation/$invitationId"
     | "/auth/handoff/redeem"
     | "/builder/letter/$coverLetterId"
+    | "/dashboard/career/jobs"
     | "/dashboard/career/offers"
     | "/dashboard/settings/account"
     | "/dashboard/settings/ai"
@@ -770,6 +781,7 @@ export interface FileRouteTypes {
     | "/auth/accept-invitation/$invitationId"
     | "/auth/handoff/redeem"
     | "/builder/letter/$coverLetterId"
+    | "/dashboard/career/jobs"
     | "/dashboard/career/offers"
     | "/dashboard/settings/account"
     | "/dashboard/settings/ai"
@@ -1090,6 +1102,13 @@ declare module "@tanstack/react-router" {
       preLoaderRoute: typeof DashboardCareerIndexRouteImport;
       parentRoute: typeof DashboardCareerRouteRoute;
     };
+    "/dashboard/career/jobs": {
+      id: "/dashboard/career/jobs";
+      path: "/jobs";
+      fullPath: "/dashboard/career/jobs";
+      preLoaderRoute: typeof DashboardCareerJobsRouteImport;
+      parentRoute: typeof DashboardCareerRouteRoute;
+    };
     "/dashboard/career/knowledge": {
       id: "/dashboard/career/knowledge";
       path: "/knowledge";
@@ -1361,6 +1380,7 @@ const DashboardCareerKnowledgeRouteRouteWithChildren =
 
 interface DashboardCareerRouteRouteChildren {
   DashboardCareerKnowledgeRouteRoute: typeof DashboardCareerKnowledgeRouteRouteWithChildren;
+  DashboardCareerJobsRoute: typeof DashboardCareerJobsRoute;
   DashboardCareerOffersRoute: typeof DashboardCareerOffersRoute;
   DashboardCareerIndexRoute: typeof DashboardCareerIndexRoute;
   DashboardCareerCoachChar123ConversationIdChar125Route: typeof DashboardCareerCoachChar123ConversationIdChar125Route;
@@ -1369,6 +1389,7 @@ interface DashboardCareerRouteRouteChildren {
 const DashboardCareerRouteRouteChildren: DashboardCareerRouteRouteChildren = {
   DashboardCareerKnowledgeRouteRoute:
     DashboardCareerKnowledgeRouteRouteWithChildren,
+  DashboardCareerJobsRoute: DashboardCareerJobsRoute,
   DashboardCareerOffersRoute: DashboardCareerOffersRoute,
   DashboardCareerIndexRoute: DashboardCareerIndexRoute,
   DashboardCareerCoachChar123ConversationIdChar125Route:

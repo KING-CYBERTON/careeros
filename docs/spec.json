@@ -66865,6 +66865,18 @@
 													}
 												]
 											},
+											"lastScheduledRunAt": {
+												"anyOf": [
+													{
+														"type": "string",
+														"format": "date-time",
+														"x-native-type": "date"
+													},
+													{
+														"type": "null"
+													}
+												]
+											},
 											"aiTopN": {
 												"type": "number"
 											},
@@ -66891,6 +66903,7 @@
 											"schedule",
 											"nextRunAt",
 											"lastRunAt",
+											"lastScheduledRunAt",
 											"aiTopN",
 											"createdAt",
 											"updatedAt"
@@ -67175,6 +67188,18 @@
 												}
 											]
 										},
+										"lastScheduledRunAt": {
+											"anyOf": [
+												{
+													"type": "string",
+													"format": "date-time",
+													"x-native-type": "date"
+												},
+												{
+													"type": "null"
+												}
+											]
+										},
 										"aiTopN": {
 											"type": "number"
 										},
@@ -67201,6 +67226,7 @@
 										"schedule",
 										"nextRunAt",
 										"lastRunAt",
+										"lastScheduledRunAt",
 										"aiTopN",
 										"createdAt",
 										"updatedAt"
@@ -67486,6 +67512,18 @@
 												}
 											]
 										},
+										"lastScheduledRunAt": {
+											"anyOf": [
+												{
+													"type": "string",
+													"format": "date-time",
+													"x-native-type": "date"
+												},
+												{
+													"type": "null"
+												}
+											]
+										},
 										"aiTopN": {
 											"type": "number"
 										},
@@ -67512,6 +67550,7 @@
 										"schedule",
 										"nextRunAt",
 										"lastRunAt",
+										"lastScheduledRunAt",
 										"aiTopN",
 										"createdAt",
 										"updatedAt"
@@ -67649,7 +67688,7 @@
 			"post": {
 				"operationId": "runDiscoverySource",
 				"summary": "Run a job discovery automation now",
-				"description": "Fetches every board of the automation, scores the postings and saves the new ones. Answers when the run is done. One run per automation every 10 minutes; TOO_MANY_REQUESTS otherwise. Requires authentication and the job discovery plan feature.",
+				"description": "Starts a run: it fetches every board of the automation, scores the postings, saves the new ones and sends the best of them to the AI match. Answers as soon as the run is recorded as running (status running, counts zero); the run continues in the background and its progress is in the run list. One manual run per automation every 10 minutes (scheduled runs do not count); TOO_MANY_REQUESTS otherwise. Requires authentication and the job discovery plan feature.",
 				"tags": [
 					"Discovery"
 				],
@@ -67697,7 +67736,28 @@
 											"type": "number"
 										},
 										"aiMatched": {
-											"type": "number"
+											"type": "number",
+											"description": "The number of model calls the run made; never more than aiPlanned."
+										},
+										"aiPlanned": {
+											"type": "number",
+											"description": "The most model calls the run planned: min(the automation's ai_top_n, the plan cap)."
+										},
+										"aiSkippedReason": {
+											"anyOf": [
+												{
+													"enum": [
+														"no_platform_ai",
+														"quota_exhausted",
+														"provider_error"
+													],
+													"type": "string"
+												},
+												{
+													"type": "null"
+												}
+											],
+											"description": "Why the AI step did not run or stopped early. The local scores stay."
 										},
 										"errors": {
 											"type": "array",
@@ -67735,6 +67795,8 @@
 										"duplicate",
 										"scored",
 										"aiMatched",
+										"aiPlanned",
+										"aiSkippedReason",
 										"errors"
 									]
 								}
@@ -67793,11 +67855,216 @@
 				]
 			}
 		},
+		"/discovery/sources/{jobSourceId}/runs": {
+			"get": {
+				"operationId": "listDiscoveryRuns",
+				"summary": "List the runs of a job discovery automation",
+				"description": "Returns the latest 20 runs of one of the caller's automations, newest first, with their counts, how each started (manual or scheduled), the AI match counts and why the AI step was skipped, if it was. A run still running shows its progress so far. NOT_FOUND when the automation is not theirs. Requires authentication and the job discovery plan feature.",
+				"tags": [
+					"Discovery"
+				],
+				"parameters": [
+					{
+						"name": "jobSourceId",
+						"in": "path",
+						"required": true,
+						"schema": {
+							"type": "string",
+							"minLength": 1
+						}
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "OK",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "array",
+									"items": {
+										"type": "object",
+										"properties": {
+											"runId": {
+												"type": "string"
+											},
+											"status": {
+												"enum": [
+													"running",
+													"succeeded",
+													"failed",
+													"partial"
+												],
+												"type": "string"
+											},
+											"fetched": {
+												"type": "number"
+											},
+											"new": {
+												"type": "number"
+											},
+											"duplicate": {
+												"type": "number"
+											},
+											"scored": {
+												"type": "number"
+											},
+											"aiMatched": {
+												"type": "number",
+												"description": "The number of model calls the run made; never more than aiPlanned."
+											},
+											"aiPlanned": {
+												"type": "number",
+												"description": "The most model calls the run planned: min(the automation's ai_top_n, the plan cap)."
+											},
+											"aiSkippedReason": {
+												"anyOf": [
+													{
+														"enum": [
+															"no_platform_ai",
+															"quota_exhausted",
+															"provider_error"
+														],
+														"type": "string"
+													},
+													{
+														"type": "null"
+													}
+												],
+												"description": "Why the AI step did not run or stopped early. The local scores stay."
+											},
+											"errors": {
+												"type": "array",
+												"items": {
+													"type": "object",
+													"properties": {
+														"source": {
+															"type": "string"
+														},
+														"token": {
+															"type": "string"
+														},
+														"code": {
+															"type": "string"
+														},
+														"status": {
+															"type": "number"
+														},
+														"reason": {
+															"type": "string"
+														}
+													},
+													"required": [
+														"code",
+														"reason"
+													]
+												}
+											},
+											"jobSourceId": {
+												"type": "string"
+											},
+											"trigger": {
+												"enum": [
+													"manual",
+													"scheduled"
+												],
+												"type": "string"
+											},
+											"startedAt": {
+												"type": "string",
+												"format": "date-time",
+												"x-native-type": "date"
+											},
+											"finishedAt": {
+												"anyOf": [
+													{
+														"type": "string",
+														"format": "date-time",
+														"x-native-type": "date"
+													},
+													{
+														"type": "null"
+													}
+												]
+											}
+										},
+										"required": [
+											"runId",
+											"status",
+											"fetched",
+											"new",
+											"duplicate",
+											"scored",
+											"aiMatched",
+											"aiPlanned",
+											"aiSkippedReason",
+											"errors",
+											"jobSourceId",
+											"trigger",
+											"startedAt",
+											"finishedAt"
+										]
+									}
+								}
+							}
+						}
+					},
+					"default": {
+						"description": "Structured API error. See status and code; do not branch on message text.",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"required": [
+										"defined",
+										"code",
+										"status",
+										"message"
+									],
+									"properties": {
+										"defined": {
+											"type": "boolean"
+										},
+										"code": {
+											"type": "string"
+										},
+										"status": {
+											"type": "integer"
+										},
+										"message": {
+											"type": "string"
+										},
+										"data": {}
+									}
+								}
+							}
+						}
+					}
+				},
+				"security": [
+					{
+						"apiKey": []
+					},
+					{
+						"bearerAuth": []
+					},
+					{
+						"cookieAuth": []
+					}
+				],
+				"x-codeSamples": [
+					{
+						"lang": "bash",
+						"label": "cURL",
+						"source": "curl \"https://rxresu.me/api/openapi/discovery/sources/<jobSourceId>/runs\" --header \"x-api-key: <api-key>\""
+					}
+				]
+			}
+		},
 		"/discovery/jobs": {
 			"get": {
 				"operationId": "listDiscoveredJobs",
 				"summary": "List discovered jobs",
-				"description": "Returns the postings discovery found for the caller, best match first. Filter by status (new, accepted, dismissed). Requires authentication and the job discovery plan feature.",
+				"description": "Returns the review queue: the postings discovery found for the caller, best match first (AI score, then local score, then newest), without their descriptions. Filter by status (new, accepted, dismissed) or by automation. Page with limit and offset. Requires authentication and the job discovery plan feature.",
 				"tags": [
 					"Discovery"
 				],
@@ -67813,6 +68080,17 @@
 							],
 							"type": "string",
 							"description": "Only jobs with this status. Omit for every status."
+						},
+						"allowEmptyValue": true,
+						"allowReserved": true
+					},
+					{
+						"name": "jobSourceId",
+						"in": "query",
+						"schema": {
+							"type": "string",
+							"minLength": 1,
+							"description": "Only jobs found by this automation."
 						},
 						"allowEmptyValue": true,
 						"allowReserved": true
@@ -67920,9 +68198,6 @@
 													}
 												]
 											},
-											"descriptionHtml": {
-												"type": "string"
-											},
 											"localScore": {
 												"type": "number"
 											},
@@ -67954,6 +68229,29 @@
 												],
 												"type": "string"
 											},
+											"applicationId": {
+												"anyOf": [
+													{
+														"type": "string"
+													},
+													{
+														"type": "null"
+													}
+												],
+												"description": "The tracker application this job became when it was accepted."
+											},
+											"acceptedAt": {
+												"anyOf": [
+													{
+														"type": "string",
+														"format": "date-time",
+														"x-native-type": "date"
+													},
+													{
+														"type": "null"
+													}
+												]
+											},
 											"createdAt": {
 												"type": "string",
 												"format": "date-time",
@@ -67972,11 +68270,12 @@
 											"remote",
 											"url",
 											"postedAt",
-											"descriptionHtml",
 											"localScore",
 											"aiScore",
 											"aiSummary",
 											"status",
+											"applicationId",
+											"acceptedAt",
 											"createdAt"
 										]
 									}
@@ -68052,6 +68351,489 @@
 						"lang": "bash",
 						"label": "cURL",
 						"source": "curl \"https://rxresu.me/api/openapi/discovery/jobs\" --header \"x-api-key: <api-key>\""
+					}
+				]
+			}
+		},
+		"/discovery/jobs/{id}": {
+			"get": {
+				"operationId": "getDiscoveredJob",
+				"summary": "Get a discovered job",
+				"description": "Returns one of the caller's discovered postings with its sanitized description (a short HTML subset: headings, paragraphs, lists, bold, italic, line breaks and https links). NOT_FOUND when it is not theirs. Requires authentication and the job discovery plan feature.",
+				"tags": [
+					"Discovery"
+				],
+				"parameters": [
+					{
+						"name": "id",
+						"in": "path",
+						"required": true,
+						"schema": {
+							"type": "string",
+							"minLength": 1
+						}
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "OK",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"id": {
+											"type": "string"
+										},
+										"jobSourceId": {
+											"anyOf": [
+												{
+													"type": "string"
+												},
+												{
+													"type": "null"
+												}
+											]
+										},
+										"source": {
+											"type": "string"
+										},
+										"externalId": {
+											"type": "string"
+										},
+										"boardToken": {
+											"type": "string"
+										},
+										"title": {
+											"type": "string"
+										},
+										"company": {
+											"type": "string"
+										},
+										"location": {
+											"anyOf": [
+												{
+													"type": "string"
+												},
+												{
+													"type": "null"
+												}
+											]
+										},
+										"remote": {
+											"anyOf": [
+												{
+													"enum": [
+														"remote",
+														"onsite",
+														"hybrid"
+													],
+													"type": "string"
+												},
+												{
+													"type": "null"
+												}
+											]
+										},
+										"url": {
+											"type": "string"
+										},
+										"postedAt": {
+											"anyOf": [
+												{
+													"type": "string",
+													"format": "date-time",
+													"x-native-type": "date"
+												},
+												{
+													"type": "null"
+												}
+											]
+										},
+										"descriptionHtml": {
+											"type": "string"
+										},
+										"localScore": {
+											"type": "number"
+										},
+										"aiScore": {
+											"anyOf": [
+												{
+													"type": "number"
+												},
+												{
+													"type": "null"
+												}
+											]
+										},
+										"aiSummary": {
+											"anyOf": [
+												{
+													"type": "string"
+												},
+												{
+													"type": "null"
+												}
+											]
+										},
+										"status": {
+											"enum": [
+												"new",
+												"accepted",
+												"dismissed"
+											],
+											"type": "string"
+										},
+										"applicationId": {
+											"anyOf": [
+												{
+													"type": "string"
+												},
+												{
+													"type": "null"
+												}
+											],
+											"description": "The tracker application this job became when it was accepted."
+										},
+										"acceptedAt": {
+											"anyOf": [
+												{
+													"type": "string",
+													"format": "date-time",
+													"x-native-type": "date"
+												},
+												{
+													"type": "null"
+												}
+											]
+										},
+										"createdAt": {
+											"type": "string",
+											"format": "date-time",
+											"x-native-type": "date"
+										}
+									},
+									"required": [
+										"id",
+										"jobSourceId",
+										"source",
+										"externalId",
+										"boardToken",
+										"title",
+										"company",
+										"location",
+										"remote",
+										"url",
+										"postedAt",
+										"descriptionHtml",
+										"localScore",
+										"aiScore",
+										"aiSummary",
+										"status",
+										"applicationId",
+										"acceptedAt",
+										"createdAt"
+									]
+								}
+							}
+						}
+					},
+					"default": {
+						"description": "Structured API error. See status and code; do not branch on message text.",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"required": [
+										"defined",
+										"code",
+										"status",
+										"message"
+									],
+									"properties": {
+										"defined": {
+											"type": "boolean"
+										},
+										"code": {
+											"type": "string"
+										},
+										"status": {
+											"type": "integer"
+										},
+										"message": {
+											"type": "string"
+										},
+										"data": {}
+									}
+								}
+							}
+						}
+					}
+				},
+				"security": [
+					{
+						"apiKey": []
+					},
+					{
+						"bearerAuth": []
+					},
+					{
+						"cookieAuth": []
+					}
+				],
+				"x-codeSamples": [
+					{
+						"lang": "bash",
+						"label": "cURL",
+						"source": "curl \"https://rxresu.me/api/openapi/discovery/jobs/<id>\" --header \"x-api-key: <api-key>\""
+					}
+				]
+			}
+		},
+		"/discovery/jobs/{id}/accept": {
+			"post": {
+				"operationId": "acceptDiscoveredJob",
+				"summary": "Accept a discovered job into the tracker",
+				"description": "Creates an application in the tracker (first stage, company, role, location, link and the description as plain text, source discovery, the board as a tag), marks the posting accepted and answers with the application id. Accepting twice answers with the same application. A dismissed posting can be accepted. A write: refused for a suspended organization. Requires authentication and the job discovery plan feature.",
+				"tags": [
+					"Discovery"
+				],
+				"parameters": [
+					{
+						"name": "id",
+						"in": "path",
+						"required": true,
+						"schema": {
+							"type": "string",
+							"minLength": 1
+						}
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "OK",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"job": {
+											"type": "object",
+											"properties": {
+												"id": {
+													"type": "string"
+												},
+												"jobSourceId": {
+													"anyOf": [
+														{
+															"type": "string"
+														},
+														{
+															"type": "null"
+														}
+													]
+												},
+												"source": {
+													"type": "string"
+												},
+												"externalId": {
+													"type": "string"
+												},
+												"boardToken": {
+													"type": "string"
+												},
+												"title": {
+													"type": "string"
+												},
+												"company": {
+													"type": "string"
+												},
+												"location": {
+													"anyOf": [
+														{
+															"type": "string"
+														},
+														{
+															"type": "null"
+														}
+													]
+												},
+												"remote": {
+													"anyOf": [
+														{
+															"enum": [
+																"remote",
+																"onsite",
+																"hybrid"
+															],
+															"type": "string"
+														},
+														{
+															"type": "null"
+														}
+													]
+												},
+												"url": {
+													"type": "string"
+												},
+												"postedAt": {
+													"anyOf": [
+														{
+															"type": "string",
+															"format": "date-time",
+															"x-native-type": "date"
+														},
+														{
+															"type": "null"
+														}
+													]
+												},
+												"descriptionHtml": {
+													"type": "string"
+												},
+												"localScore": {
+													"type": "number"
+												},
+												"aiScore": {
+													"anyOf": [
+														{
+															"type": "number"
+														},
+														{
+															"type": "null"
+														}
+													]
+												},
+												"aiSummary": {
+													"anyOf": [
+														{
+															"type": "string"
+														},
+														{
+															"type": "null"
+														}
+													]
+												},
+												"status": {
+													"enum": [
+														"new",
+														"accepted",
+														"dismissed"
+													],
+													"type": "string"
+												},
+												"applicationId": {
+													"anyOf": [
+														{
+															"type": "string"
+														},
+														{
+															"type": "null"
+														}
+													],
+													"description": "The tracker application this job became when it was accepted."
+												},
+												"acceptedAt": {
+													"anyOf": [
+														{
+															"type": "string",
+															"format": "date-time",
+															"x-native-type": "date"
+														},
+														{
+															"type": "null"
+														}
+													]
+												},
+												"createdAt": {
+													"type": "string",
+													"format": "date-time",
+													"x-native-type": "date"
+												}
+											},
+											"required": [
+												"id",
+												"jobSourceId",
+												"source",
+												"externalId",
+												"boardToken",
+												"title",
+												"company",
+												"location",
+												"remote",
+												"url",
+												"postedAt",
+												"descriptionHtml",
+												"localScore",
+												"aiScore",
+												"aiSummary",
+												"status",
+												"applicationId",
+												"acceptedAt",
+												"createdAt"
+											]
+										},
+										"applicationId": {
+											"type": "string",
+											"description": "The application in the tracker. The same one when the job was accepted before."
+										}
+									},
+									"required": [
+										"job",
+										"applicationId"
+									]
+								}
+							}
+						}
+					},
+					"default": {
+						"description": "Structured API error. See status and code; do not branch on message text.",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"required": [
+										"defined",
+										"code",
+										"status",
+										"message"
+									],
+									"properties": {
+										"defined": {
+											"type": "boolean"
+										},
+										"code": {
+											"type": "string"
+										},
+										"status": {
+											"type": "integer"
+										},
+										"message": {
+											"type": "string"
+										},
+										"data": {}
+									}
+								}
+							}
+						}
+					}
+				},
+				"security": [
+					{
+						"apiKey": []
+					},
+					{
+						"bearerAuth": []
+					},
+					{
+						"cookieAuth": []
+					}
+				],
+				"x-codeSamples": [
+					{
+						"lang": "bash",
+						"label": "cURL",
+						"source": "curl --request POST \"https://rxresu.me/api/openapi/discovery/jobs/<id>/accept\" --header \"x-api-key: <api-key>\""
 					}
 				]
 			}
@@ -68185,6 +68967,29 @@
 											],
 											"type": "string"
 										},
+										"applicationId": {
+											"anyOf": [
+												{
+													"type": "string"
+												},
+												{
+													"type": "null"
+												}
+											],
+											"description": "The tracker application this job became when it was accepted."
+										},
+										"acceptedAt": {
+											"anyOf": [
+												{
+													"type": "string",
+													"format": "date-time",
+													"x-native-type": "date"
+												},
+												{
+													"type": "null"
+												}
+											]
+										},
 										"createdAt": {
 											"type": "string",
 											"format": "date-time",
@@ -68208,6 +69013,8 @@
 										"aiScore",
 										"aiSummary",
 										"status",
+										"applicationId",
+										"acceptedAt",
 										"createdAt"
 									]
 								}
