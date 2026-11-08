@@ -187,6 +187,14 @@ export const NO_TENANT_ID: Record<string, string> = {
 	"GET /organization/entitlements": "takes no tenant id: the caller's own organization (P3-T01)",
 	"GET /organization/audit":
 		"takes no tenant id: the caller's own organization; the cursor is an opaque position in its own log (P3-T01)",
+	"GET /organization/my-cohort":
+		"takes no tenant id: the caller's own cohort in the caller's own organization (P3-T08)",
+	"GET /org-admin/cohorts": "takes no tenant id: lists the caller's own organization's cohorts (P3-T08)",
+	"POST /org-admin/cohorts": "takes no tenant id: creates a cohort in the caller's own organization (P3-T08)",
+	"POST /org-admin/invitations/dry-run":
+		"takes no tenant id: reads an uploaded CSV against the caller's own organization (P3-T08)",
+	"POST /org-admin/invitations/bulk":
+		"takes no tenant id: invites the uploaded CSV's addresses to the caller's own organization (P3-T08)",
 	"GET /billing": "takes no tenant id: the caller's own organization (P3-T04)",
 	"POST /billing/trial": "takes no tenant id: the caller's own organization (P3-T04)",
 	"POST /billing/checkout":
@@ -204,6 +212,9 @@ export const NO_TENANT_ID: Record<string, string> = {
 	"GET /discovery/sources": "takes no tenant id: lists the caller's own automations (P4-T01)",
 	"POST /discovery/sources": "takes no tenant id: creates an automation for the caller (P4-T01)",
 	"GET /discovery/jobs": "takes no tenant id: lists the caller's own discovered jobs (P4-T01)",
+	// CAREEROS (P5-T02): the clipper sign-in. The token itself names the organization; no request names another.
+	"GET /clipper/whoami": "takes no tenant id: answers for the token's own organization and host (P5-T02)",
+	"GET /clipper/tokens": "takes no tenant id: lists the caller's own Job Clipper sign-ins (P5-T02)",
 	"GET /documents": "takes no tenant id: lists the caller's own documents",
 	"GET /documents/page": "takes no tenant id: lists the caller's own documents",
 	"GET /documents/counts": "takes no tenant id: counts the caller's own documents",
@@ -278,6 +289,11 @@ export const ID_KINDS = [
 	// CAREEROS (P4-T01): job discovery
 	"jobSource",
 	"discoveredJob",
+	// CAREEROS (P3-T08): Org Admin console
+	"cohort",
+	"member",
+	// CAREEROS (P5-T02): a Job Clipper sign-in
+	"clipperToken",
 ] as const;
 export type IdKind = (typeof ID_KINDS)[number];
 export type SeedIds = Record<IdKind, string>;
@@ -305,6 +321,8 @@ const PREFIX_KIND: [RegExp, IdKind][] = [
 	[/^\/organization\/domains(\/|$)/, "orgDomain"],
 	[/^\/discovery\/sources(\/|$)/, "jobSource"],
 	[/^\/discovery\/jobs(\/|$)/, "discoveredJob"],
+	[/^\/org-admin\/cohorts(\/|$)/, "cohort"],
+	[/^\/clipper\/tokens(\/|$)/, "clipperToken"],
 ];
 
 /** Operations whose bare `id` cannot be told from the path alone. */
@@ -342,6 +360,9 @@ const FIELD_KIND: Record<string, IdKind> = {
 	scheduleId: "schedule",
 	answerId: "answer",
 	jobSourceId: "jobSource",
+	// CAREEROS (P3-T08)
+	cohortId: "cohort",
+	memberIds: "member",
 	// Not tenant ids: the client's own correlation values, sent so the request still validates.
 	sessionId: "resume",
 	toolCallId: "message",
@@ -444,6 +465,11 @@ const SLUG_FREE = {
 	statuses: [200],
 	why: "answers whether a slug is free; the reply is identical for an unknown id, so it reveals nothing of A's",
 };
+// CAREEROS (P3-T08): both fuzz organizations are on the Pro plan, so B's owner is a real admin of a real organization:
+// every org-admin operation naming A's cohort or member answers 404 like the rest, with no special allowance.
+// These reads write an audit row (`analytics.exported`) in the CALLER's organization by design. A's own control calls
+// to them are therefore made before Organization A is snapshotted; B's calls must still leave A unchanged.
+export const AUDITED_READS = new Set(["GET /org-admin/analytics/members/export", "GET /org-admin/analytics/export"]);
 const DOC_BATCH = (ids: SeedIds) => ({ documents: [{ type: "resume", id: ids.resume }] });
 const LETTER: Override = { kind: "letter", path: { type: "letter" } };
 export const OVERRIDES: Record<string, Override> = {
@@ -486,6 +512,7 @@ export const OVERRIDES: Record<string, Override> = {
 		set: (ids) => ({ ids: Array.from({ length: 6 }, () => ids.lane) }),
 		allow: { statuses: [400], why: "T06 review: BAD_REQUEST for ids the caller's organization does not have" },
 	},
+	"PATCH /org-admin/cohorts/{id}": { set: () => ({ name: "x" }) },
 	// Document routes run once for a resume and once for a cover letter.
 	"DELETE /documents/{type}/{id}": { variants: [LETTER] },
 	"DELETE /documents/{type}/{id}/trash": { variants: [LETTER] },
@@ -642,7 +669,8 @@ export function findLeaks(body: string, markers: string[], foreignIds: string[],
 // ---------------------------------------------------------------------------------------------------------------
 // Empty results. A list or bulk call may answer 200 as long as it answers with nothing.
 
-const IGNORED_NUMBER = /^(limit|offset|skipped)$/;
+// CAREEROS (P3-T08): `page` and `pageSize` are paging, not data. `total` is NOT ignored: a page with total > 0 is not empty.
+const IGNORED_NUMBER = /^(limit|offset|skipped|page|pageSize)$/;
 
 /** True for null, "", a boolean, zero, an empty array, or an object made only of such values (and paging numbers). */
 export function isEmptyResult(value: unknown, depth = 0): boolean {

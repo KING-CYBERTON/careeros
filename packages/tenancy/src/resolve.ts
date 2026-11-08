@@ -50,7 +50,9 @@ export async function resolveOrgForRequest(input: ResolveOrgInput): Promise<stri
 
 /** The parts of an authenticated request that name an organization (structurally compatible with the API's context). */
 export type AuthenticationOrgSource = {
-	method: "apiKey" | "bearer" | "session";
+	// CAREEROS (P5-T02): a Job Clipper token acts only in the organization it was issued for, on that organization's hosts.
+	method: "apiKey" | "bearer" | "session" | "clipper";
+	clipper?: { organizationId: string } | undefined;
 	user: { id: string };
 	activeOrganizationId?: string | null | undefined;
 	apiKeyId?: string | undefined;
@@ -71,6 +73,11 @@ export async function resolveOrgForAuthentication(
 	authentication: AuthenticationOrgSource,
 	host?: HostContext,
 ): Promise<string | undefined> {
+	// CAREEROS (P5-T02): fail closed. A clipper token never falls back to a membership or to the platform rules.
+	if (authentication.method === "clipper") {
+		if (host?.kind !== "org" || host.organizationId !== authentication.clipper?.organizationId)
+			throw new TenancyError("key_org_mismatch");
+	}
 	if (host?.kind === "org") return resolveOrgOnOrgHost(authentication, host.organizationId);
 	// A host that has the shape of an organization host but names none must not fall back to the platform rules.
 	if (host?.kind === "unknown" && host.matchesOrgPattern) throw new TenancyError("unknown_org_host");

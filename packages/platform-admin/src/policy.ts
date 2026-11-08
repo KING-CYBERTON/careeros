@@ -26,6 +26,8 @@ export const IMPERSONATION_REFUSED_PROCEDURES: ReadonlyMap<string, string> = new
 	["auth.deleteAccount", "deleting the account"],
 	["auth.createApiKey", "creating an API key"],
 	["auth.apiKeys.delete", "deleting an API key"],
+	// P5-T02: the member's Job Clipper credentials. A support session may neither approve a new one nor revoke one.
+	["clipper.revokeToken", "revoking a Job Clipper token"],
 	["billing.startTrial", "a billing action"],
 	["billing.checkout", "a billing action"],
 	["billing.changeSeats", "a billing action"],
@@ -58,6 +60,10 @@ export const IMPERSONATION_REFUSED_AUTH_PATHS: ReadonlySet<string> = new Set([
 	"/api-key/create",
 	"/api-key/update",
 	"/api-key/delete",
+	// P5-T02: approving or denying a Job Clipper device sign-in would hand the admin a credential in the member's name.
+	"/device/approve",
+	"/device/deny",
+	"/device/clipper/revoke",
 ]);
 
 /** Path prefixes with the same rule (every two-factor and passkey endpoint). */

@@ -2,6 +2,7 @@ import type { TwoOrgs } from "../fixtures/two-orgs";
 import type { BuiltRequest, McpTool, OpenApiDocument, Operation } from "@careeros/testing/cross-org-inventory";
 import type { APIRequestContext } from "@playwright/test";
 import {
+	AUDITED_READS,
 	buildMcpArguments,
 	buildRequest,
 	findLeaks,
@@ -269,15 +270,24 @@ test("an id from another organization never reads, changes or links Organization
 			console.log(`cross-org fuzz: org-host pass NOT RUN, the e2e server needs ORG_HOST_PATTERN=${ORG_HOST_PATTERN}`);
 		}
 
+		// CAREEROS (P3-T08): an export audits itself, in the organization of whoever calls it. A's own control calls to
+		// the two audited reads therefore run here, before A is snapshotted, so the one audit row they write for A is not
+		// mistaken for B's doing. B's attempts on them stay inside the snapshot window and must leave A unchanged.
+		const isRead = (plan: (typeof planned)[number]) =>
+			plan.operation.method === "GET" && !plan.operation.path.endsWith("/updates");
+		const audited = planned.filter((plan) => isRead(plan) && AUDITED_READS.has(plan.operation.key));
+		for (const plan of audited) {
+			const response = await send(orgs.a.session, plan.built);
+			if (response.status() >= 400)
+				failures.push(`control ${plan.label}: user A's own call answered ${response.status()}`);
+		}
 		const before = await snapshotOrgA(orgs);
 		const publicBefore = await orgs.anonymous.get(publicPage);
 		expect(publicBefore.status(), "Organization A's public resume page without a session").toBe(200);
 
 		// Control: the same read requests succeed as A, and the scanner sees A's values in them. Without this, a request
 		// that is merely malformed would pass as "not found".
-		const reads = planned.filter(
-			(plan) => plan.operation.method === "GET" && !plan.operation.path.endsWith("/updates"),
-		);
+		const reads = planned.filter((plan) => isRead(plan) && !AUDITED_READS.has(plan.operation.key));
 		let carried = 0;
 		await pool(reads, 6, async (plan) => {
 			const response = await send(orgs.a.session, plan.built);

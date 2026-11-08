@@ -174,7 +174,7 @@ async function seedJobSource(orgId: string, db: pg.Pool): Promise<{ userId: stri
 /**
  * Every tenant table (one with an `organization_id` column) must be registered here. The five resume tables are
  * registered by P1-T04, the two cover letter tables by P1-T05 and the four application tables by P1-T06, the eleven career tables by P1-T07, the six assistant and AI tables by P1-T08 and
- * the three remaining ones by P1-T09, the two branding ones by P2-T01, the organization domain one by P2-T06 and the three job discovery ones by P4-T01. The route
+ * the three remaining ones by P1-T09, the two branding ones by P2-T01, the organization domain one by P2-T06, the three job discovery ones by P4-T01 and the cohort one by P3-T08. The route
  * groups' API checks are attached by `packages/api` (it needs the router), which runs `runApiIsolationCheck` with this
  * entry's seed.
  */
@@ -628,6 +628,16 @@ export const isolationRegistry: readonly RegistryEntry[] = [
 			return id;
 		},
 	},
+	// CAREEROS (P3-T08): cohorts of an organization (the name is unique per organization, so a seed gets its own).
+	{
+		table: "cohort",
+		seed: async (orgId, db) => {
+			await ensureOrganization(db, orgId);
+			const id = `iso-cohort-${randomUUID()}`;
+			await db.query(`INSERT INTO cohort (id, organization_id, name) VALUES ($1, $2, $1)`, [id, orgId]);
+			return id;
+		},
+	},
 	{
 		table: "discovered_job",
 		seed: async (orgId, db) => {
@@ -678,6 +688,18 @@ export const tenancyAllowList: readonly AllowListEntry[] = [
 		table: "auth_handoff",
 		reason:
 			"P2-T05: pre-authentication, platform-global like Better Auth's verification table (same class: global, no tenant data, no row level security). It carries organization_id only to name the organization a sign-in is for, so it sits on this list, not the globalTables one, which is for tables without that column. It is read and written before any session or organization context exists and holds only hashes and ten-minute rows",
+	},
+	// CAREEROS (P5-T02): the Job Clipper sign-in. Both are pre-authentication, platform-global tables like auth_handoff:
+	// the device code is redeemed and the token verified before any session or organization context exists.
+	{
+		table: "device_code",
+		reason:
+			"P5-T02: Better Auth device-authorization plugin table (pre-authentication, platform-global like auth_handoff and the verification table). organization_id only names the organization whose host the code was requested on; ten-minute rows, reached through the plugin's adapter calls, and every use is checked against the request host's organization and the approver's membership",
+	},
+	{
+		table: "clipper_token",
+		reason:
+			"P5-T02: Job Clipper sign-in tokens (pre-authentication, platform-global like apikey). Holds the SHA-256 of the token, never the token. organization_id is checked against the request host's organization on every use (a token on another organization's host, the platform host or a custom domain of another organization is refused) and the member must still belong to it; reached only through the careeros-clipper plugin's adapter calls",
 	},
 	// CAREEROS (P3-T04, phase plan D9)
 	{

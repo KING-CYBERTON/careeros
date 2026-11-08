@@ -43,6 +43,8 @@ import { rateLimitConfig } from "@reactive-resume/utils/rate-limit";
 import { generateId, toUsername } from "@reactive-resume/utils/string";
 import { timezoneSchema } from "@reactive-resume/utils/timezone";
 import { isAllowedOAuthRedirectUri } from "@reactive-resume/utils/url-security.node";
+// CAREEROS: Job Clipper sign-in, device flow and host-bound tokens (P5-T02)
+import { clipperDeviceAuthorization, clipperTokens } from "./clipper";
 // CAREEROS: branded emails (P2-T04)
 import { buildEmailContext, withLinkOrigin } from "./email-brand";
 import { handoffSession } from "./handoff-session";
@@ -517,8 +519,9 @@ const getAuthConfig = () => {
 		},
 
 		// Unused endpoints: guest deletion skips the app's storage cleanup; the session JWT has no consumer.
+		// CAREEROS (P5-T02): /device/token would issue a full session; the clipper redeems at /device/clipper/token instead.
 		// CAREEROS (P3-T07): every Better Auth admin-plugin endpoint is off over HTTP; the console uses audited definer functions.
-		disabledPaths: ["/delete-anonymous-user", "/token", ...DISABLED_ADMIN_AUTH_PATHS],
+		disabledPaths: ["/delete-anonymous-user", "/token", "/device/token", ...DISABLED_ADMIN_AUTH_PATHS],
 
 		hooks: {
 			before: createAuthMiddleware(async (ctx) => {
@@ -704,6 +707,8 @@ const getAuthConfig = () => {
 					await tx.delete(schema.oauthAccessToken).where(eq(schema.oauthAccessToken.userId, user.id));
 					await tx.delete(schema.oauthRefreshToken).where(eq(schema.oauthRefreshToken.userId, user.id));
 					await tx.delete(schema.oauthConsent).where(eq(schema.oauthConsent.userId, user.id));
+					// CAREEROS (P5-T02): clipper sign-ins are credentials too.
+					await tx.delete(schema.clipperToken).where(eq(schema.clipperToken.userId, user.id));
 					// Historical passkeys may predate mailbox verification; recovery revokes all of them.
 					await tx.delete(schema.passkey).where(eq(schema.passkey.userId, user.id));
 					// Nobody had proved this address before: whoever signed up with it may have added other ways in.
@@ -848,6 +853,9 @@ const getAuthConfig = () => {
 			handoffSession,
 			// CAREEROS (P3-T07): refuses account-security endpoints in a support session; creates its session
 			impersonationSession,
+			// CAREEROS (P5-T02): Job Clipper device flow and tokens (packages/auth/src/clipper.ts)
+			clipperDeviceAuthorization,
+			clipperTokens,
 			passkey(),
 			genericOAuth({ config: authConfigs }),
 			twoFactor({ issuer: PLATFORM_DEFAULT_APP_NAME }),

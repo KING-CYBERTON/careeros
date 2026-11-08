@@ -76,6 +76,7 @@ describe.skipIf(!configured)("the isolation registry on the migrated schema", ()
 			"organization_domain",
 			"job_source",
 			"discovery_run",
+			"cohort",
 			"discovered_job",
 			"ai_usage",
 		]);
