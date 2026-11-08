@@ -101,3 +101,32 @@ describe("write procedures and the suspended-organization rule", () => {
 			expect(procedures.get(path)?.["~orpc"].middlewares, path).toContain(enforceOrganizationStatus);
 	}, 120_000);
 });
+
+// CAREEROS (P3-Q03): the Super Admin console and the suspended-organization rule. The console's procedures act on the
+// platform, not on an organization, so every write of `admin.*` is on the allow-list on purpose, and the allow-list holds
+// no `admin.*` entry that is not a real write of the router. Built from the router, so a new console write fails here
+// until its entry (with its reason) is added, and a removed procedure leaves no stale entry behind.
+describe("Super Admin procedures and the allow-list of suspended-organization writes", () => {
+	it("lists every admin write, and no admin procedure that is not one", async () => {
+		const { SUSPENDED_ORG_ALLOWED_WRITES } = await import("./entitlements");
+		const router = (await import("../routers/index")).default;
+		const admin = new Map([...collect(router, [], new Map())].filter(([path]) => path.startsWith("admin.")));
+		expect(admin.size, "the walk found the admin router").toBeGreaterThanOrEqual(10);
+		const writes = [...admin]
+			.filter(([, procedure]) => procedure["~orpc"].route.method !== "GET")
+			.map(([path]) => path);
+		expect(writes.length).toBeGreaterThanOrEqual(6);
+		const listed = [...SUSPENDED_ORG_ALLOWED_WRITES.keys()].filter((path) => path.startsWith("admin."));
+		expect(listed.sort()).toEqual(writes.sort());
+	}, 120_000);
+
+	it("keeps every console procedure out of the suspended-organization middleware: it has no organization to read", async () => {
+		const { enforceOrganizationStatus } = await import("./entitlements");
+		const router = (await import("../routers/index")).default;
+		const admin = [...collect(router, [], new Map())].filter(([path]) => path.startsWith("admin."));
+		for (const [path, procedure] of admin)
+			expect(procedure["~orpc"].middlewares, `${path} must not depend on an organization context`).not.toContain(
+				enforceOrganizationStatus,
+			);
+	}, 120_000);
+});
