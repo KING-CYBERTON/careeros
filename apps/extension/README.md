@@ -8,12 +8,18 @@ From the repository root:
 
 ```sh
 pnpm --filter extension build   # unpacked extension in apps/extension/dist
-pnpm --filter extension pack    # builds, then zips it as apps/extension/job-clipper-<version>.zip
+pnpm --filter extension run pack    # builds, checks, then zips it as apps/extension/job-clipper-<version>.zip
 pnpm --filter extension test
 pnpm --filter extension typecheck
 ```
 
-The version comes from `apps/extension/package.json`. `pack` refuses a development build.
+The version comes from `apps/extension/package.json`. `pack` refuses a development build. Use `run pack`: a bare `pnpm pack` is pnpm's own command and does not run this script.
+
+### Packing, pack checks and releases (P5-C01)
+
+`pack` reads the finished zip back and runs the checks in `scripts/pack-checks.mjs`; if any fails, the zip is deleted and the command fails. The zip must have `manifest.json` at its root, hold no source maps, `.env*` files, `node_modules` or test files, ask for exactly `activeTab`, `scripting` and `storage`, carry the `package.json` version in Chrome's format (one to four whole numbers, no suffix such as `-rc.1`), stay within 10 MB, and contain none of the product-branding words of `tooling/careeros/branding-gate.mjs`. `src/pack-checks.test.mjs` runs each check against a deliberately bad zip.
+
+CI (`careeros-ci`, job `extension`) runs `pnpm --filter extension run pack` on every change to the clipper, the packages it imports, the workflow or the lockfile, and keeps the zip for 14 days. The `careeros-extension-release` workflow (run by hand or by pushing a tag `clipper-v<version>`) builds `job-clipper-<version>.zip` with a SHA-256 checksum and keeps both for 90 days. It uploads to no store. To bump the version, release and submit to the Chrome Web Store and Edge Add-ons, follow [docs/runbooks/job-clipper-release.md](../../docs/runbooks/job-clipper-release.md).
 
 ### Development build
 
