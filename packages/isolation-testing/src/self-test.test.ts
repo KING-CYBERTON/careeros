@@ -265,6 +265,7 @@ describe("coverage check", () => {
 			"organization_domain",
 			"job_source",
 			"discovery_run",
+			"cohort",
 			"discovered_job",
 		]);
 	});

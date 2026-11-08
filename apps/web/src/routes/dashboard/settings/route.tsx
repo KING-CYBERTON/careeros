@@ -4,6 +4,8 @@ import { Trans } from "@lingui/react/macro";
 import { createFileRoute, Link, Outlet, useRouterState } from "@tanstack/react-router";
 import { Fragment } from "react";
 import { Icon } from "@reactive-resume/ui/components/icon";
+// CAREEROS (P3-T08)
+import { useOrgAdminAccess } from "@/features/org-admin/queries";
 // CAREEROS: Members & invites entry for owners and admins (P1-T03)
 import { useCanManageMembers } from "@/features/organization/queries";
 import { popTransition } from "@/features/settings/root";
@@ -18,7 +20,11 @@ type Page = {
 		| "/dashboard/settings/members"
 		// CAREEROS (P2-T07)
 		| "/dashboard/settings/branding"
-		| "/dashboard/settings/domains";
+		| "/dashboard/settings/domains"
+		// CAREEROS (P3-T08)
+		| "/dashboard/settings/cohorts"
+		| "/dashboard/settings/analytics"
+		| "/dashboard/settings/audit";
 	icon: IconName;
 	label: () => string;
 };
@@ -39,6 +45,14 @@ const BRANDING_PAGES: Page[] = [
 	{ to: "/dashboard/settings/domains", icon: "globe", label: () => t`Domains` },
 ];
 
+// CAREEROS (P3-T08): the Org Admin pages. Shown to owners and admins of an organization (not a personal workspace);
+// each page and the API check the same rule.
+const ORG_ADMIN_PAGES: Page[] = [
+	{ to: "/dashboard/settings/cohorts", icon: "graduation-cap", label: () => t`Cohorts` },
+	{ to: "/dashboard/settings/analytics", icon: "chart-line-up", label: () => t`Analytics` },
+	{ to: "/dashboard/settings/audit", icon: "list-checks", label: () => t`Audit log` },
+];
+
 // CAREEROS: the upstream project links (docs, source, translation, bug tracker, donations) are gone. What remains is the
 // licenses page and, when the brand sets one, a support link.
 const getProjectLinks = () => {
@@ -52,7 +66,10 @@ function RouteComponent() {
 	const pathname = useRouterState({ select: (state) => state.location.pathname });
 	const isRoot = pathname.replace(/\/$/, "") === "/dashboard/settings";
 	// CAREEROS (P1-T03, P2-T07)
-	const pages = useCanManageMembers() ? [...SETTINGS_PAGES, MEMBERS_PAGE, ...BRANDING_PAGES] : SETTINGS_PAGES;
+	const orgAdmin = useOrgAdminAccess() === "allowed";
+	const pages = useCanManageMembers()
+		? [...SETTINGS_PAGES, MEMBERS_PAGE, ...BRANDING_PAGES, ...(orgAdmin ? ORG_ADMIN_PAGES : [])]
+		: SETTINGS_PAGES;
 
 	return (
 		<div className="grid min-h-full content-start sm:h-svh sm:min-h-0 sm:grid-rows-[auto_minmax(0,1fr)] sm:overflow-hidden lg:grid-cols-[220px_minmax(0,1fr)] lg:grid-rows-1 lg:content-stretch">

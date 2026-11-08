@@ -81,7 +81,12 @@ export const session = pg.pgTable(
 			.defaultNow()
 			.$onUpdate(() => /* @__PURE__ */ new Date()),
 	},
-	(t) => [pg.index().on(t.token, t.userId), pg.index().on(t.expiresAt)],
+	(t) => [
+		pg.index().on(t.token, t.userId),
+		pg.index().on(t.expiresAt),
+		// CAREEROS (P3-T08): the Org Admin analytics read the sessions of one organization (active members, last active).
+		pg.index("session_active_org_user_idx").on(t.activeOrganizationId, t.userId, t.updatedAt),
+	],
 );
 
 export const account = pg.pgTable(

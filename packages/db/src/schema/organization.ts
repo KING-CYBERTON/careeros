@@ -39,6 +39,44 @@ export const organization = pg.pgTable(
 	],
 );
 
+// CAREEROS (P3-T08, phase plan D8): a group of members inside one organization (a class, an intake). A tenant table:
+// row-level security keys on `organization_id`, and a member or invitation points at its cohort through a composite
+// foreign key, so a cohort can never belong to another organization than the row that names it.
+export const cohort = pg.pgTable(
+	"cohort",
+	{
+		id: pg
+			.text("id")
+			.notNull()
+			.primaryKey()
+			.$defaultFn(() => generateId()),
+		organizationId: pg
+			.text("organization_id")
+			.notNull()
+			.references(() => organization.id, { onDelete: "cascade" }),
+		name: pg.text("name").notNull(),
+		description: pg.text("description"),
+		startsOn: pg.date("starts_on", { mode: "string" }),
+		endsOn: pg.date("ends_on", { mode: "string" }),
+		archivedAt: pg.timestamp("archived_at", { withTimezone: true }),
+		createdAt: pg.timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
+		updatedAt: pg
+			.timestamp("updated_at", { withTimezone: true })
+			.notNull()
+			.defaultNow()
+			.$onUpdate(() => new Date()),
+	},
+	(t) => [
+		// The target of the composite foreign keys from member and invitation.
+		pg.unique("cohort_organization_id_id_unique").on(t.organizationId, t.id),
+		// One name per organization, whatever its case; archived cohorts keep their name.
+		pg.uniqueIndex("cohort_organization_name_key").on(t.organizationId, sql`lower(${t.name})`),
+		pg.check("cohort_name_check", sql`char_length(btrim(${t.name})) between 1 and 100`),
+		pg.check("cohort_description_check", sql`${t.description} is null or char_length(${t.description}) <= 1000`),
+		pg.check("cohort_dates_check", sql`${t.startsOn} is null or ${t.endsOn} is null or ${t.endsOn} >= ${t.startsOn}`),
+	],
+);
+
 export const member = pg.pgTable(
 	"member",
 	{
@@ -56,12 +94,25 @@ export const member = pg.pgTable(
 			.notNull()
 			.references(() => user.id, { onDelete: "cascade" }),
 		role: pg.text("role").notNull().default("member"),
-		/** Cohort the member belongs to. No foreign key until the cohort table exists (Phase 3). */
+		/** Cohort the member belongs to; cleared (not deleted) when the cohort is deleted. */
 		cohortId: pg.text("cohort_id"),
 		invitedBy: pg.text("invited_by").references(() => user.id, { onDelete: "set null" }),
 		createdAt: pg.timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
 	},
-	(t) => [pg.uniqueIndex().on(t.organizationId, t.userId), pg.index().on(t.userId)],
+	(t) => [
+		pg.uniqueIndex().on(t.organizationId, t.userId),
+		pg.index().on(t.userId),
+		// CAREEROS (P3-T08): the cohort must be one of the member's own organization. The migration makes the key
+		// ON DELETE SET NULL (cohort_id), which clears only the cohort column (PostgreSQL 15+), never the tenant column.
+		pg
+			.foreignKey({
+				name: "member_org_cohort_fkey",
+				columns: [t.organizationId, t.cohortId],
+				foreignColumns: [cohort.organizationId, cohort.id],
+			})
+			.onDelete("set null"),
+		pg.index("member_org_cohort_idx").on(t.organizationId, t.cohortId),
+	],
 );
 
 export const invitation = pg.pgTable(
@@ -85,8 +136,19 @@ export const invitation = pg.pgTable(
 			.text("inviter_id")
 			.notNull()
 			.references(() => user.id, { onDelete: "cascade" }),
+		// CAREEROS (P3-T08): the cohort the member joins on accepting (a bulk invitation names one). Cleared with the cohort.
+		cohortId: pg.text("cohort_id"),
 	},
-	(t) => [pg.index().on(t.organizationId, t.email)],
+	(t) => [
+		pg.index().on(t.organizationId, t.email),
+		pg
+			.foreignKey({
+				name: "invitation_org_cohort_fkey",
+				columns: [t.organizationId, t.cohortId],
+				foreignColumns: [cohort.organizationId, cohort.id],
+			})
+			.onDelete("set null"),
+	],
 );
 
 // Better Auth (joins enabled) joins members to users and organizations, and organizations to members and invitations.

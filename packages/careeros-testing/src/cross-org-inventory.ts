@@ -184,6 +184,14 @@ export const NO_TENANT_ID: Record<string, string> = {
 	"GET /organization/entitlements": "takes no tenant id: the caller's own organization (P3-T01)",
 	"GET /organization/audit":
 		"takes no tenant id: the caller's own organization; the cursor is an opaque position in its own log (P3-T01)",
+	"GET /organization/my-cohort":
+		"takes no tenant id: the caller's own cohort in the caller's own organization (P3-T08)",
+	"GET /org-admin/cohorts": "takes no tenant id: lists the caller's own organization's cohorts (P3-T08)",
+	"POST /org-admin/cohorts": "takes no tenant id: creates a cohort in the caller's own organization (P3-T08)",
+	"POST /org-admin/invitations/dry-run":
+		"takes no tenant id: reads an uploaded CSV against the caller's own organization (P3-T08)",
+	"POST /org-admin/invitations/bulk":
+		"takes no tenant id: invites the uploaded CSV's addresses to the caller's own organization (P3-T08)",
 	"GET /organization/settings": "takes no tenant id: the caller's own organization",
 	"PATCH /organization/settings": "takes no tenant id: the caller's own organization",
 	"GET /organization/domains/info": "takes no tenant id: the caller's own organization's address (P2-T07)",
@@ -263,6 +271,9 @@ export const ID_KINDS = [
 	// CAREEROS (P4-T01): job discovery
 	"jobSource",
 	"discoveredJob",
+	// CAREEROS (P3-T08): Org Admin console
+	"cohort",
+	"member",
 ] as const;
 export type IdKind = (typeof ID_KINDS)[number];
 export type SeedIds = Record<IdKind, string>;
@@ -290,6 +301,7 @@ const PREFIX_KIND: [RegExp, IdKind][] = [
 	[/^\/organization\/domains(\/|$)/, "orgDomain"],
 	[/^\/discovery\/sources(\/|$)/, "jobSource"],
 	[/^\/discovery\/jobs(\/|$)/, "discoveredJob"],
+	[/^\/org-admin\/cohorts(\/|$)/, "cohort"],
 ];
 
 /** Operations whose bare `id` cannot be told from the path alone. */
@@ -327,6 +339,9 @@ const FIELD_KIND: Record<string, IdKind> = {
 	scheduleId: "schedule",
 	answerId: "answer",
 	jobSourceId: "jobSource",
+	// CAREEROS (P3-T08)
+	cohortId: "cohort",
+	memberIds: "member",
 	// Not tenant ids: the client's own correlation values, sent so the request still validates.
 	sessionId: "resume",
 	toolCallId: "message",
@@ -429,6 +444,12 @@ const SLUG_FREE = {
 	statuses: [200],
 	why: "answers whether a slug is free; the reply is identical for an unknown id, so it reveals nothing of A's",
 };
+// CAREEROS (P3-T08): Organization B's fuzz account owns a personal workspace, which has no admin console, so the console
+// answers 403 before it looks anything up. The body is still scanned for A's data, and the integration suite
+// (org-admin.integration.test.ts) runs the same attempts as the admin of a real second organization, expecting 404.
+const ORG_ADMIN_PERSONAL: Override = {
+	allow: { statuses: [403], why: "B's personal workspace has no admin console: refused before any lookup (P3-T08)" },
+};
 const DOC_BATCH = (ids: SeedIds) => ({ documents: [{ type: "resume", id: ids.resume }] });
 const LETTER: Override = { kind: "letter", path: { type: "letter" } };
 export const OVERRIDES: Record<string, Override> = {
@@ -471,6 +492,14 @@ export const OVERRIDES: Record<string, Override> = {
 		set: (ids) => ({ ids: Array.from({ length: 6 }, () => ids.lane) }),
 		allow: { statuses: [400], why: "T06 review: BAD_REQUEST for ids the caller's organization does not have" },
 	},
+	"GET /org-admin/members": ORG_ADMIN_PERSONAL,
+	"POST /org-admin/members/cohort": ORG_ADMIN_PERSONAL,
+	"PATCH /org-admin/cohorts/{id}": { ...ORG_ADMIN_PERSONAL, set: () => ({ name: "x" }) },
+	"POST /org-admin/cohorts/{id}/archive": ORG_ADMIN_PERSONAL,
+	"GET /org-admin/analytics": ORG_ADMIN_PERSONAL,
+	"GET /org-admin/analytics/members": ORG_ADMIN_PERSONAL,
+	"GET /org-admin/analytics/members/export": ORG_ADMIN_PERSONAL,
+	"GET /org-admin/analytics/export": ORG_ADMIN_PERSONAL,
 	// Document routes run once for a resume and once for a cover letter.
 	"DELETE /documents/{type}/{id}": { variants: [LETTER] },
 	"DELETE /documents/{type}/{id}/trash": { variants: [LETTER] },
