@@ -1,12 +1,9 @@
 {
   "version": "8",
   "dialect": "postgres",
-  "id": "ec7afea9-8105-42bb-90a4-dcd885bd0a02",
+  "id": "fb93457c-ff1a-49d4-8320-cc32af0380fc",
   "prevIds": [
-    "6ed8d021-5a29-41b5-afda-7d917f1be5c2",
-    "7302c86e-8981-4328-9f27-b824edeeacbf",
-    "9ffca0d9-0d74-4499-b1af-780e1d099605",
-    "c15bf803-de49-401a-bf9b-f28b8df6d7c4"
+    "0d5e2361-abdf-43ca-92be-ddf8e7783e1b"
   ],
   "ddl": [
     {
@@ -9504,6 +9501,32 @@
       "table": "discovered_job"
     },
     {
+      "type": "text",
+      "typeSchema": null,
+      "notNull": false,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "application_id",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "discovered_job"
+    },
+    {
+      "type": "timestamp with time zone",
+      "typeSchema": null,
+      "notNull": false,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "accepted_at",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "discovered_job"
+    },
+    {
       "type": "timestamp with time zone",
       "typeSchema": null,
       "notNull": true,
@@ -9577,6 +9600,19 @@
       "generated": null,
       "identity": null,
       "name": "status",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "discovery_run"
+    },
+    {
+      "type": "text",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": "'manual'",
+      "generated": null,
+      "identity": null,
+      "name": "trigger",
       "entityType": "columns",
       "schema": "public",
       "table": "discovery_run"
@@ -9668,6 +9704,32 @@
       "generated": null,
       "identity": null,
       "name": "ai_matched",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "discovery_run"
+    },
+    {
+      "type": "integer",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": "0",
+      "generated": null,
+      "identity": null,
+      "name": "ai_planned",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "discovery_run"
+    },
+    {
+      "type": "text",
+      "typeSchema": null,
+      "notNull": false,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "ai_skipped_reason",
       "entityType": "columns",
       "schema": "public",
       "table": "discovery_run"
@@ -9850,6 +9912,19 @@
       "generated": null,
       "identity": null,
       "name": "last_run_at",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "job_source"
+    },
+    {
+      "type": "timestamp with time zone",
+      "typeSchema": null,
+      "notNull": false,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "last_scheduled_run_at",
       "entityType": "columns",
       "schema": "public",
       "table": "job_source"
@@ -13975,6 +14050,34 @@
           "opclass": null
         },
         {
+          "value": "application_id",
+          "isExpression": false,
+          "asc": true,
+          "nullsFirst": false,
+          "opclass": null
+        }
+      ],
+      "isUnique": false,
+      "where": null,
+      "with": "",
+      "method": "btree",
+      "concurrently": false,
+      "name": "discovered_job_application_idx",
+      "entityType": "indexes",
+      "schema": "public",
+      "table": "discovered_job"
+    },
+    {
+      "nameExplicit": true,
+      "columns": [
+        {
+          "value": "organization_id",
+          "isExpression": false,
+          "asc": true,
+          "nullsFirst": false,
+          "opclass": null
+        },
+        {
           "value": "job_source_id",
           "isExpression": false,
           "asc": true,
@@ -16667,6 +16770,25 @@
       "table": "discovered_job"
     },
     {
+      "nameExplicit": true,
+      "columns": [
+        "organization_id",
+        "application_id"
+      ],
+      "schemaTo": "public",
+      "tableTo": "application",
+      "columnsTo": [
+        "organization_id",
+        "id"
+      ],
+      "onUpdate": "NO ACTION",
+      "onDelete": "SET NULL",
+      "name": "discovered_job_org_application_fkey",
+      "entityType": "fks",
+      "schema": "public",
+      "table": "discovered_job"
+    },
+    {
       "nameExplicit": false,
       "columns": [
         "organization_id"
@@ -18093,6 +18215,27 @@
     {
       "value": "\"status\" in ('running', 'succeeded', 'failed', 'partial')",
       "name": "discovery_run_status_check",
+      "entityType": "checks",
+      "schema": "public",
+      "table": "discovery_run"
+    },
+    {
+      "value": "\"trigger\" in ('manual', 'scheduled')",
+      "name": "discovery_run_trigger_check",
+      "entityType": "checks",
+      "schema": "public",
+      "table": "discovery_run"
+    },
+    {
+      "value": "\"ai_skipped_reason\" is null or \"ai_skipped_reason\" in ('no_platform_ai', 'quota_exhausted', 'provider_error')",
+      "name": "discovery_run_ai_skipped_reason_check",
+      "entityType": "checks",
+      "schema": "public",
+      "table": "discovery_run"
+    },
+    {
+      "value": "\"ai_planned\" >= 0 and \"ai_matched\" <= \"ai_planned\"",
+      "name": "discovery_run_ai_planned_check",
       "entityType": "checks",
       "schema": "public",
       "table": "discovery_run"

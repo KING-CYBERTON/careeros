@@ -90,6 +90,8 @@ const AI_CALL_FILES = {
 	"career/role-suggestions.ts": "getModel({ ..., metering })",
 	"cover-letters/draft.ts": "getModel({ ..., metering })",
 	"applications/ai.ts": "getModel({ ..., metering }) in resolveModel and in the posting enrichment",
+	// CAREEROS (P4-T02): the model is built by `buildModel({ ..., metering })` (getModel by default), platform key only
+	"discovery/ai-match.ts": "buildModel({ provider, model, apiKey, metering }) with feature discovery.match",
 	"career/voice.ts":
 		"transcription and speech on the member's own OpenAI-style key; no platform model exists for them (see below)",
 } as const;

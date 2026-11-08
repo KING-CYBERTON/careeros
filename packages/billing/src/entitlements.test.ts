@@ -2,6 +2,8 @@ import { describe, expect, it, vi } from "vite-plus/test";
 import {
 	aiCreditsTotal,
 	buildEntitlements,
+	DEFAULT_DISCOVERY_AI_TOP_N,
+	discoveryAiTopNCap,
 	effectiveSeatLimit,
 	TRIAL_DAYS,
 	type EntitlementInputs,
@@ -140,5 +142,22 @@ describe("request cache", () => {
 			await expect(memoizeInRequest("org", load)).rejects.toThrow("boom");
 			await expect(memoizeInRequest("org", load)).resolves.toBe(5);
 		});
+	});
+});
+
+// CAREEROS (P4-T02): the plan's cap on AI-matched jobs per discovery run
+describe("discovery AI cap", () => {
+	it("reads a whole number from 0 to 50 and falls back to the default otherwise", () => {
+		expect(discoveryAiTopNCap({ discovery_ai_top_n: 10 })).toBe(10);
+		expect(discoveryAiTopNCap({ discovery_ai_top_n: 0 })).toBe(0);
+		expect(discoveryAiTopNCap({ discovery_ai_top_n: 50 })).toBe(50);
+		for (const bad of [51, -1, 2.5, "10", null, undefined])
+			expect(discoveryAiTopNCap({ discovery_ai_top_n: bad })).toBe(DEFAULT_DISCOVERY_AI_TOP_N);
+		expect(discoveryAiTopNCap({})).toBe(25);
+	});
+
+	it("lands on the entitlements", () => {
+		expect(buildEntitlements(base).discoveryAiTopN).toBe(25);
+		expect(buildEntitlements({ ...base, planFeatures: { discovery_ai_top_n: 5 } }).discoveryAiTopN).toBe(5);
 	});
 });

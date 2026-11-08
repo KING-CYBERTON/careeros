@@ -15,6 +15,7 @@ type Place = {
 		| "/dashboard/career"
 		| "/dashboard/career/coach/{-$conversationId}"
 		| "/dashboard/career/knowledge/facts"
+		| "/dashboard/career/jobs"
 		| "/dashboard/career/offers";
 	match: string;
 	icon: IconName;
@@ -38,6 +39,8 @@ function CareerLayout() {
 			icon: "books",
 			label: t`Knowledge`,
 		},
+		// CAREEROS (P4-T02): the discovery review queue
+		{ to: "/dashboard/career/jobs", match: "/dashboard/career/jobs", icon: "magnifying-glass", label: t`Jobs` },
 		{ to: "/dashboard/career/offers", match: "/dashboard/career/offers", icon: "scales", label: t`Offers` },
 	];
 	const current = places.find((place) => matchRoute({ to: place.match, fuzzy: place.match !== "/dashboard/career/" }));

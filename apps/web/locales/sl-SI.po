@@ -3779,6 +3779,10 @@ msgstr "Vašega računa ni bilo mogoče izbrisati. Poskusite znova."
 msgid "Couldn't disconnect your {providerName} account. Try again."
 msgstr "Računa {providerName} ni bilo mogoče odklopiti. Poskusite znova."
 
+#: src/features/discovery/review-queue.tsx
+msgid "Couldn't dismiss this job. Try again."
+msgstr ""
+
 #: src/features/documents/document-actions.tsx
 msgid "Couldn't duplicate the document. Try again."
 msgstr "Dokumenta ni bilo mogoče podvojiti. Poskusite znova."
@@ -3922,6 +3926,10 @@ msgstr "Tega ni bilo mogoče naložiti. Vaši shranjeni podatki so ostali nespre
 
 #: src/features/settings/ai/clipper-sign-ins.tsx
 msgid "Couldn't load your Job Clipper sign-ins."
+msgstr ""
+
+#: src/features/discovery/review-queue.tsx
+msgid "Couldn't load your jobs. Try again."
 msgstr ""
 
 #: src/routes/dashboard/applications/index.tsx
@@ -4138,6 +4146,10 @@ msgstr "Oznak ni bilo mogoče shraniti. Poskusite znova."
 #: src/features/settings/preferences.tsx
 msgid "Couldn't save the timezone. Try again."
 msgstr "Časovnega pasu ni bilo mogoče shraniti. Poskusite znova."
+
+#: src/features/discovery/review-queue.tsx
+msgid "Couldn't save this job. Try again."
+msgstr ""
 
 #: src/features/career/today.tsx
 msgid "Couldn't save this role to Applications. Try again."
@@ -4952,6 +4964,7 @@ msgstr "Prekini povezavo"
 msgid "Disconnecting your {providerName} account…"
 msgstr "Odklapljanje vašega računa {providerName}…"
 
+#: src/features/discovery/review-queue.tsx
 #: src/features/resume/editor/write/write-panel.tsx
 #: src/routes/builder/letter/-components/write-panel.tsx
 #: src/routes/dashboard/applications/index.tsx
@@ -4964,6 +4977,10 @@ msgstr ""
 
 #: src/features/career/today.tsx
 msgid "Dismiss selected"
+msgstr ""
+
+#: src/features/discovery/review-queue.tsx
+msgid "Dismissed"
 msgstr ""
 
 #: src/features/career/role-suggestions.tsx
@@ -6985,8 +7002,13 @@ msgid "Job search pipeline"
 msgstr "Potek iskanja zaposlitve"
 
 #: src/features/command-palette/pages/navigation.tsx
+#: src/routes/dashboard/career/route.tsx
 msgid "Jobs"
 msgstr "Zaposlitve"
+
+#: src/features/discovery/review-queue.tsx
+msgid "Jobs found for you"
+msgstr ""
 
 #. Example full name placeholder on registration form
 #: src/features/auth/pages/register.tsx
@@ -7867,6 +7889,16 @@ msgstr "Označeno kot prebrano"
 msgid "Match “{0}”"
 msgstr "Ujemanje z \"{0}\""
 
+#. placeholder {0}: scoreOf(job)
+#: src/features/discovery/review-queue.tsx
+msgid "Match {0}"
+msgstr ""
+
+#. placeholder {0}: scoreOf(job)
+#: src/features/discovery/review-queue.tsx
+msgid "Match {0} (quick)"
+msgstr ""
+
 #: src/features/resume/editor/check/job-match.tsx
 msgid "Match against a job"
 msgstr "Tekma proti službi"
@@ -8260,6 +8292,7 @@ msgstr "Omrežje"
 msgid "Never"
 msgstr "Nikoli"
 
+#: src/features/discovery/review-queue.tsx
 #: src/features/documents/document-card.tsx
 #: src/routes/dashboard/-components/app-shell.tsx
 msgid "New"
@@ -8468,6 +8501,10 @@ msgstr ""
 msgid "No dates were found."
 msgstr "Datumov ni bilo mogoče najti."
 
+#: src/features/discovery/review-queue.tsx
+msgid "No dismissed jobs."
+msgstr ""
+
 #: src/features/career/workspace/apply.tsx
 msgid "no documents"
 msgstr ""
@@ -8610,6 +8647,10 @@ msgstr "Brez življenjepisa"
 #: src/features/applications/components/application-form-sheet.tsx
 msgid "No resumes yet."
 msgstr "Ni še življenjepisov."
+
+#: src/features/discovery/review-queue.tsx
+msgid "No saved jobs yet."
+msgstr ""
 
 #: src/features/org-admin/bulk-invite.tsx
 msgid "No seat left"
@@ -8891,6 +8932,10 @@ msgstr "Ni česa popraviti. Preostale strani preprosto niso zajete v tem poroči
 msgid "Nothing to review."
 msgstr "Nič za pregledati."
 
+#: src/features/discovery/review-queue.tsx
+msgid "Nothing to review. New postings show up here after an automation runs."
+msgstr ""
+
 #: src/features/ats-checker/report/report-view.tsx
 msgid "Nothing to suggest."
 msgstr "Ni predlogov."
@@ -9103,6 +9148,10 @@ msgstr "Odprite {title}"
 #: src/routes/builder/letter/-components/write-panel.tsx
 msgid "Open AI settings"
 msgstr "Odprite nastavitve AI"
+
+#: src/features/discovery/review-queue.tsx
+msgid "Open application"
+msgstr ""
 
 #: src/features/career/today.tsx
 msgid "Open briefing"
@@ -9775,6 +9824,10 @@ msgstr "Izrazi iz oglasa v vašem življenjepisu"
 
 #: src/features/career/today.tsx
 msgid "Postings can change or close. Publication date unknown; search coverage is incomplete."
+msgstr ""
+
+#: src/features/discovery/review-queue.tsx
+msgid "Postings your automations found, best match first. Save one to your applications, or dismiss it and it never comes back."
 msgstr ""
 
 #: src/features/career/workspace/practise.tsx
@@ -11371,6 +11424,10 @@ msgstr "Shrani te pogoje ponudbe za primerjavo"
 msgid "Save this story to Knowledge?"
 msgstr "Shranim to zgodbo v Znanje?"
 
+#: src/features/discovery/review-queue.tsx
+msgid "Save to applications"
+msgstr ""
+
 #: src/features/career/workspace/fit.tsx
 msgid "Save to Knowledge"
 msgstr "Shrani v Znanje"
@@ -11390,6 +11447,7 @@ msgstr "shranjeno"
 #: src/features/applications/components/add-application-dialog.tsx
 #: src/features/applications/stages.ts
 #: src/features/career/knowledge/preferences.tsx
+#: src/features/discovery/review-queue.tsx
 #: src/features/resume/editor/save-status.tsx
 #: src/routes/builder/letter/-components/letter-bar.tsx
 msgid "Saved"
@@ -11471,6 +11529,10 @@ msgstr "Shranjeno v Znanje, zasebno za to prijavo."
 #: src/features/career/workspace/practise.tsx
 msgid "Saved to Saved · Practice"
 msgstr "Shranjeno v zavihek Shranjeno · Vaja"
+
+#: src/features/discovery/review-queue.tsx
+msgid "Saved to your applications."
+msgstr ""
 
 #. placeholder {0}: new URL(url).host
 #: src/features/resume/share/address-field.tsx
@@ -12056,9 +12118,17 @@ msgstr "Prikaži ikone"
 msgid "Show in search engines"
 msgstr "Prikaži v iskalnikih"
 
+#: src/features/discovery/review-queue.tsx
+msgid "Show jobs"
+msgstr ""
+
 #: src/features/resume/editor/write/fields.tsx
 msgid "Show link in title"
 msgstr "Pokaži povezavo v naslovu"
+
+#: src/features/discovery/review-queue.tsx
+msgid "Show more"
+msgstr ""
 
 #: src/features/resume/editor/check/check-panel.tsx
 #: src/features/resume/editor/check/writing-tab.tsx
@@ -13999,6 +14069,7 @@ msgstr "Poskusite vzorec"
 #: src/features/career/workspace/practise.tsx
 #: src/features/career/workspace/preparation.tsx
 #: src/features/career/workspace/shell.tsx
+#: src/features/discovery/review-queue.tsx
 #: src/features/documents/library-error.tsx
 #: src/features/resume/editor/write/improve.tsx
 #: src/features/resume/preview/preview.browser.tsx

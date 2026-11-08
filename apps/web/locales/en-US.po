@@ -3774,6 +3774,10 @@ msgstr "Couldn't delete your account. Try again."
 msgid "Couldn't disconnect your {providerName} account. Try again."
 msgstr "Couldn't disconnect your {providerName} account. Try again."
 
+#: src/features/discovery/review-queue.tsx
+msgid "Couldn't dismiss this job. Try again."
+msgstr "Couldn't dismiss this job. Try again."
+
 #: src/features/documents/document-actions.tsx
 msgid "Couldn't duplicate the document. Try again."
 msgstr "Couldn't duplicate the document. Try again."
@@ -3918,6 +3922,10 @@ msgstr "Couldn't load this. Your saved data hasn't changed."
 #: src/features/settings/ai/clipper-sign-ins.tsx
 msgid "Couldn't load your Job Clipper sign-ins."
 msgstr "Couldn't load your Job Clipper sign-ins."
+
+#: src/features/discovery/review-queue.tsx
+msgid "Couldn't load your jobs. Try again."
+msgstr "Couldn't load your jobs. Try again."
 
 #: src/routes/dashboard/applications/index.tsx
 msgid "Couldn't load your stages, so the standard ones are shown. Try again."
@@ -4133,6 +4141,10 @@ msgstr "Couldn't save the tags. Try again."
 #: src/features/settings/preferences.tsx
 msgid "Couldn't save the timezone. Try again."
 msgstr "Couldn't save the timezone. Try again."
+
+#: src/features/discovery/review-queue.tsx
+msgid "Couldn't save this job. Try again."
+msgstr "Couldn't save this job. Try again."
 
 #: src/features/career/today.tsx
 msgid "Couldn't save this role to Applications. Try again."
@@ -4947,6 +4959,7 @@ msgstr "Disconnect"
 msgid "Disconnecting your {providerName} account…"
 msgstr "Disconnecting your {providerName} account…"
 
+#: src/features/discovery/review-queue.tsx
 #: src/features/resume/editor/write/write-panel.tsx
 #: src/routes/builder/letter/-components/write-panel.tsx
 #: src/routes/dashboard/applications/index.tsx
@@ -4960,6 +4973,10 @@ msgstr "Dismiss announcement"
 #: src/features/career/today.tsx
 msgid "Dismiss selected"
 msgstr "Dismiss selected"
+
+#: src/features/discovery/review-queue.tsx
+msgid "Dismissed"
+msgstr "Dismissed"
 
 #: src/features/career/role-suggestions.tsx
 msgid "Do not share a resume"
@@ -6980,8 +6997,13 @@ msgid "Job search pipeline"
 msgstr "Job search pipeline"
 
 #: src/features/command-palette/pages/navigation.tsx
+#: src/routes/dashboard/career/route.tsx
 msgid "Jobs"
 msgstr "Jobs"
+
+#: src/features/discovery/review-queue.tsx
+msgid "Jobs found for you"
+msgstr "Jobs found for you"
 
 #. Example full name placeholder on registration form
 #: src/features/auth/pages/register.tsx
@@ -7862,6 +7884,16 @@ msgstr "Marked as read"
 msgid "Match “{0}”"
 msgstr "Match “{0}”"
 
+#. placeholder {0}: scoreOf(job)
+#: src/features/discovery/review-queue.tsx
+msgid "Match {0}"
+msgstr "Match {0}"
+
+#. placeholder {0}: scoreOf(job)
+#: src/features/discovery/review-queue.tsx
+msgid "Match {0} (quick)"
+msgstr "Match {0} (quick)"
+
 #: src/features/resume/editor/check/job-match.tsx
 msgid "Match against a job"
 msgstr "Match against a job"
@@ -8255,6 +8287,7 @@ msgstr "Network"
 msgid "Never"
 msgstr "Never"
 
+#: src/features/discovery/review-queue.tsx
 #: src/features/documents/document-card.tsx
 #: src/routes/dashboard/-components/app-shell.tsx
 msgid "New"
@@ -8463,6 +8496,10 @@ msgstr "No current target-role or location phrase matches."
 msgid "No dates were found."
 msgstr "No dates were found."
 
+#: src/features/discovery/review-queue.tsx
+msgid "No dismissed jobs."
+msgstr "No dismissed jobs."
+
 #: src/features/career/workspace/apply.tsx
 msgid "no documents"
 msgstr "no documents"
@@ -8605,6 +8642,10 @@ msgstr "No resume"
 #: src/features/applications/components/application-form-sheet.tsx
 msgid "No resumes yet."
 msgstr "No resumes yet."
+
+#: src/features/discovery/review-queue.tsx
+msgid "No saved jobs yet."
+msgstr "No saved jobs yet."
 
 #: src/features/org-admin/bulk-invite.tsx
 msgid "No seat left"
@@ -8886,6 +8927,10 @@ msgstr "Nothing to fix. The remaining pages were simply not covered by this repo
 msgid "Nothing to review."
 msgstr "Nothing to review."
 
+#: src/features/discovery/review-queue.tsx
+msgid "Nothing to review. New postings show up here after an automation runs."
+msgstr "Nothing to review. New postings show up here after an automation runs."
+
 #: src/features/ats-checker/report/report-view.tsx
 msgid "Nothing to suggest."
 msgstr "Nothing to suggest."
@@ -9098,6 +9143,10 @@ msgstr "Open {title}"
 #: src/routes/builder/letter/-components/write-panel.tsx
 msgid "Open AI settings"
 msgstr "Open AI settings"
+
+#: src/features/discovery/review-queue.tsx
+msgid "Open application"
+msgstr "Open application"
 
 #: src/features/career/today.tsx
 msgid "Open briefing"
@@ -9771,6 +9820,10 @@ msgstr "Posting terms in your resume"
 #: src/features/career/today.tsx
 msgid "Postings can change or close. Publication date unknown; search coverage is incomplete."
 msgstr "Postings can change or close. Publication date unknown; search coverage is incomplete."
+
+#: src/features/discovery/review-queue.tsx
+msgid "Postings your automations found, best match first. Save one to your applications, or dismiss it and it never comes back."
+msgstr "Postings your automations found, best match first. Save one to your applications, or dismiss it and it never comes back."
 
 #: src/features/career/workspace/practise.tsx
 #: src/features/career/workspace/saved.tsx
@@ -11366,6 +11419,10 @@ msgstr "Save these offer terms to compare"
 msgid "Save this story to Knowledge?"
 msgstr "Save this story to Knowledge?"
 
+#: src/features/discovery/review-queue.tsx
+msgid "Save to applications"
+msgstr "Save to applications"
+
 #: src/features/career/workspace/fit.tsx
 msgid "Save to Knowledge"
 msgstr "Save to Knowledge"
@@ -11385,6 +11442,7 @@ msgstr "saved"
 #: src/features/applications/components/add-application-dialog.tsx
 #: src/features/applications/stages.ts
 #: src/features/career/knowledge/preferences.tsx
+#: src/features/discovery/review-queue.tsx
 #: src/features/resume/editor/save-status.tsx
 #: src/routes/builder/letter/-components/letter-bar.tsx
 msgid "Saved"
@@ -11466,6 +11524,10 @@ msgstr "Saved to Knowledge, private to this application."
 #: src/features/career/workspace/practise.tsx
 msgid "Saved to Saved · Practice"
 msgstr "Saved to Saved · Practice"
+
+#: src/features/discovery/review-queue.tsx
+msgid "Saved to your applications."
+msgstr "Saved to your applications."
 
 #. placeholder {0}: new URL(url).host
 #: src/features/resume/share/address-field.tsx
@@ -12051,9 +12113,17 @@ msgstr "Show icons"
 msgid "Show in search engines"
 msgstr "Show in search engines"
 
+#: src/features/discovery/review-queue.tsx
+msgid "Show jobs"
+msgstr "Show jobs"
+
 #: src/features/resume/editor/write/fields.tsx
 msgid "Show link in title"
 msgstr "Show link in title"
+
+#: src/features/discovery/review-queue.tsx
+msgid "Show more"
+msgstr "Show more"
 
 #: src/features/resume/editor/check/check-panel.tsx
 #: src/features/resume/editor/check/writing-tab.tsx
@@ -13994,6 +14064,7 @@ msgstr "Try a sample"
 #: src/features/career/workspace/practise.tsx
 #: src/features/career/workspace/preparation.tsx
 #: src/features/career/workspace/shell.tsx
+#: src/features/discovery/review-queue.tsx
 #: src/features/documents/library-error.tsx
 #: src/features/resume/editor/write/improve.tsx
 #: src/features/resume/preview/preview.browser.tsx
