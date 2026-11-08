@@ -115,7 +115,8 @@ export const careerJobs = {
 		if (input.kind === "prepare" && input.enabled) {
 			if (!input.aiProviderId)
 				throw new ORPCError("BAD_REQUEST", { message: "Choose a tested AI provider for scheduled preparation." });
-			await aiProvidersService.getRunnableById({ userId, id: input.aiProviderId });
+			// CAREEROS (P3-T03): the feature lets the platform provider be named
+			await aiProvidersService.getRunnableById({ userId, id: input.aiProviderId, feature: "career.generate" });
 		} else if (input.aiProviderId) {
 			// Any other schedule may name a connection too; it still has to be one of the account's own, in this organization
 			// (CAREEROS P1-T08: row-level security limits the lookup to the active organization, and the database refuses a

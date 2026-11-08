@@ -266,6 +266,7 @@ describe("coverage check", () => {
 			"job_source",
 			"discovery_run",
 			"discovered_job",
+			"ai_usage",
 		]);
 	});
 });

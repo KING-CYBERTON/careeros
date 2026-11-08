@@ -4,11 +4,14 @@ import { ORPCError } from "@orpc/server";
 import { env } from "@reactive-resume/env/server";
 import { rateLimitConfig } from "@reactive-resume/utils/rate-limit";
 import { createRateLimiter } from "../../redis";
+// CAREEROS (P3-T03)
+import { addAiQuotaWarning } from "../ai-quota-warning";
 
 const isRateLimitEnabled = process.env.NODE_ENV === "production" && !env.FLAG_DISABLE_API_RATE_LIMIT;
 
 type ContextWithHeaders = {
 	reqHeaders?: Headers;
+	resHeaders?: Headers;
 	user?: { id: string } | null;
 	trustedClient?: string;
 };
@@ -116,10 +119,18 @@ export const resumeDownloadRateLimit = createRatelimitMiddleware<
 
 // Per account, not per document or thread: each new ID would otherwise get a fresh budget, and server-managed AI is
 // paid for by the operator.
-export const aiRequestRateLimit = createRatelimitMiddleware<ContextWithHeaders, unknown>({
+const aiRequestLimiter = createRatelimitMiddleware<ContextWithHeaders, unknown>({
 	limiter: productionLimiter(aiLimiter),
 	key: ({ context }) => `ai-request:${getUserKey(context)}`,
 });
+
+// CAREEROS (P3-T03): every AI procedure uses this middleware, so it also adds the 80% quota warning header to the
+// response of the request (see ai-quota-warning.ts). The rate limiter itself is unchanged.
+export const aiRequestRateLimit: typeof aiRequestLimiter = async (options, input, output) => {
+	const result = await aiRequestLimiter(options, input, output);
+	await addAiQuotaWarning(options.context);
+	return result;
+};
 
 // Voice practice transcribes and speaks every turn, so it has its own account budget beside the chat's.
 export const aiVoiceRateLimit = createRatelimitMiddleware<ContextWithHeaders, unknown>({

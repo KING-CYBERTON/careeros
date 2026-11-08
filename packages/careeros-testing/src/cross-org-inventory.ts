@@ -155,6 +155,9 @@ export const NO_TENANT_ID: Record<string, string> = {
 	"GET /applications/tags": "takes no tenant id: the caller's own tags",
 	"GET /ai-providers": "takes no tenant id: lists the caller's own providers",
 	"POST /ai-providers": "takes no tenant id: creates a provider",
+	// CAREEROS (P3-T03): no id of any kind goes in; the organization comes from the session
+	"GET /organization/ai-usage": "takes no tenant id: reads only the caller's own organization's AI usage",
+	"GET /ai/quota": "takes no tenant id: reads only the caller's own organization's AI allowance",
 	"POST /ai/content-reports": "takes no tenant id: a report of generated content",
 	"POST /applications/ai/search-postings": "takes no tenant id: searches the web",
 	"POST /applications/ai/parse-posting": "takes no tenant id: parses pasted text",

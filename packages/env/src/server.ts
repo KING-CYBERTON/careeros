@@ -254,6 +254,12 @@ export const env = createEnv({
 		AI_MODEL: z.string().trim().min(1).optional(),
 		AI_API_KEY: z.string().trim().min(1).optional(),
 		AI_BASE_URL: z.url({ protocol: /^https?$/ }).optional(),
+		// CAREEROS (P3-T03): the platform's Claude key. Organizations on a plan with platform AI use it when a member has no
+		// provider of their own. Server only: never returned by an API, never logged, never stored in the database.
+		ANTHROPIC_API_KEY: z.string().trim().min(1).optional(),
+		// CAREEROS (P3-T03): the models the platform key uses. Each must have a price in @careeros/ai-metering.
+		CAREEROS_AI_MODEL_GENERATION: z.string().trim().min(1).default("claude-sonnet-5-5"),
+		CAREEROS_AI_MODEL_FAST: z.string().trim().min(1).default("claude-haiku-5-5"),
 
 		// Feature Flags
 		FLAG_DISABLE_SIGNUPS: z.stringbool().default(false),

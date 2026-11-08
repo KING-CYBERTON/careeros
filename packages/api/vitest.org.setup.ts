@@ -35,8 +35,10 @@ vi.mock("@careeros/billing", async (importOriginal) => {
 				status: "active",
 				seatLimit: null,
 				seatsUsed: 1,
-				aiCreditsPerSeat: 0,
-				aiCreditsTotal: 0,
+				// CAREEROS (P3-T03): the pro plan's pool. A zero pool would make the AI quota check refuse every platform and
+				// server-managed AI call in these tests.
+				aiCreditsPerSeat: 300,
+				aiCreditsTotal: 300,
 				features: Object.fromEntries(original.FEATURE_KEYS.map((key) => [key, true])),
 				overageAllowed: false,
 				readOnly: false,
