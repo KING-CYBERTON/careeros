@@ -153,5 +153,7 @@ export const application = pg.pgTable(
 		pg.index().on(t.organizationId, t.userId, t.laneId),
 		// CAREEROS (P1-T07): the target of career_workspace's composite foreign key.
 		pg.unique("application_organization_id_id_unique").on(t.organizationId, t.id),
+		// CAREEROS (P3-T08): the Org Admin analytics count the applications an organization created in a date range.
+		pg.index("application_org_created_idx").on(t.organizationId, t.createdAt),
 	],
 );

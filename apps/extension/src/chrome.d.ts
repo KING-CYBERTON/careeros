@@ -13,6 +13,10 @@ declare const chrome: {
 		getAll(): Promise<{ origins?: string[] }>;
 		remove(permissions: { origins?: string[]; permissions?: string[] }): Promise<boolean>;
 	};
+	// P5-T02: opens the member's approval page in a new tab. Creating a tab needs no extra permission.
+	tabs: {
+		create(properties: { url: string }): Promise<unknown>;
+	};
 	runtime: {
 		getManifest(): { version: string; name: string };
 	};

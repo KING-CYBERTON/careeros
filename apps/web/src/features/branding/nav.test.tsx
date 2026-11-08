@@ -1,11 +1,11 @@
 // @vitest-environment happy-dom
 
-import { render, screen } from "@testing-library/react";
+import { cleanup, render, screen } from "@testing-library/react";
 import { afterEach, expect, it, vi } from "vite-plus/test";
 import { i18n } from "@lingui/core";
 import { I18nProvider } from "@lingui/react";
 
-const access = vi.hoisted(() => ({ canManage: false }));
+const access = vi.hoisted(() => ({ canManage: false, orgAdmin: "denied" as "denied" | "allowed" | "loading" }));
 
 vi.mock("@tanstack/react-router", () => ({
 	createFileRoute: () => (options: object) => ({ options }),
@@ -14,6 +14,8 @@ vi.mock("@tanstack/react-router", () => ({
 	useRouterState: () => "/dashboard/settings",
 }));
 vi.mock("@/features/organization/queries", () => ({ useCanManageMembers: () => access.canManage }));
+// CAREEROS (P3-T08): the Org Admin entries need an organization that is not a personal workspace
+vi.mock("@/features/org-admin/queries", () => ({ useOrgAdminAccess: () => access.orgAdmin }));
 vi.mock("@/features/settings/root", () => ({ popTransition: undefined }));
 
 vi.stubGlobal("__APP_VERSION__", "test");
@@ -33,6 +35,7 @@ const renderNav = () => {
 
 afterEach(() => {
 	access.canManage = false;
+	access.orgAdmin = "denied";
 });
 
 it("hides Branding and Domains from a member", () => {
@@ -47,4 +50,15 @@ it("shows Branding and Domains to an owner or admin", () => {
 	renderNav();
 	expect(screen.getByText("Branding")).toBeTruthy();
 	expect(screen.getByText("Domains")).toBeTruthy();
+});
+
+it("shows the Org Admin pages only to an admin of an organization", () => {
+	access.canManage = true;
+	renderNav();
+	expect(screen.queryByText("Cohorts")).toBeNull();
+	expect(screen.queryByText("Analytics")).toBeNull();
+	cleanup();
+	access.orgAdmin = "allowed";
+	renderNav();
+	for (const label of ["Cohorts", "Analytics", "AI usage", "Audit log"]) expect(screen.getByText(label)).toBeTruthy();
 });

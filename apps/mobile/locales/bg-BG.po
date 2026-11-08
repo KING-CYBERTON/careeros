@@ -33,6 +33,11 @@ msgstr "„{0}“ се премести в кошчето"
 msgid "“{0}” stops being your primary resume."
 msgstr "„{0}“ вече няма да е основната ви автобиография."
 
+#. placeholder {0}: selected?.label ?? ""
+#: src/features/settings/clipper-sign-ins.tsx
+msgid "“{0}” stops working. You can sign in again from the extension."
+msgstr ""
+
 #. placeholder {0}: purge?.documents[0]?.name
 #: src/features/documents/library.tsx
 msgid "“{0}” will be deleted for good and can't be restored."
@@ -2092,6 +2097,10 @@ msgstr "Опресняването на брифинга е включено · 
 msgid "Briefing refresh paused"
 msgstr "Обновяването на брифинга е на пауза"
 
+#: src/features/settings/clipper-sign-ins.tsx
+msgid "Browsers where you signed in to the Job Clipper extension. You sign in from the extension on a computer."
+msgstr ""
+
 #: src/features/ai/web-access.tsx
 msgid "Built-in reader"
 msgstr "Вграден четец"
@@ -3137,6 +3146,10 @@ msgstr "Това не можа да се зареди. Проверете връ
 msgid "Couldn't load versions."
 msgstr "Не можах да заредя версии."
 
+#: src/features/settings/clipper-sign-ins.tsx
+msgid "Couldn't load your Job Clipper sign-ins."
+msgstr ""
+
 #: app/(tabs)/settings/account.tsx
 msgid "Couldn't load your profile."
 msgstr "Профилът ви не можа да се зареди."
@@ -3244,6 +3257,10 @@ msgstr "Автобиографията не можа да се изобрази.
 #: src/features/settings/api-keys.tsx
 msgid "Couldn't revoke the key. Try again."
 msgstr "Ключът не можа да бъде отменен. Опитайте отново."
+
+#: src/features/settings/clipper-sign-ins.tsx
+msgid "Couldn't revoke the sign-in. Try again."
+msgstr ""
 
 #: src/features/career/facts.tsx
 #: src/features/career/hooks.ts
@@ -5458,6 +5475,10 @@ msgstr "JavaScript"
 msgid "Job"
 msgstr "Работа"
 
+#: src/features/settings/clipper-sign-ins.tsx
+msgid "Job Clipper sign-ins"
+msgstr ""
+
 #: src/features/application-detail/sheets.tsx
 #: src/features/workspace/preparation.tsx
 msgid "Job description"
@@ -6046,6 +6067,10 @@ msgstr ""
 msgid "Loading saved version…"
 msgstr "Зареждане на запазената версия…"
 
+#: src/features/settings/clipper-sign-ins.tsx
+msgid "Loading sign-ins…"
+msgstr ""
+
 #: src/features/ai/web-access.tsx
 msgid "Loading web access…"
 msgstr "Зареждане на уеб достъпа…"
@@ -6619,6 +6644,7 @@ msgstr "Мрежа"
 
 #: src/features/career/preferences.tsx
 #: src/features/settings/api-keys.tsx
+#: src/features/settings/clipper-sign-ins.tsx
 msgid "Never"
 msgstr "Никога"
 
@@ -6823,6 +6849,10 @@ msgstr "Няма съвпадение на факти"
 #: src/features/write/pickers.tsx
 msgid "No icons match."
 msgstr "Няма съответстващи икони."
+
+#: src/features/settings/clipper-sign-ins.tsx
+msgid "No Job Clipper sign-ins yet."
+msgstr ""
 
 #: src/features/documents/new-document.tsx
 msgid "No job yet"
@@ -9063,6 +9093,7 @@ msgid "Reviewing needs an AI connection. What you write here stays on this devic
 msgstr "Прегледът изисква AI връзка. Това, което напишете тук, остава на това устройство дотогава."
 
 #: src/features/settings/api-keys.tsx
+#: src/features/settings/clipper-sign-ins.tsx
 msgid "Revoke"
 msgstr "Отмени"
 
@@ -9070,13 +9101,25 @@ msgstr "Отмени"
 msgid "Revoke API key?"
 msgstr "Анулиране на ключ API?"
 
+#: src/features/settings/clipper-sign-ins.tsx
+msgid "Revoke Job Clipper sign-in?"
+msgstr ""
+
 #: src/features/settings/api-keys.tsx
 msgid "Revoke key"
 msgstr "Отмяна на ключа"
 
+#: src/features/settings/clipper-sign-ins.tsx
+msgid "Revoke sign-in"
+msgstr ""
+
 #: src/features/settings/api-keys.tsx
 msgid "Revoke this API key"
 msgstr "Отменете този API ключ"
+
+#: src/features/settings/clipper-sign-ins.tsx
+msgid "Revoke this Job Clipper sign-in"
+msgstr ""
 
 #: src/features/check/writing.tsx
 msgid "Rewrite accepted"
@@ -10028,9 +10071,19 @@ msgstr "Вход и сигурност"
 msgid "Sign-in didn't complete"
 msgstr "Влизането не беше завършено"
 
+#: src/features/settings/clipper-sign-ins.tsx
+msgid "Sign-in revoked. The extension stops working on its next request."
+msgstr ""
+
 #: src/features/letters/write.tsx
 msgid "Sign-off"
 msgstr "Заключителна фраза"
+
+#. placeholder {0}: date(token.createdAt)
+#. placeholder {1}: date(token.lastUsedAt)
+#: src/features/settings/clipper-sign-ins.tsx
+msgid "Signed in {0} · Last used {1}"
+msgstr ""
 
 #. placeholder {0}: hostOf(server)
 #: src/auth/session-gate.tsx
@@ -11513,6 +11566,7 @@ msgstr "Опитайте {suggestion}"
 #: src/features/branding/domains-screen.tsx
 #: src/features/letters/write.tsx
 #: src/features/settings/api-keys.tsx
+#: src/features/settings/clipper-sign-ins.tsx
 #: src/features/workspace/parts.tsx
 #: src/features/workspace/preparation.tsx
 #: src/features/workspace/shell.tsx
@@ -12606,6 +12660,10 @@ msgstr "Вашите точки са изписани с необичайни з
 #: src/draft/conflict-sheet.tsx
 msgid "Your changes on this device will be replaced by the saved version."
 msgstr "Вашите промени на това устройство ще бъдат заменени от запазената версия."
+
+#: src/features/settings/profile.tsx
+msgid "Your cohort"
+msgstr ""
 
 #: src/features/ats-checker/messages.ts
 msgid "Your contact details are not on the first page."

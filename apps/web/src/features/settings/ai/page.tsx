@@ -1,5 +1,6 @@
 import { Trans } from "@lingui/react/macro";
 import { ApiKeysSection } from "./api-keys";
+import { ClipperSignInsSection } from "./clipper-sign-ins";
 import { ConnectedAppsSection } from "./connected-apps";
 import { McpSection } from "./mcp";
 import { ProvidersSection } from "./providers";
@@ -18,6 +19,8 @@ export function AiDeveloperSettings() {
 			<WebAccessSection />
 			<ApiKeysSection />
 			<ConnectedAppsSection />
+			{/* CAREEROS (P5-T02): the member's Job Clipper sign-ins */}
+			<ClipperSignInsSection />
 			<McpSection />
 		</>
 	);

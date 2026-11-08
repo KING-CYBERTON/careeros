@@ -41,6 +41,8 @@ import { rateLimitConfig } from "@reactive-resume/utils/rate-limit";
 import { generateId, toUsername } from "@reactive-resume/utils/string";
 import { timezoneSchema } from "@reactive-resume/utils/timezone";
 import { isAllowedOAuthRedirectUri } from "@reactive-resume/utils/url-security.node";
+// CAREEROS: Job Clipper sign-in, device flow and host-bound tokens (P5-T02)
+import { clipperDeviceAuthorization, clipperTokens } from "./clipper";
 // CAREEROS: branded emails (P2-T04)
 import { buildEmailContext, withLinkOrigin } from "./email-brand";
 // CAREEROS: the session operations of the sign-in handoff (P2-T05)
@@ -522,7 +524,8 @@ const getAuthConfig = () => {
 		},
 
 		// Unused endpoints: guest deletion skips the app's storage cleanup; the session JWT has no consumer.
-		disabledPaths: ["/delete-anonymous-user", "/token"],
+		// CAREEROS (P5-T02): /device/token would issue a full session; the clipper redeems at /device/clipper/token instead.
+		disabledPaths: ["/delete-anonymous-user", "/token", "/device/token"],
 
 		hooks: {
 			before: createAuthMiddleware(async (ctx) => {
@@ -708,6 +711,8 @@ const getAuthConfig = () => {
 					await tx.delete(schema.oauthAccessToken).where(eq(schema.oauthAccessToken.userId, user.id));
 					await tx.delete(schema.oauthRefreshToken).where(eq(schema.oauthRefreshToken.userId, user.id));
 					await tx.delete(schema.oauthConsent).where(eq(schema.oauthConsent.userId, user.id));
+					// CAREEROS (P5-T02): clipper sign-ins are credentials too.
+					await tx.delete(schema.clipperToken).where(eq(schema.clipperToken.userId, user.id));
 					// Historical passkeys may predate mailbox verification; recovery revokes all of them.
 					await tx.delete(schema.passkey).where(eq(schema.passkey.userId, user.id));
 					// Nobody had proved this address before: whoever signed up with it may have added other ways in.
@@ -850,6 +855,9 @@ const getAuthConfig = () => {
 			organizationRules,
 			// CAREEROS (P2-T05): server-only session endpoints for the social and OIDC handoff to an organization host
 			handoffSession,
+			// CAREEROS (P5-T02): Job Clipper device flow and tokens (packages/auth/src/clipper.ts)
+			clipperDeviceAuthorization,
+			clipperTokens,
 			passkey(),
 			genericOAuth({ config: authConfigs }),
 			twoFactor({ issuer: PLATFORM_DEFAULT_APP_NAME }),

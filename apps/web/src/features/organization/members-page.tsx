@@ -15,6 +15,8 @@ import { toast } from "@reactive-resume/ui/components/toast";
 import { organizationKeys, unwrap, useActiveOrganizationId, useMembers, useOrganizations } from "./queries";
 import { canChangeRoles, canManageMembers, getRoleLabel } from "./roles";
 import { PageHeader } from "@/components/layout/page-header";
+// CAREEROS (P3-T08)
+import { BulkInviteSection } from "@/features/org-admin/bulk-invite";
 import { SettingsSection } from "@/features/settings/section";
 import { useConfirm } from "@/hooks/use-confirm";
 import { authClient } from "@/libs/auth/client";
@@ -58,6 +60,8 @@ export function MembersSettings() {
 			) : (
 				<>
 					<InviteOrNotice />
+					{/* CAREEROS (P3-T08): bulk CSV invites, shown to owners and admins of an organization */}
+					<BulkInviteSection />
 					<MembersSection myRole={data.me.role} myMemberId={data.me.id} />
 					<InvitationsSection />
 				</>

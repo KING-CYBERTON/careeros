@@ -1,11 +1,9 @@
 {
   "version": "8",
   "dialect": "postgres",
-  "id": "6c313739-6037-402b-b668-0b3e17d3aedf",
+  "id": "9ffca0d9-0d74-4499-b1af-780e1d099605",
   "prevIds": [
-    "6df6c61b-ce67-43e0-883f-34b181e4dfa2",
-    "6ed8d021-5a29-41b5-afda-7d917f1be5c2",
-    "7302c86e-8981-4328-9f27-b824edeeacbf"
+    "6df6c61b-ce67-43e0-883f-34b181e4dfa2"
   ],
   "ddl": [
     {
@@ -292,6 +290,12 @@
     },
     {
       "isRlsEnabled": false,
+      "name": "cohort",
+      "entityType": "tables",
+      "schema": "public"
+    },
+    {
+      "isRlsEnabled": false,
       "name": "invitation",
       "entityType": "tables",
       "schema": "public"
@@ -364,12 +368,6 @@
     },
     {
       "isRlsEnabled": false,
-      "name": "billing_event",
-      "entityType": "tables",
-      "schema": "public"
-    },
-    {
-      "isRlsEnabled": false,
       "name": "feature_flag",
       "entityType": "tables",
       "schema": "public"
@@ -383,12 +381,6 @@
     {
       "isRlsEnabled": false,
       "name": "subscription",
-      "entityType": "tables",
-      "schema": "public"
-    },
-    {
-      "isRlsEnabled": false,
-      "name": "ai_usage",
       "entityType": "tables",
       "schema": "public"
     },
@@ -7904,6 +7896,123 @@
       "name": "id",
       "entityType": "columns",
       "schema": "public",
+      "table": "cohort"
+    },
+    {
+      "type": "text",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "organization_id",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "cohort"
+    },
+    {
+      "type": "text",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "name",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "cohort"
+    },
+    {
+      "type": "text",
+      "typeSchema": null,
+      "notNull": false,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "description",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "cohort"
+    },
+    {
+      "type": "date",
+      "typeSchema": null,
+      "notNull": false,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "starts_on",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "cohort"
+    },
+    {
+      "type": "date",
+      "typeSchema": null,
+      "notNull": false,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "ends_on",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "cohort"
+    },
+    {
+      "type": "timestamp with time zone",
+      "typeSchema": null,
+      "notNull": false,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "archived_at",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "cohort"
+    },
+    {
+      "type": "timestamp with time zone",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": "now()",
+      "generated": null,
+      "identity": null,
+      "name": "created_at",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "cohort"
+    },
+    {
+      "type": "timestamp with time zone",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": "now()",
+      "generated": null,
+      "identity": null,
+      "name": "updated_at",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "cohort"
+    },
+    {
+      "type": "text",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "id",
+      "entityType": "columns",
+      "schema": "public",
       "table": "invitation"
     },
     {
@@ -7993,6 +8102,19 @@
       "generated": null,
       "identity": null,
       "name": "inviter_id",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "invitation"
+    },
+    {
+      "type": "text",
+      "typeSchema": null,
+      "notNull": false,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "cohort_id",
       "entityType": "columns",
       "schema": "public",
       "table": "invitation"
@@ -9064,32 +9186,6 @@
       "table": "discovered_job"
     },
     {
-      "type": "text",
-      "typeSchema": null,
-      "notNull": false,
-      "dimensions": 0,
-      "default": null,
-      "generated": null,
-      "identity": null,
-      "name": "application_id",
-      "entityType": "columns",
-      "schema": "public",
-      "table": "discovered_job"
-    },
-    {
-      "type": "timestamp with time zone",
-      "typeSchema": null,
-      "notNull": false,
-      "dimensions": 0,
-      "default": null,
-      "generated": null,
-      "identity": null,
-      "name": "accepted_at",
-      "entityType": "columns",
-      "schema": "public",
-      "table": "discovered_job"
-    },
-    {
       "type": "timestamp with time zone",
       "typeSchema": null,
       "notNull": true,
@@ -9163,19 +9259,6 @@
       "generated": null,
       "identity": null,
       "name": "status",
-      "entityType": "columns",
-      "schema": "public",
-      "table": "discovery_run"
-    },
-    {
-      "type": "text",
-      "typeSchema": null,
-      "notNull": true,
-      "dimensions": 0,
-      "default": "'manual'",
-      "generated": null,
-      "identity": null,
-      "name": "trigger",
       "entityType": "columns",
       "schema": "public",
       "table": "discovery_run"
@@ -9267,32 +9350,6 @@
       "generated": null,
       "identity": null,
       "name": "ai_matched",
-      "entityType": "columns",
-      "schema": "public",
-      "table": "discovery_run"
-    },
-    {
-      "type": "integer",
-      "typeSchema": null,
-      "notNull": true,
-      "dimensions": 0,
-      "default": "0",
-      "generated": null,
-      "identity": null,
-      "name": "ai_planned",
-      "entityType": "columns",
-      "schema": "public",
-      "table": "discovery_run"
-    },
-    {
-      "type": "text",
-      "typeSchema": null,
-      "notNull": false,
-      "dimensions": 0,
-      "default": null,
-      "generated": null,
-      "identity": null,
-      "name": "ai_skipped_reason",
       "entityType": "columns",
       "schema": "public",
       "table": "discovery_run"
@@ -9480,19 +9537,6 @@
       "table": "job_source"
     },
     {
-      "type": "timestamp with time zone",
-      "typeSchema": null,
-      "notNull": false,
-      "dimensions": 0,
-      "default": null,
-      "generated": null,
-      "identity": null,
-      "name": "last_scheduled_run_at",
-      "entityType": "columns",
-      "schema": "public",
-      "table": "job_source"
-    },
-    {
       "type": "integer",
       "typeSchema": null,
       "notNull": true,
@@ -9660,123 +9704,6 @@
       "entityType": "columns",
       "schema": "public",
       "table": "audit_log"
-    },
-    {
-      "type": "text",
-      "typeSchema": null,
-      "notNull": true,
-      "dimensions": 0,
-      "default": "gen_random_uuid()",
-      "generated": null,
-      "identity": null,
-      "name": "id",
-      "entityType": "columns",
-      "schema": "public",
-      "table": "billing_event"
-    },
-    {
-      "type": "text",
-      "typeSchema": null,
-      "notNull": true,
-      "dimensions": 0,
-      "default": null,
-      "generated": null,
-      "identity": null,
-      "name": "provider",
-      "entityType": "columns",
-      "schema": "public",
-      "table": "billing_event"
-    },
-    {
-      "type": "text",
-      "typeSchema": null,
-      "notNull": true,
-      "dimensions": 0,
-      "default": null,
-      "generated": null,
-      "identity": null,
-      "name": "provider_event_id",
-      "entityType": "columns",
-      "schema": "public",
-      "table": "billing_event"
-    },
-    {
-      "type": "text",
-      "typeSchema": null,
-      "notNull": false,
-      "dimensions": 0,
-      "default": null,
-      "generated": null,
-      "identity": null,
-      "name": "organization_id",
-      "entityType": "columns",
-      "schema": "public",
-      "table": "billing_event"
-    },
-    {
-      "type": "text",
-      "typeSchema": null,
-      "notNull": true,
-      "dimensions": 0,
-      "default": null,
-      "generated": null,
-      "identity": null,
-      "name": "type",
-      "entityType": "columns",
-      "schema": "public",
-      "table": "billing_event"
-    },
-    {
-      "type": "timestamp with time zone",
-      "typeSchema": null,
-      "notNull": true,
-      "dimensions": 0,
-      "default": "now()",
-      "generated": null,
-      "identity": null,
-      "name": "received_at",
-      "entityType": "columns",
-      "schema": "public",
-      "table": "billing_event"
-    },
-    {
-      "type": "timestamp with time zone",
-      "typeSchema": null,
-      "notNull": false,
-      "dimensions": 0,
-      "default": null,
-      "generated": null,
-      "identity": null,
-      "name": "processed_at",
-      "entityType": "columns",
-      "schema": "public",
-      "table": "billing_event"
-    },
-    {
-      "type": "text",
-      "typeSchema": null,
-      "notNull": true,
-      "dimensions": 0,
-      "default": null,
-      "generated": null,
-      "identity": null,
-      "name": "outcome",
-      "entityType": "columns",
-      "schema": "public",
-      "table": "billing_event"
-    },
-    {
-      "type": "text",
-      "typeSchema": null,
-      "notNull": false,
-      "dimensions": 0,
-      "default": null,
-      "generated": null,
-      "identity": null,
-      "name": "error",
-      "entityType": "columns",
-      "schema": "public",
-      "table": "billing_event"
     },
     {
       "type": "text",
@@ -10219,175 +10146,6 @@
       "entityType": "columns",
       "schema": "public",
       "table": "subscription"
-    },
-    {
-      "type": "text",
-      "typeSchema": null,
-      "notNull": true,
-      "dimensions": 0,
-      "default": "public.careeros_uuidv7()",
-      "generated": null,
-      "identity": null,
-      "name": "id",
-      "entityType": "columns",
-      "schema": "public",
-      "table": "ai_usage"
-    },
-    {
-      "type": "text",
-      "typeSchema": null,
-      "notNull": true,
-      "dimensions": 0,
-      "default": null,
-      "generated": null,
-      "identity": null,
-      "name": "organization_id",
-      "entityType": "columns",
-      "schema": "public",
-      "table": "ai_usage"
-    },
-    {
-      "type": "text",
-      "typeSchema": null,
-      "notNull": false,
-      "dimensions": 0,
-      "default": null,
-      "generated": null,
-      "identity": null,
-      "name": "user_id",
-      "entityType": "columns",
-      "schema": "public",
-      "table": "ai_usage"
-    },
-    {
-      "type": "text",
-      "typeSchema": null,
-      "notNull": true,
-      "dimensions": 0,
-      "default": null,
-      "generated": null,
-      "identity": null,
-      "name": "source",
-      "entityType": "columns",
-      "schema": "public",
-      "table": "ai_usage"
-    },
-    {
-      "type": "text",
-      "typeSchema": null,
-      "notNull": true,
-      "dimensions": 0,
-      "default": null,
-      "generated": null,
-      "identity": null,
-      "name": "feature",
-      "entityType": "columns",
-      "schema": "public",
-      "table": "ai_usage"
-    },
-    {
-      "type": "text",
-      "typeSchema": null,
-      "notNull": true,
-      "dimensions": 0,
-      "default": null,
-      "generated": null,
-      "identity": null,
-      "name": "provider",
-      "entityType": "columns",
-      "schema": "public",
-      "table": "ai_usage"
-    },
-    {
-      "type": "text",
-      "typeSchema": null,
-      "notNull": true,
-      "dimensions": 0,
-      "default": null,
-      "generated": null,
-      "identity": null,
-      "name": "model",
-      "entityType": "columns",
-      "schema": "public",
-      "table": "ai_usage"
-    },
-    {
-      "type": "integer",
-      "typeSchema": null,
-      "notNull": true,
-      "dimensions": 0,
-      "default": "0",
-      "generated": null,
-      "identity": null,
-      "name": "input_tokens",
-      "entityType": "columns",
-      "schema": "public",
-      "table": "ai_usage"
-    },
-    {
-      "type": "integer",
-      "typeSchema": null,
-      "notNull": true,
-      "dimensions": 0,
-      "default": "0",
-      "generated": null,
-      "identity": null,
-      "name": "output_tokens",
-      "entityType": "columns",
-      "schema": "public",
-      "table": "ai_usage"
-    },
-    {
-      "type": "integer",
-      "typeSchema": null,
-      "notNull": true,
-      "dimensions": 0,
-      "default": "0",
-      "generated": null,
-      "identity": null,
-      "name": "cached_input_tokens",
-      "entityType": "columns",
-      "schema": "public",
-      "table": "ai_usage"
-    },
-    {
-      "type": "bigint",
-      "typeSchema": null,
-      "notNull": true,
-      "dimensions": 0,
-      "default": "0",
-      "generated": null,
-      "identity": null,
-      "name": "cost_usd_micros",
-      "entityType": "columns",
-      "schema": "public",
-      "table": "ai_usage"
-    },
-    {
-      "type": "integer",
-      "typeSchema": null,
-      "notNull": true,
-      "dimensions": 0,
-      "default": "0",
-      "generated": null,
-      "identity": null,
-      "name": "credits",
-      "entityType": "columns",
-      "schema": "public",
-      "table": "ai_usage"
-    },
-    {
-      "type": "timestamp with time zone",
-      "typeSchema": null,
-      "notNull": true,
-      "dimensions": 0,
-      "default": "now()",
-      "generated": null,
-      "identity": null,
-      "name": "created_at",
-      "entityType": "columns",
-      "schema": "public",
-      "table": "ai_usage"
     },
     {
       "nameExplicit": false,
@@ -11001,6 +10759,34 @@
       "method": "btree",
       "concurrently": false,
       "name": "application_organization_id_user_id_lane_id_index",
+      "entityType": "indexes",
+      "schema": "public",
+      "table": "application"
+    },
+    {
+      "nameExplicit": true,
+      "columns": [
+        {
+          "value": "organization_id",
+          "isExpression": false,
+          "asc": true,
+          "nullsFirst": false,
+          "opclass": null
+        },
+        {
+          "value": "created_at",
+          "isExpression": false,
+          "asc": true,
+          "nullsFirst": false,
+          "opclass": null
+        }
+      ],
+      "isUnique": false,
+      "where": null,
+      "with": "",
+      "method": "btree",
+      "concurrently": false,
+      "name": "application_org_created_idx",
       "entityType": "indexes",
       "schema": "public",
       "table": "application"
@@ -11839,6 +11625,41 @@
       "table": "session"
     },
     {
+      "nameExplicit": true,
+      "columns": [
+        {
+          "value": "active_organization_id",
+          "isExpression": false,
+          "asc": true,
+          "nullsFirst": false,
+          "opclass": null
+        },
+        {
+          "value": "user_id",
+          "isExpression": false,
+          "asc": true,
+          "nullsFirst": false,
+          "opclass": null
+        },
+        {
+          "value": "updated_at",
+          "isExpression": false,
+          "asc": true,
+          "nullsFirst": false,
+          "opclass": null
+        }
+      ],
+      "isUnique": false,
+      "where": null,
+      "with": "",
+      "method": "btree",
+      "concurrently": false,
+      "name": "session_active_org_user_idx",
+      "entityType": "indexes",
+      "schema": "public",
+      "table": "session"
+    },
+    {
       "nameExplicit": false,
       "columns": [
         {
@@ -12184,6 +12005,34 @@
       "method": "btree",
       "concurrently": false,
       "name": "resume_organization_id_user_id_updated_at_index",
+      "entityType": "indexes",
+      "schema": "public",
+      "table": "resume"
+    },
+    {
+      "nameExplicit": true,
+      "columns": [
+        {
+          "value": "organization_id",
+          "isExpression": false,
+          "asc": true,
+          "nullsFirst": false,
+          "opclass": null
+        },
+        {
+          "value": "created_at",
+          "isExpression": false,
+          "asc": true,
+          "nullsFirst": false,
+          "opclass": null
+        }
+      ],
+      "isUnique": false,
+      "where": null,
+      "with": "",
+      "method": "btree",
+      "concurrently": false,
+      "name": "resume_org_created_idx",
       "entityType": "indexes",
       "schema": "public",
       "table": "resume"
@@ -12665,6 +12514,34 @@
       "table": "ai_content_report"
     },
     {
+      "nameExplicit": true,
+      "columns": [
+        {
+          "value": "organization_id",
+          "isExpression": false,
+          "asc": true,
+          "nullsFirst": false,
+          "opclass": null
+        },
+        {
+          "value": "lower(\"name\")",
+          "isExpression": true,
+          "asc": true,
+          "nullsFirst": false,
+          "opclass": null
+        }
+      ],
+      "isUnique": true,
+      "where": null,
+      "with": "",
+      "method": "btree",
+      "concurrently": false,
+      "name": "cohort_organization_name_key",
+      "entityType": "indexes",
+      "schema": "public",
+      "table": "cohort"
+    },
+    {
       "nameExplicit": false,
       "columns": [
         {
@@ -12737,6 +12614,34 @@
       "method": "btree",
       "concurrently": false,
       "name": "member_user_id_index",
+      "entityType": "indexes",
+      "schema": "public",
+      "table": "member"
+    },
+    {
+      "nameExplicit": true,
+      "columns": [
+        {
+          "value": "organization_id",
+          "isExpression": false,
+          "asc": true,
+          "nullsFirst": false,
+          "opclass": null
+        },
+        {
+          "value": "cohort_id",
+          "isExpression": false,
+          "asc": true,
+          "nullsFirst": false,
+          "opclass": null
+        }
+      ],
+      "isUnique": false,
+      "where": null,
+      "with": "",
+      "method": "btree",
+      "concurrently": false,
+      "name": "member_org_cohort_idx",
       "entityType": "indexes",
       "schema": "public",
       "table": "member"
@@ -12941,34 +12846,6 @@
           "opclass": null
         },
         {
-          "value": "application_id",
-          "isExpression": false,
-          "asc": true,
-          "nullsFirst": false,
-          "opclass": null
-        }
-      ],
-      "isUnique": false,
-      "where": null,
-      "with": "",
-      "method": "btree",
-      "concurrently": false,
-      "name": "discovered_job_application_idx",
-      "entityType": "indexes",
-      "schema": "public",
-      "table": "discovered_job"
-    },
-    {
-      "nameExplicit": true,
-      "columns": [
-        {
-          "value": "organization_id",
-          "isExpression": false,
-          "asc": true,
-          "nullsFirst": false,
-          "opclass": null
-        },
-        {
           "value": "job_source_id",
           "isExpression": false,
           "asc": true,
@@ -13088,62 +12965,6 @@
       "nameExplicit": true,
       "columns": [
         {
-          "value": "provider",
-          "isExpression": false,
-          "asc": true,
-          "nullsFirst": false,
-          "opclass": null
-        },
-        {
-          "value": "provider_event_id",
-          "isExpression": false,
-          "asc": true,
-          "nullsFirst": false,
-          "opclass": null
-        }
-      ],
-      "isUnique": true,
-      "where": null,
-      "with": "",
-      "method": "btree",
-      "concurrently": false,
-      "name": "billing_event_provider_event_key",
-      "entityType": "indexes",
-      "schema": "public",
-      "table": "billing_event"
-    },
-    {
-      "nameExplicit": true,
-      "columns": [
-        {
-          "value": "organization_id",
-          "isExpression": false,
-          "asc": true,
-          "nullsFirst": false,
-          "opclass": null
-        },
-        {
-          "value": "received_at",
-          "isExpression": false,
-          "asc": false,
-          "nullsFirst": false,
-          "opclass": null
-        }
-      ],
-      "isUnique": false,
-      "where": null,
-      "with": "",
-      "method": "btree",
-      "concurrently": false,
-      "name": "billing_event_org_received_idx",
-      "entityType": "indexes",
-      "schema": "public",
-      "table": "billing_event"
-    },
-    {
-      "nameExplicit": true,
-      "columns": [
-        {
           "value": "coalesce(\"organization_id\", '')",
           "isExpression": true,
           "asc": true,
@@ -13188,34 +13009,6 @@
       "entityType": "indexes",
       "schema": "public",
       "table": "subscription"
-    },
-    {
-      "nameExplicit": true,
-      "columns": [
-        {
-          "value": "organization_id",
-          "isExpression": false,
-          "asc": true,
-          "nullsFirst": false,
-          "opclass": null
-        },
-        {
-          "value": "created_at",
-          "isExpression": false,
-          "asc": true,
-          "nullsFirst": false,
-          "opclass": null
-        }
-      ],
-      "isUnique": false,
-      "where": null,
-      "with": "",
-      "method": "btree",
-      "concurrently": false,
-      "name": "ai_usage_org_created_idx",
-      "entityType": "indexes",
-      "schema": "public",
-      "table": "ai_usage"
     },
     {
       "nameExplicit": false,
@@ -15163,6 +14956,23 @@
       ],
       "onUpdate": "NO ACTION",
       "onDelete": "CASCADE",
+      "name": "cohort_organization_id_organization_id_fkey",
+      "entityType": "fks",
+      "schema": "public",
+      "table": "cohort"
+    },
+    {
+      "nameExplicit": false,
+      "columns": [
+        "organization_id"
+      ],
+      "schemaTo": "public",
+      "tableTo": "organization",
+      "columnsTo": [
+        "id"
+      ],
+      "onUpdate": "NO ACTION",
+      "onDelete": "CASCADE",
       "name": "invitation_organization_id_organization_id_fkey",
       "entityType": "fks",
       "schema": "public",
@@ -15181,6 +14991,25 @@
       "onUpdate": "NO ACTION",
       "onDelete": "CASCADE",
       "name": "invitation_inviter_id_user_id_fkey",
+      "entityType": "fks",
+      "schema": "public",
+      "table": "invitation"
+    },
+    {
+      "nameExplicit": true,
+      "columns": [
+        "organization_id",
+        "cohort_id"
+      ],
+      "schemaTo": "public",
+      "tableTo": "cohort",
+      "columnsTo": [
+        "organization_id",
+        "id"
+      ],
+      "onUpdate": "NO ACTION",
+      "onDelete": "SET NULL",
+      "name": "invitation_org_cohort_fkey",
       "entityType": "fks",
       "schema": "public",
       "table": "invitation"
@@ -15232,6 +15061,25 @@
       "onUpdate": "NO ACTION",
       "onDelete": "SET NULL",
       "name": "member_invited_by_user_id_fkey",
+      "entityType": "fks",
+      "schema": "public",
+      "table": "member"
+    },
+    {
+      "nameExplicit": true,
+      "columns": [
+        "organization_id",
+        "cohort_id"
+      ],
+      "schemaTo": "public",
+      "tableTo": "cohort",
+      "columnsTo": [
+        "organization_id",
+        "id"
+      ],
+      "onUpdate": "NO ACTION",
+      "onDelete": "SET NULL",
+      "name": "member_org_cohort_fkey",
       "entityType": "fks",
       "schema": "public",
       "table": "member"
@@ -15447,25 +15295,6 @@
       "table": "discovered_job"
     },
     {
-      "nameExplicit": true,
-      "columns": [
-        "organization_id",
-        "application_id"
-      ],
-      "schemaTo": "public",
-      "tableTo": "application",
-      "columnsTo": [
-        "organization_id",
-        "id"
-      ],
-      "onUpdate": "NO ACTION",
-      "onDelete": "SET NULL",
-      "name": "discovered_job_org_application_fkey",
-      "entityType": "fks",
-      "schema": "public",
-      "table": "discovered_job"
-    },
-    {
       "nameExplicit": false,
       "columns": [
         "organization_id"
@@ -15653,40 +15482,6 @@
       "entityType": "fks",
       "schema": "public",
       "table": "subscription"
-    },
-    {
-      "nameExplicit": false,
-      "columns": [
-        "organization_id"
-      ],
-      "schemaTo": "public",
-      "tableTo": "organization",
-      "columnsTo": [
-        "id"
-      ],
-      "onUpdate": "NO ACTION",
-      "onDelete": "CASCADE",
-      "name": "ai_usage_organization_id_organization_id_fkey",
-      "entityType": "fks",
-      "schema": "public",
-      "table": "ai_usage"
-    },
-    {
-      "nameExplicit": false,
-      "columns": [
-        "user_id"
-      ],
-      "schemaTo": "public",
-      "tableTo": "user",
-      "columnsTo": [
-        "id"
-      ],
-      "onUpdate": "NO ACTION",
-      "onDelete": "SET NULL",
-      "name": "ai_usage_user_id_user_id_fkey",
-      "entityType": "fks",
-      "schema": "public",
-      "table": "ai_usage"
     },
     {
       "columns": [
@@ -16169,6 +15964,16 @@
         "id"
       ],
       "nameExplicit": false,
+      "name": "cohort_pkey",
+      "schema": "public",
+      "table": "cohort",
+      "entityType": "pks"
+    },
+    {
+      "columns": [
+        "id"
+      ],
+      "nameExplicit": false,
       "name": "invitation_pkey",
       "schema": "public",
       "table": "invitation",
@@ -16289,16 +16094,6 @@
         "id"
       ],
       "nameExplicit": false,
-      "name": "billing_event_pkey",
-      "schema": "public",
-      "table": "billing_event",
-      "entityType": "pks"
-    },
-    {
-      "columns": [
-        "id"
-      ],
-      "nameExplicit": false,
       "name": "feature_flag_pkey",
       "schema": "public",
       "table": "feature_flag",
@@ -16322,16 +16117,6 @@
       "name": "subscription_pkey",
       "schema": "public",
       "table": "subscription",
-      "entityType": "pks"
-    },
-    {
-      "columns": [
-        "id"
-      ],
-      "nameExplicit": false,
-      "name": "ai_usage_pkey",
-      "schema": "public",
-      "table": "ai_usage",
       "entityType": "pks"
     },
     {
@@ -16480,6 +16265,18 @@
       "entityType": "uniques",
       "schema": "public",
       "table": "storage_cleanup_job"
+    },
+    {
+      "nameExplicit": true,
+      "columns": [
+        "organization_id",
+        "id"
+      ],
+      "nullsNotDistinct": false,
+      "name": "cohort_organization_id_id_unique",
+      "entityType": "uniques",
+      "schema": "public",
+      "table": "cohort"
     },
     {
       "nameExplicit": true,
@@ -16643,6 +16440,27 @@
       "entityType": "uniques"
     },
     {
+      "value": "char_length(btrim(\"name\")) between 1 and 100",
+      "name": "cohort_name_check",
+      "entityType": "checks",
+      "schema": "public",
+      "table": "cohort"
+    },
+    {
+      "value": "\"description\" is null or char_length(\"description\") <= 1000",
+      "name": "cohort_description_check",
+      "entityType": "checks",
+      "schema": "public",
+      "table": "cohort"
+    },
+    {
+      "value": "\"starts_on\" is null or \"ends_on\" is null or \"ends_on\" >= \"starts_on\"",
+      "name": "cohort_dates_check",
+      "entityType": "checks",
+      "schema": "public",
+      "table": "cohort"
+    },
+    {
       "value": "\"status\" in ('trial', 'active', 'past_due', 'suspended')",
       "name": "organization_status_check",
       "entityType": "checks",
@@ -16769,27 +16587,6 @@
       "table": "discovery_run"
     },
     {
-      "value": "\"trigger\" in ('manual', 'scheduled')",
-      "name": "discovery_run_trigger_check",
-      "entityType": "checks",
-      "schema": "public",
-      "table": "discovery_run"
-    },
-    {
-      "value": "\"ai_skipped_reason\" is null or \"ai_skipped_reason\" in ('no_platform_ai', 'quota_exhausted', 'provider_error')",
-      "name": "discovery_run_ai_skipped_reason_check",
-      "entityType": "checks",
-      "schema": "public",
-      "table": "discovery_run"
-    },
-    {
-      "value": "\"ai_planned\" >= 0 and \"ai_matched\" <= \"ai_planned\"",
-      "name": "discovery_run_ai_planned_check",
-      "entityType": "checks",
-      "schema": "public",
-      "table": "discovery_run"
-    },
-    {
       "value": "\"fetched\" >= 0 and \"new\" >= 0 and \"duplicate\" >= 0 and \"scored\" >= 0 and \"ai_matched\" >= 0",
       "name": "discovery_run_counts_check",
       "entityType": "checks",
@@ -16846,13 +16643,6 @@
       "table": "audit_log"
     },
     {
-      "value": "\"outcome\" in ('applied', 'duplicate', 'ignored', 'error')",
-      "name": "billing_event_outcome_check",
-      "entityType": "checks",
-      "schema": "public",
-      "table": "billing_event"
-    },
-    {
       "value": "\"key\" ~ '^[a-z][a-z0-9_.]{1,63}$'",
       "name": "feature_flag_key_check",
       "entityType": "checks",
@@ -16867,7 +16657,7 @@
       "table": "plan"
     },
     {
-      "value": "\"provider\" in ('none', 'manual', 'paystack', 'stripe', 'mpesa', 'fake')",
+      "value": "\"provider\" in ('none', 'manual', 'paystack', 'stripe', 'mpesa')",
       "name": "subscription_provider_check",
       "entityType": "checks",
       "schema": "public",
@@ -16893,13 +16683,6 @@
       "entityType": "checks",
       "schema": "public",
       "table": "subscription"
-    },
-    {
-      "value": "\"source\" in ('platform', 'own_key')",
-      "name": "ai_usage_source_check",
-      "entityType": "checks",
-      "schema": "public",
-      "table": "ai_usage"
     }
   ],
   "renames": []

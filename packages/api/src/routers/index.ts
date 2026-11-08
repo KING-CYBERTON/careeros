@@ -10,12 +10,16 @@ import { billingRouter } from "../features/billing/router";
 // CAREEROS: organization branding and settings (P2-T01)
 import { brandingRouter, settingsRouter } from "../features/branding/router";
 import { careerRouter } from "../features/career/router";
+// CAREEROS: Job Clipper sign-in procedures (P5-T02)
+import { clipperRouter } from "../features/clipper/router";
 import { coverLettersRouter } from "../features/cover-letters/router";
 import { customDomainRouter } from "../features/custom-domain/router";
 // CAREEROS: job discovery (P4-T01)
 import { discoveryRouter } from "../features/discovery/router";
 import { documentsRouter } from "../features/documents/router";
 import { flagsRouter } from "../features/flags/router";
+// CAREEROS: Org Admin console (P3-T08)
+import { orgAdminRouter } from "../features/org-admin/router";
 // CAREEROS: organization custom domains (P2-T06)
 import { organizationDomainRouter } from "../features/org-domain/router";
 // CAREEROS: join or switch page of an organization host (P2-T03)
@@ -41,6 +45,8 @@ export default {
 	billing: billingRouter,
 	branding: brandingRouter,
 	career: careerRouter,
+	// CAREEROS: Job Clipper sign-in procedures (P5-T02)
+	clipper: clipperRouter,
 	coverLetters: coverLettersRouter,
 	customDomain: customDomainRouter,
 	// CAREEROS: job discovery (P4-T01)
@@ -49,6 +55,8 @@ export default {
 	flags: flagsRouter,
 	// CAREEROS: read-only entitlements and audit log of the organization (P3-T01)
 	organization: organizationRouter,
+	// CAREEROS: Org Admin console, cohorts, bulk invites, analytics (P3-T08)
+	orgAdmin: orgAdminRouter,
 	// CAREEROS: join or switch page of an organization host (P2-T03)
 	organizationHost: organizationHostRouter,
 	// CAREEROS: organization custom domains (P2-T06)

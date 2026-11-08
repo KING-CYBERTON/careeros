@@ -354,6 +354,12 @@ msgstr ""
 msgid "{0} closed"
 msgstr "{0} закрыто"
 
+#. placeholder {0}: row.credits
+#. placeholder {1}: row.calls
+#: src/features/org-admin/ai-usage-page.tsx
+msgid "{0} credits · {1} calls"
+msgstr ""
+
 #. placeholder {0}: semantics.dates.length
 #: src/features/resume/editor/check/parser-view.tsx
 msgid "{0} found"
@@ -387,6 +393,11 @@ msgstr "{0} интервью"
 #. placeholder {1}: getRoleLabel(invitation.role)
 #: src/features/auth/pages/accept-invitation.tsx
 msgid "{0} invited you to join as {1}."
+msgstr ""
+
+#. placeholder {0}: cohort.memberCount
+#: src/features/org-admin/cohorts-page.tsx
+msgid "{0} members"
 msgstr ""
 
 #. placeholder {0}: row.minutes
@@ -471,6 +482,12 @@ msgstr "{0} пропущено"
 #: src/features/career/workspace/saved.tsx
 msgid "{0} supported, {1} partly supported, {2} with no evidence yet. {3}"
 msgstr "Подтверждено: {0}, частично: {1}, пока без подтверждений: {2}. {3}"
+
+#. placeholder {0}: period.start.toLocaleDateString()
+#. placeholder {1}: period.end.toLocaleDateString()
+#: src/features/org-admin/ai-usage-page.tsx
+msgid "{0} to {1}"
+msgstr ""
 
 #. placeholder {0}: findings.length
 #: src/features/ats-checker/report/report-view.tsx
@@ -725,6 +742,11 @@ msgstr "{name} использует один столбец"
 msgid "{names} come last in the text. Most systems still find them; some don't."
 msgstr "{names} идет последним в тексте. Большинство систем все еще находят их; некоторые нет."
 
+#. placeholder {0}: report.rows.length
+#: src/features/org-admin/bulk-invite.tsx
+msgid "{okRows} of {0} rows can be invited."
+msgstr ""
+
 #: src/features/resume/editor/check/check-panel.tsx
 msgid "{open, plural, one {# thing to review.} other {# things to review.}}"
 msgstr "{open, plural, one {# вещь для обзора.} other {#, что стоит рассмотреть.}}"
@@ -911,6 +933,10 @@ msgstr "За 24 часа"
 msgid "30 days"
 msgstr "30 дней"
 
+#: src/features/org-admin/ai-usage-page.tsx
+msgid "80% of the pooled credits are used"
+msgstr ""
+
 #: src/features/settings/ai/api-keys.tsx
 msgid "90 days"
 msgstr "90 дней"
@@ -1002,6 +1028,10 @@ msgstr "Страница повёрнута."
 #: src/features/resume/editor/check/job-match.tsx
 msgid "A pasted posting can be saved as an application afterwards."
 msgstr "Вставленное объявление о вакансии впоследствии можно сохранить как заявление о приеме на работу."
+
+#: src/features/org-admin/access.tsx
+msgid "A personal workspace has no admin area. Create an organization to manage a team."
+msgstr ""
 
 #: src/features/organization/members-page.tsx
 msgid "A personal workspace has one seat"
@@ -1102,6 +1132,7 @@ msgid "Account"
 msgstr "Аккаунт"
 
 #: src/features/career/knowledge/stories.tsx
+#: src/features/org-admin/audit-page.tsx
 msgid "Action"
 msgstr "Действие"
 
@@ -1113,6 +1144,10 @@ msgstr "Действия"
 #: src/features/settings/ai/web-access.tsx
 msgid "Active"
 msgstr "Активный"
+
+#: src/features/org-admin/analytics-page.tsx
+msgid "Active members"
+msgstr ""
 
 #: src/features/applications/components/detail/activity.tsx
 msgid "Activity"
@@ -1607,6 +1642,10 @@ msgstr "ИИ не смог предоставить подробную инфо�
 msgid "AI edit"
 msgstr "ИИ редактировать"
 
+#: src/features/org-admin/ai-usage-page.tsx
+msgid "AI features that use the platform's model stay off until the next period or a larger plan."
+msgstr ""
+
 #: src/features/career/schedule-sheet.tsx
 msgid "AI is optional. Review target roles in Knowledge, wait for Saved, then create a new schedule. Existing schedules keep this query until you edit and save it."
 msgstr ""
@@ -1630,6 +1669,11 @@ msgstr "Не удалось загрузить поставщиков ИИ. Пе
 
 #: src/features/career/role-suggestions.tsx
 msgid "AI suggestions, not verified qualifications or hiring predictions. Sources below are your statements."
+msgstr ""
+
+#: src/features/org-admin/ai-usage-page.tsx
+#: src/routes/dashboard/settings/route.tsx
+msgid "AI usage"
 msgstr ""
 
 #: src/features/career/workspace/answer-library.tsx
@@ -1679,6 +1723,14 @@ msgstr ""
 msgid "All employers"
 msgstr ""
 
+#: src/features/org-admin/analytics-page.tsx
+msgid "All members"
+msgstr ""
+
+#: src/features/org-admin/ai-usage-page.tsx
+msgid "All of the pooled credits are used"
+msgstr ""
+
 #: src/features/settings/account/data.tsx
 msgid "All your documents, applications, API keys and public links are deleted for good. This can't be undone."
 msgstr "Все ваши документы, заявки на работу, ключи API и публичные ссылки будут удалены навсегда. Это действие нельзя отменить."
@@ -1690,6 +1742,10 @@ msgstr "Разрешить доступ"
 #: src/features/ats-checker/messages.ts
 msgid "Almost none of your bullets carry a number."
 msgstr "Почти ни один из ваших пунктов не содержит цифр."
+
+#: src/features/org-admin/bulk-invite.tsx
+msgid "Already a member"
+msgstr ""
 
 #: src/features/applications/components/add-application-dialog.tsx
 msgid "Already applied"
@@ -1710,6 +1766,10 @@ msgstr "Уже есть аккаунт? <0/>"
 #: src/features/applications/components/add-application-dialog.tsx
 msgid "Already interviewing"
 msgstr "Уже беру интервью"
+
+#: src/features/org-admin/bulk-invite.tsx
+msgid "Already invited"
+msgstr ""
 
 #: src/features/resume/editor/check/check-panel.tsx
 msgid "Also check the exported PDF"
@@ -1752,6 +1812,11 @@ msgstr ""
 #: src/components/layout/error-screen.tsx
 msgid "An unexpected error stopped this page from loading. Try again, or go to the dashboard."
 msgstr "Из-за непредвиденной ошибки эта страница не загрузилась. Попробуйте еще раз или перейдите на панель управления."
+
+#: src/features/org-admin/analytics-page.tsx
+#: src/routes/dashboard/settings/route.tsx
+msgid "Analytics"
+msgstr ""
 
 #. placeholder {0}: others.length
 #: src/features/applications/components/detail/contacts.tsx
@@ -1982,10 +2047,15 @@ msgstr ""
 #: src/features/career/workspace/shell.tsx
 #: src/features/command-palette/pages/navigation.tsx
 #: src/features/command-palette/pages/resumes.tsx
+#: src/features/org-admin/analytics-page.tsx
 #: src/routes/dashboard/-components/app-shell.tsx
 #: src/routes/dashboard/applications/index.tsx
 msgid "Applications"
 msgstr "Заявки"
+
+#: src/features/org-admin/analytics-page.tsx
+msgid "Applications created"
+msgstr ""
 
 #: src/features/applications/components/insights-view.tsx
 msgid "Applications over time"
@@ -2032,9 +2102,26 @@ msgstr "Применено. Заявка обновлена."
 msgid "Apply"
 msgstr "Отклик"
 
+#: src/features/auth/pages/device.tsx
+msgid "Approve"
+msgstr ""
+
 #: src/libs/locale.ts
 msgid "Arabic"
 msgstr "Арабский"
+
+#: src/features/org-admin/cohorts-page.tsx
+msgid "Archive"
+msgstr ""
+
+#. placeholder {0}: cohort.name
+#: src/features/org-admin/cohorts-page.tsx
+msgid "Archive {0}"
+msgstr ""
+
+#: src/features/org-admin/cohorts-page.tsx
+msgid "Archived"
+msgstr ""
 
 #: src/features/applications/components/import-applications-sheet.tsx
 msgid "Archived (closes it)"
@@ -2122,6 +2209,10 @@ msgstr "Спросите или опишите изменение…"
 msgid "Aspect ratio"
 msgstr "Соотношение сторон"
 
+#: src/features/org-admin/cohorts-page.tsx
+msgid "Assign members"
+msgstr ""
+
 #: src/features/assistant/assistant-button.tsx
 #: src/features/assistant/assistant-panel.tsx
 #: src/features/assistant/conversation.tsx
@@ -2170,6 +2261,11 @@ msgstr "Прикрепить файл резюме (PDF)"
 #: src/features/career/coach-chat.tsx
 msgid "Attachment"
 msgstr "Вложение"
+
+#: src/features/org-admin/audit-page.tsx
+#: src/routes/dashboard/settings/route.tsx
+msgid "Audit log"
+msgstr ""
 
 #. placeholder {0}: countryName(row.countryCode, i18n.locale)
 #: src/features/settings/account/application-profile.tsx
@@ -2400,6 +2496,10 @@ msgstr "Просмотрите бесплатные шаблоны резюме 
 msgid "Browse free resume templates, compare one-column and two-column layouts, and download sample PDFs. Customize your resume and export to PDF or Word."
 msgstr "Просмотрите бесплатные шаблоны резюме, сравните макеты с одной и двумя колонками и загрузите образцы PDF-файлов. Настройте свое резюме и экспортируйте его в PDF или Microsoft Word."
 
+#: src/features/settings/ai/clipper-sign-ins.tsx
+msgid "Browsers where you signed in to the Job Clipper extension. Revoke one and it stops working on its next request."
+msgstr ""
+
 #: src/features/homepage/ui.tsx
 msgid "Build your resume"
 msgstr "Создайте свое резюме"
@@ -2424,6 +2524,24 @@ msgstr "Маркированный список"
 
 #: src/features/legal/signup-notice.tsx
 msgid "By creating an account you agree to the <0>Terms</0> and the <1>Privacy policy</1>."
+msgstr ""
+
+#: src/features/org-admin/ai-usage-page.tsx
+msgid "By feature"
+msgstr ""
+
+#: src/features/org-admin/ai-usage-page.tsx
+msgid "By member"
+msgstr ""
+
+#. placeholder {0}: stages.saved
+#. placeholder {1}: stages.applied
+#. placeholder {2}: stages.screening
+#. placeholder {3}: stages.interview
+#. placeholder {4}: stages.offer
+#. placeholder {5}: stages.closed
+#: src/features/org-admin/analytics-page.tsx
+msgid "By stage: saved {0}, applied {1}, screening {2}, interview {3}, offer {4}, closed {5}."
 msgstr ""
 
 #: src/routes/dashboard/applications/index.tsx
@@ -2609,6 +2727,10 @@ msgstr ""
 msgid "Check every claim, date and result against your experience."
 msgstr "Сверьте каждое утверждение, дату и результат с вашим опытом."
 
+#: src/features/org-admin/bulk-invite.tsx
+msgid "Check file"
+msgstr ""
+
 #: src/features/career/workspace/fit.tsx
 msgid "Check fit"
 msgstr "Проверить соответствие"
@@ -2627,6 +2749,10 @@ msgstr "проверьте цифры и имена перед использо�
 
 #: src/components/layout/unknown-organization-screen.tsx
 msgid "Check the address, or ask the person who gave it to you for the right link."
+msgstr ""
+
+#: src/features/org-admin/analytics-page.tsx
+msgid "Check the dates and try again."
 msgstr ""
 
 #: src/features/career/workspace/prepare.tsx
@@ -2682,6 +2808,10 @@ msgstr "Сверяем со Знаниями"
 #: src/features/ats-checker/checker.tsx
 msgid "Checking layout and content"
 msgstr "Проверка макета и контента"
+
+#: src/features/auth/pages/device.tsx
+msgid "Checking the code..."
+msgstr ""
 
 #: src/features/resume/editor/check/check-panel.tsx
 msgid "Checking the exported PDF…"
@@ -2921,6 +3051,23 @@ msgstr "Коуч"
 msgid "Code"
 msgstr "Код"
 
+#: src/features/auth/pages/device.tsx
+msgid "Code from the extension"
+msgstr ""
+
+#: src/features/org-admin/analytics-page.tsx
+msgid "Cohort"
+msgstr ""
+
+#: src/features/org-admin/audit-page.tsx
+msgid "cohort.created"
+msgstr ""
+
+#: src/features/org-admin/cohorts-page.tsx
+#: src/routes/dashboard/settings/route.tsx
+msgid "Cohorts"
+msgstr ""
+
 #: src/routes/builder/$resumeId/-components/design-panel.tsx
 #: src/routes/builder/letter/-components/design-panel.tsx
 msgid "Color"
@@ -2946,6 +3093,10 @@ msgstr "Столбцы"
 #: src/features/resume/editor/check/issues.ts
 msgid "Columns can scramble the order text is read in."
 msgstr "Столбцы могут шифровать порядок чтения текста."
+
+#: src/features/org-admin/bulk-invite.tsx
+msgid "Columns: email (required), role (member or admin) and cohort (a cohort name). Up to 500 rows and 256 KB."
+msgstr ""
 
 #: src/features/career/today.tsx
 msgid "Coming up"
@@ -3192,6 +3343,7 @@ msgstr "Содержимое расположено в виде сетки."
 #. Primary action button to proceed to next step in two-factor setup
 #: src/dialogs/auth/enable-two-factor.tsx
 #: src/features/assistant/conversation.tsx
+#: src/features/auth/pages/device.tsx
 #: src/features/auth/pages/register.tsx
 msgid "Continue"
 msgstr "Продолжить"
@@ -3369,6 +3521,10 @@ msgstr "Не удалось прикрепить файл. Попробуйте 
 msgid "Couldn't cancel the invitation. Try again."
 msgstr ""
 
+#: src/features/org-admin/cohorts-page.tsx
+msgid "Couldn't change the cohort. Try again."
+msgstr ""
+
 #: src/routes/builder/letter/-components/design-panel.tsx
 msgid "Couldn't change the design. Try again."
 msgstr "Не удалось изменить дизайн. Попробуйте еще раз."
@@ -3406,6 +3562,10 @@ msgstr ""
 msgid "Couldn't complete this connection. Restart the connection from your client and try again."
 msgstr "Не удалось завершить это подключение. Перезапустите подключение в своем клиенте и попробуйте еще раз."
 
+#: src/features/auth/pages/device.tsx
+msgid "Couldn't complete this. Start again from the extension and try again."
+msgstr ""
+
 #. Fallback toast when linking a social authentication provider fails
 #: src/features/settings/account/auth-hooks.ts
 msgid "Couldn't connect your {providerName} account. Try again."
@@ -3439,6 +3599,10 @@ msgstr "Не удалось скопировать в буфер обмена. �
 
 #: src/features/branding/domains-page.tsx
 msgid "Couldn't copy. Select the text instead."
+msgstr ""
+
+#: src/features/org-admin/cohorts-page.tsx
+msgid "Couldn't create the cohort. Try again."
 msgstr ""
 
 #: src/features/documents/use-start-document.ts
@@ -3521,6 +3685,10 @@ msgstr ""
 msgid "Couldn't export your data. Try again."
 msgstr "Не удалось экспортировать данные. Попробуйте еще раз."
 
+#: src/features/org-admin/analytics-page.tsx
+msgid "Couldn't export. Try again."
+msgstr ""
+
 #: src/features/applications/components/application-form-sheet.tsx
 msgid "Couldn't fill in the fields. Try again, or fill them in yourself."
 msgstr "Не удалось заполнить поля. Попробуйте еще раз или заполните их вручную."
@@ -3576,6 +3744,14 @@ msgstr "Не удалось загрузить подключения ИИ. По
 msgid "Couldn't load AI connections. Your saved connections haven't changed."
 msgstr "Не удалось загрузить подключения ИИ. Ваши сохраненные подключения не изменились."
 
+#: src/features/org-admin/ai-usage-page.tsx
+msgid "Couldn't load AI usage"
+msgstr ""
+
+#: src/features/org-admin/analytics-page.tsx
+msgid "Couldn't load analytics"
+msgstr ""
+
 #: src/routes/dashboard/applications/index.tsx
 msgid "Couldn't load applications. Try again."
 msgstr "Не удалось загрузить заявки. Попробуйте еще раз."
@@ -3618,6 +3794,10 @@ msgstr "Не удалось загрузить файл примера. Попр
 msgid "Couldn't load this. Your saved data hasn't changed."
 msgstr "Не удалось загрузить. Ваши сохраненные данные не изменились."
 
+#: src/features/settings/ai/clipper-sign-ins.tsx
+msgid "Couldn't load your Job Clipper sign-ins."
+msgstr ""
+
 #: src/features/discovery/review-queue.tsx
 msgid "Couldn't load your jobs. Try again."
 msgstr ""
@@ -3654,6 +3834,10 @@ msgstr "Не удалось отметить как прочитанное. По
 msgid "Couldn't move the document to Trash. Try again."
 msgstr "Не удалось отправить документ в корзину. Попробуйте еще раз."
 
+#: src/features/org-admin/cohorts-page.tsx
+msgid "Couldn't move the members. Try again."
+msgstr ""
+
 #: src/features/resume/export/use-resume-export.ts
 msgid "Couldn't prepare the resume for printing. Try again."
 msgstr "Не удалось подготовить резюме к печати. Попробуйте еще раз."
@@ -3682,6 +3866,10 @@ msgstr "Не удалось прочитать этот файл. Попробу
 #: src/features/resume/editor/write/section-row.tsx
 msgid "Couldn't read the dates on {entries}, so they stay at the end. Fix their dates and sort again."
 msgstr "Не удалось распознать даты в {entries}, поэтому они остаются в конце. Исправьте даты и отсортируйте снова."
+
+#: src/features/org-admin/bulk-invite.tsx
+msgid "Couldn't read the file. Try again."
+msgstr ""
 
 #. placeholder {0}: part.errorText
 #: src/features/assistant/conversation.tsx
@@ -3724,6 +3912,10 @@ msgstr ""
 msgid "Couldn't remove the passkey. Try again."
 msgstr "Не удалось удалить ключ доступа. Попробуйте еще раз."
 
+#: src/features/org-admin/cohorts-page.tsx
+msgid "Couldn't rename the cohort. Try again."
+msgstr ""
+
 #: src/features/documents/document-actions.tsx
 msgid "Couldn't rename the document. Try again."
 msgstr "Не удалось переименовать документ. Попробуйте еще раз."
@@ -3756,6 +3948,10 @@ msgstr "Не удалось отозвать ключ. Попробуйте ещ
 #: src/features/settings/ai/connected-apps.tsx
 msgid "Couldn't revoke this connection. Try again."
 msgstr "Не удалось отозвать это подключение. Попробуйте еще раз."
+
+#: src/features/settings/ai/clipper-sign-ins.tsx
+msgid "Couldn't revoke this sign-in. Try again."
+msgstr ""
 
 #: src/features/career/hooks.ts
 msgid "Couldn't save that change. Check your connection and try again."
@@ -3861,6 +4057,10 @@ msgstr "Не удалось сохранить. Попробуйте еще ра
 msgid "Couldn't schedule the interview. Try again."
 msgstr "Не удалось назначить собеседование. Попробуйте еще раз."
 
+#: src/features/org-admin/bulk-invite.tsx
+msgid "Couldn't send"
+msgstr ""
+
 #: src/features/auth/pages/accept-invitation.tsx
 #: src/features/settings/account/profile.tsx
 msgid "Couldn't send the email. Try again."
@@ -3868,6 +4068,10 @@ msgstr "Не удалось отправить письмо. Попробуйт�
 
 #: src/features/organization/members-page.tsx
 msgid "Couldn't send the invitation. Try again."
+msgstr ""
+
+#: src/features/org-admin/bulk-invite.tsx
+msgid "Couldn't send the invitations. Try again."
 msgstr ""
 
 #. Fallback toast when requesting password reset email fails without backend message
@@ -4135,6 +4339,10 @@ msgstr "Это приложение может создавать и редак�
 msgid "Create and open"
 msgstr "Создать и открыть"
 
+#: src/features/org-admin/cohorts-page.tsx
+msgid "Create cohort"
+msgstr ""
+
 #: src/features/settings/ai/api-keys.tsx
 msgid "Create key"
 msgstr "Создать ключ"
@@ -4159,10 +4367,19 @@ msgstr "Создано"
 msgid "Created “{finalName}”"
 msgstr "Создано «{finalName}»"
 
+#. placeholder {0}: cohort.name
+#: src/features/org-admin/cohorts-page.tsx
+msgid "Created {0}"
+msgstr ""
+
 #. placeholder {0}: job.company
 #: src/features/documents/new-document-dialog.tsx
 msgid "Created and linked to {0}"
 msgstr "Создано и связано с {0}."
+
+#: src/features/org-admin/ai-usage-page.tsx
+msgid "Credits your members have used of the organization's pooled allowance this period."
+msgstr ""
 
 #: src/features/resume/editor/write/picture-settings.tsx
 msgid "Crop and upload"
@@ -4175,6 +4392,10 @@ msgstr "Обрезать фото"
 #: src/features/applications/components/import-applications-sheet.tsx
 msgid "CSV data"
 msgstr "CSV-данные"
+
+#: src/features/org-admin/bulk-invite.tsx
+msgid "CSV file"
+msgstr ""
 
 #: src/features/career/knowledge/preferences.tsx
 #: src/features/career/offer-entry.tsx
@@ -4506,6 +4727,10 @@ msgstr "Удален в"
 #: src/features/resume/editor/design/style-groups.tsx
 msgid "Density"
 msgstr "Плотность"
+
+#: src/features/auth/pages/device.tsx
+msgid "Deny"
+msgstr ""
 
 #: src/features/auth/pages/consent.tsx
 msgid "Deny access"
@@ -4883,6 +5108,10 @@ msgstr "Перетащите для импорта"
 msgid "Duplicate"
 msgstr "Дублировать"
 
+#: src/features/org-admin/bulk-invite.tsx
+msgid "Duplicate in the file"
+msgstr ""
+
 #: src/dialogs/resume/index.tsx
 msgid "Duplicate resume"
 msgstr "Дублировать резюме"
@@ -5061,6 +5290,8 @@ msgstr "Образование"
 msgid "Education swaps school and field of study the same way."
 msgstr "В разделе «Образование» учебное заведение и специальность меняются местами таким же образом."
 
+#: src/features/org-admin/analytics-page.tsx
+#: src/features/org-admin/bulk-invite.tsx
 #: src/features/resume/editor/check/parser-view.tsx
 #: src/features/resume/editor/write/basics-card.tsx
 #: src/features/settings/account/profile.tsx
@@ -5117,6 +5348,10 @@ msgstr ""
 #: src/features/resume/editor/write/dates-field.tsx
 msgid "End"
 msgstr "Конец"
+
+#: src/features/org-admin/cohorts-page.tsx
+msgid "Ends"
+msgstr ""
 
 #: src/libs/locale.ts
 msgid "English"
@@ -5237,6 +5472,7 @@ msgstr "Введите пароль, чтобы отключить двухэт�
 msgid "Enter your password."
 msgstr "Введите пароль."
 
+#: src/features/org-admin/audit-page.tsx
 #: src/routes/builder/$resumeId/-components/design-panel.tsx
 msgid "Entries"
 msgstr "Записи"
@@ -5325,6 +5561,10 @@ msgstr "Экспортируйте все"
 msgid "Export from the original document instead of scanning or screenshotting it."
 msgstr "Экспортируйте из исходного документа, а не сканируйте и не делайте скриншот."
 
+#: src/features/org-admin/analytics-page.tsx
+msgid "Export members"
+msgstr ""
+
 #: src/features/resume/import/read-file.ts
 msgid "export opened"
 msgstr "экспорт открыт"
@@ -5339,6 +5579,10 @@ msgstr ""
 
 #: src/features/settings/account/application-profile.tsx
 msgid "Export saved profile"
+msgstr ""
+
+#: src/features/org-admin/analytics-page.tsx
+msgid "Export summary"
 msgstr ""
 
 #: src/features/ats-checker/messages.ts
@@ -5462,6 +5706,10 @@ msgstr "Заполнение записей"
 #: src/features/documents/documents-page.tsx
 msgid "Filter by tag"
 msgstr "Фильтровать по тегу"
+
+#: src/features/org-admin/analytics-page.tsx
+msgid "Filters"
+msgstr ""
 
 #: src/features/career/schedule-sheet.tsx
 msgid "Find roles"
@@ -5728,6 +5976,7 @@ msgid "French"
 msgstr "Французский"
 
 #: src/features/career/workspace/fit.tsx
+#: src/features/org-admin/analytics-page.tsx
 #: src/routes/builder/letter/-components/write-panel.tsx
 msgid "From"
 msgstr "От"
@@ -5900,6 +6149,10 @@ msgstr "Приветствие"
 #: src/features/documents/documents-page.tsx
 msgid "Grid"
 msgstr "Плитка"
+
+#: src/features/org-admin/cohorts-page.tsx
+msgid "Group members into classes or intakes, then follow how each group is doing."
+msgstr ""
 
 #: src/features/ats-checker/checker.tsx
 #: src/features/resume/editor/check/check-panel.tsx
@@ -6107,6 +6360,10 @@ msgstr "Как показать файл"
 #: src/features/assistant/assistant-panel.tsx
 msgid "How well do I fit this role?"
 msgstr "Насколько я подхожу на эту роль?"
+
+#: src/features/org-admin/analytics-page.tsx
+msgid "How your members are doing: resumes, applications, interviews and offers."
+msgstr ""
 
 #: src/features/branding/branding-page.tsx
 msgid "How your organization looks to its members."
@@ -6368,6 +6625,7 @@ msgid "Interviewer"
 msgstr "Интервьюер"
 
 #: src/features/applications/components/calendar-view.tsx
+#: src/features/org-admin/analytics-page.tsx
 msgid "Interviews"
 msgstr "Собеседования"
 
@@ -6380,8 +6638,16 @@ msgstr ""
 msgid "Invitation unavailable"
 msgstr ""
 
+#: src/features/org-admin/bulk-invite.tsx
+msgid "Invite from a CSV file"
+msgstr ""
+
 #: src/features/organization/members-page.tsx
 msgid "Invite someone"
+msgstr ""
+
+#: src/features/org-admin/bulk-invite.tsx
+msgid "Invited"
 msgstr ""
 
 #: src/features/career/offers.tsx
@@ -6503,6 +6769,14 @@ msgstr "Японский"
 #: src/features/command-palette/pages/navigation.tsx
 msgid "Job"
 msgstr "Работа"
+
+#: src/features/auth/pages/device.tsx
+msgid "Job Clipper on {organizationName} can read your profile name and save jobs to your tracker."
+msgstr ""
+
+#: src/features/settings/ai/clipper-sign-ins.tsx
+msgid "Job Clipper sign-ins"
+msgstr ""
 
 #: src/features/applications/components/application-form-sheet.tsx
 #: src/features/applications/components/import-applications-sheet.tsx
@@ -6751,6 +7025,10 @@ msgstr "Язык"
 msgid "Languages"
 msgstr "Языки"
 
+#: src/features/org-admin/analytics-page.tsx
+msgid "Last active"
+msgstr ""
+
 #. placeholder {0}: monthYear(new Date(password.updatedAt))
 #: src/features/settings/account/security.tsx
 msgid "Last changed in {0}"
@@ -6780,6 +7058,7 @@ msgid "Last seen in search: {0}"
 msgstr ""
 
 #: src/features/settings/ai/api-keys.tsx
+#: src/features/settings/ai/clipper-sign-ins.tsx
 msgid "Last used"
 msgstr "Последнее использование"
 
@@ -6840,6 +7119,7 @@ msgstr "Оставьте пустым, чтобы использовать ис�
 msgid "Leave out"
 msgstr "Пропустить"
 
+#: src/features/org-admin/ai-usage-page.tsx
 #: src/features/resume/editor/design/template-group.tsx
 msgid "Left"
 msgstr "Левый"
@@ -6954,6 +7234,10 @@ msgstr "Светлая тема"
 #: src/features/assistant/assistant-panel.tsx
 msgid "Likely questions, from the posting and your resume"
 msgstr "Вероятные вопросы из объявления о вакансии и вашего резюме."
+
+#: src/features/org-admin/bulk-invite.tsx
+msgid "Line"
+msgstr ""
 
 #: src/routes/builder/$resumeId/-sidebar/right/sections/typography.tsx
 msgid "Line height"
@@ -7110,6 +7394,10 @@ msgstr "Live · обновления по мере редактирования"
 msgid "Live at {0}"
 msgstr "В прямом эфире на {0}"
 
+#: src/features/org-admin/audit-page.tsx
+msgid "Load more"
+msgstr ""
+
 #: src/features/applications/components/import-applications-sheet.tsx
 msgid "Load your stages before importing named stages. Your CSV data is kept."
 msgstr "Загрузите свои этапы перед импортом именованных этапов. Ваши данные CSV сохранятся."
@@ -7175,6 +7463,10 @@ msgstr ""
 #: src/features/career/workspace/shell.tsx
 msgid "Loading saved version…"
 msgstr "Загрузка сохраненной версии…"
+
+#: src/features/settings/ai/clipper-sign-ins.tsx
+msgid "Loading sign-ins..."
+msgstr ""
 
 #: src/routes/builder/$resumeId/-sidebar/right/sections/custom-styles.tsx
 msgid "Loading stylesheet editor…"
@@ -7449,6 +7741,7 @@ msgstr "Середина"
 msgid "Member"
 msgstr ""
 
+#: src/features/org-admin/analytics-page.tsx
 #: src/features/organization/members-page.tsx
 msgid "Members"
 msgstr ""
@@ -7559,6 +7852,11 @@ msgstr "Большинство систем регистрируют канди�
 msgid "Mostly readable"
 msgstr "В основном читаемый"
 
+#. placeholder {0}: selected.size
+#: src/features/org-admin/cohorts-page.tsx
+msgid "Move {0} selected"
+msgstr ""
+
 #: src/features/applications/components/manage-lanes-sheet.tsx
 msgid "Move {label} down"
 msgstr "Переместить «{label}» вниз"
@@ -7603,6 +7901,10 @@ msgstr "Переместить роль вверх"
 msgid "Move section to another column or page"
 msgstr "Переместить раздел в другой столбец или на другую страницу"
 
+#: src/features/org-admin/cohorts-page.tsx
+msgid "Move selected members to"
+msgstr ""
+
 #: src/routes/builder/$resumeId/-sidebar/right/sections/layout/pages.tsx
 msgid "Move to"
 msgstr "Переместить в"
@@ -7637,6 +7939,11 @@ msgstr "Вверх"
 msgid "Move your email and phone number to the top of page one."
 msgstr "Переместите email и номер телефона в начало первой страницы."
 
+#. placeholder {0}: result.updated
+#: src/features/org-admin/cohorts-page.tsx
+msgid "Moved {0} members"
+msgstr ""
+
 #. placeholder {0}: done.length
 #. placeholder {1}: documents.length
 #: src/features/documents/document-actions.tsx
@@ -7663,6 +7970,8 @@ msgstr "Переводит заявку из этапа «{0}»."
 #: src/features/documents/documents-page.tsx
 #: src/features/documents/new-document-dialog.tsx
 #: src/features/documents/trash-page.tsx
+#: src/features/org-admin/analytics-page.tsx
+#: src/features/org-admin/cohorts-page.tsx
 #: src/features/resume/editor/check/parser-view.tsx
 #: src/features/resume/editor/write/entries.tsx
 #: src/features/settings/account/profile.tsx
@@ -7760,6 +8069,7 @@ msgstr "Сеть"
 
 #: src/features/career/knowledge/facts.tsx
 #: src/features/settings/ai/api-keys.tsx
+#: src/features/settings/ai/clipper-sign-ins.tsx
 msgid "Never"
 msgstr "Никогда"
 
@@ -7777,6 +8087,10 @@ msgstr "Новый ключ API"
 #: src/features/command-palette/pages/resumes.tsx
 msgid "New application"
 msgstr "Новая заявка"
+
+#: src/features/org-admin/cohorts-page.tsx
+msgid "New cohort"
+msgstr ""
 
 #: src/features/assistant/assistant-panel.tsx
 #: src/features/career/coach-thread.tsx
@@ -7801,6 +8115,11 @@ msgstr "Новый факт"
 #: src/features/settings/ai/api-keys.tsx
 msgid "New key"
 msgstr "Новый ключ"
+
+#. placeholder {0}: cohort.name
+#: src/features/org-admin/cohorts-page.tsx
+msgid "New name for {0}"
+msgstr ""
 
 #: src/features/resume/editor/write/entry-card.tsx
 #: src/routes/builder/$resumeId/-sidebar/right/sections/layout/pages.tsx
@@ -7834,6 +8153,8 @@ msgid "New stage color"
 msgstr "Цвет нового этапа"
 
 #: src/features/documents/page-navigation.tsx
+#: src/features/org-admin/analytics-page.tsx
+#: src/features/org-admin/cohorts-page.tsx
 msgid "Next"
 msgstr ""
 
@@ -7903,6 +8224,14 @@ msgstr "Маркированные списки не найдены."
 msgid "No change needed. It's already at {stage}."
 msgstr "Изменения не нужны. Этап уже «{stage}»."
 
+#: src/features/org-admin/cohorts-page.tsx
+msgid "No cohort"
+msgstr ""
+
+#: src/features/org-admin/cohorts-page.tsx
+msgid "No cohorts yet."
+msgstr ""
+
 #. Empty-state message when no command palette results match the search query
 #: src/features/command-palette/content.tsx
 msgid "No commands match that search."
@@ -7964,6 +8293,10 @@ msgstr "Нет адреса электронной почты"
 msgid "No email address was found."
 msgstr "Адрес электронной почты не найден."
 
+#: src/features/org-admin/audit-page.tsx
+msgid "No entries."
+msgstr ""
+
 #: src/features/career/shared.tsx
 msgid "No evidence yet"
 msgstr "Пока нет подтверждений"
@@ -7979,6 +8312,10 @@ msgstr "Пока нет фактов для привязки. Добавьте �
 #: src/features/career/knowledge/facts.tsx
 msgid "No facts yet. Add one above."
 msgstr "Фактов пока нет. Добавьте первый выше."
+
+#: src/features/settings/ai/clipper-sign-ins.tsx
+msgid "No Job Clipper sign-ins yet."
+msgstr ""
 
 #: src/features/documents/new-document-dialog.tsx
 msgid "No job yet"
@@ -8046,6 +8383,10 @@ msgstr "Номер телефона не найден."
 msgid "No photo. Most ATS ignore photos; some regions expect one."
 msgstr "Нет фото. Большинство ATS игнорируют фотографии; некоторые регионы ожидают его."
 
+#: src/features/org-admin/ai-usage-page.tsx
+msgid "No platform AI use yet."
+msgstr ""
+
 #: src/features/applications/components/add-application-dialog.tsx
 msgid "No postings found. Try different keywords."
 msgstr "Объявлений о вакансиях не найдено. Попробуйте разные ключевые слова."
@@ -8072,6 +8413,10 @@ msgstr "Резюме пока нет."
 
 #: src/features/discovery/review-queue.tsx
 msgid "No saved jobs yet."
+msgstr ""
+
+#: src/features/org-admin/bulk-invite.tsx
+msgid "No seat left"
 msgstr ""
 
 #: src/features/documents/document-actions.tsx
@@ -8163,6 +8508,10 @@ msgstr "нормальные поля"
 #: src/libs/locale.ts
 msgid "Norwegian"
 msgstr "Норвежский"
+
+#: src/features/org-admin/bulk-invite.tsx
+msgid "Not a valid email"
+msgstr ""
 
 #: src/features/career/workspace/messages.tsx
 msgid "Not applied"
@@ -8396,6 +8745,7 @@ msgstr "Предложение о работе сохранено"
 msgid "Offer type"
 msgstr "Тип предложения о работе"
 
+#: src/features/org-admin/analytics-page.tsx
 #: src/routes/dashboard/career/route.tsx
 msgid "Offers"
 msgstr "Предложения"
@@ -8467,6 +8817,10 @@ msgstr "Разрешайте только приложения, которым �
 msgid "Only applies when the section fits on a single page."
 msgstr "Применяется только в том случае, если раздел помещается на одной странице."
 
+#: src/features/auth/pages/device.tsx
+msgid "Only continue if this code matches the one shown in the extension."
+msgstr ""
+
 #: src/features/ats-checker/messages.ts
 msgid "Only one recognizable section heading was found."
 msgstr "Найден только один распознаваемый заголовок раздела."
@@ -8481,6 +8835,10 @@ msgstr ""
 
 #: src/features/organization/members-page.tsx
 msgid "Only owners and admins can manage members"
+msgstr ""
+
+#: src/features/org-admin/access.tsx
+msgid "Only owners and admins of an organization can open this page"
 msgstr ""
 
 #: src/features/settings/ai/providers.tsx
@@ -8757,6 +9115,11 @@ msgstr "Страница"
 msgid "Page {0}"
 msgstr "Страница {0}"
 
+#: src/features/org-admin/analytics-page.tsx
+#: src/features/org-admin/cohorts-page.tsx
+msgid "Page {page} of {pages}"
+msgstr ""
+
 #: src/routes/builder/$resumeId/-components/page-canvas.tsx
 #: src/routes/builder/letter/-components/letter-page.tsx
 msgid "Page {pageNumber}"
@@ -9003,6 +9366,10 @@ msgstr "Выберите время позже текущего."
 msgid "Pick an icon"
 msgstr "Выберите значок"
 
+#: src/features/org-admin/cohorts-page.tsx
+msgid "Pick members, then move them to a cohort or take them out of theirs."
+msgstr ""
+
 #: src/features/ats-checker/messages.ts
 msgid "Pick one format and use it everywhere."
 msgstr "Выберите один формат и используйте его везде."
@@ -9070,6 +9437,14 @@ msgstr "Польский"
 #: src/features/career/shared.tsx
 msgid "Polishing"
 msgstr "Шлифуем"
+
+#: src/features/org-admin/ai-usage-page.tsx
+msgid "Pooled"
+msgstr ""
+
+#: src/features/org-admin/ai-usage-page.tsx
+msgid "Pooled credits used"
+msgstr ""
 
 #. Preset button for setting picture aspect ratio to portrait orientation
 #: src/features/resume/editor/write/picture-settings.tsx
@@ -9259,6 +9634,8 @@ msgid "Previewing {0} · click to apply"
 msgstr "Предварительный просмотр {0} · нажмите, чтобы применить"
 
 #: src/features/documents/page-navigation.tsx
+#: src/features/org-admin/analytics-page.tsx
+#: src/features/org-admin/cohorts-page.tsx
 msgid "Previous"
 msgstr ""
 
@@ -10012,15 +10389,25 @@ msgstr ""
 msgid "Removed {name}"
 msgstr ""
 
+#: src/features/org-admin/ai-usage-page.tsx
+msgid "Removed member"
+msgstr ""
+
 #: src/features/branding/domains.ts
 msgid "Removing"
 msgstr ""
 
 #: src/features/career/coach.tsx
 #: src/features/documents/document-actions.tsx
+#: src/features/org-admin/cohorts-page.tsx
 #: src/features/settings/account/security.tsx
 msgid "Rename"
 msgstr "Переименовать"
+
+#. placeholder {0}: cohort.name
+#: src/features/org-admin/cohorts-page.tsx
+msgid "Rename {0}"
+msgstr ""
 
 #: src/routes/builder/letter/-components/letter-bar.tsx
 msgid "Rename letter"
@@ -10152,8 +10539,14 @@ msgstr "Ответить до"
 
 #: src/features/documents/document-actions.tsx
 #: src/features/documents/trash-page.tsx
+#: src/features/org-admin/cohorts-page.tsx
 msgid "Restore"
 msgstr "Восстановить"
+
+#. placeholder {0}: cohort.name
+#: src/features/org-admin/cohorts-page.tsx
+msgid "Restore {0}"
+msgstr ""
 
 #: src/features/resume/share/history-tab.tsx
 msgid "Restore this version"
@@ -10187,6 +10580,7 @@ msgid "Restricted to its employer or application."
 msgstr ""
 
 #: src/features/career/knowledge/stories.tsx
+#: src/features/org-admin/bulk-invite.tsx
 msgid "Result"
 msgstr "Результат"
 
@@ -10253,12 +10647,17 @@ msgstr ""
 #: src/features/command-palette/pages/navigation.tsx
 #: src/features/command-palette/pages/resumes.tsx
 #: src/features/documents/documents-page.tsx
+#: src/features/org-admin/analytics-page.tsx
 msgid "Resumes"
 msgstr "Резюме"
 
 #: src/features/settings/preferences.tsx
 msgid "Resumes always render on white paper, whatever the theme."
 msgstr "Резюме всегда оформляются на белой бумаге, независимо от темы."
+
+#: src/features/org-admin/analytics-page.tsx
+msgid "Resumes created"
+msgstr ""
 
 #. placeholder {0}: application.postingSource.retrievedAt
 #. placeholder {1}: application.postingSource.method
@@ -10387,6 +10786,7 @@ msgid "Reviewing needs an AI connection. <0>Add one in Settings</0>. What you wr
 msgstr "Для проверки нужно подключение ИИ. <0>Добавьте его в настройках</0>. До тех пор все, что вы здесь пишете, остается в этом браузере."
 
 #: src/features/settings/ai/api-keys.tsx
+#: src/features/settings/ai/clipper-sign-ins.tsx
 msgid "Revoke"
 msgstr "Отозвать"
 
@@ -10402,6 +10802,12 @@ msgstr "Отозвать доступ"
 #: src/features/settings/ai/connected-apps.tsx
 msgid "Revoke an application's access to your account."
 msgstr "Отмените доступ приложения к вашей учетной записи."
+
+#. placeholder {0}: token.label
+#. placeholder {1}: token.organizationName
+#: src/features/settings/ai/clipper-sign-ins.tsx
+msgid "Revoke the Job Clipper sign-in on {0} for {1}"
+msgstr ""
 
 #: src/features/settings/ai/api-keys.tsx
 msgid "Revoked “{name}”. Apps using it stop working now."
@@ -10989,9 +11395,11 @@ msgid "Select"
 msgstr "Выбрать"
 
 #. placeholder {0}: document.name
+#. placeholder {0}: member.name
 #. placeholder {0}: row.role
 #: src/features/career/today.tsx
 #: src/features/documents/document-card.tsx
+#: src/features/org-admin/cohorts-page.tsx
 msgid "Select {0}"
 msgstr "Выбрать {0}"
 
@@ -11043,6 +11451,10 @@ msgstr "Семантическая таблица стилей CSS"
 #: src/features/career/coach-thread.tsx
 msgid "Send"
 msgstr "Отправлять"
+
+#: src/features/org-admin/bulk-invite.tsx
+msgid "Send {okRows} invitations"
+msgstr ""
 
 #: src/features/organization/members-page.tsx
 msgid "Send invitation"
@@ -11128,6 +11540,16 @@ msgstr "Отправляет текст вашего резюме только �
 #: src/features/resume/share/format.ts
 msgid "Sent"
 msgstr "Отправил"
+
+#. placeholder {0}: result.sent
+#: src/features/org-admin/bulk-invite.tsx
+msgid "Sent {0} invitations"
+msgstr ""
+
+#. placeholder {0}: report.sent
+#: src/features/org-admin/bulk-invite.tsx
+msgid "Sent {0} invitations."
+msgstr ""
 
 #. placeholder {0}: version.name
 #: src/features/resume/share/format.ts
@@ -11270,6 +11692,10 @@ msgstr "Показать еще раз"
 msgid "Show all types"
 msgstr "Показать все типы"
 
+#: src/features/org-admin/cohorts-page.tsx
+msgid "Show archived"
+msgstr ""
+
 #: src/routes/dashboard/applications/index.tsx
 msgid "Show closed"
 msgstr "Показать закрыто"
@@ -11392,6 +11818,10 @@ msgstr "Войдите сейчас"
 msgid "Sign in or create an account with the email address that received the invitation to join."
 msgstr ""
 
+#: src/features/auth/pages/device.tsx
+msgid "Sign in the Job Clipper"
+msgstr ""
+
 #: src/features/auth/pages/organization-access.tsx
 msgid "Sign in to continue"
 msgstr ""
@@ -11434,7 +11864,12 @@ msgstr "Вход не завершён"
 msgid "Sign-off"
 msgstr "Заключительная фраза"
 
+#: src/features/settings/ai/clipper-sign-ins.tsx
+msgid "Signed in"
+msgstr ""
+
 #: src/features/auth/pages/consent.tsx
+#: src/features/auth/pages/device.tsx
 msgid "Signed in as {email}"
 msgstr "Выполнен вход как {email}"
 
@@ -11790,6 +12225,10 @@ msgstr ""
 msgid "Started"
 msgstr "Начато"
 
+#: src/features/org-admin/cohorts-page.tsx
+msgid "Starts"
+msgstr ""
+
 #: src/features/career/shared.tsx
 msgid "Starts in {minutes} minutes"
 msgstr "Начинается через {minutes} мин"
@@ -11948,6 +12387,7 @@ msgstr "Предлагает вырезать, но никогда не удал
 msgid "Summaries of your open applications"
 msgstr "Сводки по вашим открытым заявкам"
 
+#: src/features/org-admin/analytics-page.tsx
 #: src/features/resume/editor/write/summary-editor.tsx
 #: src/libs/resume/section.tsx
 msgid "Summary"
@@ -12241,6 +12681,10 @@ msgstr "Текст под {minimum} pt может быть неправильн�
 msgid "Thai"
 msgstr "Тайский"
 
+#: src/features/auth/pages/device.tsx
+msgid "That code is not valid or has expired. Start again from the extension."
+msgstr ""
+
 #: src/features/ats-checker/checker.tsx
 msgid "That file couldn't be read as a PDF. Choose a PDF file and try again."
 msgstr "Этот файл не удалось прочитать как PDF. Выберите PDF-файл и попробуйте еще раз."
@@ -12280,6 +12724,10 @@ msgstr "Этот провайдер входа больше не доступе�
 #: src/features/resume/share/download-tab.tsx
 msgid "The {label} file couldn't be generated. Try again, or download PDF instead."
 msgstr "Не удалось создать файл {label}. Попробуйте еще раз или вместо этого загрузите PDF."
+
+#: src/features/org-admin/ai-usage-page.tsx
+msgid "The 20 members who used the most."
+msgstr ""
 
 #: src/libs/error-message.ts
 msgid "The address must contain only lowercase letters and numbers, separated by single dashes."
@@ -12364,6 +12812,10 @@ msgstr "Файл не удалось прочитать как резюме."
 #: src/routes/builder/letter/-components/write-panel.tsx
 msgid "The greeting follows the name."
 msgstr "Приветствие следует за именем."
+
+#: src/features/auth/pages/device.tsx
+msgid "The Job Clipper is signed in to {organizationName}. You can close this tab and go back to the extension."
+msgstr ""
 
 #: src/features/settings/ai/providers.tsx
 msgid "The key is encrypted on the server and never shown again. Saving tests the connection."
@@ -12847,6 +13299,10 @@ msgstr "Этот PDF представляет собой отсканирова�
 msgid "This PDF is password protected. Save an unprotected copy and try again."
 msgstr "Этот PDF защищён паролем. Сохраните незащищённую копию и попробуйте снова."
 
+#: src/features/org-admin/ai-usage-page.tsx
+msgid "This period"
+msgstr ""
+
 #: src/features/assistant/question-card.tsx
 msgid "This question couldn't be asked. Send a new message to continue."
 msgstr ""
@@ -13006,6 +13462,7 @@ msgstr "Совет"
 msgid "Title"
 msgstr "Название"
 
+#: src/features/org-admin/analytics-page.tsx
 #: src/routes/builder/letter/-components/write-panel.tsx
 msgid "To"
 msgstr "К"
@@ -13119,6 +13576,7 @@ msgstr "Попробуйте еще раз"
 
 #: src/features/branding/branding-page.tsx
 #: src/features/branding/domains-page.tsx
+#: src/features/org-admin/ai-usage-page.tsx
 msgid "Try again in a moment."
 msgstr ""
 
@@ -13311,6 +13769,14 @@ msgstr "Отменить изменение резюме"
 msgid "Unknown"
 msgstr "Неизвестно"
 
+#: src/features/org-admin/bulk-invite.tsx
+msgid "Unknown cohort"
+msgstr ""
+
+#: src/features/org-admin/bulk-invite.tsx
+msgid "Unknown role"
+msgstr ""
+
 #: src/features/documents/document-actions.tsx
 msgid "Unlink"
 msgstr "Отсоединить"
@@ -13368,6 +13834,10 @@ msgstr "До 2 минут. Слова появляются по мере реч�
 #: src/features/ats-checker/checker.tsx
 msgid "Up to 25 MB · checked in your browser, never uploaded"
 msgstr "До 25 MB · проверено в браузере, никогда не загружалось"
+
+#: src/features/org-admin/analytics-page.tsx
+msgid "Up to 366 days, in UTC."
+msgstr ""
 
 #: src/features/applications/components/calendar-view.tsx
 msgid "Upcoming interviews"
@@ -13603,6 +14073,7 @@ msgid "Use your editor's normal bullet list, so stray glyphs do not land mid-sen
 msgstr "Используйте обычный маркированный список редактора, чтобы посторонние глифы не попадали в середину предложения."
 
 #: src/features/career/coach-chat.tsx
+#: src/features/org-admin/ai-usage-page.tsx
 msgid "Used"
 msgstr "Использовано"
 
@@ -14090,6 +14561,10 @@ msgstr "Какие возможности лучше всего соответс
 msgid "Which other benefits come with it, like pension or allowances?"
 msgstr "Какие еще льготы в него входят, например пенсия или компенсации?"
 
+#: src/features/org-admin/audit-page.tsx
+msgid "Who changed what in your organization."
+msgstr ""
+
 #: src/features/applications/components/interview-dialog.tsx
 #: src/features/career/workspace/shell.tsx
 msgid "Who you'll meet"
@@ -14110,6 +14585,10 @@ msgstr "широкие поля"
 #: src/features/resume/editor/design/template-group.tsx
 msgid "Width"
 msgstr "Ширина"
+
+#: src/features/org-admin/bulk-invite.tsx
+msgid "Will be invited"
+msgstr ""
 
 #: src/features/settings/account/application-profile.tsx
 msgid "Willing to relocate"
@@ -14266,6 +14745,10 @@ msgstr "Вы ответили: {answer}"
 msgid "You applied to {0} before and didn't hear back."
 msgstr "Вы уже откликались в {0} и не получили ответа."
 
+#: src/features/auth/pages/device.tsx
+msgid "You are not a member of {organizationName}, so you cannot sign the Job Clipper in to it."
+msgstr ""
+
 #: src/features/organization/no-organization-notice.tsx
 msgid "You aren't a member of any organization yet. Open the invitation link in the email you received to join one."
 msgstr ""
@@ -14293,6 +14776,10 @@ msgstr ""
 #: src/features/auth/pages/error.tsx
 msgid "You canceled the sign-in before it finished. Try again when you're ready."
 msgstr "Вы отменили вход до его завершения. Попробуйте еще раз, когда будете готовы."
+
+#: src/features/auth/pages/device.tsx
+msgid "You denied this sign-in. Nothing was shared. You can close this tab."
+msgstr ""
 
 #: src/features/documents/new-document-dialog.tsx
 msgid "You don't have a resume to copy yet. Import or create a resume first, then return to copy it for this job."
@@ -14458,6 +14945,11 @@ msgstr ""
 msgid "Your changes were kept in “{name}”."
 msgstr ""
 
+#. placeholder {0}: data.cohortName
+#: src/features/settings/account/profile.tsx
+msgid "Your cohort: {0}"
+msgstr ""
+
 #: src/features/ats-checker/messages.ts
 msgid "Your contact details are not on the first page."
 msgstr "Ваши контактные данные не на первой странице."
@@ -14590,6 +15082,10 @@ msgstr "В резюме изменился номер телефона. Пись
 #: src/features/ats-checker/messages.ts
 msgid "Your phone number is written in an unusual shape."
 msgstr "Ваш номер телефона записан в необычном формате."
+
+#: src/features/org-admin/ai-usage-page.tsx
+msgid "Your plan allows going over; extra use is billed."
+msgstr ""
 
 #: src/features/career/coach.tsx
 msgid "your preferences"
