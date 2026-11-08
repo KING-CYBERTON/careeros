@@ -42123,6 +42123,1670 @@
 				]
 			}
 		},
+		"/billing": {
+			"get": {
+				"operationId": "getBilling",
+				"summary": "Get the organization's plan, subscription and the plans on offer",
+				"description": "Returns the plan, status, seats, billing period, trial and grace dates, provider, and the available plans with their prices. Only an owner or admin can read it. Requires authentication.",
+				"tags": [
+					"Billing"
+				],
+				"parameters": [],
+				"responses": {
+					"200": {
+						"description": "OK",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"planId": {
+											"type": "string"
+										},
+										"status": {
+											"enum": [
+												"trial",
+												"active",
+												"past_due",
+												"suspended"
+											],
+											"type": "string"
+										},
+										"subscription": {
+											"type": "object",
+											"properties": {
+												"status": {
+													"enum": [
+														"trialing",
+														"active",
+														"past_due",
+														"canceled",
+														"none"
+													],
+													"type": "string"
+												},
+												"provider": {
+													"type": "string",
+													"description": "`none` when the organization has never paid."
+												},
+												"seats": {
+													"type": "integer",
+													"minimum": -9007199254740991,
+													"maximum": 9007199254740991
+												},
+												"interval": {
+													"anyOf": [
+														{
+															"enum": [
+																"month",
+																"year"
+															],
+															"type": "string"
+														},
+														{
+															"type": "null"
+														}
+													]
+												},
+												"currentPeriodStart": {
+													"anyOf": [
+														{
+															"type": "string",
+															"format": "date-time",
+															"x-native-type": "date"
+														},
+														{
+															"type": "null"
+														}
+													]
+												},
+												"currentPeriodEnd": {
+													"anyOf": [
+														{
+															"type": "string",
+															"format": "date-time",
+															"x-native-type": "date"
+														},
+														{
+															"type": "null"
+														}
+													]
+												},
+												"trialEndsAt": {
+													"anyOf": [
+														{
+															"type": "string",
+															"format": "date-time",
+															"x-native-type": "date"
+														},
+														{
+															"type": "null"
+														}
+													]
+												},
+												"graceEndsAt": {
+													"anyOf": [
+														{
+															"type": "string",
+															"format": "date-time",
+															"x-native-type": "date"
+														},
+														{
+															"type": "null"
+														}
+													],
+													"description": "When a past-due organization will be suspended."
+												}
+											},
+											"required": [
+												"status",
+												"provider",
+												"seats",
+												"interval",
+												"currentPeriodStart",
+												"currentPeriodEnd",
+												"trialEndsAt",
+												"graceEndsAt"
+											]
+										},
+										"memberCount": {
+											"type": "integer",
+											"minimum": -9007199254740991,
+											"maximum": 9007199254740991
+										},
+										"billingEnabled": {
+											"type": "boolean",
+											"description": "False when the server has no payment provider: nobody can pay."
+										},
+										"canManage": {
+											"type": "boolean",
+											"description": "True for the owner: only the owner starts a trial, checks out, changes seats or cancels."
+										},
+										"canStartTrial": {
+											"type": "boolean"
+										},
+										"plans": {
+											"type": "array",
+											"items": {
+												"type": "object",
+												"properties": {
+													"id": {
+														"type": "string"
+													},
+													"name": {
+														"type": "string"
+													},
+													"pricingModel": {
+														"enum": [
+															"flat",
+															"per_seat"
+														],
+														"type": "string",
+														"description": "`flat`: one price per organization. `per_seat`: the price is per seat."
+													},
+													"seatLimit": {
+														"anyOf": [
+															{
+																"type": "integer",
+																"minimum": -9007199254740991,
+																"maximum": 9007199254740991
+															},
+															{
+																"type": "null"
+															}
+														],
+														"description": "Null means unlimited."
+													},
+													"priceMonthlyUsdCents": {
+														"anyOf": [
+															{
+																"type": "integer",
+																"minimum": -9007199254740991,
+																"maximum": 9007199254740991
+															},
+															{
+																"type": "null"
+															}
+														],
+														"description": "US cents. Null means contact us."
+													},
+													"priceAnnualUsdCents": {
+														"anyOf": [
+															{
+																"type": "integer",
+																"minimum": -9007199254740991,
+																"maximum": 9007199254740991
+															},
+															{
+																"type": "null"
+															}
+														]
+													},
+													"priceMonthlyKes": {
+														"anyOf": [
+															{
+																"type": "integer",
+																"minimum": -9007199254740991,
+																"maximum": 9007199254740991
+															},
+															{
+																"type": "null"
+															}
+														],
+														"description": "Whole Kenyan shillings."
+													},
+													"priceAnnualKes": {
+														"anyOf": [
+															{
+																"type": "integer",
+																"minimum": -9007199254740991,
+																"maximum": 9007199254740991
+															},
+															{
+																"type": "null"
+															}
+														]
+													},
+													"aiCreditsPerSeat": {
+														"type": "integer",
+														"minimum": -9007199254740991,
+														"maximum": 9007199254740991
+													},
+													"features": {
+														"type": "object",
+														"propertyNames": {
+															"type": "string"
+														},
+														"additionalProperties": {
+															"type": "boolean"
+														}
+													},
+													"selfService": {
+														"type": "boolean",
+														"description": "Whether the organization can buy this plan itself (otherwise: contact us)."
+													}
+												},
+												"required": [
+													"id",
+													"name",
+													"pricingModel",
+													"seatLimit",
+													"priceMonthlyUsdCents",
+													"priceAnnualUsdCents",
+													"priceMonthlyKes",
+													"priceAnnualKes",
+													"aiCreditsPerSeat",
+													"features",
+													"selfService"
+												]
+											}
+										}
+									},
+									"required": [
+										"planId",
+										"status",
+										"subscription",
+										"memberCount",
+										"billingEnabled",
+										"canManage",
+										"canStartTrial",
+										"plans"
+									]
+								}
+							}
+						}
+					},
+					"403": {
+						"description": "403",
+						"content": {
+							"application/json": {
+								"schema": {
+									"oneOf": [
+										{
+											"type": "object",
+											"properties": {
+												"defined": {
+													"const": true
+												},
+												"code": {
+													"const": "FORBIDDEN"
+												},
+												"status": {
+													"const": 403
+												},
+												"message": {
+													"type": "string",
+													"default": "Only an owner or admin of the organization can see billing."
+												},
+												"data": {}
+											},
+											"required": [
+												"defined",
+												"code",
+												"status",
+												"message"
+											]
+										},
+										{
+											"type": "object",
+											"properties": {
+												"defined": {
+													"const": false
+												},
+												"code": {
+													"type": "string"
+												},
+												"status": {
+													"type": "number"
+												},
+												"message": {
+													"type": "string"
+												},
+												"data": {}
+											},
+											"required": [
+												"defined",
+												"code",
+												"status",
+												"message"
+											]
+										}
+									]
+								}
+							}
+						}
+					},
+					"default": {
+						"description": "Structured API error. See status and code; do not branch on message text.",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"required": [
+										"defined",
+										"code",
+										"status",
+										"message"
+									],
+									"properties": {
+										"defined": {
+											"type": "boolean"
+										},
+										"code": {
+											"type": "string"
+										},
+										"status": {
+											"type": "integer"
+										},
+										"message": {
+											"type": "string"
+										},
+										"data": {}
+									}
+								}
+							}
+						}
+					}
+				},
+				"security": [
+					{
+						"apiKey": []
+					},
+					{
+						"bearerAuth": []
+					},
+					{
+						"cookieAuth": []
+					}
+				],
+				"x-codeSamples": [
+					{
+						"lang": "bash",
+						"label": "cURL",
+						"source": "curl \"https://careeros.example/api/openapi/billing\" --header \"x-api-key: <api-key>\""
+					}
+				]
+			}
+		},
+		"/billing/trial": {
+			"post": {
+				"operationId": "startBillingTrial",
+				"summary": "Start the organization's 14-day trial",
+				"description": "Moves an organization on the personal plan to a 14-day trial with 5 seats. Once per organization. Only the owner can do this. Requires authentication.",
+				"tags": [
+					"Billing"
+				],
+				"requestBody": {
+					"required": false,
+					"content": {
+						"application/json": {
+							"schema": {
+								"type": "object"
+							}
+						}
+					}
+				},
+				"responses": {
+					"200": {
+						"description": "OK",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"trialEndsAt": {
+											"type": "string",
+											"format": "date-time",
+											"x-native-type": "date"
+										}
+									},
+									"required": [
+										"trialEndsAt"
+									]
+								}
+							}
+						}
+					},
+					"403": {
+						"description": "403",
+						"content": {
+							"application/json": {
+								"schema": {
+									"oneOf": [
+										{
+											"type": "object",
+											"properties": {
+												"defined": {
+													"const": true
+												},
+												"code": {
+													"const": "FORBIDDEN"
+												},
+												"status": {
+													"const": 403
+												},
+												"message": {
+													"type": "string",
+													"default": "Only the owner of the organization can do this."
+												},
+												"data": {}
+											},
+											"required": [
+												"defined",
+												"code",
+												"status",
+												"message"
+											]
+										},
+										{
+											"type": "object",
+											"properties": {
+												"defined": {
+													"const": false
+												},
+												"code": {
+													"type": "string"
+												},
+												"status": {
+													"type": "number"
+												},
+												"message": {
+													"type": "string"
+												},
+												"data": {}
+											},
+											"required": [
+												"defined",
+												"code",
+												"status",
+												"message"
+											]
+										}
+									]
+								}
+							}
+						}
+					},
+					"409": {
+						"description": "409",
+						"content": {
+							"application/json": {
+								"schema": {
+									"oneOf": [
+										{
+											"type": "object",
+											"properties": {
+												"defined": {
+													"const": true
+												},
+												"code": {
+													"const": "CONFLICT"
+												},
+												"status": {
+													"const": 409
+												},
+												"message": {
+													"type": "string",
+													"default": "The organization cannot start a trial."
+												},
+												"data": {}
+											},
+											"required": [
+												"defined",
+												"code",
+												"status",
+												"message"
+											]
+										},
+										{
+											"type": "object",
+											"properties": {
+												"defined": {
+													"const": false
+												},
+												"code": {
+													"type": "string"
+												},
+												"status": {
+													"type": "number"
+												},
+												"message": {
+													"type": "string"
+												},
+												"data": {}
+											},
+											"required": [
+												"defined",
+												"code",
+												"status",
+												"message"
+											]
+										}
+									]
+								}
+							}
+						}
+					},
+					"412": {
+						"description": "412",
+						"content": {
+							"application/json": {
+								"schema": {
+									"oneOf": [
+										{
+											"type": "object",
+											"properties": {
+												"defined": {
+													"const": true
+												},
+												"code": {
+													"const": "PRECONDITION_FAILED"
+												},
+												"status": {
+													"const": 412
+												},
+												"message": {
+													"type": "string",
+													"default": "Billing is not enabled on this server."
+												},
+												"data": {}
+											},
+											"required": [
+												"defined",
+												"code",
+												"status",
+												"message"
+											]
+										},
+										{
+											"type": "object",
+											"properties": {
+												"defined": {
+													"const": false
+												},
+												"code": {
+													"type": "string"
+												},
+												"status": {
+													"type": "number"
+												},
+												"message": {
+													"type": "string"
+												},
+												"data": {}
+											},
+											"required": [
+												"defined",
+												"code",
+												"status",
+												"message"
+											]
+										}
+									]
+								}
+							}
+						}
+					},
+					"default": {
+						"description": "Structured API error. See status and code; do not branch on message text.",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"required": [
+										"defined",
+										"code",
+										"status",
+										"message"
+									],
+									"properties": {
+										"defined": {
+											"type": "boolean"
+										},
+										"code": {
+											"type": "string"
+										},
+										"status": {
+											"type": "integer"
+										},
+										"message": {
+											"type": "string"
+										},
+										"data": {}
+									}
+								}
+							}
+						}
+					}
+				},
+				"security": [
+					{
+						"apiKey": []
+					},
+					{
+						"bearerAuth": []
+					},
+					{
+						"cookieAuth": []
+					}
+				],
+				"x-codeSamples": [
+					{
+						"lang": "bash",
+						"label": "cURL",
+						"source": "curl --request POST \"https://careeros.example/api/openapi/billing/trial\" --header \"x-api-key: <api-key>\" --header \"Content-Type: application/json\" --data '{}'"
+					}
+				]
+			}
+		},
+		"/billing/checkout": {
+			"post": {
+				"operationId": "createBillingCheckout",
+				"summary": "Start paying for a plan",
+				"description": "Asks the payment provider for a checkout. Seats cannot be fewer than the current members. The subscription changes when the provider confirms the payment. Only the owner can do this. Requires authentication.",
+				"tags": [
+					"Billing"
+				],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"type": "object",
+								"properties": {
+									"planId": {
+										"enum": [
+											"starter",
+											"pro"
+										],
+										"type": "string",
+										"description": "The plan to buy."
+									},
+									"interval": {
+										"enum": [
+											"month",
+											"year"
+										],
+										"type": "string"
+									},
+									"seats": {
+										"type": "integer",
+										"minimum": 1,
+										"maximum": 10000
+									}
+								},
+								"required": [
+									"planId",
+									"interval",
+									"seats"
+								]
+							}
+						}
+					}
+				},
+				"responses": {
+					"200": {
+						"description": "OK",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"redirectUrl": {
+											"anyOf": [
+												{
+													"type": "string"
+												},
+												{
+													"type": "null"
+												}
+											],
+											"description": "Send the browser here to pay. Null when a prompt was sent to the phone."
+										},
+										"stkPushRequested": {
+											"type": "boolean",
+											"description": "True when the customer was asked to approve on their phone (M-Pesa)."
+										}
+									},
+									"required": [
+										"redirectUrl",
+										"stkPushRequested"
+									]
+								}
+							}
+						}
+					},
+					"400": {
+						"description": "400",
+						"content": {
+							"application/json": {
+								"schema": {
+									"oneOf": [
+										{
+											"type": "object",
+											"properties": {
+												"defined": {
+													"const": true
+												},
+												"code": {
+													"const": "BAD_REQUEST"
+												},
+												"status": {
+													"const": 400
+												},
+												"message": {
+													"type": "string",
+													"default": "The plan or seats are not valid."
+												},
+												"data": {}
+											},
+											"required": [
+												"defined",
+												"code",
+												"status",
+												"message"
+											]
+										},
+										{
+											"type": "object",
+											"properties": {
+												"defined": {
+													"const": false
+												},
+												"code": {
+													"type": "string"
+												},
+												"status": {
+													"type": "number"
+												},
+												"message": {
+													"type": "string"
+												},
+												"data": {}
+											},
+											"required": [
+												"defined",
+												"code",
+												"status",
+												"message"
+											]
+										}
+									]
+								}
+							}
+						}
+					},
+					"403": {
+						"description": "403",
+						"content": {
+							"application/json": {
+								"schema": {
+									"oneOf": [
+										{
+											"type": "object",
+											"properties": {
+												"defined": {
+													"const": true
+												},
+												"code": {
+													"const": "FORBIDDEN"
+												},
+												"status": {
+													"const": 403
+												},
+												"message": {
+													"type": "string",
+													"default": "Only the owner of the organization can do this."
+												},
+												"data": {}
+											},
+											"required": [
+												"defined",
+												"code",
+												"status",
+												"message"
+											]
+										},
+										{
+											"type": "object",
+											"properties": {
+												"defined": {
+													"const": false
+												},
+												"code": {
+													"type": "string"
+												},
+												"status": {
+													"type": "number"
+												},
+												"message": {
+													"type": "string"
+												},
+												"data": {}
+											},
+											"required": [
+												"defined",
+												"code",
+												"status",
+												"message"
+											]
+										}
+									]
+								}
+							}
+						}
+					},
+					"412": {
+						"description": "412",
+						"content": {
+							"application/json": {
+								"schema": {
+									"oneOf": [
+										{
+											"type": "object",
+											"properties": {
+												"defined": {
+													"const": true
+												},
+												"code": {
+													"const": "PRECONDITION_FAILED"
+												},
+												"status": {
+													"const": 412
+												},
+												"message": {
+													"type": "string",
+													"default": "Billing is not enabled on this server."
+												},
+												"data": {}
+											},
+											"required": [
+												"defined",
+												"code",
+												"status",
+												"message"
+											]
+										},
+										{
+											"type": "object",
+											"properties": {
+												"defined": {
+													"const": false
+												},
+												"code": {
+													"type": "string"
+												},
+												"status": {
+													"type": "number"
+												},
+												"message": {
+													"type": "string"
+												},
+												"data": {}
+											},
+											"required": [
+												"defined",
+												"code",
+												"status",
+												"message"
+											]
+										}
+									]
+								}
+							}
+						}
+					},
+					"default": {
+						"description": "Structured API error. See status and code; do not branch on message text.",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"required": [
+										"defined",
+										"code",
+										"status",
+										"message"
+									],
+									"properties": {
+										"defined": {
+											"type": "boolean"
+										},
+										"code": {
+											"type": "string"
+										},
+										"status": {
+											"type": "integer"
+										},
+										"message": {
+											"type": "string"
+										},
+										"data": {}
+									}
+								}
+							}
+						}
+					}
+				},
+				"security": [
+					{
+						"apiKey": []
+					},
+					{
+						"bearerAuth": []
+					},
+					{
+						"cookieAuth": []
+					}
+				],
+				"x-codeSamples": [
+					{
+						"lang": "bash",
+						"label": "cURL",
+						"source": "curl --request POST \"https://careeros.example/api/openapi/billing/checkout\" --header \"x-api-key: <api-key>\" --header \"Content-Type: application/json\" --data '{\n  \"planId\": \"starter\",\n  \"interval\": \"month\",\n  \"seats\": 123\n}'"
+					}
+				]
+			}
+		},
+		"/billing/seats": {
+			"post": {
+				"operationId": "changeBillingSeats",
+				"summary": "Change the number of paid seats",
+				"description": "Asks the payment provider to change the seats. Seats cannot be fewer than the current members. The subscription changes when the provider confirms. Only the owner can do this. Requires authentication.",
+				"tags": [
+					"Billing"
+				],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"type": "object",
+								"properties": {
+									"seats": {
+										"type": "integer",
+										"minimum": 1,
+										"maximum": 10000
+									}
+								},
+								"required": [
+									"seats"
+								]
+							}
+						}
+					}
+				},
+				"responses": {
+					"200": {
+						"description": "OK",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"accepted": {
+											"type": "boolean",
+											"description": "The provider was told. The subscription changes when the provider confirms."
+										}
+									},
+									"required": [
+										"accepted"
+									]
+								}
+							}
+						}
+					},
+					"400": {
+						"description": "400",
+						"content": {
+							"application/json": {
+								"schema": {
+									"oneOf": [
+										{
+											"type": "object",
+											"properties": {
+												"defined": {
+													"const": true
+												},
+												"code": {
+													"const": "BAD_REQUEST"
+												},
+												"status": {
+													"const": 400
+												},
+												"message": {
+													"type": "string",
+													"default": "The seats are not valid."
+												},
+												"data": {}
+											},
+											"required": [
+												"defined",
+												"code",
+												"status",
+												"message"
+											]
+										},
+										{
+											"type": "object",
+											"properties": {
+												"defined": {
+													"const": false
+												},
+												"code": {
+													"type": "string"
+												},
+												"status": {
+													"type": "number"
+												},
+												"message": {
+													"type": "string"
+												},
+												"data": {}
+											},
+											"required": [
+												"defined",
+												"code",
+												"status",
+												"message"
+											]
+										}
+									]
+								}
+							}
+						}
+					},
+					"403": {
+						"description": "403",
+						"content": {
+							"application/json": {
+								"schema": {
+									"oneOf": [
+										{
+											"type": "object",
+											"properties": {
+												"defined": {
+													"const": true
+												},
+												"code": {
+													"const": "FORBIDDEN"
+												},
+												"status": {
+													"const": 403
+												},
+												"message": {
+													"type": "string",
+													"default": "Only the owner of the organization can do this."
+												},
+												"data": {}
+											},
+											"required": [
+												"defined",
+												"code",
+												"status",
+												"message"
+											]
+										},
+										{
+											"type": "object",
+											"properties": {
+												"defined": {
+													"const": false
+												},
+												"code": {
+													"type": "string"
+												},
+												"status": {
+													"type": "number"
+												},
+												"message": {
+													"type": "string"
+												},
+												"data": {}
+											},
+											"required": [
+												"defined",
+												"code",
+												"status",
+												"message"
+											]
+										}
+									]
+								}
+							}
+						}
+					},
+					"412": {
+						"description": "412",
+						"content": {
+							"application/json": {
+								"schema": {
+									"oneOf": [
+										{
+											"type": "object",
+											"properties": {
+												"defined": {
+													"const": true
+												},
+												"code": {
+													"const": "PRECONDITION_FAILED"
+												},
+												"status": {
+													"const": 412
+												},
+												"message": {
+													"type": "string",
+													"default": "The organization has no active subscription to change."
+												},
+												"data": {}
+											},
+											"required": [
+												"defined",
+												"code",
+												"status",
+												"message"
+											]
+										},
+										{
+											"type": "object",
+											"properties": {
+												"defined": {
+													"const": false
+												},
+												"code": {
+													"type": "string"
+												},
+												"status": {
+													"type": "number"
+												},
+												"message": {
+													"type": "string"
+												},
+												"data": {}
+											},
+											"required": [
+												"defined",
+												"code",
+												"status",
+												"message"
+											]
+										}
+									]
+								}
+							}
+						}
+					},
+					"default": {
+						"description": "Structured API error. See status and code; do not branch on message text.",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"required": [
+										"defined",
+										"code",
+										"status",
+										"message"
+									],
+									"properties": {
+										"defined": {
+											"type": "boolean"
+										},
+										"code": {
+											"type": "string"
+										},
+										"status": {
+											"type": "integer"
+										},
+										"message": {
+											"type": "string"
+										},
+										"data": {}
+									}
+								}
+							}
+						}
+					}
+				},
+				"security": [
+					{
+						"apiKey": []
+					},
+					{
+						"bearerAuth": []
+					},
+					{
+						"cookieAuth": []
+					}
+				],
+				"x-codeSamples": [
+					{
+						"lang": "bash",
+						"label": "cURL",
+						"source": "curl --request POST \"https://careeros.example/api/openapi/billing/seats\" --header \"x-api-key: <api-key>\" --header \"Content-Type: application/json\" --data '{\n  \"seats\": 123\n}'"
+					}
+				]
+			}
+		},
+		"/billing/cancel": {
+			"post": {
+				"operationId": "cancelBillingSubscription",
+				"summary": "Cancel the subscription at the end of the paid period",
+				"description": "Asks the payment provider to cancel. The organization keeps working until the paid period ends. Only the owner can do this. Requires authentication.",
+				"tags": [
+					"Billing"
+				],
+				"requestBody": {
+					"required": false,
+					"content": {
+						"application/json": {
+							"schema": {
+								"type": "object"
+							}
+						}
+					}
+				},
+				"responses": {
+					"200": {
+						"description": "OK",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"accepted": {
+											"type": "boolean",
+											"description": "The provider was told. The subscription changes when the provider confirms."
+										}
+									},
+									"required": [
+										"accepted"
+									]
+								}
+							}
+						}
+					},
+					"403": {
+						"description": "403",
+						"content": {
+							"application/json": {
+								"schema": {
+									"oneOf": [
+										{
+											"type": "object",
+											"properties": {
+												"defined": {
+													"const": true
+												},
+												"code": {
+													"const": "FORBIDDEN"
+												},
+												"status": {
+													"const": 403
+												},
+												"message": {
+													"type": "string",
+													"default": "Only the owner of the organization can do this."
+												},
+												"data": {}
+											},
+											"required": [
+												"defined",
+												"code",
+												"status",
+												"message"
+											]
+										},
+										{
+											"type": "object",
+											"properties": {
+												"defined": {
+													"const": false
+												},
+												"code": {
+													"type": "string"
+												},
+												"status": {
+													"type": "number"
+												},
+												"message": {
+													"type": "string"
+												},
+												"data": {}
+											},
+											"required": [
+												"defined",
+												"code",
+												"status",
+												"message"
+											]
+										}
+									]
+								}
+							}
+						}
+					},
+					"412": {
+						"description": "412",
+						"content": {
+							"application/json": {
+								"schema": {
+									"oneOf": [
+										{
+											"type": "object",
+											"properties": {
+												"defined": {
+													"const": true
+												},
+												"code": {
+													"const": "PRECONDITION_FAILED"
+												},
+												"status": {
+													"const": 412
+												},
+												"message": {
+													"type": "string",
+													"default": "The organization has no active subscription to cancel."
+												},
+												"data": {}
+											},
+											"required": [
+												"defined",
+												"code",
+												"status",
+												"message"
+											]
+										},
+										{
+											"type": "object",
+											"properties": {
+												"defined": {
+													"const": false
+												},
+												"code": {
+													"type": "string"
+												},
+												"status": {
+													"type": "number"
+												},
+												"message": {
+													"type": "string"
+												},
+												"data": {}
+											},
+											"required": [
+												"defined",
+												"code",
+												"status",
+												"message"
+											]
+										}
+									]
+								}
+							}
+						}
+					},
+					"default": {
+						"description": "Structured API error. See status and code; do not branch on message text.",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"required": [
+										"defined",
+										"code",
+										"status",
+										"message"
+									],
+									"properties": {
+										"defined": {
+											"type": "boolean"
+										},
+										"code": {
+											"type": "string"
+										},
+										"status": {
+											"type": "integer"
+										},
+										"message": {
+											"type": "string"
+										},
+										"data": {}
+									}
+								}
+							}
+						}
+					}
+				},
+				"security": [
+					{
+						"apiKey": []
+					},
+					{
+						"bearerAuth": []
+					},
+					{
+						"cookieAuth": []
+					}
+				],
+				"x-codeSamples": [
+					{
+						"lang": "bash",
+						"label": "cURL",
+						"source": "curl --request POST \"https://careeros.example/api/openapi/billing/cancel\" --header \"x-api-key: <api-key>\" --header \"Content-Type: application/json\" --data '{}'"
+					}
+				]
+			}
+		},
+		"/billing/portal": {
+			"post": {
+				"operationId": "getBillingPortal",
+				"summary": "Get the payment provider's customer portal",
+				"description": "Returns a link to the provider's page for cards and invoices, when the provider has one. Only the owner can do this. Requires authentication.",
+				"tags": [
+					"Billing"
+				],
+				"requestBody": {
+					"required": false,
+					"content": {
+						"application/json": {
+							"schema": {
+								"type": "object"
+							}
+						}
+					}
+				},
+				"responses": {
+					"200": {
+						"description": "OK",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"url": {
+											"type": "string"
+										}
+									},
+									"required": [
+										"url"
+									]
+								}
+							}
+						}
+					},
+					"403": {
+						"description": "403",
+						"content": {
+							"application/json": {
+								"schema": {
+									"oneOf": [
+										{
+											"type": "object",
+											"properties": {
+												"defined": {
+													"const": true
+												},
+												"code": {
+													"const": "FORBIDDEN"
+												},
+												"status": {
+													"const": 403
+												},
+												"message": {
+													"type": "string",
+													"default": "Only the owner of the organization can do this."
+												},
+												"data": {}
+											},
+											"required": [
+												"defined",
+												"code",
+												"status",
+												"message"
+											]
+										},
+										{
+											"type": "object",
+											"properties": {
+												"defined": {
+													"const": false
+												},
+												"code": {
+													"type": "string"
+												},
+												"status": {
+													"type": "number"
+												},
+												"message": {
+													"type": "string"
+												},
+												"data": {}
+											},
+											"required": [
+												"defined",
+												"code",
+												"status",
+												"message"
+											]
+										}
+									]
+								}
+							}
+						}
+					},
+					"412": {
+						"description": "412",
+						"content": {
+							"application/json": {
+								"schema": {
+									"oneOf": [
+										{
+											"type": "object",
+											"properties": {
+												"defined": {
+													"const": true
+												},
+												"code": {
+													"const": "PRECONDITION_FAILED"
+												},
+												"status": {
+													"const": 412
+												},
+												"message": {
+													"type": "string",
+													"default": "The payment provider has no billing portal."
+												},
+												"data": {}
+											},
+											"required": [
+												"defined",
+												"code",
+												"status",
+												"message"
+											]
+										},
+										{
+											"type": "object",
+											"properties": {
+												"defined": {
+													"const": false
+												},
+												"code": {
+													"type": "string"
+												},
+												"status": {
+													"type": "number"
+												},
+												"message": {
+													"type": "string"
+												},
+												"data": {}
+											},
+											"required": [
+												"defined",
+												"code",
+												"status",
+												"message"
+											]
+										}
+									]
+								}
+							}
+						}
+					},
+					"default": {
+						"description": "Structured API error. See status and code; do not branch on message text.",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"required": [
+										"defined",
+										"code",
+										"status",
+										"message"
+									],
+									"properties": {
+										"defined": {
+											"type": "boolean"
+										},
+										"code": {
+											"type": "string"
+										},
+										"status": {
+											"type": "integer"
+										},
+										"message": {
+											"type": "string"
+										},
+										"data": {}
+									}
+								}
+							}
+						}
+					}
+				},
+				"security": [
+					{
+						"apiKey": []
+					},
+					{
+						"bearerAuth": []
+					},
+					{
+						"cookieAuth": []
+					}
+				],
+				"x-codeSamples": [
+					{
+						"lang": "bash",
+						"label": "cURL",
+						"source": "curl --request POST \"https://careeros.example/api/openapi/billing/portal\" --header \"x-api-key: <api-key>\" --header \"Content-Type: application/json\" --data '{}'"
+					}
+				]
+			}
+		},
 		"/branding": {
 			"get": {
 				"operationId": "getBranding",

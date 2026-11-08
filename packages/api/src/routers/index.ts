@@ -4,6 +4,8 @@ import { aiRouter } from "../features/ai/router";
 import { applicationProfileRouter } from "../features/application-profile/router";
 import { applicationsRouter } from "../features/applications/router";
 import { authRouter } from "../features/auth/router";
+// CAREEROS: billing for organization owners (P3-T04)
+import { billingRouter } from "../features/billing/router";
 // CAREEROS: organization branding and settings (P2-T01)
 import { brandingRouter, settingsRouter } from "../features/branding/router";
 import { careerRouter } from "../features/career/router";
@@ -34,6 +36,8 @@ export default {
 	applications: applicationsRouter,
 	auth: authRouter,
 	// CAREEROS: organization branding and settings (P2-T01)
+	// CAREEROS: billing for organization owners (P3-T04)
+	billing: billingRouter,
 	branding: brandingRouter,
 	career: careerRouter,
 	coverLetters: coverLettersRouter,

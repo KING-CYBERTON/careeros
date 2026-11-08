@@ -237,6 +237,13 @@ export const env = createEnv({
 		ENCRYPTION_SECRET: z.string().min(32, "ENCRYPTION_SECRET must be at least 32 characters").optional(),
 		CRON_SECRET: z.string().min(16, "CRON_SECRET must be at least 16 characters").optional(),
 
+		// CAREEROS (P3-T04, phase plan D1, D9): the payment provider. `none` turns billing off: every organization behaves
+		// as its plan says and no payment is taken. `fake` is for tests and staging only and is refused in production.
+		// `paystack` and `stripe` are accepted values that wait for P3-T05 (no adapter exists yet).
+		BILLING_PROVIDER: z.enum(["fake", "paystack", "stripe", "none"]).default("none"),
+		// CAREEROS (P3-T04): the HMAC secret the fake provider signs its events with. Required while BILLING_PROVIDER=fake.
+		BILLING_FAKE_SECRET: z.string().min(16, "BILLING_FAKE_SECRET must be at least 16 characters").optional(),
+
 		// Optional search and enhanced reading; custom URLs are operator-controlled Firecrawl services.
 		WEB_ACCESS_PROVIDER: z.enum(["firecrawl", "tavily", "exa"]).optional(),
 		WEB_ACCESS_API_KEY: z.string().trim().min(1).optional(),
@@ -267,6 +274,14 @@ if (env.ORG_HOST_PATTERN) {
 	const platformHosts = [env.APP_URL, env.APP_ALIAS_URL].flatMap((url) => (url ? [new URL(url).hostname] : []));
 	if (platformHosts.some((hostname) => matchesOrgHostPattern(env.ORG_HOST_PATTERN as string, hostname)))
 		throw new Error("ORG_HOST_PATTERN must not match the host of APP_URL or APP_ALIAS_URL.");
+}
+
+// CAREEROS (P3-T04): the fake billing provider approves payments for anyone who can reach its test page, so it must
+// never run in production, and it cannot sign events without its secret.
+if (env.BILLING_PROVIDER === "fake") {
+	if (process.env.NODE_ENV === "production")
+		throw new Error("BILLING_PROVIDER=fake is for tests and staging only and is refused when NODE_ENV=production.");
+	if (!env.BILLING_FAKE_SECRET) throw new Error("BILLING_PROVIDER=fake requires BILLING_FAKE_SECRET.");
 }
 
 if (

@@ -676,6 +676,12 @@ export const tenancyAllowList: readonly AllowListEntry[] = [
 		reason:
 			"P2-T05: pre-authentication, platform-global like Better Auth's verification table (same class: global, no tenant data, no row level security). It carries organization_id only to name the organization a sign-in is for, so it sits on this list, not the globalTables one, which is for tables without that column. It is read and written before any session or organization context exists and holds only hashes and ten-minute rows",
 	},
+	// CAREEROS (P3-T04, phase plan D9)
+	{
+		table: "billing_event",
+		reason:
+			"P3-T04: the idempotency record of verified payment-provider events, global like a ledger: provider ids and normalized fields only, never card data. It carries organization_id only to name the organization the verified metadata pointed at (not a foreign key), so it sits on this list, not the globalTables one, which is for tables without that column. It has no tenant policy on purpose: the app role has no privilege on it at all and reaches it only through the definer function careeros_record_billing_event; row level security is forced, with a policy for the owner role alone",
+	},
 ];
 
 export const DEFAULT_SCHEMA = "public";
