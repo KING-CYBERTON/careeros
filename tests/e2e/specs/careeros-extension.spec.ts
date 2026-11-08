@@ -6,7 +6,13 @@ import { createServer, type Server } from "node:http";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { chromium } from "@playwright/test";
-import { createHostOrgs, ORG_HOST_PATTERN, orgHostsConfigured, send } from "../fixtures/org-hosts";
+import {
+	createHostOrgs,
+	ORG_HOST_LAUNCH_OPTIONS,
+	ORG_HOST_PATTERN,
+	orgHostsConfigured,
+	send,
+} from "../fixtures/org-hosts";
 import { expect, test } from "../fixtures/test";
 
 // P5-T01: the Job Clipper extension. A development build of apps/extension is loaded unpacked into Chromium; the popup
@@ -283,7 +289,6 @@ test.describe("job clipper extension", () => {
 	}
 
 	test("clipping a job: read the page, confirm, save, and see it in the web tracker", async ({
-		browser,
 		playwright,
 		baseURL,
 	}) => {
@@ -311,11 +316,20 @@ test.describe("job clipper extension", () => {
 		expect(link).toMatch(new RegExp(`^${orgs.a.origin}/dashboard/applications\\?applicationId=`));
 
 		// The web tracker, as the member, shows the job on the organization's host.
-		const memberContext = await browser.newContext({ colorScheme: "light" });
+		// A browser of its own that resolves `*.orgs.test` like the extension's (the default test browser does not).
+		const trackerBrowser = await chromium.launch({ channel: "chromium", ...ORG_HOST_LAUNCH_OPTIONS });
+		const memberContext = await trackerBrowser.newContext({ colorScheme: "light" });
 		try {
 			const [name = "", ...rest] = orgs.a.member.cookie.split("; ")[0]?.split("=") ?? [];
 			await memberContext.addCookies([
-				{ name, value: rest.join("="), domain: orgs.a.host, path: "/", httpOnly: true, sameSite: "Lax" },
+				{
+					name,
+					value: rest.join("="),
+					domain: new URL(orgs.a.origin).hostname,
+					path: "/",
+					httpOnly: true,
+					sameSite: "Lax",
+				},
 			]);
 			const tracker = await memberContext.newPage();
 			await tracker.goto(link);
@@ -323,6 +337,7 @@ test.describe("job clipper extension", () => {
 			await expect(tracker.getByText("Senior Backend Engineer").first()).toBeVisible();
 		} finally {
 			await memberContext.close();
+			await trackerBrowser.close();
 		}
 		await page.close();
 
