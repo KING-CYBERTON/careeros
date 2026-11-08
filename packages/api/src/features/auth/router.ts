@@ -23,6 +23,8 @@ import {
 } from "../../dto/career";
 import { resumeDto } from "../../dto/resume";
 import { accountRateLimit } from "../../middleware/rate-limit";
+// CAREEROS (P4-T02)
+import { discoveryExportSchema } from "../discovery/schemas";
 // CAREEROS: API keys carry the creator's active organization (P1-T03)
 import { organizationForNewApiKey, setApiKeyOrganization } from "./api-key-org";
 import { authService } from "./service";
@@ -252,6 +254,8 @@ export const authRouter = {
 				applicationPipeline: applicationPipelineSchema,
 				// CAREEROS (P1-T08): the tenant column is not part of the export
 				aiContentReports: z.array(createSelectSchema(schema.aiContentReport).omit({ organizationId: true })),
+				// CAREEROS (P4-T02): job discovery automations, runs and found jobs; the tenant column and owner are omitted
+				discovery: discoveryExportSchema,
 				career: z.object({
 					profile: careerProfileDataSchema,
 					reviewedAnswers: z.array(reviewedAnswerSchema),

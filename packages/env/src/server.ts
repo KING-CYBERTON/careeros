@@ -267,6 +267,8 @@ export const env = createEnv({
 		FLAG_ENABLE_GUEST_LOGIN: z.stringbool().default(false),
 		FLAG_DISABLE_IMAGE_PROCESSING: z.stringbool().default(false),
 		FLAG_DISABLE_API_RATE_LIMIT: z.stringbool().default(false),
+		// CAREEROS (P4-T02): stops scheduled job discovery runs on this server. Manual "Run now" still works.
+		FLAG_DISABLE_DISCOVERY_SCHEDULER: z.stringbool().default(false),
 		FLAG_ALLOW_UNSAFE_AI_BASE_URL: z.stringbool().default(false),
 		FLAG_ALLOW_UNSAFE_OAUTH_REDIRECT_URI: z.stringbool().default(false),
 		FLAG_OLACV_SUGGESTION: z.stringbool().default(false),

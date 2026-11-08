@@ -31,6 +31,8 @@ export async function installSchemaLocalGuestMove(client: Pick<Pool, "query">, s
 		["20261101083119_career_rls", "careeros_due_career_jobs"],
 		["20261101083119_career_rls", "careeros_orgs_with_due_career_schedules"],
 		["20261101083119_career_rls", "careeros_orgs_with_career_upkeep"],
+		// CAREEROS (P4-T02): discovery automations, runs and jobs follow the guest (after the applications they point at)
+		["20261108165138_discovery_runs_ai_review", "careeros_move_guest_discovery", "discovered_job"],
 		// CAREEROS (P1-T08): saved AI connections, assistant conversations and content reports
 		["20261101085357_agent_ai_rls", "careeros_move_guest_agent"],
 		// CAREEROS (P1-T09): the remaining tables' functions, including the account-delete trigger function, whose

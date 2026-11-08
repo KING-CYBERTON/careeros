@@ -211,7 +211,6 @@ export const NO_TENANT_ID: Record<string, string> = {
 	"POST /organization/join": "takes no tenant id: joins the request host's organization, never an input (P2-T03)",
 	"GET /discovery/sources": "takes no tenant id: lists the caller's own automations (P4-T01)",
 	"POST /discovery/sources": "takes no tenant id: creates an automation for the caller (P4-T01)",
-	"GET /discovery/jobs": "takes no tenant id: lists the caller's own discovered jobs (P4-T01)",
 	// CAREEROS (P5-T02): the clipper sign-in. The token itself names the organization; no request names another.
 	"GET /clipper/whoami": "takes no tenant id: answers for the token's own organization and host (P5-T02)",
 	"GET /clipper/tokens": "takes no tenant id: lists the caller's own Job Clipper sign-ins (P5-T02)",

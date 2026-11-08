@@ -92,6 +92,8 @@ const AI_CALL_FILES = {
 	"applications/ai.ts": "getModel({ ..., metering }) in resolveModel and in the posting enrichment",
 	"clipper/cleanup.ts":
 		"getModel({ ..., metering }) on the platform runnable only (getPlatformRunnable), never a saved key",
+	// CAREEROS (P4-T02): the model is built by `buildModel({ ..., metering })` (getModel by default), platform key only
+	"discovery/ai-match.ts": "buildModel({ provider, model, apiKey, metering }) with feature discovery.match",
 	"career/voice.ts":
 		"transcription and speech on the member's own OpenAI-style key; no platform model exists for them (see below)",
 } as const;

@@ -16,6 +16,8 @@ import { applicationProfileService } from "../application-profile/service";
 import { applicationLaneService } from "../applications/lanes";
 import { careerService } from "../career/service";
 import { coverLetterService } from "../cover-letters/service";
+// CAREEROS (P4-T02): discovery rows are part of the account export
+import { discoveryService } from "../discovery/service";
 import { reportStorageCleanupSummary, runStorageCleanup } from "../storage/cleanup";
 import { revokeAppleAuthorization } from "./apple-revocation";
 
@@ -114,6 +116,8 @@ export const authService = {
 				await db.select().from(schema.aiContentReport).where(eq(schema.aiContentReport.userId, input.userId))
 			).map(({ organizationId: _organizationId, ...report }) => report),
 			career: await careerService.exportData(input.userId),
+			// CAREEROS (P4-T02, Q226): job discovery automations, their runs and the jobs they found
+			discovery: await discoveryService.exportData(input.userId),
 			applicationProfile: await applicationProfileService.get(input.userId),
 		};
 	},

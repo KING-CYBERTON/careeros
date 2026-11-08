@@ -3,8 +3,11 @@ import { protectedProcedure } from "../../context";
 import { requireFeature } from "../../middleware/entitlements";
 import { accountRateLimit } from "../../middleware/rate-limit";
 import {
+	acceptResultSchema,
 	jobListInputSchema,
 	jobSchema,
+	jobSummarySchema,
+	runSchema,
 	runSummarySchema,
 	sourceCreateSchema,
 	sourceSchema,
@@ -90,11 +93,27 @@ export const discoveryRouter = {
 			operationId: "runDiscoverySource",
 			summary: "Run a job discovery automation now",
 			description:
-				"Fetches every board of the automation, scores the postings and saves the new ones. Answers when the run is done. One run per automation every 10 minutes; TOO_MANY_REQUESTS otherwise. Requires authentication and the job discovery plan feature.",
+				"Starts a run: it fetches every board of the automation, scores the postings, saves the new ones and sends the best of them to the AI match. Answers as soon as the run is recorded as running (status running, counts zero); the run continues in the background and its progress is in the run list. One manual run per automation every 10 minutes (scheduled runs do not count); TOO_MANY_REQUESTS otherwise. Requires authentication and the job discovery plan feature.",
 		})
 		.input(z.object({ jobSourceId: z.string().min(1) }))
 		.output(runSummarySchema)
 		.handler(({ context, input }) => discoveryService.runNow(context.user.id, input.jobSourceId)),
+
+	runs: {
+		list: discoveryProcedure
+			.route({
+				...route,
+				method: "GET",
+				path: "/discovery/sources/{jobSourceId}/runs",
+				operationId: "listDiscoveryRuns",
+				summary: "List the runs of a job discovery automation",
+				description:
+					"Returns the latest 20 runs of one of the caller's automations, newest first, with their counts, how each started (manual or scheduled), the AI match counts and why the AI step was skipped, if it was. A run still running shows its progress so far. NOT_FOUND when the automation is not theirs. Requires authentication and the job discovery plan feature.",
+			})
+			.input(z.object({ jobSourceId: z.string().min(1) }))
+			.output(z.array(runSchema))
+			.handler(({ context, input }) => discoveryService.runs.list(context.user.id, input.jobSourceId)),
+	},
 
 	jobs: {
 		list: discoveryProcedure
@@ -105,11 +124,40 @@ export const discoveryRouter = {
 				operationId: "listDiscoveredJobs",
 				summary: "List discovered jobs",
 				description:
-					"Returns the postings discovery found for the caller, best match first. Filter by status (new, accepted, dismissed). Requires authentication and the job discovery plan feature.",
+					"Returns the review queue: the postings discovery found for the caller, best match first (AI score, then local score, then newest), without their descriptions. Filter by status (new, accepted, dismissed) or by automation. Page with limit and offset. Requires authentication and the job discovery plan feature.",
 			})
 			.input(jobListInputSchema)
-			.output(z.array(jobSchema))
+			.output(z.array(jobSummarySchema))
 			.handler(({ context, input }) => discoveryService.jobs.list(context.user.id, input)),
+
+		get: discoveryProcedure
+			.route({
+				...route,
+				method: "GET",
+				path: "/discovery/jobs/{id}",
+				operationId: "getDiscoveredJob",
+				summary: "Get a discovered job",
+				description:
+					"Returns one of the caller's discovered postings with its sanitized description (a short HTML subset: headings, paragraphs, lists, bold, italic, line breaks and https links). NOT_FOUND when it is not theirs. Requires authentication and the job discovery plan feature.",
+			})
+			.input(id)
+			.output(jobSchema)
+			.handler(({ context, input }) => discoveryService.jobs.get(context.user.id, input.id)),
+
+		accept: discoveryProcedure
+			.route({
+				...route,
+				method: "POST",
+				path: "/discovery/jobs/{id}/accept",
+				operationId: "acceptDiscoveredJob",
+				summary: "Accept a discovered job into the tracker",
+				description:
+					"Creates an application in the tracker (first stage, company, role, location, link and the description as plain text, source discovery, the board as a tag), marks the posting accepted and answers with the application id. Accepting twice answers with the same application. A dismissed posting can be accepted. A write: refused for a suspended organization. Requires authentication and the job discovery plan feature.",
+			})
+			.input(id)
+			.use(accountRateLimit)
+			.output(acceptResultSchema)
+			.handler(({ context, input }) => discoveryService.jobs.accept(context.user.id, input.id)),
 
 		dismiss: discoveryProcedure
 			.route({

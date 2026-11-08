@@ -14,6 +14,8 @@ export const AI_FEATURES = {
 	"applications.extract": { fast: true, label: "Read a job posting" },
 	// CAREEROS (P5-T03): the Job Clipper's optional "Tidy with AI", on the platform provider only.
 	"clipper.cleanup": { fast: true, label: "Tidy a clipped job" },
+	// CAREEROS (P4-T02): the AI match of a discovery run scores one found job against the member's preferences.
+	"discovery.match": { fast: true, label: "Job matching" },
 } as const satisfies Record<string, { fast: boolean; label: string }>;
 
 export type AiFeature = keyof typeof AI_FEATURES;

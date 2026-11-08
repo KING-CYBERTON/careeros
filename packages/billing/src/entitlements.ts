@@ -3,7 +3,7 @@ import { and, count, eq, gt } from "drizzle-orm";
 import { db } from "@reactive-resume/db/client";
 import * as schema from "@reactive-resume/db/schema";
 import { BillingError } from "./errors";
-import { resolveFeatures, type FeatureKey } from "./features";
+import { DISCOVERY_AI_TOP_N_KEY, resolveFeatures, type FeatureKey } from "./features";
 import { memoizeInRequest } from "./request-cache";
 
 // CAREEROS (P3-T01, phase plan D3, D4): the one function that answers "what is this organization allowed right now".
@@ -23,6 +23,12 @@ export type Entitlements = {
 	/** Resolved in the D4 order. Every key in `FEATURE_KEYS` is present. */
 	features: Record<string, boolean>;
 	overageAllowed: boolean;
+	/**
+	 * CAREEROS (P4-T02): the most jobs one discovery run may send to the model (the plan's cap, GTM-PLAN G3). It comes
+	 * from the plan's `features.discovery_ai_top_n` (a whole number from 0 to 50) and is `DEFAULT_DISCOVERY_AI_TOP_N`
+	 * when the plan has none.
+	 */
+	discoveryAiTopN: number;
 	/** True while the organization is suspended: it can sign in and export, but not write. */
 	readOnly: boolean;
 };
@@ -55,6 +61,17 @@ export type EntitlementInputs = {
  */
 export function aiCreditsTotal(aiCreditsPerSeat: number, seatsPaid: number, memberCount: number): number {
 	return aiCreditsPerSeat * Math.max(seatsPaid, memberCount);
+}
+
+/** The plan cap on AI-matched jobs per discovery run when a plan names none (an automation's own `ai_top_n` defaults to 10). */
+export const DEFAULT_DISCOVERY_AI_TOP_N = 25;
+
+/** The cap from a plan's `features`: a whole number from 0 to 50, else the default. */
+export function discoveryAiTopNCap(planFeatures: Record<string, unknown>): number {
+	const value = planFeatures[DISCOVERY_AI_TOP_N_KEY];
+	return typeof value === "number" && Number.isInteger(value) && value >= 0 && value <= 50
+		? value
+		: DEFAULT_DISCOVERY_AI_TOP_N;
 }
 
 /** Length of a trial in days (PRODUCT.md 8.8). The `plan` table has no column for it; T04's state machine uses this. */
@@ -97,6 +114,7 @@ export function buildEntitlements(input: EntitlementInputs): Entitlements {
 			globalFlags: input.globalFlags,
 		}),
 		overageAllowed: input.overageAllowed,
+		discoveryAiTopN: discoveryAiTopNCap(input.planFeatures),
 		readOnly: input.status === "suspended",
 	};
 }

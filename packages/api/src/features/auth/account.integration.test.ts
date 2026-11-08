@@ -64,6 +64,10 @@ describe.skipIf(!process.env.OAUTH_TEST_DATABASE_URL)("account wrapper ownership
 			"agent_attachments",
 			"agent_actions",
 			"ai_content_report",
+			// CAREEROS (P4-T02): discovery automations, runs and jobs; the guest move reads them
+			"job_source",
+			"discovery_run",
+			"discovered_job",
 			"resume_slug_redirect",
 			"released_username",
 			"storage_cleanup_job",

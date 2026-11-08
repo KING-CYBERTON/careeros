@@ -3182,6 +3182,7 @@ msgid "Couldn't open the browser. Try again."
 msgstr "Tarayıcı açılamadı. Tekrar deneyin."
 
 #: src/features/career/today.tsx
+#: src/features/discovery/review-queue.tsx
 msgid "Couldn't open the posting. Try again."
 msgstr "İş ilanı açılamadı. Tekrar deneyin."
 
@@ -3951,6 +3952,7 @@ msgstr "Çevrimdışı düzenlemelerinizi atın ve kayıtlı sürümü yükleyin
 msgid "Discard your offline edits?"
 msgstr "Çevrimdışı düzenlemeleriniz silinsin mi?"
 
+#: src/features/discovery/review-queue.tsx
 #: src/features/letters/write.tsx
 #: src/ui/layout.tsx
 msgid "Dismiss"
@@ -3958,6 +3960,10 @@ msgstr "Azletmek"
 
 #: src/features/career/today.tsx
 msgid "Dismiss selected"
+msgstr ""
+
+#: src/features/discovery/review-queue.tsx
+msgid "Dismissed"
 msgstr ""
 
 #: src/features/career/role-suggestions.tsx
@@ -5506,6 +5512,7 @@ msgstr "Bu sunucuda iş arama yapılandırılmamış. Bunun yerine bir ilan bağ
 msgid "Job search pipeline"
 msgstr "İş arama hattı"
 
+#: app/(tabs)/career/_layout.tsx
 #: src/features/search/search-screen.tsx
 msgid "Jobs"
 msgstr "İşler"
@@ -6281,6 +6288,16 @@ msgstr "Okundu olarak işaretlendi"
 msgid "Match “{resumeName}”"
 msgstr "“{resumeName}” ile eşleştir"
 
+#. placeholder {0}: scoreOf(job)
+#: src/features/discovery/review-queue.tsx
+msgid "Match {0}"
+msgstr ""
+
+#. placeholder {0}: scoreOf(job)
+#: src/features/discovery/review-queue.tsx
+msgid "Match {0} (quick)"
+msgstr ""
+
 #: src/features/search/search-screen.tsx
 msgid "Match system theme"
 msgstr "Eşleştirme sistemi teması"
@@ -6633,6 +6650,7 @@ msgstr "Asla"
 
 #: app/_layout.tsx
 #: app/(tabs)/_layout.tsx
+#: src/features/discovery/review-queue.tsx
 #: src/features/documents/library.tsx
 #: src/shell/app-tabs.tsx
 msgid "New"
@@ -6672,6 +6690,10 @@ msgstr "Yeni belge"
 #: src/features/write/section-sheet.tsx
 msgid "New page"
 msgstr "Yeni sayfa"
+
+#: src/features/discovery/review-queue.tsx
+msgid "New postings show up here after an automation runs."
+msgstr ""
 
 #: src/features/career/today.tsx
 msgid "New roles from your search"
@@ -6791,6 +6813,10 @@ msgstr "Tarih yok"
 #: src/features/ats-checker/messages.ts
 msgid "No dates were found."
 msgstr "Tarih bulunamadı."
+
+#: src/features/discovery/review-queue.tsx
+msgid "No dismissed jobs"
+msgstr ""
 
 #: src/features/workspace/tabs/apply.tsx
 msgid "no documents"
@@ -6918,6 +6944,10 @@ msgstr "Sonuç yok"
 #: src/features/letters/write.tsx
 msgid "No resume"
 msgstr "Özgeçmiş yok"
+
+#: src/features/discovery/review-queue.tsx
+msgid "No saved jobs yet"
+msgstr ""
 
 #: src/auth/messages.ts
 msgid "No server answered at this address. Check the spelling, or ask your administrator whether the server allows app sign-in."
@@ -7124,6 +7154,10 @@ msgstr "Düzeltilecek bir şey yok"
 msgid "Nothing to fix. The remaining pages were simply not covered by this report."
 msgstr "Düzeltilecek bir şey yok. Kalan sayfalar bu rapor kapsamında değerlendirilmedi."
 
+#: src/features/discovery/review-queue.tsx
+msgid "Nothing to review"
+msgstr ""
+
 #: src/features/career/preferences.tsx
 msgid "Notice period (weeks)"
 msgstr "İhbar süresi (hafta)"
@@ -7326,6 +7360,7 @@ msgstr "AI ayarlarını açın"
 #: src/features/applications-board/board-screen.tsx
 #: src/features/applications/list-screen.tsx
 #: src/features/check/job-match.tsx
+#: src/features/discovery/review-queue.tsx
 msgid "Open application"
 msgstr "Başvuruyu aç"
 
@@ -7849,6 +7884,10 @@ msgstr "İş ilanı"
 msgid "Postings can change or close. Publication date unknown; search coverage is incomplete."
 msgstr ""
 
+#: src/features/discovery/review-queue.tsx
+msgid "Postings your automations found, best match first. Save one to your applications, or dismiss it and it never comes back."
+msgstr ""
+
 #: src/features/workspace/parts.tsx
 #: src/features/workspace/tabs/practise.tsx
 #: src/features/workspace/tabs/prepare.tsx
@@ -8232,6 +8271,7 @@ msgstr "Lisansı oku"
 
 #: src/features/applications/add-sheet.tsx
 #: src/features/career/today.tsx
+#: src/features/discovery/review-queue.tsx
 msgid "Read posting"
 msgstr "İş ilanını okuyun"
 
@@ -9303,6 +9343,10 @@ msgstr "Karşılaştırmak için bu teklif koşullarını kaydedin"
 msgid "Save this story to Knowledge?"
 msgstr "Bu hikâye Bilgi Bankası'na kaydedilsin mi?"
 
+#: src/features/discovery/review-queue.tsx
+msgid "Save to applications"
+msgstr ""
+
 #: src/features/workspace/tabs/fit.tsx
 msgid "Save to Knowledge"
 msgstr "Bilgi Bankasına kaydet"
@@ -9317,6 +9361,7 @@ msgstr "Kendinizinkini yeni bir belge olarak kaydedin ve onlarınkini burada sak
 
 #: src/features/applications/stages.ts
 #: src/features/career/preferences.tsx
+#: src/features/discovery/review-queue.tsx
 #: src/shell/builder-chrome.tsx
 msgid "Saved"
 msgstr "Kaydedildi"
@@ -9366,6 +9411,10 @@ msgstr "Bilgi Bankasına kaydedildi, yalnızca bu başvuruya özel."
 #: src/features/workspace/tabs/practise.tsx
 msgid "Saved to Saved · Practice"
 msgstr "“Kaydedilenler” · Pratik altına kaydedildi"
+
+#: src/features/discovery/review-queue.tsx
+msgid "Saved to your applications"
+msgstr ""
 
 #: src/features/applications/add-sheet.tsx
 msgid "Saving the job. Wait for confirmation before making another change."
@@ -9858,6 +9907,10 @@ msgstr "Simgeleri göster"
 msgid "Show in search engines"
 msgstr "Arama motorlarında göster"
 
+#: src/features/discovery/review-queue.tsx
+msgid "Show jobs"
+msgstr ""
+
 #: src/features/ai/provider-editor.tsx
 msgid "Show key"
 msgstr "Anahtarı göster"
@@ -9869,6 +9922,7 @@ msgstr "Başlıkta bağlantıyı göster"
 #: app/(tabs)/settings/preferences.tsx
 #: src/features/application-detail/interview-sheet.tsx
 #: src/features/career/today.tsx
+#: src/features/discovery/review-queue.tsx
 msgid "Show more"
 msgstr "Daha fazlasını göster"
 
