@@ -6,7 +6,7 @@ import { createServer, type Server } from "node:http";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { chromium } from "@playwright/test";
-import { createHostOrgs, ORG_HOST_PATTERN, orgHostsConfigured } from "../fixtures/org-hosts";
+import { createHostOrgs, ORG_HOST_PATTERN, orgHostsConfigured, send } from "../fixtures/org-hosts";
 import { expect, test } from "../fixtures/test";
 
 // P5-T01: the Job Clipper extension. A development build of apps/extension is loaded unpacked into Chromium; the popup
@@ -147,8 +147,47 @@ test.describe("job clipper extension", () => {
 		await expect(page.getByText("Connected to")).toBeVisible();
 		// The header takes the organization's colour.
 		await expect(page.locator("header")).toHaveCSS("background-color", "rgb(200, 40, 60)");
-		// Not signed in yet: a disabled button and a note.
-		await expect(page.getByRole("button", { name: "Sign in" })).toBeDisabled();
+		// Not signed in yet: a Sign in button (P5-T02).
+		await expect(page.getByRole("button", { name: "Sign in" })).toBeEnabled();
+		await page.close();
+	});
+
+	test("signing in: the popup shows a code, a member approves it, and the popup says who is signed in", async ({
+		playwright,
+		baseURL,
+	}) => {
+		test.setTimeout(90_000);
+		const server = baseURL ?? "http://localhost:3000";
+		const page = await openPopup();
+		await page.getByRole("button", { name: "Sign in" }).click();
+		// The code arrives after one request to the organization's host; a failure shows a notice instead.
+		await expect(page.getByTestId("user-code")).toBeVisible({ timeout: 15_000 });
+		const shown = (await page.getByTestId("user-code").textContent()) ?? "";
+		const userCode = shown.replaceAll("-", "").trim();
+		expect(userCode).toMatch(/^[A-Z0-9]{8}$/);
+
+		// A member opens the approval page on the organization's host and approves: review the code, then approve it.
+		const common = { host: orgs.a.host, origin: orgs.a.origin, cookie: orgs.a.member.cookie };
+		const reviewed = await send(playwright, server, {
+			...common,
+			method: "GET",
+			path: `/api/auth/device?user_code=${userCode}`,
+		});
+		expect(reviewed.response.status()).toBe(200);
+		const approved = await send(playwright, server, {
+			...common,
+			method: "POST",
+			path: "/api/auth/device/approve",
+			data: { userCode },
+		});
+		expect(approved.response.status()).toBe(200);
+
+		// The popup polls every 5 seconds and ends on "Signed in as <name>".
+		await expect(page.getByTestId("signed-in-as")).toContainText("Signed in as", { timeout: 40_000 });
+
+		// Sign out revokes the token on the server and forgets it here.
+		await page.getByRole("button", { name: "Sign out" }).click();
+		await expect(page.getByRole("button", { name: "Sign in" })).toBeEnabled();
 		await page.close();
 	});
 

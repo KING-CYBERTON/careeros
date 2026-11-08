@@ -4,6 +4,7 @@ import { orpc } from "@/api/client";
 import { ApiKeys } from "@/features/settings/api-keys";
 import { ApplicationProfileSection } from "@/features/settings/application-profile";
 import { openAccountSettings } from "@/features/settings/browser";
+import { ClipperSignIns } from "@/features/settings/clipper-sign-ins";
 import { ExportDataRow } from "@/features/settings/export";
 import { SettingsGroup, SettingsPage } from "@/features/settings/layout";
 import { ProfileEditor } from "@/features/settings/profile";
@@ -84,6 +85,8 @@ export default function AccountScreen() {
 						/>
 					</SettingsGroup>
 					<ApiKeys userId={profile.data.id} />
+					{/* CAREEROS (P5-T02): Job Clipper sign-ins, parity with the web Settings list */}
+					<ClipperSignIns userId={profile.data.id} />
 					<ApplicationProfileSection />
 					<SettingsGroup title={t`Your data`}>
 						<ExportDataRow />

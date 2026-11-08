@@ -96,9 +96,14 @@ describe.skipIf(!configured)("entitlement enforcement through protectedProcedure
 		return { locale: "en-US", reqHeaders, host: hostContext };
 	};
 	let current: { credential: Credential; host: string } = { credential: { cookie: "" }, host: PLATFORM };
+	let routerForClients: object | undefined;
+	// The credential is read when the request context is built, which happens after `as` returns. Sharing one mutable
+	// `current` made simultaneous calls all use the last credential, so one person "joined" several times and the race
+	// test saw "already a member" (CONFLICT). The returned client therefore carries its own credential and host;
+	// `current` stays for the tests that call `as(...)` and then use `client` or `allowedClient` directly.
 	const as = (credential: Credential, host = PLATFORM) => {
 		current = { credential, host };
-		return client;
+		return routerForClients ? makeClient(routerForClients, () => requestContext(credential, host)) : client;
 	};
 
 	beforeAll(async () => {
@@ -120,7 +125,8 @@ describe.skipIf(!configured)("entitlement enforcement through protectedProcedure
 		const stub = (method: "GET" | "POST") =>
 			protectedProcedure.route({ method, path: `/stub/${randomUUID()}`, tags: ["Internal"] }).handler(() => "done");
 		const context = () => requestContext(current.credential, current.host);
-		client = makeClient({ ...routers, probe: { read: stub("GET"), write: stub("POST") } }, context);
+		routerForClients = { ...routers, probe: { read: stub("GET"), write: stub("POST") } };
+		client = makeClient(routerForClients, context);
 		// One stub per allow-listed path, at that exact router path (the allow-list is keyed by it).
 		allowedClient = makeClient(
 			nest([...SUSPENDED_ORG_ALLOWED_WRITES.keys()], () => stub("POST")),
