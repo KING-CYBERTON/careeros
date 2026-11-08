@@ -1,7 +1,7 @@
 import z from "zod";
 import { protectedProcedure } from "../../context";
+import { requireFeature } from "../../middleware/entitlements";
 import { accountRateLimit } from "../../middleware/rate-limit";
-import { requireJobDiscoveryFeature } from "./gate";
 import {
 	jobListInputSchema,
 	jobSchema,
@@ -17,10 +17,8 @@ const id = z.object({ id: z.string().min(1) });
 
 // CAREEROS (P4-T01): job discovery. Every procedure requires the plan feature `job_discovery` and reads or writes only
 // the caller's own rows in the current organization.
-const discoveryProcedure = protectedProcedure.use(async ({ next }) => {
-	await requireJobDiscoveryFeature();
-	return next();
-});
+// CAREEROS (P3-T02): the gate is the shared requireFeature middleware (it replaced P4-T01's temporary gate.ts).
+const discoveryProcedure = protectedProcedure.use(requireFeature("job_discovery"));
 
 export const discoveryRouter = {
 	sources: {

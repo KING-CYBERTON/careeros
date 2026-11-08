@@ -21,3 +21,26 @@ vi.mock("@careeros/tenancy", async (importOriginal) => ({
 	resolveOrgForRequest: () => Promise.resolve(TEST_ORGANIZATION_ID),
 	withOrgContext: <T>(_organizationId: string, fn: () => Promise<T>) => fn(),
 }));
+
+// P3-T02: `protectedProcedure` reads the organization's entitlements before a write. Upstream router tests have no
+// billing tables, so they get an active organization on a plan with every feature. Tests of the enforcement itself
+// (`entitlements.test.ts`, `*.integration.test.ts`) declare their own `vi.mock("@careeros/billing")`, which takes precedence.
+vi.mock("@careeros/billing", async (importOriginal) => {
+	const original = await importOriginal<typeof import("@careeros/billing")>();
+	return {
+		...original,
+		getEntitlements: vi.fn(() =>
+			Promise.resolve({
+				planId: "pro",
+				status: "active",
+				seatLimit: null,
+				seatsUsed: 1,
+				aiCreditsPerSeat: 0,
+				aiCreditsTotal: 0,
+				features: Object.fromEntries(original.FEATURE_KEYS.map((key) => [key, true])),
+				overageAllowed: false,
+				readOnly: false,
+			}),
+		),
+	};
+});

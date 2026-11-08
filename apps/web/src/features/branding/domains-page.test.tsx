@@ -14,11 +14,14 @@ const state = vi.hoisted(() => ({
 		domainLimit: 5,
 	},
 	domains: [] as object[],
+	// P3-T02: the organization's resolved features, as the router context carries them.
+	features: { custom_domain: true } as Record<string, boolean>,
 }));
 
 vi.mock("@tanstack/react-router", async (importOriginal) => ({
 	...(await importOriginal<object>()),
 	useNavigate: () => vi.fn(),
+	useRouteContext: () => ({ flags: { features: state.features } }),
 }));
 vi.mock("@/features/organization/queries", () => ({
 	useMembers: () => ({ isLoading: false, data: { me: { role: "admin" } } }),
@@ -106,4 +109,17 @@ it("shows a neutral notice instead of the form when custom domains are not set u
 	expect(screen.queryByRole("button", { name: "Add domain" })).toBeNull();
 	// The address that always works still shows.
 	expect(screen.getByTestId("subdomain-host")).toBeTruthy();
+});
+
+// CAREEROS (P3-T02): Domains is a plan feature (`custom_domain`).
+it("shows an 'available on Pro' note instead of the form when the plan lacks custom domains, and keeps the address", async () => {
+	state.features = { custom_domain: false };
+	state.info = { ...state.info, domainsConfigured: true };
+	state.domains = [];
+	renderPage();
+	expect(await screen.findByTestId("domains-not-in-plan")).toBeTruthy();
+	expect(screen.getByText("Custom domains are available on Pro")).toBeTruthy();
+	expect(screen.queryByRole("button", { name: "Add domain" })).toBeNull();
+	expect(screen.getByTestId("subdomain-host")).toBeTruthy();
+	state.features = { custom_domain: true };
 });

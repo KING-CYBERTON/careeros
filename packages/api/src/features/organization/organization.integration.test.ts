@@ -7,6 +7,8 @@ import { withDatabasePool } from "@reactive-resume/db/client";
 
 // Real organization scope, not the fixed one from vitest.org.setup.ts.
 vi.mock("@careeros/tenancy", async (importOriginal) => importOriginal());
+// CAREEROS (P3-T02): the shared setup stubs billing; this suite reads the real entitlements.
+vi.mock("@careeros/billing", async (importOriginal) => importOriginal());
 vi.mock("@reactive-resume/auth/config", () => ({ auth: {}, verifyOAuthToken: vi.fn() }));
 
 // P3-T01: the read-only entitlements and audit procedures, as the `careeros_app` role on a database of its own with

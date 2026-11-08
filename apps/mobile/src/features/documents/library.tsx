@@ -20,6 +20,8 @@ import { Thumbnail } from "./thumbnail";
 import { client, orpc } from "@/api/client";
 import { getAccountScope, useSession } from "@/auth/session";
 import { CollectionHeader } from "@/components/collection-header";
+// CAREEROS (P3-T02)
+import { SuspendedBanner } from "@/features/organization/entitlements";
 import { routes } from "@/routes";
 import {
 	Banner,
@@ -326,6 +328,8 @@ export function DocumentsLibrary({ trashed = false }: DocumentsLibraryProps) {
 		);
 	const header = (
 		<View style={{ gap: space.s4 }}>
+			{/* CAREEROS (P3-T02): the same text as the web banner while the organization is suspended */}
+			{trashed ? null : <SuspendedBanner />}
 			<View style={{ flexDirection: "row", alignItems: "center", gap: space.s2 }}>
 				{trashed && (
 					<IconButton
