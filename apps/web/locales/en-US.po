@@ -349,6 +349,12 @@ msgstr "{0} (mine)"
 msgid "{0} closed"
 msgstr "{0} closed"
 
+#. placeholder {0}: row.credits
+#. placeholder {1}: row.calls
+#: src/features/org-admin/ai-usage-page.tsx
+msgid "{0} credits · {1} calls"
+msgstr "{0} credits · {1} calls"
+
 #. placeholder {0}: semantics.dates.length
 #: src/features/resume/editor/check/parser-view.tsx
 msgid "{0} found"
@@ -471,6 +477,12 @@ msgstr "{0} skipped"
 #: src/features/career/workspace/saved.tsx
 msgid "{0} supported, {1} partly supported, {2} with no evidence yet. {3}"
 msgstr "{0} supported, {1} partly supported, {2} with no evidence yet. {3}"
+
+#. placeholder {0}: period.start.toLocaleDateString()
+#. placeholder {1}: period.end.toLocaleDateString()
+#: src/features/org-admin/ai-usage-page.tsx
+msgid "{0} to {1}"
+msgstr "{0} to {1}"
 
 #. placeholder {0}: findings.length
 #: src/features/ats-checker/report/report-view.tsx
@@ -915,6 +927,10 @@ msgstr "24 hours before"
 #: src/features/settings/ai/api-keys.tsx
 msgid "30 days"
 msgstr "30 days"
+
+#: src/features/org-admin/ai-usage-page.tsx
+msgid "80% of the pooled credits are used"
+msgstr "80% of the pooled credits are used"
 
 #: src/features/settings/ai/api-keys.tsx
 msgid "90 days"
@@ -1621,6 +1637,10 @@ msgstr "AI couldn't fill the details. The posting is retained; complete the fiel
 msgid "AI edit"
 msgstr "AI edit"
 
+#: src/features/org-admin/ai-usage-page.tsx
+msgid "AI features that use the platform's model stay off until the next period or a larger plan."
+msgstr "AI features that use the platform's model stay off until the next period or a larger plan."
+
 #: src/features/career/schedule-sheet.tsx
 msgid "AI is optional. Review target roles in Knowledge, wait for Saved, then create a new schedule. Existing schedules keep this query until you edit and save it."
 msgstr "AI is optional. Review target roles in Knowledge, wait for Saved, then create a new schedule. Existing schedules keep this query until you edit and save it."
@@ -1645,6 +1665,11 @@ msgstr "AI providers couldn't be loaded. Reload to try again."
 #: src/features/career/role-suggestions.tsx
 msgid "AI suggestions, not verified qualifications or hiring predictions. Sources below are your statements."
 msgstr "AI suggestions, not verified qualifications or hiring predictions. Sources below are your statements."
+
+#: src/features/org-admin/ai-usage-page.tsx
+#: src/routes/dashboard/settings/route.tsx
+msgid "AI usage"
+msgstr "AI usage"
 
 #: src/features/career/workspace/answer-library.tsx
 msgid "AI-assisted draft"
@@ -1696,6 +1721,10 @@ msgstr "All employers"
 #: src/features/org-admin/analytics-page.tsx
 msgid "All members"
 msgstr "All members"
+
+#: src/features/org-admin/ai-usage-page.tsx
+msgid "All of the pooled credits are used"
+msgstr "All of the pooled credits are used"
 
 #: src/features/settings/account/data.tsx
 msgid "All your documents, applications, API keys and public links are deleted for good. This can't be undone."
@@ -2483,6 +2512,14 @@ msgstr "Bulleted list"
 #: src/features/legal/signup-notice.tsx
 msgid "By creating an account you agree to the <0>Terms</0> and the <1>Privacy policy</1>."
 msgstr "By creating an account you agree to the <0>Terms</0> and the <1>Privacy policy</1>."
+
+#: src/features/org-admin/ai-usage-page.tsx
+msgid "By feature"
+msgstr "By feature"
+
+#: src/features/org-admin/ai-usage-page.tsx
+msgid "By member"
+msgstr "By member"
 
 #. placeholder {0}: stages.saved
 #. placeholder {1}: stages.applied
@@ -3677,6 +3714,10 @@ msgstr "Couldn't load AI connections. Try again before importing this file."
 msgid "Couldn't load AI connections. Your saved connections haven't changed."
 msgstr "Couldn't load AI connections. Your saved connections haven't changed."
 
+#: src/features/org-admin/ai-usage-page.tsx
+msgid "Couldn't load AI usage"
+msgstr "Couldn't load AI usage"
+
 #: src/features/org-admin/analytics-page.tsx
 msgid "Couldn't load analytics"
 msgstr "Couldn't load analytics"
@@ -4289,6 +4330,10 @@ msgstr "Created {0}"
 #: src/features/documents/new-document-dialog.tsx
 msgid "Created and linked to {0}"
 msgstr "Created and linked to {0}"
+
+#: src/features/org-admin/ai-usage-page.tsx
+msgid "Credits your members have used of the organization's pooled allowance this period."
+msgstr "Credits your members have used of the organization's pooled allowance this period."
 
 #: src/features/resume/editor/write/picture-settings.tsx
 msgid "Crop and upload"
@@ -7005,6 +7050,7 @@ msgstr "Leave it empty to use the original title."
 msgid "Leave out"
 msgstr "Leave out"
 
+#: src/features/org-admin/ai-usage-page.tsx
 #: src/features/resume/editor/design/template-group.tsx
 msgid "Left"
 msgstr "Left"
@@ -8244,6 +8290,10 @@ msgstr "No phone number was found."
 msgid "No photo. Most ATS ignore photos; some regions expect one."
 msgstr "No photo. Most ATS ignore photos; some regions expect one."
 
+#: src/features/org-admin/ai-usage-page.tsx
+msgid "No platform AI use yet."
+msgstr "No platform AI use yet."
+
 #: src/features/applications/components/add-application-dialog.tsx
 msgid "No postings found. Try different keywords."
 msgstr "No postings found. Try different keywords."
@@ -9279,6 +9329,14 @@ msgstr "Polish"
 msgid "Polishing"
 msgstr "Polishing"
 
+#: src/features/org-admin/ai-usage-page.tsx
+msgid "Pooled"
+msgstr "Pooled"
+
+#: src/features/org-admin/ai-usage-page.tsx
+msgid "Pooled credits used"
+msgstr "Pooled credits used"
+
 #. Preset button for setting picture aspect ratio to portrait orientation
 #: src/features/resume/editor/write/picture-settings.tsx
 msgid "Portrait"
@@ -10217,6 +10275,10 @@ msgstr "Removed {0}"
 #: src/features/organization/members-page.tsx
 msgid "Removed {name}"
 msgstr "Removed {name}"
+
+#: src/features/org-admin/ai-usage-page.tsx
+msgid "Removed member"
+msgstr "Removed member"
 
 #: src/features/branding/domains.ts
 msgid "Removing"
@@ -12513,6 +12575,10 @@ msgstr "That sign-in provider is no longer available on this server. Use another
 msgid "The {label} file couldn't be generated. Try again, or download PDF instead."
 msgstr "The {label} file couldn't be generated. Try again, or download PDF instead."
 
+#: src/features/org-admin/ai-usage-page.tsx
+msgid "The 20 members who used the most."
+msgstr "The 20 members who used the most."
+
 #: src/libs/error-message.ts
 msgid "The address must contain only lowercase letters and numbers, separated by single dashes."
 msgstr "The address must contain only lowercase letters and numbers, separated by single dashes."
@@ -13079,6 +13145,10 @@ msgstr "This PDF is a scanned image. There's no text to read. Try the Word versi
 msgid "This PDF is password protected. Save an unprotected copy and try again."
 msgstr "This PDF is password protected. Save an unprotected copy and try again."
 
+#: src/features/org-admin/ai-usage-page.tsx
+msgid "This period"
+msgstr "This period"
+
 #: src/features/assistant/question-card.tsx
 msgid "This question couldn't be asked. Send a new message to continue."
 msgstr "This question couldn't be asked. Send a new message to continue."
@@ -13351,6 +13421,7 @@ msgstr "Try again"
 
 #: src/features/branding/branding-page.tsx
 #: src/features/branding/domains-page.tsx
+#: src/features/org-admin/ai-usage-page.tsx
 msgid "Try again in a moment."
 msgstr "Try again in a moment."
 
@@ -13847,6 +13918,7 @@ msgid "Use your editor's normal bullet list, so stray glyphs do not land mid-sen
 msgstr "Use your editor's normal bullet list, so stray glyphs do not land mid-sentence."
 
 #: src/features/career/coach-chat.tsx
+#: src/features/org-admin/ai-usage-page.tsx
 msgid "Used"
 msgstr "Used"
 
@@ -14847,6 +14919,10 @@ msgstr "Your phone number changed on the resume. The letter updated too."
 #: src/features/ats-checker/messages.ts
 msgid "Your phone number is written in an unusual shape."
 msgstr "Your phone number is written in an unusual shape."
+
+#: src/features/org-admin/ai-usage-page.tsx
+msgid "Your plan allows going over; extra use is billed."
+msgstr "Your plan allows going over; extra use is billed."
 
 #: src/features/career/coach.tsx
 msgid "your preferences"

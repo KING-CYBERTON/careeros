@@ -354,6 +354,12 @@ msgstr ""
 msgid "{0} closed"
 msgstr "{0} закрыто"
 
+#. placeholder {0}: row.credits
+#. placeholder {1}: row.calls
+#: src/features/org-admin/ai-usage-page.tsx
+msgid "{0} credits · {1} calls"
+msgstr ""
+
 #. placeholder {0}: semantics.dates.length
 #: src/features/resume/editor/check/parser-view.tsx
 msgid "{0} found"
@@ -476,6 +482,12 @@ msgstr "{0} пропущено"
 #: src/features/career/workspace/saved.tsx
 msgid "{0} supported, {1} partly supported, {2} with no evidence yet. {3}"
 msgstr "Подтверждено: {0}, частично: {1}, пока без подтверждений: {2}. {3}"
+
+#. placeholder {0}: period.start.toLocaleDateString()
+#. placeholder {1}: period.end.toLocaleDateString()
+#: src/features/org-admin/ai-usage-page.tsx
+msgid "{0} to {1}"
+msgstr ""
 
 #. placeholder {0}: findings.length
 #: src/features/ats-checker/report/report-view.tsx
@@ -920,6 +932,10 @@ msgstr "За 24 часа"
 #: src/features/settings/ai/api-keys.tsx
 msgid "30 days"
 msgstr "30 дней"
+
+#: src/features/org-admin/ai-usage-page.tsx
+msgid "80% of the pooled credits are used"
+msgstr ""
 
 #: src/features/settings/ai/api-keys.tsx
 msgid "90 days"
@@ -1626,6 +1642,10 @@ msgstr "ИИ не смог предоставить подробную инфо�
 msgid "AI edit"
 msgstr "ИИ редактировать"
 
+#: src/features/org-admin/ai-usage-page.tsx
+msgid "AI features that use the platform's model stay off until the next period or a larger plan."
+msgstr ""
+
 #: src/features/career/schedule-sheet.tsx
 msgid "AI is optional. Review target roles in Knowledge, wait for Saved, then create a new schedule. Existing schedules keep this query until you edit and save it."
 msgstr ""
@@ -1649,6 +1669,11 @@ msgstr "Не удалось загрузить поставщиков ИИ. Пе
 
 #: src/features/career/role-suggestions.tsx
 msgid "AI suggestions, not verified qualifications or hiring predictions. Sources below are your statements."
+msgstr ""
+
+#: src/features/org-admin/ai-usage-page.tsx
+#: src/routes/dashboard/settings/route.tsx
+msgid "AI usage"
 msgstr ""
 
 #: src/features/career/workspace/answer-library.tsx
@@ -1700,6 +1725,10 @@ msgstr ""
 
 #: src/features/org-admin/analytics-page.tsx
 msgid "All members"
+msgstr ""
+
+#: src/features/org-admin/ai-usage-page.tsx
+msgid "All of the pooled credits are used"
 msgstr ""
 
 #: src/features/settings/account/data.tsx
@@ -2487,6 +2516,14 @@ msgstr "Маркированный список"
 
 #: src/features/legal/signup-notice.tsx
 msgid "By creating an account you agree to the <0>Terms</0> and the <1>Privacy policy</1>."
+msgstr ""
+
+#: src/features/org-admin/ai-usage-page.tsx
+msgid "By feature"
+msgstr ""
+
+#: src/features/org-admin/ai-usage-page.tsx
+msgid "By member"
 msgstr ""
 
 #. placeholder {0}: stages.saved
@@ -3682,6 +3719,10 @@ msgstr "Не удалось загрузить подключения ИИ. По
 msgid "Couldn't load AI connections. Your saved connections haven't changed."
 msgstr "Не удалось загрузить подключения ИИ. Ваши сохраненные подключения не изменились."
 
+#: src/features/org-admin/ai-usage-page.tsx
+msgid "Couldn't load AI usage"
+msgstr ""
+
 #: src/features/org-admin/analytics-page.tsx
 msgid "Couldn't load analytics"
 msgstr ""
@@ -4294,6 +4335,10 @@ msgstr ""
 #: src/features/documents/new-document-dialog.tsx
 msgid "Created and linked to {0}"
 msgstr "Создано и связано с {0}."
+
+#: src/features/org-admin/ai-usage-page.tsx
+msgid "Credits your members have used of the organization's pooled allowance this period."
+msgstr ""
 
 #: src/features/resume/editor/write/picture-settings.tsx
 msgid "Crop and upload"
@@ -7010,6 +7055,7 @@ msgstr "Оставьте пустым, чтобы использовать ис�
 msgid "Leave out"
 msgstr "Пропустить"
 
+#: src/features/org-admin/ai-usage-page.tsx
 #: src/features/resume/editor/design/template-group.tsx
 msgid "Left"
 msgstr "Левый"
@@ -8249,6 +8295,10 @@ msgstr "Номер телефона не найден."
 msgid "No photo. Most ATS ignore photos; some regions expect one."
 msgstr "Нет фото. Большинство ATS игнорируют фотографии; некоторые регионы ожидают его."
 
+#: src/features/org-admin/ai-usage-page.tsx
+msgid "No platform AI use yet."
+msgstr ""
+
 #: src/features/applications/components/add-application-dialog.tsx
 msgid "No postings found. Try different keywords."
 msgstr "Объявлений о вакансиях не найдено. Попробуйте разные ключевые слова."
@@ -9284,6 +9334,14 @@ msgstr "Польский"
 msgid "Polishing"
 msgstr "Шлифуем"
 
+#: src/features/org-admin/ai-usage-page.tsx
+msgid "Pooled"
+msgstr ""
+
+#: src/features/org-admin/ai-usage-page.tsx
+msgid "Pooled credits used"
+msgstr ""
+
 #. Preset button for setting picture aspect ratio to portrait orientation
 #: src/features/resume/editor/write/picture-settings.tsx
 msgid "Portrait"
@@ -10221,6 +10279,10 @@ msgstr ""
 
 #: src/features/organization/members-page.tsx
 msgid "Removed {name}"
+msgstr ""
+
+#: src/features/org-admin/ai-usage-page.tsx
+msgid "Removed member"
 msgstr ""
 
 #: src/features/branding/domains.ts
@@ -12518,6 +12580,10 @@ msgstr "Этот провайдер входа больше не доступе�
 msgid "The {label} file couldn't be generated. Try again, or download PDF instead."
 msgstr "Не удалось создать файл {label}. Попробуйте еще раз или вместо этого загрузите PDF."
 
+#: src/features/org-admin/ai-usage-page.tsx
+msgid "The 20 members who used the most."
+msgstr ""
+
 #: src/libs/error-message.ts
 msgid "The address must contain only lowercase letters and numbers, separated by single dashes."
 msgstr "Адрес должен содержать только строчные буквы и цифры, разделенные одинарными дефисами."
@@ -13084,6 +13150,10 @@ msgstr "Этот PDF представляет собой отсканирова�
 msgid "This PDF is password protected. Save an unprotected copy and try again."
 msgstr "Этот PDF защищён паролем. Сохраните незащищённую копию и попробуйте снова."
 
+#: src/features/org-admin/ai-usage-page.tsx
+msgid "This period"
+msgstr ""
+
 #: src/features/assistant/question-card.tsx
 msgid "This question couldn't be asked. Send a new message to continue."
 msgstr ""
@@ -13356,6 +13426,7 @@ msgstr "Попробуйте еще раз"
 
 #: src/features/branding/branding-page.tsx
 #: src/features/branding/domains-page.tsx
+#: src/features/org-admin/ai-usage-page.tsx
 msgid "Try again in a moment."
 msgstr ""
 
@@ -13852,6 +13923,7 @@ msgid "Use your editor's normal bullet list, so stray glyphs do not land mid-sen
 msgstr "Используйте обычный маркированный список редактора, чтобы посторонние глифы не попадали в середину предложения."
 
 #: src/features/career/coach-chat.tsx
+#: src/features/org-admin/ai-usage-page.tsx
 msgid "Used"
 msgstr "Использовано"
 
@@ -14852,6 +14924,10 @@ msgstr "В резюме изменился номер телефона. Пись
 #: src/features/ats-checker/messages.ts
 msgid "Your phone number is written in an unusual shape."
 msgstr "Ваш номер телефона записан в необычном формате."
+
+#: src/features/org-admin/ai-usage-page.tsx
+msgid "Your plan allows going over; extra use is billed."
+msgstr ""
 
 #: src/features/career/coach.tsx
 msgid "your preferences"

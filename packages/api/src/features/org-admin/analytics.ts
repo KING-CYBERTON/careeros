@@ -113,7 +113,7 @@ async function summarize(organizationId: string, input: AnalyticsInput) {
 		) as Record<ApplicationStatus, number>,
 		interviews: Number(row.interviews),
 		offers: Number(row.offers),
-		// Filled by the AI metering (P3-T03) once it has merged; null means "not metered".
+		// Null: the period-based AI usage lives on Settings → AI usage (P3-T03), not on a date range (Q328).
 		aiCreditsUsed: null as number | null,
 	};
 }

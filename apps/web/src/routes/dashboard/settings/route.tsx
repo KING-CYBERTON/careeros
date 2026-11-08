@@ -24,6 +24,7 @@ type Page = {
 		// CAREEROS (P3-T08)
 		| "/dashboard/settings/cohorts"
 		| "/dashboard/settings/analytics"
+		| "/dashboard/settings/ai-usage"
 		| "/dashboard/settings/audit";
 	icon: IconName;
 	label: () => string;
@@ -50,6 +51,7 @@ const BRANDING_PAGES: Page[] = [
 const ORG_ADMIN_PAGES: Page[] = [
 	{ to: "/dashboard/settings/cohorts", icon: "graduation-cap", label: () => t`Cohorts` },
 	{ to: "/dashboard/settings/analytics", icon: "chart-line-up", label: () => t`Analytics` },
+	{ to: "/dashboard/settings/ai-usage", icon: "sparkle", label: () => t`AI usage` },
 	{ to: "/dashboard/settings/audit", icon: "list-checks", label: () => t`Audit log` },
 ];
 

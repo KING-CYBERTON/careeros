@@ -53,6 +53,7 @@ import { Route as DashboardResumesIndexRouteImport } from "./routes/dashboard/re
 import { Route as DashboardSettingsIndexRouteImport } from "./routes/dashboard/settings/index";
 import { Route as DashboardSettingsAccountRouteImport } from "./routes/dashboard/settings/account";
 import { Route as DashboardSettingsAiRouteImport } from "./routes/dashboard/settings/ai";
+import { Route as DashboardSettingsAiUsageRouteImport } from "./routes/dashboard/settings/ai-usage";
 import { Route as DashboardSettingsAnalyticsRouteImport } from "./routes/dashboard/settings/analytics";
 import { Route as DashboardSettingsApiKeysRouteImport } from "./routes/dashboard/settings/api-keys";
 import { Route as DashboardSettingsAuditRouteImport } from "./routes/dashboard/settings/audit";
@@ -295,6 +296,12 @@ const DashboardSettingsAiRoute = DashboardSettingsAiRouteImport.update({
   path: "/ai",
   getParentRoute: () => DashboardSettingsRouteRoute,
 } as any);
+const DashboardSettingsAiUsageRoute =
+  DashboardSettingsAiUsageRouteImport.update({
+    id: "/ai-usage",
+    path: "/ai-usage",
+    getParentRoute: () => DashboardSettingsRouteRoute,
+  } as any);
 const DashboardSettingsAnalyticsRoute =
   DashboardSettingsAnalyticsRouteImport.update({
     id: "/analytics",
@@ -436,6 +443,7 @@ export interface FileRoutesByFullPath {
   "/dashboard/career/offers": typeof DashboardCareerOffersRoute;
   "/dashboard/settings/account": typeof DashboardSettingsAccountRoute;
   "/dashboard/settings/ai": typeof DashboardSettingsAiRoute;
+  "/dashboard/settings/ai-usage": typeof DashboardSettingsAiUsageRoute;
   "/dashboard/settings/analytics": typeof DashboardSettingsAnalyticsRoute;
   "/dashboard/settings/api-keys": typeof DashboardSettingsApiKeysRoute;
   "/dashboard/settings/audit": typeof DashboardSettingsAuditRoute;
@@ -492,6 +500,7 @@ export interface FileRoutesByTo {
   "/dashboard/career/offers": typeof DashboardCareerOffersRoute;
   "/dashboard/settings/account": typeof DashboardSettingsAccountRoute;
   "/dashboard/settings/ai": typeof DashboardSettingsAiRoute;
+  "/dashboard/settings/ai-usage": typeof DashboardSettingsAiUsageRoute;
   "/dashboard/settings/analytics": typeof DashboardSettingsAnalyticsRoute;
   "/dashboard/settings/api-keys": typeof DashboardSettingsApiKeysRoute;
   "/dashboard/settings/audit": typeof DashboardSettingsAuditRoute;
@@ -556,6 +565,7 @@ export interface FileRoutesById {
   "/dashboard/career/offers": typeof DashboardCareerOffersRoute;
   "/dashboard/settings/account": typeof DashboardSettingsAccountRoute;
   "/dashboard/settings/ai": typeof DashboardSettingsAiRoute;
+  "/dashboard/settings/ai-usage": typeof DashboardSettingsAiUsageRoute;
   "/dashboard/settings/analytics": typeof DashboardSettingsAnalyticsRoute;
   "/dashboard/settings/api-keys": typeof DashboardSettingsApiKeysRoute;
   "/dashboard/settings/audit": typeof DashboardSettingsAuditRoute;
@@ -620,6 +630,7 @@ export interface FileRouteTypes {
     | "/dashboard/career/offers"
     | "/dashboard/settings/account"
     | "/dashboard/settings/ai"
+    | "/dashboard/settings/ai-usage"
     | "/dashboard/settings/analytics"
     | "/dashboard/settings/api-keys"
     | "/dashboard/settings/audit"
@@ -676,6 +687,7 @@ export interface FileRouteTypes {
     | "/dashboard/career/offers"
     | "/dashboard/settings/account"
     | "/dashboard/settings/ai"
+    | "/dashboard/settings/ai-usage"
     | "/dashboard/settings/analytics"
     | "/dashboard/settings/api-keys"
     | "/dashboard/settings/audit"
@@ -739,6 +751,7 @@ export interface FileRouteTypes {
     | "/dashboard/career/offers"
     | "/dashboard/settings/account"
     | "/dashboard/settings/ai"
+    | "/dashboard/settings/ai-usage"
     | "/dashboard/settings/analytics"
     | "/dashboard/settings/api-keys"
     | "/dashboard/settings/audit"
@@ -1082,6 +1095,13 @@ declare module "@tanstack/react-router" {
       preLoaderRoute: typeof DashboardSettingsAiRouteImport;
       parentRoute: typeof DashboardSettingsRouteRoute;
     };
+    "/dashboard/settings/ai-usage": {
+      id: "/dashboard/settings/ai-usage";
+      path: "/ai-usage";
+      fullPath: "/dashboard/settings/ai-usage";
+      preLoaderRoute: typeof DashboardSettingsAiUsageRouteImport;
+      parentRoute: typeof DashboardSettingsRouteRoute;
+    };
     "/dashboard/settings/analytics": {
       id: "/dashboard/settings/analytics";
       path: "/analytics";
@@ -1325,6 +1345,7 @@ interface DashboardSettingsRouteRouteChildren {
   DashboardSettingsIntegrationsRouteRoute: typeof DashboardSettingsIntegrationsRouteRoute;
   DashboardSettingsAccountRoute: typeof DashboardSettingsAccountRoute;
   DashboardSettingsAiRoute: typeof DashboardSettingsAiRoute;
+  DashboardSettingsAiUsageRoute: typeof DashboardSettingsAiUsageRoute;
   DashboardSettingsAnalyticsRoute: typeof DashboardSettingsAnalyticsRoute;
   DashboardSettingsApiKeysRoute: typeof DashboardSettingsApiKeysRoute;
   DashboardSettingsAuditRoute: typeof DashboardSettingsAuditRoute;
@@ -1345,6 +1366,7 @@ const DashboardSettingsRouteRouteChildren: DashboardSettingsRouteRouteChildren =
       DashboardSettingsIntegrationsRouteRoute,
     DashboardSettingsAccountRoute: DashboardSettingsAccountRoute,
     DashboardSettingsAiRoute: DashboardSettingsAiRoute,
+    DashboardSettingsAiUsageRoute: DashboardSettingsAiUsageRoute,
     DashboardSettingsAnalyticsRoute: DashboardSettingsAnalyticsRoute,
     DashboardSettingsApiKeysRoute: DashboardSettingsApiKeysRoute,
     DashboardSettingsAuditRoute: DashboardSettingsAuditRoute,
