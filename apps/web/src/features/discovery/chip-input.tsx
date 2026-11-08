@@ -35,7 +35,7 @@ export function ChipInput({ label, hint, values, onChange, error }: ChipInputPro
 				{label}
 			</label>
 			{values.length > 0 && (
-				<ul className="flex flex-wrap gap-1.5" aria-label={label}>
+				<ul className="flex flex-wrap gap-1.5" aria-label={t`Added: ${label}`}>
 					{values.map((value) => (
 						<li
 							key={value}

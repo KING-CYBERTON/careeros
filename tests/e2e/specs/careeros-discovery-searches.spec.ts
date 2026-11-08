@@ -38,7 +38,7 @@ test("a member creates, edits, pauses and deletes a job search from the Jobs pag
 		await titles.press("Enter");
 		await titles.fill("product manager");
 		await titles.press("Enter");
-		await expect(form.getByRole("list", { name: "Job titles" }).getByRole("listitem")).toHaveCount(1);
+		await expect(form.getByRole("list", { name: "Added: Job titles" }).getByRole("listitem")).toHaveCount(1);
 		await form.getByRole("button", { name: "Add a board" }).click();
 		await form.getByLabel("Board 1 name or link").fill("https://www.linkedin.com/jobs/view/1");
 		await expect(form.getByText("This board isn't supported yet")).toBeVisible();

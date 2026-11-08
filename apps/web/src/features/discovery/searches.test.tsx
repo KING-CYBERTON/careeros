@@ -348,3 +348,13 @@ it("shows only the plan note when the server refuses the list", async () => {
 	expect(screen.queryByRole("button", { name: "New search" })).toBeNull();
 	expect(screen.queryByRole("alert")).toBeNull();
 });
+
+it("gives each chip field exactly one labelled control, even with chips added", async () => {
+	const user = userEvent.setup();
+	renderSearches();
+	await user.click(await screen.findByRole("button", { name: "New search" }));
+	for (const label of ["Job titles", "Skills", "Keywords", "Locations"]) {
+		await user.type(screen.getByLabelText(label, { exact: true }), `${label} one,`);
+		expect(screen.getAllByLabelText(label, { exact: true })).toHaveLength(1);
+	}
+});
