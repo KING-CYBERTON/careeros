@@ -13,6 +13,12 @@ export const FEATURE_KEYS = [
 export type FeatureKey = (typeof FEATURE_KEYS)[number];
 
 /**
+ * CAREEROS (P4-T02): a plan's numeric entry in `plan.features`. It is a limit, not an on/off feature, so it never shows
+ * up in the resolved feature map. See `discoveryAiTopNCap` in entitlements.ts.
+ */
+export const DISCOVERY_AI_TOP_N_KEY = "discovery_ai_top_n";
+
+/**
  * The last step of the chain: what a feature is when no org flag, plan entry or global flag says anything. Everything
  * defaults to off, so a feature that nobody configured is not granted (fail closed).
  */
@@ -58,7 +64,7 @@ export function resolveFeatures(inputs: FeatureInputs): Record<string, boolean> 
 	const keys = new Set<string>([
 		...FEATURE_KEYS,
 		...inputs.orgFlags.keys(),
-		...Object.keys(inputs.planFeatures),
+		...Object.keys(inputs.planFeatures).filter((key) => key !== DISCOVERY_AI_TOP_N_KEY),
 		...inputs.globalFlags.keys(),
 	]);
 	const resolved: Record<string, boolean> = {};

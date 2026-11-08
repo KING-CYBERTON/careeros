@@ -3505,6 +3505,10 @@ msgstr "無法刪除您的帳戶。請再試一次。"
 msgid "Couldn't disconnect your {providerName} account. Try again."
 msgstr "無法取消連結您的 {providerName} 帳戶。請再試一次。"
 
+#: src/features/discovery/review-queue.tsx
+msgid "Couldn't dismiss this job. Try again."
+msgstr ""
+
 #: src/features/documents/document-actions.tsx
 msgid "Couldn't duplicate the document. Try again."
 msgstr "無法複製文件。請再試一次。"
@@ -3613,6 +3617,10 @@ msgstr "無法載入範例檔案。再試一次。"
 #: src/routes/dashboard/applications/index.tsx
 msgid "Couldn't load this. Your saved data hasn't changed."
 msgstr "無法載入此內容。您已儲存的資料沒有變更。"
+
+#: src/features/discovery/review-queue.tsx
+msgid "Couldn't load your jobs. Try again."
+msgstr ""
 
 #: src/routes/dashboard/applications/index.tsx
 msgid "Couldn't load your stages, so the standard ones are shown. Try again."
@@ -3812,6 +3820,10 @@ msgstr "無法儲存標籤。請再試一次。"
 #: src/features/settings/preferences.tsx
 msgid "Couldn't save the timezone. Try again."
 msgstr "無法儲存時區。請再試一次。"
+
+#: src/features/discovery/review-queue.tsx
+msgid "Couldn't save this job. Try again."
+msgstr ""
 
 #: src/features/career/today.tsx
 msgid "Couldn't save this role to Applications. Try again."
@@ -4590,6 +4602,7 @@ msgstr "中斷連結"
 msgid "Disconnecting your {providerName} account…"
 msgstr "正在取消連結您的 {providerName} 帳戶…"
 
+#: src/features/discovery/review-queue.tsx
 #: src/features/resume/editor/write/write-panel.tsx
 #: src/routes/builder/letter/-components/write-panel.tsx
 #: src/routes/dashboard/applications/index.tsx
@@ -4598,6 +4611,10 @@ msgstr "解僱"
 
 #: src/features/career/today.tsx
 msgid "Dismiss selected"
+msgstr ""
+
+#: src/features/discovery/review-queue.tsx
+msgid "Dismissed"
 msgstr ""
 
 #: src/features/career/role-suggestions.tsx
@@ -6522,8 +6539,13 @@ msgid "Job search pipeline"
 msgstr "求職流程"
 
 #: src/features/command-palette/pages/navigation.tsx
+#: src/routes/dashboard/career/route.tsx
 msgid "Jobs"
 msgstr "工作機會"
+
+#: src/features/discovery/review-queue.tsx
+msgid "Jobs found for you"
+msgstr ""
 
 #. Example full name placeholder on registration form
 #: src/features/auth/pages/register.tsx
@@ -7373,6 +7395,16 @@ msgstr "已標記為已讀"
 msgid "Match “{0}”"
 msgstr "匹配“{0}”"
 
+#. placeholder {0}: scoreOf(job)
+#: src/features/discovery/review-queue.tsx
+msgid "Match {0}"
+msgstr ""
+
+#. placeholder {0}: scoreOf(job)
+#: src/features/discovery/review-queue.tsx
+msgid "Match {0} (quick)"
+msgstr ""
+
 #: src/features/resume/editor/check/job-match.tsx
 msgid "Match against a job"
 msgstr "與工作匹配"
@@ -7731,6 +7763,7 @@ msgstr "網路"
 msgid "Never"
 msgstr "絕不"
 
+#: src/features/discovery/review-queue.tsx
 #: src/features/documents/document-card.tsx
 #: src/routes/dashboard/-components/app-shell.tsx
 msgid "New"
@@ -7907,6 +7940,10 @@ msgstr ""
 msgid "No dates were found."
 msgstr "未找到任何日期。"
 
+#: src/features/discovery/review-queue.tsx
+msgid "No dismissed jobs."
+msgstr ""
+
 #: src/features/career/workspace/apply.tsx
 msgid "no documents"
 msgstr ""
@@ -8032,6 +8069,10 @@ msgstr "沒有履歷"
 #: src/features/applications/components/application-form-sheet.tsx
 msgid "No resumes yet."
 msgstr "尚無履歷。"
+
+#: src/features/discovery/review-queue.tsx
+msgid "No saved jobs yet."
+msgstr ""
 
 #: src/features/documents/document-actions.tsx
 msgid "No selected documents were deleted. Refresh to see what remains."
@@ -8296,6 +8337,10 @@ msgstr "沒有需要修復的內容。其餘頁面只是未被本報告涵蓋。
 msgid "Nothing to review."
 msgstr "沒什麼好評論的。"
 
+#: src/features/discovery/review-queue.tsx
+msgid "Nothing to review. New postings show up here after an automation runs."
+msgstr ""
+
 #: src/features/ats-checker/report/report-view.tsx
 msgid "Nothing to suggest."
 msgstr "沒有可提供的建議。"
@@ -8483,6 +8528,10 @@ msgstr "開啟{title}"
 #: src/routes/builder/letter/-components/write-panel.tsx
 msgid "Open AI settings"
 msgstr "開啟AI設定"
+
+#: src/features/discovery/review-queue.tsx
+msgid "Open application"
+msgstr ""
 
 #: src/features/career/today.tsx
 msgid "Open briefing"
@@ -9068,6 +9117,10 @@ msgstr "履歷表中的職缺發布條款"
 
 #: src/features/career/today.tsx
 msgid "Postings can change or close. Publication date unknown; search coverage is incomplete."
+msgstr ""
+
+#: src/features/discovery/review-queue.tsx
+msgid "Postings your automations found, best match first. Save one to your applications, or dismiss it and it never comes back."
 msgstr ""
 
 #: src/features/career/workspace/practise.tsx
@@ -10584,6 +10637,10 @@ msgstr "儲存這些錄取條件以進行比較"
 msgid "Save this story to Knowledge?"
 msgstr "將這段經歷儲存至知識庫？"
 
+#: src/features/discovery/review-queue.tsx
+msgid "Save to applications"
+msgstr ""
+
 #: src/features/career/workspace/fit.tsx
 msgid "Save to Knowledge"
 msgstr "儲存到知識庫"
@@ -10603,6 +10660,7 @@ msgstr "已儲存"
 #: src/features/applications/components/add-application-dialog.tsx
 #: src/features/applications/stages.ts
 #: src/features/career/knowledge/preferences.tsx
+#: src/features/discovery/review-queue.tsx
 #: src/features/resume/editor/save-status.tsx
 #: src/routes/builder/letter/-components/letter-bar.tsx
 msgid "Saved"
@@ -10684,6 +10742,10 @@ msgstr "已儲存到知識庫，僅用於這筆應徵。"
 #: src/features/career/workspace/practise.tsx
 msgid "Saved to Saved · Practice"
 msgstr "已儲存到「已儲存」 · 練習"
+
+#: src/features/discovery/review-queue.tsx
+msgid "Saved to your applications."
+msgstr ""
 
 #. placeholder {0}: new URL(url).host
 #: src/features/resume/share/address-field.tsx
@@ -11228,9 +11290,17 @@ msgstr "顯示圖示"
 msgid "Show in search engines"
 msgstr "在搜尋引擎中顯示"
 
+#: src/features/discovery/review-queue.tsx
+msgid "Show jobs"
+msgstr ""
+
 #: src/features/resume/editor/write/fields.tsx
 msgid "Show link in title"
 msgstr "在標題中顯示連結"
+
+#: src/features/discovery/review-queue.tsx
+msgid "Show more"
+msgstr ""
 
 #: src/features/resume/editor/check/check-panel.tsx
 #: src/features/resume/editor/check/writing-tab.tsx
@@ -13036,6 +13106,7 @@ msgstr "嘗試樣品"
 #: src/features/career/workspace/practise.tsx
 #: src/features/career/workspace/preparation.tsx
 #: src/features/career/workspace/shell.tsx
+#: src/features/discovery/review-queue.tsx
 #: src/features/documents/library-error.tsx
 #: src/features/resume/editor/write/improve.tsx
 #: src/features/resume/preview/preview.browser.tsx

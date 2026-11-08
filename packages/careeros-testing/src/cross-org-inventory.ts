@@ -203,7 +203,6 @@ export const NO_TENANT_ID: Record<string, string> = {
 	"POST /organization/join": "takes no tenant id: joins the request host's organization, never an input (P2-T03)",
 	"GET /discovery/sources": "takes no tenant id: lists the caller's own automations (P4-T01)",
 	"POST /discovery/sources": "takes no tenant id: creates an automation for the caller (P4-T01)",
-	"GET /discovery/jobs": "takes no tenant id: lists the caller's own discovered jobs (P4-T01)",
 	"GET /documents": "takes no tenant id: lists the caller's own documents",
 	"GET /documents/page": "takes no tenant id: lists the caller's own documents",
 	"GET /documents/counts": "takes no tenant id: counts the caller's own documents",
