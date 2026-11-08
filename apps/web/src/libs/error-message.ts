@@ -64,6 +64,9 @@ export function getOrpcErrorMessage(
 	if (entitlementMessage) return entitlementMessage;
 	if (error.code === "AI_CREDENTIAL_DECRYPTION_FAILED")
 		return t`The saved provider key can't be decrypted. Enter the key again in Settings → AI & developer.`;
+	// CAREEROS (P3-T03): the organization's AI allowance is used up. Shown wherever an AI action fails.
+	if (error.code === "AI_QUOTA_EXCEEDED")
+		return t`Your organization has used all of this month's AI allowance. Add your own AI provider in Settings → AI & developer to keep going, or ask an admin about the plan.`;
 
 	const mappedMessage = options.byCode?.[error.code];
 	if (mappedMessage) return mappedMessage;

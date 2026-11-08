@@ -1,12 +1,14 @@
-import { beforeEach, describe, expect, it, vi } from "vite-plus/test";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vite-plus/test";
 
-const { dbMock, queryMock, queryState } = vi.hoisted(() => {
+const { dbMock, queryMock, queryState, envMock } = vi.hoisted(() => {
+	const envMock: Record<string, unknown> = { AUTH_SECRET: "synthetic-test-auth-secret" };
 	const state = {
 		rows: [] as unknown[],
 		whereArg: undefined as unknown,
 		orderByArgs: [] as unknown[],
 		updateRows: undefined as unknown[] | undefined,
 		updateWhere: undefined as unknown,
+		insertedRow: undefined as unknown,
 	};
 	const query = {
 		from: vi.fn(() => query),
@@ -29,10 +31,21 @@ const { dbMock, queryMock, queryState } = vi.hoisted(() => {
 		returning: vi.fn(async () => state.updateRows ?? state.rows),
 	};
 
+	// CAREEROS (P3-T03): the server-managed reference row is upserted with insert ... on conflict ... returning.
+	const insert = {
+		values: vi.fn((row: Record<string, unknown>) => {
+			state.insertedRow = row;
+			return insert;
+		}),
+		onConflictDoUpdate: vi.fn(() => insert),
+		returning: vi.fn(async () => [state.insertedRow]),
+	};
+
 	return {
-		dbMock: { select: vi.fn(() => query), update: vi.fn(() => update) },
+		dbMock: { select: vi.fn(() => query), update: vi.fn(() => update), insert: vi.fn(() => insert) },
 		queryMock: query,
 		queryState: state,
+		envMock,
 	};
 });
 
@@ -68,7 +81,12 @@ vi.mock("drizzle-orm", () => ({
 	ne: (left: unknown, right: unknown) => ({ type: "ne", left, right }),
 	sql: (strings: TemplateStringsArray, ...values: unknown[]) => ({ type: "sql", strings: [...strings], values }),
 }));
-vi.mock("@reactive-resume/env/server", () => ({ env: { AUTH_SECRET: "synthetic-test-auth-secret" } }));
+vi.mock("@reactive-resume/env/server", () => ({ env: envMock }));
+const quotaMock = vi.hoisted(() => ({ assertWithinQuota: vi.fn(async () => ({})) }));
+vi.mock("@careeros/ai-metering", async (original) => ({
+	...(await original<typeof import("@careeros/ai-metering")>()),
+	assertWithinQuota: quotaMock.assertWithinQuota,
+}));
 vi.mock("../ai/credentials", () => ({
 	assertCredentialEncryptionConfigured: vi.fn(),
 	decryptCredential: vi.fn(() => "decrypted-key"),
@@ -129,6 +147,8 @@ describe("aiProvidersService", () => {
 				{ type: "eq", left: "ai_provider.enabled", right: true },
 				{ type: "eq", left: "ai_provider.test_status", right: "success" },
 				{ type: "ne", left: "ai_provider.id", right: "server-ai:org_test:user-1" },
+				// CAREEROS (P3-T03): the platform reference row is never one of the member's own providers
+				{ type: "ne", left: "ai_provider.id", right: "platform-ai:org_test:user-1" },
 			],
 		});
 		expect(queryState.orderByArgs).toEqual([
@@ -194,5 +214,60 @@ describe("aiProvidersService", () => {
 				original?.recipientVersion,
 			);
 		}
+	});
+
+	// CAREEROS (P3-T03): the operator's server-managed AI is the operator's money, so it is metered like the platform.
+	describe("server-managed AI", () => {
+		const configure = (model: string) => {
+			envMock.AI_PROVIDER = "anthropic";
+			envMock.AI_MODEL = model;
+			envMock.AI_API_KEY = "operator-key-placeholder";
+		};
+		afterEach(() => {
+			delete envMock.AI_PROVIDER;
+			delete envMock.AI_MODEL;
+			delete envMock.AI_API_KEY;
+		});
+
+		it("is metered as a platform call and checked against the organization's quota", async () => {
+			configure("claude-sonnet-5-5");
+			for (const resolve of [
+				() => aiProvidersService.getRunnableById({ id: "any", userId: "user-1", feature: "resume.improve" }),
+				() => aiProvidersService.getDefaultRunnable({ userId: "user-1", feature: "resume.improve" }),
+			]) {
+				quotaMock.assertWithinQuota.mockClear();
+				const runnable = await resolve();
+				expect(runnable).toMatchObject({
+					managed: true,
+					source: "platform",
+					metering: { feature: "resume.improve", userId: "user-1", source: "platform" },
+				});
+				expect(quotaMock.assertWithinQuota).toHaveBeenCalledTimes(1);
+			}
+		});
+
+		it("is refused at 100% of the allowance", async () => {
+			configure("claude-sonnet-5-5");
+			quotaMock.assertWithinQuota.mockRejectedValueOnce(
+				Object.assign(new Error("quota"), { code: "AI_QUOTA_EXCEEDED" }),
+			);
+			await expect(
+				aiProvidersService.getDefaultRunnable({ userId: "user-1", feature: "agent.turn" }),
+			).rejects.toMatchObject({ code: "AI_QUOTA_EXCEEDED" });
+		});
+
+		it("is refused when its model has no price, like the platform path", async () => {
+			configure("some-unpriced-model");
+			await expect(
+				aiProvidersService.getDefaultRunnable({ userId: "user-1", feature: "resume.improve" }),
+			).rejects.toMatchObject({ code: "BAD_REQUEST" });
+		});
+
+		it("is refused for a caller that names no feature, so nothing runs unmetered", async () => {
+			configure("claude-sonnet-5-5");
+			await expect(aiProvidersService.getRunnableById({ id: "any", userId: "user-1" })).rejects.toMatchObject({
+				code: "BAD_REQUEST",
+			});
+		});
 	});
 });

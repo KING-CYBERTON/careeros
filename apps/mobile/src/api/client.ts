@@ -13,6 +13,8 @@ import { createTanstackQueryUtils } from "@orpc/tanstack-query";
 import { fetch as expoFetch } from "expo/fetch";
 import { isOrgHostNotMemberError } from "@reactive-resume/utils/org-host-error";
 import { authorizeAiRequest } from "./ai-consent";
+// CAREEROS (P3-T03): the 80% AI allowance notice
+import { createAiQuotaWatcher, noticeAiQuotaExceeded, noticeAiQuotaWarning, showAiQuotaWarning } from "./ai-quota";
 // CAREEROS: the account is not a member of the organization that owns this server address (P2-T03)
 import { markOrgHostBlocked } from "@/auth/org-host-block";
 import { getAccountScope, getCredentials, recoverFromUnauthorized, rejectCredentials } from "@/auth/session";
@@ -91,6 +93,21 @@ const createLink = (label: string) =>
 	new RPCLink<ClientContext>({
 		url: `${placeholder}/api/rpc`,
 		fetch: rpcFetch,
+		// CAREEROS (P3-T03): the 80% AI allowance notice rides on the response headers of each call.
+		clientInterceptors: [
+			async (options) => {
+				try {
+					const response = await options.next();
+					noticeAiQuotaWarning(response.headers);
+					return response;
+				} catch (error) {
+					noticeAiQuotaExceeded(error);
+					throw error;
+				} finally {
+					quotaWatcher.afterCall(options.path);
+				}
+			},
+		],
 		interceptors: [
 			async (options) => {
 				const { path, input, context, signal, next } = options;
@@ -112,6 +129,9 @@ const createLink = (label: string) =>
 
 /** Request/response calls. */
 export const client: RouterClient<typeof router, ClientContext> = createORPCClient(createLink("oRPC client"));
+
+// CAREEROS (P3-T03): after an AI call, ask `ai/quota` and show the 80% notice from the answer (the header may be lost)
+const quotaWatcher = createAiQuotaWatcher({ fetchQuota: () => client.ai.quota(), notify: showAiQuotaWarning });
 
 /** Long-lived event iterators (assistant, resume updates, letter drafts), kept apart from `client`. */
 export const streamClient: RouterClient<typeof router, ClientContext> = createORPCClient(

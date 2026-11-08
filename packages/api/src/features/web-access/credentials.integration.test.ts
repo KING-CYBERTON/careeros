@@ -18,6 +18,12 @@ const env = vi.hoisted(() => ({
 	AI_BASE_URL: "",
 }));
 vi.mock("@reactive-resume/env/server", () => ({ env }));
+// CAREEROS (P3-T03): server-managed AI is checked against the organization quota. This fixture schema has no
+// organization or usage tables, and the quota itself is covered by the ai-metering database suite.
+vi.mock("@careeros/ai-metering", async (original) => ({
+	...(await original<typeof import("@careeros/ai-metering")>()),
+	assertWithinQuota: async () => ({}),
+}));
 vi.mock("@reactive-resume/db/client", () => ({
 	get db() {
 		return fixture.db;
@@ -165,20 +171,20 @@ describe.skipIf(!process.env.INTEGRATIONS_TEST_DATABASE_URL)("integration creden
 		await pool.query("UPDATE ai_providers SET enabled=true, test_status='success' WHERE id=$1", [personal.id]);
 		Object.assign(env, {
 			AI_PROVIDER: "openai",
-			AI_MODEL: "server-model",
+			AI_MODEL: "claude-sonnet-5-5",
 			AI_API_KEY: "server-secret",
 			AI_BASE_URL: "https://ai.example.com/v1",
 			ENCRYPTION_SECRET: "",
 		});
-		const global = await ai.getRunnableById({ userId: "alice", id: personal.id });
+		const global = await ai.getRunnableById({ userId: "alice", id: personal.id, feature: "resume.improve" });
 		expect(global).toMatchObject({
 			managed: true,
 			provider: "openai",
-			model: "server-model",
+			model: "claude-sonnet-5-5",
 			apiKey: "server-secret",
 			baseURL: "https://ai.example.com/v1",
 		});
-		expect((await ai.getDefaultRunnable({ userId: "alice" }))?.id).toBe(global.id);
+		expect((await ai.getDefaultRunnable({ userId: "alice", feature: "resume.improve" }))?.id).toBe(global.id);
 		const listed = await ai.list({ userId: "alice" });
 		expect(listed).toHaveLength(1);
 		expect(listed[0]).toMatchObject({ managed: true, enabled: true });

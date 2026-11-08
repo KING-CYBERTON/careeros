@@ -267,6 +267,7 @@ describe("coverage check", () => {
 			"discovery_run",
 			"cohort",
 			"discovered_job",
+			"ai_usage",
 		]);
 	});
 });

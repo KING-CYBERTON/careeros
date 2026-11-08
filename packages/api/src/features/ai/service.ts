@@ -1,3 +1,5 @@
+// CAREEROS (P3-T03): metered models
+import type { Metering } from "@careeros/ai-metering";
 import type { AIProvider } from "@reactive-resume/ai/types";
 import type { ResumeData } from "@reactive-resume/schema/resume/data";
 import type { ModelMessage } from "ai";
@@ -14,6 +16,8 @@ import { createOpenAICompatible } from "@ai-sdk/openai-compatible";
 import { createPerplexity } from "@ai-sdk/perplexity";
 import { createTogetherAI } from "@ai-sdk/togetherai";
 import { createXai } from "@ai-sdk/xai";
+// CAREEROS (P3-T03): every call that can reach the platform key is recorded in ai_usage
+import { meterLanguageModel } from "@careeros/ai-metering";
 import { APICallError, createGateway, generateText, LoadAPIKeyError, NoSuchModelError } from "ai";
 import { createOllama } from "ollama-ai-provider-v2";
 import { match } from "ts-pattern";
@@ -31,6 +35,7 @@ import { ZipEntryTooLargeError, unzipEntries } from "@reactive-resume/import/zip
 import { decodeEntities } from "../web-access/builtin";
 import { isDirectOpenAIProvider } from "./capabilities";
 import { aiDeadline } from "./generate-json";
+import { isPlatformApiKey } from "./platform";
 import { aiTransport, resolveAiBaseUrl } from "./url-policy";
 
 const aiExtractionTemplate = buildAiExtractionTemplate();
@@ -69,6 +74,11 @@ type GetModelInput = {
 	model: string;
 	apiKey: string;
 	baseURL?: string;
+	/**
+	 * CAREEROS (P3-T03): who the call is for and which feature it serves. With it the model records an `ai_usage` row
+	 * after every generate and stream. The platform key is refused without it.
+	 */
+	metering?: Metering | undefined;
 };
 
 const MAX_AI_FILE_BYTES = 10 * 1024 * 1024; // 10MB
@@ -91,7 +101,19 @@ const DOCX_DOCUMENT_XML_PATH = "word/document.xml";
 // Resume bodies are kilobytes; this leaves room for long documents without trusting the archive's declared size.
 const MAX_DOCX_DOCUMENT_XML_BYTES = 20 * 1024 * 1024;
 
+/** CAREEROS (P3-T03): the metering step. The platform key can only be used through a model that meters it. */
+function metered<M extends Parameters<typeof meterLanguageModel>[0]>(model: M, input: GetModelInput) {
+	if (isPlatformApiKey(input.apiKey) && input.provider === "anthropic" && input.metering?.source !== "platform")
+		throw new Error("PLATFORM_KEY_UNMETERED");
+	if (!input.metering) return model;
+	return meterLanguageModel(model, { metering: input.metering, provider: input.provider, modelId: input.model });
+}
+
 export function getModel(input: GetModelInput) {
+	return metered(getRawModel(input), input);
+}
+
+function getRawModel(input: GetModelInput) {
 	const { provider, model, apiKey } = input;
 	const baseURL = resolveAiBaseUrl(input);
 	const settings = { apiKey, baseURL, ...aiTransport() };
@@ -131,8 +153,9 @@ export function getAgentModel(input: GetModelInput) {
 	if (!isDirectOpenAIProvider(input)) return getModel(input);
 
 	// Direct OpenAI assistants use Responses for reasoning with function tools.
-	return createOpenAI({ apiKey: input.apiKey, baseURL: resolveAiBaseUrl(input), ...aiTransport() }).responses(
-		input.model,
+	return metered(
+		createOpenAI({ apiKey: input.apiKey, baseURL: resolveAiBaseUrl(input), ...aiTransport() }).responses(input.model),
+		input,
 	);
 }
 
@@ -286,6 +309,8 @@ export async function testConnection(input: TestConnectionInput): Promise<TestCo
 
 type ParsePdfInput = z.infer<typeof aiCredentialsSchema> & {
 	file: z.infer<typeof fileInputSchema>;
+	// CAREEROS (P3-T03)
+	metering?: Metering | undefined;
 };
 
 type BuildResumeParsingMessagesInput = {
@@ -343,6 +368,8 @@ async function parsePdf(input: ParsePdfInput): Promise<ResumeData> {
 
 type ParseDocxInput = z.infer<typeof aiCredentialsSchema> & {
 	file: z.infer<typeof fileInputSchema>;
+	// CAREEROS (P3-T03)
+	metering?: Metering | undefined;
 	mediaType: "application/msword" | "application/vnd.openxmlformats-officedocument.wordprocessingml.document";
 };
 
