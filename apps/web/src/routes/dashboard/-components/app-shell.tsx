@@ -22,6 +22,8 @@ import { useCommandPaletteStore } from "@/features/command-palette/store";
 import { NoOrganizationNotice } from "@/features/organization/no-organization-notice";
 import { SuspendedBanner } from "@/features/organization/suspended-banner";
 import { OrganizationSwitcher } from "@/features/organization/switcher";
+// CAREEROS (P3-T07): platform announcements
+import { AnnouncementBanner } from "@/features/platform-admin/announcement-banner";
 import { isEditableElementFocused } from "@/features/resume/builder/draft";
 import { UserDropdownMenu } from "@/features/user/dropdown-menu";
 import { getBrand } from "@/libs/brand";
@@ -118,6 +120,8 @@ export function AppShell({ children }: AppShellProps) {
 			<main id="main-content" className="min-w-0">
 				{/* CAREEROS (P3-T02): a suspended organization is read-only; the server refuses the writes */}
 				<SuspendedBanner />
+				{/* CAREEROS (P3-T07): platform announcements for this member, dismissible */}
+				<AnnouncementBanner />
 				<GuestBanner />
 				{/* CAREEROS (P1-T03): the sidebar carries the switcher on desktop; tablets and phones get it here */}
 				<NoOrganizationNotice />

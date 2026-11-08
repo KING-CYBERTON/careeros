@@ -3,7 +3,7 @@ import { t } from "@lingui/core/macro";
 import { useLingui } from "@lingui/react";
 import { Trans } from "@lingui/react/macro";
 import { useQueryClient } from "@tanstack/react-query";
-import { useRouter } from "@tanstack/react-router";
+import { useRouteContext, useRouter } from "@tanstack/react-router";
 import {
 	DropdownMenu,
 	DropdownMenuContent,
@@ -36,6 +36,15 @@ export function UserDropdownMenu({ children }: Props) {
 	const { i18n } = useLingui();
 	const { theme, setTheme } = useTheme();
 	const { data: session } = authClient.useSession();
+	// CAREEROS (P3-T07): the console link is for platform admins on the platform host; the server decides for real.
+	const { flags } = useRouteContext({ strict: false });
+	const onPlatformHost = !flags?.appUrl || flags.appUrl === window.location.origin;
+	const showConsole =
+		onPlatformHost &&
+		((session?.user as { role?: string | null } | undefined)?.role ?? "")
+			.split(",")
+			.map((value) => value.trim())
+			.includes("admin");
 
 	const handleThemeChange = (value: string) => {
 		if (!isTheme(value)) return;
@@ -80,6 +89,12 @@ export function UserDropdownMenu({ children }: Props) {
 					<Icon name="gear-six" />
 					<Trans>Settings</Trans>
 				</DropdownMenuItem>
+				{showConsole && (
+					<DropdownMenuItem onClick={() => void router.navigate({ to: "/admin" })}>
+						<Icon name="gear-six" />
+						<Trans>Admin console</Trans>
+					</DropdownMenuItem>
+				)}
 				<DropdownMenuSeparator />
 				<DropdownMenuGroup>
 					<DropdownMenuSub>

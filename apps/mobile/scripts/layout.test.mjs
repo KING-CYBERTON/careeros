@@ -536,6 +536,8 @@ const { DocumentsLibrary } = load("features/documents/library.tsx", {
 	"./thumbnail": { Thumbnail: "Thumbnail" },
 	// CAREEROS (P3-T02): the suspended banner is drawn by its own module; this test is about the list.
 	"@/features/organization/entitlements": { SuspendedBanner: () => null },
+	// CAREEROS (P3-T07): the announcement banners are drawn by their own module; this test is about the list.
+	"@/features/organization/announcements": { AnnouncementBanners: () => null },
 	"@/api/client": {
 		client: {},
 		orpc: {

@@ -26,12 +26,20 @@ import { organizationDomainRouter } from "../features/org-domain/router";
 import { organizationHostRouter } from "../features/organization-host/router";
 // CAREEROS: read-only entitlements and audit log of the organization (P3-T01)
 import { organizationRouter } from "../features/organization/router";
+// CAREEROS (P3-T07): the Super Admin console and the member-facing announcement and support-session pieces
+import { adminRouter, announcementsRouter, impersonationRouter } from "../features/platform-admin/router";
 import { resumeRouter } from "../features/resume/router";
 import { statisticsRouter } from "../features/statistics/router";
 import { storageRouter } from "../features/storage/router";
 import { webAccessRouter } from "../features/web-access/router";
 
 export default {
+	// CAREEROS (P3-T07): platform host only; every procedure answers 404 elsewhere
+	admin: adminRouter,
+	// CAREEROS (P3-T07): the member's announcement banner
+	announcements: announcementsRouter,
+	// CAREEROS (P3-T07): the member's support-session banner and End now
+	impersonation: impersonationRouter,
 	applicationProfile: applicationProfileRouter,
 	ai: aiRouter,
 	aiProviders: aiProvidersRouter,
