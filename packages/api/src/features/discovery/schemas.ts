@@ -8,58 +8,9 @@ import {
 } from "@careeros/job-discovery";
 import z from "zod";
 
-const term = z.string().trim().min(1).max(100);
-const termList = z
-	.array(term)
-	.max(50)
-	.transform((items) => {
-		// Case-insensitive de-dupe keeps the first spelling.
-		const seen = new Set<string>();
-		return items.filter((item) => {
-			const key = item.toLowerCase();
-			if (seen.has(key)) return false;
-			seen.add(key);
-			return true;
-		});
-	});
-
-/** A board appears once per source and token, whatever the case of the token. */
-const boards = boardListSchema.transform((items) => {
-	const seen = new Set<string>();
-	return items.filter((item) => {
-		const key = `${item.source}:${item.token.toLowerCase()}`;
-		if (seen.has(key)) return false;
-		seen.add(key);
-		return true;
-	});
-});
-
-const sourceFields = {
-	name: z.string().trim().min(1).max(120),
-	titles: termList,
-	skills: termList,
-	keywords: termList,
-	locations: termList,
-	remote: z.enum(REMOTE_PREFERENCES),
-	boards,
-	schedule: z.enum(SCHEDULES),
-	aiTopN: z.number().int().min(0).max(50),
-};
-
-export const sourceCreateSchema = z.object({
-	name: sourceFields.name,
-	titles: sourceFields.titles.default([]),
-	skills: sourceFields.skills.default([]),
-	keywords: sourceFields.keywords.default([]),
-	locations: sourceFields.locations.default([]),
-	remote: sourceFields.remote.default("any"),
-	boards: sourceFields.boards.default([]),
-	schedule: sourceFields.schedule.default("daily"),
-	aiTopN: sourceFields.aiTopN.default(10),
-});
-
-// Built from the fields without their defaults: a defaulted field left out of a patch would otherwise be reset.
-export const sourceUpdateSchema = z.object({ id: z.string().min(1) }).extend(z.object(sourceFields).partial().shape);
+// CAREEROS (P4-T03): the input rules live in `@careeros/discovery-form`, so the web and mobile forms validate with the
+// same code as the server.
+export { sourceCreateSchema, sourceUpdateSchema } from "@careeros/discovery-form";
 
 export const sourceSchema = z.object({
 	id: z.string(),
