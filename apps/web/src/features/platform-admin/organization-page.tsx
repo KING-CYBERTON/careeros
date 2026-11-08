@@ -24,10 +24,11 @@ const MIN_REASON = 10;
 type FieldProps = { label: string; children: ReactNode };
 function Field({ label, children }: FieldProps) {
 	return (
-		<div className="grid gap-1.5">
-			<Label>{label}</Label>
+		// The control sits inside the label, so the label names it for screen readers and for tests alike.
+		<Label className="grid items-stretch gap-1.5">
+			<span>{label}</span>
 			{children}
-		</div>
+		</Label>
 	);
 }
 
