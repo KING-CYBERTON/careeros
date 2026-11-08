@@ -335,9 +335,9 @@ describe.skipIf(!configured)("role recipient approval through router, PostgreSQL
 		run(async () => {
 			Object.assign(env, {
 				AI_PROVIDER: "openai-compatible",
-				AI_MODEL: "managed-a",
+				AI_MODEL: "claude-sonnet-5-5",
 				AI_BASE_URL: a.baseURL,
-				AI_API_KEY: "synthetic-managed-a",
+				AI_API_KEY: "synthetic-claude-sonnet-5-5",
 			});
 			let disclosed = (await client().providers.list({}))[0];
 			assert(disclosed);
@@ -348,8 +348,8 @@ describe.skipIf(!configured)("role recipient approval through router, PostgreSQL
 			});
 			for (const change of [
 				{ AI_BASE_URL: b.baseURL },
-				{ AI_MODEL: "managed-b" },
-				{ AI_API_KEY: "synthetic-managed-b" },
+				{ AI_MODEL: "claude-haiku-5-5" },
+				{ AI_API_KEY: "synthetic-claude-haiku-5-5" },
 			]) {
 				Object.assign(env, change);
 				const counts = [a.requests.length, b.requests.length];
@@ -362,8 +362,8 @@ describe.skipIf(!configured)("role recipient approval through router, PostgreSQL
 				suggestions: [{ role: "Engineer" }],
 			});
 			expect(b.requests.at(-1)).toMatchObject({
-				body: { model: "managed-b" },
-				authorization: "Bearer synthetic-managed-b",
+				body: { model: "claude-haiku-5-5" },
+				authorization: "Bearer synthetic-claude-haiku-5-5",
 				roles: true,
 			});
 		}));
@@ -372,9 +372,9 @@ describe.skipIf(!configured)("role recipient approval through router, PostgreSQL
 		run(async () => {
 			Object.assign(env, {
 				AI_PROVIDER: "openai-compatible",
-				AI_MODEL: "managed-a",
+				AI_MODEL: "claude-sonnet-5-5",
 				AI_BASE_URL: a.baseURL,
-				AI_API_KEY: "synthetic-managed-a",
+				AI_API_KEY: "synthetic-claude-sonnet-5-5",
 			});
 			const disclosed = (await client().providers.list({}))[0];
 			assert(disclosed);
@@ -390,12 +390,16 @@ describe.skipIf(!configured)("role recipient approval through router, PostgreSQL
 					);
 					expect(blocked.rows[0]?.count).toBeGreaterThan(0);
 				});
-				Object.assign(env, { AI_MODEL: "managed-b", AI_BASE_URL: b.baseURL, AI_API_KEY: "synthetic-managed-b" });
+				Object.assign(env, {
+					AI_MODEL: "claude-haiku-5-5",
+					AI_BASE_URL: b.baseURL,
+					AI_API_KEY: "synthetic-claude-haiku-5-5",
+				});
 				await lock.query("COMMIT");
 				await expect(pending).resolves.toMatchObject({ suggestions: [{ role: "Engineer" }] });
 				expect(a.requests.at(-1)).toMatchObject({
-					body: { model: "managed-a" },
-					authorization: "Bearer synthetic-managed-a",
+					body: { model: "claude-sonnet-5-5" },
+					authorization: "Bearer synthetic-claude-sonnet-5-5",
 					roles: true,
 				});
 			} finally {
@@ -409,9 +413,9 @@ describe.skipIf(!configured)("role recipient approval through router, PostgreSQL
 			run(async () => {
 				Object.assign(env, {
 					AI_PROVIDER: "openai-compatible",
-					AI_MODEL: "managed-a",
+					AI_MODEL: "claude-sonnet-5-5",
 					AI_BASE_URL: a.baseURL,
-					AI_API_KEY: "synthetic-managed-a",
+					AI_API_KEY: "synthetic-claude-sonnet-5-5",
 				});
 				const disclosed = (await client().providers.list({}))[0];
 				assert(disclosed);
@@ -625,9 +629,9 @@ describe.skipIf(!configured)("role recipient approval through router, PostgreSQL
 			if (change === "managed-off")
 				Object.assign(env, {
 					AI_PROVIDER: "openai-compatible",
-					AI_MODEL: "managed-a",
+					AI_MODEL: "claude-sonnet-5-5",
 					AI_BASE_URL: a.baseURL,
-					AI_API_KEY: "synthetic-managed-a",
+					AI_API_KEY: "synthetic-claude-sonnet-5-5",
 				});
 			const disclosed = change === "managed-off" ? (await client().providers.list({}))[0] : await create();
 			assert(disclosed);

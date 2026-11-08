@@ -1,3 +1,7 @@
+// CAREEROS (P3-T03)
+import type { AiFeature } from "@careeros/ai-metering";
+import { getQuotaState } from "@careeros/ai-metering";
+import { requireOrgId } from "@careeros/tenancy";
 import { ORPCError } from "@orpc/client";
 import { AISDKError } from "ai";
 import { flattenError, ZodError, z } from "zod";
@@ -44,10 +48,11 @@ const aiErrors = {
 	},
 } as const;
 
-async function getRunnableProvider(userId: string, aiProviderId?: string) {
+// CAREEROS (P3-T03): the feature picks the platform model and names the call in ai_usage
+async function getRunnableProvider(userId: string, feature: AiFeature, aiProviderId?: string) {
 	const provider = aiProviderId
-		? await aiProvidersService.getRunnableById({ id: aiProviderId, userId })
-		: await aiProvidersService.getDefaultRunnable({ userId });
+		? await aiProvidersService.getRunnableById({ id: aiProviderId, userId, feature })
+		: await aiProvidersService.getDefaultRunnable({ userId, feature });
 
 	if (!provider)
 		throw new ORPCError("BAD_REQUEST", {
@@ -59,6 +64,31 @@ async function getRunnableProvider(userId: string, aiProviderId?: string) {
 
 export const aiRouter = {
 	reportContent: reportAiContent,
+	// CAREEROS (P3-T03): the organization's pooled AI credits, for the 80% toast and the providers screen. Any member.
+	quota: protectedProcedure
+		.route({
+			method: "GET",
+			path: "/ai/quota",
+			tags: ["AI"],
+			operationId: "getAiQuota",
+			summary: "Get the organization's AI allowance",
+			description:
+				"Returns the credits the organization has used of its pooled platform AI allowance in the current period, and the allowance. Any member can read it. Requires authentication.",
+		})
+		.input(z.object({}).optional())
+		.output(
+			z.object({
+				used: z.number().int(),
+				allowance: z.number().int(),
+				warning: z.boolean().describe("80% or more of the allowance is used."),
+				blocked: z.boolean().describe("The allowance is used up and platform AI calls are refused."),
+			}),
+		)
+		.handler(async () => {
+			const { used, allowance, warning, blocked } = await getQuotaState(requireOrgId());
+			return { used, allowance, warning, blocked };
+		}),
+
 	parsePdf: protectedProcedure
 		.route({
 			method: "POST",
@@ -76,12 +106,13 @@ export const aiRouter = {
 		.output(resumeDataSchema)
 		.handler(async ({ context, input }) => {
 			try {
-				const provider = await getRunnableProvider(context.user.id, input.aiProviderId);
+				const provider = await getRunnableProvider(context.user.id, "resume.parse", input.aiProviderId);
 				return await aiService.parsePdf({
 					provider: provider.provider,
 					model: provider.model,
 					apiKey: provider.apiKey,
 					baseURL: provider.baseURL ?? "",
+					metering: provider.metering,
 					file: input.file,
 				});
 			} catch (error) {
@@ -115,12 +146,13 @@ export const aiRouter = {
 		.output(resumeDataSchema)
 		.handler(async ({ context, input }) => {
 			try {
-				const provider = await getRunnableProvider(context.user.id, input.aiProviderId);
+				const provider = await getRunnableProvider(context.user.id, "resume.parse", input.aiProviderId);
 				return await aiService.parseDocx({
 					provider: provider.provider,
 					model: provider.model,
 					apiKey: provider.apiKey,
 					baseURL: provider.baseURL ?? "",
+					metering: provider.metering,
 					mediaType: input.mediaType,
 					file: input.file,
 				});
@@ -146,7 +178,7 @@ export const aiRouter = {
 		.errors(aiErrors)
 		.handler(async ({ context, input }) => {
 			try {
-				const provider = await getRunnableProvider(context.user.id, input.aiProviderId);
+				const provider = await getRunnableProvider(context.user.id, "ats.review", input.aiProviderId);
 
 				return await reviewResumeText({
 					...input,
@@ -154,6 +186,7 @@ export const aiRouter = {
 					model: provider.model,
 					apiKey: provider.apiKey,
 					baseURL: provider.baseURL ?? "",
+					metering: provider.metering,
 				});
 			} catch (error) {
 				rethrowAiError(error, "The AI returned the review in the wrong format. Try again, or choose another model.");
@@ -177,7 +210,7 @@ export const aiRouter = {
 		.errors(aiErrors)
 		.handler(async ({ context, input }) => {
 			try {
-				const provider = await getRunnableProvider(context.user.id, input.aiProviderId);
+				const provider = await getRunnableProvider(context.user.id, "resume.improve", input.aiProviderId);
 
 				return await improveLine({
 					...input,
@@ -185,6 +218,7 @@ export const aiRouter = {
 					model: provider.model,
 					apiKey: provider.apiKey,
 					baseURL: provider.baseURL ?? "",
+					metering: provider.metering,
 				});
 			} catch (error) {
 				rethrowAiError(error, "The AI returned suggestions in the wrong format. Try again, or choose another model.");

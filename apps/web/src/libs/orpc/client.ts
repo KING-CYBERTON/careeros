@@ -4,6 +4,8 @@ import { createORPCClient, onError } from "@orpc/client";
 import { RPCLink } from "@orpc/client/fetch";
 import { BatchLinkPlugin } from "@orpc/client/plugins";
 import { createTanstackQueryUtils } from "@orpc/tanstack-query";
+// CAREEROS (P3-T03): the 80% AI allowance notice
+import { createAiQuotaWatcher, noticeAiQuotaExceeded, noticeAiQuotaWarning, showAiQuotaWarning } from "./ai-quota";
 import { rpcFetch } from "./fetch";
 // CAREEROS: a user who is not a member of this address's organization sees the join or switch page (P2-T03)
 import { handleOrgHostError } from "./org-host";
@@ -20,6 +22,21 @@ export const client: RouterClient<typeof router> = createORPCClient(
 				groups: [{ condition: () => true, context: {} }],
 			}),
 		],
+		// CAREEROS (P3-T03): the 80% AI allowance notice rides on the response headers of each call.
+		clientInterceptors: [
+			async (options) => {
+				try {
+					const response = await options.next();
+					noticeAiQuotaWarning(response.headers);
+					return response;
+				} catch (error) {
+					noticeAiQuotaExceeded(error);
+					throw error;
+				} finally {
+					quotaWatcher.afterCall(options.path);
+				}
+			},
+		],
 		interceptors: [
 			onError((error) => {
 				if (error instanceof DOMException && error.name === "AbortError") return;
@@ -30,10 +47,28 @@ export const client: RouterClient<typeof router> = createORPCClient(
 	}),
 );
 
+// CAREEROS (P3-T03): after an AI call, ask `ai/quota` and show the 80% notice from the answer (the header may be lost)
+const quotaWatcher = createAiQuotaWatcher({ fetchQuota: () => client.ai.quota(), notify: showAiQuotaWarning });
+
 export const streamClient: RouterClient<typeof router> = createORPCClient(
 	new RPCLink({
 		url: getRpcUrl,
 		fetch: rpcFetch,
+		// CAREEROS (P3-T03): the 80% AI allowance notice
+		clientInterceptors: [
+			async (options) => {
+				try {
+					const response = await options.next();
+					noticeAiQuotaWarning(response.headers);
+					return response;
+				} catch (error) {
+					noticeAiQuotaExceeded(error);
+					throw error;
+				} finally {
+					quotaWatcher.afterCall(options.path);
+				}
+			},
+		],
 		interceptors: [
 			onError((error) => {
 				if (error instanceof DOMException && error.name === "AbortError") return;

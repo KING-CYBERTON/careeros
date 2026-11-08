@@ -56,7 +56,9 @@ export function ProvidersSection() {
 	const [editing, setEditing] = useState<SavedProvider | null>(null);
 	const managed = providers?.find((provider) => provider.managed);
 	// The server lists the default first, so the first usable provider is the one every automatic choice uses.
-	const usable = providers?.filter((provider) => provider.enabled && provider.testStatus === "success") ?? [];
+	// CAREEROS (P3-T03): the "Included with your plan" entry is read-only and never the member's default provider.
+	const own = providers?.filter((provider) => !provider.platform) ?? [];
+	const usable = own.filter((provider) => provider.enabled && provider.testStatus === "success");
 	const defaultId = usable[0]?.id;
 	const makeDefault = useMutation(orpc.aiProviders.setDefault.mutationOptions());
 
@@ -100,29 +102,33 @@ export function ProvidersSection() {
 					</p>
 				) : (
 					<>
-						{providers?.map((provider) => (
-							<ProviderRow
-								key={provider.id}
-								provider={provider}
-								isDefault={provider.id === defaultId && (providers?.length ?? 0) > 1}
-								onMakeDefault={
-									usable.length > 1 && provider.id !== defaultId && usable.includes(provider)
-										? () =>
-												makeDefault.mutate(
-													{ id: provider.id },
-													{
-														onError: (failure) =>
-															toastError(failure, t`Couldn't make this provider the default. Try again.`, {
-																allowServerMessage: true,
-															}),
-													},
-												)
-										: undefined
-								}
-								makingDefault={makeDefault.isPending && makeDefault.variables?.id === provider.id}
-								onEdit={() => setEditing(provider)}
-							/>
-						))}
+						{providers?.map((provider) =>
+							provider.platform ? (
+								<PlatformRow key={provider.id} provider={provider} />
+							) : (
+								<ProviderRow
+									key={provider.id}
+									provider={provider}
+									isDefault={provider.id === defaultId && own.length > 1}
+									onMakeDefault={
+										usable.length > 1 && provider.id !== defaultId && usable.includes(provider)
+											? () =>
+													makeDefault.mutate(
+														{ id: provider.id },
+														{
+															onError: (failure) =>
+																toastError(failure, t`Couldn't make this provider the default. Try again.`, {
+																	allowServerMessage: true,
+																}),
+														},
+													)
+											: undefined
+									}
+									makingDefault={makeDefault.isPending && makeDefault.variables?.id === provider.id}
+									onEdit={() => setEditing(provider)}
+								/>
+							),
+						)}
 						<button
 							type="button"
 							onClick={() => setAdding(true)}
@@ -290,6 +296,34 @@ function ProviderRow({ provider, isDefault, onMakeDefault, makingDefault, onEdit
 					{error}
 				</p>
 			)}
+		</div>
+	);
+}
+
+type PlatformRowProps = { provider: SavedProvider };
+
+// CAREEROS (P3-T03): the AI included with the plan. Read-only: no key, no test, no edit, nothing to make default.
+function PlatformRow({ provider }: PlatformRowProps) {
+	return (
+		<div className="grid gap-2 rounded-lg border border-line p-3">
+			<div className="flex items-center gap-3">
+				<ProviderLogo provider={provider.provider} className="size-10 rounded-lg bg-sunken" />
+				<span className="grid min-w-0 flex-1 gap-0.5">
+					<span className="flex flex-wrap items-center gap-2 text-sm font-semibold">
+						<span className="break-words">
+							<Trans>Included with your plan</Trans>
+						</span>
+						<span className="rounded-sm bg-accent-soft px-2 py-0.5 text-xs font-medium text-accent-text">
+							<Trans>Ready</Trans>
+						</span>
+					</span>
+					<span className="text-xs text-ink-3">
+						<Trans>
+							Used when you haven't added a provider of your own. Counts toward your organization's AI allowance.
+						</Trans>
+					</span>
+				</span>
+			</div>
 		</div>
 	);
 }

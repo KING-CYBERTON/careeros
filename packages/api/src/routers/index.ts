@@ -1,9 +1,12 @@
 import { agentRouter } from "../features/agent/router";
 import { aiProvidersRouter } from "../features/ai-providers/router";
+import { aiUsageRouter } from "../features/ai-usage/router";
 import { aiRouter } from "../features/ai/router";
 import { applicationProfileRouter } from "../features/application-profile/router";
 import { applicationsRouter } from "../features/applications/router";
 import { authRouter } from "../features/auth/router";
+// CAREEROS: billing for organization owners (P3-T04)
+import { billingRouter } from "../features/billing/router";
 // CAREEROS: organization branding and settings (P2-T01)
 import { brandingRouter, settingsRouter } from "../features/branding/router";
 import { careerRouter } from "../features/career/router";
@@ -28,10 +31,14 @@ export default {
 	applicationProfile: applicationProfileRouter,
 	ai: aiRouter,
 	aiProviders: aiProvidersRouter,
+	// CAREEROS (P3-T03): organization AI usage summary (owner or admin)
+	aiUsage: aiUsageRouter,
 	agent: agentRouter,
 	applications: applicationsRouter,
 	auth: authRouter,
 	// CAREEROS: organization branding and settings (P2-T01)
+	// CAREEROS: billing for organization owners (P3-T04)
+	billing: billingRouter,
 	branding: brandingRouter,
 	career: careerRouter,
 	coverLetters: coverLettersRouter,

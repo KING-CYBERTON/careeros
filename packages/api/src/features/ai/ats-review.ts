@@ -1,3 +1,5 @@
+// CAREEROS (P3-T03): the call is metered
+import type { Metering } from "@careeros/ai-metering";
 import { z } from "zod";
 import { atsReviewSystemPrompt, atsReviewUserPromptTemplate } from "@reactive-resume/ai/prompts";
 import { dataBlock, inertMarkers } from "./data-block";
@@ -93,6 +95,8 @@ type AtsReviewServiceInput = AtsReviewInput & {
 	model: string;
 	apiKey: string;
 	baseURL: string;
+	// CAREEROS (P3-T03)
+	metering?: Metering | undefined;
 };
 
 function renderFindings(findings: AtsReviewInput["findings"]): string {
