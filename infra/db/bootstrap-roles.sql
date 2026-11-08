@@ -131,3 +131,20 @@ BEGIN
 	END IF;
 END
 $$;
+
+-- P3-T07: the Super Admin console's tables are reached only through definer functions (careeros_admin_*,
+-- careeros_impersonation_*, careeros_announcement*); the app role has no privilege on them at all. Repeated after the
+-- blanket GRANT on every run; skipped for tables a database does not have yet.
+DO $$
+BEGIN
+	IF to_regclass('public.announcement') IS NOT NULL THEN
+		REVOKE ALL ON TABLE public.announcement FROM careeros_app;
+	END IF;
+	IF to_regclass('public.announcement_dismissal') IS NOT NULL THEN
+		REVOKE ALL ON TABLE public.announcement_dismissal FROM careeros_app;
+	END IF;
+	IF to_regclass('public.impersonation') IS NOT NULL THEN
+		REVOKE ALL ON TABLE public.impersonation FROM careeros_app;
+	END IF;
+END
+$$;

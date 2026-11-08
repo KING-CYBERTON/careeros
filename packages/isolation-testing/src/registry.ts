@@ -707,6 +707,17 @@ export const tenancyAllowList: readonly AllowListEntry[] = [
 		reason:
 			"P3-T04: the idempotency record of verified payment-provider events, global like a ledger: provider ids and normalized fields only, never card data. It carries organization_id only to name the organization the verified metadata pointed at (not a foreign key), so it sits on this list, not the globalTables one, which is for tables without that column. It has no tenant policy on purpose: the app role has no privilege on it at all and reaches it only through the definer function careeros_record_billing_event; row level security is forced, with a policy for the owner role alone",
 	},
+	// CAREEROS (P3-T07, phase plan D6)
+	{
+		table: "announcement",
+		reason:
+			"P3-T07: GLOBAL by design, a platform-wide banner (title and plain-text body). Its nullable organization_id only narrows who sees it (null = everyone; not a foreign key), so it sits on this list, not the globalTables one, which is for tables without that column. The app role has no privilege on it: platform admins write it through careeros_admin_announcement_save, which checks the actor and audits, and members read what applies to them through careeros_announcements_for_member; row level security is forced, with a policy for the owner role alone",
+	},
+	{
+		table: "impersonation",
+		reason:
+			"P3-T07: GLOBAL by design, the platform's record of support (impersonation) sessions: ids, a typed reason and a hashed one-time token, never a credential. organization_id names the member's organization (not a foreign key, so the record outlives it), so it sits on this list, not the globalTables one. The app role has no privilege on it: it is reached only through careeros_admin_impersonation_start and the careeros_impersonation_* functions; row level security is forced, with a policy for the owner role alone",
+	},
 ];
 
 export const DEFAULT_SCHEMA = "public";
@@ -753,6 +764,11 @@ export const globalTables: readonly AllowListEntry[] = [
 		table: "plan",
 		reason:
 			"P3-T01: the catalogue of plans (price, seat limit, AI credits, features). Global like a price list: it has no organization_id, every role may read it, and only the owner role writes it (SELECT-only policy and grants for careeros_app). It holds no tenant data",
+	},
+	{
+		table: "announcement_dismissal",
+		reason:
+			"P3-T07: which member dismissed which platform announcement (a user id and an announcement id). It has no organization_id: a dismissal belongs to the person, whatever organization they act in, and goes with the account (ON DELETE CASCADE). The app role has no privilege on it; careeros_announcement_dismiss is the only writer",
 	},
 	{
 		table: "organization_domain_cf_cleanup",

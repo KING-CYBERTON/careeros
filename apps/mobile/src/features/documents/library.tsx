@@ -20,6 +20,8 @@ import { Thumbnail } from "./thumbnail";
 import { client, orpc } from "@/api/client";
 import { getAccountScope, useSession } from "@/auth/session";
 import { CollectionHeader } from "@/components/collection-header";
+// CAREEROS (P3-T07): platform announcements, dismissible per user
+import { AnnouncementBanners } from "@/features/organization/announcements";
 // CAREEROS (P3-T02)
 import { SuspendedBanner } from "@/features/organization/entitlements";
 import { routes } from "@/routes";
@@ -330,6 +332,8 @@ export function DocumentsLibrary({ trashed = false }: DocumentsLibraryProps) {
 		<View style={{ gap: space.s4 }}>
 			{/* CAREEROS (P3-T02): the same text as the web banner while the organization is suspended */}
 			{trashed ? null : <SuspendedBanner />}
+			{/* CAREEROS (P3-T07): the same banners as the web app */}
+			{trashed ? null : <AnnouncementBanners />}
 			<View style={{ flexDirection: "row", alignItems: "center", gap: space.s2 }}>
 				{trashed && (
 					<IconButton

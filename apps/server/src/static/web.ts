@@ -454,6 +454,14 @@ export async function handleWebApp(
 	const requestedPath = new URL(request.url).pathname;
 	const pathname = requestedPath === "/index.html" ? "/" : requestedPath;
 
+	// CAREEROS (P3-T07): the Super Admin console exists on the platform host only. On an organization host, a custom
+	// domain or any other host its pages answer 404, decided here from the resolved host, never from the request.
+	if (host.kind !== "platform" && (pathname === "/admin" || pathname.startsWith("/admin/")))
+		return new Response("Not Found", {
+			status: 404,
+			headers: { "Content-Type": "text/plain; charset=UTF-8", "X-Robots-Tag": "noindex, nofollow" },
+		});
+
 	if (!isAppSectionPath(pathname) && isAssetPath(pathname)) {
 		return new Response("Not Found", { status: 404 });
 	}
