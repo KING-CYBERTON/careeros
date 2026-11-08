@@ -349,6 +349,13 @@ export const aiProvidersService = {
 		);
 	},
 
+	/**
+	 * CAREEROS (P5-T03): the platform provider and nothing else, after the plan and quota checks. A caller that must never
+	 * touch a member's saved key (the Job Clipper's "Tidy with AI", which runs on a clipper token) uses this instead of
+	 * `getDefaultRunnable`, which falls back to the member's own providers and the server-managed AI.
+	 */
+	getPlatformRunnable: (input: { userId: string; feature: AiFeature }) => platformRunnable(input.userId, input.feature),
+
 	getDefaultRunnable: async (input: { userId: string; feature?: AiFeature | undefined }) => {
 		const global = await serverProvider(input.userId);
 		if (global) return serverRunnable(global, input);

@@ -214,6 +214,12 @@ export const NO_TENANT_ID: Record<string, string> = {
 	// CAREEROS (P5-T02): the clipper sign-in. The token itself names the organization; no request names another.
 	"GET /clipper/whoami": "takes no tenant id: answers for the token's own organization and host (P5-T02)",
 	"GET /clipper/tokens": "takes no tenant id: lists the caller's own Job Clipper sign-ins (P5-T02)",
+	// CAREEROS (P5-T03): clipping a job. Neither takes an id; the fuzz spec asks `find-by-url` for Organization A's
+	// posting address as Organization B (cookie and API key) and expects no match.
+	"GET /clipper/find-by-url":
+		"takes no tenant id: answers only for the caller's own applications in the request host's organization, with an id and a title (P5-T03)",
+	"POST /clipper/cleanup":
+		"takes no tenant id: tidies the fields it is given on the caller's own organization's AI allowance (P5-T03)",
 	"GET /documents": "takes no tenant id: lists the caller's own documents",
 	"GET /documents/page": "takes no tenant id: lists the caller's own documents",
 	"GET /documents/counts": "takes no tenant id: counts the caller's own documents",

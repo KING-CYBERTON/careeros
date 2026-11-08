@@ -9,6 +9,7 @@ import { DEV_HTTP_HOSTS } from "../lib/config";
 import { approvalUrl, formatUserCode, nextPollDelaySeconds, pollDeviceFlow, startDeviceFlow } from "../lib/device-flow";
 import { callApi, clearFlow, clearSession, loadFlow, loadSession, saveFlow, saveSession } from "../lib/session";
 import { clearConnection } from "../lib/storage";
+import { ClipView } from "./ClipView";
 import { OrgMark } from "./OrgMark";
 import { strings } from "./strings";
 
@@ -17,7 +18,7 @@ type ConnectedProps = {
 	onDisconnected: () => void;
 };
 
-/** Connected: signed out (a Sign in button), waiting for approval (the code), or signed in. T03 fills the clip view. */
+/** Connected: signed out (a Sign in button), waiting for approval (the code), or signed in. The clip view is `ClipView` (P5-T03). */
 export function Connected(props: ConnectedProps) {
 	const { connection } = props;
 	const [session, setSession] = useState<Session | null>(null);
@@ -195,10 +196,16 @@ export function Connected(props: ConnectedProps) {
 				) : null}
 
 				{session ? (
-					<section className="rounded-lg border border-dashed border-line-2 p-3" aria-label={strings.clipTitle}>
-						<h2 className="text-sm font-semibold text-ink">{strings.clipTitle}</h2>
-						<p className="mt-1 text-[13px] leading-[19px] text-ink-2">{strings.clipPlaceholder}</p>
-					</section>
+					<ClipView
+						session={session}
+						origin={connection.origin}
+						onSignedOut={() => {
+							// The server no longer knows this token: back to "not signed in", as at open.
+							void clearSession();
+							setSession(null);
+							setNotice(strings.sessionEnded);
+						}}
+					/>
 				) : null}
 
 				<div className="flex items-center justify-between">
