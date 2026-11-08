@@ -121,3 +121,13 @@ BEGIN
 	END IF;
 END
 $$;
+
+-- P3-T03: ai_usage is append-only for the app role (SELECT and INSERT stay), like audit_log. Repeated after the blanket
+-- GRANT on every run; skipped when the table does not exist yet.
+DO $$
+BEGIN
+	IF to_regclass('public.ai_usage') IS NOT NULL THEN
+		REVOKE UPDATE, DELETE, TRUNCATE ON TABLE public.ai_usage FROM careeros_app;
+	END IF;
+END
+$$;

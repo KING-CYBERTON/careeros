@@ -62,7 +62,12 @@ async function context(userId: string, input: Input) {
 
 /** Suggests drafts only. No preference, schedule, evidence, application or answer is saved. */
 export async function suggestTargetRoles(userId: string, input: Input, signal?: AbortSignal) {
-	const provider = await aiProvidersService.getRunnableById({ userId, id: input.providerId });
+	const provider = await aiProvidersService.getRunnableById({
+		userId,
+		id: input.providerId,
+		// CAREEROS (P3-T03)
+		feature: "career.role_suggestions",
+	});
 	if (provider.id !== input.providerId || provider.recipientVersion !== input.recipientVersion)
 		throw new ORPCError("CONFLICT", {
 			message: "The AI connection changed. Refresh connections and select the recipient again.",
@@ -77,6 +82,7 @@ export async function suggestTargetRoles(userId: string, input: Input, signal?: 
 		model: provider.model,
 		apiKey: provider.apiKey,
 		...(provider.baseURL ? { baseURL: provider.baseURL } : {}),
+		metering: provider.metering,
 	});
 	const deadline = AbortSignal.any([AbortSignal.timeout(120_000), ...(signal ? [signal] : [])]);
 	const prompt = {

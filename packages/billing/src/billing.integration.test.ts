@@ -17,6 +17,9 @@ const configured = Boolean(process.env.CAREEROS_TEST_DATABASE_URL && process.env
 const LEGACY_ORG = "billing-legacy";
 const timePart = (id: string | undefined) => (id ?? "").replaceAll("-", "").slice(0, 12);
 const MIGRATION = new URL("../../../migrations/20261102174208_plans_entitlements/", import.meta.url);
+// CAREEROS (P3-T03): the `ai_usage` table (a later migration) uses `careeros_uuidv7()`, which this migration creates, so
+// the down test first reverts it and applies it again at the end.
+const AI_USAGE_MIGRATION = new URL("../../../migrations/20261102185233_ai_usage/", import.meta.url);
 
 describe.skipIf(!configured)("plans, subscriptions, flags, audit log and entitlements", () => {
 	const run = randomUUID().slice(0, 8);
@@ -729,9 +732,13 @@ describe.skipIf(!configured)("plans, subscriptions, flags, audit log and entitle
 		it("refuses while data exists, then reverts the migration, and the migration applies again", async () => {
 			const down = await readFile(new URL("down.sql", MIGRATION), "utf8");
 			const up = await readFile(new URL("migration.sql", MIGRATION), "utf8");
+			const laterDown = await readFile(new URL("down.sql", AI_USAGE_MIGRATION), "utf8");
+			const laterUp = await readFile(new URL("migration.sql", AI_USAGE_MIGRATION), "utf8");
 			const scratch = await createIsolatedTestDatabase("billing_down");
 			const client = new Pool({ connectionString: scratch.ownerUrl });
 			try {
+				// The later migration depends on this one: take it off first, put it back last.
+				await client.query(laterDown);
 				await client.query(`INSERT INTO organization (id, name, slug) VALUES ('down-org', 'Down', 'down-org')`);
 				// The organization has left the defaults (plan 'pro') and has an audit row: the down migration refuses.
 				await client.query(`SELECT careeros_set_org_plan('down-org', 'pro', NULL, NULL, 'x')`);
@@ -753,6 +760,9 @@ describe.skipIf(!configured)("plans, subscriptions, flags, audit log and entitle
 						`SELECT o.plan_id, s.plan_id AS subscription_plan FROM organization o JOIN subscription s ON s.organization_id = o.id WHERE o.id = 'down-org'`,
 					);
 					expect(back.rows).toEqual([{ plan_id: "personal", subscription_plan: "personal" }]);
+					await connection.query(laterUp);
+					const restored = await connection.query(`SELECT to_regclass('public.ai_usage') AS ai_usage`);
+					expect(restored.rows[0]).toEqual({ ai_usage: "ai_usage" });
 				} finally {
 					connection.release();
 				}
