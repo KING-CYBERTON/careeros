@@ -1,6 +1,6 @@
 # Job Clipper
 
-A Manifest V3 browser extension for Chrome and Edge. On first run you enter your organization's address and the popup shows that organization's name and logo. Sign-in (P5-T02) and clipping a job (P5-T03) come next. The extension has no product brand of its own: the organization's brand appears at run time.
+A Manifest V3 browser extension for Chrome and Edge. On first run you enter your organization's address and the popup shows that organization's name and logo. Sign-in (P5-T02) and clipping a job (P5-T03) are built in. The extension has no product brand of its own: the organization's brand appears at run time.
 
 ## Build
 
@@ -53,7 +53,20 @@ There are no `host_permissions` and no content scripts. Extension pages run unde
 3. The answer is a clipper token. It is stored in `chrome.storage.local` together with its origin and is sent only as `Authorization: Bearer` to that origin (`authorizedRequest` refuses any other, never follows redirects, never sends cookies). The server stores only its hash.
 4. **Sign out** revokes the token on the server (`/api/auth/device/clipper/revoke`) and deletes it here. **Change organization** does both and also forgets the connection. A token the server no longer knows (revoked, expired, member removed) returns the popup to signed out.
 
-Polling runs while the popup is open (a Manifest V3 service worker cannot keep a timer); a pending sign-in is kept in storage and resumes when the popup is opened again. The manifest permissions are unchanged. The server answers extension origins (CORS, no cookies) on the sign-in routes too, so sign-in works even when the browser has not granted host access (`apps/server/src/http/extension-cors.ts`). Sign-in works only on an organization host (its subdomain or active custom domain); on any other address the popup says the address does not support sign-in. A token works only on that organization's hosts and only for `clipper.whoami`, `branding.publicForHost` and `applications.create`. Members see and revoke their sign-ins under Settings on web and mobile.
+Polling runs while the popup is open (a Manifest V3 service worker cannot keep a timer); a pending sign-in is kept in storage and resumes when the popup is opened again. The manifest permissions are unchanged. The server answers extension origins (CORS, no cookies) on the sign-in routes too, so sign-in works even when the browser has not granted host access (`apps/server/src/http/extension-cors.ts`). Sign-in works only on an organization host (its subdomain or active custom domain); on any other address the popup says the address does not support sign-in. A token works only on that organization's hosts and only for `clipper.whoami`, `clipper.findByUrl`, `clipper.cleanup`, `branding.publicForHost` and `applications.create`. Members see and revoke their sign-ins under Settings on web and mobile.
+
+## Clipping a job (P5-T03)
+
+Open the popup on a job page while signed in.
+
+1. **Read.** The popup injects one small function (`src/lib/reader.ts`, `chrome.scripting.executeScript`, permissions `activeTab` and `scripting`, nothing new) into the active tab. It runs in the extension's isolated world, runs none of the page's scripts, adds no listener, changes nothing and returns plain strings. Every read is bounded (20 JSON-LD blocks, 40 candidate blocks, 200,000 text nodes, an iterative walk) and cut to a cap. It reads text, never `innerHTML`.
+2. **Map.** `src/lib/posting.ts` turns that into the form: `JobPosting` JSON-LD first (a single object, an array, `@graph`, `@type` as a string or an array; malformed blocks are skipped), otherwise the Open Graph title, the first heading or the tab title, the site name or a meta tag for the company, and the largest `main`, `article` or `[role=main]` for the description. Values pass through an inert HTML parser that yields text only and are cut to 300 characters (fields) and 20,000 (description). The tab address is the default posting address (https only, no fragment, no `utm_*` or other tracking parameters).
+3. **Confirm.** The form shows where the values came from: "Found on the page" (JSON-LD), "Best guess" (heuristics) or "Fill in". Title and company are required. Everything is shown as text in form fields. A page that cannot be read shows "This page can't be read. You can still fill the form in."
+4. **Duplicate check.** `GET /api/openapi/clipper/find-by-url` returns at most an id and a title of the member's own application with the same address in the organization. The popup says "Already in your tracker" with an Open link, and saving stays possible.
+5. **Save.** `POST /api/openapi/applications` with the first stage (`saved`) and the source `clipper`. The server rebuilds a clipper request from the clip's own fields, cleans the description to plain text and applies the caps. "Saved" links to the application on the organization's host. An organization that is read-only (`ORG_SUSPENDED`), a sign-in that ended (401) and a network error each get a readable message, and a failed save keeps the form.
+6. **Tidy with AI (optional).** Shown only when `clipper.whoami` says `tidyAvailable` (the plan includes platform AI and the monthly allowance has credits left). `POST /api/openapi/clipper/cleanup` makes one metered call (feature `clipper.cleanup`, the fast model) to the platform AI, never to a member's saved key. The page text goes to the model as a marked data block, and the answer must pass the same field checks or nothing changes. A used-up allowance returns `AI_QUOTA_EXCEEDED` and the popup says so.
+
+The fixtures for the reader tests are fictional pages in `src/lib/posting.fixtures.ts` (`example.test` addresses only). The e2e cannot grant `activeTab`, so it replaces `chrome.tabs.query` and `chrome.scripting.executeScript` in the popup with shims that run the real reader in a local page (see docs/questions.md Q363).
 
 ## How the address is checked
 
@@ -64,8 +77,8 @@ Polling runs while the popup is open (a Manifest V3 service worker cannot keep a
 
 ## Layout
 
-- `src/lib/`: address normalization, branding validation, storage. Pure and tested.
-- `src/popup/`: the React popup (360 px). All strings are in `strings.ts`.
+- `src/lib/`: address normalization, branding validation, storage, the page reader (`reader.ts`), the posting mapper (`posting.ts`) and the clip API calls (`clip-api.ts`). Pure and tested.
+- `src/popup/`: the React popup (360 px). `ClipView.tsx` is the clip form. All strings are in `strings.ts`.
 - `src/background/service-worker.ts`: empty for now; T02 and T03 add to it.
 - `src/manifest.ts`: the manifest, written to `dist/manifest.json` by `vite.config.ts`.
 - `public/icons/`: neutral placeholder icons.

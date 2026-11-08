@@ -104,7 +104,18 @@ export function authorizedRequest(
 
 export type ApiResult<T> =
 	| { ok: true; data: T }
-	| { ok: false; reason: "unauthorized" | "refused" | "unreachable" | "failed" };
+	// CAREEROS (P5-T03): a failed answer also carries its status and the server's error code (`ORG_SUSPENDED`,
+	// `AI_QUOTA_EXCEEDED`, ...), so the popup can say what happened. The code is read as text and never trusted further.
+	| { ok: false; reason: "unauthorized" | "refused" | "unreachable" | "failed"; status?: number; code?: string };
+
+/** The error code of a failed answer: `data.code` (the entitlement errors) or `code` (the oRPC error code). */
+export function errorCodeOf(body: unknown): string | undefined {
+	if (typeof body !== "object" || body === null) return undefined;
+	const record = body as { code?: unknown; data?: unknown };
+	const data = typeof record.data === "object" && record.data !== null ? (record.data as { code?: unknown }) : {};
+	const code = typeof data.code === "string" ? data.code : typeof record.code === "string" ? record.code : undefined;
+	return code && /^[A-Z_]{1,60}$/.test(code) ? code : undefined;
+}
 
 /** Calls the connected organization's API with the token. A 401 means the token is gone: the caller clears it. */
 export async function callApi<T>(
@@ -123,6 +134,9 @@ export async function callApi<T>(
 		return { ok: false, reason: "unreachable" };
 	}
 	if (response.status === 401) return { ok: false, reason: "unauthorized" };
-	if (!response.ok) return { ok: false, reason: "failed" };
+	if (!response.ok) {
+		const code = errorCodeOf(await response.json().catch(() => null));
+		return { ok: false, reason: "failed", status: response.status, ...(code ? { code } : {}) };
+	}
 	return { ok: true, data: (await response.json().catch(() => null)) as T };
 }
