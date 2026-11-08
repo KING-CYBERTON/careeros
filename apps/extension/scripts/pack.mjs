@@ -1,9 +1,10 @@
 // CAREEROS (P5-T01): zips apps/extension/dist as job-clipper-<version>.zip, the file the stores take. Run after the
 // build (`pnpm --filter extension pack` does both). Refuses a build that is not a production build.
-import { readdirSync, readFileSync, statSync, writeFileSync } from "node:fs";
+import { readdirSync, readFileSync, rmSync, statSync, writeFileSync } from "node:fs";
 import { join, relative, sep } from "node:path";
 import { fileURLToPath } from "node:url";
-import { zipSync } from "fflate";
+import { unzipSync, zipSync } from "fflate";
+import { checkArchive } from "./pack-checks.mjs";
 
 const root = fileURLToPath(new URL("..", import.meta.url));
 const dist = join(root, "dist");
@@ -30,4 +31,17 @@ walk(dist);
 const archive = join(root, `job-clipper-${version}.zip`);
 // A fixed timestamp keeps the same build byte-for-byte the same archive.
 writeFileSync(archive, zipSync(files, { level: 9, mtime: new Date("2026-01-01T00:00:00Z") }));
-console.log(`${archive} (${Object.keys(files).length} files)`);
+
+// CAREEROS (P5-C01): check the archive as written, not the folder it came from. A failed archive is deleted so nothing
+// downstream (CI artifact, release upload) can pick it up.
+const size = statSync(archive).size;
+const problems = checkArchive({
+	entries: unzipSync(new Uint8Array(readFileSync(archive))),
+	zipBytes: size,
+	packageVersion: version,
+});
+if (problems.length > 0) {
+	rmSync(archive, { force: true });
+	throw new Error(`${archive} failed the pack checks:\n- ${problems.join("\n- ")}`);
+}
+console.log(`${archive} (${Object.keys(files).length} files, ${size} bytes, pack checks passed)`);
