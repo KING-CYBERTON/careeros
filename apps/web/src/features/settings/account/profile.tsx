@@ -1,7 +1,7 @@
 import type { AuthSession } from "@reactive-resume/auth/types";
 import { t } from "@lingui/core/macro";
 import { Trans } from "@lingui/react/macro";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useRouteContext, useRouter } from "@tanstack/react-router";
 import { useId, useRef, useState } from "react";
 import z from "zod";
@@ -131,6 +131,17 @@ function SavedField({
 
 type ProfileSectionProps = { session: AuthSession };
 
+// CAREEROS (P3-T08): a member sees which cohort they belong to. Mobile shows the same line in its profile.
+function MyCohort() {
+	const { data } = useQuery(orpc.organization.myCohort.queryOptions());
+	if (!data?.cohortName) return null;
+	return (
+		<p className="text-sm text-ink-2" data-testid="my-cohort">
+			<Trans>Your cohort: {data.cohortName}</Trans>
+		</p>
+	);
+}
+
 export function ProfileSection({ session }: ProfileSectionProps) {
 	const router = useRouter();
 	const queryClient = useQueryClient();
@@ -176,6 +187,7 @@ export function ProfileSection({ session }: ProfileSectionProps) {
 	return (
 		<SettingsSection title={<Trans>Profile</Trans>}>
 			<ProfilePhoto name={user.name} image={user.image ?? null} onChange={(image) => updateUser({ image })} />
+			<MyCohort />
 
 			<div className="grid gap-3 sm:grid-cols-2">
 				<SavedField

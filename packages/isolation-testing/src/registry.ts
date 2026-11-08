@@ -174,7 +174,7 @@ async function seedJobSource(orgId: string, db: pg.Pool): Promise<{ userId: stri
 /**
  * Every tenant table (one with an `organization_id` column) must be registered here. The five resume tables are
  * registered by P1-T04, the two cover letter tables by P1-T05 and the four application tables by P1-T06, the eleven career tables by P1-T07, the six assistant and AI tables by P1-T08 and
- * the three remaining ones by P1-T09, the two branding ones by P2-T01, the organization domain one by P2-T06 and the three job discovery ones by P4-T01. The route
+ * the three remaining ones by P1-T09, the two branding ones by P2-T01, the organization domain one by P2-T06, the three job discovery ones by P4-T01 and the cohort one by P3-T08. The route
  * groups' API checks are attached by `packages/api` (it needs the router), which runs `runApiIsolationCheck` with this
  * entry's seed.
  */
@@ -625,6 +625,16 @@ export const isolationRegistry: readonly RegistryEntry[] = [
 				orgId,
 				sourceId,
 			]);
+			return id;
+		},
+	},
+	// CAREEROS (P3-T08): cohorts of an organization (the name is unique per organization, so a seed gets its own).
+	{
+		table: "cohort",
+		seed: async (orgId, db) => {
+			await ensureOrganization(db, orgId);
+			const id = `iso-cohort-${randomUUID()}`;
+			await db.query(`INSERT INTO cohort (id, organization_id, name) VALUES ($1, $2, $1)`, [id, orgId]);
 			return id;
 		},
 	},

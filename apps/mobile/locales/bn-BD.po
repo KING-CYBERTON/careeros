@@ -33,6 +33,11 @@ msgstr "\"{0}\" ট্র্যাশে সরানো হয়েছে৷"
 msgid "“{0}” stops being your primary resume."
 msgstr "“{0}” আর আপনার প্রধান জীবনবৃত্তান্ত থাকবে না।"
 
+#. placeholder {0}: selected?.label ?? ""
+#: src/features/settings/clipper-sign-ins.tsx
+msgid "“{0}” stops working. You can sign in again from the extension."
+msgstr ""
+
 #. placeholder {0}: purge?.documents[0]?.name
 #: src/features/documents/library.tsx
 msgid "“{0}” will be deleted for good and can't be restored."
@@ -2092,6 +2097,10 @@ msgstr "ব্রিফিং রিফ্রেশ চালু আছে · {n
 msgid "Briefing refresh paused"
 msgstr "ব্রিফিং রিফ্রেশ বিরতিতে"
 
+#: src/features/settings/clipper-sign-ins.tsx
+msgid "Browsers where you signed in to the Job Clipper extension. You sign in from the extension on a computer."
+msgstr ""
+
 #: src/features/ai/web-access.tsx
 msgid "Built-in reader"
 msgstr "অন্তর্নির্মিত পাঠক"
@@ -3137,6 +3146,10 @@ msgstr "এটি লোড করা যায়নি। আপনার স�
 msgid "Couldn't load versions."
 msgstr "সংস্করণ লোড করা যায়নি।"
 
+#: src/features/settings/clipper-sign-ins.tsx
+msgid "Couldn't load your Job Clipper sign-ins."
+msgstr ""
+
 #: app/(tabs)/settings/account.tsx
 msgid "Couldn't load your profile."
 msgstr "আপনার প্রোফাইল লোড করা যায়নি."
@@ -3243,6 +3256,10 @@ msgstr "এই জীবনবৃত্তান্ত রেন্ডার ক
 #: src/features/settings/api-keys.tsx
 msgid "Couldn't revoke the key. Try again."
 msgstr "কীটি প্রত্যাহার করা যায়নি। আবার চেষ্টা করুন"
+
+#: src/features/settings/clipper-sign-ins.tsx
+msgid "Couldn't revoke the sign-in. Try again."
+msgstr ""
 
 #: src/features/career/facts.tsx
 #: src/features/career/hooks.ts
@@ -5452,6 +5469,10 @@ msgstr "JavaScript"
 msgid "Job"
 msgstr "চাকরি"
 
+#: src/features/settings/clipper-sign-ins.tsx
+msgid "Job Clipper sign-ins"
+msgstr ""
+
 #: src/features/application-detail/sheets.tsx
 #: src/features/workspace/preparation.tsx
 msgid "Job description"
@@ -6039,6 +6060,10 @@ msgstr ""
 msgid "Loading saved version…"
 msgstr "সংরক্ষিত সংস্করণ লোড হচ্ছে…"
 
+#: src/features/settings/clipper-sign-ins.tsx
+msgid "Loading sign-ins…"
+msgstr ""
+
 #: src/features/ai/web-access.tsx
 msgid "Loading web access…"
 msgstr "ওয়েব অ্যাক্সেস লোড হচ্ছে..."
@@ -6602,6 +6627,7 @@ msgstr "নেটওয়ার্ক"
 
 #: src/features/career/preferences.tsx
 #: src/features/settings/api-keys.tsx
+#: src/features/settings/clipper-sign-ins.tsx
 msgid "Never"
 msgstr "কখনই না"
 
@@ -6797,6 +6823,10 @@ msgstr "কোনো তথ্য মিলছে না"
 #: src/features/write/pickers.tsx
 msgid "No icons match."
 msgstr "কোনো আইকন মেলে না।"
+
+#: src/features/settings/clipper-sign-ins.tsx
+msgid "No Job Clipper sign-ins yet."
+msgstr ""
 
 #: src/features/documents/new-document.tsx
 msgid "No job yet"
@@ -9023,6 +9053,7 @@ msgid "Reviewing needs an AI connection. What you write here stays on this devic
 msgstr "পর্যালোচনার জন্য একটি AI সংযোগ প্রয়োজন৷ আপনি এখানে যা লিখছেন তা এই ডিভাইসে ততক্ষণ পর্যন্ত থাকবে।"
 
 #: src/features/settings/api-keys.tsx
+#: src/features/settings/clipper-sign-ins.tsx
 msgid "Revoke"
 msgstr "প্রত্যাহার করুন"
 
@@ -9030,13 +9061,25 @@ msgstr "প্রত্যাহার করুন"
 msgid "Revoke API key?"
 msgstr "API কী প্রত্যাহার করবেন?"
 
+#: src/features/settings/clipper-sign-ins.tsx
+msgid "Revoke Job Clipper sign-in?"
+msgstr ""
+
 #: src/features/settings/api-keys.tsx
 msgid "Revoke key"
 msgstr "কী প্রত্যাহার করুন"
 
+#: src/features/settings/clipper-sign-ins.tsx
+msgid "Revoke sign-in"
+msgstr ""
+
 #: src/features/settings/api-keys.tsx
 msgid "Revoke this API key"
 msgstr "এই API কী প্রত্যাহার করুন"
+
+#: src/features/settings/clipper-sign-ins.tsx
+msgid "Revoke this Job Clipper sign-in"
+msgstr ""
 
 #: src/features/check/writing.tsx
 msgid "Rewrite accepted"
@@ -9974,9 +10017,19 @@ msgstr "সাইন ইন এবং নিরাপত্তা"
 msgid "Sign-in didn't complete"
 msgstr "সাইন ইন সম্পূর্ণ হয়নি"
 
+#: src/features/settings/clipper-sign-ins.tsx
+msgid "Sign-in revoked. The extension stops working on its next request."
+msgstr ""
+
 #: src/features/letters/write.tsx
 msgid "Sign-off"
 msgstr "সমাপনী"
+
+#. placeholder {0}: date(token.createdAt)
+#. placeholder {1}: date(token.lastUsedAt)
+#: src/features/settings/clipper-sign-ins.tsx
+msgid "Signed in {0} · Last used {1}"
+msgstr ""
 
 #. placeholder {0}: hostOf(server)
 #: src/auth/session-gate.tsx
@@ -11459,6 +11512,7 @@ msgstr "চেষ্টা করুন {suggestion}"
 #: src/features/branding/domains-screen.tsx
 #: src/features/letters/write.tsx
 #: src/features/settings/api-keys.tsx
+#: src/features/settings/clipper-sign-ins.tsx
 #: src/features/workspace/parts.tsx
 #: src/features/workspace/preparation.tsx
 #: src/features/workspace/shell.tsx
@@ -12552,6 +12606,10 @@ msgstr "আপনার বুলেটগুলো অস্বাভাবি�
 #: src/draft/conflict-sheet.tsx
 msgid "Your changes on this device will be replaced by the saved version."
 msgstr "এই ডিভাইসে আপনার পরিবর্তনগুলি সংরক্ষিত সংস্করণ দ্বারা প্রতিস্থাপিত হবে৷"
+
+#: src/features/settings/profile.tsx
+msgid "Your cohort"
+msgstr ""
 
 #: src/features/ats-checker/messages.ts
 msgid "Your contact details are not on the first page."

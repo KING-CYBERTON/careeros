@@ -50,6 +50,7 @@ export async function listAuditLog(userId: string, input: AuditListInput) {
 		.where(
 			and(
 				eq(schema.auditLog.organizationId, organizationId),
+				input.action === undefined ? undefined : eq(schema.auditLog.action, input.action),
 				after
 					? sql`(${schema.auditLog.createdAt}, ${schema.auditLog.id}) < (${after.createdAt}::timestamptz, ${after.id})`
 					: undefined,
@@ -63,4 +64,19 @@ export async function listAuditLog(userId: string, input: AuditListInput) {
 		items: page.map(({ cursorTime: _cursorTime, ...entry }) => entry),
 		nextCursor: rows.length > limit && last ? `${last.cursorTime}|${last.id}` : null,
 	};
+}
+
+/** CAREEROS (P3-T08): the name of the signed-in member's own cohort in the current organization (null when none). */
+export async function getMyCohort(userId: string) {
+	const organizationId = requireOrgId();
+	const [row] = await db
+		.select({ name: schema.cohort.name })
+		.from(schema.member)
+		.leftJoin(
+			schema.cohort,
+			and(eq(schema.cohort.organizationId, schema.member.organizationId), eq(schema.cohort.id, schema.member.cohortId)),
+		)
+		.where(and(eq(schema.member.organizationId, organizationId), eq(schema.member.userId, userId)))
+		.limit(1);
+	return { cohortName: row?.name ?? null };
 }

@@ -354,6 +354,12 @@ msgstr ""
 msgid "{0} closed"
 msgstr "{0} fermé"
 
+#. placeholder {0}: row.credits
+#. placeholder {1}: row.calls
+#: src/features/org-admin/ai-usage-page.tsx
+msgid "{0} credits · {1} calls"
+msgstr ""
+
 #. placeholder {0}: semantics.dates.length
 #: src/features/resume/editor/check/parser-view.tsx
 msgid "{0} found"
@@ -387,6 +393,11 @@ msgstr "Entretien {0}"
 #. placeholder {1}: getRoleLabel(invitation.role)
 #: src/features/auth/pages/accept-invitation.tsx
 msgid "{0} invited you to join as {1}."
+msgstr ""
+
+#. placeholder {0}: cohort.memberCount
+#: src/features/org-admin/cohorts-page.tsx
+msgid "{0} members"
 msgstr ""
 
 #. placeholder {0}: row.minutes
@@ -471,6 +482,12 @@ msgstr "{0} ignorée(s)"
 #: src/features/career/workspace/saved.tsx
 msgid "{0} supported, {1} partly supported, {2} with no evidence yet. {3}"
 msgstr "{0} étayées, {1} partiellement étayées, {2} sans preuve pour l'instant. {3}"
+
+#. placeholder {0}: period.start.toLocaleDateString()
+#. placeholder {1}: period.end.toLocaleDateString()
+#: src/features/org-admin/ai-usage-page.tsx
+msgid "{0} to {1}"
+msgstr ""
 
 #. placeholder {0}: findings.length
 #: src/features/ats-checker/report/report-view.tsx
@@ -725,6 +742,11 @@ msgstr "{name} utilise une colonne"
 msgid "{names} come last in the text. Most systems still find them; some don't."
 msgstr "{names} arrive en dernier dans le texte. La plupart des systèmes les trouvent encore ; d'autres non."
 
+#. placeholder {0}: report.rows.length
+#: src/features/org-admin/bulk-invite.tsx
+msgid "{okRows} of {0} rows can be invited."
+msgstr ""
+
 #: src/features/resume/editor/check/check-panel.tsx
 msgid "{open, plural, one {# thing to review.} other {# things to review.}}"
 msgstr "{open, plural, one {# chose à revoir.} other {# éléments à revoir.}}"
@@ -911,6 +933,10 @@ msgstr "24 heures avant"
 msgid "30 days"
 msgstr "30 jours"
 
+#: src/features/org-admin/ai-usage-page.tsx
+msgid "80% of the pooled credits are used"
+msgstr ""
+
 #: src/features/settings/ai/api-keys.tsx
 msgid "90 days"
 msgstr "90 jours"
@@ -1002,6 +1028,10 @@ msgstr "Une page est pivotée."
 #: src/features/resume/editor/check/job-match.tsx
 msgid "A pasted posting can be saved as an application afterwards."
 msgstr "Une offre d’emploi collée peut ensuite être enregistrée en tant que candidature."
+
+#: src/features/org-admin/access.tsx
+msgid "A personal workspace has no admin area. Create an organization to manage a team."
+msgstr ""
 
 #: src/features/organization/members-page.tsx
 msgid "A personal workspace has one seat"
@@ -1102,6 +1132,7 @@ msgid "Account"
 msgstr "Compte"
 
 #: src/features/career/knowledge/stories.tsx
+#: src/features/org-admin/audit-page.tsx
 msgid "Action"
 msgstr "Action"
 
@@ -1113,6 +1144,10 @@ msgstr "Actes"
 #: src/features/settings/ai/web-access.tsx
 msgid "Active"
 msgstr "Actif"
+
+#: src/features/org-admin/analytics-page.tsx
+msgid "Active members"
+msgstr ""
 
 #: src/features/applications/components/detail/activity.tsx
 msgid "Activity"
@@ -1607,6 +1642,10 @@ msgstr "L'IA n'a pas pu fournir les détails. L'offre d'emploi est conservée; c
 msgid "AI edit"
 msgstr "Modification de l'IA"
 
+#: src/features/org-admin/ai-usage-page.tsx
+msgid "AI features that use the platform's model stay off until the next period or a larger plan."
+msgstr ""
+
 #: src/features/career/schedule-sheet.tsx
 msgid "AI is optional. Review target roles in Knowledge, wait for Saved, then create a new schedule. Existing schedules keep this query until you edit and save it."
 msgstr ""
@@ -1630,6 +1669,11 @@ msgstr "Les fournisseurs d'IA n'ont pas pu être chargés. Rechargez pour réess
 
 #: src/features/career/role-suggestions.tsx
 msgid "AI suggestions, not verified qualifications or hiring predictions. Sources below are your statements."
+msgstr ""
+
+#: src/features/org-admin/ai-usage-page.tsx
+#: src/routes/dashboard/settings/route.tsx
+msgid "AI usage"
 msgstr ""
 
 #: src/features/career/workspace/answer-library.tsx
@@ -1679,6 +1723,14 @@ msgstr ""
 msgid "All employers"
 msgstr ""
 
+#: src/features/org-admin/analytics-page.tsx
+msgid "All members"
+msgstr ""
+
+#: src/features/org-admin/ai-usage-page.tsx
+msgid "All of the pooled credits are used"
+msgstr ""
+
 #: src/features/settings/account/data.tsx
 msgid "All your documents, applications, API keys and public links are deleted for good. This can't be undone."
 msgstr "Tous vos documents, candidatures, clés API et liens publics sont définitivement supprimés. Cela ne peut pas être annulé."
@@ -1690,6 +1742,10 @@ msgstr "Autoriser l'accès"
 #: src/features/ats-checker/messages.ts
 msgid "Almost none of your bullets carry a number."
 msgstr "Presque aucune de vos puces ne comporte de chiffre."
+
+#: src/features/org-admin/bulk-invite.tsx
+msgid "Already a member"
+msgstr ""
 
 #: src/features/applications/components/add-application-dialog.tsx
 msgid "Already applied"
@@ -1710,6 +1766,10 @@ msgstr "Vous avez déjà un compte ? <0/>"
 #: src/features/applications/components/add-application-dialog.tsx
 msgid "Already interviewing"
 msgstr "Déjà interviewé"
+
+#: src/features/org-admin/bulk-invite.tsx
+msgid "Already invited"
+msgstr ""
 
 #: src/features/resume/editor/check/check-panel.tsx
 msgid "Also check the exported PDF"
@@ -1752,6 +1812,11 @@ msgstr ""
 #: src/components/layout/error-screen.tsx
 msgid "An unexpected error stopped this page from loading. Try again, or go to the dashboard."
 msgstr "Une erreur inattendue a empêché le chargement de cette page. Réessayez ou accédez au tableau de bord."
+
+#: src/features/org-admin/analytics-page.tsx
+#: src/routes/dashboard/settings/route.tsx
+msgid "Analytics"
+msgstr ""
 
 #. placeholder {0}: others.length
 #: src/features/applications/components/detail/contacts.tsx
@@ -1982,10 +2047,15 @@ msgstr ""
 #: src/features/career/workspace/shell.tsx
 #: src/features/command-palette/pages/navigation.tsx
 #: src/features/command-palette/pages/resumes.tsx
+#: src/features/org-admin/analytics-page.tsx
 #: src/routes/dashboard/-components/app-shell.tsx
 #: src/routes/dashboard/applications/index.tsx
 msgid "Applications"
 msgstr "Candidatures"
+
+#: src/features/org-admin/analytics-page.tsx
+msgid "Applications created"
+msgstr ""
 
 #: src/features/applications/components/insights-view.tsx
 msgid "Applications over time"
@@ -2039,6 +2109,19 @@ msgstr ""
 #: src/libs/locale.ts
 msgid "Arabic"
 msgstr "Arabe"
+
+#: src/features/org-admin/cohorts-page.tsx
+msgid "Archive"
+msgstr ""
+
+#. placeholder {0}: cohort.name
+#: src/features/org-admin/cohorts-page.tsx
+msgid "Archive {0}"
+msgstr ""
+
+#: src/features/org-admin/cohorts-page.tsx
+msgid "Archived"
+msgstr ""
 
 #: src/features/applications/components/import-applications-sheet.tsx
 msgid "Archived (closes it)"
@@ -2126,6 +2209,10 @@ msgstr "Demandez ou décrivez un changement…"
 msgid "Aspect ratio"
 msgstr "Format d'image"
 
+#: src/features/org-admin/cohorts-page.tsx
+msgid "Assign members"
+msgstr ""
+
 #: src/features/assistant/assistant-button.tsx
 #: src/features/assistant/assistant-panel.tsx
 #: src/features/assistant/conversation.tsx
@@ -2174,6 +2261,11 @@ msgstr "Joindre un fichier de CV (PDF)"
 #: src/features/career/coach-chat.tsx
 msgid "Attachment"
 msgstr "Pièce jointe"
+
+#: src/features/org-admin/audit-page.tsx
+#: src/routes/dashboard/settings/route.tsx
+msgid "Audit log"
+msgstr ""
 
 #. placeholder {0}: countryName(row.countryCode, i18n.locale)
 #: src/features/settings/account/application-profile.tsx
@@ -2434,6 +2526,24 @@ msgstr "Liste à puces"
 msgid "By creating an account you agree to the <0>Terms</0> and the <1>Privacy policy</1>."
 msgstr ""
 
+#: src/features/org-admin/ai-usage-page.tsx
+msgid "By feature"
+msgstr ""
+
+#: src/features/org-admin/ai-usage-page.tsx
+msgid "By member"
+msgstr ""
+
+#. placeholder {0}: stages.saved
+#. placeholder {1}: stages.applied
+#. placeholder {2}: stages.screening
+#. placeholder {3}: stages.interview
+#. placeholder {4}: stages.offer
+#. placeholder {5}: stages.closed
+#: src/features/org-admin/analytics-page.tsx
+msgid "By stage: saved {0}, applied {1}, screening {2}, interview {3}, offer {4}, closed {5}."
+msgstr ""
+
 #: src/routes/dashboard/applications/index.tsx
 msgid "Calendar"
 msgstr "Calendrier"
@@ -2617,6 +2727,10 @@ msgstr ""
 msgid "Check every claim, date and result against your experience."
 msgstr "Vérifiez chaque affirmation, date et résultat par rapport à votre expérience."
 
+#: src/features/org-admin/bulk-invite.tsx
+msgid "Check file"
+msgstr ""
+
 #: src/features/career/workspace/fit.tsx
 msgid "Check fit"
 msgstr "Vérifier l'adéquation"
@@ -2635,6 +2749,10 @@ msgstr "vérifiez les chiffres et les noms avant de l'utiliser"
 
 #: src/components/layout/unknown-organization-screen.tsx
 msgid "Check the address, or ask the person who gave it to you for the right link."
+msgstr ""
+
+#: src/features/org-admin/analytics-page.tsx
+msgid "Check the dates and try again."
 msgstr ""
 
 #: src/features/career/workspace/prepare.tsx
@@ -2937,6 +3055,19 @@ msgstr "Code"
 msgid "Code from the extension"
 msgstr ""
 
+#: src/features/org-admin/analytics-page.tsx
+msgid "Cohort"
+msgstr ""
+
+#: src/features/org-admin/audit-page.tsx
+msgid "cohort.created"
+msgstr ""
+
+#: src/features/org-admin/cohorts-page.tsx
+#: src/routes/dashboard/settings/route.tsx
+msgid "Cohorts"
+msgstr ""
+
 #: src/routes/builder/$resumeId/-components/design-panel.tsx
 #: src/routes/builder/letter/-components/design-panel.tsx
 msgid "Color"
@@ -2962,6 +3093,10 @@ msgstr "Colonnes"
 #: src/features/resume/editor/check/issues.ts
 msgid "Columns can scramble the order text is read in."
 msgstr "Les colonnes peuvent brouiller le texte de la commande qui est lu."
+
+#: src/features/org-admin/bulk-invite.tsx
+msgid "Columns: email (required), role (member or admin) and cohort (a cohort name). Up to 500 rows and 256 KB."
+msgstr ""
 
 #: src/features/career/today.tsx
 msgid "Coming up"
@@ -3386,6 +3521,10 @@ msgstr "Impossible de joindre le fichier. Réessayez."
 msgid "Couldn't cancel the invitation. Try again."
 msgstr ""
 
+#: src/features/org-admin/cohorts-page.tsx
+msgid "Couldn't change the cohort. Try again."
+msgstr ""
+
 #: src/routes/builder/letter/-components/design-panel.tsx
 msgid "Couldn't change the design. Try again."
 msgstr "Impossible de modifier le design. Essayer à nouveau."
@@ -3460,6 +3599,10 @@ msgstr "Impossible de copier dans le presse-papiers. Réessayez."
 
 #: src/features/branding/domains-page.tsx
 msgid "Couldn't copy. Select the text instead."
+msgstr ""
+
+#: src/features/org-admin/cohorts-page.tsx
+msgid "Couldn't create the cohort. Try again."
 msgstr ""
 
 #: src/features/documents/use-start-document.ts
@@ -3538,6 +3681,10 @@ msgstr ""
 msgid "Couldn't export your data. Try again."
 msgstr "Impossible d'exporter vos données. Réessayez."
 
+#: src/features/org-admin/analytics-page.tsx
+msgid "Couldn't export. Try again."
+msgstr ""
+
 #: src/features/applications/components/application-form-sheet.tsx
 msgid "Couldn't fill in the fields. Try again, or fill them in yourself."
 msgstr "Impossible de remplir les champs. Réessayez ou remplissez-les vous-même."
@@ -3592,6 +3739,14 @@ msgstr "Impossible de charger les connexions IA. Réessayez avant d'importer ce 
 #: src/features/settings/integrations/ai-provider-load-state.tsx
 msgid "Couldn't load AI connections. Your saved connections haven't changed."
 msgstr "Impossible de charger les connexions IA. Vos connexions enregistrées n'ont pas changé."
+
+#: src/features/org-admin/ai-usage-page.tsx
+msgid "Couldn't load AI usage"
+msgstr ""
+
+#: src/features/org-admin/analytics-page.tsx
+msgid "Couldn't load analytics"
+msgstr ""
 
 #: src/routes/dashboard/applications/index.tsx
 msgid "Couldn't load applications. Try again."
@@ -3671,6 +3826,10 @@ msgstr "Impossible de marquer cet élément comme lu. Réessayez."
 msgid "Couldn't move the document to Trash. Try again."
 msgstr "Impossible de déplacer le document vers la corbeille. Réessayez."
 
+#: src/features/org-admin/cohorts-page.tsx
+msgid "Couldn't move the members. Try again."
+msgstr ""
+
 #: src/features/resume/export/use-resume-export.ts
 msgid "Couldn't prepare the resume for printing. Try again."
 msgstr "Impossible de préparer le CV pour l'impression. Réessayez."
@@ -3699,6 +3858,10 @@ msgstr "Impossible de lire ce fichier. Réessayez."
 #: src/features/resume/editor/write/section-row.tsx
 msgid "Couldn't read the dates on {entries}, so they stay at the end. Fix their dates and sort again."
 msgstr "Impossible de lire les dates de {entries} : ces entrées restent à la fin. Corrigez leurs dates et triez à nouveau."
+
+#: src/features/org-admin/bulk-invite.tsx
+msgid "Couldn't read the file. Try again."
+msgstr ""
 
 #. placeholder {0}: part.errorText
 #: src/features/assistant/conversation.tsx
@@ -3740,6 +3903,10 @@ msgstr ""
 #: src/features/settings/account/security.tsx
 msgid "Couldn't remove the passkey. Try again."
 msgstr "Impossible de supprimer le mot de passe. Essayer à nouveau."
+
+#: src/features/org-admin/cohorts-page.tsx
+msgid "Couldn't rename the cohort. Try again."
+msgstr ""
 
 #: src/features/documents/document-actions.tsx
 msgid "Couldn't rename the document. Try again."
@@ -3878,6 +4045,10 @@ msgstr "Impossible d'enregistrer. Essayer à nouveau."
 msgid "Couldn't schedule the interview. Try again."
 msgstr "Impossible de planifier l'entretien. Réessayez."
 
+#: src/features/org-admin/bulk-invite.tsx
+msgid "Couldn't send"
+msgstr ""
+
 #: src/features/auth/pages/accept-invitation.tsx
 #: src/features/settings/account/profile.tsx
 msgid "Couldn't send the email. Try again."
@@ -3885,6 +4056,10 @@ msgstr "Impossible d'envoyer l'e-mail. Essayer à nouveau."
 
 #: src/features/organization/members-page.tsx
 msgid "Couldn't send the invitation. Try again."
+msgstr ""
+
+#: src/features/org-admin/bulk-invite.tsx
+msgid "Couldn't send the invitations. Try again."
 msgstr ""
 
 #. Fallback toast when requesting password reset email fails without backend message
@@ -4152,6 +4327,10 @@ msgstr "Cette application peut créer et modifier vos documents et candidatures.
 msgid "Create and open"
 msgstr "Créer et ouvrir"
 
+#: src/features/org-admin/cohorts-page.tsx
+msgid "Create cohort"
+msgstr ""
+
 #: src/features/settings/ai/api-keys.tsx
 msgid "Create key"
 msgstr "Créer une clé"
@@ -4176,10 +4355,19 @@ msgstr "Créé"
 msgid "Created “{finalName}”"
 msgstr "Créé « {finalName} »"
 
+#. placeholder {0}: cohort.name
+#: src/features/org-admin/cohorts-page.tsx
+msgid "Created {0}"
+msgstr ""
+
 #. placeholder {0}: job.company
 #: src/features/documents/new-document-dialog.tsx
 msgid "Created and linked to {0}"
 msgstr "Créé et lié à {0}"
+
+#: src/features/org-admin/ai-usage-page.tsx
+msgid "Credits your members have used of the organization's pooled allowance this period."
+msgstr ""
 
 #: src/features/resume/editor/write/picture-settings.tsx
 msgid "Crop and upload"
@@ -4192,6 +4380,10 @@ msgstr "Recadrer la photo"
 #: src/features/applications/components/import-applications-sheet.tsx
 msgid "CSV data"
 msgstr "Données CSV"
+
+#: src/features/org-admin/bulk-invite.tsx
+msgid "CSV file"
+msgstr ""
 
 #: src/features/career/knowledge/preferences.tsx
 #: src/features/career/offer-entry.tsx
@@ -4899,6 +5091,10 @@ msgstr "Déposer pour importer"
 msgid "Duplicate"
 msgstr "Dupliquer"
 
+#: src/features/org-admin/bulk-invite.tsx
+msgid "Duplicate in the file"
+msgstr ""
+
 #: src/dialogs/resume/index.tsx
 msgid "Duplicate resume"
 msgstr "Dupliquer le CV"
@@ -5077,6 +5273,8 @@ msgstr "Formation"
 msgid "Education swaps school and field of study the same way."
 msgstr "Dans Formation, l'établissement et le domaine d'études sont inversés de la même façon."
 
+#: src/features/org-admin/analytics-page.tsx
+#: src/features/org-admin/bulk-invite.tsx
 #: src/features/resume/editor/check/parser-view.tsx
 #: src/features/resume/editor/write/basics-card.tsx
 #: src/features/settings/account/profile.tsx
@@ -5133,6 +5331,10 @@ msgstr ""
 #: src/features/resume/editor/write/dates-field.tsx
 msgid "End"
 msgstr "Fin"
+
+#: src/features/org-admin/cohorts-page.tsx
+msgid "Ends"
+msgstr ""
 
 #: src/libs/locale.ts
 msgid "English"
@@ -5253,6 +5455,7 @@ msgstr "Saisissez votre mot de passe pour désactiver la vérification en deux �
 msgid "Enter your password."
 msgstr "Saisissez votre mot de passe."
 
+#: src/features/org-admin/audit-page.tsx
 #: src/routes/builder/$resumeId/-components/design-panel.tsx
 msgid "Entries"
 msgstr "Entrées"
@@ -5341,6 +5544,10 @@ msgstr "Exportez tout"
 msgid "Export from the original document instead of scanning or screenshotting it."
 msgstr "Exportez depuis le document d'origine plutôt que de le scanner ou d'en faire une capture d'écran."
 
+#: src/features/org-admin/analytics-page.tsx
+msgid "Export members"
+msgstr ""
+
 #: src/features/resume/import/read-file.ts
 msgid "export opened"
 msgstr "exportation ouverte"
@@ -5355,6 +5562,10 @@ msgstr ""
 
 #: src/features/settings/account/application-profile.tsx
 msgid "Export saved profile"
+msgstr ""
+
+#: src/features/org-admin/analytics-page.tsx
+msgid "Export summary"
 msgstr ""
 
 #: src/features/ats-checker/messages.ts
@@ -5478,6 +5689,10 @@ msgstr "Remplir les entrées"
 #: src/features/documents/documents-page.tsx
 msgid "Filter by tag"
 msgstr "Filtrer par balise"
+
+#: src/features/org-admin/analytics-page.tsx
+msgid "Filters"
+msgstr ""
 
 #: src/features/career/schedule-sheet.tsx
 msgid "Find roles"
@@ -5744,6 +5959,7 @@ msgid "French"
 msgstr "Français"
 
 #: src/features/career/workspace/fit.tsx
+#: src/features/org-admin/analytics-page.tsx
 #: src/routes/builder/letter/-components/write-panel.tsx
 msgid "From"
 msgstr "Depuis"
@@ -5916,6 +6132,10 @@ msgstr "Formule d'appel"
 #: src/features/documents/documents-page.tsx
 msgid "Grid"
 msgstr "Grille"
+
+#: src/features/org-admin/cohorts-page.tsx
+msgid "Group members into classes or intakes, then follow how each group is doing."
+msgstr ""
 
 #: src/features/ats-checker/checker.tsx
 #: src/features/resume/editor/check/check-panel.tsx
@@ -6123,6 +6343,10 @@ msgstr "Comment afficher le fichier"
 #: src/features/assistant/assistant-panel.tsx
 msgid "How well do I fit this role?"
 msgstr "Dans quelle mesure est-ce que je correspond bien à ce rôle ?"
+
+#: src/features/org-admin/analytics-page.tsx
+msgid "How your members are doing: resumes, applications, interviews and offers."
+msgstr ""
 
 #: src/features/branding/branding-page.tsx
 msgid "How your organization looks to its members."
@@ -6384,6 +6608,7 @@ msgid "Interviewer"
 msgstr "Intervieweur"
 
 #: src/features/applications/components/calendar-view.tsx
+#: src/features/org-admin/analytics-page.tsx
 msgid "Interviews"
 msgstr "Entretiens"
 
@@ -6396,8 +6621,16 @@ msgstr ""
 msgid "Invitation unavailable"
 msgstr ""
 
+#: src/features/org-admin/bulk-invite.tsx
+msgid "Invite from a CSV file"
+msgstr ""
+
 #: src/features/organization/members-page.tsx
 msgid "Invite someone"
+msgstr ""
+
+#: src/features/org-admin/bulk-invite.tsx
+msgid "Invited"
 msgstr ""
 
 #: src/features/career/offers.tsx
@@ -6770,6 +7003,10 @@ msgstr "Langue"
 msgid "Languages"
 msgstr "Langues"
 
+#: src/features/org-admin/analytics-page.tsx
+msgid "Last active"
+msgstr ""
+
 #. placeholder {0}: monthYear(new Date(password.updatedAt))
 #: src/features/settings/account/security.tsx
 msgid "Last changed in {0}"
@@ -6860,6 +7097,7 @@ msgstr "Laissez vide pour utiliser le titre d'origine."
 msgid "Leave out"
 msgstr "Omettre"
 
+#: src/features/org-admin/ai-usage-page.tsx
 #: src/features/resume/editor/design/template-group.tsx
 msgid "Left"
 msgstr "Gauche"
@@ -6974,6 +7212,10 @@ msgstr "Thème clair"
 #: src/features/assistant/assistant-panel.tsx
 msgid "Likely questions, from the posting and your resume"
 msgstr "Questions probables, provenant de l'offre d'emploi et de votre curriculum vitae"
+
+#: src/features/org-admin/bulk-invite.tsx
+msgid "Line"
+msgstr ""
 
 #: src/routes/builder/$resumeId/-sidebar/right/sections/typography.tsx
 msgid "Line height"
@@ -7129,6 +7371,10 @@ msgstr "En direct  · mises à jour au fur et à mesure que vous modifiez"
 #: src/features/resume/share/address-field.tsx
 msgid "Live at {0}"
 msgstr "En direct au {0}"
+
+#: src/features/org-admin/audit-page.tsx
+msgid "Load more"
+msgstr ""
 
 #: src/features/applications/components/import-applications-sheet.tsx
 msgid "Load your stages before importing named stages. Your CSV data is kept."
@@ -7463,6 +7709,7 @@ msgstr "Moyen"
 msgid "Member"
 msgstr ""
 
+#: src/features/org-admin/analytics-page.tsx
 #: src/features/organization/members-page.tsx
 msgid "Members"
 msgstr ""
@@ -7573,6 +7820,11 @@ msgstr "La plupart des systèmes déposent les candidats par adresse e-mail."
 msgid "Mostly readable"
 msgstr "Généralement lisible"
 
+#. placeholder {0}: selected.size
+#: src/features/org-admin/cohorts-page.tsx
+msgid "Move {0} selected"
+msgstr ""
+
 #: src/features/applications/components/manage-lanes-sheet.tsx
 msgid "Move {label} down"
 msgstr "Descendre {label}"
@@ -7617,6 +7869,10 @@ msgstr "Augmenter le rôle"
 msgid "Move section to another column or page"
 msgstr "Déplacer la section vers une autre colonne ou page"
 
+#: src/features/org-admin/cohorts-page.tsx
+msgid "Move selected members to"
+msgstr ""
+
 #: src/routes/builder/$resumeId/-sidebar/right/sections/layout/pages.tsx
 msgid "Move to"
 msgstr "Déplacer vers"
@@ -7651,6 +7907,11 @@ msgstr "Monter"
 msgid "Move your email and phone number to the top of page one."
 msgstr "Déplacez votre email et votre numéro de téléphone en haut de la première page."
 
+#. placeholder {0}: result.updated
+#: src/features/org-admin/cohorts-page.tsx
+msgid "Moved {0} members"
+msgstr ""
+
 #. placeholder {0}: done.length
 #. placeholder {1}: documents.length
 #: src/features/documents/document-actions.tsx
@@ -7677,6 +7938,8 @@ msgstr "Déplace la candidature depuis {0}."
 #: src/features/documents/documents-page.tsx
 #: src/features/documents/new-document-dialog.tsx
 #: src/features/documents/trash-page.tsx
+#: src/features/org-admin/analytics-page.tsx
+#: src/features/org-admin/cohorts-page.tsx
 #: src/features/resume/editor/check/parser-view.tsx
 #: src/features/resume/editor/write/entries.tsx
 #: src/features/settings/account/profile.tsx
@@ -7792,6 +8055,10 @@ msgstr "Nouvelle clé API"
 msgid "New application"
 msgstr "Nouvelle candidature"
 
+#: src/features/org-admin/cohorts-page.tsx
+msgid "New cohort"
+msgstr ""
+
 #: src/features/assistant/assistant-panel.tsx
 #: src/features/career/coach-thread.tsx
 #: src/features/career/coach.tsx
@@ -7815,6 +8082,11 @@ msgstr "Nouveau fait"
 #: src/features/settings/ai/api-keys.tsx
 msgid "New key"
 msgstr "Nouvelle clé"
+
+#. placeholder {0}: cohort.name
+#: src/features/org-admin/cohorts-page.tsx
+msgid "New name for {0}"
+msgstr ""
 
 #: src/features/resume/editor/write/entry-card.tsx
 #: src/routes/builder/$resumeId/-sidebar/right/sections/layout/pages.tsx
@@ -7848,6 +8120,8 @@ msgid "New stage color"
 msgstr "Couleur de la nouvelle étape"
 
 #: src/features/documents/page-navigation.tsx
+#: src/features/org-admin/analytics-page.tsx
+#: src/features/org-admin/cohorts-page.tsx
 msgid "Next"
 msgstr ""
 
@@ -7917,6 +8191,14 @@ msgstr "Aucune liste à puces n'a été trouvée."
 msgid "No change needed. It's already at {stage}."
 msgstr "Aucun changement nécessaire. Elle est déjà à l'étape {stage}."
 
+#: src/features/org-admin/cohorts-page.tsx
+msgid "No cohort"
+msgstr ""
+
+#: src/features/org-admin/cohorts-page.tsx
+msgid "No cohorts yet."
+msgstr ""
+
 #. Empty-state message when no command palette results match the search query
 #: src/features/command-palette/content.tsx
 msgid "No commands match that search."
@@ -7973,6 +8255,10 @@ msgstr "Aucune adresse e-mail"
 #: src/features/ats-checker/messages.ts
 msgid "No email address was found."
 msgstr "Aucune adresse email n'a été trouvée."
+
+#: src/features/org-admin/audit-page.tsx
+msgid "No entries."
+msgstr ""
 
 #: src/features/career/shared.tsx
 msgid "No evidence yet"
@@ -8060,6 +8346,10 @@ msgstr "Aucun numéro de téléphone n'a été trouvé."
 msgid "No photo. Most ATS ignore photos; some regions expect one."
 msgstr "Aucune photo. La plupart des ATS ignorent les photos ; certaines régions en attendent un."
 
+#: src/features/org-admin/ai-usage-page.tsx
+msgid "No platform AI use yet."
+msgstr ""
+
 #: src/features/applications/components/add-application-dialog.tsx
 msgid "No postings found. Try different keywords."
 msgstr "Aucune offre d'emploi trouvée. Essayez différents mots-clés."
@@ -8083,6 +8373,10 @@ msgstr "Pas de CV"
 #: src/features/applications/components/application-form-sheet.tsx
 msgid "No resumes yet."
 msgstr "Aucun CV pour le moment."
+
+#: src/features/org-admin/bulk-invite.tsx
+msgid "No seat left"
+msgstr ""
 
 #: src/features/documents/document-actions.tsx
 msgid "No selected documents were deleted. Refresh to see what remains."
@@ -8173,6 +8467,10 @@ msgstr "marges normales"
 #: src/libs/locale.ts
 msgid "Norwegian"
 msgstr "Norvégien"
+
+#: src/features/org-admin/bulk-invite.tsx
+msgid "Not a valid email"
+msgstr ""
 
 #: src/features/career/workspace/messages.tsx
 msgid "Not applied"
@@ -8402,6 +8700,7 @@ msgstr "Offre d’emploi enregistrée"
 msgid "Offer type"
 msgstr "Type d’offre d’emploi"
 
+#: src/features/org-admin/analytics-page.tsx
 #: src/routes/dashboard/career/route.tsx
 msgid "Offers"
 msgstr "Offres"
@@ -8491,6 +8790,10 @@ msgstr ""
 
 #: src/features/organization/members-page.tsx
 msgid "Only owners and admins can manage members"
+msgstr ""
+
+#: src/features/org-admin/access.tsx
+msgid "Only owners and admins of an organization can open this page"
 msgstr ""
 
 #: src/features/settings/ai/providers.tsx
@@ -8763,6 +9066,11 @@ msgstr "Page"
 msgid "Page {0}"
 msgstr "Page {0}"
 
+#: src/features/org-admin/analytics-page.tsx
+#: src/features/org-admin/cohorts-page.tsx
+msgid "Page {page} of {pages}"
+msgstr ""
+
 #: src/routes/builder/$resumeId/-components/page-canvas.tsx
 #: src/routes/builder/letter/-components/letter-page.tsx
 msgid "Page {pageNumber}"
@@ -9009,6 +9317,10 @@ msgstr "Choisissez une heure future."
 msgid "Pick an icon"
 msgstr "Choisissez une icône"
 
+#: src/features/org-admin/cohorts-page.tsx
+msgid "Pick members, then move them to a cohort or take them out of theirs."
+msgstr ""
+
 #: src/features/ats-checker/messages.ts
 msgid "Pick one format and use it everywhere."
 msgstr "Choisissez un format et utilisez-le partout."
@@ -9076,6 +9388,14 @@ msgstr "Polonais"
 #: src/features/career/shared.tsx
 msgid "Polishing"
 msgstr "Peaufinage"
+
+#: src/features/org-admin/ai-usage-page.tsx
+msgid "Pooled"
+msgstr ""
+
+#: src/features/org-admin/ai-usage-page.tsx
+msgid "Pooled credits used"
+msgstr ""
 
 #. Preset button for setting picture aspect ratio to portrait orientation
 #: src/features/resume/editor/write/picture-settings.tsx
@@ -9261,6 +9581,8 @@ msgid "Previewing {0} · click to apply"
 msgstr "Aperçu de {0} · cliquez pour appliquer"
 
 #: src/features/documents/page-navigation.tsx
+#: src/features/org-admin/analytics-page.tsx
+#: src/features/org-admin/cohorts-page.tsx
 msgid "Previous"
 msgstr ""
 
@@ -10014,15 +10336,25 @@ msgstr ""
 msgid "Removed {name}"
 msgstr ""
 
+#: src/features/org-admin/ai-usage-page.tsx
+msgid "Removed member"
+msgstr ""
+
 #: src/features/branding/domains.ts
 msgid "Removing"
 msgstr ""
 
 #: src/features/career/coach.tsx
 #: src/features/documents/document-actions.tsx
+#: src/features/org-admin/cohorts-page.tsx
 #: src/features/settings/account/security.tsx
 msgid "Rename"
 msgstr "Rebaptiser"
+
+#. placeholder {0}: cohort.name
+#: src/features/org-admin/cohorts-page.tsx
+msgid "Rename {0}"
+msgstr ""
 
 #: src/routes/builder/letter/-components/letter-bar.tsx
 msgid "Rename letter"
@@ -10154,8 +10486,14 @@ msgstr "Date limite de réponse"
 
 #: src/features/documents/document-actions.tsx
 #: src/features/documents/trash-page.tsx
+#: src/features/org-admin/cohorts-page.tsx
 msgid "Restore"
 msgstr "Restaurer"
+
+#. placeholder {0}: cohort.name
+#: src/features/org-admin/cohorts-page.tsx
+msgid "Restore {0}"
+msgstr ""
 
 #: src/features/resume/share/history-tab.tsx
 msgid "Restore this version"
@@ -10189,6 +10527,7 @@ msgid "Restricted to its employer or application."
 msgstr ""
 
 #: src/features/career/knowledge/stories.tsx
+#: src/features/org-admin/bulk-invite.tsx
 msgid "Result"
 msgstr "Résultat"
 
@@ -10255,12 +10594,17 @@ msgstr ""
 #: src/features/command-palette/pages/navigation.tsx
 #: src/features/command-palette/pages/resumes.tsx
 #: src/features/documents/documents-page.tsx
+#: src/features/org-admin/analytics-page.tsx
 msgid "Resumes"
 msgstr "CVs"
 
 #: src/features/settings/preferences.tsx
 msgid "Resumes always render on white paper, whatever the theme."
 msgstr "les CV sont toujours rendus sur papier blanc, quel que soit le thème."
+
+#: src/features/org-admin/analytics-page.tsx
+msgid "Resumes created"
+msgstr ""
 
 #. placeholder {0}: application.postingSource.retrievedAt
 #. placeholder {1}: application.postingSource.method
@@ -10989,9 +11333,11 @@ msgid "Select"
 msgstr "Sélectionner"
 
 #. placeholder {0}: document.name
+#. placeholder {0}: member.name
 #. placeholder {0}: row.role
 #: src/features/career/today.tsx
 #: src/features/documents/document-card.tsx
+#: src/features/org-admin/cohorts-page.tsx
 msgid "Select {0}"
 msgstr "Sélectionner {0}"
 
@@ -11043,6 +11389,10 @@ msgstr "Feuille de style CSS sémantique"
 #: src/features/career/coach-thread.tsx
 msgid "Send"
 msgstr "Envoyer"
+
+#: src/features/org-admin/bulk-invite.tsx
+msgid "Send {okRows} invitations"
+msgstr ""
 
 #: src/features/organization/members-page.tsx
 msgid "Send invitation"
@@ -11128,6 +11478,16 @@ msgstr "Envoie le texte de votre CV uniquement à {0} · {1}, avec votre clé."
 #: src/features/resume/share/format.ts
 msgid "Sent"
 msgstr "Envoyé"
+
+#. placeholder {0}: result.sent
+#: src/features/org-admin/bulk-invite.tsx
+msgid "Sent {0} invitations"
+msgstr ""
+
+#. placeholder {0}: report.sent
+#: src/features/org-admin/bulk-invite.tsx
+msgid "Sent {0} invitations."
+msgstr ""
 
 #. placeholder {0}: version.name
 #: src/features/resume/share/format.ts
@@ -11269,6 +11629,10 @@ msgstr "Remontrer"
 #: src/features/career/knowledge/facts.tsx
 msgid "Show all types"
 msgstr "Afficher tous les types"
+
+#: src/features/org-admin/cohorts-page.tsx
+msgid "Show archived"
+msgstr ""
 
 #: src/routes/dashboard/applications/index.tsx
 msgid "Show closed"
@@ -11791,6 +12155,10 @@ msgstr ""
 msgid "Started"
 msgstr "Commencé"
 
+#: src/features/org-admin/cohorts-page.tsx
+msgid "Starts"
+msgstr ""
+
 #: src/features/career/shared.tsx
 msgid "Starts in {minutes} minutes"
 msgstr "Commence dans {minutes} minutes"
@@ -11949,6 +12317,7 @@ msgstr "Suggère des coupes, ne supprime jamais tout seul"
 msgid "Summaries of your open applications"
 msgstr "Résumés de vos candidatures en cours"
 
+#: src/features/org-admin/analytics-page.tsx
 #: src/features/resume/editor/write/summary-editor.tsx
 #: src/libs/resume/section.tsx
 msgid "Summary"
@@ -12285,6 +12654,10 @@ msgstr "Ce fournisseur de connexion n'est plus disponible sur ce serveur. Utilis
 #: src/features/resume/share/download-tab.tsx
 msgid "The {label} file couldn't be generated. Try again, or download PDF instead."
 msgstr "Le fichier {label} n'a pas pu être généré. Réessayez ou téléchargez plutôt PDF."
+
+#: src/features/org-admin/ai-usage-page.tsx
+msgid "The 20 members who used the most."
+msgstr ""
 
 #: src/libs/error-message.ts
 msgid "The address must contain only lowercase letters and numbers, separated by single dashes."
@@ -12856,6 +13229,10 @@ msgstr "Ce PDF est une image numérisée. Il n'y a pas de texte à lire. Essayez
 msgid "This PDF is password protected. Save an unprotected copy and try again."
 msgstr "Ce PDF est protégé par mot de passe. Enregistrez une copie non protégée et réessayez."
 
+#: src/features/org-admin/ai-usage-page.tsx
+msgid "This period"
+msgstr ""
+
 #: src/features/assistant/question-card.tsx
 msgid "This question couldn't be asked. Send a new message to continue."
 msgstr ""
@@ -13015,6 +13392,7 @@ msgstr "Astuce"
 msgid "Title"
 msgstr "Titre"
 
+#: src/features/org-admin/analytics-page.tsx
 #: src/routes/builder/letter/-components/write-panel.tsx
 msgid "To"
 msgstr "À"
@@ -13127,6 +13505,7 @@ msgstr "Essayer à nouveau"
 
 #: src/features/branding/branding-page.tsx
 #: src/features/branding/domains-page.tsx
+#: src/features/org-admin/ai-usage-page.tsx
 msgid "Try again in a moment."
 msgstr ""
 
@@ -13319,6 +13698,14 @@ msgstr "Annuler la modification du CV"
 msgid "Unknown"
 msgstr "Inconnu"
 
+#: src/features/org-admin/bulk-invite.tsx
+msgid "Unknown cohort"
+msgstr ""
+
+#: src/features/org-admin/bulk-invite.tsx
+msgid "Unknown role"
+msgstr ""
+
 #: src/features/documents/document-actions.tsx
 msgid "Unlink"
 msgstr "Dissocier"
@@ -13376,6 +13763,10 @@ msgstr "Jusqu'à 2 minutes. Vos mots s'affichent pendant que vous parlez."
 #: src/features/ats-checker/checker.tsx
 msgid "Up to 25 MB · checked in your browser, never uploaded"
 msgstr "Jusqu'à 25 MB · vérifiés dans votre navigateur, jamais téléchargés"
+
+#: src/features/org-admin/analytics-page.tsx
+msgid "Up to 366 days, in UTC."
+msgstr ""
 
 #: src/features/applications/components/calendar-view.tsx
 msgid "Upcoming interviews"
@@ -13611,6 +14002,7 @@ msgid "Use your editor's normal bullet list, so stray glyphs do not land mid-sen
 msgstr "Utilisez la liste à puces normale de votre éditeur, pour que des glyphes parasites n'atterrissent pas au milieu d'une phrase."
 
 #: src/features/career/coach-chat.tsx
+#: src/features/org-admin/ai-usage-page.tsx
 msgid "Used"
 msgstr "Utilisé"
 
@@ -14098,6 +14490,10 @@ msgstr "Quelles opportunités correspondent le mieux à mes priorités ?"
 msgid "Which other benefits come with it, like pension or allowances?"
 msgstr "Quels autres avantages sont inclus, comme une retraite complémentaire ou des indemnités ?"
 
+#: src/features/org-admin/audit-page.tsx
+msgid "Who changed what in your organization."
+msgstr ""
+
 #: src/features/applications/components/interview-dialog.tsx
 #: src/features/career/workspace/shell.tsx
 msgid "Who you'll meet"
@@ -14118,6 +14514,10 @@ msgstr "marges larges"
 #: src/features/resume/editor/design/template-group.tsx
 msgid "Width"
 msgstr "Largeur"
+
+#: src/features/org-admin/bulk-invite.tsx
+msgid "Will be invited"
+msgstr ""
 
 #: src/features/settings/account/application-profile.tsx
 msgid "Willing to relocate"
@@ -14474,6 +14874,11 @@ msgstr ""
 msgid "Your changes were kept in “{name}”."
 msgstr ""
 
+#. placeholder {0}: data.cohortName
+#: src/features/settings/account/profile.tsx
+msgid "Your cohort: {0}"
+msgstr ""
+
 #: src/features/ats-checker/messages.ts
 msgid "Your contact details are not on the first page."
 msgstr "Vos coordonnées ne sont pas sur la première page."
@@ -14606,6 +15011,10 @@ msgstr "Votre numéro de téléphone a changé sur le CV. La lettre a également
 #: src/features/ats-checker/messages.ts
 msgid "Your phone number is written in an unusual shape."
 msgstr "Votre numéro de téléphone est écrit dans un format inhabituel."
+
+#: src/features/org-admin/ai-usage-page.tsx
+msgid "Your plan allows going over; extra use is billed."
+msgstr ""
 
 #: src/features/career/coach.tsx
 msgid "your preferences"
