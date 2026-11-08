@@ -9,6 +9,10 @@ import type { MiddlewareHandler } from "hono";
 // them without CORS; this makes them work too when the browser has not granted (or the member has withdrawn) that access,
 // as in the e2e run, where the permission prompt cannot be answered. Nothing else gets CORS, and the token still has to
 // be right and host-bound: the answer to a request from an extension origin is the same as to any other.
+// CAREEROS (P5-T03): clipping a job adds three more, by exact path: `GET /api/openapi/clipper/find-by-url`,
+// `POST /api/openapi/clipper/cleanup` and `POST /api/openapi/applications`. The last path is shared with other methods, but
+// the answer carries no `Access-Control-Allow-Credentials` and the request carries no cookie, so only a request with a
+// clipper token gets anything an extension page can read, and a clipper token reaches only `applications.create` there.
 
 /** `chrome-extension://<id>` (Chrome, Edge) and `moz-extension://<uuid>` (Firefox): the origins of an extension's pages. */
 const EXTENSION_ORIGIN = /^(?:chrome|moz)-extension:\/\/[A-Za-z0-9-]{1,64}$/;
@@ -21,6 +25,10 @@ export const EXTENSION_CLIPPER_CORS_ROUTES: Readonly<Record<string, "GET" | "POS
 	"/api/auth/device/clipper/token": "POST",
 	"/api/auth/device/clipper/revoke": "POST",
 	"/api/openapi/clipper/whoami": "GET",
+	// P5-T03: clipping a job. The duplicate check, the optional AI tidy and the save, each by exact path.
+	"/api/openapi/clipper/find-by-url": "GET",
+	"/api/openapi/clipper/cleanup": "POST",
+	"/api/openapi/applications": "POST",
 };
 
 type ExtensionCorsOptions = { methods: string; headers: string };

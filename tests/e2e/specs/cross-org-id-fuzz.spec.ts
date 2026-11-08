@@ -352,6 +352,33 @@ test("an id from another organization never reads, changes or links Organization
 			});
 		}
 
+		// 4b. P5-T03: the Job Clipper's duplicate check takes an address, not an id, so it is asked for Organization A's
+		// posting address here. A's own member finds it (the control: the check is not vacuous); B finds nothing.
+		const lookup = (request: typeof orgs.a.session) =>
+			request.get(`/api/openapi/clipper/find-by-url?url=${encodeURIComponent(orgs.aPostingUrl)}`, {
+				failOnStatusCode: false,
+				timeout: 20_000,
+			});
+		const control = await lookup(orgs.a.session);
+		expect(control.status(), "A's own find-by-url").toBe(200);
+		expect(((await control.json()) as { match: { id: string } | null }).match?.id, "A finds its own application").toBe(
+			orgs.ids.application,
+		);
+		for (const [mode, request] of [
+			["cookie", orgs.b.session],
+			["api key", orgs.bKeyed],
+		] as const) {
+			const response = await lookup(request);
+			const text = await response.text();
+			const leaks = findLeaks(text, orgs.markers, orgs.foreignIds, []);
+			if (leaks.length > 0)
+				failures.push(`GET /clipper/find-by-url [${mode}]: carries Organization A's ${leaks.join(", ")}`);
+			else if (response.status() !== 200 || (parse(text) as { match?: unknown }).match !== null)
+				failures.push(
+					`GET /clipper/find-by-url [${mode}]: expected {"match":null}, got ${response.status()} ${text.slice(0, 200)}`,
+				);
+		}
+
 		await pool(mcpPlans, 6, async ({ tool, args, sentIds }) => {
 			const label = `MCP ${tool.name}`;
 			const answer = await mcp("tools/call", { name: tool.name, arguments: args });

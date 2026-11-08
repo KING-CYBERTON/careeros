@@ -90,6 +90,8 @@ const AI_CALL_FILES = {
 	"career/role-suggestions.ts": "getModel({ ..., metering })",
 	"cover-letters/draft.ts": "getModel({ ..., metering })",
 	"applications/ai.ts": "getModel({ ..., metering }) in resolveModel and in the posting enrichment",
+	"clipper/cleanup.ts":
+		"getModel({ ..., metering }) on the platform runnable only (getPlatformRunnable), never a saved key",
 	"career/voice.ts":
 		"transcription and speech on the member's own OpenAI-style key; no platform model exists for them (see below)",
 } as const;
@@ -127,7 +129,7 @@ describe("the AI call sites", () => {
 		const unnamed: string[] = [];
 		for (const [file, source] of sources) {
 			if (file.startsWith("ai-providers/")) continue;
-			for (const name of ["getRunnableById", "getDefaultRunnable"]) {
+			for (const name of ["getRunnableById", "getDefaultRunnable", "getPlatformRunnable"]) {
 				for (const call of callsOf(source, name)) {
 					// Voice has no platform feature: it must stay unable to resolve the platform provider.
 					if (file === "career/voice.ts") {

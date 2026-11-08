@@ -12,6 +12,8 @@ export const AI_FEATURES = {
 	"cover_letter.draft": { fast: false, label: "Cover letter drafts" },
 	"applications.ai": { fast: false, label: "Application tools" },
 	"applications.extract": { fast: true, label: "Read a job posting" },
+	// CAREEROS (P5-T03): the Job Clipper's optional "Tidy with AI", on the platform provider only.
+	"clipper.cleanup": { fast: true, label: "Tidy a clipped job" },
 } as const satisfies Record<string, { fast: boolean; label: string }>;
 
 export type AiFeature = keyof typeof AI_FEATURES;
