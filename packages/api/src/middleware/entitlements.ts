@@ -70,7 +70,12 @@ export const SUSPENDED_ORG_ALLOWED_WRITES: ReadonlyMap<string, string> = new Map
 	["resume.verifyPassword", "public: checks the password of a shared resume"],
 	// The ATS PDF check is public, reads an uploaded PDF and stores nothing. It is only exposed as a REST alias.
 	["checkPdf", "public: analyzes an uploaded PDF and stores nothing"],
-	// T06 billing procedures (an owner must be able to pay to lift a suspension) are added here by that task.
+	// CAREEROS (P3-T04): billing. A suspended organization's owner must be able to pay its way out of the suspension.
+	["billing.startTrial", "starting a trial, which lifts nothing by itself but is part of getting out of suspension"],
+	["billing.checkout", "paying: the checkout is how a suspended organization buys its way out of the suspension"],
+	["billing.changeSeats", "changing the seat count, which is part of paying the right amount"],
+	["billing.cancel", "cancelling the subscription, which an owner must always be able to do"],
+	["billing.portal", "opening the provider's billing portal to update a payment method"],
 ]);
 
 /** Whether a procedure writes: its OpenAPI route method is not GET, and a procedure without a method counts as a write. */

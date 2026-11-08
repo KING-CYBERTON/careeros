@@ -678,6 +678,12 @@ export const tenancyAllowList: readonly AllowListEntry[] = [
 		reason:
 			"P5-T02: Job Clipper sign-in tokens (pre-authentication, platform-global like apikey). Holds the SHA-256 of the token, never the token. organization_id is checked against the request host's organization on every use (a token on another organization's host, the platform host or a custom domain of another organization is refused) and the member must still belong to it; reached only through the careeros-clipper plugin's adapter calls",
 	},
+	// CAREEROS (P3-T04, phase plan D9)
+	{
+		table: "billing_event",
+		reason:
+			"P3-T04: the idempotency record of verified payment-provider events, global like a ledger: provider ids and normalized fields only, never card data. It carries organization_id only to name the organization the verified metadata pointed at (not a foreign key), so it sits on this list, not the globalTables one, which is for tables without that column. It has no tenant policy on purpose: the app role has no privilege on it at all and reaches it only through the definer function careeros_record_billing_event; row level security is forced, with a policy for the owner role alone",
+	},
 ];
 
 export const DEFAULT_SCHEMA = "public";
