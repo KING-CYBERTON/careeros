@@ -25,6 +25,8 @@ import { BreakpointIndicator } from "@/components/layout/breakpoint-indicator";
 import { DialogManager } from "@/dialogs/manager";
 import { CommandPalette } from "@/features/command-palette";
 import { useDocumentWebMcpTools } from "@/features/documents/webmcp";
+// CAREEROS (P3-T07): the support-session banner, on every page of an impersonated session
+import { ImpersonationBanner } from "@/features/platform-admin/impersonation-banner";
 import { ThemeProvider } from "@/features/theme/provider";
 import { ConfirmDialogProvider } from "@/hooks/use-confirm";
 // CAREEROS (P3-T02): flags now carry the organization's resolved features
@@ -93,6 +95,8 @@ function RootComponent() {
 										<DirectionProvider direction={dir}>
 											<TooltipProvider>
 												<ConfirmDialogProvider>
+													{/* CAREEROS (P3-T07) */}
+													<ImpersonationBanner />
 													<Outlet />
 
 													<DialogManager />

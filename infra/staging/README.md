@@ -232,6 +232,19 @@ Add the domain to a test organization through the API (`POST /organization/domai
 - Organization host: run `org-dns-remove` with the slug. It deletes only a record that carries the comment `careeros-staging-managed` and whose name matches `ORG_HOST_PATTERN`; it never deletes in bulk.
 - Custom domain: remove it in the organization's domain settings (`DELETE /organization/domains/{id}`, which also removes the Cloudflare custom hostname), then ask the customer to delete their CNAME and TXT records. A removed domain stops being served within about a minute.
 
+## Platform admins (P3-T07)
+
+The Super Admin console lives at `/admin` on the platform host only (every organization host and custom domain answers 404). Nobody can promote an account from the app: the Better Auth admin endpoints are switched off. Grant or remove the role with the database owner connection (the same one migrations use) and say who you are:
+
+```sh
+export DATABASE_MIGRATION_URL=postgres://careeros_owner:...@host/db
+node tooling/careeros/platform-admin.mjs grant person@example.com --operator "Your name"
+node tooling/careeros/platform-admin.mjs revoke person@example.com --operator "Your name"
+node tooling/careeros/platform-admin.mjs list
+```
+
+Each change writes a platform audit row (`admin.role_granted` or `admin.role_revoked`) with the operator's name and no email address. A new admin must turn on two-factor authentication in Settings before the console opens; until then every console call answers 403. Support (impersonation) sessions need `ORG_HOST_PATTERN` set, because they start on the member's organization subdomain.
+
 ## Security notes
 
 - No container publishes host ports; only `cloudflared` makes outbound connections.

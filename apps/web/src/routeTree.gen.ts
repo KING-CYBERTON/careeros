@@ -10,6 +10,7 @@
 
 import { Route as rootRouteImport } from "./routes/__root";
 import { Route as HomeRouteRouteImport } from "./routes/_home/route";
+import { Route as AdminRouteRouteImport } from "./routes/admin/route";
 import { Route as AgentRouteRouteImport } from "./routes/agent/route";
 import { Route as AuthRouteRouteImport } from "./routes/auth/route";
 import { Route as DashboardRouteRouteImport } from "./routes/dashboard/route";
@@ -20,6 +21,10 @@ import { Route as HomeLicensesRouteImport } from "./routes/_home/licenses";
 import { Route as HomePrivacyRouteImport } from "./routes/_home/privacy";
 import { Route as HomeResumeTemplatesRouteImport } from "./routes/_home/resume-templates";
 import { Route as HomeTermsRouteImport } from "./routes/_home/terms";
+import { Route as AdminIndexRouteImport } from "./routes/admin/index";
+import { Route as AdminAnnouncementsRouteImport } from "./routes/admin/announcements";
+import { Route as AdminAuditRouteImport } from "./routes/admin/audit";
+import { Route as AdminMetricsRouteImport } from "./routes/admin/metrics";
 import { Route as AgentIndexRouteImport } from "./routes/agent/index";
 import { Route as AgentThreadIdRouteImport } from "./routes/agent/$threadId";
 import { Route as AgentNewRouteImport } from "./routes/agent/new";
@@ -27,6 +32,7 @@ import { Route as AuthIndexRouteImport } from "./routes/auth/index";
 import { Route as AuthConsentRouteImport } from "./routes/auth/consent";
 import { Route as AuthErrorRouteImport } from "./routes/auth/error";
 import { Route as AuthForgotPasswordRouteImport } from "./routes/auth/forgot-password";
+import { Route as AuthImpersonateRouteImport } from "./routes/auth/impersonate";
 import { Route as AuthLoginRouteImport } from "./routes/auth/login";
 import { Route as AuthNativeCallbackRouteImport } from "./routes/auth/native-callback";
 import { Route as AuthOrganizationAccessRouteImport } from "./routes/auth/organization-access";
@@ -40,6 +46,8 @@ import { Route as DashboardCareerRouteRouteImport } from "./routes/dashboard/car
 import { Route as DashboardCoverLettersRouteImport } from "./routes/dashboard/cover-letters";
 import { Route as DashboardSettingsRouteRouteImport } from "./routes/dashboard/settings/route";
 import { Route as DashboardTrashRouteImport } from "./routes/dashboard/trash";
+import { Route as AdminOrganizationsIndexRouteImport } from "./routes/admin/organizations.index";
+import { Route as AdminOrganizationsOrganizationIdRouteImport } from "./routes/admin/organizations.$organizationId";
 import { Route as AuthAcceptInvitationInvitationIdRouteImport } from "./routes/auth/accept-invitation.$invitationId";
 import { Route as AuthHandoffIndexRouteImport } from "./routes/auth/handoff.index";
 import { Route as AuthHandoffRedeemRouteImport } from "./routes/auth/handoff.redeem";
@@ -70,6 +78,11 @@ import { Route as DashboardCareerKnowledgeStoriesChar123StoryIdChar125RouteImpor
 
 const HomeRouteRoute = HomeRouteRouteImport.update({
   id: "/_home",
+  getParentRoute: () => rootRouteImport,
+} as any);
+const AdminRouteRoute = AdminRouteRouteImport.update({
+  id: "/admin",
+  path: "/admin",
   getParentRoute: () => rootRouteImport,
 } as any);
 const AgentRouteRoute = AgentRouteRouteImport.update({
@@ -122,6 +135,26 @@ const HomeTermsRoute = HomeTermsRouteImport.update({
   path: "/terms",
   getParentRoute: () => HomeRouteRoute,
 } as any);
+const AdminIndexRoute = AdminIndexRouteImport.update({
+  id: "/",
+  path: "/",
+  getParentRoute: () => AdminRouteRoute,
+} as any);
+const AdminAnnouncementsRoute = AdminAnnouncementsRouteImport.update({
+  id: "/announcements",
+  path: "/announcements",
+  getParentRoute: () => AdminRouteRoute,
+} as any);
+const AdminAuditRoute = AdminAuditRouteImport.update({
+  id: "/audit",
+  path: "/audit",
+  getParentRoute: () => AdminRouteRoute,
+} as any);
+const AdminMetricsRoute = AdminMetricsRouteImport.update({
+  id: "/metrics",
+  path: "/metrics",
+  getParentRoute: () => AdminRouteRoute,
+} as any);
 const AgentIndexRoute = AgentIndexRouteImport.update({
   id: "/",
   path: "/",
@@ -155,6 +188,11 @@ const AuthErrorRoute = AuthErrorRouteImport.update({
 const AuthForgotPasswordRoute = AuthForgotPasswordRouteImport.update({
   id: "/forgot-password",
   path: "/forgot-password",
+  getParentRoute: () => AuthRouteRoute,
+} as any);
+const AuthImpersonateRoute = AuthImpersonateRouteImport.update({
+  id: "/impersonate",
+  path: "/impersonate",
   getParentRoute: () => AuthRouteRoute,
 } as any);
 const AuthLoginRoute = AuthLoginRouteImport.update({
@@ -222,6 +260,17 @@ const DashboardTrashRoute = DashboardTrashRouteImport.update({
   path: "/trash",
   getParentRoute: () => DashboardRouteRoute,
 } as any);
+const AdminOrganizationsIndexRoute = AdminOrganizationsIndexRouteImport.update({
+  id: "/organizations/",
+  path: "/organizations/",
+  getParentRoute: () => AdminRouteRoute,
+} as any);
+const AdminOrganizationsOrganizationIdRoute =
+  AdminOrganizationsOrganizationIdRouteImport.update({
+    id: "/organizations/$organizationId",
+    path: "/organizations/$organizationId",
+    getParentRoute: () => AdminRouteRoute,
+  } as any);
 const AuthAcceptInvitationInvitationIdRoute =
   AuthAcceptInvitationInvitationIdRouteImport.update({
     id: "/accept-invitation/$invitationId",
@@ -379,6 +428,7 @@ const DashboardCareerKnowledgeStoriesChar123StoryIdChar125Route =
 
 export interface FileRoutesByFullPath {
   "/": typeof HomeIndexRoute;
+  "/admin": typeof AdminRouteRouteWithChildren;
   "/agent": typeof AgentRouteRouteWithChildren;
   "/auth": typeof AuthRouteRouteWithChildren;
   "/dashboard": typeof DashboardRouteRouteWithChildren;
@@ -391,11 +441,15 @@ export interface FileRoutesByFullPath {
   "/privacy": typeof HomePrivacyRoute;
   "/resume-templates": typeof HomeResumeTemplatesRoute;
   "/terms": typeof HomeTermsRoute;
+  "/admin/announcements": typeof AdminAnnouncementsRoute;
+  "/admin/audit": typeof AdminAuditRoute;
+  "/admin/metrics": typeof AdminMetricsRoute;
   "/agent/$threadId": typeof AgentThreadIdRoute;
   "/agent/new": typeof AgentNewRoute;
   "/auth/consent": typeof AuthConsentRoute;
   "/auth/error": typeof AuthErrorRoute;
   "/auth/forgot-password": typeof AuthForgotPasswordRoute;
+  "/auth/impersonate": typeof AuthImpersonateRoute;
   "/auth/login": typeof AuthLoginRoute;
   "/auth/native-callback": typeof AuthNativeCallbackRoute;
   "/auth/organization-access": typeof AuthOrganizationAccessRoute;
@@ -405,11 +459,13 @@ export interface FileRoutesByFullPath {
   "/auth/verify-2fa-backup": typeof AuthVerify2faBackupRoute;
   "/dashboard/cover-letters": typeof DashboardCoverLettersRoute;
   "/dashboard/trash": typeof DashboardTrashRoute;
+  "/admin/": typeof AdminIndexRoute;
   "/agent/": typeof AgentIndexRoute;
   "/auth/": typeof AuthIndexRoute;
   "/dashboard/": typeof DashboardIndexRoute;
   "/dashboard/career/knowledge": typeof DashboardCareerKnowledgeRouteRouteWithChildren;
   "/dashboard/settings/integrations": typeof DashboardSettingsIntegrationsRouteRoute;
+  "/admin/organizations/$organizationId": typeof AdminOrganizationsOrganizationIdRoute;
   "/auth/accept-invitation/$invitationId": typeof AuthAcceptInvitationInvitationIdRoute;
   "/auth/handoff/redeem": typeof AuthHandoffRedeemRoute;
   "/builder/letter/$coverLetterId": typeof BuilderLetterCoverLetterIdRoute;
@@ -423,6 +479,7 @@ export interface FileRoutesByFullPath {
   "/dashboard/settings/members": typeof DashboardSettingsMembersRoute;
   "/dashboard/settings/preferences": typeof DashboardSettingsPreferencesRoute;
   "/dashboard/settings/profile": typeof DashboardSettingsProfileRoute;
+  "/admin/organizations/": typeof AdminOrganizationsIndexRoute;
   "/auth/handoff/": typeof AuthHandoffIndexRoute;
   "/builder/$resumeId/": typeof BuilderResumeIdIndexRoute;
   "/dashboard/applications/": typeof DashboardApplicationsIndexRoute;
@@ -443,11 +500,15 @@ export interface FileRoutesByTo {
   "/privacy": typeof HomePrivacyRoute;
   "/resume-templates": typeof HomeResumeTemplatesRoute;
   "/terms": typeof HomeTermsRoute;
+  "/admin/announcements": typeof AdminAnnouncementsRoute;
+  "/admin/audit": typeof AdminAuditRoute;
+  "/admin/metrics": typeof AdminMetricsRoute;
   "/agent/$threadId": typeof AgentThreadIdRoute;
   "/agent/new": typeof AgentNewRoute;
   "/auth/consent": typeof AuthConsentRoute;
   "/auth/error": typeof AuthErrorRoute;
   "/auth/forgot-password": typeof AuthForgotPasswordRoute;
+  "/auth/impersonate": typeof AuthImpersonateRoute;
   "/auth/login": typeof AuthLoginRoute;
   "/auth/native-callback": typeof AuthNativeCallbackRoute;
   "/auth/organization-access": typeof AuthOrganizationAccessRoute;
@@ -458,11 +519,13 @@ export interface FileRoutesByTo {
   "/dashboard/cover-letters": typeof DashboardCoverLettersRoute;
   "/dashboard/trash": typeof DashboardTrashRoute;
   "/": typeof HomeIndexRoute;
+  "/admin": typeof AdminIndexRoute;
   "/agent": typeof AgentIndexRoute;
   "/auth": typeof AuthIndexRoute;
   "/dashboard": typeof DashboardIndexRoute;
   "/dashboard/career/knowledge": typeof DashboardCareerKnowledgeRouteRouteWithChildren;
   "/dashboard/settings/integrations": typeof DashboardSettingsIntegrationsRouteRoute;
+  "/admin/organizations/$organizationId": typeof AdminOrganizationsOrganizationIdRoute;
   "/auth/accept-invitation/$invitationId": typeof AuthAcceptInvitationInvitationIdRoute;
   "/auth/handoff/redeem": typeof AuthHandoffRedeemRoute;
   "/builder/letter/$coverLetterId": typeof BuilderLetterCoverLetterIdRoute;
@@ -476,6 +539,7 @@ export interface FileRoutesByTo {
   "/dashboard/settings/members": typeof DashboardSettingsMembersRoute;
   "/dashboard/settings/preferences": typeof DashboardSettingsPreferencesRoute;
   "/dashboard/settings/profile": typeof DashboardSettingsProfileRoute;
+  "/admin/organizations": typeof AdminOrganizationsIndexRoute;
   "/auth/handoff": typeof AuthHandoffIndexRoute;
   "/builder/$resumeId": typeof BuilderResumeIdIndexRoute;
   "/dashboard/applications": typeof DashboardApplicationsIndexRoute;
@@ -492,6 +556,7 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport;
   "/_home": typeof HomeRouteRouteWithChildren;
+  "/admin": typeof AdminRouteRouteWithChildren;
   "/agent": typeof AgentRouteRouteWithChildren;
   "/auth": typeof AuthRouteRouteWithChildren;
   "/dashboard": typeof DashboardRouteRouteWithChildren;
@@ -504,11 +569,15 @@ export interface FileRoutesById {
   "/_home/privacy": typeof HomePrivacyRoute;
   "/_home/resume-templates": typeof HomeResumeTemplatesRoute;
   "/_home/terms": typeof HomeTermsRoute;
+  "/admin/announcements": typeof AdminAnnouncementsRoute;
+  "/admin/audit": typeof AdminAuditRoute;
+  "/admin/metrics": typeof AdminMetricsRoute;
   "/agent/$threadId": typeof AgentThreadIdRoute;
   "/agent/new": typeof AgentNewRoute;
   "/auth/consent": typeof AuthConsentRoute;
   "/auth/error": typeof AuthErrorRoute;
   "/auth/forgot-password": typeof AuthForgotPasswordRoute;
+  "/auth/impersonate": typeof AuthImpersonateRoute;
   "/auth/login": typeof AuthLoginRoute;
   "/auth/native-callback": typeof AuthNativeCallbackRoute;
   "/auth/organization-access": typeof AuthOrganizationAccessRoute;
@@ -519,11 +588,13 @@ export interface FileRoutesById {
   "/dashboard/cover-letters": typeof DashboardCoverLettersRoute;
   "/dashboard/trash": typeof DashboardTrashRoute;
   "/_home/": typeof HomeIndexRoute;
+  "/admin/": typeof AdminIndexRoute;
   "/agent/": typeof AgentIndexRoute;
   "/auth/": typeof AuthIndexRoute;
   "/dashboard/": typeof DashboardIndexRoute;
   "/dashboard/career/knowledge": typeof DashboardCareerKnowledgeRouteRouteWithChildren;
   "/dashboard/settings/integrations": typeof DashboardSettingsIntegrationsRouteRoute;
+  "/admin/organizations/$organizationId": typeof AdminOrganizationsOrganizationIdRoute;
   "/auth/accept-invitation/$invitationId": typeof AuthAcceptInvitationInvitationIdRoute;
   "/auth/handoff/redeem": typeof AuthHandoffRedeemRoute;
   "/builder/letter/$coverLetterId": typeof BuilderLetterCoverLetterIdRoute;
@@ -537,6 +608,7 @@ export interface FileRoutesById {
   "/dashboard/settings/members": typeof DashboardSettingsMembersRoute;
   "/dashboard/settings/preferences": typeof DashboardSettingsPreferencesRoute;
   "/dashboard/settings/profile": typeof DashboardSettingsProfileRoute;
+  "/admin/organizations/": typeof AdminOrganizationsIndexRoute;
   "/auth/handoff/": typeof AuthHandoffIndexRoute;
   "/builder/$resumeId/": typeof BuilderResumeIdIndexRoute;
   "/dashboard/applications/": typeof DashboardApplicationsIndexRoute;
@@ -554,6 +626,7 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath;
   fullPaths:
     | "/"
+    | "/admin"
     | "/agent"
     | "/auth"
     | "/dashboard"
@@ -566,11 +639,15 @@ export interface FileRouteTypes {
     | "/privacy"
     | "/resume-templates"
     | "/terms"
+    | "/admin/announcements"
+    | "/admin/audit"
+    | "/admin/metrics"
     | "/agent/$threadId"
     | "/agent/new"
     | "/auth/consent"
     | "/auth/error"
     | "/auth/forgot-password"
+    | "/auth/impersonate"
     | "/auth/login"
     | "/auth/native-callback"
     | "/auth/organization-access"
@@ -580,11 +657,13 @@ export interface FileRouteTypes {
     | "/auth/verify-2fa-backup"
     | "/dashboard/cover-letters"
     | "/dashboard/trash"
+    | "/admin/"
     | "/agent/"
     | "/auth/"
     | "/dashboard/"
     | "/dashboard/career/knowledge"
     | "/dashboard/settings/integrations"
+    | "/admin/organizations/$organizationId"
     | "/auth/accept-invitation/$invitationId"
     | "/auth/handoff/redeem"
     | "/builder/letter/$coverLetterId"
@@ -598,6 +677,7 @@ export interface FileRouteTypes {
     | "/dashboard/settings/members"
     | "/dashboard/settings/preferences"
     | "/dashboard/settings/profile"
+    | "/admin/organizations/"
     | "/auth/handoff/"
     | "/builder/$resumeId/"
     | "/dashboard/applications/"
@@ -618,11 +698,15 @@ export interface FileRouteTypes {
     | "/privacy"
     | "/resume-templates"
     | "/terms"
+    | "/admin/announcements"
+    | "/admin/audit"
+    | "/admin/metrics"
     | "/agent/$threadId"
     | "/agent/new"
     | "/auth/consent"
     | "/auth/error"
     | "/auth/forgot-password"
+    | "/auth/impersonate"
     | "/auth/login"
     | "/auth/native-callback"
     | "/auth/organization-access"
@@ -633,11 +717,13 @@ export interface FileRouteTypes {
     | "/dashboard/cover-letters"
     | "/dashboard/trash"
     | "/"
+    | "/admin"
     | "/agent"
     | "/auth"
     | "/dashboard"
     | "/dashboard/career/knowledge"
     | "/dashboard/settings/integrations"
+    | "/admin/organizations/$organizationId"
     | "/auth/accept-invitation/$invitationId"
     | "/auth/handoff/redeem"
     | "/builder/letter/$coverLetterId"
@@ -651,6 +737,7 @@ export interface FileRouteTypes {
     | "/dashboard/settings/members"
     | "/dashboard/settings/preferences"
     | "/dashboard/settings/profile"
+    | "/admin/organizations"
     | "/auth/handoff"
     | "/builder/$resumeId"
     | "/dashboard/applications"
@@ -666,6 +753,7 @@ export interface FileRouteTypes {
   id:
     | "__root__"
     | "/_home"
+    | "/admin"
     | "/agent"
     | "/auth"
     | "/dashboard"
@@ -678,11 +766,15 @@ export interface FileRouteTypes {
     | "/_home/privacy"
     | "/_home/resume-templates"
     | "/_home/terms"
+    | "/admin/announcements"
+    | "/admin/audit"
+    | "/admin/metrics"
     | "/agent/$threadId"
     | "/agent/new"
     | "/auth/consent"
     | "/auth/error"
     | "/auth/forgot-password"
+    | "/auth/impersonate"
     | "/auth/login"
     | "/auth/native-callback"
     | "/auth/organization-access"
@@ -693,11 +785,13 @@ export interface FileRouteTypes {
     | "/dashboard/cover-letters"
     | "/dashboard/trash"
     | "/_home/"
+    | "/admin/"
     | "/agent/"
     | "/auth/"
     | "/dashboard/"
     | "/dashboard/career/knowledge"
     | "/dashboard/settings/integrations"
+    | "/admin/organizations/$organizationId"
     | "/auth/accept-invitation/$invitationId"
     | "/auth/handoff/redeem"
     | "/builder/letter/$coverLetterId"
@@ -711,6 +805,7 @@ export interface FileRouteTypes {
     | "/dashboard/settings/members"
     | "/dashboard/settings/preferences"
     | "/dashboard/settings/profile"
+    | "/admin/organizations/"
     | "/auth/handoff/"
     | "/builder/$resumeId/"
     | "/dashboard/applications/"
@@ -727,6 +822,7 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   HomeRouteRoute: typeof HomeRouteRouteWithChildren;
+  AdminRouteRoute: typeof AdminRouteRouteWithChildren;
   AgentRouteRoute: typeof AgentRouteRouteWithChildren;
   AuthRouteRoute: typeof AuthRouteRouteWithChildren;
   DashboardRouteRoute: typeof DashboardRouteRouteWithChildren;
@@ -741,6 +837,13 @@ declare module "@tanstack/react-router" {
       path: "";
       fullPath: "/";
       preLoaderRoute: typeof HomeRouteRouteImport;
+      parentRoute: typeof rootRouteImport;
+    };
+    "/admin": {
+      id: "/admin";
+      path: "/admin";
+      fullPath: "/admin";
+      preLoaderRoute: typeof AdminRouteRouteImport;
       parentRoute: typeof rootRouteImport;
     };
     "/agent": {
@@ -813,6 +916,34 @@ declare module "@tanstack/react-router" {
       preLoaderRoute: typeof HomeTermsRouteImport;
       parentRoute: typeof HomeRouteRoute;
     };
+    "/admin/": {
+      id: "/admin/";
+      path: "/";
+      fullPath: "/admin/";
+      preLoaderRoute: typeof AdminIndexRouteImport;
+      parentRoute: typeof AdminRouteRoute;
+    };
+    "/admin/announcements": {
+      id: "/admin/announcements";
+      path: "/announcements";
+      fullPath: "/admin/announcements";
+      preLoaderRoute: typeof AdminAnnouncementsRouteImport;
+      parentRoute: typeof AdminRouteRoute;
+    };
+    "/admin/audit": {
+      id: "/admin/audit";
+      path: "/audit";
+      fullPath: "/admin/audit";
+      preLoaderRoute: typeof AdminAuditRouteImport;
+      parentRoute: typeof AdminRouteRoute;
+    };
+    "/admin/metrics": {
+      id: "/admin/metrics";
+      path: "/metrics";
+      fullPath: "/admin/metrics";
+      preLoaderRoute: typeof AdminMetricsRouteImport;
+      parentRoute: typeof AdminRouteRoute;
+    };
     "/agent/": {
       id: "/agent/";
       path: "/";
@@ -860,6 +991,13 @@ declare module "@tanstack/react-router" {
       path: "/forgot-password";
       fullPath: "/auth/forgot-password";
       preLoaderRoute: typeof AuthForgotPasswordRouteImport;
+      parentRoute: typeof AuthRouteRoute;
+    };
+    "/auth/impersonate": {
+      id: "/auth/impersonate";
+      path: "/impersonate";
+      fullPath: "/auth/impersonate";
+      preLoaderRoute: typeof AuthImpersonateRouteImport;
       parentRoute: typeof AuthRouteRoute;
     };
     "/auth/login": {
@@ -952,6 +1090,20 @@ declare module "@tanstack/react-router" {
       fullPath: "/dashboard/trash";
       preLoaderRoute: typeof DashboardTrashRouteImport;
       parentRoute: typeof DashboardRouteRoute;
+    };
+    "/admin/organizations/": {
+      id: "/admin/organizations/";
+      path: "/organizations";
+      fullPath: "/admin/organizations/";
+      preLoaderRoute: typeof AdminOrganizationsIndexRouteImport;
+      parentRoute: typeof AdminRouteRoute;
+    };
+    "/admin/organizations/$organizationId": {
+      id: "/admin/organizations/$organizationId";
+      path: "/organizations/$organizationId";
+      fullPath: "/admin/organizations/$organizationId";
+      preLoaderRoute: typeof AdminOrganizationsOrganizationIdRouteImport;
+      parentRoute: typeof AdminRouteRoute;
     };
     "/auth/accept-invitation/$invitationId": {
       id: "/auth/accept-invitation/$invitationId";
@@ -1169,6 +1321,28 @@ const HomeRouteRouteWithChildren = HomeRouteRoute._addFileChildren(
   HomeRouteRouteChildren,
 );
 
+interface AdminRouteRouteChildren {
+  AdminAnnouncementsRoute: typeof AdminAnnouncementsRoute;
+  AdminAuditRoute: typeof AdminAuditRoute;
+  AdminMetricsRoute: typeof AdminMetricsRoute;
+  AdminIndexRoute: typeof AdminIndexRoute;
+  AdminOrganizationsOrganizationIdRoute: typeof AdminOrganizationsOrganizationIdRoute;
+  AdminOrganizationsIndexRoute: typeof AdminOrganizationsIndexRoute;
+}
+
+const AdminRouteRouteChildren: AdminRouteRouteChildren = {
+  AdminAnnouncementsRoute: AdminAnnouncementsRoute,
+  AdminAuditRoute: AdminAuditRoute,
+  AdminMetricsRoute: AdminMetricsRoute,
+  AdminIndexRoute: AdminIndexRoute,
+  AdminOrganizationsOrganizationIdRoute: AdminOrganizationsOrganizationIdRoute,
+  AdminOrganizationsIndexRoute: AdminOrganizationsIndexRoute,
+};
+
+const AdminRouteRouteWithChildren = AdminRouteRoute._addFileChildren(
+  AdminRouteRouteChildren,
+);
+
 interface AgentRouteRouteChildren {
   AgentThreadIdRoute: typeof AgentThreadIdRoute;
   AgentNewRoute: typeof AgentNewRoute;
@@ -1189,6 +1363,7 @@ interface AuthRouteRouteChildren {
   AuthConsentRoute: typeof AuthConsentRoute;
   AuthErrorRoute: typeof AuthErrorRoute;
   AuthForgotPasswordRoute: typeof AuthForgotPasswordRoute;
+  AuthImpersonateRoute: typeof AuthImpersonateRoute;
   AuthLoginRoute: typeof AuthLoginRoute;
   AuthNativeCallbackRoute: typeof AuthNativeCallbackRoute;
   AuthOrganizationAccessRoute: typeof AuthOrganizationAccessRoute;
@@ -1206,6 +1381,7 @@ const AuthRouteRouteChildren: AuthRouteRouteChildren = {
   AuthConsentRoute: AuthConsentRoute,
   AuthErrorRoute: AuthErrorRoute,
   AuthForgotPasswordRoute: AuthForgotPasswordRoute,
+  AuthImpersonateRoute: AuthImpersonateRoute,
   AuthLoginRoute: AuthLoginRoute,
   AuthNativeCallbackRoute: AuthNativeCallbackRoute,
   AuthOrganizationAccessRoute: AuthOrganizationAccessRoute,
@@ -1340,6 +1516,7 @@ const BuilderResumeIdRouteRouteWithChildren =
 
 const rootRouteChildren: RootRouteChildren = {
   HomeRouteRoute: HomeRouteRouteWithChildren,
+  AdminRouteRoute: AdminRouteRouteWithChildren,
   AgentRouteRoute: AgentRouteRouteWithChildren,
   AuthRouteRoute: AuthRouteRouteWithChildren,
   DashboardRouteRoute: DashboardRouteRouteWithChildren,
