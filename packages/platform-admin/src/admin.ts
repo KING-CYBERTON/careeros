@@ -291,3 +291,10 @@ export function listAudit(actorUserId: string, filters: AuditFilters = {}): Prom
 		}));
 	});
 }
+
+/** Throws an `AdminError` unless the actor is a platform admin with two-factor authentication on. Reads and audits nothing. */
+export function assertPlatformAdmin(actorUserId: string): Promise<void> {
+	return guarded(async () => {
+		await db.execute(sql`select careeros_assert_platform_admin(${actorUserId}::text)`);
+	});
+}

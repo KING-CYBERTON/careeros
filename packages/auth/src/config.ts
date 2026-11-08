@@ -12,6 +12,8 @@ import { drizzleAdapter } from "@better-auth/drizzle-adapter/relations-v2";
 import { dash } from "@better-auth/infra";
 import { oauthProvider } from "@better-auth/oauth-provider";
 import { passkey } from "@better-auth/passkey";
+// CAREEROS: the session operations of the sign-in handoff (P2-T05)
+import { DISABLED_ADMIN_AUTH_PATHS } from "@careeros/platform-admin/policy";
 import { hostTrustedOrigins } from "@careeros/tenancy";
 import { compare, hash } from "bcryptjs";
 import { APIError, betterAuth } from "better-auth";
@@ -43,8 +45,9 @@ import { timezoneSchema } from "@reactive-resume/utils/timezone";
 import { isAllowedOAuthRedirectUri } from "@reactive-resume/utils/url-security.node";
 // CAREEROS: branded emails (P2-T04)
 import { buildEmailContext, withLinkOrigin } from "./email-brand";
-// CAREEROS: the session operations of the sign-in handoff (P2-T05)
 import { handoffSession } from "./handoff-session";
+// CAREEROS (P3-T07): support-session guard and the server-only session endpoint of the impersonation redeem
+import { impersonationSession } from "./impersonation-session";
 import { createGithubProfileMapper, createProfileMapper, isUsernameReserved } from "./oauth-profile";
 // CAREEROS: invite-only organization hosts (P2-T03)
 import { guardOrgHostSignUp } from "./org-host";
@@ -514,7 +517,8 @@ const getAuthConfig = () => {
 		},
 
 		// Unused endpoints: guest deletion skips the app's storage cleanup; the session JWT has no consumer.
-		disabledPaths: ["/delete-anonymous-user", "/token"],
+		// CAREEROS (P3-T07): every Better Auth admin-plugin endpoint is off over HTTP; the console uses audited definer functions.
+		disabledPaths: ["/delete-anonymous-user", "/token", ...DISABLED_ADMIN_AUTH_PATHS],
 
 		hooks: {
 			before: createAuthMiddleware(async (ctx) => {
@@ -842,6 +846,8 @@ const getAuthConfig = () => {
 			organizationRules,
 			// CAREEROS (P2-T05): server-only session endpoints for the social and OIDC handoff to an organization host
 			handoffSession,
+			// CAREEROS (P3-T07): refuses account-security endpoints in a support session; creates its session
+			impersonationSession,
 			passkey(),
 			genericOAuth({ config: authConfigs }),
 			twoFactor({ issuer: PLATFORM_DEFAULT_APP_NAME }),

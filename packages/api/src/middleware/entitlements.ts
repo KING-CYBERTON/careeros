@@ -74,6 +74,19 @@ export const SUSPENDED_ORG_ALLOWED_WRITES: ReadonlyMap<string, string> = new Map
 	["billing.changeSeats", "changing the seat count, which is part of paying the right amount"],
 	["billing.cancel", "cancelling the subscription, which an owner must always be able to do"],
 	["billing.portal", "opening the provider's billing portal to update a payment method"],
+	// CAREEROS (P3-T07): the Super Admin console acts on the platform, not on an organization (Q340). Its procedures run
+	// without an organization context, so the suspended-organization rule has nothing to read; they are listed so that
+	// the inventory knows the omission is a decision. Each is refused off the platform host and checked in the database.
+	["admin.orgs.setStatus", "platform console: acts on the platform, not on the admin's organization"],
+	["admin.orgs.setPlan", "platform console: acts on the platform, not on the admin's organization"],
+	["admin.orgs.setAiOverage", "platform console: acts on the platform, not on the admin's organization"],
+	["admin.payments.record", "platform console: acts on the platform, not on the admin's organization"],
+	["admin.announcements.save", "platform console: acts on the platform, not on the admin's organization"],
+	["admin.announcements.end", "platform console: acts on the platform, not on the admin's organization"],
+	["admin.impersonation.start", "platform console: acts on the platform, not on the admin's organization"],
+	// A member of a suspended organization can still dismiss a banner for themselves and end a support session.
+	["announcements.dismiss", "dismissing an announcement is per user and changes nothing in the organization"],
+	["impersonation.end", "ending a support session must always work, whatever state the organization is in"],
 ]);
 
 /** Whether a procedure writes: its OpenAPI route method is not GET, and a procedure without a method counts as a write. */

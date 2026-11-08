@@ -42,11 +42,13 @@ import { handleCareerJobs } from "./career-jobs";
 import { handleCustomDomain, handleTraefikProvider } from "./custom-domain";
 // CAREEROS (P5-T01): CORS for the extension's read of the host-branding route
 import { EXTENSION_CORS_PATH, extensionBrandingCors } from "./extension-cors";
-// CAREEROS: social and OIDC sign-in on organization hosts through a one-time handoff (P2-T05)
 import { handleHandoffBegin, handleHandoffIssue, handleHandoffRedeem, handleHandoffRequest } from "./handoff";
 import { handleHealth } from "./health";
 // CAREEROS: the request host decides the organization (P2-T03)
 import { hostMiddleware, type HostVariables } from "./host";
+// CAREEROS: social and OIDC sign-in on organization hosts through a one-time handoff (P2-T05)
+// CAREEROS (P3-T07): the member-host half of a support (impersonation) session
+import { handleImpersonationRedeem } from "./impersonation";
 import { handlePublicResumePdf } from "./public-resume-pdf";
 import { handleResumePdfDownload } from "./resume-pdf";
 
@@ -136,6 +138,8 @@ export function createApp(options: AppOptions = {}) {
 	app.use("/api/storage/stage", limitBody(64 * 1024));
 	// CAREEROS (P2-T05): the handoff bodies are two short strings
 	app.use("/api/careeros/handoff/*", limitBody(8 * 1024));
+	// CAREEROS (P3-T07): the support-session redeem body is an id and a token
+	app.use("/api/careeros/impersonation/*", limitBody(8 * 1024));
 	// CAREEROS (P3-T04): a provider event is a small JSON document; the fake test page posts two short strings
 	app.use("/api/billing/webhook/*", limitBody(BILLING_WEBHOOK_MAX_BYTES));
 	app.use("/api/billing/fake/*", limitBody(8 * 1024));
@@ -150,6 +154,8 @@ export function createApp(options: AppOptions = {}) {
 	);
 	app.get("/api/careeros/handoff/issue", (c) => handleHandoffIssue(c.req.raw, c.get("host"), client(c)));
 	app.post("/api/careeros/handoff/redeem", (c) => handleHandoffRedeem(c.req.raw, c.get("host"), client(c)));
+	// CAREEROS (P3-T07): organization host only; the database checks the token, its expiry, the origin and the organization
+	app.post("/api/careeros/impersonation/redeem", (c) => handleImpersonationRedeem(c.req.raw, c.get("host"), client(c)));
 	// CAREEROS (P3-T04, D9): platform host only, signature first; the fake provider's test page exists only for BILLING_PROVIDER=fake
 	app.post("/api/billing/webhook/:provider", (c) =>
 		handleBillingWebhook(c.req.raw, c.get("host"), c.req.param("provider"), client(c)),

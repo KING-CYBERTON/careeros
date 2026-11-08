@@ -2,6 +2,9 @@ import type { Locale } from "@reactive-resume/utils/locale";
 import type { User } from "better-auth";
 // CAREEROS (P3-T02): one request-scoped entitlements cache, opened per protected procedure
 import { runWithEntitlementsCache } from "@careeros/billing";
+// CAREEROS (P3-T07): a support session is live only while its record is; some procedures refuse it
+import { isImpersonationActive } from "@careeros/platform-admin";
+import { isRefusedWhileImpersonating } from "@careeros/platform-admin/policy";
 // CAREEROS: tenant context for every protected procedure (P1-T02)
 import {
 	currentHost,
@@ -30,6 +33,10 @@ export type RequestAuthentication = {
 	activeOrganizationId?: string | null | undefined;
 	/** CAREEROS: the verified API key's id; only set for API-key authentication (P1-T02). */
 	apiKeyId?: string | undefined;
+	/** CAREEROS (P3-T07): the Better Auth session id; only set for session authentication. */
+	sessionId?: string | undefined;
+	/** CAREEROS (P3-T07): the platform admin behind a support (impersonation) session; unset for a normal session. */
+	impersonatedBy?: string | undefined;
 };
 
 interface ORPCContext {
@@ -124,11 +131,22 @@ export async function resolveAuthenticationFromRequestHeaders(
 		const result = await auth.api.getSession({ headers: sessionHeaders, query: { disableCookieCache: true } });
 		if (!result?.user) return null;
 		const activeUser = await findActiveUser(result.user.id);
+		// CAREEROS (P3-T07): a session impersonated by an admin is accepted only while its support record is live (60 minutes, not ended).
+		const sessionRow = (result as { session?: { id?: string; impersonatedBy?: string | null } }).session;
+		const impersonatedBy = sessionRow?.impersonatedBy ?? undefined;
+		if (
+			activeUser &&
+			impersonatedBy &&
+			!(await isImpersonationActive(sessionRow?.id ?? "", activeUser.id, impersonatedBy))
+		)
+			return null;
 		return activeUser
 			? {
 					user: activeUser,
 					method: "session",
 					permissions: fullPermissions,
+					sessionId: sessionRow?.id,
+					impersonatedBy,
 					// CAREEROS: Better Auth's organization plugin stores the active organization on the session (P1-T02)
 					activeOrganizationId: (result as { session?: { activeOrganizationId?: string | null } }).session
 						?.activeOrganizationId,
@@ -182,8 +200,14 @@ export const protectedProcedureWithoutOrg = publicProcedure
 	.route({
 		spec: (operation) => ({ ...operation, security: [{ apiKey: [] }, { bearerAuth: [] }, { cookieAuth: [] }] }),
 	})
-	.use(({ context, procedure, next }) => {
+	.use(({ context, procedure, path, next }) => {
 		if (!context.user) throw new ORPCError("UNAUTHORIZED");
+		// CAREEROS (P3-T07): a support session may not change the member's sign-in, credentials or billing, or use the console.
+		if (context.authentication?.impersonatedBy && isRefusedWhileImpersonating(path.join(".")))
+			throw new ORPCError("FORBIDDEN", {
+				message: "This is not available during a support session.",
+				data: { code: "IMPERSONATION_NOT_ALLOWED" },
+			});
 		const permission = requiredPermission(procedure["~orpc"].route);
 		if (!context.authentication?.permissions.includes(permission)) {
 			context.resHeaders?.set("WWW-Authenticate", `Bearer error="insufficient_scope", scope="api:${permission}"`);

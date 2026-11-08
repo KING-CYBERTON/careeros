@@ -1,6 +1,7 @@
 // CAREEROS (P3-T07, phase plan D6, D7): the Super Admin console's database access and rules. Every cross-organization
 // action is a SECURITY DEFINER function that checks the actor in the database and audits in the same transaction.
 export {
+	assertPlatformAdmin,
 	getMetrics,
 	getOrg,
 	listAudit,
