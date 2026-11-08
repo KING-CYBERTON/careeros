@@ -369,6 +369,18 @@ describe.skipIf(!configured)("Org Admin console (API)", () => {
 			const memberA = await addMember(orgA, "tenam", "member", "Secret A Person");
 			await invoke(admin.members.setCohort, { memberIds: [memberA.memberId], cohortId: cohortA.id }, ctxA);
 
+			// A's audit trail as it stands; nothing B does below may add to, change or remove it (tenant isolation).
+			const auditDigest = async () =>
+				(
+					await owner.query(
+						`SELECT count(*)::int AS n, md5(coalesce(string_agg(t::text, '|' ORDER BY t::text), '')) AS digest
+						 FROM audit_log t WHERE organization_id = $1`,
+						[orgA],
+					)
+				).rows[0];
+			const auditABefore = await auditDigest();
+			expect(auditABefore.n).toBeGreaterThan(0);
+
 			// B lists its own and sees none of A's.
 			expect(JSON.stringify(await invoke(admin.cohorts.list, { includeArchived: true }, ctxB))).not.toContain(
 				"Secret A",
@@ -421,7 +433,18 @@ describe.skipIf(!configured)("Org Admin console (API)", () => {
 			);
 			expect(auditB.items.some((item) => item.targetId === cohortA.id)).toBe(false);
 			// A caller cannot act in an organization they are not in, whatever the session says.
-			await expect(invoke(admin.cohorts.list, undefined, context(founderB, orgA))).rejects.toBeTruthy();
+			// Every write and export in A's organization, tried by B, is refused before it can write an audit row there.
+			const asBInA = context(founderB, orgA);
+			await expect(invoke(admin.cohorts.list, undefined, asBInA)).rejects.toBeTruthy();
+			await expect(invoke(admin.cohorts.create, { name: "Intruder" }, asBInA)).rejects.toBeTruthy();
+			await expect(invoke(admin.cohorts.update, { id: cohortA.id, name: "Hijack" }, asBInA)).rejects.toBeTruthy();
+			await expect(invoke(admin.cohorts.archive, { id: cohortA.id }, asBInA)).rejects.toBeTruthy();
+			await expect(
+				invoke(admin.members.setCohort, { memberIds: [memberA.memberId], cohortId: null }, asBInA),
+			).rejects.toBeTruthy();
+			await expect(invoke(admin.analytics.exportMembers, {}, asBInA)).rejects.toBeTruthy();
+			await expect(invoke(admin.analytics.exportSummary, {}, asBInA)).rejects.toBeTruthy();
+			expect(await auditDigest()).toEqual(auditABefore);
 		});
 	});
 

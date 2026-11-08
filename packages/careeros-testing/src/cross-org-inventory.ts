@@ -465,12 +465,11 @@ const SLUG_FREE = {
 	statuses: [200],
 	why: "answers whether a slug is free; the reply is identical for an unknown id, so it reveals nothing of A's",
 };
-// CAREEROS (P3-T08): Organization B's fuzz account owns a personal workspace, which has no admin console, so the console
-// answers 403 before it looks anything up. The body is still scanned for A's data, and the integration suite
-// (org-admin.integration.test.ts) runs the same attempts as the admin of a real second organization, expecting 404.
-const ORG_ADMIN_PERSONAL: Override = {
-	allow: { statuses: [403], why: "B's personal workspace has no admin console: refused before any lookup (P3-T08)" },
-};
+// CAREEROS (P3-T08): both fuzz organizations are on the Pro plan, so B's owner is a real admin of a real organization:
+// every org-admin operation naming A's cohort or member answers 404 like the rest, with no special allowance.
+// These reads write an audit row (`analytics.exported`) in the CALLER's organization by design. A's own control calls
+// to them are therefore made before Organization A is snapshotted; B's calls must still leave A unchanged.
+export const AUDITED_READS = new Set(["GET /org-admin/analytics/members/export", "GET /org-admin/analytics/export"]);
 const DOC_BATCH = (ids: SeedIds) => ({ documents: [{ type: "resume", id: ids.resume }] });
 const LETTER: Override = { kind: "letter", path: { type: "letter" } };
 export const OVERRIDES: Record<string, Override> = {
@@ -513,14 +512,7 @@ export const OVERRIDES: Record<string, Override> = {
 		set: (ids) => ({ ids: Array.from({ length: 6 }, () => ids.lane) }),
 		allow: { statuses: [400], why: "T06 review: BAD_REQUEST for ids the caller's organization does not have" },
 	},
-	"GET /org-admin/members": ORG_ADMIN_PERSONAL,
-	"POST /org-admin/members/cohort": ORG_ADMIN_PERSONAL,
-	"PATCH /org-admin/cohorts/{id}": { ...ORG_ADMIN_PERSONAL, set: () => ({ name: "x" }) },
-	"POST /org-admin/cohorts/{id}/archive": ORG_ADMIN_PERSONAL,
-	"GET /org-admin/analytics": ORG_ADMIN_PERSONAL,
-	"GET /org-admin/analytics/members": ORG_ADMIN_PERSONAL,
-	"GET /org-admin/analytics/members/export": ORG_ADMIN_PERSONAL,
-	"GET /org-admin/analytics/export": ORG_ADMIN_PERSONAL,
+	"PATCH /org-admin/cohorts/{id}": { set: () => ({ name: "x" }) },
 	// Document routes run once for a resume and once for a cover letter.
 	"DELETE /documents/{type}/{id}": { variants: [LETTER] },
 	"DELETE /documents/{type}/{id}/trash": { variants: [LETTER] },
