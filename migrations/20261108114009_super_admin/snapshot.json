@@ -1,7 +1,7 @@
 {
   "version": "8",
   "dialect": "postgres",
-  "id": "7c68610f-6ee2-49b4-8d1f-cfba5d845790",
+  "id": "ec7afea9-8105-42bb-90a4-dcd885bd0a02",
   "prevIds": [
     "6ed8d021-5a29-41b5-afda-7d917f1be5c2",
     "7302c86e-8981-4328-9f27-b824edeeacbf",
@@ -10756,7 +10756,7 @@
       "typeSchema": null,
       "notNull": true,
       "dimensions": 0,
-      "default": "public.careeros_uuidv7()",
+      "default": "gen_random_uuid()",
       "generated": null,
       "identity": null,
       "name": "id",
@@ -10938,7 +10938,7 @@
       "typeSchema": null,
       "notNull": true,
       "dimensions": 0,
-      "default": "public.careeros_uuidv7()",
+      "default": "gen_random_uuid()",
       "generated": null,
       "identity": null,
       "name": "id",
@@ -16888,23 +16888,6 @@
       "entityType": "fks",
       "schema": "public",
       "table": "ai_usage"
-    },
-    {
-      "nameExplicit": false,
-      "columns": [
-        "plan_id"
-      ],
-      "schemaTo": "public",
-      "tableTo": "plan",
-      "columnsTo": [
-        "id"
-      ],
-      "onUpdate": "NO ACTION",
-      "onDelete": "NO ACTION",
-      "name": "announcement_plan_id_plan_id_fkey",
-      "entityType": "fks",
-      "schema": "public",
-      "table": "announcement"
     },
     {
       "nameExplicit": false,

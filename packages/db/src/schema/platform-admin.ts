@@ -1,7 +1,6 @@
 import { sql } from "drizzle-orm";
 import * as pg from "drizzle-orm/pg-core";
 import { user } from "./auth";
-import { plan } from "./billing";
 
 // CAREEROS (P3-T07, phase plan D6): the Super Admin console's own tables. All three are GLOBAL and the app role has no
 // privilege on any of them: every read and write goes through a SECURITY DEFINER function (see the migration), which
@@ -30,13 +29,15 @@ export const announcement = pg.pgTable(
 			.text("id")
 			.notNull()
 			.primaryKey()
-			.default(sql`public.careeros_uuidv7()::text`),
+			.default(sql`gen_random_uuid()::text`),
 		title: pg.text("title").notNull(),
 		body: pg.text("body").notNull(),
 		severity: pg.text("severity").notNull().default("info"),
 		startsAt: pg.timestamp("starts_at", { withTimezone: true }).notNull(),
 		endsAt: pg.timestamp("ends_at", { withTimezone: true }).notNull(),
-		planId: pg.text("plan_id").references(() => plan.id),
+		// Not a foreign key, like `organization_id`: the plan table's own down migration must not depend on this one, and
+		// `careeros_admin_announcement_save` checks the plan exists. A removed plan simply never matches.
+		planId: pg.text("plan_id"),
 		organizationId: pg.text("organization_id"),
 		createdBy: pg.text("created_by"),
 		createdAt: pg.timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
@@ -97,7 +98,7 @@ export const impersonation = pg.pgTable(
 			.text("id")
 			.notNull()
 			.primaryKey()
-			.default(sql`public.careeros_uuidv7()::text`),
+			.default(sql`gen_random_uuid()::text`),
 		impersonatorUserId: pg.text("impersonator_user_id").notNull(),
 		targetUserId: pg.text("target_user_id").notNull(),
 		organizationId: pg.text("organization_id").notNull(),
