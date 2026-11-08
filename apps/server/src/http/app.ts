@@ -38,7 +38,12 @@ import { handleAuth, handleOAuth } from "./auth";
 import { handleCareerJobs } from "./career-jobs";
 import { handleCustomDomain, handleTraefikProvider } from "./custom-domain";
 // CAREEROS (P5-T01): CORS for the extension's read of the host-branding route
-import { EXTENSION_CORS_PATH, extensionBrandingCors } from "./extension-cors";
+import {
+	EXTENSION_CLIPPER_CORS_ROUTES,
+	EXTENSION_CORS_PATH,
+	extensionBrandingCors,
+	extensionClipperCors,
+} from "./extension-cors";
 // CAREEROS: social and OIDC sign-in on organization hosts through a one-time handoff (P2-T05)
 import { handleHandoffBegin, handleHandoffIssue, handleHandoffRedeem, handleHandoffRequest } from "./handoff";
 import { handleHealth } from "./health";
@@ -126,6 +131,8 @@ export function createApp(options: AppOptions = {}) {
 		});
 	// CAREEROS (P5-T01): the browser extension reads this one public route cross-origin; no other route gets CORS.
 	app.use(EXTENSION_CORS_PATH, extensionBrandingCors);
+	// CAREEROS (P5-T02): and the Job Clipper's sign-in routes, each by exact path (see extension-cors.ts).
+	for (const path of Object.keys(EXTENSION_CLIPPER_CORS_ROUTES)) app.use(path, extensionClipperCors);
 	app.use("/api/openapi/*", limitBody(40 * 1024 * 1024));
 	// Hono's `/x/*` also matches `/x`, so each wildcard below covers its base path too.
 	app.use("/api/rpc/*", limitBody(160 * 1024 * 1024));

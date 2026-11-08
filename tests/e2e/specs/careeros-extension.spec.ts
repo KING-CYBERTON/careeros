@@ -160,6 +160,8 @@ test.describe("job clipper extension", () => {
 		const server = baseURL ?? "http://localhost:3000";
 		const page = await openPopup();
 		await page.getByRole("button", { name: "Sign in" }).click();
+		// The code arrives after one request to the organization's host; a failure shows a notice instead.
+		await expect(page.getByTestId("user-code")).toBeVisible({ timeout: 15_000 });
 		const shown = (await page.getByTestId("user-code").textContent()) ?? "";
 		const userCode = shown.replaceAll("-", "").trim();
 		expect(userCode).toMatch(/^[A-Z0-9]{8}$/);

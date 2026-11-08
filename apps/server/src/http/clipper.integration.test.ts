@@ -366,6 +366,77 @@ describe.skipIf(!configured)("Job Clipper sign-in", () => {
 		});
 	});
 
+	// The extension's popup is a page of its own origin. When the browser has not granted it host access to the
+	// organization's address, the browser asks the server (CORS), so these routes must answer an extension origin.
+	describe("an extension page without host access (CORS)", () => {
+		const extension = "chrome-extension://abcdefghijklmnopabcdefghijklmnop";
+		const preflight = (path: string, method: string, headers: string) =>
+			call(`${originOf(orgs.a)}${path}`, {
+				method: "OPTIONS",
+				headers: {
+					origin: extension,
+					"access-control-request-method": method,
+					"access-control-request-headers": headers,
+				},
+			});
+
+		it("answers the preflight of each clipper route, and only those", async () => {
+			for (const [path, method, headers] of [
+				["/api/auth/device/code", "POST", "content-type"],
+				["/api/auth/device/clipper/token", "POST", "content-type"],
+				["/api/auth/device/clipper/revoke", "POST", "authorization,content-type"],
+				["/api/openapi/clipper/whoami", "GET", "authorization"],
+			] as const) {
+				const response = await preflight(path, method, headers);
+				expect(response.status, path).toBe(204);
+				expect(response.headers.get("access-control-allow-origin"), path).toBe(extension);
+				expect(response.headers.get("access-control-allow-credentials"), path).toBeNull();
+				expect(response.headers.get("access-control-allow-headers"), path).toContain("Authorization");
+			}
+			// Everything else keeps no CORS: the approval endpoints, the token list and revoke-by-id are page-only.
+			for (const path of ["/api/auth/device/approve", "/api/auth/device/deny", "/api/openapi/clipper/tokens"]) {
+				const response = await preflight(path, "POST", "content-type");
+				expect(response.headers.get("access-control-allow-origin"), path).toBeNull();
+			}
+		});
+
+		it("lets the extension start a sign-in and then use its token, with no cookie", async () => {
+			const started = await call(`${originOf(orgs.a)}/api/auth/device/code`, {
+				method: "POST",
+				headers: { origin: extension, "content-type": "application/json", "user-agent": CHROME },
+				body: JSON.stringify({ client_id: CLIENT_ID }),
+			});
+			expect(started.status).toBe(200);
+			expect(started.headers.get("access-control-allow-origin")).toBe(extension);
+			expect(started.headers.get("access-control-allow-credentials")).toBeNull();
+			expect(await json(started)).toMatchObject({ device_code: expect.any(String) });
+
+			const { token } = await signIn(orgs.a);
+			const whoami = await call(`${originOf(orgs.a)}/api/openapi/clipper/whoami`, {
+				headers: { origin: extension, authorization: `Bearer ${token}` },
+			});
+			expect(whoami.status).toBe(200);
+			expect(whoami.headers.get("access-control-allow-origin")).toBe(extension);
+			// The same token from an extension page is still refused on another organization's host.
+			const other = await call(`${originOf(orgs.b)}/api/openapi/clipper/whoami`, {
+				headers: { origin: extension, authorization: `Bearer ${token}` },
+			});
+			expect(other.status).toBe(401);
+		});
+
+		it("gives a web page of another origin no CORS headers", async () => {
+			const response = await call(`${originOf(orgs.a)}/api/auth/device/code`, {
+				method: "OPTIONS",
+				headers: {
+					origin: "https://evil.example",
+					"access-control-request-method": "POST",
+					"access-control-request-headers": "content-type",
+				},
+			});
+			expect(response.headers.get("access-control-allow-origin")).toBeNull();
+		});
+	});
+
 	describe("a clipper token", () => {
 		it("works on its organization's subdomain and custom domain", async () => {
 			const { token, who } = await signIn(orgs.a);

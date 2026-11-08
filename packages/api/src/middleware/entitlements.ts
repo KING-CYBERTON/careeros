@@ -62,6 +62,8 @@ export const SUSPENDED_ORG_ALLOWED_WRITES: ReadonlyMap<string, string> = new Map
 	// key used on the suspended organization is read-only like every other credential.
 	["auth.createApiKey", "creating an API key, which is account-level"],
 	["auth.apiKeys.delete", "deleting an API key, which is account-level"],
+	// CAREEROS (P5-T02): a member must always be able to cut off their own Job Clipper sign-in.
+	["clipper.revokeToken", "revoking the member's own Job Clipper sign-in, which is account-level"],
 	// Public resume views are served from a public link and do not act in the viewer's organization.
 	["resume.getRoot", "public: resolves the root resume for the landing page, writes nothing"],
 	["resume.statistics.recordDownload", "public: counts a download of a public resume"],
