@@ -65,6 +65,30 @@ describe("callApi", () => {
 		});
 	});
 
+	it("carries the status and the error code of a failed answer", async () => {
+		const body = JSON.stringify({ code: "FORBIDDEN", status: 403, data: { code: "ORG_SUSPENDED" } });
+		const suspended = vi.fn().mockResolvedValue(new Response(body, { status: 403 }));
+		expect(await callApi(session, connected, "/api/x", {}, suspended as never)).toEqual({
+			ok: false,
+			reason: "failed",
+			status: 403,
+			code: "ORG_SUSPENDED",
+		});
+		const quota = vi
+			.fn()
+			.mockResolvedValue(new Response(JSON.stringify({ code: "AI_QUOTA_EXCEEDED" }), { status: 402 }));
+		expect(await callApi(session, connected, "/api/x", {}, quota as never)).toMatchObject({
+			status: 402,
+			code: "AI_QUOTA_EXCEEDED",
+		});
+		const odd = vi.fn().mockResolvedValue(new Response("<html>", { status: 500 }));
+		expect(await callApi(session, connected, "/api/x", {}, odd as never)).toEqual({
+			ok: false,
+			reason: "failed",
+			status: 500,
+		});
+	});
+
 	it("returns the data of a success and reports an unreachable server", async () => {
 		const ok = vi.fn().mockResolvedValue(new Response(JSON.stringify({ name: "Ada" }), { status: 200 }));
 		expect(await callApi(session, connected, "/api/x", {}, ok as never)).toEqual({ ok: true, data: { name: "Ada" } });
