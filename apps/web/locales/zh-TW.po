@@ -389,6 +389,11 @@ msgstr "{0}採訪"
 msgid "{0} invited you to join as {1}."
 msgstr ""
 
+#. placeholder {0}: cohort.memberCount
+#: src/features/org-admin/cohorts-page.tsx
+msgid "{0} members"
+msgstr ""
+
 #. placeholder {0}: row.minutes
 #: src/features/career/workspace/prepare.tsx
 msgid "{0} min"
@@ -725,6 +730,11 @@ msgstr "{name} 使用一根立柱"
 msgid "{names} come last in the text. Most systems still find them; some don't."
 msgstr "{names} 在文本中排在最後。大多數系統仍然可以找到它們；有些則不然。"
 
+#. placeholder {0}: report.rows.length
+#: src/features/org-admin/bulk-invite.tsx
+msgid "{okRows} of {0} rows can be invited."
+msgstr ""
+
 #: src/features/resume/editor/check/check-panel.tsx
 msgid "{open, plural, one {# thing to review.} other {# things to review.}}"
 msgstr "{open, plural, one {# 要審查的東西。} other {# 要審查的事情。}}"
@@ -1003,6 +1013,10 @@ msgstr "有一頁被旋轉了。"
 msgid "A pasted posting can be saved as an application afterwards."
 msgstr "貼上的職位發布之後可以保存為職位申請。"
 
+#: src/features/org-admin/access.tsx
+msgid "A personal workspace has no admin area. Create an organization to manage a team."
+msgstr ""
+
 #: src/features/organization/members-page.tsx
 msgid "A personal workspace has one seat"
 msgstr ""
@@ -1102,6 +1116,7 @@ msgid "Account"
 msgstr "帳戶"
 
 #: src/features/career/knowledge/stories.tsx
+#: src/features/org-admin/audit-page.tsx
 msgid "Action"
 msgstr "行動"
 
@@ -1113,6 +1128,10 @@ msgstr "行動"
 #: src/features/settings/ai/web-access.tsx
 msgid "Active"
 msgstr "積極的"
+
+#: src/features/org-admin/analytics-page.tsx
+msgid "Active members"
+msgstr ""
 
 #: src/features/applications/components/detail/activity.tsx
 msgid "Activity"
@@ -1679,6 +1698,10 @@ msgstr ""
 msgid "All employers"
 msgstr ""
 
+#: src/features/org-admin/analytics-page.tsx
+msgid "All members"
+msgstr ""
+
 #: src/features/settings/account/data.tsx
 msgid "All your documents, applications, API keys and public links are deleted for good. This can't be undone."
 msgstr "您的所有文件、應徵紀錄、API 金鑰和公共連結都將永久刪除。此操作無法復原。"
@@ -1690,6 +1713,10 @@ msgstr "允許存取"
 #: src/features/ats-checker/messages.ts
 msgid "Almost none of your bullets carry a number."
 msgstr "您的重點裡幾乎沒有數字。"
+
+#: src/features/org-admin/bulk-invite.tsx
+msgid "Already a member"
+msgstr ""
 
 #: src/features/applications/components/add-application-dialog.tsx
 msgid "Already applied"
@@ -1710,6 +1737,10 @@ msgstr "已有帳戶？<0/>"
 #: src/features/applications/components/add-application-dialog.tsx
 msgid "Already interviewing"
 msgstr "已經面試了"
+
+#: src/features/org-admin/bulk-invite.tsx
+msgid "Already invited"
+msgstr ""
 
 #: src/features/resume/editor/check/check-panel.tsx
 msgid "Also check the exported PDF"
@@ -1752,6 +1783,11 @@ msgstr ""
 #: src/components/layout/error-screen.tsx
 msgid "An unexpected error stopped this page from loading. Try again, or go to the dashboard."
 msgstr "頁面載入出現意外錯誤。請再試一次，或前往控制台。"
+
+#: src/features/org-admin/analytics-page.tsx
+#: src/routes/dashboard/settings/route.tsx
+msgid "Analytics"
+msgstr ""
 
 #. placeholder {0}: others.length
 #: src/features/applications/components/detail/contacts.tsx
@@ -1982,10 +2018,15 @@ msgstr ""
 #: src/features/career/workspace/shell.tsx
 #: src/features/command-palette/pages/navigation.tsx
 #: src/features/command-palette/pages/resumes.tsx
+#: src/features/org-admin/analytics-page.tsx
 #: src/routes/dashboard/-components/app-shell.tsx
 #: src/routes/dashboard/applications/index.tsx
 msgid "Applications"
 msgstr "應徵紀錄"
+
+#: src/features/org-admin/analytics-page.tsx
+msgid "Applications created"
+msgstr ""
 
 #: src/features/applications/components/insights-view.tsx
 msgid "Applications over time"
@@ -2035,6 +2076,19 @@ msgstr "投遞"
 #: src/libs/locale.ts
 msgid "Arabic"
 msgstr "阿拉伯文"
+
+#: src/features/org-admin/cohorts-page.tsx
+msgid "Archive"
+msgstr ""
+
+#. placeholder {0}: cohort.name
+#: src/features/org-admin/cohorts-page.tsx
+msgid "Archive {0}"
+msgstr ""
+
+#: src/features/org-admin/cohorts-page.tsx
+msgid "Archived"
+msgstr ""
 
 #: src/features/applications/components/import-applications-sheet.tsx
 msgid "Archived (closes it)"
@@ -2122,6 +2176,10 @@ msgstr "詢問或描述更改..."
 msgid "Aspect ratio"
 msgstr "顯示比例"
 
+#: src/features/org-admin/cohorts-page.tsx
+msgid "Assign members"
+msgstr ""
+
 #: src/features/assistant/assistant-button.tsx
 #: src/features/assistant/assistant-panel.tsx
 #: src/features/assistant/conversation.tsx
@@ -2170,6 +2228,11 @@ msgstr "附加履歷檔案 (PDF)"
 #: src/features/career/coach-chat.tsx
 msgid "Attachment"
 msgstr "依戀"
+
+#: src/features/org-admin/audit-page.tsx
+#: src/routes/dashboard/settings/route.tsx
+msgid "Audit log"
+msgstr ""
 
 #. placeholder {0}: countryName(row.countryCode, i18n.locale)
 #: src/features/settings/account/application-profile.tsx
@@ -2426,6 +2489,16 @@ msgstr "項目符號清單"
 msgid "By creating an account you agree to the <0>Terms</0> and the <1>Privacy policy</1>."
 msgstr ""
 
+#. placeholder {0}: stages.saved
+#. placeholder {1}: stages.applied
+#. placeholder {2}: stages.screening
+#. placeholder {3}: stages.interview
+#. placeholder {4}: stages.offer
+#. placeholder {5}: stages.closed
+#: src/features/org-admin/analytics-page.tsx
+msgid "By stage: saved {0}, applied {1}, screening {2}, interview {3}, offer {4}, closed {5}."
+msgstr ""
+
 #: src/routes/dashboard/applications/index.tsx
 msgid "Calendar"
 msgstr "日曆"
@@ -2609,6 +2682,10 @@ msgstr ""
 msgid "Check every claim, date and result against your experience."
 msgstr "對照您的經歷核實每一項陳述、日期和結果。"
 
+#: src/features/org-admin/bulk-invite.tsx
+msgid "Check file"
+msgstr ""
+
 #: src/features/career/workspace/fit.tsx
 msgid "Check fit"
 msgstr "檢查契合度"
@@ -2627,6 +2704,10 @@ msgstr "使用前請核對數字和名稱"
 
 #: src/components/layout/unknown-organization-screen.tsx
 msgid "Check the address, or ask the person who gave it to you for the right link."
+msgstr ""
+
+#: src/features/org-admin/analytics-page.tsx
+msgid "Check the dates and try again."
 msgstr ""
 
 #: src/features/career/workspace/prepare.tsx
@@ -2921,6 +3002,19 @@ msgstr "教練"
 msgid "Code"
 msgstr "程式碼"
 
+#: src/features/org-admin/analytics-page.tsx
+msgid "Cohort"
+msgstr ""
+
+#: src/features/org-admin/audit-page.tsx
+msgid "cohort.created"
+msgstr ""
+
+#: src/features/org-admin/cohorts-page.tsx
+#: src/routes/dashboard/settings/route.tsx
+msgid "Cohorts"
+msgstr ""
+
 #: src/routes/builder/$resumeId/-components/design-panel.tsx
 #: src/routes/builder/letter/-components/design-panel.tsx
 msgid "Color"
@@ -2946,6 +3040,10 @@ msgstr "欄"
 #: src/features/resume/editor/check/issues.ts
 msgid "Columns can scramble the order text is read in."
 msgstr "列可以打亂文字的讀入順序。"
+
+#: src/features/org-admin/bulk-invite.tsx
+msgid "Columns: email (required), role (member or admin) and cohort (a cohort name). Up to 500 rows and 256 KB."
+msgstr ""
 
 #: src/features/career/today.tsx
 msgid "Coming up"
@@ -3369,6 +3467,10 @@ msgstr "無法附加檔案。請再試一次。"
 msgid "Couldn't cancel the invitation. Try again."
 msgstr ""
 
+#: src/features/org-admin/cohorts-page.tsx
+msgid "Couldn't change the cohort. Try again."
+msgstr ""
+
 #: src/routes/builder/letter/-components/design-panel.tsx
 msgid "Couldn't change the design. Try again."
 msgstr "無法改變設計。再試一次。"
@@ -3439,6 +3541,10 @@ msgstr "無法複製到剪貼簿。請再試一次。"
 
 #: src/features/branding/domains-page.tsx
 msgid "Couldn't copy. Select the text instead."
+msgstr ""
+
+#: src/features/org-admin/cohorts-page.tsx
+msgid "Couldn't create the cohort. Try again."
 msgstr ""
 
 #: src/features/documents/use-start-document.ts
@@ -3517,6 +3623,10 @@ msgstr ""
 msgid "Couldn't export your data. Try again."
 msgstr "無法匯出您的資料。請再試一次。"
 
+#: src/features/org-admin/analytics-page.tsx
+msgid "Couldn't export. Try again."
+msgstr ""
+
 #: src/features/applications/components/application-form-sheet.tsx
 msgid "Couldn't fill in the fields. Try again, or fill them in yourself."
 msgstr "無法填寫這些欄位。請再試一次，或自行填寫。"
@@ -3571,6 +3681,10 @@ msgstr "無法載入 AI 連線。請重試後再匯入此檔案。"
 #: src/features/settings/integrations/ai-provider-load-state.tsx
 msgid "Couldn't load AI connections. Your saved connections haven't changed."
 msgstr "無法載入 AI 連線。您已儲存的連線沒有變更。"
+
+#: src/features/org-admin/analytics-page.tsx
+msgid "Couldn't load analytics"
+msgstr ""
 
 #: src/routes/dashboard/applications/index.tsx
 msgid "Couldn't load applications. Try again."
@@ -3646,6 +3760,10 @@ msgstr "無法標記為已讀。請再試一次。"
 msgid "Couldn't move the document to Trash. Try again."
 msgstr "無法將文件移至垃圾箱。請再試一次。"
 
+#: src/features/org-admin/cohorts-page.tsx
+msgid "Couldn't move the members. Try again."
+msgstr ""
+
 #: src/features/resume/export/use-resume-export.ts
 msgid "Couldn't prepare the resume for printing. Try again."
 msgstr "無法準備列印履歷。請再試一次。"
@@ -3674,6 +3792,10 @@ msgstr "無法讀取該檔案。請再試一次。"
 #: src/features/resume/editor/write/section-row.tsx
 msgid "Couldn't read the dates on {entries}, so they stay at the end. Fix their dates and sort again."
 msgstr "無法讀取 {entries} 的日期，因此它們保留在末尾。請修正日期後重新排序。"
+
+#: src/features/org-admin/bulk-invite.tsx
+msgid "Couldn't read the file. Try again."
+msgstr ""
 
 #. placeholder {0}: part.errorText
 #: src/features/assistant/conversation.tsx
@@ -3715,6 +3837,10 @@ msgstr ""
 #: src/features/settings/account/security.tsx
 msgid "Couldn't remove the passkey. Try again."
 msgstr "無法刪除密鑰。再試一次。"
+
+#: src/features/org-admin/cohorts-page.tsx
+msgid "Couldn't rename the cohort. Try again."
+msgstr ""
 
 #: src/features/documents/document-actions.tsx
 msgid "Couldn't rename the document. Try again."
@@ -3849,6 +3975,10 @@ msgstr "無法保存。再試一次。"
 msgid "Couldn't schedule the interview. Try again."
 msgstr "無法安排面試。請再試一次。"
 
+#: src/features/org-admin/bulk-invite.tsx
+msgid "Couldn't send"
+msgstr ""
+
 #: src/features/auth/pages/accept-invitation.tsx
 #: src/features/settings/account/profile.tsx
 msgid "Couldn't send the email. Try again."
@@ -3856,6 +3986,10 @@ msgstr "無法傳送電子郵件。再試一次。"
 
 #: src/features/organization/members-page.tsx
 msgid "Couldn't send the invitation. Try again."
+msgstr ""
+
+#: src/features/org-admin/bulk-invite.tsx
+msgid "Couldn't send the invitations. Try again."
 msgstr ""
 
 #. Fallback toast when requesting password reset email fails without backend message
@@ -4123,6 +4257,10 @@ msgstr "該應用程式可以建立和編輯您的文件和工作申請。它可
 msgid "Create and open"
 msgstr "創建並打開"
 
+#: src/features/org-admin/cohorts-page.tsx
+msgid "Create cohort"
+msgstr ""
+
 #: src/features/settings/ai/api-keys.tsx
 msgid "Create key"
 msgstr "建立密鑰"
@@ -4147,6 +4285,11 @@ msgstr "建立日期"
 msgid "Created “{finalName}”"
 msgstr "創建“{finalName}”"
 
+#. placeholder {0}: cohort.name
+#: src/features/org-admin/cohorts-page.tsx
+msgid "Created {0}"
+msgstr ""
+
 #. placeholder {0}: job.company
 #: src/features/documents/new-document-dialog.tsx
 msgid "Created and linked to {0}"
@@ -4163,6 +4306,10 @@ msgstr "裁切照片"
 #: src/features/applications/components/import-applications-sheet.tsx
 msgid "CSV data"
 msgstr "CSV 資料"
+
+#: src/features/org-admin/bulk-invite.tsx
+msgid "CSV file"
+msgstr ""
 
 #: src/features/career/knowledge/preferences.tsx
 #: src/features/career/offer-entry.tsx
@@ -4866,6 +5013,10 @@ msgstr "拖放導入"
 msgid "Duplicate"
 msgstr "複製"
 
+#: src/features/org-admin/bulk-invite.tsx
+msgid "Duplicate in the file"
+msgstr ""
+
 #: src/dialogs/resume/index.tsx
 msgid "Duplicate resume"
 msgstr "複製履歷"
@@ -5044,6 +5195,8 @@ msgstr "學歷"
 msgid "Education swaps school and field of study the same way."
 msgstr "學歷中的學校與主修領域也會以相同方式交換位置。"
 
+#: src/features/org-admin/analytics-page.tsx
+#: src/features/org-admin/bulk-invite.tsx
 #: src/features/resume/editor/check/parser-view.tsx
 #: src/features/resume/editor/write/basics-card.tsx
 #: src/features/settings/account/profile.tsx
@@ -5100,6 +5253,10 @@ msgstr ""
 #: src/features/resume/editor/write/dates-field.tsx
 msgid "End"
 msgstr "結尾"
+
+#: src/features/org-admin/cohorts-page.tsx
+msgid "Ends"
+msgstr ""
 
 #: src/libs/locale.ts
 msgid "English"
@@ -5220,6 +5377,7 @@ msgstr "請輸入密碼以關閉兩步驟驗證。關閉後，僅憑密碼即可
 msgid "Enter your password."
 msgstr "請輸入您的密碼。"
 
+#: src/features/org-admin/audit-page.tsx
 #: src/routes/builder/$resumeId/-components/design-panel.tsx
 msgid "Entries"
 msgstr "項目"
@@ -5308,6 +5466,10 @@ msgstr "匯出所有內容"
 msgid "Export from the original document instead of scanning or screenshotting it."
 msgstr "從原始文件匯出，而不是掃描或截圖。"
 
+#: src/features/org-admin/analytics-page.tsx
+msgid "Export members"
+msgstr ""
+
 #: src/features/resume/import/read-file.ts
 msgid "export opened"
 msgstr "出口打開"
@@ -5322,6 +5484,10 @@ msgstr ""
 
 #: src/features/settings/account/application-profile.tsx
 msgid "Export saved profile"
+msgstr ""
+
+#: src/features/org-admin/analytics-page.tsx
+msgid "Export summary"
 msgstr ""
 
 #: src/features/ats-checker/messages.ts
@@ -5445,6 +5611,10 @@ msgstr "填寫條目"
 #: src/features/documents/documents-page.tsx
 msgid "Filter by tag"
 msgstr "按標籤過濾"
+
+#: src/features/org-admin/analytics-page.tsx
+msgid "Filters"
+msgstr ""
 
 #: src/features/career/schedule-sheet.tsx
 msgid "Find roles"
@@ -5711,6 +5881,7 @@ msgid "French"
 msgstr "法文"
 
 #: src/features/career/workspace/fit.tsx
+#: src/features/org-admin/analytics-page.tsx
 #: src/routes/builder/letter/-components/write-panel.tsx
 msgid "From"
 msgstr "從"
@@ -5883,6 +6054,10 @@ msgstr "稱呼"
 #: src/features/documents/documents-page.tsx
 msgid "Grid"
 msgstr "網格"
+
+#: src/features/org-admin/cohorts-page.tsx
+msgid "Group members into classes or intakes, then follow how each group is doing."
+msgstr ""
 
 #: src/features/ats-checker/checker.tsx
 #: src/features/resume/editor/check/check-panel.tsx
@@ -6090,6 +6265,10 @@ msgstr "如何顯示文件"
 #: src/features/assistant/assistant-panel.tsx
 msgid "How well do I fit this role?"
 msgstr "我有多適合這個角色？"
+
+#: src/features/org-admin/analytics-page.tsx
+msgid "How your members are doing: resumes, applications, interviews and offers."
+msgstr ""
 
 #: src/features/branding/branding-page.tsx
 msgid "How your organization looks to its members."
@@ -6347,6 +6526,7 @@ msgid "Interviewer"
 msgstr "面試官"
 
 #: src/features/applications/components/calendar-view.tsx
+#: src/features/org-admin/analytics-page.tsx
 msgid "Interviews"
 msgstr "面試"
 
@@ -6359,8 +6539,16 @@ msgstr ""
 msgid "Invitation unavailable"
 msgstr ""
 
+#: src/features/org-admin/bulk-invite.tsx
+msgid "Invite from a CSV file"
+msgstr ""
+
 #: src/features/organization/members-page.tsx
 msgid "Invite someone"
+msgstr ""
+
+#: src/features/org-admin/bulk-invite.tsx
+msgid "Invited"
 msgstr ""
 
 #: src/features/career/offers.tsx
@@ -6725,6 +6913,10 @@ msgstr "語言"
 msgid "Languages"
 msgstr "語言"
 
+#: src/features/org-admin/analytics-page.tsx
+msgid "Last active"
+msgstr ""
+
 #. placeholder {0}: monthYear(new Date(password.updatedAt))
 #: src/features/settings/account/security.tsx
 msgid "Last changed in {0}"
@@ -6929,6 +7121,10 @@ msgstr "淺色主題"
 msgid "Likely questions, from the posting and your resume"
 msgstr "招聘啟事和履歷中可能出現的問題"
 
+#: src/features/org-admin/bulk-invite.tsx
+msgid "Line"
+msgstr ""
+
 #: src/routes/builder/$resumeId/-sidebar/right/sections/typography.tsx
 msgid "Line height"
 msgstr "行高"
@@ -7083,6 +7279,10 @@ msgstr "編輯時即時更新"
 #: src/features/resume/share/address-field.tsx
 msgid "Live at {0}"
 msgstr "現場直播：{0}"
+
+#: src/features/org-admin/audit-page.tsx
+msgid "Load more"
+msgstr ""
 
 #: src/features/applications/components/import-applications-sheet.tsx
 msgid "Load your stages before importing named stages. Your CSV data is kept."
@@ -7413,6 +7613,7 @@ msgstr "中等的"
 msgid "Member"
 msgstr ""
 
+#: src/features/org-admin/analytics-page.tsx
 #: src/features/organization/members-page.tsx
 msgid "Members"
 msgstr ""
@@ -7523,6 +7724,11 @@ msgstr "大多數系統透過電子郵件地址對候選人進行歸檔。"
 msgid "Mostly readable"
 msgstr "大部分可讀"
 
+#. placeholder {0}: selected.size
+#: src/features/org-admin/cohorts-page.tsx
+msgid "Move {0} selected"
+msgstr ""
+
 #: src/features/applications/components/manage-lanes-sheet.tsx
 msgid "Move {label} down"
 msgstr "下移{label}"
@@ -7567,6 +7773,10 @@ msgstr "將角色向上移動"
 msgid "Move section to another column or page"
 msgstr "將本節內容移至另一列或頁面"
 
+#: src/features/org-admin/cohorts-page.tsx
+msgid "Move selected members to"
+msgstr ""
+
 #: src/routes/builder/$resumeId/-sidebar/right/sections/layout/pages.tsx
 msgid "Move to"
 msgstr "移動到"
@@ -7601,6 +7811,11 @@ msgstr "向上移動"
 msgid "Move your email and phone number to the top of page one."
 msgstr "把您的電子郵件和電話號碼移到第一頁頂部。"
 
+#. placeholder {0}: result.updated
+#: src/features/org-admin/cohorts-page.tsx
+msgid "Moved {0} members"
+msgstr ""
+
 #. placeholder {0}: done.length
 #. placeholder {1}: documents.length
 #: src/features/documents/document-actions.tsx
@@ -7627,6 +7842,8 @@ msgstr "將應徵紀錄從「{0}」移出。"
 #: src/features/documents/documents-page.tsx
 #: src/features/documents/new-document-dialog.tsx
 #: src/features/documents/trash-page.tsx
+#: src/features/org-admin/analytics-page.tsx
+#: src/features/org-admin/cohorts-page.tsx
 #: src/features/resume/editor/check/parser-view.tsx
 #: src/features/resume/editor/write/entries.tsx
 #: src/features/settings/account/profile.tsx
@@ -7741,6 +7958,10 @@ msgstr "全新 API 鑰匙"
 msgid "New application"
 msgstr "新應徵紀錄"
 
+#: src/features/org-admin/cohorts-page.tsx
+msgid "New cohort"
+msgstr ""
+
 #: src/features/assistant/assistant-panel.tsx
 #: src/features/career/coach-thread.tsx
 #: src/features/career/coach.tsx
@@ -7764,6 +7985,11 @@ msgstr "新事實"
 #: src/features/settings/ai/api-keys.tsx
 msgid "New key"
 msgstr "新鑰匙"
+
+#. placeholder {0}: cohort.name
+#: src/features/org-admin/cohorts-page.tsx
+msgid "New name for {0}"
+msgstr ""
 
 #: src/features/resume/editor/write/entry-card.tsx
 #: src/routes/builder/$resumeId/-sidebar/right/sections/layout/pages.tsx
@@ -7797,6 +8023,8 @@ msgid "New stage color"
 msgstr "新階段顏色"
 
 #: src/features/documents/page-navigation.tsx
+#: src/features/org-admin/analytics-page.tsx
+#: src/features/org-admin/cohorts-page.tsx
 msgid "Next"
 msgstr ""
 
@@ -7866,6 +8094,14 @@ msgstr "未找到項目符號清單。"
 msgid "No change needed. It's already at {stage}."
 msgstr "無需變更。它已在「{stage}」。"
 
+#: src/features/org-admin/cohorts-page.tsx
+msgid "No cohort"
+msgstr ""
+
+#: src/features/org-admin/cohorts-page.tsx
+msgid "No cohorts yet."
+msgstr ""
+
 #. Empty-state message when no command palette results match the search query
 #: src/features/command-palette/content.tsx
 msgid "No commands match that search."
@@ -7922,6 +8158,10 @@ msgstr "沒有電子郵件地址"
 #: src/features/ats-checker/messages.ts
 msgid "No email address was found."
 msgstr "未找到電子郵件地址。"
+
+#: src/features/org-admin/audit-page.tsx
+msgid "No entries."
+msgstr ""
 
 #: src/features/career/shared.tsx
 msgid "No evidence yet"
@@ -8029,6 +8269,10 @@ msgstr "沒有履歷"
 msgid "No resumes yet."
 msgstr "尚無履歷。"
 
+#: src/features/org-admin/bulk-invite.tsx
+msgid "No seat left"
+msgstr ""
+
 #: src/features/documents/document-actions.tsx
 msgid "No selected documents were deleted. Refresh to see what remains."
 msgstr ""
@@ -8118,6 +8362,10 @@ msgstr "正常邊距"
 #: src/libs/locale.ts
 msgid "Norwegian"
 msgstr "挪威語"
+
+#: src/features/org-admin/bulk-invite.tsx
+msgid "Not a valid email"
+msgstr ""
 
 #: src/features/career/workspace/messages.tsx
 msgid "Not applied"
@@ -8347,6 +8595,7 @@ msgstr "已儲存錄取邀約"
 msgid "Offer type"
 msgstr "錄取邀約類型"
 
+#: src/features/org-admin/analytics-page.tsx
 #: src/routes/dashboard/career/route.tsx
 msgid "Offers"
 msgstr "錄取通知"
@@ -8432,6 +8681,10 @@ msgstr ""
 
 #: src/features/organization/members-page.tsx
 msgid "Only owners and admins can manage members"
+msgstr ""
+
+#: src/features/org-admin/access.tsx
+msgid "Only owners and admins of an organization can open this page"
 msgstr ""
 
 #: src/features/settings/ai/providers.tsx
@@ -8704,6 +8957,11 @@ msgstr "頁"
 msgid "Page {0}"
 msgstr "第 {0} 頁"
 
+#: src/features/org-admin/analytics-page.tsx
+#: src/features/org-admin/cohorts-page.tsx
+msgid "Page {page} of {pages}"
+msgstr ""
+
 #: src/routes/builder/$resumeId/-components/page-canvas.tsx
 #: src/routes/builder/letter/-components/letter-page.tsx
 msgid "Page {pageNumber}"
@@ -8949,6 +9207,10 @@ msgstr "請選擇晚於現在的時間。"
 #: src/components/input/icon-picker.tsx
 msgid "Pick an icon"
 msgstr "選擇一個圖標"
+
+#: src/features/org-admin/cohorts-page.tsx
+msgid "Pick members, then move them to a cohort or take them out of theirs."
+msgstr ""
 
 #: src/features/ats-checker/messages.ts
 msgid "Pick one format and use it everywhere."
@@ -9202,6 +9464,8 @@ msgid "Previewing {0} · click to apply"
 msgstr "預覽 {0} · 點擊套用"
 
 #: src/features/documents/page-navigation.tsx
+#: src/features/org-admin/analytics-page.tsx
+#: src/features/org-admin/cohorts-page.tsx
 msgid "Previous"
 msgstr ""
 
@@ -9961,9 +10225,15 @@ msgstr ""
 
 #: src/features/career/coach.tsx
 #: src/features/documents/document-actions.tsx
+#: src/features/org-admin/cohorts-page.tsx
 #: src/features/settings/account/security.tsx
 msgid "Rename"
 msgstr "重新命名"
+
+#. placeholder {0}: cohort.name
+#: src/features/org-admin/cohorts-page.tsx
+msgid "Rename {0}"
+msgstr ""
 
 #: src/routes/builder/letter/-components/letter-bar.tsx
 msgid "Rename letter"
@@ -10095,8 +10365,14 @@ msgstr "答覆期限"
 
 #: src/features/documents/document-actions.tsx
 #: src/features/documents/trash-page.tsx
+#: src/features/org-admin/cohorts-page.tsx
 msgid "Restore"
 msgstr "恢復"
+
+#. placeholder {0}: cohort.name
+#: src/features/org-admin/cohorts-page.tsx
+msgid "Restore {0}"
+msgstr ""
 
 #: src/features/resume/share/history-tab.tsx
 msgid "Restore this version"
@@ -10130,6 +10406,7 @@ msgid "Restricted to its employer or application."
 msgstr ""
 
 #: src/features/career/knowledge/stories.tsx
+#: src/features/org-admin/bulk-invite.tsx
 msgid "Result"
 msgstr "結果"
 
@@ -10196,12 +10473,17 @@ msgstr ""
 #: src/features/command-palette/pages/navigation.tsx
 #: src/features/command-palette/pages/resumes.tsx
 #: src/features/documents/documents-page.tsx
+#: src/features/org-admin/analytics-page.tsx
 msgid "Resumes"
 msgstr "履歷"
 
 #: src/features/settings/preferences.tsx
 msgid "Resumes always render on white paper, whatever the theme."
 msgstr "無論主題是什麼，履歷總是呈現在白紙上。"
+
+#: src/features/org-admin/analytics-page.tsx
+msgid "Resumes created"
+msgstr ""
 
 #. placeholder {0}: application.postingSource.retrievedAt
 #. placeholder {1}: application.postingSource.method
@@ -10923,9 +11205,11 @@ msgid "Select"
 msgstr "選擇"
 
 #. placeholder {0}: document.name
+#. placeholder {0}: member.name
 #. placeholder {0}: row.role
 #: src/features/career/today.tsx
 #: src/features/documents/document-card.tsx
+#: src/features/org-admin/cohorts-page.tsx
 msgid "Select {0}"
 msgstr "選擇 {0}"
 
@@ -10977,6 +11261,10 @@ msgstr "語意化 CSS 樣式表"
 #: src/features/career/coach-thread.tsx
 msgid "Send"
 msgstr "傳送"
+
+#: src/features/org-admin/bulk-invite.tsx
+msgid "Send {okRows} invitations"
+msgstr ""
 
 #: src/features/organization/members-page.tsx
 msgid "Send invitation"
@@ -11062,6 +11350,16 @@ msgstr "使用您的金鑰將您的履歷文字僅發送至 {0} · {1}。"
 #: src/features/resume/share/format.ts
 msgid "Sent"
 msgstr "傳送"
+
+#. placeholder {0}: result.sent
+#: src/features/org-admin/bulk-invite.tsx
+msgid "Sent {0} invitations"
+msgstr ""
+
+#. placeholder {0}: report.sent
+#: src/features/org-admin/bulk-invite.tsx
+msgid "Sent {0} invitations."
+msgstr ""
 
 #. placeholder {0}: version.name
 #: src/features/resume/share/format.ts
@@ -11203,6 +11501,10 @@ msgstr "再次顯示"
 #: src/features/career/knowledge/facts.tsx
 msgid "Show all types"
 msgstr "顯示所有類型"
+
+#: src/features/org-admin/cohorts-page.tsx
+msgid "Show archived"
+msgstr ""
 
 #: src/routes/dashboard/applications/index.tsx
 msgid "Show closed"
@@ -11716,6 +12018,10 @@ msgstr ""
 msgid "Started"
 msgstr "已開始"
 
+#: src/features/org-admin/cohorts-page.tsx
+msgid "Starts"
+msgstr ""
+
 #: src/features/career/shared.tsx
 msgid "Starts in {minutes} minutes"
 msgstr "{minutes} 分鐘後開始"
@@ -11874,6 +12180,7 @@ msgstr "建議剪切，切勿自行刪除"
 msgid "Summaries of your open applications"
 msgstr "您進行中應徵的摘要"
 
+#: src/features/org-admin/analytics-page.tsx
 #: src/features/resume/editor/write/summary-editor.tsx
 #: src/libs/resume/section.tsx
 msgid "Summary"
@@ -12932,6 +13239,7 @@ msgstr "提示"
 msgid "Title"
 msgstr "標題"
 
+#: src/features/org-admin/analytics-page.tsx
 #: src/routes/builder/letter/-components/write-panel.tsx
 msgid "To"
 msgstr "到"
@@ -13236,6 +13544,14 @@ msgstr "撤銷履歷更改"
 msgid "Unknown"
 msgstr "未知"
 
+#: src/features/org-admin/bulk-invite.tsx
+msgid "Unknown cohort"
+msgstr ""
+
+#: src/features/org-admin/bulk-invite.tsx
+msgid "Unknown role"
+msgstr ""
+
 #: src/features/documents/document-actions.tsx
 msgid "Unlink"
 msgstr "取消連結"
@@ -13293,6 +13609,10 @@ msgstr "最長 2 分鐘。說話時文字會即時顯示。"
 #: src/features/ats-checker/checker.tsx
 msgid "Up to 25 MB · checked in your browser, never uploaded"
 msgstr "最多 25 個 MB · 在瀏覽器中查看，從未上傳"
+
+#: src/features/org-admin/analytics-page.tsx
+msgid "Up to 366 days, in UTC."
+msgstr ""
 
 #: src/features/applications/components/calendar-view.tsx
 msgid "Upcoming interviews"
@@ -14011,6 +14331,10 @@ msgstr "哪些機會最符合我的優先事項？"
 msgid "Which other benefits come with it, like pension or allowances?"
 msgstr "還有哪些其他福利，例如退休金或津貼？"
 
+#: src/features/org-admin/audit-page.tsx
+msgid "Who changed what in your organization."
+msgstr ""
+
 #: src/features/applications/components/interview-dialog.tsx
 #: src/features/career/workspace/shell.tsx
 msgid "Who you'll meet"
@@ -14031,6 +14355,10 @@ msgstr "寬裕的利潤"
 #: src/features/resume/editor/design/template-group.tsx
 msgid "Width"
 msgstr "寬度"
+
+#: src/features/org-admin/bulk-invite.tsx
+msgid "Will be invited"
+msgstr ""
 
 #: src/features/settings/account/application-profile.tsx
 msgid "Willing to relocate"
@@ -14377,6 +14705,11 @@ msgstr ""
 
 #: src/features/resume/builder/draft.ts
 msgid "Your changes were kept in “{name}”."
+msgstr ""
+
+#. placeholder {0}: data.cohortName
+#: src/features/settings/account/profile.tsx
+msgid "Your cohort: {0}"
 msgstr ""
 
 #: src/features/ats-checker/messages.ts

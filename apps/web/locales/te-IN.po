@@ -389,6 +389,11 @@ msgstr "{0} ఇంటర్వ్యూ"
 msgid "{0} invited you to join as {1}."
 msgstr ""
 
+#. placeholder {0}: cohort.memberCount
+#: src/features/org-admin/cohorts-page.tsx
+msgid "{0} members"
+msgstr ""
+
 #. placeholder {0}: row.minutes
 #: src/features/career/workspace/prepare.tsx
 msgid "{0} min"
@@ -725,6 +730,11 @@ msgstr "{name} ఒక నిలువు వరుసను ఉపయోగి�
 msgid "{names} come last in the text. Most systems still find them; some don't."
 msgstr "{names} వచనంలో చివరిగా వస్తుంది. చాలా సిస్టమ్‌లు ఇప్పటికీ వాటిని కనుగొంటాయి; కొన్ని చేయవు."
 
+#. placeholder {0}: report.rows.length
+#: src/features/org-admin/bulk-invite.tsx
+msgid "{okRows} of {0} rows can be invited."
+msgstr ""
+
 #: src/features/resume/editor/check/check-panel.tsx
 msgid "{open, plural, one {# thing to review.} other {# things to review.}}"
 msgstr "{open, plural, one {# సమీక్షించాల్సిన విషయం.} other {సమీక్షించాల్సిన # విషయాలు.}}"
@@ -1003,6 +1013,10 @@ msgstr "ఒక పేజీ తిప్పబడింది."
 msgid "A pasted posting can be saved as an application afterwards."
 msgstr "అతికించిన జాబ్ పోస్టింగ్ తర్వాత జాబ్ అప్లికేషన్‌గా సేవ్ చేయబడుతుంది."
 
+#: src/features/org-admin/access.tsx
+msgid "A personal workspace has no admin area. Create an organization to manage a team."
+msgstr ""
+
 #: src/features/organization/members-page.tsx
 msgid "A personal workspace has one seat"
 msgstr ""
@@ -1102,6 +1116,7 @@ msgid "Account"
 msgstr "ఖాతా"
 
 #: src/features/career/knowledge/stories.tsx
+#: src/features/org-admin/audit-page.tsx
 msgid "Action"
 msgstr "చర్య"
 
@@ -1113,6 +1128,10 @@ msgstr "చర్యలు"
 #: src/features/settings/ai/web-access.tsx
 msgid "Active"
 msgstr "చురుకుగా"
+
+#: src/features/org-admin/analytics-page.tsx
+msgid "Active members"
+msgstr ""
 
 #: src/features/applications/components/detail/activity.tsx
 msgid "Activity"
@@ -1679,6 +1698,10 @@ msgstr ""
 msgid "All employers"
 msgstr ""
 
+#: src/features/org-admin/analytics-page.tsx
+msgid "All members"
+msgstr ""
+
 #: src/features/settings/account/data.tsx
 msgid "All your documents, applications, API keys and public links are deleted for good. This can't be undone."
 msgstr "మీ పత్రాలు, ఉద్యోగ దరఖాస్తులు, API కీలు మరియు పబ్లిక్ లింక్‌లు అన్నీ శాశ్వతంగా తొలగించబడతాయి. ఈ చర్యను రద్దు చేయడం సాధ్యం కాదు."
@@ -1690,6 +1713,10 @@ msgstr "యాక్సెస్‌ని అనుమతించండి"
 #: src/features/ats-checker/messages.ts
 msgid "Almost none of your bullets carry a number."
 msgstr "మీ బుల్లెట్లలో దాదాపు ఏవీ సంఖ్యను కలిగి లేవు."
+
+#: src/features/org-admin/bulk-invite.tsx
+msgid "Already a member"
+msgstr ""
 
 #: src/features/applications/components/add-application-dialog.tsx
 msgid "Already applied"
@@ -1710,6 +1737,10 @@ msgstr "ఇప్పటికే ఖాతా ఉందా? <0/>"
 #: src/features/applications/components/add-application-dialog.tsx
 msgid "Already interviewing"
 msgstr "ఇప్పటికే ఇంటర్వ్యూ చేస్తున్నారు"
+
+#: src/features/org-admin/bulk-invite.tsx
+msgid "Already invited"
+msgstr ""
 
 #: src/features/resume/editor/check/check-panel.tsx
 msgid "Also check the exported PDF"
@@ -1752,6 +1783,11 @@ msgstr ""
 #: src/components/layout/error-screen.tsx
 msgid "An unexpected error stopped this page from loading. Try again, or go to the dashboard."
 msgstr "ఊహించని లోపం కారణంగా ఈ పేజీ లోడ్ అవ్వలేదు. మళ్ళీ ప్రయత్నించండి లేదా డాష్‌బోర్డ్‌కు వెళ్ళండి."
+
+#: src/features/org-admin/analytics-page.tsx
+#: src/routes/dashboard/settings/route.tsx
+msgid "Analytics"
+msgstr ""
 
 #. placeholder {0}: others.length
 #: src/features/applications/components/detail/contacts.tsx
@@ -1982,10 +2018,15 @@ msgstr ""
 #: src/features/career/workspace/shell.tsx
 #: src/features/command-palette/pages/navigation.tsx
 #: src/features/command-palette/pages/resumes.tsx
+#: src/features/org-admin/analytics-page.tsx
 #: src/routes/dashboard/-components/app-shell.tsx
 #: src/routes/dashboard/applications/index.tsx
 msgid "Applications"
 msgstr "దరఖాస్తులు"
+
+#: src/features/org-admin/analytics-page.tsx
+msgid "Applications created"
+msgstr ""
 
 #: src/features/applications/components/insights-view.tsx
 msgid "Applications over time"
@@ -2035,6 +2076,19 @@ msgstr "దరఖాస్తు"
 #: src/libs/locale.ts
 msgid "Arabic"
 msgstr "అరబిక్"
+
+#: src/features/org-admin/cohorts-page.tsx
+msgid "Archive"
+msgstr ""
+
+#. placeholder {0}: cohort.name
+#: src/features/org-admin/cohorts-page.tsx
+msgid "Archive {0}"
+msgstr ""
+
+#: src/features/org-admin/cohorts-page.tsx
+msgid "Archived"
+msgstr ""
 
 #: src/features/applications/components/import-applications-sheet.tsx
 msgid "Archived (closes it)"
@@ -2122,6 +2176,10 @@ msgstr "మార్పుని అడగండి లేదా వివరి
 msgid "Aspect ratio"
 msgstr "కారక నిష్పత్తి"
 
+#: src/features/org-admin/cohorts-page.tsx
+msgid "Assign members"
+msgstr ""
+
 #: src/features/assistant/assistant-button.tsx
 #: src/features/assistant/assistant-panel.tsx
 #: src/features/assistant/conversation.tsx
@@ -2170,6 +2228,11 @@ msgstr "రెజ్యూమే ఫైల్‌ను జతచేయండి 
 #: src/features/career/coach-chat.tsx
 msgid "Attachment"
 msgstr "జతచేయడం"
+
+#: src/features/org-admin/audit-page.tsx
+#: src/routes/dashboard/settings/route.tsx
+msgid "Audit log"
+msgstr ""
 
 #. placeholder {0}: countryName(row.countryCode, i18n.locale)
 #: src/features/settings/account/application-profile.tsx
@@ -2426,6 +2489,16 @@ msgstr "బుల్లెట్ జాబితా"
 msgid "By creating an account you agree to the <0>Terms</0> and the <1>Privacy policy</1>."
 msgstr ""
 
+#. placeholder {0}: stages.saved
+#. placeholder {1}: stages.applied
+#. placeholder {2}: stages.screening
+#. placeholder {3}: stages.interview
+#. placeholder {4}: stages.offer
+#. placeholder {5}: stages.closed
+#: src/features/org-admin/analytics-page.tsx
+msgid "By stage: saved {0}, applied {1}, screening {2}, interview {3}, offer {4}, closed {5}."
+msgstr ""
+
 #: src/routes/dashboard/applications/index.tsx
 msgid "Calendar"
 msgstr "క్యాలెండర్"
@@ -2609,6 +2682,10 @@ msgstr ""
 msgid "Check every claim, date and result against your experience."
 msgstr "ప్రతి వాదన, తేదీ, ఫలితాన్ని మీ అనుభవంతో సరిచూసుకోండి."
 
+#: src/features/org-admin/bulk-invite.tsx
+msgid "Check file"
+msgstr ""
+
 #: src/features/career/workspace/fit.tsx
 msgid "Check fit"
 msgstr "ఫిట్‌ను తనిఖీ చేయి"
@@ -2627,6 +2704,10 @@ msgstr "ఉపయోగించే ముందు సంఖ్యలు, ప�
 
 #: src/components/layout/unknown-organization-screen.tsx
 msgid "Check the address, or ask the person who gave it to you for the right link."
+msgstr ""
+
+#: src/features/org-admin/analytics-page.tsx
+msgid "Check the dates and try again."
 msgstr ""
 
 #: src/features/career/workspace/prepare.tsx
@@ -2921,6 +3002,19 @@ msgstr "కోచ్"
 msgid "Code"
 msgstr "కోడ్"
 
+#: src/features/org-admin/analytics-page.tsx
+msgid "Cohort"
+msgstr ""
+
+#: src/features/org-admin/audit-page.tsx
+msgid "cohort.created"
+msgstr ""
+
+#: src/features/org-admin/cohorts-page.tsx
+#: src/routes/dashboard/settings/route.tsx
+msgid "Cohorts"
+msgstr ""
+
 #: src/routes/builder/$resumeId/-components/design-panel.tsx
 #: src/routes/builder/letter/-components/design-panel.tsx
 msgid "Color"
@@ -2946,6 +3040,10 @@ msgstr "నిలువు వరుసలు"
 #: src/features/resume/editor/check/issues.ts
 msgid "Columns can scramble the order text is read in."
 msgstr "నిలువు వరుసలు చదివిన ఆర్డర్ వచనాన్ని పెనుగులాడగలవు."
+
+#: src/features/org-admin/bulk-invite.tsx
+msgid "Columns: email (required), role (member or admin) and cohort (a cohort name). Up to 500 rows and 256 KB."
+msgstr ""
 
 #: src/features/career/today.tsx
 msgid "Coming up"
@@ -3369,6 +3467,10 @@ msgstr "ఫైల్‌ని అటాచ్ చేయడం సాధ్యప
 msgid "Couldn't cancel the invitation. Try again."
 msgstr ""
 
+#: src/features/org-admin/cohorts-page.tsx
+msgid "Couldn't change the cohort. Try again."
+msgstr ""
+
 #: src/routes/builder/letter/-components/design-panel.tsx
 msgid "Couldn't change the design. Try again."
 msgstr "డిజైన్‌ని మార్చడం సాధ్యపడలేదు. మళ్లీ ప్రయత్నించండి."
@@ -3439,6 +3541,10 @@ msgstr "క్లిప్‌బోర్డ్‌కు కాపీ చేయ�
 
 #: src/features/branding/domains-page.tsx
 msgid "Couldn't copy. Select the text instead."
+msgstr ""
+
+#: src/features/org-admin/cohorts-page.tsx
+msgid "Couldn't create the cohort. Try again."
 msgstr ""
 
 #: src/features/documents/use-start-document.ts
@@ -3517,6 +3623,10 @@ msgstr ""
 msgid "Couldn't export your data. Try again."
 msgstr "మీ డేటాను ఎగుమతి చేయడం సాధ్యపడలేదు. మళ్ళీ ప్రయత్నించండి."
 
+#: src/features/org-admin/analytics-page.tsx
+msgid "Couldn't export. Try again."
+msgstr ""
+
 #: src/features/applications/components/application-form-sheet.tsx
 msgid "Couldn't fill in the fields. Try again, or fill them in yourself."
 msgstr "ఫీల్డ్‌లను పూరించడం సాధ్యపడలేదు. మళ్ళీ ప్రయత్నించండి లేదా మీరే పూరించండి."
@@ -3571,6 +3681,10 @@ msgstr "AI కనెక్షన్‌లను లోడ్ చేయడం స
 #: src/features/settings/integrations/ai-provider-load-state.tsx
 msgid "Couldn't load AI connections. Your saved connections haven't changed."
 msgstr "AI కనెక్షన్‌లను లోడ్ చేయడం సాధ్యపడలేదు. మీరు సేవ్ చేసిన కనెక్షన్‌లు మారలేదు."
+
+#: src/features/org-admin/analytics-page.tsx
+msgid "Couldn't load analytics"
+msgstr ""
 
 #: src/routes/dashboard/applications/index.tsx
 msgid "Couldn't load applications. Try again."
@@ -3646,6 +3760,10 @@ msgstr "దీన్ని చదివినట్లు గుర్తిం�
 msgid "Couldn't move the document to Trash. Try again."
 msgstr "పత్రాన్ని ట్రాష్‌కు తరలించడం సాధ్యపడలేదు. మళ్ళీ ప్రయత్నించండి."
 
+#: src/features/org-admin/cohorts-page.tsx
+msgid "Couldn't move the members. Try again."
+msgstr ""
+
 #: src/features/resume/export/use-resume-export.ts
 msgid "Couldn't prepare the resume for printing. Try again."
 msgstr "ప్రింటింగ్ కోసం రెజ్యూమ్‌ను సిద్ధం చేయలేకపోయాం. మళ్ళీ ప్రయత్నించండి."
@@ -3674,6 +3792,10 @@ msgstr "ఆ ఫైల్‌ను చదవడం సాధ్యపడలేద
 #: src/features/resume/editor/write/section-row.tsx
 msgid "Couldn't read the dates on {entries}, so they stay at the end. Fix their dates and sort again."
 msgstr "{entries}లోని తేదీలను చదవడం సాధ్యపడలేదు, కాబట్టి అవి చివరలోనే ఉంటాయి. వాటి తేదీలను సరిచేసి మళ్ళీ క్రమబద్ధీకరించండి."
+
+#: src/features/org-admin/bulk-invite.tsx
+msgid "Couldn't read the file. Try again."
+msgstr ""
 
 #. placeholder {0}: part.errorText
 #: src/features/assistant/conversation.tsx
@@ -3715,6 +3837,10 @@ msgstr ""
 #: src/features/settings/account/security.tsx
 msgid "Couldn't remove the passkey. Try again."
 msgstr "పాస్‌కీని తీసివేయడం సాధ్యపడలేదు. మళ్లీ ప్రయత్నించండి."
+
+#: src/features/org-admin/cohorts-page.tsx
+msgid "Couldn't rename the cohort. Try again."
+msgstr ""
 
 #: src/features/documents/document-actions.tsx
 msgid "Couldn't rename the document. Try again."
@@ -3849,6 +3975,10 @@ msgstr "సేవ్ చేయడం సాధ్యపడలేదు. మళ�
 msgid "Couldn't schedule the interview. Try again."
 msgstr "ఇంటర్వ్యూని షెడ్యూల్ చేయడం సాధ్యపడలేదు. మళ్ళీ ప్రయత్నించండి."
 
+#: src/features/org-admin/bulk-invite.tsx
+msgid "Couldn't send"
+msgstr ""
+
 #: src/features/auth/pages/accept-invitation.tsx
 #: src/features/settings/account/profile.tsx
 msgid "Couldn't send the email. Try again."
@@ -3856,6 +3986,10 @@ msgstr "ఇమెయిల్ పంపడం సాధ్యపడలేదు.
 
 #: src/features/organization/members-page.tsx
 msgid "Couldn't send the invitation. Try again."
+msgstr ""
+
+#: src/features/org-admin/bulk-invite.tsx
+msgid "Couldn't send the invitations. Try again."
 msgstr ""
 
 #. Fallback toast when requesting password reset email fails without backend message
@@ -4123,6 +4257,10 @@ msgstr "ఈ అప్లికేషన్ మీ పత్రాలు మర�
 msgid "Create and open"
 msgstr "సృష్టించండి మరియు తెరవండి"
 
+#: src/features/org-admin/cohorts-page.tsx
+msgid "Create cohort"
+msgstr ""
+
 #: src/features/settings/ai/api-keys.tsx
 msgid "Create key"
 msgstr "కీని సృష్టించండి"
@@ -4147,6 +4285,11 @@ msgstr "సృష్టించబడింది"
 msgid "Created “{finalName}”"
 msgstr "\"{finalName}\" సృష్టించబడింది"
 
+#. placeholder {0}: cohort.name
+#: src/features/org-admin/cohorts-page.tsx
+msgid "Created {0}"
+msgstr ""
+
 #. placeholder {0}: job.company
 #: src/features/documents/new-document-dialog.tsx
 msgid "Created and linked to {0}"
@@ -4163,6 +4306,10 @@ msgstr "ఫోటోను కత్తిరించండి"
 #: src/features/applications/components/import-applications-sheet.tsx
 msgid "CSV data"
 msgstr "CSV డేటా"
+
+#: src/features/org-admin/bulk-invite.tsx
+msgid "CSV file"
+msgstr ""
 
 #: src/features/career/knowledge/preferences.tsx
 #: src/features/career/offer-entry.tsx
@@ -4866,6 +5013,10 @@ msgstr "దిగుమతి చేయడానికి వదలండి"
 msgid "Duplicate"
 msgstr "నకిలీ"
 
+#: src/features/org-admin/bulk-invite.tsx
+msgid "Duplicate in the file"
+msgstr ""
+
 #: src/dialogs/resume/index.tsx
 msgid "Duplicate resume"
 msgstr "రిజ్యూమ్ నకిలీ చేయండి"
@@ -5044,6 +5195,8 @@ msgstr "విద్య"
 msgid "Education swaps school and field of study the same way."
 msgstr "విద్య విభాగంలో విద్యాసంస్థ, అధ్యయన రంగం కూడా ఇదే విధంగా స్థానాలు మారతాయి."
 
+#: src/features/org-admin/analytics-page.tsx
+#: src/features/org-admin/bulk-invite.tsx
 #: src/features/resume/editor/check/parser-view.tsx
 #: src/features/resume/editor/write/basics-card.tsx
 #: src/features/settings/account/profile.tsx
@@ -5100,6 +5253,10 @@ msgstr ""
 #: src/features/resume/editor/write/dates-field.tsx
 msgid "End"
 msgstr "ముగింపు"
+
+#: src/features/org-admin/cohorts-page.tsx
+msgid "Ends"
+msgstr ""
 
 #: src/libs/locale.ts
 msgid "English"
@@ -5220,6 +5377,7 @@ msgstr "రెండు-దశల ధృవీకరణను ఆఫ్ చే�
 msgid "Enter your password."
 msgstr "మీ పాస్‌వర్డ్‌ను నమోదు చేయండి."
 
+#: src/features/org-admin/audit-page.tsx
 #: src/routes/builder/$resumeId/-components/design-panel.tsx
 msgid "Entries"
 msgstr "నమోదులు"
@@ -5308,6 +5466,10 @@ msgstr "ప్రతిదీ ఎగుమతి చేయండి"
 msgid "Export from the original document instead of scanning or screenshotting it."
 msgstr "దాన్ని స్కాన్ చేయడం లేదా స్క్రీన్‌షాట్ తీయడం కాకుండా అసలు డాక్యుమెంట్ నుండి ఎగుమతి చేయండి."
 
+#: src/features/org-admin/analytics-page.tsx
+msgid "Export members"
+msgstr ""
+
 #: src/features/resume/import/read-file.ts
 msgid "export opened"
 msgstr "ఎగుమతి తెరవబడింది"
@@ -5322,6 +5484,10 @@ msgstr ""
 
 #: src/features/settings/account/application-profile.tsx
 msgid "Export saved profile"
+msgstr ""
+
+#: src/features/org-admin/analytics-page.tsx
+msgid "Export summary"
 msgstr ""
 
 #: src/features/ats-checker/messages.ts
@@ -5445,6 +5611,10 @@ msgstr "ఎంట్రీలను పూరించడం"
 #: src/features/documents/documents-page.tsx
 msgid "Filter by tag"
 msgstr "ట్యాగ్ ద్వారా ఫిల్టర్ చేయండి"
+
+#: src/features/org-admin/analytics-page.tsx
+msgid "Filters"
+msgstr ""
 
 #: src/features/career/schedule-sheet.tsx
 msgid "Find roles"
@@ -5711,6 +5881,7 @@ msgid "French"
 msgstr "ఫ్రెంచ్"
 
 #: src/features/career/workspace/fit.tsx
+#: src/features/org-admin/analytics-page.tsx
 #: src/routes/builder/letter/-components/write-panel.tsx
 msgid "From"
 msgstr "నుండి"
@@ -5883,6 +6054,10 @@ msgstr "సంబోధన"
 #: src/features/documents/documents-page.tsx
 msgid "Grid"
 msgstr "గ్రిడ్"
+
+#: src/features/org-admin/cohorts-page.tsx
+msgid "Group members into classes or intakes, then follow how each group is doing."
+msgstr ""
 
 #: src/features/ats-checker/checker.tsx
 #: src/features/resume/editor/check/check-panel.tsx
@@ -6090,6 +6265,10 @@ msgstr "ఫైల్‌ను ఎలా చూపించాలి"
 #: src/features/assistant/assistant-panel.tsx
 msgid "How well do I fit this role?"
 msgstr "ఈ పాత్రకు నేను ఎంతవరకు సరిపోతాను?"
+
+#: src/features/org-admin/analytics-page.tsx
+msgid "How your members are doing: resumes, applications, interviews and offers."
+msgstr ""
 
 #: src/features/branding/branding-page.tsx
 msgid "How your organization looks to its members."
@@ -6347,6 +6526,7 @@ msgid "Interviewer"
 msgstr "ఇంటర్వ్యూయర్"
 
 #: src/features/applications/components/calendar-view.tsx
+#: src/features/org-admin/analytics-page.tsx
 msgid "Interviews"
 msgstr "ఇంటర్వ్యూలు"
 
@@ -6359,8 +6539,16 @@ msgstr ""
 msgid "Invitation unavailable"
 msgstr ""
 
+#: src/features/org-admin/bulk-invite.tsx
+msgid "Invite from a CSV file"
+msgstr ""
+
 #: src/features/organization/members-page.tsx
 msgid "Invite someone"
+msgstr ""
+
+#: src/features/org-admin/bulk-invite.tsx
+msgid "Invited"
 msgstr ""
 
 #: src/features/career/offers.tsx
@@ -6725,6 +6913,10 @@ msgstr "భాష"
 msgid "Languages"
 msgstr "భాషలు"
 
+#: src/features/org-admin/analytics-page.tsx
+msgid "Last active"
+msgstr ""
+
 #. placeholder {0}: monthYear(new Date(password.updatedAt))
 #: src/features/settings/account/security.tsx
 msgid "Last changed in {0}"
@@ -6929,6 +7121,10 @@ msgstr "లైట్ థీమ్"
 msgid "Likely questions, from the posting and your resume"
 msgstr "ఉద్యోగ పోస్టింగ్ మరియు మీ రెజ్యూమే నుండి సంభావ్య ప్రశ్నలు"
 
+#: src/features/org-admin/bulk-invite.tsx
+msgid "Line"
+msgstr ""
+
 #: src/routes/builder/$resumeId/-sidebar/right/sections/typography.tsx
 msgid "Line height"
 msgstr "లైన్ హైట్"
@@ -7083,6 +7279,10 @@ msgstr "ప్రత్యక్ష ప్రసారం · మీరు సవ
 #: src/features/resume/share/address-field.tsx
 msgid "Live at {0}"
 msgstr "{0}లో నివసిస్తున్నారు"
+
+#: src/features/org-admin/audit-page.tsx
+msgid "Load more"
+msgstr ""
 
 #: src/features/applications/components/import-applications-sheet.tsx
 msgid "Load your stages before importing named stages. Your CSV data is kept."
@@ -7413,6 +7613,7 @@ msgstr "మధ్యస్థం"
 msgid "Member"
 msgstr ""
 
+#: src/features/org-admin/analytics-page.tsx
 #: src/features/organization/members-page.tsx
 msgid "Members"
 msgstr ""
@@ -7523,6 +7724,11 @@ msgstr "చాలా సిస్టమ్‌లు ఇమెయిల్ చి
 msgid "Mostly readable"
 msgstr "ఎక్కువగా చదవగలిగేది"
 
+#. placeholder {0}: selected.size
+#: src/features/org-admin/cohorts-page.tsx
+msgid "Move {0} selected"
+msgstr ""
+
 #: src/features/applications/components/manage-lanes-sheet.tsx
 msgid "Move {label} down"
 msgstr "{label}ను కిందికి తరలించండి"
@@ -7567,6 +7773,10 @@ msgstr "పాత్రను పైకి తరలించండి"
 msgid "Move section to another column or page"
 msgstr "విభాగాన్ని వేరొక కాలమ్‌కు లేదా పేజీకి తరలించండి"
 
+#: src/features/org-admin/cohorts-page.tsx
+msgid "Move selected members to"
+msgstr ""
+
 #: src/routes/builder/$resumeId/-sidebar/right/sections/layout/pages.tsx
 msgid "Move to"
 msgstr "కి తరలించండి"
@@ -7601,6 +7811,11 @@ msgstr "పైకి కదలండి"
 msgid "Move your email and phone number to the top of page one."
 msgstr "మీ ఇమెయిల్ మరియు ఫోన్ నంబర్‌ను మొదటి పేజీ పైభాగానికి తరలించండి."
 
+#. placeholder {0}: result.updated
+#: src/features/org-admin/cohorts-page.tsx
+msgid "Moved {0} members"
+msgstr ""
+
 #. placeholder {0}: done.length
 #. placeholder {1}: documents.length
 #: src/features/documents/document-actions.tsx
@@ -7627,6 +7842,8 @@ msgstr "దరఖాస్తును {0} నుండి తరలిస్త
 #: src/features/documents/documents-page.tsx
 #: src/features/documents/new-document-dialog.tsx
 #: src/features/documents/trash-page.tsx
+#: src/features/org-admin/analytics-page.tsx
+#: src/features/org-admin/cohorts-page.tsx
 #: src/features/resume/editor/check/parser-view.tsx
 #: src/features/resume/editor/write/entries.tsx
 #: src/features/settings/account/profile.tsx
@@ -7741,6 +7958,10 @@ msgstr "కొత్త API కీ"
 msgid "New application"
 msgstr "కొత్త దరఖాస్తు"
 
+#: src/features/org-admin/cohorts-page.tsx
+msgid "New cohort"
+msgstr ""
+
 #: src/features/assistant/assistant-panel.tsx
 #: src/features/career/coach-thread.tsx
 #: src/features/career/coach.tsx
@@ -7764,6 +7985,11 @@ msgstr "కొత్త వాస్తవం"
 #: src/features/settings/ai/api-keys.tsx
 msgid "New key"
 msgstr "కొత్త కీ"
+
+#. placeholder {0}: cohort.name
+#: src/features/org-admin/cohorts-page.tsx
+msgid "New name for {0}"
+msgstr ""
 
 #: src/features/resume/editor/write/entry-card.tsx
 #: src/routes/builder/$resumeId/-sidebar/right/sections/layout/pages.tsx
@@ -7797,6 +8023,8 @@ msgid "New stage color"
 msgstr "కొత్త దశ రంగు"
 
 #: src/features/documents/page-navigation.tsx
+#: src/features/org-admin/analytics-page.tsx
+#: src/features/org-admin/cohorts-page.tsx
 msgid "Next"
 msgstr ""
 
@@ -7866,6 +8094,14 @@ msgstr "బుల్లెట్ జాబితాలు కనుగొనబ�
 msgid "No change needed. It's already at {stage}."
 msgstr "మార్పు అవసరం లేదు. ఇది ఇప్పటికే {stage}లో ఉంది."
 
+#: src/features/org-admin/cohorts-page.tsx
+msgid "No cohort"
+msgstr ""
+
+#: src/features/org-admin/cohorts-page.tsx
+msgid "No cohorts yet."
+msgstr ""
+
 #. Empty-state message when no command palette results match the search query
 #: src/features/command-palette/content.tsx
 msgid "No commands match that search."
@@ -7922,6 +8158,10 @@ msgstr "ఇమెయిల్ చిరునామా లేదు"
 #: src/features/ats-checker/messages.ts
 msgid "No email address was found."
 msgstr "ఇమెయిల్ చిరునామా కనుగొనబడలేదు."
+
+#: src/features/org-admin/audit-page.tsx
+msgid "No entries."
+msgstr ""
 
 #: src/features/career/shared.tsx
 msgid "No evidence yet"
@@ -8029,6 +8269,10 @@ msgstr "రెజ్యూమే లేదు"
 msgid "No resumes yet."
 msgstr "ఇంకా రెజ్యూమ్‌లు లేవు."
 
+#: src/features/org-admin/bulk-invite.tsx
+msgid "No seat left"
+msgstr ""
+
 #: src/features/documents/document-actions.tsx
 msgid "No selected documents were deleted. Refresh to see what remains."
 msgstr ""
@@ -8118,6 +8362,10 @@ msgstr "సాధారణ అంచులు"
 #: src/libs/locale.ts
 msgid "Norwegian"
 msgstr "నార్వేజియన్"
+
+#: src/features/org-admin/bulk-invite.tsx
+msgid "Not a valid email"
+msgstr ""
 
 #: src/features/career/workspace/messages.tsx
 msgid "Not applied"
@@ -8347,6 +8595,7 @@ msgstr "ఉద్యోగ ఆఫర్ సేవ్ అయింది"
 msgid "Offer type"
 msgstr "ఉద్యోగ ఆఫర్ రకం"
 
+#: src/features/org-admin/analytics-page.tsx
 #: src/routes/dashboard/career/route.tsx
 msgid "Offers"
 msgstr "ఆఫర్‌లు"
@@ -8432,6 +8681,10 @@ msgstr ""
 
 #: src/features/organization/members-page.tsx
 msgid "Only owners and admins can manage members"
+msgstr ""
+
+#: src/features/org-admin/access.tsx
+msgid "Only owners and admins of an organization can open this page"
 msgstr ""
 
 #: src/features/settings/ai/providers.tsx
@@ -8704,6 +8957,11 @@ msgstr "పేజ్"
 msgid "Page {0}"
 msgstr "పేజ్ {0}"
 
+#: src/features/org-admin/analytics-page.tsx
+#: src/features/org-admin/cohorts-page.tsx
+msgid "Page {page} of {pages}"
+msgstr ""
+
 #: src/routes/builder/$resumeId/-components/page-canvas.tsx
 #: src/routes/builder/letter/-components/letter-page.tsx
 msgid "Page {pageNumber}"
@@ -8949,6 +9207,10 @@ msgstr "ఇప్పటి తర్వాతి సమయాన్ని ఎం
 #: src/components/input/icon-picker.tsx
 msgid "Pick an icon"
 msgstr "ఒక చిహ్నాన్ని ఎంచుకోండి"
+
+#: src/features/org-admin/cohorts-page.tsx
+msgid "Pick members, then move them to a cohort or take them out of theirs."
+msgstr ""
 
 #: src/features/ats-checker/messages.ts
 msgid "Pick one format and use it everywhere."
@@ -9202,6 +9464,8 @@ msgid "Previewing {0} · click to apply"
 msgstr "{0} ప్రివ్యూ చేస్తోంది · వర్తింపజేయడానికి క్లిక్ చేయండి"
 
 #: src/features/documents/page-navigation.tsx
+#: src/features/org-admin/analytics-page.tsx
+#: src/features/org-admin/cohorts-page.tsx
 msgid "Previous"
 msgstr ""
 
@@ -9961,9 +10225,15 @@ msgstr ""
 
 #: src/features/career/coach.tsx
 #: src/features/documents/document-actions.tsx
+#: src/features/org-admin/cohorts-page.tsx
 #: src/features/settings/account/security.tsx
 msgid "Rename"
 msgstr "పేరు మార్చండి"
+
+#. placeholder {0}: cohort.name
+#: src/features/org-admin/cohorts-page.tsx
+msgid "Rename {0}"
+msgstr ""
 
 #: src/routes/builder/letter/-components/letter-bar.tsx
 msgid "Rename letter"
@@ -10095,8 +10365,14 @@ msgstr "స్పందించాల్సిన గడువు"
 
 #: src/features/documents/document-actions.tsx
 #: src/features/documents/trash-page.tsx
+#: src/features/org-admin/cohorts-page.tsx
 msgid "Restore"
 msgstr "పునరుద్ధరించండి"
+
+#. placeholder {0}: cohort.name
+#: src/features/org-admin/cohorts-page.tsx
+msgid "Restore {0}"
+msgstr ""
 
 #: src/features/resume/share/history-tab.tsx
 msgid "Restore this version"
@@ -10130,6 +10406,7 @@ msgid "Restricted to its employer or application."
 msgstr ""
 
 #: src/features/career/knowledge/stories.tsx
+#: src/features/org-admin/bulk-invite.tsx
 msgid "Result"
 msgstr "ఫలితం"
 
@@ -10196,12 +10473,17 @@ msgstr ""
 #: src/features/command-palette/pages/navigation.tsx
 #: src/features/command-palette/pages/resumes.tsx
 #: src/features/documents/documents-page.tsx
+#: src/features/org-admin/analytics-page.tsx
 msgid "Resumes"
 msgstr "రిజ్యూమ్స్"
 
 #: src/features/settings/preferences.tsx
 msgid "Resumes always render on white paper, whatever the theme."
 msgstr "రెజ్యూమెలు ఎల్లప్పుడూ తెలుపు కాగితంపై రెండర్, థీమ్ ఏదైనప్పటికీ."
+
+#: src/features/org-admin/analytics-page.tsx
+msgid "Resumes created"
+msgstr ""
 
 #. placeholder {0}: application.postingSource.retrievedAt
 #. placeholder {1}: application.postingSource.method
@@ -10923,9 +11205,11 @@ msgid "Select"
 msgstr "ఎంచుకోండి"
 
 #. placeholder {0}: document.name
+#. placeholder {0}: member.name
 #. placeholder {0}: row.role
 #: src/features/career/today.tsx
 #: src/features/documents/document-card.tsx
+#: src/features/org-admin/cohorts-page.tsx
 msgid "Select {0}"
 msgstr "{0}ని ఎంచుకోండి"
 
@@ -10977,6 +11261,10 @@ msgstr "సెమాంటిక్ CSS స్టైల్‌షీట్"
 #: src/features/career/coach-thread.tsx
 msgid "Send"
 msgstr "పంపండి"
+
+#: src/features/org-admin/bulk-invite.tsx
+msgid "Send {okRows} invitations"
+msgstr ""
 
 #: src/features/organization/members-page.tsx
 msgid "Send invitation"
@@ -11062,6 +11350,16 @@ msgstr "మీ కీతో {0} · {1}కి మాత్రమే మీ రె
 #: src/features/resume/share/format.ts
 msgid "Sent"
 msgstr "పంపబడింది"
+
+#. placeholder {0}: result.sent
+#: src/features/org-admin/bulk-invite.tsx
+msgid "Sent {0} invitations"
+msgstr ""
+
+#. placeholder {0}: report.sent
+#: src/features/org-admin/bulk-invite.tsx
+msgid "Sent {0} invitations."
+msgstr ""
 
 #. placeholder {0}: version.name
 #: src/features/resume/share/format.ts
@@ -11203,6 +11501,10 @@ msgstr "మళ్లీ చూపించు"
 #: src/features/career/knowledge/facts.tsx
 msgid "Show all types"
 msgstr "అన్ని రకాలను చూపు"
+
+#: src/features/org-admin/cohorts-page.tsx
+msgid "Show archived"
+msgstr ""
 
 #: src/routes/dashboard/applications/index.tsx
 msgid "Show closed"
@@ -11716,6 +12018,10 @@ msgstr ""
 msgid "Started"
 msgstr "ప్రారంభమైంది"
 
+#: src/features/org-admin/cohorts-page.tsx
+msgid "Starts"
+msgstr ""
+
 #: src/features/career/shared.tsx
 msgid "Starts in {minutes} minutes"
 msgstr "{minutes} నిమిషాల్లో ప్రారంభమవుతుంది"
@@ -11874,6 +12180,7 @@ msgstr "కోతలను సూచిస్తుంది, దాని స�
 msgid "Summaries of your open applications"
 msgstr "మీ ఓపెన్ దరఖాస్తుల సారాంశాలు"
 
+#: src/features/org-admin/analytics-page.tsx
 #: src/features/resume/editor/write/summary-editor.tsx
 #: src/libs/resume/section.tsx
 msgid "Summary"
@@ -12932,6 +13239,7 @@ msgstr "చిట్కా"
 msgid "Title"
 msgstr "టైటిల్"
 
+#: src/features/org-admin/analytics-page.tsx
 #: src/routes/builder/letter/-components/write-panel.tsx
 msgid "To"
 msgstr "కు"
@@ -13236,6 +13544,14 @@ msgstr "రెజ్యూమ్ మార్పును అన్డు చే
 msgid "Unknown"
 msgstr "తెలియదు"
 
+#: src/features/org-admin/bulk-invite.tsx
+msgid "Unknown cohort"
+msgstr ""
+
+#: src/features/org-admin/bulk-invite.tsx
+msgid "Unknown role"
+msgstr ""
+
 #: src/features/documents/document-actions.tsx
 msgid "Unlink"
 msgstr "అన్‌లింక్ చేయండి"
@@ -13293,6 +13609,10 @@ msgstr "2 నిమిషాల వరకు. మీరు మాట్లాడ
 #: src/features/ats-checker/checker.tsx
 msgid "Up to 25 MB · checked in your browser, never uploaded"
 msgstr "25 MB వరకు · మీ బ్రౌజర్‌లో తనిఖీ చేయబడింది, ఎప్పుడూ అప్‌లోడ్ చేయబడలేదు"
+
+#: src/features/org-admin/analytics-page.tsx
+msgid "Up to 366 days, in UTC."
+msgstr ""
 
 #: src/features/applications/components/calendar-view.tsx
 msgid "Upcoming interviews"
@@ -14011,6 +14331,10 @@ msgstr "నా ప్రాధాన్యతలకు ఏ అవకాశాల
 msgid "Which other benefits come with it, like pension or allowances?"
 msgstr "పెన్షన్ లేదా అలవెన్సుల వంటి ఇంకా ఏ ప్రయోజనాలు ఉంటాయి?"
 
+#: src/features/org-admin/audit-page.tsx
+msgid "Who changed what in your organization."
+msgstr ""
+
 #: src/features/applications/components/interview-dialog.tsx
 #: src/features/career/workspace/shell.tsx
 msgid "Who you'll meet"
@@ -14031,6 +14355,10 @@ msgstr "విస్తృత అంచులు"
 #: src/features/resume/editor/design/template-group.tsx
 msgid "Width"
 msgstr "వెడల్పు"
+
+#: src/features/org-admin/bulk-invite.tsx
+msgid "Will be invited"
+msgstr ""
 
 #: src/features/settings/account/application-profile.tsx
 msgid "Willing to relocate"
@@ -14377,6 +14705,11 @@ msgstr ""
 
 #: src/features/resume/builder/draft.ts
 msgid "Your changes were kept in “{name}”."
+msgstr ""
+
+#. placeholder {0}: data.cohortName
+#: src/features/settings/account/profile.tsx
+msgid "Your cohort: {0}"
 msgstr ""
 
 #: src/features/ats-checker/messages.ts

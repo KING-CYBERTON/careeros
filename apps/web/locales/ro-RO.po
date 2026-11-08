@@ -389,6 +389,11 @@ msgstr "{0} interviu"
 msgid "{0} invited you to join as {1}."
 msgstr ""
 
+#. placeholder {0}: cohort.memberCount
+#: src/features/org-admin/cohorts-page.tsx
+msgid "{0} members"
+msgstr ""
+
 #. placeholder {0}: row.minutes
 #: src/features/career/workspace/prepare.tsx
 msgid "{0} min"
@@ -725,6 +730,11 @@ msgstr "{name} utilizează o coloană"
 msgid "{names} come last in the text. Most systems still find them; some don't."
 msgstr "{names} este ultimul în text. Majoritatea sistemelor încă le găsesc; unii nu."
 
+#. placeholder {0}: report.rows.length
+#: src/features/org-admin/bulk-invite.tsx
+msgid "{okRows} of {0} rows can be invited."
+msgstr ""
+
 #: src/features/resume/editor/check/check-panel.tsx
 msgid "{open, plural, one {# thing to review.} other {# things to review.}}"
 msgstr "{open, plural, one {# lucru de revizuit.} other {# lucruri de revizuit.}}"
@@ -1003,6 +1013,10 @@ msgstr "O pagină este rotită."
 msgid "A pasted posting can be saved as an application afterwards."
 msgstr "O postare de angajare lipită poate fi salvată ulterior ca cerere de angajare."
 
+#: src/features/org-admin/access.tsx
+msgid "A personal workspace has no admin area. Create an organization to manage a team."
+msgstr ""
+
 #: src/features/organization/members-page.tsx
 msgid "A personal workspace has one seat"
 msgstr ""
@@ -1102,6 +1116,7 @@ msgid "Account"
 msgstr "Cont"
 
 #: src/features/career/knowledge/stories.tsx
+#: src/features/org-admin/audit-page.tsx
 msgid "Action"
 msgstr "Acțiune"
 
@@ -1113,6 +1128,10 @@ msgstr "Acțiuni"
 #: src/features/settings/ai/web-access.tsx
 msgid "Active"
 msgstr "Activ"
+
+#: src/features/org-admin/analytics-page.tsx
+msgid "Active members"
+msgstr ""
 
 #: src/features/applications/components/detail/activity.tsx
 msgid "Activity"
@@ -1679,6 +1698,10 @@ msgstr ""
 msgid "All employers"
 msgstr ""
 
+#: src/features/org-admin/analytics-page.tsx
+msgid "All members"
+msgstr ""
+
 #: src/features/settings/account/data.tsx
 msgid "All your documents, applications, API keys and public links are deleted for good. This can't be undone."
 msgstr "Toate documentele, candidaturile, cheile API și linkurile publice ale dvs. vor fi șterse definitiv. Această acțiune nu poate fi anulată."
@@ -1690,6 +1713,10 @@ msgstr "Permite accesul"
 #: src/features/ats-checker/messages.ts
 msgid "Almost none of your bullets carry a number."
 msgstr "Aproape niciunul dintre punctele dvs. nu conține un număr."
+
+#: src/features/org-admin/bulk-invite.tsx
+msgid "Already a member"
+msgstr ""
 
 #: src/features/applications/components/add-application-dialog.tsx
 msgid "Already applied"
@@ -1710,6 +1737,10 @@ msgstr "Ai deja un cont? <0/>"
 #: src/features/applications/components/add-application-dialog.tsx
 msgid "Already interviewing"
 msgstr "Deja intervievat"
+
+#: src/features/org-admin/bulk-invite.tsx
+msgid "Already invited"
+msgstr ""
 
 #: src/features/resume/editor/check/check-panel.tsx
 msgid "Also check the exported PDF"
@@ -1752,6 +1783,11 @@ msgstr ""
 #: src/components/layout/error-screen.tsx
 msgid "An unexpected error stopped this page from loading. Try again, or go to the dashboard."
 msgstr "O eroare neașteptată a împiedicat încărcarea acestei pagini. Încearcă din nou sau mergi la panoul de control."
+
+#: src/features/org-admin/analytics-page.tsx
+#: src/routes/dashboard/settings/route.tsx
+msgid "Analytics"
+msgstr ""
 
 #. placeholder {0}: others.length
 #: src/features/applications/components/detail/contacts.tsx
@@ -1982,10 +2018,15 @@ msgstr ""
 #: src/features/career/workspace/shell.tsx
 #: src/features/command-palette/pages/navigation.tsx
 #: src/features/command-palette/pages/resumes.tsx
+#: src/features/org-admin/analytics-page.tsx
 #: src/routes/dashboard/-components/app-shell.tsx
 #: src/routes/dashboard/applications/index.tsx
 msgid "Applications"
 msgstr "Candidaturi"
+
+#: src/features/org-admin/analytics-page.tsx
+msgid "Applications created"
+msgstr ""
 
 #: src/features/applications/components/insights-view.tsx
 msgid "Applications over time"
@@ -2035,6 +2076,19 @@ msgstr "Candidatare"
 #: src/libs/locale.ts
 msgid "Arabic"
 msgstr "Arabă"
+
+#: src/features/org-admin/cohorts-page.tsx
+msgid "Archive"
+msgstr ""
+
+#. placeholder {0}: cohort.name
+#: src/features/org-admin/cohorts-page.tsx
+msgid "Archive {0}"
+msgstr ""
+
+#: src/features/org-admin/cohorts-page.tsx
+msgid "Archived"
+msgstr ""
 
 #: src/features/applications/components/import-applications-sheet.tsx
 msgid "Archived (closes it)"
@@ -2122,6 +2176,10 @@ msgstr "Întrebați sau descrieți o schimbare..."
 msgid "Aspect ratio"
 msgstr "Raport de aspect"
 
+#: src/features/org-admin/cohorts-page.tsx
+msgid "Assign members"
+msgstr ""
+
 #: src/features/assistant/assistant-button.tsx
 #: src/features/assistant/assistant-panel.tsx
 #: src/features/assistant/conversation.tsx
@@ -2170,6 +2228,11 @@ msgstr "Atașează un fișier CV (PDF)"
 #: src/features/career/coach-chat.tsx
 msgid "Attachment"
 msgstr "Atașament"
+
+#: src/features/org-admin/audit-page.tsx
+#: src/routes/dashboard/settings/route.tsx
+msgid "Audit log"
+msgstr ""
 
 #. placeholder {0}: countryName(row.countryCode, i18n.locale)
 #: src/features/settings/account/application-profile.tsx
@@ -2426,6 +2489,16 @@ msgstr "Listă cu marcatori"
 msgid "By creating an account you agree to the <0>Terms</0> and the <1>Privacy policy</1>."
 msgstr ""
 
+#. placeholder {0}: stages.saved
+#. placeholder {1}: stages.applied
+#. placeholder {2}: stages.screening
+#. placeholder {3}: stages.interview
+#. placeholder {4}: stages.offer
+#. placeholder {5}: stages.closed
+#: src/features/org-admin/analytics-page.tsx
+msgid "By stage: saved {0}, applied {1}, screening {2}, interview {3}, offer {4}, closed {5}."
+msgstr ""
+
 #: src/routes/dashboard/applications/index.tsx
 msgid "Calendar"
 msgstr "Calendaristic"
@@ -2609,6 +2682,10 @@ msgstr ""
 msgid "Check every claim, date and result against your experience."
 msgstr "Verificați fiecare afirmație, dată și rezultat față de experiența dvs."
 
+#: src/features/org-admin/bulk-invite.tsx
+msgid "Check file"
+msgstr ""
+
 #: src/features/career/workspace/fit.tsx
 msgid "Check fit"
 msgstr "Verificați potrivirea"
@@ -2627,6 +2704,10 @@ msgstr "verificați cifrele și numele înainte de a-l folosi"
 
 #: src/components/layout/unknown-organization-screen.tsx
 msgid "Check the address, or ask the person who gave it to you for the right link."
+msgstr ""
+
+#: src/features/org-admin/analytics-page.tsx
+msgid "Check the dates and try again."
 msgstr ""
 
 #: src/features/career/workspace/prepare.tsx
@@ -2921,6 +3002,19 @@ msgstr "Coach"
 msgid "Code"
 msgstr "Cod"
 
+#: src/features/org-admin/analytics-page.tsx
+msgid "Cohort"
+msgstr ""
+
+#: src/features/org-admin/audit-page.tsx
+msgid "cohort.created"
+msgstr ""
+
+#: src/features/org-admin/cohorts-page.tsx
+#: src/routes/dashboard/settings/route.tsx
+msgid "Cohorts"
+msgstr ""
+
 #: src/routes/builder/$resumeId/-components/design-panel.tsx
 #: src/routes/builder/letter/-components/design-panel.tsx
 msgid "Color"
@@ -2946,6 +3040,10 @@ msgstr "Coloane"
 #: src/features/resume/editor/check/issues.ts
 msgid "Columns can scramble the order text is read in."
 msgstr "Coloanele pot amesteca ordinea în care este citit textul."
+
+#: src/features/org-admin/bulk-invite.tsx
+msgid "Columns: email (required), role (member or admin) and cohort (a cohort name). Up to 500 rows and 256 KB."
+msgstr ""
 
 #: src/features/career/today.tsx
 msgid "Coming up"
@@ -3369,6 +3467,10 @@ msgstr "Nu s-a putut atașa fișierul. Încearcă din nou."
 msgid "Couldn't cancel the invitation. Try again."
 msgstr ""
 
+#: src/features/org-admin/cohorts-page.tsx
+msgid "Couldn't change the cohort. Try again."
+msgstr ""
+
 #: src/routes/builder/letter/-components/design-panel.tsx
 msgid "Couldn't change the design. Try again."
 msgstr "Nu s-a putut schimba designul. Încearcă din nou."
@@ -3439,6 +3541,10 @@ msgstr "Nu s-a putut copia în clipboard. Încearcă din nou."
 
 #: src/features/branding/domains-page.tsx
 msgid "Couldn't copy. Select the text instead."
+msgstr ""
+
+#: src/features/org-admin/cohorts-page.tsx
+msgid "Couldn't create the cohort. Try again."
 msgstr ""
 
 #: src/features/documents/use-start-document.ts
@@ -3517,6 +3623,10 @@ msgstr ""
 msgid "Couldn't export your data. Try again."
 msgstr "Nu s-au putut exporta datele. Încearcă din nou."
 
+#: src/features/org-admin/analytics-page.tsx
+msgid "Couldn't export. Try again."
+msgstr ""
+
 #: src/features/applications/components/application-form-sheet.tsx
 msgid "Couldn't fill in the fields. Try again, or fill them in yourself."
 msgstr "Nu s-au putut completa câmpurile. Încearcă din nou sau completează-le manual."
@@ -3571,6 +3681,10 @@ msgstr "Nu s-au putut încărca conexiunile AI. Încercați din nou înainte de 
 #: src/features/settings/integrations/ai-provider-load-state.tsx
 msgid "Couldn't load AI connections. Your saved connections haven't changed."
 msgstr "Nu s-au putut încărca conexiunile AI. Conexiunile salvate nu s-au schimbat."
+
+#: src/features/org-admin/analytics-page.tsx
+msgid "Couldn't load analytics"
+msgstr ""
 
 #: src/routes/dashboard/applications/index.tsx
 msgid "Couldn't load applications. Try again."
@@ -3646,6 +3760,10 @@ msgstr "Nu s-a putut marca drept citit. Încearcă din nou."
 msgid "Couldn't move the document to Trash. Try again."
 msgstr "Documentul nu a putut fi mutat în Coșul de gunoi. Încearcă din nou."
 
+#: src/features/org-admin/cohorts-page.tsx
+msgid "Couldn't move the members. Try again."
+msgstr ""
+
 #: src/features/resume/export/use-resume-export.ts
 msgid "Couldn't prepare the resume for printing. Try again."
 msgstr "Nu s-a putut pregăti CV-ul pentru tipărire. Încearcă din nou."
@@ -3674,6 +3792,10 @@ msgstr "Nu s-a putut citi fișierul. Încearcă din nou."
 #: src/features/resume/editor/write/section-row.tsx
 msgid "Couldn't read the dates on {entries}, so they stay at the end. Fix their dates and sort again."
 msgstr "Nu s-au putut citi datele pentru {entries}, așa că rămân la final. Corectează datele și sortează din nou."
+
+#: src/features/org-admin/bulk-invite.tsx
+msgid "Couldn't read the file. Try again."
+msgstr ""
 
 #. placeholder {0}: part.errorText
 #: src/features/assistant/conversation.tsx
@@ -3715,6 +3837,10 @@ msgstr ""
 #: src/features/settings/account/security.tsx
 msgid "Couldn't remove the passkey. Try again."
 msgstr "Nu s-a putut elimina cheia de acces. Încearcă din nou."
+
+#: src/features/org-admin/cohorts-page.tsx
+msgid "Couldn't rename the cohort. Try again."
+msgstr ""
 
 #: src/features/documents/document-actions.tsx
 msgid "Couldn't rename the document. Try again."
@@ -3849,6 +3975,10 @@ msgstr "Nu s-a putut salva. Încearcă din nou."
 msgid "Couldn't schedule the interview. Try again."
 msgstr "Nu s-a putut programa interviul. Încearcă din nou."
 
+#: src/features/org-admin/bulk-invite.tsx
+msgid "Couldn't send"
+msgstr ""
+
 #: src/features/auth/pages/accept-invitation.tsx
 #: src/features/settings/account/profile.tsx
 msgid "Couldn't send the email. Try again."
@@ -3856,6 +3986,10 @@ msgstr "Nu s-a putut trimite e-mailul. Încearcă din nou."
 
 #: src/features/organization/members-page.tsx
 msgid "Couldn't send the invitation. Try again."
+msgstr ""
+
+#: src/features/org-admin/bulk-invite.tsx
+msgid "Couldn't send the invitations. Try again."
 msgstr ""
 
 #. Fallback toast when requesting password reset email fails without backend message
@@ -4123,6 +4257,10 @@ msgstr "Această aplicație vă poate crea și edita documentele și cererile de
 msgid "Create and open"
 msgstr "Creați și deschideți"
 
+#: src/features/org-admin/cohorts-page.tsx
+msgid "Create cohort"
+msgstr ""
+
 #: src/features/settings/ai/api-keys.tsx
 msgid "Create key"
 msgstr "Creați cheia"
@@ -4147,6 +4285,11 @@ msgstr "Creat"
 msgid "Created “{finalName}”"
 msgstr "Creat „{finalName}”"
 
+#. placeholder {0}: cohort.name
+#: src/features/org-admin/cohorts-page.tsx
+msgid "Created {0}"
+msgstr ""
+
 #. placeholder {0}: job.company
 #: src/features/documents/new-document-dialog.tsx
 msgid "Created and linked to {0}"
@@ -4163,6 +4306,10 @@ msgstr "Decupează fotografia"
 #: src/features/applications/components/import-applications-sheet.tsx
 msgid "CSV data"
 msgstr "date CSV"
+
+#: src/features/org-admin/bulk-invite.tsx
+msgid "CSV file"
+msgstr ""
 
 #: src/features/career/knowledge/preferences.tsx
 #: src/features/career/offer-entry.tsx
@@ -4866,6 +5013,10 @@ msgstr "Aruncă pentru a importa"
 msgid "Duplicate"
 msgstr "Duplică"
 
+#: src/features/org-admin/bulk-invite.tsx
+msgid "Duplicate in the file"
+msgstr ""
+
 #: src/dialogs/resume/index.tsx
 msgid "Duplicate resume"
 msgstr "Duplică CV-ul"
@@ -5044,6 +5195,8 @@ msgstr "Educație"
 msgid "Education swaps school and field of study the same way."
 msgstr "În Educație, instituția și domeniul de studiu se inversează în același mod."
 
+#: src/features/org-admin/analytics-page.tsx
+#: src/features/org-admin/bulk-invite.tsx
 #: src/features/resume/editor/check/parser-view.tsx
 #: src/features/resume/editor/write/basics-card.tsx
 #: src/features/settings/account/profile.tsx
@@ -5100,6 +5253,10 @@ msgstr ""
 #: src/features/resume/editor/write/dates-field.tsx
 msgid "End"
 msgstr "Sfârşit"
+
+#: src/features/org-admin/cohorts-page.tsx
+msgid "Ends"
+msgstr ""
 
 #: src/libs/locale.ts
 msgid "English"
@@ -5220,6 +5377,7 @@ msgstr "Introdu parola pentru a dezactiva verificarea în doi pași. Fără ea, 
 msgid "Enter your password."
 msgstr "Introdu parola."
 
+#: src/features/org-admin/audit-page.tsx
 #: src/routes/builder/$resumeId/-components/design-panel.tsx
 msgid "Entries"
 msgstr "Înregistrări"
@@ -5308,6 +5466,10 @@ msgstr "Exportați totul"
 msgid "Export from the original document instead of scanning or screenshotting it."
 msgstr "Exportați din documentul original, în loc să îl scanați sau să faceți captură de ecran."
 
+#: src/features/org-admin/analytics-page.tsx
+msgid "Export members"
+msgstr ""
+
 #: src/features/resume/import/read-file.ts
 msgid "export opened"
 msgstr "exportul deschis"
@@ -5322,6 +5484,10 @@ msgstr ""
 
 #: src/features/settings/account/application-profile.tsx
 msgid "Export saved profile"
+msgstr ""
+
+#: src/features/org-admin/analytics-page.tsx
+msgid "Export summary"
 msgstr ""
 
 #: src/features/ats-checker/messages.ts
@@ -5445,6 +5611,10 @@ msgstr "Completarea intrărilor"
 #: src/features/documents/documents-page.tsx
 msgid "Filter by tag"
 msgstr "Filtrați după etichetă"
+
+#: src/features/org-admin/analytics-page.tsx
+msgid "Filters"
+msgstr ""
 
 #: src/features/career/schedule-sheet.tsx
 msgid "Find roles"
@@ -5711,6 +5881,7 @@ msgid "French"
 msgstr "Franceză"
 
 #: src/features/career/workspace/fit.tsx
+#: src/features/org-admin/analytics-page.tsx
 #: src/routes/builder/letter/-components/write-panel.tsx
 msgid "From"
 msgstr "Din"
@@ -5883,6 +6054,10 @@ msgstr "Formulă de adresare"
 #: src/features/documents/documents-page.tsx
 msgid "Grid"
 msgstr "Grilă"
+
+#: src/features/org-admin/cohorts-page.tsx
+msgid "Group members into classes or intakes, then follow how each group is doing."
+msgstr ""
 
 #: src/features/ats-checker/checker.tsx
 #: src/features/resume/editor/check/check-panel.tsx
@@ -6090,6 +6265,10 @@ msgstr "Cum să afișați fișierul"
 #: src/features/assistant/assistant-panel.tsx
 msgid "How well do I fit this role?"
 msgstr "Cât de bine mă potrivesc acestui rol?"
+
+#: src/features/org-admin/analytics-page.tsx
+msgid "How your members are doing: resumes, applications, interviews and offers."
+msgstr ""
 
 #: src/features/branding/branding-page.tsx
 msgid "How your organization looks to its members."
@@ -6347,6 +6526,7 @@ msgid "Interviewer"
 msgstr "Intervievator"
 
 #: src/features/applications/components/calendar-view.tsx
+#: src/features/org-admin/analytics-page.tsx
 msgid "Interviews"
 msgstr "Interviuri"
 
@@ -6359,8 +6539,16 @@ msgstr ""
 msgid "Invitation unavailable"
 msgstr ""
 
+#: src/features/org-admin/bulk-invite.tsx
+msgid "Invite from a CSV file"
+msgstr ""
+
 #: src/features/organization/members-page.tsx
 msgid "Invite someone"
+msgstr ""
+
+#: src/features/org-admin/bulk-invite.tsx
+msgid "Invited"
 msgstr ""
 
 #: src/features/career/offers.tsx
@@ -6725,6 +6913,10 @@ msgstr "Limbă"
 msgid "Languages"
 msgstr "Limbi"
 
+#: src/features/org-admin/analytics-page.tsx
+msgid "Last active"
+msgstr ""
+
 #. placeholder {0}: monthYear(new Date(password.updatedAt))
 #: src/features/settings/account/security.tsx
 msgid "Last changed in {0}"
@@ -6929,6 +7121,10 @@ msgstr "Temă deschisă"
 msgid "Likely questions, from the posting and your resume"
 msgstr "Întrebări probabile, din postarea de locuri de muncă și CV-ul dvs"
 
+#: src/features/org-admin/bulk-invite.tsx
+msgid "Line"
+msgstr ""
+
 #: src/routes/builder/$resumeId/-sidebar/right/sections/typography.tsx
 msgid "Line height"
 msgstr "Înălțimea liniei"
@@ -7083,6 +7279,10 @@ msgstr "Actualizări live · pe măsură ce editați"
 #: src/features/resume/share/address-field.tsx
 msgid "Live at {0}"
 msgstr "Live la {0}"
+
+#: src/features/org-admin/audit-page.tsx
+msgid "Load more"
+msgstr ""
 
 #: src/features/applications/components/import-applications-sheet.tsx
 msgid "Load your stages before importing named stages. Your CSV data is kept."
@@ -7413,6 +7613,7 @@ msgstr "Mediu"
 msgid "Member"
 msgstr ""
 
+#: src/features/org-admin/analytics-page.tsx
 #: src/features/organization/members-page.tsx
 msgid "Members"
 msgstr ""
@@ -7523,6 +7724,11 @@ msgstr "Majoritatea sistemelor depun candidații prin adresa de e-mail."
 msgid "Mostly readable"
 msgstr "În mare parte lizibil"
 
+#. placeholder {0}: selected.size
+#: src/features/org-admin/cohorts-page.tsx
+msgid "Move {0} selected"
+msgstr ""
+
 #: src/features/applications/components/manage-lanes-sheet.tsx
 msgid "Move {label} down"
 msgstr "Mutați {label} mai jos"
@@ -7567,6 +7773,10 @@ msgstr "Mutați rolul în sus"
 msgid "Move section to another column or page"
 msgstr "Mutați secțiunea în altă coloană sau pagină"
 
+#: src/features/org-admin/cohorts-page.tsx
+msgid "Move selected members to"
+msgstr ""
+
 #: src/routes/builder/$resumeId/-sidebar/right/sections/layout/pages.tsx
 msgid "Move to"
 msgstr "Mută în"
@@ -7601,6 +7811,11 @@ msgstr "Mișcă-te în sus"
 msgid "Move your email and phone number to the top of page one."
 msgstr "Mutați e-mailul și numărul de telefon în partea de sus a primei pagini."
 
+#. placeholder {0}: result.updated
+#: src/features/org-admin/cohorts-page.tsx
+msgid "Moved {0} members"
+msgstr ""
+
 #. placeholder {0}: done.length
 #. placeholder {1}: documents.length
 #: src/features/documents/document-actions.tsx
@@ -7627,6 +7842,8 @@ msgstr "Mută candidatura din {0}."
 #: src/features/documents/documents-page.tsx
 #: src/features/documents/new-document-dialog.tsx
 #: src/features/documents/trash-page.tsx
+#: src/features/org-admin/analytics-page.tsx
+#: src/features/org-admin/cohorts-page.tsx
 #: src/features/resume/editor/check/parser-view.tsx
 #: src/features/resume/editor/write/entries.tsx
 #: src/features/settings/account/profile.tsx
@@ -7741,6 +7958,10 @@ msgstr "Cheie nouă API"
 msgid "New application"
 msgstr "Candidatură nouă"
 
+#: src/features/org-admin/cohorts-page.tsx
+msgid "New cohort"
+msgstr ""
+
 #: src/features/assistant/assistant-panel.tsx
 #: src/features/career/coach-thread.tsx
 #: src/features/career/coach.tsx
@@ -7764,6 +7985,11 @@ msgstr "Fapt nou"
 #: src/features/settings/ai/api-keys.tsx
 msgid "New key"
 msgstr "Cheie nouă"
+
+#. placeholder {0}: cohort.name
+#: src/features/org-admin/cohorts-page.tsx
+msgid "New name for {0}"
+msgstr ""
 
 #: src/features/resume/editor/write/entry-card.tsx
 #: src/routes/builder/$resumeId/-sidebar/right/sections/layout/pages.tsx
@@ -7797,6 +8023,8 @@ msgid "New stage color"
 msgstr "Culoarea etapei noi"
 
 #: src/features/documents/page-navigation.tsx
+#: src/features/org-admin/analytics-page.tsx
+#: src/features/org-admin/cohorts-page.tsx
 msgid "Next"
 msgstr ""
 
@@ -7866,6 +8094,14 @@ msgstr "Nu a fost găsită nicio listă cu puncte."
 msgid "No change needed. It's already at {stage}."
 msgstr "Nu e nevoie de nicio modificare. Este deja în {stage}."
 
+#: src/features/org-admin/cohorts-page.tsx
+msgid "No cohort"
+msgstr ""
+
+#: src/features/org-admin/cohorts-page.tsx
+msgid "No cohorts yet."
+msgstr ""
+
 #. Empty-state message when no command palette results match the search query
 #: src/features/command-palette/content.tsx
 msgid "No commands match that search."
@@ -7922,6 +8158,10 @@ msgstr "Fără adresă de e-mail"
 #: src/features/ats-checker/messages.ts
 msgid "No email address was found."
 msgstr "Nu a fost găsită nicio adresă de e-mail."
+
+#: src/features/org-admin/audit-page.tsx
+msgid "No entries."
+msgstr ""
 
 #: src/features/career/shared.tsx
 msgid "No evidence yet"
@@ -8029,6 +8269,10 @@ msgstr "Fără CV"
 msgid "No resumes yet."
 msgstr "Încă nu există CV-uri."
 
+#: src/features/org-admin/bulk-invite.tsx
+msgid "No seat left"
+msgstr ""
+
 #: src/features/documents/document-actions.tsx
 msgid "No selected documents were deleted. Refresh to see what remains."
 msgstr ""
@@ -8118,6 +8362,10 @@ msgstr "marginile normale"
 #: src/libs/locale.ts
 msgid "Norwegian"
 msgstr "Norvegiană"
+
+#: src/features/org-admin/bulk-invite.tsx
+msgid "Not a valid email"
+msgstr ""
 
 #: src/features/career/workspace/messages.tsx
 msgid "Not applied"
@@ -8347,6 +8595,7 @@ msgstr "Ofertă salvată"
 msgid "Offer type"
 msgstr "Tipul ofertei"
 
+#: src/features/org-admin/analytics-page.tsx
 #: src/routes/dashboard/career/route.tsx
 msgid "Offers"
 msgstr "Oferte"
@@ -8432,6 +8681,10 @@ msgstr ""
 
 #: src/features/organization/members-page.tsx
 msgid "Only owners and admins can manage members"
+msgstr ""
+
+#: src/features/org-admin/access.tsx
+msgid "Only owners and admins of an organization can open this page"
 msgstr ""
 
 #: src/features/settings/ai/providers.tsx
@@ -8704,6 +8957,11 @@ msgstr "Pagină"
 msgid "Page {0}"
 msgstr "Pagina {0}"
 
+#: src/features/org-admin/analytics-page.tsx
+#: src/features/org-admin/cohorts-page.tsx
+msgid "Page {page} of {pages}"
+msgstr ""
+
 #: src/routes/builder/$resumeId/-components/page-canvas.tsx
 #: src/routes/builder/letter/-components/letter-page.tsx
 msgid "Page {pageNumber}"
@@ -8949,6 +9207,10 @@ msgstr "Alegeți o oră ulterioară momentului actual."
 #: src/components/input/icon-picker.tsx
 msgid "Pick an icon"
 msgstr "Alegeți o pictogramă"
+
+#: src/features/org-admin/cohorts-page.tsx
+msgid "Pick members, then move them to a cohort or take them out of theirs."
+msgstr ""
 
 #: src/features/ats-checker/messages.ts
 msgid "Pick one format and use it everywhere."
@@ -9202,6 +9464,8 @@ msgid "Previewing {0} · click to apply"
 msgstr "Previzualizare {0} · faceți clic pentru a aplica"
 
 #: src/features/documents/page-navigation.tsx
+#: src/features/org-admin/analytics-page.tsx
+#: src/features/org-admin/cohorts-page.tsx
 msgid "Previous"
 msgstr ""
 
@@ -9961,9 +10225,15 @@ msgstr ""
 
 #: src/features/career/coach.tsx
 #: src/features/documents/document-actions.tsx
+#: src/features/org-admin/cohorts-page.tsx
 #: src/features/settings/account/security.tsx
 msgid "Rename"
 msgstr "Redenumiți"
+
+#. placeholder {0}: cohort.name
+#: src/features/org-admin/cohorts-page.tsx
+msgid "Rename {0}"
+msgstr ""
 
 #: src/routes/builder/letter/-components/letter-bar.tsx
 msgid "Rename letter"
@@ -10095,8 +10365,14 @@ msgstr "Răspuns până la"
 
 #: src/features/documents/document-actions.tsx
 #: src/features/documents/trash-page.tsx
+#: src/features/org-admin/cohorts-page.tsx
 msgid "Restore"
 msgstr "Restabili"
+
+#. placeholder {0}: cohort.name
+#: src/features/org-admin/cohorts-page.tsx
+msgid "Restore {0}"
+msgstr ""
 
 #: src/features/resume/share/history-tab.tsx
 msgid "Restore this version"
@@ -10130,6 +10406,7 @@ msgid "Restricted to its employer or application."
 msgstr ""
 
 #: src/features/career/knowledge/stories.tsx
+#: src/features/org-admin/bulk-invite.tsx
 msgid "Result"
 msgstr "Rezultat"
 
@@ -10196,12 +10473,17 @@ msgstr ""
 #: src/features/command-palette/pages/navigation.tsx
 #: src/features/command-palette/pages/resumes.tsx
 #: src/features/documents/documents-page.tsx
+#: src/features/org-admin/analytics-page.tsx
 msgid "Resumes"
 msgstr "CV-uri"
 
 #: src/features/settings/preferences.tsx
 msgid "Resumes always render on white paper, whatever the theme."
 msgstr "CV-urile se redau întotdeauna pe hârtie albă, indiferent de temă."
+
+#: src/features/org-admin/analytics-page.tsx
+msgid "Resumes created"
+msgstr ""
 
 #. placeholder {0}: application.postingSource.retrievedAt
 #. placeholder {1}: application.postingSource.method
@@ -10923,9 +11205,11 @@ msgid "Select"
 msgstr "Selectați"
 
 #. placeholder {0}: document.name
+#. placeholder {0}: member.name
 #. placeholder {0}: row.role
 #: src/features/career/today.tsx
 #: src/features/documents/document-card.tsx
+#: src/features/org-admin/cohorts-page.tsx
 msgid "Select {0}"
 msgstr "Selectați {0}"
 
@@ -10977,6 +11261,10 @@ msgstr "Foaie de stil CSS semantică"
 #: src/features/career/coach-thread.tsx
 msgid "Send"
 msgstr "Trimite"
+
+#: src/features/org-admin/bulk-invite.tsx
+msgid "Send {okRows} invitations"
+msgstr ""
 
 #: src/features/organization/members-page.tsx
 msgid "Send invitation"
@@ -11062,6 +11350,16 @@ msgstr "Trimite textul CV-ului dvs. numai către {0} · {1}, cu cheia dvs."
 #: src/features/resume/share/format.ts
 msgid "Sent"
 msgstr "Trimis"
+
+#. placeholder {0}: result.sent
+#: src/features/org-admin/bulk-invite.tsx
+msgid "Sent {0} invitations"
+msgstr ""
+
+#. placeholder {0}: report.sent
+#: src/features/org-admin/bulk-invite.tsx
+msgid "Sent {0} invitations."
+msgstr ""
 
 #. placeholder {0}: version.name
 #: src/features/resume/share/format.ts
@@ -11203,6 +11501,10 @@ msgstr "Arată din nou"
 #: src/features/career/knowledge/facts.tsx
 msgid "Show all types"
 msgstr "Afișați toate tipurile"
+
+#: src/features/org-admin/cohorts-page.tsx
+msgid "Show archived"
+msgstr ""
 
 #: src/routes/dashboard/applications/index.tsx
 msgid "Show closed"
@@ -11716,6 +12018,10 @@ msgstr ""
 msgid "Started"
 msgstr "Început"
 
+#: src/features/org-admin/cohorts-page.tsx
+msgid "Starts"
+msgstr ""
+
 #: src/features/career/shared.tsx
 msgid "Starts in {minutes} minutes"
 msgstr "Începe în {minutes} minute"
@@ -11874,6 +12180,7 @@ msgstr "Sugerează tăieturi, nu se șterge niciodată singur"
 msgid "Summaries of your open applications"
 msgstr "Rezumatele candidaturilor dvs. deschise"
 
+#: src/features/org-admin/analytics-page.tsx
 #: src/features/resume/editor/write/summary-editor.tsx
 #: src/libs/resume/section.tsx
 msgid "Summary"
@@ -12932,6 +13239,7 @@ msgstr "Sfat"
 msgid "Title"
 msgstr "Titlu"
 
+#: src/features/org-admin/analytics-page.tsx
 #: src/routes/builder/letter/-components/write-panel.tsx
 msgid "To"
 msgstr "La"
@@ -13236,6 +13544,14 @@ msgstr "Anulați modificarea CV-ului"
 msgid "Unknown"
 msgstr "Necunoscut"
 
+#: src/features/org-admin/bulk-invite.tsx
+msgid "Unknown cohort"
+msgstr ""
+
+#: src/features/org-admin/bulk-invite.tsx
+msgid "Unknown role"
+msgstr ""
+
 #: src/features/documents/document-actions.tsx
 msgid "Unlink"
 msgstr "Deconectați"
@@ -13293,6 +13609,10 @@ msgstr "Până la 2 minute. Cuvintele apar pe măsură ce vorbiți."
 #: src/features/ats-checker/checker.tsx
 msgid "Up to 25 MB · checked in your browser, never uploaded"
 msgstr "Până la 25 MB · verificat în browser, niciodată încărcat"
+
+#: src/features/org-admin/analytics-page.tsx
+msgid "Up to 366 days, in UTC."
+msgstr ""
 
 #: src/features/applications/components/calendar-view.tsx
 msgid "Upcoming interviews"
@@ -14011,6 +14331,10 @@ msgstr "Ce oportunități se potrivesc cel mai bine cu prioritățile mele?"
 msgid "Which other benefits come with it, like pension or allowances?"
 msgstr "Ce alte beneficii include, cum ar fi pensia sau indemnizațiile?"
 
+#: src/features/org-admin/audit-page.tsx
+msgid "Who changed what in your organization."
+msgstr ""
+
 #: src/features/applications/components/interview-dialog.tsx
 #: src/features/career/workspace/shell.tsx
 msgid "Who you'll meet"
@@ -14031,6 +14355,10 @@ msgstr "margini largi"
 #: src/features/resume/editor/design/template-group.tsx
 msgid "Width"
 msgstr "Lăţime"
+
+#: src/features/org-admin/bulk-invite.tsx
+msgid "Will be invited"
+msgstr ""
 
 #: src/features/settings/account/application-profile.tsx
 msgid "Willing to relocate"
@@ -14377,6 +14705,11 @@ msgstr ""
 
 #: src/features/resume/builder/draft.ts
 msgid "Your changes were kept in “{name}”."
+msgstr ""
+
+#. placeholder {0}: data.cohortName
+#: src/features/settings/account/profile.tsx
+msgid "Your cohort: {0}"
 msgstr ""
 
 #: src/features/ats-checker/messages.ts
