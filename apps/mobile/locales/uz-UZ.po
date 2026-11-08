@@ -33,6 +33,11 @@ msgstr "“{0}” chiqitdonga tashlandi"
 msgid "“{0}” stops being your primary resume."
 msgstr "“{0}” endi asosiy rezyumengiz emas."
 
+#. placeholder {0}: selected?.label ?? ""
+#: src/features/settings/clipper-sign-ins.tsx
+msgid "“{0}” stops working. You can sign in again from the extension."
+msgstr ""
+
 #. placeholder {0}: purge?.documents[0]?.name
 #: src/features/documents/library.tsx
 msgid "“{0}” will be deleted for good and can't be restored."
@@ -2092,6 +2097,10 @@ msgstr "Brifingni yangilash yoqilgan · {next}"
 msgid "Briefing refresh paused"
 msgstr "Brifingni yangilash to'xtatilgan"
 
+#: src/features/settings/clipper-sign-ins.tsx
+msgid "Browsers where you signed in to the Job Clipper extension. You sign in from the extension on a computer."
+msgstr ""
+
 #: src/features/ai/web-access.tsx
 msgid "Built-in reader"
 msgstr "O'rnatilgan o'quvchi"
@@ -3137,6 +3146,10 @@ msgstr "Buni yuklab bo‘lmadi. Ulanishingizni tekshiring va qaytadan urining."
 msgid "Couldn't load versions."
 msgstr "Versiyalarni yuklab bo‘lmadi."
 
+#: src/features/settings/clipper-sign-ins.tsx
+msgid "Couldn't load your Job Clipper sign-ins."
+msgstr ""
+
 #: app/(tabs)/settings/account.tsx
 msgid "Couldn't load your profile."
 msgstr "Profilingizni yuklab bo‘lmadi."
@@ -3243,6 +3256,10 @@ msgstr "Bu rezyumeni ko‘rsatib bo‘lmadi."
 #: src/features/settings/api-keys.tsx
 msgid "Couldn't revoke the key. Try again."
 msgstr "Kalitni bekor qilib boʻlmadi. Qayta urinib ko'ring."
+
+#: src/features/settings/clipper-sign-ins.tsx
+msgid "Couldn't revoke the sign-in. Try again."
+msgstr ""
 
 #: src/features/career/facts.tsx
 #: src/features/career/hooks.ts
@@ -5452,6 +5469,10 @@ msgstr "JavaScript"
 msgid "Job"
 msgstr "Ish"
 
+#: src/features/settings/clipper-sign-ins.tsx
+msgid "Job Clipper sign-ins"
+msgstr ""
+
 #: src/features/application-detail/sheets.tsx
 #: src/features/workspace/preparation.tsx
 msgid "Job description"
@@ -6039,6 +6060,10 @@ msgstr ""
 msgid "Loading saved version…"
 msgstr "Saqlangan versiya yuklanmoqda…"
 
+#: src/features/settings/clipper-sign-ins.tsx
+msgid "Loading sign-ins…"
+msgstr ""
+
 #: src/features/ai/web-access.tsx
 msgid "Loading web access…"
 msgstr "Internetga kirish yuklanmoqda…"
@@ -6602,6 +6627,7 @@ msgstr "Tarmoq"
 
 #: src/features/career/preferences.tsx
 #: src/features/settings/api-keys.tsx
+#: src/features/settings/clipper-sign-ins.tsx
 msgid "Never"
 msgstr "Hech qachon"
 
@@ -6797,6 +6823,10 @@ msgstr "Hech qanday fakt mos kelmaydi"
 #: src/features/write/pickers.tsx
 msgid "No icons match."
 msgstr "Hech qanday piktogramma mos kelmaydi."
+
+#: src/features/settings/clipper-sign-ins.tsx
+msgid "No Job Clipper sign-ins yet."
+msgstr ""
 
 #: src/features/documents/new-document.tsx
 msgid "No job yet"
@@ -9023,6 +9053,7 @@ msgid "Reviewing needs an AI connection. What you write here stays on this devic
 msgstr "Tekshirish uchun AI ulanishi kerak. Bu yerda yozganlaringiz shu vaqtgacha ushbu qurilmada qoladi."
 
 #: src/features/settings/api-keys.tsx
+#: src/features/settings/clipper-sign-ins.tsx
 msgid "Revoke"
 msgstr "Bekor qilish"
 
@@ -9030,13 +9061,25 @@ msgstr "Bekor qilish"
 msgid "Revoke API key?"
 msgstr "API kaliti bekor qilinsinmi?"
 
+#: src/features/settings/clipper-sign-ins.tsx
+msgid "Revoke Job Clipper sign-in?"
+msgstr ""
+
 #: src/features/settings/api-keys.tsx
 msgid "Revoke key"
 msgstr "Kalitni bekor qilish"
 
+#: src/features/settings/clipper-sign-ins.tsx
+msgid "Revoke sign-in"
+msgstr ""
+
 #: src/features/settings/api-keys.tsx
 msgid "Revoke this API key"
 msgstr "Ushbu API kalitini bekor qiling"
+
+#: src/features/settings/clipper-sign-ins.tsx
+msgid "Revoke this Job Clipper sign-in"
+msgstr ""
 
 #: src/features/check/writing.tsx
 msgid "Rewrite accepted"
@@ -9974,9 +10017,19 @@ msgstr "Kirish va xavfsizlik"
 msgid "Sign-in didn't complete"
 msgstr "Kirish yakunlanmadi"
 
+#: src/features/settings/clipper-sign-ins.tsx
+msgid "Sign-in revoked. The extension stops working on its next request."
+msgstr ""
+
 #: src/features/letters/write.tsx
 msgid "Sign-off"
 msgstr "Yakuniy ibora"
+
+#. placeholder {0}: date(token.createdAt)
+#. placeholder {1}: date(token.lastUsedAt)
+#: src/features/settings/clipper-sign-ins.tsx
+msgid "Signed in {0} · Last used {1}"
+msgstr ""
 
 #. placeholder {0}: hostOf(server)
 #: src/auth/session-gate.tsx
@@ -11459,6 +11512,7 @@ msgstr "Sinab ko‘ring: {suggestion}"
 #: src/features/branding/domains-screen.tsx
 #: src/features/letters/write.tsx
 #: src/features/settings/api-keys.tsx
+#: src/features/settings/clipper-sign-ins.tsx
 #: src/features/workspace/parts.tsx
 #: src/features/workspace/preparation.tsx
 #: src/features/workspace/shell.tsx

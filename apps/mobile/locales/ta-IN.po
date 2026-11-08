@@ -33,6 +33,11 @@ msgstr "“{0}” குப்பைக்கு நகர்த்தப்ப�
 msgid "“{0}” stops being your primary resume."
 msgstr "“{0}” இனி உங்கள் முதன்மை ரெஸ்யூமாக இருக்காது."
 
+#. placeholder {0}: selected?.label ?? ""
+#: src/features/settings/clipper-sign-ins.tsx
+msgid "“{0}” stops working. You can sign in again from the extension."
+msgstr ""
+
 #. placeholder {0}: purge?.documents[0]?.name
 #: src/features/documents/library.tsx
 msgid "“{0}” will be deleted for good and can't be restored."
@@ -2092,6 +2097,10 @@ msgstr "தானியங்கு சுருக்கமான புது�
 msgid "Briefing refresh paused"
 msgstr "சுருக்கக் குறிப்புப் புதுப்பிப்பு இடைநிறுத்தப்பட்டது"
 
+#: src/features/settings/clipper-sign-ins.tsx
+msgid "Browsers where you signed in to the Job Clipper extension. You sign in from the extension on a computer."
+msgstr ""
+
 #: src/features/ai/web-access.tsx
 msgid "Built-in reader"
 msgstr "உள்ளமைக்கப்பட்ட வாசகர்"
@@ -3137,6 +3146,10 @@ msgstr "இதை ஏற்ற முடியவில்லை. உங்க�
 msgid "Couldn't load versions."
 msgstr "பதிப்புகளை ஏற்ற முடியவில்லை."
 
+#: src/features/settings/clipper-sign-ins.tsx
+msgid "Couldn't load your Job Clipper sign-ins."
+msgstr ""
+
 #: app/(tabs)/settings/account.tsx
 msgid "Couldn't load your profile."
 msgstr "உங்கள் சுயவிவரத்தை ஏற்ற முடியவில்லை."
@@ -3243,6 +3256,10 @@ msgstr "இந்த ரெஸ்யூமை ரெண்டர் செய்
 #: src/features/settings/api-keys.tsx
 msgid "Couldn't revoke the key. Try again."
 msgstr "விசையைத் திரும்பப் பெற முடியவில்லை. மீண்டும் முயற்சிக்கவும்."
+
+#: src/features/settings/clipper-sign-ins.tsx
+msgid "Couldn't revoke the sign-in. Try again."
+msgstr ""
 
 #: src/features/career/facts.tsx
 #: src/features/career/hooks.ts
@@ -5452,6 +5469,10 @@ msgstr "JavaScript"
 msgid "Job"
 msgstr "வேலை"
 
+#: src/features/settings/clipper-sign-ins.tsx
+msgid "Job Clipper sign-ins"
+msgstr ""
+
 #: src/features/application-detail/sheets.tsx
 #: src/features/workspace/preparation.tsx
 msgid "Job description"
@@ -6039,6 +6060,10 @@ msgstr ""
 msgid "Loading saved version…"
 msgstr "சேமித்த பதிப்பை ஏற்றுகிறது…"
 
+#: src/features/settings/clipper-sign-ins.tsx
+msgid "Loading sign-ins…"
+msgstr ""
+
 #: src/features/ai/web-access.tsx
 msgid "Loading web access…"
 msgstr "இணைய அணுகலை ஏற்றுகிறது…"
@@ -6602,6 +6627,7 @@ msgstr "நெட்வொர்க்"
 
 #: src/features/career/preferences.tsx
 #: src/features/settings/api-keys.tsx
+#: src/features/settings/clipper-sign-ins.tsx
 msgid "Never"
 msgstr "ஒருபோதும் இல்லை"
 
@@ -6797,6 +6823,10 @@ msgstr "உண்மைகள் பொருந்தவில்லை"
 #: src/features/write/pickers.tsx
 msgid "No icons match."
 msgstr "ஐகான்கள் பொருந்தவில்லை."
+
+#: src/features/settings/clipper-sign-ins.tsx
+msgid "No Job Clipper sign-ins yet."
+msgstr ""
 
 #: src/features/documents/new-document.tsx
 msgid "No job yet"
@@ -9023,6 +9053,7 @@ msgid "Reviewing needs an AI connection. What you write here stays on this devic
 msgstr "மதிப்பாய்வுக்கு AI இணைப்பு தேவை. நீங்கள் இங்கு எழுதுவது அதுவரை இந்தச் சாதனத்தில் இருக்கும்."
 
 #: src/features/settings/api-keys.tsx
+#: src/features/settings/clipper-sign-ins.tsx
 msgid "Revoke"
 msgstr "திரும்பப் பெறு"
 
@@ -9030,13 +9061,25 @@ msgstr "திரும்பப் பெறு"
 msgid "Revoke API key?"
 msgstr "API விசையை திரும்பப் பெறவா?"
 
+#: src/features/settings/clipper-sign-ins.tsx
+msgid "Revoke Job Clipper sign-in?"
+msgstr ""
+
 #: src/features/settings/api-keys.tsx
 msgid "Revoke key"
 msgstr "சாவியைத் திரும்பப் பெறு"
 
+#: src/features/settings/clipper-sign-ins.tsx
+msgid "Revoke sign-in"
+msgstr ""
+
 #: src/features/settings/api-keys.tsx
 msgid "Revoke this API key"
 msgstr "இந்த API விசையைத் திரும்பப் பெறவும்"
+
+#: src/features/settings/clipper-sign-ins.tsx
+msgid "Revoke this Job Clipper sign-in"
+msgstr ""
 
 #: src/features/check/writing.tsx
 msgid "Rewrite accepted"
@@ -9974,9 +10017,19 @@ msgstr "உள்நுழைவு & பாதுகாப்பு"
 msgid "Sign-in didn't complete"
 msgstr "உள்நுழைவு முடிவடையவில்லை"
 
+#: src/features/settings/clipper-sign-ins.tsx
+msgid "Sign-in revoked. The extension stops working on its next request."
+msgstr ""
+
 #: src/features/letters/write.tsx
 msgid "Sign-off"
 msgstr "நிறைவு வாசகம்"
+
+#. placeholder {0}: date(token.createdAt)
+#. placeholder {1}: date(token.lastUsedAt)
+#: src/features/settings/clipper-sign-ins.tsx
+msgid "Signed in {0} · Last used {1}"
+msgstr ""
 
 #. placeholder {0}: hostOf(server)
 #: src/auth/session-gate.tsx
@@ -11459,6 +11512,7 @@ msgstr "{suggestion} முயற்சிக்கவும்"
 #: src/features/branding/domains-screen.tsx
 #: src/features/letters/write.tsx
 #: src/features/settings/api-keys.tsx
+#: src/features/settings/clipper-sign-ins.tsx
 #: src/features/workspace/parts.tsx
 #: src/features/workspace/preparation.tsx
 #: src/features/workspace/shell.tsx

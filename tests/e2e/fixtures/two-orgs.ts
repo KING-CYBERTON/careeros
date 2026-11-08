@@ -103,6 +103,8 @@ async function seedRowsWithoutEndpoint(a: Party, tag: string) {
 		discoveredJob: `xorga-posting-${tag}`,
 		// CAREEROS (P3-T08): a cohort of Organization A. The marker is in its name so any echo is detected.
 		cohort: `xorga-cohort-${tag}`,
+		// CAREEROS (P5-T02): one of A's Job Clipper sign-ins. Only a hash goes in, as in production.
+		clipperToken: `xorga-clipper-${tag}`,
 	};
 	await withSeedPool(async (pool) => {
 		await pool.query(
@@ -156,6 +158,11 @@ async function seedRowsWithoutEndpoint(a: Party, tag: string) {
 				`Xorga${tag} Company`,
 				`https://example.test/xorga-${tag}`,
 			],
+		);
+		await pool.query(
+			`insert into clipper_token (id, token_hash, user_id, organization_id, host, label, expires_at)
+			 values ($1, $2, $3, $4, $5, 'Chrome on Linux', now() + interval '90 days')`,
+			[ids.clipperToken, `xorga${tag}hash`, a.userId, a.organizationId, `xorga-${tag}.example.test`],
 		);
 		// Custom domains are switched off on the e2e server (no 412-free endpoint), so the row goes in directly.
 		await pool.query(
@@ -517,6 +524,7 @@ export async function createTwoOrgs(playwright: Playwright, baseURL: string, own
 			// CAREEROS (P3-T08)
 			cohort: extra.cohort,
 			member: authOrg.memberId,
+			clipperToken: extra.clipperToken,
 		};
 		const missing = Object.entries(ids).filter(([, value]) => !value);
 		if (missing.length > 0)
