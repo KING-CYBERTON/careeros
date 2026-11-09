@@ -113,6 +113,8 @@ All Phase 2 tasks are merged. P2-C03 (from exit review M1, [spec](plans/cicd/P2-
 | P5-T03 | [plans/P5-T03-clipping.md](plans/P5-T03-clipping.md)                                   | **Merged** · [review](reviews/P5-T03-review-1.md)                                            | [#95](https://github.com/KING-CYBERTON/careeros/pull/95)   |
 | P5-C01 | [plans/P5-C01-extension-packaging.md](plans/P5-C01-extension-packaging.md)             | **Merged** · [review](reviews/P5-T03-review-1.md)                                            | [#94](https://github.com/KING-CYBERTON/careeros/pull/94)   |
 | P6-T01 | [plans/P6-T01-legal-pages.md](plans/P6-T01-legal-pages.md)                             | **Merged** · [review](reviews/P6-T01-review-1.md)                                            | [#73](https://github.com/KING-CYBERTON/careeros/pull/73)   |
+| P5-T04 | [plans/P5-T04-email-templates-per-stage.md](plans/P5-T04-email-templates-per-stage.md) | Approved; in build                                                                           | —                                                          |
+| P6-T02 | [plans/P6-T02-email-delivery-plunk.md](plans/P6-T02-email-delivery-plunk.md)           | Approved; in build                                                                           | —                                                          |
 
 ### Waiting on Stephen (Phase 3 and go-to-market)
 
