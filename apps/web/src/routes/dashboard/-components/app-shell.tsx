@@ -17,6 +17,8 @@ import { cn } from "@reactive-resume/utils/style";
 import { MobileTabIndicator } from "@/components/layout/mobile-tab-indicator";
 import { useDialogStore } from "@/dialogs/store";
 import { GuestBanner } from "@/features/auth/components/guest-banner";
+// CAREEROS (P3-T06): trial, past due and suspension notices for owners; an overdue notice for members
+import { BillingBanner } from "@/features/billing/billing-banner";
 import { useCommandPaletteStore } from "@/features/command-palette/store";
 // CAREEROS: organization switcher and the no-organization notice (P1-T03)
 import { NoOrganizationNotice } from "@/features/organization/no-organization-notice";
@@ -120,6 +122,8 @@ export function AppShell({ children }: AppShellProps) {
 			<main id="main-content" className="min-w-0">
 				{/* CAREEROS (P3-T02): a suspended organization is read-only; the server refuses the writes */}
 				<SuspendedBanner />
+				{/* CAREEROS (P3-T06): billing notices, with a link to the billing page for the owner */}
+				<BillingBanner />
 				{/* CAREEROS (P3-T07): platform announcements for this member, dismissible */}
 				<AnnouncementBanner />
 				<GuestBanner />

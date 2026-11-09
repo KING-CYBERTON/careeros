@@ -349,6 +349,11 @@ msgstr "{0} (копија)"
 msgid "{0} (mine)"
 msgstr ""
 
+#. placeholder {0}: plan.aiCreditsPerSeat
+#: src/features/billing/plans.tsx
+msgid "{0} AI credits per seat each month"
+msgstr ""
+
 #. placeholder {0}: insights.closed
 #: src/features/applications/components/insights-view.tsx
 msgid "{0} closed"
@@ -358,6 +363,11 @@ msgstr "{0} затворен"
 #. placeholder {1}: row.calls
 #: src/features/org-admin/ai-usage-page.tsx
 msgid "{0} credits · {1} calls"
+msgstr ""
+
+#. placeholder {0}: trialDays ?? 0
+#: src/features/billing/summary.tsx
+msgid "{0} days left in the trial."
 msgstr ""
 
 #. placeholder {0}: semantics.dates.length
@@ -454,6 +464,11 @@ msgstr "{0} од {1} прилагођених пријава за посао ј�
 msgid "{0} of {1} terms found"
 msgstr "Пронађено {0} од {1} термина"
 
+#. placeholder {0}: billing.memberCount
+#: src/features/billing/summary.tsx
+msgid "{0} of {seatLimit}"
+msgstr ""
+
 #. placeholder {0}: document.posting.company
 #: src/features/assistant/conversation.tsx
 msgid "{0} posting"
@@ -498,6 +513,17 @@ msgstr "{0} за исправку"
 #. placeholder {1}: failed.length
 #: src/features/career/today.tsx
 msgid "{0} updated; {1} failed. Failed roles remain selected. Refresh or retry."
+msgstr ""
+
+#. placeholder {0}: billing.memberCount
+#: src/features/billing/summary.tsx
+msgid "{0} used"
+msgstr ""
+
+#. placeholder {0}: credits.used
+#. placeholder {1}: Math.max(0, credits.allowance - credits.used)
+#: src/features/billing/summary.tsx
+msgid "{0} used, {1} left"
 msgstr ""
 
 #. placeholder {0}: answer.split(/\s+/).filter(Boolean).length
@@ -1165,6 +1191,7 @@ msgstr ""
 msgid "Actions"
 msgstr "Акције"
 
+#: src/features/billing/summary.tsx
 #: src/features/branding/domains.ts
 #: src/features/platform-admin/organizations-page.tsx
 #: src/features/settings/ai/web-access.tsx
@@ -1697,8 +1724,13 @@ msgstr ""
 msgid "AI couldn't fill the details. The posting is retained; complete the fields manually."
 msgstr "АИ није могао да испуни детаље. Оглас за посао се задржава; ручно попуните поља."
 
+#: src/features/billing/summary.tsx
 #: src/features/platform-admin/organizations-page.tsx
 msgid "AI credits"
+msgstr ""
+
+#: src/features/billing/summary.tsx
+msgid "AI credits used this period"
 msgstr ""
 
 #: src/features/resume/share/format.ts
@@ -1880,6 +1912,7 @@ msgstr "Такође приказује иконе о вештинама, про
 msgid "Amharic"
 msgstr "Амхарски"
 
+#: src/features/billing/invoices.tsx
 #: src/features/platform-admin/organization-page.tsx
 msgid "Amount"
 msgstr ""
@@ -1925,6 +1958,10 @@ msgstr ""
 #: src/features/platform-admin/announcements-page.tsx
 #: src/features/platform-admin/layout.tsx
 msgid "Announcements"
+msgstr ""
+
+#: src/features/billing/plans.tsx
+msgid "Annual"
 msgstr ""
 
 #: src/features/branding/domains.ts
@@ -2219,6 +2256,10 @@ msgstr "Пријављивање"
 msgid "Approve"
 msgstr ""
 
+#: src/features/billing/billing-page.tsx
+msgid "Approve the payment on your phone."
+msgstr ""
+
 #: src/libs/locale.ts
 msgid "Arabic"
 msgstr "Арапски"
@@ -2305,6 +2346,10 @@ msgstr "Замолите асистента да то уради"
 #: src/features/career/workspace/shell.tsx
 msgid "Ask the coach"
 msgstr "Питајте саветника"
+
+#: src/features/billing/billing-page.tsx
+msgid "Ask the owner of your organization about the plan or payments."
+msgstr ""
 
 #: src/features/branding/domains-page.tsx
 msgid "Ask the platform administrator to set up custom domains. Your address above keeps working."
@@ -2436,6 +2481,11 @@ msgstr "Назад на пријаве"
 msgid "Back to authentication settings"
 msgstr "Назад на подешавања потврде идентитета"
 
+#: src/features/billing/receipt-page.tsx
+#: src/features/billing/return-page.tsx
+msgid "Back to billing"
+msgstr ""
+
 #: src/features/career/workspace/shell.tsx
 msgid "Back to current"
 msgstr "Назад на тренутну"
@@ -2521,6 +2571,19 @@ msgstr "Бенгалски"
 #: src/features/resume/share/download-tab.tsx
 msgid "Best for applying"
 msgstr "Најбоље за пријаву"
+
+#: src/features/billing/billing-page.tsx
+#: src/routes/dashboard/settings/route.tsx
+msgid "Billing"
+msgstr ""
+
+#: src/features/billing/plans.tsx
+msgid "Billing interval"
+msgstr ""
+
+#: src/features/billing/billing-page.tsx
+msgid "Billing is managed by the platform"
+msgstr ""
 
 #: src/features/settings/account/application-profile.tsx
 msgid "Blank fields mean unknown. Nothing is inferred from your resume. Self-identification is not collected here. Enter references yourself and review their details before sharing."
@@ -2699,6 +2762,7 @@ msgstr "Може ли софтвер да прочита ваш резиме?"
 #: src/features/applications/components/import-applications-sheet.tsx
 #: src/features/applications/components/interview-dialog.tsx
 #: src/features/applications/components/manage-lanes-sheet.tsx
+#: src/features/billing/plans.tsx
 #: src/features/career/knowledge/facts.tsx
 #: src/features/career/knowledge/stories.tsx
 #: src/features/career/offer-entry.tsx
@@ -2721,6 +2785,33 @@ msgstr "Откажи"
 #. placeholder {0}: invitation.email
 #: src/features/organization/members-page.tsx
 msgid "Cancel invitation for {0}"
+msgstr ""
+
+#: src/features/billing/billing-page.tsx
+msgid "Cancel subscription"
+msgstr ""
+
+#: src/features/billing/billing-page.tsx
+msgid "Cancel this subscription?"
+msgstr ""
+
+#. placeholder {0}: periodEnd ?? "the period ends"
+#: src/features/billing/summary.tsx
+msgid "Canceled. The organization keeps working until {0}."
+msgstr ""
+
+#: src/features/billing/billing-page.tsx
+msgid "Cancellation sent. It shows once the payment provider confirms."
+msgstr ""
+
+#: src/features/billing/invoices.tsx
+#: src/features/billing/plans.tsx
+#: src/features/billing/summary.tsx
+msgid "Card"
+msgstr ""
+
+#: src/features/billing/plans.tsx
+msgid "Card renews automatically."
 msgstr ""
 
 #: src/routes/dashboard/-components/app-shell.tsx
@@ -2752,6 +2843,11 @@ msgstr "Сертификације"
 msgid "Change"
 msgstr "Промена"
 
+#. placeholder {0}: plan.name
+#: src/features/billing/plans.tsx
+msgid "Change {0}"
+msgstr ""
+
 #: src/features/career/coach-chat.tsx
 #: src/features/settings/ai/web-access.tsx
 msgid "Change connection"
@@ -2780,6 +2876,10 @@ msgstr "Промените фотографију"
 
 #: src/features/platform-admin/organization-page.tsx
 msgid "Change plan"
+msgstr ""
+
+#: src/features/billing/plans.tsx
+msgid "Change seats or interval"
 msgstr ""
 
 #: src/features/applications/components/detail/next-step-card.tsx
@@ -2986,6 +3086,15 @@ msgstr "Кинески (поједностављени)"
 #: src/libs/locale.ts
 msgid "Chinese (Traditional)"
 msgstr "Кинески (традиционални)"
+
+#: src/features/billing/plans.tsx
+msgid "Choose"
+msgstr ""
+
+#. placeholder {0}: plan.name
+#: src/features/billing/plans.tsx
+msgid "Choose {0}"
+msgstr ""
 
 #: src/features/career/workspace/preparation.tsx
 msgid "Choose a base resume"
@@ -3351,6 +3460,10 @@ msgstr "Потврдите време са особом {contact} пре дод�
 msgid "Confirm the time, link and who you'll meet. Glance at the resume and letter you sent."
 msgstr "Потврдите време, линк и са ким ћете се састати. Баците поглед на резиме и писмо које сте послали."
 
+#: src/features/billing/return-page.tsx
+msgid "Confirmation may take a few minutes. You can leave this page; your plan updates as soon as the payment is confirmed."
+msgstr ""
+
 #: src/features/assistant/provider-setup.tsx
 #: src/features/resume/share/custom-domain-field.tsx
 #: src/features/settings/account/security.tsx
@@ -3471,6 +3584,14 @@ msgstr "Контакт телефон"
 msgid "Contact role"
 msgstr "Контакт улога"
 
+#: src/features/billing/plans.tsx
+msgid "Contact us"
+msgstr ""
+
+#: src/features/billing/plans.tsx
+msgid "Contact us to buy this plan."
+msgstr ""
+
 #: src/features/applications/components/detail/contacts.tsx
 #: src/features/applications/components/import-applications-sheet.tsx
 msgid "Contacts"
@@ -3501,6 +3622,10 @@ msgstr "Настави"
 #: src/features/auth/pages/login.tsx
 msgid "Continue as guest"
 msgstr "Настави као гост"
+
+#: src/features/billing/plans.tsx
+msgid "Continue to payment"
+msgstr ""
 
 #: src/features/assistant/conversation.tsx
 #: src/features/career/coach-chat.tsx
@@ -3671,6 +3796,10 @@ msgstr "Није могуће приложити датотеку. Покуша�
 msgid "Couldn't cancel the invitation. Try again."
 msgstr ""
 
+#: src/features/billing/billing-page.tsx
+msgid "Couldn't cancel."
+msgstr ""
+
 #: src/features/org-admin/cohorts-page.tsx
 msgid "Couldn't change the cohort. Try again."
 msgstr ""
@@ -3691,6 +3820,10 @@ msgstr ""
 #: src/features/discovery/searches.tsx
 msgid "Couldn't change the schedule. Try again."
 msgstr "Није могуће променити распоред. Покушајте поново."
+
+#: src/features/billing/billing-page.tsx
+msgid "Couldn't change the seats."
+msgstr ""
 
 #: src/features/career/today.tsx
 msgid "Couldn't change this schedule. Try again."
@@ -3919,6 +4052,10 @@ msgstr ""
 msgid "Couldn't load applications. Try again."
 msgstr "Није могуће учитати пријаве. Покушајте поново."
 
+#: src/features/billing/billing-page.tsx
+msgid "Couldn't load billing"
+msgstr ""
+
 #: src/features/settings/ai/connected-apps.tsx
 msgid "Couldn't load connected applications. Refresh the page to try again."
 msgstr "Није могуће учитати повезане апликације. Освежите страницу да бисте покушали поново."
@@ -3934,6 +4071,10 @@ msgstr ""
 #: src/features/career/knowledge/stories.tsx
 msgid "Couldn't load interviews. Retry"
 msgstr "Није могуће учитати интервјуе. Покушај поново"
+
+#: src/features/billing/billing-page.tsx
+msgid "Couldn't load invoices"
+msgstr ""
 
 #: src/features/organization/members-page.tsx
 msgid "Couldn't load members"
@@ -4305,8 +4446,16 @@ msgstr "Није могуће покренути снимање. Изабери�
 msgid "Couldn't start the conversation. Try again."
 msgstr "Није могуће започети разговор. Покушајте поново."
 
+#: src/features/billing/billing-page.tsx
+msgid "Couldn't start the payment."
+msgstr ""
+
 #: src/features/discovery/searches.tsx
 msgid "Couldn't start the run. Try again."
+msgstr ""
+
+#: src/features/billing/billing-page.tsx
+msgid "Couldn't start the trial."
 msgstr ""
 
 #: src/features/career/role-suggestions.tsx
@@ -4624,6 +4773,14 @@ msgstr "Тренутни фокус, релевантно искуство и з
 msgid "Current password"
 msgstr "Тренутна лозинка"
 
+#: src/features/billing/summary.tsx
+msgid "Current period"
+msgstr ""
+
+#: src/features/billing/plans.tsx
+msgid "Current plan"
+msgstr ""
+
 #: src/components/input/color-picker.tsx
 #: src/features/resume/editor/design/style-groups.tsx
 msgid "Custom"
@@ -4705,6 +4862,7 @@ msgstr ""
 #: src/features/applications/components/detail/activity.tsx
 #: src/features/applications/components/detail/next-step-card.tsx
 #: src/features/applications/components/interview-dialog.tsx
+#: src/features/billing/invoices.tsx
 #: src/features/resume/editor/design/entries-group.tsx
 #: src/features/resume/editor/write/dates-field.tsx
 #: src/routes/builder/letter/-components/write-panel.tsx
@@ -5588,6 +5746,10 @@ msgstr ""
 msgid "Ends"
 msgstr ""
 
+#: src/features/billing/summary.tsx
+msgid "Ends at period end"
+msgstr ""
+
 #: src/libs/locale.ts
 msgid "English"
 msgstr "Енглески"
@@ -5650,6 +5812,10 @@ msgstr "Унесите веб адресу, на пример екампле.com
 
 #: src/features/discovery/search-messages.ts
 msgid "Enter a whole number from 0 to {MAX_AI_TOP_N}."
+msgstr ""
+
+#: src/features/billing/plans.tsx
+msgid "Enter a whole number of seats, at least 1."
 msgstr ""
 
 #: src/features/settings/ai/providers.tsx
@@ -6939,8 +7105,16 @@ msgstr ""
 msgid "Invited"
 msgstr ""
 
+#: src/features/billing/invoices.tsx
+msgid "Invoice"
+msgstr ""
+
 #: src/features/platform-admin/organization-page.tsx
 msgid "Invoice or bank reference"
+msgstr ""
+
+#: src/features/billing/invoices.tsx
+msgid "Invoices"
 msgstr ""
 
 #: src/features/career/offers.tsx
@@ -7192,6 +7366,10 @@ msgstr "Настави уређивање"
 #: src/features/documents/trash-page.tsx
 msgid "Keep in Trash"
 msgstr "Чувај у Отпаду"
+
+#: src/features/billing/billing-page.tsx
+msgid "Keep it"
+msgstr ""
 
 #: src/features/career/workspace/prepare.tsx
 msgid "Keep it honest"
@@ -7705,6 +7883,14 @@ msgstr "Листа"
 msgid "List the tools and technologies you use. Recruiters search skills more than any other field."
 msgstr "Наведите алате и технологије које користите. Регрутери претражују вештине више него било које друго поље."
 
+#: src/features/billing/plans.tsx
+msgid "Listed price per month:"
+msgstr ""
+
+#: src/features/billing/plans.tsx
+msgid "Listed price per year:"
+msgstr ""
+
 #: src/features/career/workspace/practise.tsx
 msgid "Listening… Stop when you're done."
 msgstr "Слушам… Зауставите када завршите."
@@ -7876,6 +8062,16 @@ msgstr "Ниско"
 msgid "Lower the design sheet"
 msgstr "Спустите лист дизајна"
 
+#: src/features/billing/invoices.tsx
+#: src/features/billing/plans.tsx
+#: src/features/billing/summary.tsx
+msgid "M-Pesa"
+msgstr ""
+
+#: src/features/billing/plans.tsx
+msgid "M-Pesa pays one period at a time. You pay again when the period ends."
+msgstr ""
+
 #: src/features/resume/share/web-page-text.ts
 msgid "Made with {appName}"
 msgstr ""
@@ -7941,6 +8137,10 @@ msgstr "Малајски"
 #: src/libs/locale.ts
 msgid "Malayalam"
 msgstr "Малајалам"
+
+#: src/features/billing/billing-page.tsx
+msgid "Manage"
+msgstr ""
 
 #: src/routes/dashboard/applications/index.tsx
 msgid "Manage stages"
@@ -8081,6 +8281,10 @@ msgstr ""
 msgid "Members & invites"
 msgstr ""
 
+#: src/features/billing/summary.tsx
+msgid "Members can view and export data but not change it until a payment is made."
+msgstr ""
+
 #: src/features/platform-admin/announcements-page.tsx
 msgid "Message (plain text, up to 1,000 characters)"
 msgstr ""
@@ -8096,6 +8300,10 @@ msgstr "Пошаљите поруку саветнику"
 #: src/features/career/shared.tsx
 msgid "Messages"
 msgstr "Поруке"
+
+#: src/features/billing/invoices.tsx
+msgid "Method"
+msgstr ""
 
 #: src/features/platform-admin/layout.tsx
 #: src/features/platform-admin/metrics-page.tsx
@@ -8135,6 +8343,7 @@ msgstr "Модел: {label}"
 msgid "Month"
 msgstr ""
 
+#: src/features/billing/plans.tsx
 #: src/features/platform-admin/organization-page.tsx
 msgid "Monthly"
 msgstr ""
@@ -8745,6 +8954,10 @@ msgstr ""
 msgid "No other stage counts as {0}. Add one first, so its applications have somewhere to go."
 msgstr "Ниједна друга фаза се не рачуна као {0}. Прво додајте такву фазу да бисте имали где да преместите пријаве."
 
+#: src/features/billing/invoices.tsx
+msgid "No payments yet."
+msgstr ""
+
 #: src/features/organization/members-page.tsx
 msgid "No pending invitations."
 msgstr ""
@@ -9240,6 +9453,10 @@ msgstr ""
 msgid "Only owners and admins can manage members"
 msgstr ""
 
+#: src/features/billing/billing-page.tsx
+msgid "Only owners and admins can open billing"
+msgstr ""
+
 #: src/features/org-admin/access.tsx
 msgid "Only owners and admins of an organization can open this page"
 msgstr ""
@@ -9265,6 +9482,10 @@ msgstr "Одједном се увози само првих {MAX_IMPORT} ред
 #: src/features/ats-checker/messages.ts
 msgid "Only the first pages were checked."
 msgstr "Проверене су само прве странице."
+
+#: src/features/billing/billing-page.tsx
+msgid "Only the owner can change the plan, seats or payment details."
+msgstr ""
 
 #: src/features/platform-admin/announcements-page.tsx
 msgid "Only this organization (id, optional)"
@@ -9300,6 +9521,10 @@ msgstr "Отворите подешавања АИ"
 
 #: src/features/discovery/review-queue.tsx
 msgid "Open application"
+msgstr ""
+
+#: src/features/billing/billing-banner.tsx
+msgid "Open billing"
 msgstr ""
 
 #: src/features/career/today.tsx
@@ -9670,6 +9895,10 @@ msgstr "Лозинка је постављена"
 msgid "Past conversations"
 msgstr "Прошли разговори"
 
+#: src/features/billing/summary.tsx
+msgid "Past due"
+msgstr ""
+
 #: src/features/applications/components/add-application-dialog.tsx
 msgid "Paste a job link or posting, then check the role and company."
 msgstr "Налепите везу за посао или оглас за посао, а затим проверите улогу и компанију."
@@ -9745,14 +9974,41 @@ msgstr "Паузирано · {line}"
 msgid "Paused schedules keep their settings."
 msgstr "Паузирани распореди задржавају своја подешавања."
 
+#. placeholder {0}: plan.name
+#: src/features/billing/plans.tsx
+msgid "Pay for {0}"
+msgstr ""
+
 #: src/features/career/knowledge/preferences.tsx
 #: src/features/career/offer-entry.tsx
 #: src/features/settings/account/application-profile.tsx
 msgid "Pay period"
 msgstr "Период исплате"
 
+#: src/features/billing/return-page.tsx
+msgid "Payment"
+msgstr ""
+
+#. placeholder {0}: graceEnd ?? "the grace end date"
+#: src/features/billing/summary.tsx
+msgid "Payment failed. Pay by {0} to avoid suspension."
+msgstr ""
+
+#: src/features/billing/plans.tsx
+#: src/features/billing/summary.tsx
+msgid "Payment method"
+msgstr ""
+
+#: src/features/billing/return-page.tsx
+msgid "Payment received, updating your plan"
+msgstr ""
+
 #: src/features/platform-admin/organization-page.tsx
 msgid "Payment recorded."
+msgstr ""
+
+#: src/features/billing/invoices.tsx
+msgid "Payments made for this organization."
 msgstr ""
 
 #: src/features/resume/stylesheet/editor.tsx
@@ -9775,9 +10031,17 @@ msgstr "По сату"
 msgid "Per month"
 msgstr "Месечно"
 
+#: src/features/billing/plans.tsx
+msgid "per seat"
+msgstr ""
+
 #: src/features/career/offer-entry.tsx
 msgid "Per year"
 msgstr "Годишње"
+
+#: src/features/billing/invoices.tsx
+msgid "Period"
+msgstr ""
 
 #: src/features/platform-admin/organization-page.tsx
 msgid "Period end"
@@ -9875,6 +10139,7 @@ msgstr "Обичан текст (.txt)"
 msgid "Plain text with headings. Paste into application forms and notes."
 msgstr "Обичан текст са насловима. Залепите у формуларе за пријаву и белешке."
 
+#: src/features/billing/invoices.tsx
 #: src/features/platform-admin/organization-page.tsx
 #: src/features/platform-admin/organizations-page.tsx
 msgid "Plan"
@@ -9903,6 +10168,10 @@ msgstr "Планирајте потрагу, држите доказе на је
 #: src/features/career/shared.tsx
 msgid "Planning your week"
 msgstr "Планирање ваше недеље"
+
+#: src/features/billing/billing-page.tsx
+msgid "Plans"
+msgstr ""
 
 #: src/features/platform-admin/audit-page.tsx
 msgid "Platform"
@@ -10173,6 +10442,10 @@ msgstr "Принт"
 #: src/features/ats-checker/messages.ts
 msgid "Print or export the form to a flat PDF before sending it."
 msgstr "Одштампајте или извезите формулар у равни PDF пре него што га пошаљете."
+
+#: src/features/billing/invoices.tsx
+msgid "Print receipt"
+msgstr ""
 
 #: src/features/resume/share/share-panel.tsx
 msgid "Privacy"
@@ -10555,6 +10828,11 @@ msgstr ""
 msgid "Recalled"
 msgstr "Из сећања"
 
+#: src/features/billing/invoices.tsx
+#: src/features/billing/receipt-page.tsx
+msgid "Receipt"
+msgstr ""
+
 #: src/features/career/coach.tsx
 msgid "Recent"
 msgstr "Недавно"
@@ -10639,6 +10917,10 @@ msgstr "Црвена"
 #: src/features/resume/stylesheet/toolbar.tsx
 msgid "Redo resume change"
 msgstr "Поновите промену резимеа"
+
+#: src/features/billing/invoices.tsx
+msgid "Reference"
+msgstr ""
 
 #. placeholder {0}: index + 1
 #: src/features/settings/account/application-profile.tsx
@@ -10970,6 +11252,10 @@ msgstr "Преименуј верзију"
 #: src/routes/builder/letter/-components/letter-bar.tsx
 msgid "Rename…"
 msgstr "Преименуј…"
+
+#: src/features/billing/summary.tsx
+msgid "Renews or ends on {periodEnd}."
+msgstr ""
 
 #: src/features/applications/components/application-detail-sheet.tsx
 msgid "Reopen"
@@ -11950,6 +12236,14 @@ msgstr "Претраживање веба"
 msgid "Searching the web…"
 msgstr "Претраживање веба…"
 
+#: src/features/billing/billing-page.tsx
+msgid "Seat change sent. It shows once the payment provider confirms."
+msgstr ""
+
+#: src/features/billing/billing-page.tsx
+#: src/features/billing/invoices.tsx
+#: src/features/billing/plans.tsx
+#: src/features/billing/summary.tsx
 #: src/features/platform-admin/organization-page.tsx
 #: src/features/platform-admin/organizations-page.tsx
 msgid "Seats"
@@ -12778,6 +13072,10 @@ msgstr "Фазе"
 msgid "Start"
 msgstr "Почни"
 
+#: src/features/billing/billing-page.tsx
+msgid "Start 14-day trial"
+msgstr ""
+
 #: src/features/career/workspace/prepare.tsx
 msgid "Start a debrief"
 msgstr "Започни анализу"
@@ -13061,6 +13359,7 @@ msgstr ""
 msgid "Suspend organization"
 msgstr ""
 
+#: src/features/billing/summary.tsx
 #: src/features/platform-admin/organizations-page.tsx
 msgid "Suspended"
 msgstr ""
@@ -13587,6 +13886,14 @@ msgstr "Странице су слике, без текста иза њих."
 msgid "The payment could not be recorded."
 msgstr ""
 
+#: src/features/billing/billing-page.tsx
+msgid "The payment provider has no billing page to open."
+msgstr ""
+
+#: src/features/billing/return-page.tsx
+msgid "The payment was not completed. Nothing was charged and your plan has not changed."
+msgstr ""
+
 #: src/features/branding/branding-page.tsx
 msgid "The platform default shows again."
 msgstr ""
@@ -14027,12 +14334,20 @@ msgstr "Овај PDF је заштићен лозинком. Сачувајте 
 msgid "This period"
 msgstr ""
 
+#: src/features/billing/plans.tsx
+msgid "This plan allows at most {seatLimit} seats."
+msgstr ""
+
 #: src/features/assistant/question-card.tsx
 msgid "This question couldn't be asked. Send a new message to continue."
 msgstr ""
 
 #: src/features/assistant/question-card.tsx
 msgid "This question didn't finish."
+msgstr ""
+
+#: src/features/billing/receipt-page.tsx
+msgid "This receipt was not found"
 msgstr ""
 
 #: src/features/settings/account/application-profile.tsx
@@ -14269,6 +14584,10 @@ msgstr "Отпад је празан"
 msgid "Trash was already empty"
 msgstr ""
 
+#: src/features/billing/summary.tsx
+msgid "Trial"
+msgstr ""
+
 #: src/features/platform-admin/organization-page.tsx
 msgid "Trial ends"
 msgstr ""
@@ -14309,6 +14628,7 @@ msgstr "Пробајте узорак"
 msgid "Try again"
 msgstr "Покушај поново"
 
+#: src/features/billing/billing-page.tsx
 #: src/features/branding/branding-page.tsx
 #: src/features/branding/domains-page.tsx
 #: src/features/org-admin/ai-usage-page.tsx
@@ -14521,6 +14841,10 @@ msgstr ""
 msgid "Unknown role"
 msgstr ""
 
+#: src/features/billing/plans.tsx
+msgid "Unlimited seats"
+msgstr ""
+
 #: src/features/documents/document-actions.tsx
 msgid "Unlink"
 msgstr "Прекини везу"
@@ -14567,6 +14891,11 @@ msgstr "Писмо без наслова"
 msgid "Untitled resume"
 msgstr "Унтитлед ресуме"
 
+#. placeholder {0}: plan.seatLimit
+#: src/features/billing/plans.tsx
+msgid "Up to {0} seats"
+msgstr ""
+
 #: src/features/career/workspace/practise.tsx
 msgid "Up to 2 minutes. Or <0>choose an audio file</0> up to 2 MB."
 msgstr "До 2 минута. Или <0>изаберите аудио датотеку</0> до 2 MB."
@@ -14587,9 +14916,17 @@ msgstr ""
 msgid "Upcoming interviews"
 msgstr "Предстојећи интервјуи"
 
+#: src/features/billing/billing-page.tsx
+msgid "Update card or cancel"
+msgstr ""
+
 #: src/dialogs/resume/index.tsx
 msgid "Update resume"
 msgstr "Ажурирај резиме"
+
+#: src/features/billing/billing-page.tsx
+msgid "Update seats"
+msgstr ""
 
 #: src/features/applications/components/application-form-sheet.tsx
 msgid "Update this application's details."
@@ -15622,6 +15959,10 @@ msgstr "Достигли сте ограничење од {MAX_APPLICATION_LANES
 msgid "You've reached the limit. Remove a domain to add another."
 msgstr ""
 
+#: src/features/billing/billing-page.tsx
+msgid "Your 14-day trial has started."
+msgstr ""
+
 #: src/features/settings/account/data.tsx
 msgid "Your account was deleted."
 msgstr "Ваш налог је избрисан."
@@ -15791,6 +16132,11 @@ msgstr "Ваш наслов се променио у резимеу. Писмо 
 msgid "your Knowledge"
 msgstr "ваше Знање"
 
+#. placeholder {0}: graceEnd ?? "the grace end date"
+#: src/features/billing/billing-banner.tsx
+msgid "Your last payment failed. Pay by {0} to avoid suspension. "
+msgstr ""
+
 #: src/features/ats-checker/messages.ts
 msgid "Your lines are packed very tightly."
 msgstr "Ваше линије су веома збијене."
@@ -15831,6 +16177,15 @@ msgstr "Ваш увод"
 msgid "Your opening, the stories to bring and questions to ask. It becomes your checklist 10 minutes before the call."
 msgstr "Ваш увод, приче које ћете донети и питања која ћете поставити. 10 минута пре позива постаје ваша контролна листа."
 
+#: src/features/billing/billing-page.tsx
+#: src/features/billing/plans.tsx
+msgid "Your organization has {memberCount} members, so it needs at least {memberCount} seats. Remove members first."
+msgstr ""
+
+#: src/features/billing/billing-banner.tsx
+msgid "Your organization has an overdue payment. Please contact your organization's owner."
+msgstr ""
+
 #: src/libs/orpc/ai-quota.ts
 msgid "Your organization has used 80% of this month's AI allowance."
 msgstr ""
@@ -15844,6 +16199,18 @@ msgstr ""
 msgid "Your organization is served on this domain."
 msgstr ""
 
+#: src/features/billing/billing-banner.tsx
+msgid "Your organization is suspended. Make a payment to restore it. "
+msgstr ""
+
+#: src/features/billing/billing-page.tsx
+msgid "Your organization keeps working until {end}, when the paid period ends. Nothing is charged after that."
+msgstr ""
+
+#: src/features/billing/billing-page.tsx
+msgid "Your organization keeps working until the paid period ends. Nothing is charged after that."
+msgstr ""
+
 #: src/routes/builder/letter/-components/letter-shell.tsx
 msgid "Your phone number changed on the resume. The letter updated too."
 msgstr "Ваш број телефона је промењен у биографији. Писмо је такође ажурирано."
@@ -15851,6 +16218,10 @@ msgstr "Ваш број телефона је промењен у биограф
 #: src/features/ats-checker/messages.ts
 msgid "Your phone number is written in an unusual shape."
 msgstr "Ваш број телефона је написан у необичном облику."
+
+#: src/features/billing/summary.tsx
+msgid "Your plan"
+msgstr ""
 
 #: src/features/discovery/search-messages.ts
 msgid "Your plan allows at most {cap} jobs per run."
@@ -15862,6 +16233,18 @@ msgstr ""
 
 #: src/features/discovery/searches.tsx
 msgid "Your plan doesn't include job discovery. Ask your administrator about upgrading."
+msgstr ""
+
+#: src/features/billing/billing-page.tsx
+msgid "Your plan is set for you. There is nothing to pay here."
+msgstr ""
+
+#: src/features/billing/return-page.tsx
+msgid "Your plan is updated."
+msgstr ""
+
+#: src/features/billing/billing-page.tsx
+msgid "Your plan, seats, payments and AI credits."
 msgstr ""
 
 #: src/features/career/coach.tsx
@@ -15937,6 +16320,11 @@ msgstr "ваше приче"
 #: src/features/career/workspace/practise.tsx
 msgid "Your story couldn't be loaded."
 msgstr "Ваша прича није могла да се учита."
+
+#. placeholder {0}: trialDays ?? 0
+#: src/features/billing/billing-banner.tsx
+msgid "Your trial ends in {0} days. Pick a plan to keep going. "
+msgstr ""
 
 #: src/features/career/workspace/prepare.tsx
 msgid "Your two-minute introduction"
