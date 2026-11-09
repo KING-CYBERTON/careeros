@@ -1,10 +1,9 @@
 {
   "version": "8",
   "dialect": "postgres",
-  "id": "2b6de6e5-21d7-4a08-a12d-a0812283907d",
+  "id": "67610277-71db-4a4a-a616-951e4aa4d43f",
   "prevIds": [
-    "91e9516a-d425-4bb0-8939-52c405c69a2c",
-    "91f5bfaa-a34e-4717-959a-dceccdc40a65"
+    "40e39ea9-90d5-4ddc-94b6-a95c6d550d9c"
   ],
   "ddl": [
     {
@@ -436,6 +435,12 @@
     {
       "isRlsEnabled": false,
       "name": "impersonation",
+      "entityType": "tables",
+      "schema": "public"
+    },
+    {
+      "isRlsEnabled": false,
+      "name": "email_suppression",
       "entityType": "tables",
       "schema": "public"
     },
@@ -11490,6 +11495,58 @@
       "table": "impersonation"
     },
     {
+      "type": "text",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "email_hash",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "email_suppression"
+    },
+    {
+      "type": "text",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "reason",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "email_suppression"
+    },
+    {
+      "type": "text",
+      "typeSchema": null,
+      "notNull": false,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "provider_email_id",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "email_suppression"
+    },
+    {
+      "type": "timestamp with time zone",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": "now()",
+      "generated": null,
+      "identity": null,
+      "name": "created_at",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "email_suppression"
+    },
+    {
       "nameExplicit": false,
       "columns": [
         {
@@ -18242,6 +18299,16 @@
       "entityType": "pks"
     },
     {
+      "columns": [
+        "email_hash"
+      ],
+      "nameExplicit": false,
+      "name": "email_suppression_pkey",
+      "schema": "public",
+      "table": "email_suppression",
+      "entityType": "pks"
+    },
+    {
       "nameExplicit": true,
       "columns": [
         "organization_id",
@@ -18938,6 +19005,20 @@
       "entityType": "checks",
       "schema": "public",
       "table": "impersonation"
+    },
+    {
+      "value": "\"email_hash\" ~ '^[0-9a-f]{64}$'",
+      "name": "email_suppression_hash_check",
+      "entityType": "checks",
+      "schema": "public",
+      "table": "email_suppression"
+    },
+    {
+      "value": "\"reason\" in ('bounce', 'complaint')",
+      "name": "email_suppression_reason_check",
+      "entityType": "checks",
+      "schema": "public",
+      "table": "email_suppression"
     }
   ],
   "renames": []

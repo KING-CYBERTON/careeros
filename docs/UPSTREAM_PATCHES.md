@@ -665,7 +665,7 @@ No upstream file is edited. CareerOS files changed: `packages/platform-admin/src
 
 ## P5-T04: email templates per stage
 
-New code is in `packages/email-templates`, `packages/api/src/features/email-templates`, `packages/db/src/schema/email-template.ts`, `apps/web/src/features/email-templates`, `apps/mobile/src/features/email-templates` and migration `20261109184453_email_templates`. These upstream files are edited, each marked `CAREEROS (P5-T04)`.
+New code is in `packages/email-templates`, `packages/api/src/features/email-templates`, `packages/db/src/schema/email-template.ts`, `apps/web/src/features/email-templates`, `apps/mobile/src/features/email-templates` and migration `20261109192321_email_templates`. These upstream files are edited, each marked `CAREEROS (P5-T04)`.
 
 | File / setting                                                                                                                                                                    | Task   | What changed and why                                                                                                                                      |
 | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------ | --------------------------------------------------------------------------------------------------------------------------------------------------------- |
