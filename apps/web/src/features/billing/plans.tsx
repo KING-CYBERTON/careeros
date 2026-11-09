@@ -1,6 +1,6 @@
 import type { BillingInterval, Currency, PaymentMethod, PlanPrices } from "./lib";
 import { t } from "@lingui/core/macro";
-import { Trans } from "@lingui/react/macro";
+import { Plural, Trans } from "@lingui/react/macro";
 import { useId, useState } from "react";
 import { Badge } from "@reactive-resume/ui/components/badge";
 import { Button } from "@reactive-resume/ui/components/button";
@@ -22,7 +22,23 @@ export type PlanListing = PlanPrices & {
 
 type PlanPriceLinesProps = { plan: PlanPrices; locale: string };
 
+/** A plan whose every listed price is zero (personal, trial): nothing to buy, so it shows "Free". */
+const isFree = (plan: PlanPrices) =>
+	[plan.priceMonthlyUsdCents, plan.priceAnnualUsdCents, plan.priceMonthlyKes, plan.priceAnnualKes].every(
+		(price) => price === 0,
+	);
+
+/** The plans worth showing: the current one, the ones that can be bought and the ones that say "contact us". */
+export const visiblePlans = (plans: PlanListing[], currentPlanId: string) =>
+	plans.filter((plan) => plan.id === currentPlanId || plan.selfService || !isFree(plan));
+
 function PlanPriceLines({ plan, locale }: PlanPriceLinesProps) {
+	if (isFree(plan))
+		return (
+			<p className="text-sm text-ink-2" data-testid="plan-prices">
+				<Trans>Free</Trans>
+			</p>
+		);
 	const lines = (["month", "year"] as const).map((interval) => {
 		const parts = (["KES", "USD"] as const).map((currency) => {
 			const price = planPrice(plan, interval, currency);
@@ -65,7 +81,7 @@ type PlanCardsProps = {
 export function PlanCards({ plans, currentPlanId, locale, canManage, selectedId, onSelect }: PlanCardsProps) {
 	return (
 		<ul className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3" data-testid="plan-cards">
-			{plans.map((plan) => {
+			{visiblePlans(plans, currentPlanId).map((plan) => {
 				const current = plan.id === currentPlanId;
 				return (
 					<li
@@ -84,11 +100,16 @@ export function PlanCards({ plans, currentPlanId, locale, canManage, selectedId,
 						</div>
 						<PlanPriceLines plan={plan} locale={locale} />
 						<p className="text-[13px] text-ink-3">
-							{plan.seatLimit === null ? <Trans>Unlimited seats</Trans> : <Trans>Up to {plan.seatLimit} seats</Trans>}
+							{plan.seatLimit === null ? (
+								<Trans>Unlimited seats</Trans>
+							) : (
+								<Plural value={plan.seatLimit} one="Up to # seat" other="Up to # seats" />
+							)}
 							{" · "}
 							<Trans>{plan.aiCreditsPerSeat} AI credits per seat each month</Trans>
 						</p>
 						{canManage &&
+							!isFree(plan) &&
 							(plan.selfService ? (
 								<Button
 									variant={current ? "secondary" : "primary"}

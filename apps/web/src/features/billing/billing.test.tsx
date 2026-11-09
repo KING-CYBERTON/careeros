@@ -67,7 +67,23 @@ const wrap = (ui: React.ReactNode) => (
 	</QueryClientProvider>
 );
 
+const freePlan = (id: string, name: string) => ({
+	id,
+	name,
+	pricingModel: "flat",
+	seatLimit: 5,
+	priceMonthlyUsdCents: 0,
+	priceAnnualUsdCents: 0,
+	priceMonthlyKes: 0,
+	priceAnnualKes: 0,
+	aiCreditsPerSeat: 50,
+	features: {},
+	selfService: false,
+});
+
 const plans = [
+	freePlan("personal", "Personal"),
+	freePlan("trial", "Trial"),
 	{
 		id: "starter",
 		name: "Starter",
@@ -161,6 +177,8 @@ it("shows seats used against the paid seats, and the AI credits left", async () 
 
 it("renders prices from the plan data and never invents one", async () => {
 	await page();
+	expect(screen.queryByTestId("plan-card-trial")).toBeNull();
+	expect(screen.queryByTestId("plan-card-personal")).toBeNull();
 	const starter = screen.getByTestId("plan-card-starter");
 	expect(starter.textContent).toMatch(/KES\s1,777/);
 	expect(starter.textContent).toContain("$12.34");
