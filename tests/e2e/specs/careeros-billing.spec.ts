@@ -2,9 +2,9 @@ import { accountOrganizationId, setAccountOrganizationPlan } from "../fixtures/c
 import { withSeedPool } from "../fixtures/seed-db";
 import { expect, test } from "../fixtures/test";
 
-// P3-T06: the owner's billing page with the fake payment provider (no real provider is ever called). The server must run
-// with BILLING_PROVIDER=fake and BILLING_FAKE_SECRET, which the server refuses under NODE_ENV=production, so these specs
-// skip unless the test process sees BILLING_PROVIDER=fake (Q481).
+// P3-T06: the owner's billing page with the fake payment provider (no real provider is ever called). The CI e2e job runs
+// the built server with BILLING_PROVIDER=fake, a test BILLING_FAKE_SECRET and FLAG_ALLOW_FAKE_BILLING=true (which lets the
+// fake provider start under NODE_ENV=production; never set it on a public deployment). Without them the specs skip.
 test.skip(
 	process.env.BILLING_PROVIDER !== "fake",
 	"needs a server started with BILLING_PROVIDER=fake (not production)",

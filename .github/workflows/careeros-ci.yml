@@ -372,6 +372,11 @@ jobs:
       FLAG_DISABLE_API_RATE_LIMIT: "true"
       LOCAL_STORAGE_PATH: /tmp/reactive-resume-e2e-storage
       FLAG_ALLOW_UNSAFE_AI_BASE_URL: "true"
+      # CAREEROS: P3-T06. The billing e2e (careeros-billing.spec.ts) runs the built server (NODE_ENV=production) against
+      # the fake provider; the flag lets that start. Test-only values; never set on a public deployment.
+      BILLING_PROVIDER: fake
+      BILLING_FAKE_SECRET: isolated-ci-billing-fake-secret-32-chars
+      FLAG_ALLOW_FAKE_BILLING: "true"
       # CAREEROS: P2-T05. Organization hosts for the sign-in handoff e2e (careeros-auth-handoff.spec.ts). No e2e host
       # on localhost matches the pattern, so the other specs are unaffected. The Google values are placeholders: the
       # provider is enabled so `begin` accepts it, but the spec never contacts it (the issue step is seeded).
