@@ -521,7 +521,7 @@ describe.skipIf(!configured)("plans, subscriptions, flags, audit log and entitle
 
 		it("careeros_audit_platform writes a row without an organization and returns its id", async () => {
 			const written = await ownerRows<{ id: string }>(
-				`SELECT careeros_audit_platform($1, $2, 'admin.impersonation_started', 'user', $3, '{"minutes": 30}', '203.0.113.7') AS id`,
+				`SELECT careeros_audit_platform($1, $2, 'billing.platform_event', 'user', $3, '{"minutes": 30}', '203.0.113.7') AS id`,
 				[ids.admin, ids.ownerA, ids.memberA],
 			);
 			const id = written[0]?.id ?? "";
@@ -533,7 +533,7 @@ describe.skipIf(!configured)("plans, subscriptions, flags, audit log and entitle
 				organization_id: null,
 				actor_user_id: ids.admin,
 				impersonator_user_id: ids.ownerA,
-				action: "admin.impersonation_started",
+				action: "billing.platform_event",
 				target_type: "user",
 				target_id: ids.memberA,
 				metadata: { minutes: 30 },
@@ -542,6 +542,18 @@ describe.skipIf(!configured)("plans, subscriptions, flags, audit log and entitle
 			await expect(
 				owner.query(`SELECT careeros_audit_platform(NULL, NULL, 'Bad Action', NULL, NULL, NULL, NULL)`),
 			).rejects.toMatchObject({ code: "23514" });
+			// P3-T09 (Q422): console (admin.*) rows are written only by the console's own definer functions.
+			const before = await ownerRows<{ n: string }>(`SELECT count(*) AS n FROM audit_log`);
+			await expect(
+				owner.query(
+					`SELECT careeros_audit_platform($1, NULL, 'admin.org_status_set', 'organization', $2, '{}', NULL)`,
+					[ids.admin, ids.orgA],
+				),
+			).rejects.toMatchObject({ code: "42501" });
+			await expect(
+				asApp(ids.orgA, `SELECT careeros_audit_platform(NULL, NULL, 'admin.forged', NULL, NULL, NULL, NULL)`),
+			).rejects.toMatchObject({ code: "42501" });
+			expect((await ownerRows<{ n: string }>(`SELECT count(*) AS n FROM audit_log`))[0]?.n).toBe(before[0]?.n);
 			// The app role runs the function (only TypeScript callers decide who may), but cannot read the row it wrote.
 			const viaApp = await asApp(
 				ids.orgA,

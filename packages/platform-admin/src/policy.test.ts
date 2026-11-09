@@ -6,6 +6,7 @@ import {
 	IMPERSONATION_TOKEN_SECONDS,
 	isAuthPathRefusedWhileImpersonating,
 	isRefusedWhileImpersonating,
+	normalizeAuthPath,
 } from "./policy";
 
 // CAREEROS (P3-T07): the plain-data rules of the console. No database.
@@ -64,6 +65,30 @@ describe("platform admin policy", () => {
 		"/passkey/add-passkey",
 		"/device/approve",
 		"/device/deny",
+		// P3-T09: credentials that outlive the session, and ending the member's other sessions.
+		"/oauth2/create-client",
+		"/oauth2/register",
+		"/oauth2/consent",
+		"/oauth2/authorize",
+		"/oauth2/token",
+		"/get-access-token",
+		"/refresh-token",
+		"/revoke-session",
+		"/revoke-sessions",
+		"/revoke-other-sessions",
+		// Normalization: case, repeated and trailing slashes, encoding, dot segments, the /api/auth prefix.
+		"/OAuth2/create-client",
+		"/oauth2//register",
+		"/oauth2/register/",
+		"/oauth2%2Fcreate-client",
+		"/oauth2/%63reate-client",
+		"/oauth2/%252e%252e/oauth2/register",
+		"/Revoke-Other-Sessions/",
+		"//revoke-other-sessions",
+		"/api/auth/oauth2/create-client",
+		"/x/../oauth2/register",
+		"/oauth2",
+		"/Two-Factor/Enable",
 	])("refuses the account endpoint %s in a support session", (path) => {
 		expect(isAuthPathRefusedWhileImpersonating(path)).toBe(true);
 	});
@@ -74,6 +99,13 @@ describe("platform admin policy", () => {
 			expect(isAuthPathRefusedWhileImpersonating(path)).toBe(false);
 		},
 	);
+
+	it("normalizes a path to one form", () => {
+		expect(normalizeAuthPath("/OAuth2//Register/")).toBe("/oauth2/register");
+		expect(normalizeAuthPath("/oauth2%2Fregister?x=1")).toBe("/oauth2/register");
+		expect(normalizeAuthPath("/%E0%A4%A")).toBe("/%e0%a4%a");
+		expect(normalizeAuthPath("")).toBe("/");
+	});
 
 	it("switches off every admin plugin endpoint over HTTP", () => {
 		expect(DISABLED_ADMIN_AUTH_PATHS).toContain("/admin/impersonate-user");

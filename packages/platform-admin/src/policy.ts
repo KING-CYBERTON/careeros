@@ -46,8 +46,11 @@ export function isRefusedWhileImpersonating(path: string): boolean {
 }
 
 /**
- * Better Auth endpoints (paths under /api/auth) an impersonated session may not call: the password, the email, two-factor
- * authentication, API keys, passkeys, linked accounts and deleting the account.
+ * Better Auth endpoints (paths under /api/auth) an impersonated session may not call: everything that changes how the
+ * member signs in, and everything that creates, refreshes or hands out a credential that could outlive the 60 minutes
+ * (P3-T09, Q421): the password, the email, two-factor authentication, API keys, passkeys, linked accounts, deleting the
+ * account, OAuth clients and consent, access and refresh tokens, and ending the member's other sessions.
+ * Compare with the normalized path (see normalizeAuthPath), never with the raw string.
  */
 export const IMPERSONATION_REFUSED_AUTH_PATHS: ReadonlySet<string> = new Set([
 	"/change-password",
@@ -60,19 +63,59 @@ export const IMPERSONATION_REFUSED_AUTH_PATHS: ReadonlySet<string> = new Set([
 	"/api-key/create",
 	"/api-key/update",
 	"/api-key/delete",
+	// P3-T09: tokens and sessions.
+	"/get-access-token",
+	"/refresh-token",
+	"/revoke-session",
+	"/revoke-sessions",
+	"/revoke-other-sessions",
 	// P5-T02: approving or denying a Job Clipper device sign-in would hand the admin a credential in the member's name.
 	"/device/approve",
 	"/device/deny",
 	"/device/clipper/revoke",
+	// P3-T09: the device-authorization endpoints of Better Auth that are not already switched off over HTTP.
+	"/device/code",
+	"/device/token",
 ]);
 
-/** Path prefixes with the same rule (every two-factor and passkey endpoint). */
-export const IMPERSONATION_REFUSED_AUTH_PREFIXES: readonly string[] = ["/two-factor/", "/passkey/"];
+/**
+ * Path prefixes with the same rule: every two-factor and passkey endpoint, and the whole OAuth provider (`/oauth2/`:
+ * client create and register, consent, authorize, token, introspect, revoke; every one of them is a client, a consent or a
+ * credential).
+ */
+export const IMPERSONATION_REFUSED_AUTH_PREFIXES: readonly string[] = ["/two-factor/", "/passkey/", "/oauth2/"];
+
+/**
+ * The form of a Better Auth path that policy compares: percent-decoded (repeatedly, so `%252f` cannot hide), lower case,
+ * dot segments resolved, repeated slashes collapsed, no trailing slash, and without a leading `/api/auth`. A path that
+ * does not decode is returned as it is, lower cased (it cannot match a route either).
+ */
+export function normalizeAuthPath(path: string): string {
+	let value = path.split(/[?#]/, 1)[0] ?? "";
+	for (let pass = 0; pass < 4; pass += 1) {
+		try {
+			const decoded = decodeURIComponent(value);
+			if (decoded === value) break;
+			value = decoded;
+		} catch {
+			break;
+		}
+	}
+	const segments: string[] = [];
+	for (const segment of value.replaceAll("\\", "/").toLowerCase().split("/")) {
+		if (segment === "" || segment === ".") continue;
+		if (segment === "..") segments.pop();
+		else segments.push(segment);
+	}
+	if (segments[0] === "api" && segments[1] === "auth") segments.splice(0, 2);
+	return `/${segments.join("/")}`;
+}
 
 export function isAuthPathRefusedWhileImpersonating(path: string): boolean {
+	const normalized = normalizeAuthPath(path);
 	return (
-		IMPERSONATION_REFUSED_AUTH_PATHS.has(path) ||
-		IMPERSONATION_REFUSED_AUTH_PREFIXES.some((prefix) => path.startsWith(prefix))
+		IMPERSONATION_REFUSED_AUTH_PATHS.has(normalized) ||
+		IMPERSONATION_REFUSED_AUTH_PREFIXES.some((prefix) => normalized.startsWith(prefix) || `${normalized}/` === prefix)
 	);
 }
 

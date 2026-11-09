@@ -55,5 +55,6 @@ export {
 	IMPERSONATION_REFUSED_PROCEDURES,
 	IMPERSONATION_TOKEN_SECONDS,
 	isAuthPathRefusedWhileImpersonating,
+	normalizeAuthPath,
 	isRefusedWhileImpersonating,
 } from "./policy";
