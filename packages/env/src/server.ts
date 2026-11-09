@@ -277,6 +277,9 @@ export const env = createEnv({
 		// CAREEROS (P4-T02): stops scheduled job discovery runs on this server. Manual "Run now" still works.
 		FLAG_DISABLE_DISCOVERY_SCHEDULER: z.stringbool().default(false),
 		FLAG_ALLOW_UNSAFE_AI_BASE_URL: z.stringbool().default(false),
+		// CAREEROS (P3-T06): lets BILLING_PROVIDER=fake start under NODE_ENV=production, for the e2e job's built server only.
+		// The fake provider approves any payment for anyone who can reach its test page: never set this on a public deployment.
+		FLAG_ALLOW_FAKE_BILLING: z.stringbool().default(false),
 		FLAG_ALLOW_UNSAFE_OAUTH_REDIRECT_URI: z.stringbool().default(false),
 		FLAG_OLACV_SUGGESTION: z.stringbool().default(false),
 	},
@@ -293,9 +296,18 @@ if (env.ORG_HOST_PATTERN) {
 
 // CAREEROS (P3-T04): the fake billing provider approves payments for anyone who can reach its test page, so it must
 // never run in production, and it cannot sign events without its secret.
+// CAREEROS (P3-T06): FLAG_ALLOW_FAKE_BILLING=true relaxes the production refusal for the e2e job, which runs the built
+// server (NODE_ENV=production) against the fake provider. It is loud on purpose.
 if (env.BILLING_PROVIDER === "fake") {
-	if (process.env.NODE_ENV === "production")
-		throw new Error("BILLING_PROVIDER=fake is for tests and staging only and is refused when NODE_ENV=production.");
+	if (process.env.NODE_ENV === "production") {
+		if (!env.FLAG_ALLOW_FAKE_BILLING)
+			throw new Error("BILLING_PROVIDER=fake is for tests and staging only and is refused when NODE_ENV=production.");
+		console.warn(
+			"WARNING: BILLING_PROVIDER=fake is running under NODE_ENV=production because FLAG_ALLOW_FAKE_BILLING=true. " +
+				"The fake provider approves any payment for anyone who can reach its test page. " +
+				"NEVER set FLAG_ALLOW_FAKE_BILLING on a public deployment.",
+		);
+	}
 	if (!env.BILLING_FAKE_SECRET) throw new Error("BILLING_PROVIDER=fake requires BILLING_FAKE_SECRET.");
 }
 

@@ -387,6 +387,12 @@ msgstr "{0} குறைவு"
 msgid "{0} more"
 msgstr "{0} அதிகம்"
 
+#. placeholder {0}: plan.seatsUsed
+#. placeholder {1}: plan.seatLimit
+#: src/features/organization/plan-screen.tsx
+msgid "{0} of {1}"
+msgstr ""
+
 #. placeholder {0}: shown.length
 #. placeholder {1}: TEMPLATES.length
 #: src/features/design/template-group.tsx
@@ -428,6 +434,11 @@ msgstr "{0} தேர்ந்தெடுக்கப்பட்டது"
 #. placeholder {1}: failed.length
 #: src/features/career/today.tsx
 msgid "{0} updated; {1} failed. Failed roles remain selected. Refresh or retry."
+msgstr ""
+
+#. placeholder {0}: plan.seatsUsed
+#: src/features/organization/plan-screen.tsx
+msgid "{0} used"
 msgstr ""
 
 #. placeholder {0}: answer.split(/\s+/).filter(Boolean).length
@@ -704,6 +715,10 @@ msgstr "{toCheck, plural, one {# புலத்தைப் பார்க்�
 msgid "{toCheck, plural, one {# to check} other {# to check}}"
 msgstr "{toCheck, plural, one {சரிபார்க்க #} other {சரிபார்க்க #}}"
 
+#: src/features/organization/plan-screen.tsx
+msgid "{trialDays} days left"
+msgstr ""
+
 #: src/features/letters/write.tsx
 #: src/features/workspace/tabs/apply.tsx
 msgid "{words, plural, one {# word} other {# words}}"
@@ -822,6 +837,14 @@ msgstr "எண் வடிவ தேதி வெவ்வேறு நாட�
 msgid "A page is rotated."
 msgstr "ஒரு பக்கம் சுழற்றப்பட்டுள்ளது."
 
+#: src/features/organization/plan-screen.tsx
+msgid "A payment is overdue. Please contact your organization's owner."
+msgstr ""
+
+#: src/features/organization/plan-screen.tsx
+msgid "A payment is overdue. Please contact your organization's owner. Service pauses after {graceEnd}."
+msgstr ""
+
 #: src/features/applications/prior-no-response.tsx
 msgid "A previous application to this company was closed with No response. You can still apply."
 msgstr "இந்த நிறுவனத்திற்கான முந்தைய விண்ணப்பம் “பதில் இல்லை” என்ற முடிவுடன் மூடப்பட்டது. நீங்கள் இன்னும் விண்ணப்பிக்கலாம்."
@@ -919,6 +942,7 @@ msgstr "{1} இல் {0}க்கான செயல்கள்"
 
 #: src/features/ai/web-access.tsx
 #: src/features/branding/domains-screen.tsx
+#: src/features/organization/plan-screen.tsx
 msgid "Active"
 msgstr "செயலில்"
 
@@ -1390,6 +1414,10 @@ msgstr "AI வழங்குநர்களை ஏற்ற முடியவ�
 #: src/features/applications/add-sheet.tsx
 msgid "AI providers couldn't be loaded. Retry or fill the details manually."
 msgstr "AI வழங்குநர்களை ஏற்ற முடியவில்லை. மீண்டும் முயற்சிக்கவும் அல்லது விவரங்களைக் கைமுறையாக நிரப்பவும்."
+
+#: src/features/organization/plan-screen.tsx
+msgid "AI quota"
+msgstr ""
 
 #: src/features/applications/add-sheet.tsx
 msgid "AI reads pasted text only when you ask. Links can use the page’s own job data without AI."
@@ -3170,6 +3198,10 @@ msgstr "கவர் கடிதத்தை ஏற்ற முடியவி
 #: src/features/check/job-match.tsx
 msgid "Couldn't load the linked posting."
 msgstr "இணைக்கப்பட்ட வேலை இடுகையை ஏற்ற முடியவில்லை."
+
+#: src/features/organization/plan-screen.tsx
+msgid "Couldn't load the plan."
+msgstr ""
 
 #: app/builder/[id]/page.tsx
 #: app/builder/[id]/write.tsx
@@ -5907,6 +5939,7 @@ msgid "Leave it empty to remove the link."
 msgstr "இணைப்பை அகற்ற அதை காலியாக விடவும்."
 
 #: src/features/design/template-group.tsx
+#: src/features/organization/plan-screen.tsx
 msgid "Left"
 msgstr "விட்டு"
 
@@ -7809,6 +7842,10 @@ msgstr "கடவுச்சொற்கள் பொருந்தவில�
 msgid "Past conversations"
 msgstr "கடந்த உரையாடல்கள்"
 
+#: src/features/organization/plan-screen.tsx
+msgid "Past due"
+msgstr ""
+
 #: src/features/applications/add-sheet.tsx
 msgid "Paste a job link or posting, then check the role and company. Nothing is saved until you choose Save job."
 msgstr "வேலை இடுகையிடும் இணைப்பையோ அதன் உரையையோ ஒட்டவும், பிறகு பங்கு மற்றும் நிறுவனத்தைச் சரிபார்க்கவும். வேலையைச் சேமி என்பதைத் தேர்ந்தெடுக்கும் வரை எதுவும் சேமிக்கப்படாது."
@@ -7905,6 +7942,10 @@ msgstr "மாதத்திற்கு"
 msgid "Per year"
 msgstr "வருடத்திற்கு"
 
+#: src/features/organization/plan-screen.tsx
+msgid "Period ends"
+msgstr ""
+
 #: app/(tabs)/settings/account.tsx
 msgid "Permanently removes everything. Opens your browser account settings."
 msgstr "எல்லா தரவையும் நிரந்தரமாக நீக்குகிறது. உலாவியில் உங்கள் கணக்கு அமைப்புகளைத் திறக்கும்."
@@ -7983,6 +8024,11 @@ msgstr "எளிய உரை (.txt)"
 #: src/features/share/download.tsx
 msgid "Plain text with headings. Paste into application forms and notes."
 msgstr "தலைப்புகளுடன் கூடிய எளிய உரை. வேலை விண்ணப்பப் படிவங்கள் மற்றும் குறிப்புகளில் ஒட்டவும்."
+
+#: app/(tabs)/settings/index.tsx
+#: src/features/organization/plan-screen.tsx
+msgid "Plan"
+msgstr ""
 
 #: src/features/workspace/tabs/prepare.tsx
 msgid "Plan again"
@@ -9794,6 +9840,10 @@ msgstr ""
 msgid "Searching the web…"
 msgstr "இணையத்தில் தேடுகிறது…"
 
+#: src/features/organization/plan-screen.tsx
+msgid "Seats"
+msgstr ""
+
 #: src/features/career/offers.tsx
 msgid "Second offer"
 msgstr "இரண்டாவது சலுகை"
@@ -10592,6 +10642,10 @@ msgstr "இப்போது தொடங்குகிறது"
 msgid "State or region"
 msgstr ""
 
+#: src/features/organization/plan-screen.tsx
+msgid "Status"
+msgstr "நிலை"
+
 #: src/features/documents/new-document.tsx
 msgid "Stay in Documents"
 msgstr "ஆவணங்கள் இல் இருங்கள்"
@@ -10719,6 +10773,10 @@ msgstr "சான்று உள்ளது"
 
 #: src/features/workspace/answer-library.tsx
 msgid "Supporting Knowledge facts and stories"
+msgstr ""
+
+#: src/features/organization/plan-screen.tsx
+msgid "Suspended"
 msgstr ""
 
 #: src/features/career/offers.tsx
@@ -11520,6 +11578,10 @@ msgstr "இந்த மாதம்"
 msgid "This organization has no free seats. Remove a member or an invitation, or ask the owner to add seats."
 msgstr ""
 
+#: src/features/organization/plan-screen.tsx
+msgid "This organization is suspended. You can view and export your data."
+msgstr ""
+
 #: src/features/organization/entitlement-message.ts
 #: src/features/organization/entitlements.tsx
 msgid "This organization is suspended. You can view and export your data. Contact your administrator."
@@ -11548,6 +11610,10 @@ msgstr "இந்த PDF க்கு உரை அடுக்கு இல்�
 #: src/features/ats-checker/check.ts
 msgid "This PDF is password protected. Save an unprotected copy and try again."
 msgstr "இந்த PDF கடவுச்சொல் பாதுகாப்புடையது. பாதுகாக்கப்படாத நகலைச் சேமித்து மீண்டும் முயற்சிக்கவும்."
+
+#: src/features/organization/plan-screen.tsx
+msgid "This plan has no pooled AI credits."
+msgstr ""
 
 #: src/features/assistant/messages.tsx
 msgid "This question couldn't be asked. Send a new message to continue."
@@ -11790,6 +11856,10 @@ msgstr "குப்பை காலியாக உள்ளது"
 msgid "Trash was already empty"
 msgstr ""
 
+#: src/features/organization/plan-screen.tsx
+msgid "Trial"
+msgstr ""
+
 #: src/features/workspace/parts.tsx
 msgid "Trimming words"
 msgstr "சொற்களைக் குறைக்கிறது"
@@ -11809,6 +11879,7 @@ msgstr "{suggestion} முயற்சிக்கவும்"
 #: src/features/branding/branding-screen.tsx
 #: src/features/branding/domains-screen.tsx
 #: src/features/letters/write.tsx
+#: src/features/organization/plan-screen.tsx
 #: src/features/settings/api-keys.tsx
 #: src/features/settings/clipper-sign-ins.tsx
 #: src/features/workspace/parts.tsx
@@ -12252,6 +12323,10 @@ msgstr "இந்த நேரத்தை பயன்படுத்தவு�
 #: src/features/ats-checker/messages.ts
 msgid "Use your editor's normal bullet list, so stray glyphs do not land mid-sentence."
 msgstr "பிசகான எழுத்துருக் குறியீடுகள் வாக்கியத்தின் நடுவில் வராமல் இருக்க, உங்கள் எடிட்டரின் வழக்கமான புல்லட் பட்டியலைப் பயன்படுத்தவும்."
+
+#: src/features/organization/plan-screen.tsx
+msgid "Used"
+msgstr "பயன்படுத்தியவை"
 
 #: src/features/workspace/tabs/saved.tsx
 msgid "used {used}"
@@ -13020,6 +13095,10 @@ msgstr ""
 
 #: src/features/branding/domains-screen.tsx
 msgid "Your organization is served on this domain."
+msgstr ""
+
+#: src/features/organization/plan-screen.tsx
+msgid "Your organization's owner manages the plan and payments on the web."
 msgstr ""
 
 #: src/features/ats-checker/messages.ts

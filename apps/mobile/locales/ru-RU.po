@@ -387,6 +387,12 @@ msgstr "{0} меньше"
 msgid "{0} more"
 msgstr "на {0} больше"
 
+#. placeholder {0}: plan.seatsUsed
+#. placeholder {1}: plan.seatLimit
+#: src/features/organization/plan-screen.tsx
+msgid "{0} of {1}"
+msgstr ""
+
 #. placeholder {0}: shown.length
 #. placeholder {1}: TEMPLATES.length
 #: src/features/design/template-group.tsx
@@ -428,6 +434,11 @@ msgstr "{0} выбрано"
 #. placeholder {1}: failed.length
 #: src/features/career/today.tsx
 msgid "{0} updated; {1} failed. Failed roles remain selected. Refresh or retry."
+msgstr ""
+
+#. placeholder {0}: plan.seatsUsed
+#: src/features/organization/plan-screen.tsx
+msgid "{0} used"
 msgstr ""
 
 #. placeholder {0}: answer.split(/\s+/).filter(Boolean).length
@@ -704,6 +715,10 @@ msgstr "{toCheck, plural, one {Поле # нуждается в проверке
 msgid "{toCheck, plural, one {# to check} other {# to check}}"
 msgstr "{toCheck, plural, one {# для проверки} other {# для проверки}}"
 
+#: src/features/organization/plan-screen.tsx
+msgid "{trialDays} days left"
+msgstr ""
+
 #: src/features/letters/write.tsx
 #: src/features/workspace/tabs/apply.tsx
 msgid "{words, plural, one {# word} other {# words}}"
@@ -822,6 +837,14 @@ msgstr "Числовая дата читается по-разному в раз
 msgid "A page is rotated."
 msgstr "Страница повёрнута."
 
+#: src/features/organization/plan-screen.tsx
+msgid "A payment is overdue. Please contact your organization's owner."
+msgstr ""
+
+#: src/features/organization/plan-screen.tsx
+msgid "A payment is overdue. Please contact your organization's owner. Service pauses after {graceEnd}."
+msgstr ""
+
 #: src/features/applications/prior-no-response.tsx
 msgid "A previous application to this company was closed with No response. You can still apply."
 msgstr "Предыдущий отклик в эту компанию был закрыт с результатом «Нет ответа». Вы всё равно можете откликнуться."
@@ -919,6 +942,7 @@ msgstr "Действия для {0} в {1}"
 
 #: src/features/ai/web-access.tsx
 #: src/features/branding/domains-screen.tsx
+#: src/features/organization/plan-screen.tsx
 msgid "Active"
 msgstr "Активный"
 
@@ -1390,6 +1414,10 @@ msgstr "Не удалось загрузить поставщиков ИИ. Пе
 #: src/features/applications/add-sheet.tsx
 msgid "AI providers couldn't be loaded. Retry or fill the details manually."
 msgstr "Не удалось загрузить AI-провайдеров. Попробуйте еще раз или заполните данные вручную."
+
+#: src/features/organization/plan-screen.tsx
+msgid "AI quota"
+msgstr ""
 
 #: src/features/applications/add-sheet.tsx
 msgid "AI reads pasted text only when you ask. Links can use the page’s own job data without AI."
@@ -3170,6 +3198,10 @@ msgstr "Не удалось загрузить сопроводительное 
 #: src/features/check/job-match.tsx
 msgid "Couldn't load the linked posting."
 msgstr "Не удалось загрузить связанное объявление о вакансии."
+
+#: src/features/organization/plan-screen.tsx
+msgid "Couldn't load the plan."
+msgstr ""
 
 #: app/builder/[id]/page.tsx
 #: app/builder/[id]/write.tsx
@@ -5907,6 +5939,7 @@ msgid "Leave it empty to remove the link."
 msgstr "Оставьте поле пустым, чтобы удалить ссылку."
 
 #: src/features/design/template-group.tsx
+#: src/features/organization/plan-screen.tsx
 msgid "Left"
 msgstr "Левый"
 
@@ -7809,6 +7842,10 @@ msgstr "Пароли не совпадают."
 msgid "Past conversations"
 msgstr "Прошлые разговоры"
 
+#: src/features/organization/plan-screen.tsx
+msgid "Past due"
+msgstr ""
+
 #: src/features/applications/add-sheet.tsx
 msgid "Paste a job link or posting, then check the role and company. Nothing is saved until you choose Save job."
 msgstr "Вставьте ссылку на объявление о вакансии или ее текст, затем проверьте роль и компанию. Ничего не сохраняется, пока вы не выберите «Сохранить задание»."
@@ -7905,6 +7942,10 @@ msgstr "В месяц"
 msgid "Per year"
 msgstr "В год"
 
+#: src/features/organization/plan-screen.tsx
+msgid "Period ends"
+msgstr ""
+
 #: app/(tabs)/settings/account.tsx
 msgid "Permanently removes everything. Opens your browser account settings."
 msgstr "Безвозвратно удаляет все данные. Открывает настройки вашей учетной записи в браузере."
@@ -7983,6 +8024,11 @@ msgstr "Обычный текст (.txt)"
 #: src/features/share/download.tsx
 msgid "Plain text with headings. Paste into application forms and notes."
 msgstr "Простой текст с заголовками. Вставьте в формы заявлений о приеме на работу и в заметки."
+
+#: app/(tabs)/settings/index.tsx
+#: src/features/organization/plan-screen.tsx
+msgid "Plan"
+msgstr ""
 
 #: src/features/workspace/tabs/prepare.tsx
 msgid "Plan again"
@@ -9794,6 +9840,10 @@ msgstr ""
 msgid "Searching the web…"
 msgstr "Поиск в Интернете…"
 
+#: src/features/organization/plan-screen.tsx
+msgid "Seats"
+msgstr ""
+
 #: src/features/career/offers.tsx
 msgid "Second offer"
 msgstr "Второе предложение"
@@ -10592,6 +10642,10 @@ msgstr "Начинается сейчас"
 msgid "State or region"
 msgstr ""
 
+#: src/features/organization/plan-screen.tsx
+msgid "Status"
+msgstr "Статус"
+
 #: src/features/documents/new-document.tsx
 msgid "Stay in Documents"
 msgstr "Остаться в «Документах»"
@@ -10719,6 +10773,10 @@ msgstr "Подтверждено"
 
 #: src/features/workspace/answer-library.tsx
 msgid "Supporting Knowledge facts and stories"
+msgstr ""
+
+#: src/features/organization/plan-screen.tsx
+msgid "Suspended"
 msgstr ""
 
 #: src/features/career/offers.tsx
@@ -11520,6 +11578,10 @@ msgstr "В этом месяце"
 msgid "This organization has no free seats. Remove a member or an invitation, or ask the owner to add seats."
 msgstr ""
 
+#: src/features/organization/plan-screen.tsx
+msgid "This organization is suspended. You can view and export your data."
+msgstr ""
+
 #: src/features/organization/entitlement-message.ts
 #: src/features/organization/entitlements.tsx
 msgid "This organization is suspended. You can view and export your data. Contact your administrator."
@@ -11548,6 +11610,10 @@ msgstr "Этот PDF не имеет текстового слоя, поэтом
 #: src/features/ats-checker/check.ts
 msgid "This PDF is password protected. Save an unprotected copy and try again."
 msgstr "Этот PDF защищён паролем. Сохраните незащищённую копию и попробуйте снова."
+
+#: src/features/organization/plan-screen.tsx
+msgid "This plan has no pooled AI credits."
+msgstr ""
 
 #: src/features/assistant/messages.tsx
 msgid "This question couldn't be asked. Send a new message to continue."
@@ -11790,6 +11856,10 @@ msgstr "Корзина пуста"
 msgid "Trash was already empty"
 msgstr ""
 
+#: src/features/organization/plan-screen.tsx
+msgid "Trial"
+msgstr ""
+
 #: src/features/workspace/parts.tsx
 msgid "Trimming words"
 msgstr "Убираем лишние слова"
@@ -11809,6 +11879,7 @@ msgstr "Попробуйте {suggestion}"
 #: src/features/branding/branding-screen.tsx
 #: src/features/branding/domains-screen.tsx
 #: src/features/letters/write.tsx
+#: src/features/organization/plan-screen.tsx
 #: src/features/settings/api-keys.tsx
 #: src/features/settings/clipper-sign-ins.tsx
 #: src/features/workspace/parts.tsx
@@ -12252,6 +12323,10 @@ msgstr "Используйте это время"
 #: src/features/ats-checker/messages.ts
 msgid "Use your editor's normal bullet list, so stray glyphs do not land mid-sentence."
 msgstr "Используйте обычный маркированный список редактора, чтобы посторонние глифы не попадали в середину предложения."
+
+#: src/features/organization/plan-screen.tsx
+msgid "Used"
+msgstr "Использовано"
 
 #: src/features/workspace/tabs/saved.tsx
 msgid "used {used}"
@@ -13020,6 +13095,10 @@ msgstr ""
 
 #: src/features/branding/domains-screen.tsx
 msgid "Your organization is served on this domain."
+msgstr ""
+
+#: src/features/organization/plan-screen.tsx
+msgid "Your organization's owner manages the plan and payments on the web."
 msgstr ""
 
 #: src/features/ats-checker/messages.ts

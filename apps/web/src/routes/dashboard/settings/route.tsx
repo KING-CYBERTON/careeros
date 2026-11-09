@@ -25,7 +25,9 @@ type Page = {
 		| "/dashboard/settings/cohorts"
 		| "/dashboard/settings/analytics"
 		| "/dashboard/settings/ai-usage"
-		| "/dashboard/settings/audit";
+		| "/dashboard/settings/audit"
+		// CAREEROS (P3-T06)
+		| "/dashboard/organization/billing";
 	icon: IconName;
 	label: () => string;
 };
@@ -55,6 +57,9 @@ const ORG_ADMIN_PAGES: Page[] = [
 	{ to: "/dashboard/settings/audit", icon: "list-checks", label: () => t`Audit log` },
 ];
 
+// CAREEROS (P3-T06): billing, for owners and admins (the page and the API check again; only the owner can act)
+const BILLING_PAGE: Page = { to: "/dashboard/organization/billing", icon: "briefcase", label: () => t`Billing` };
+
 // CAREEROS: the upstream project links (docs, source, translation, bug tracker, donations) are gone. What remains is the
 // licenses page and, when the brand sets one, a support link.
 const getProjectLinks = () => {
@@ -70,7 +75,7 @@ function RouteComponent() {
 	// CAREEROS (P1-T03, P2-T07)
 	const orgAdmin = useOrgAdminAccess() === "allowed";
 	const pages = useCanManageMembers()
-		? [...SETTINGS_PAGES, MEMBERS_PAGE, ...BRANDING_PAGES, ...(orgAdmin ? ORG_ADMIN_PAGES : [])]
+		? [...SETTINGS_PAGES, MEMBERS_PAGE, ...BRANDING_PAGES, BILLING_PAGE, ...(orgAdmin ? ORG_ADMIN_PAGES : [])]
 		: SETTINGS_PAGES;
 
 	return (

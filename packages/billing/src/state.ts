@@ -100,6 +100,10 @@ function eventAudit(action: string, event: BillingEvent, extra: Record<string, u
 			seats: event.seats,
 			amount: event.amount,
 			currency: event.currency,
+			// CAREEROS (P3-T06): the billing page lists payments from these audit rows, with the period each one paid for.
+			interval: event.interval,
+			periodStart: event.periodStart?.toISOString() ?? null,
+			periodEnd: event.periodEnd?.toISOString() ?? null,
 			...extra,
 		},
 	};

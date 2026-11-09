@@ -28,6 +28,7 @@ beforeEach(() => {
 		"PAYSTACK_SECRET_KEY",
 		"PAYSTACK_PUBLIC_KEY",
 		"PAYSTACK_ALLOW_TEST_KEY",
+		"FLAG_ALLOW_FAKE_BILLING",
 	])
 		vi.stubEnv(name, undefined);
 });
@@ -300,6 +301,38 @@ describe("billing provider configuration", () => {
 		vi.stubEnv("BILLING_PROVIDER", "fake");
 		vi.stubEnv("BILLING_FAKE_SECRET", secret);
 		await expect(import("./server")).rejects.toThrow("refused when NODE_ENV=production");
+	});
+
+	it("still refuses fake in production when the flag is off or false", async () => {
+		for (const flag of [undefined, "false"]) {
+			vi.resetModules();
+			vi.stubEnv("NODE_ENV", "production");
+			vi.stubEnv("AUTH_SECRET", "a".repeat(40));
+			vi.stubEnv("BILLING_PROVIDER", "fake");
+			vi.stubEnv("BILLING_FAKE_SECRET", secret);
+			vi.stubEnv("FLAG_ALLOW_FAKE_BILLING", flag);
+			await expect(import("./server")).rejects.toThrow("refused when NODE_ENV=production");
+		}
+	});
+
+	it("starts fake in production only with FLAG_ALLOW_FAKE_BILLING=true, and warns loudly", async () => {
+		const warn = vi.spyOn(console, "warn").mockImplementation(() => {});
+		vi.stubEnv("NODE_ENV", "production");
+		vi.stubEnv("AUTH_SECRET", "a".repeat(40));
+		vi.stubEnv("BILLING_PROVIDER", "fake");
+		vi.stubEnv("BILLING_FAKE_SECRET", secret);
+		vi.stubEnv("FLAG_ALLOW_FAKE_BILLING", "true");
+		expect((await import("./server")).env.BILLING_PROVIDER).toBe("fake");
+		expect(warn.mock.calls.flat().join(" ")).toMatch(/NEVER set FLAG_ALLOW_FAKE_BILLING on a public deployment/);
+	});
+
+	it("still requires the secret in production when the flag is on", async () => {
+		vi.stubEnv("NODE_ENV", "production");
+		vi.stubEnv("AUTH_SECRET", "a".repeat(40));
+		vi.stubEnv("BILLING_PROVIDER", "fake");
+		vi.stubEnv("FLAG_ALLOW_FAKE_BILLING", "true");
+		vi.spyOn(console, "warn").mockImplementation(() => {});
+		await expect(import("./server")).rejects.toThrow("requires BILLING_FAKE_SECRET");
 	});
 
 	it("refuses fake without its secret", async () => {

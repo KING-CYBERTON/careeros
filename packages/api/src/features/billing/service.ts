@@ -13,7 +13,7 @@ import {
 import { PaystackError, ProviderUnsupportedError, recordPendingSeatChange } from "@careeros/billing";
 import { requireOrgId } from "@careeros/tenancy";
 import { ORPCError } from "@orpc/server";
-import { and, eq } from "drizzle-orm";
+import { and, desc, eq, inArray } from "drizzle-orm";
 import { db } from "@reactive-resume/db/client";
 import * as schema from "@reactive-resume/db/schema";
 import { env } from "@reactive-resume/env/server";
@@ -67,7 +67,8 @@ function providerFailure(error: unknown, unsupported: string): unknown {
 	return error;
 }
 
-const returnUrl = () => new URL("/dashboard", env.APP_URL).toString();
+// CAREEROS (P3-T06): the provider sends the customer back to the billing return page, which waits for the confirmation.
+const returnUrl = () => new URL("/dashboard/organization/billing/return", env.APP_URL).toString();
 
 /** Seats must cover the people already in the organization; a downgrade below the member count is refused here. */
 function checkSeats(seats: number, memberCount: number, seatLimit: number | null) {
@@ -128,6 +129,64 @@ export async function getBilling(userId: string) {
 					(a.priceMonthlyUsdCents ?? Number.MAX_SAFE_INTEGER) - (b.priceMonthlyUsdCents ?? Number.MAX_SAFE_INTEGER),
 			),
 	};
+}
+
+// CAREEROS (P3-T06): the payments of the organization, from the audit rows the state machine and the manual payment
+// function write for a verified payment. RLS scopes the read; the organization filter is stated as well.
+const PAYMENT_ACTIONS = ["billing.checkout_completed", "billing.payment_succeeded", "billing.manual_payment"];
+
+const text = (value: unknown, max = 128): string | null =>
+	typeof value === "string" && value.length > 0 ? value.slice(0, max) : null;
+const whole = (value: unknown): number | null =>
+	typeof value === "number" && Number.isInteger(value) && value >= 0 ? value : null;
+const moment = (value: unknown): Date | null => {
+	if (typeof value !== "string") return null;
+	const date = new Date(value);
+	return Number.isNaN(date.getTime()) ? null : date;
+};
+
+export async function listInvoices(userId: string) {
+	const { organizationId, role } = await roleOf(userId);
+	if (role !== "owner" && role !== "admin")
+		throw new ORPCError("FORBIDDEN", { message: "Only an owner or admin of the organization can see billing." });
+	const rows = await db
+		.select({ id: schema.auditLog.id, metadata: schema.auditLog.metadata, createdAt: schema.auditLog.createdAt })
+		.from(schema.auditLog)
+		.where(and(eq(schema.auditLog.organizationId, organizationId), inArray(schema.auditLog.action, PAYMENT_ACTIONS)))
+		.orderBy(desc(schema.auditLog.createdAt))
+		.limit(100);
+	const seen = new Set<string>();
+	const invoices = [];
+	for (const row of rows) {
+		const meta = row.metadata;
+		const amount = whole(meta.amount);
+		const currency = text(meta.currency, 3);
+		const periodEnd = moment(meta.periodEnd);
+		// A checkout and the payment it made can both be audited: list the payment once.
+		const key = amount !== null && periodEnd ? `${currency}:${amount}:${periodEnd.toISOString()}` : null;
+		if (key) {
+			if (seen.has(key)) continue;
+			seen.add(key);
+		}
+		const interval: BillingInterval | null =
+			meta.interval === "month" || meta.interval === "year" ? meta.interval : null;
+		const method: "card" | "mpesa" | null = meta.method === "card" || meta.method === "mpesa" ? meta.method : null;
+		invoices.push({
+			id: row.id,
+			date: row.createdAt,
+			amount,
+			currency,
+			provider: text(meta.source, 32) ?? "unknown",
+			method,
+			reference: text(meta.reference) ?? text(meta.providerEventId),
+			planId: text(meta.planId, 64),
+			seats: whole(meta.seats),
+			interval,
+			periodStart: moment(meta.periodStart),
+			periodEnd,
+		});
+	}
+	return { invoices };
 }
 
 export async function startTrial(userId: string) {

@@ -43351,6 +43351,285 @@
 				]
 			}
 		},
+		"/billing/invoices": {
+			"get": {
+				"operationId": "listBillingInvoices",
+				"summary": "List the organization's payments",
+				"description": "Returns the payments the organization has made (newest first, up to 100): date, amount, currency, provider, method, reference and the period each paid for. It holds no card data. Only an owner or admin can read it. Requires authentication.",
+				"tags": [
+					"Billing"
+				],
+				"parameters": [],
+				"responses": {
+					"200": {
+						"description": "OK",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"invoices": {
+											"type": "array",
+											"items": {
+												"type": "object",
+												"properties": {
+													"id": {
+														"type": "string"
+													},
+													"date": {
+														"type": "string",
+														"format": "date-time",
+														"x-native-type": "date"
+													},
+													"amount": {
+														"anyOf": [
+															{
+																"type": "integer",
+																"minimum": -9007199254740991,
+																"maximum": 9007199254740991
+															},
+															{
+																"type": "null"
+															}
+														],
+														"description": "In the smallest unit of `currency` (cents for USD and KES)."
+													},
+													"currency": {
+														"anyOf": [
+															{
+																"type": "string"
+															},
+															{
+																"type": "null"
+															}
+														]
+													},
+													"provider": {
+														"type": "string",
+														"description": "The payment provider that took the payment, or `manual` for an invoice paid by hand."
+													},
+													"method": {
+														"anyOf": [
+															{
+																"enum": [
+																	"card",
+																	"mpesa"
+																],
+																"type": "string"
+															},
+															{
+																"type": "null"
+															}
+														],
+														"description": "How it was paid, when the provider said."
+													},
+													"reference": {
+														"anyOf": [
+															{
+																"type": "string"
+															},
+															{
+																"type": "null"
+															}
+														]
+													},
+													"planId": {
+														"anyOf": [
+															{
+																"type": "string"
+															},
+															{
+																"type": "null"
+															}
+														]
+													},
+													"seats": {
+														"anyOf": [
+															{
+																"type": "integer",
+																"minimum": -9007199254740991,
+																"maximum": 9007199254740991
+															},
+															{
+																"type": "null"
+															}
+														]
+													},
+													"interval": {
+														"anyOf": [
+															{
+																"enum": [
+																	"month",
+																	"year"
+																],
+																"type": "string"
+															},
+															{
+																"type": "null"
+															}
+														]
+													},
+													"periodStart": {
+														"anyOf": [
+															{
+																"type": "string",
+																"format": "date-time",
+																"x-native-type": "date"
+															},
+															{
+																"type": "null"
+															}
+														]
+													},
+													"periodEnd": {
+														"anyOf": [
+															{
+																"type": "string",
+																"format": "date-time",
+																"x-native-type": "date"
+															},
+															{
+																"type": "null"
+															}
+														]
+													}
+												},
+												"required": [
+													"id",
+													"date",
+													"amount",
+													"currency",
+													"provider",
+													"method",
+													"reference",
+													"planId",
+													"seats",
+													"interval",
+													"periodStart",
+													"periodEnd"
+												]
+											}
+										}
+									},
+									"required": [
+										"invoices"
+									]
+								}
+							}
+						}
+					},
+					"403": {
+						"description": "403",
+						"content": {
+							"application/json": {
+								"schema": {
+									"oneOf": [
+										{
+											"type": "object",
+											"properties": {
+												"defined": {
+													"const": true
+												},
+												"code": {
+													"const": "FORBIDDEN"
+												},
+												"status": {
+													"const": 403
+												},
+												"message": {
+													"type": "string",
+													"default": "Only an owner or admin of the organization can see billing."
+												},
+												"data": {}
+											},
+											"required": [
+												"defined",
+												"code",
+												"status",
+												"message"
+											]
+										},
+										{
+											"type": "object",
+											"properties": {
+												"defined": {
+													"const": false
+												},
+												"code": {
+													"type": "string"
+												},
+												"status": {
+													"type": "number"
+												},
+												"message": {
+													"type": "string"
+												},
+												"data": {}
+											},
+											"required": [
+												"defined",
+												"code",
+												"status",
+												"message"
+											]
+										}
+									]
+								}
+							}
+						}
+					},
+					"default": {
+						"description": "Structured API error. See status and code; do not branch on message text.",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"required": [
+										"defined",
+										"code",
+										"status",
+										"message"
+									],
+									"properties": {
+										"defined": {
+											"type": "boolean"
+										},
+										"code": {
+											"type": "string"
+										},
+										"status": {
+											"type": "integer"
+										},
+										"message": {
+											"type": "string"
+										},
+										"data": {}
+									}
+								}
+							}
+						}
+					}
+				},
+				"security": [
+					{
+						"apiKey": []
+					},
+					{
+						"bearerAuth": []
+					},
+					{
+						"cookieAuth": []
+					}
+				],
+				"x-codeSamples": [
+					{
+						"lang": "bash",
+						"label": "cURL",
+						"source": "curl \"https://careeros.example/api/openapi/billing/invoices\" --header \"x-api-key: <api-key>\""
+					}
+				]
+			}
+		},
 		"/billing/trial": {
 			"post": {
 				"operationId": "startBillingTrial",

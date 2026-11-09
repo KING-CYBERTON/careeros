@@ -6,8 +6,8 @@ export type BuilderPane = "write" | "page" | "design" | "check" | "share";
 export type LetterPane = "write" | "page" | "design";
 // CAREEROS (P4-T02): the jobs pane (discovery review queue)
 export type CareerPane = "today" | "coach" | "knowledge" | "jobs" | "offers";
-// CAREEROS (P2-T07): branding and domains panes
-export type SettingsPane = "account" | "preferences" | "ai" | "branding" | "domains";
+// CAREEROS (P2-T07, P3-T06): branding, domains and plan panes
+export type SettingsPane = "account" | "preferences" | "ai" | "branding" | "domains" | "plan";
 export type ApplicationTab = WorkspaceTab;
 /** The Applications tab's views; List is the tab's index. */
 export type ApplicationsView = "list" | "board" | "calendar" | "insights";

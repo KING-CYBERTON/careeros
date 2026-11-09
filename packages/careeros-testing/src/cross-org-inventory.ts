@@ -196,6 +196,8 @@ export const NO_TENANT_ID: Record<string, string> = {
 	"POST /org-admin/invitations/bulk":
 		"takes no tenant id: invites the uploaded CSV's addresses to the caller's own organization (P3-T08)",
 	"GET /billing": "takes no tenant id: the caller's own organization (P3-T04)",
+	"GET /billing/invoices":
+		"takes no tenant id: lists the caller's own organization's payments from its audit rows; asserted empty of Organization A's (P3-T06)",
 	"POST /billing/trial": "takes no tenant id: the caller's own organization (P3-T04)",
 	"POST /billing/checkout":
 		"takes no tenant id: the caller's own organization; the body names a plan, an interval and a seat count (P3-T04)",
