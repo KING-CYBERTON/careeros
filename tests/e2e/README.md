@@ -43,6 +43,7 @@ and production build. The runner still uses zero retries, so parallelism cannot 
   a password-protected link.
 - OAuth consent for MCP clients: deny, allow with PKCE, and the access token's audience at `/mcp`.
 - The assistant, against a scripted OpenAI-compatible provider (`fixtures/ai-stub.ts`). It needs `FLAG_ALLOW_UNSAFE_AI_BASE_URL=true` so the server may call the stub on 127.0.0.1, and skips without it.
+- CareerOS billing (`careeros-billing.spec.ts`), against the fake payment provider. It needs `BILLING_PROVIDER=fake`, a `BILLING_FAKE_SECRET` of 16+ characters and `FLAG_ALLOW_FAKE_BILLING=true` (the built server runs with `NODE_ENV=production`, which refuses the fake provider without the flag). Never set the flag on a public deployment. It skips without `BILLING_PROVIDER=fake`.
 
 Visual regression, PDF/DOCX rasterization parity, thumbnail resolution, and import-fixture reproduction are
 intentionally outside the PR gate to keep it fast.

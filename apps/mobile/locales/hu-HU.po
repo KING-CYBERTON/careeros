@@ -387,6 +387,12 @@ msgstr "{0}-kal kevesebb"
 msgid "{0} more"
 msgstr "{0} többlet"
 
+#. placeholder {0}: plan.seatsUsed
+#. placeholder {1}: plan.seatLimit
+#: src/features/organization/plan-screen.tsx
+msgid "{0} of {1}"
+msgstr ""
+
 #. placeholder {0}: shown.length
 #. placeholder {1}: TEMPLATES.length
 #: src/features/design/template-group.tsx
@@ -428,6 +434,11 @@ msgstr "{0} kiválasztva"
 #. placeholder {1}: failed.length
 #: src/features/career/today.tsx
 msgid "{0} updated; {1} failed. Failed roles remain selected. Refresh or retry."
+msgstr ""
+
+#. placeholder {0}: plan.seatsUsed
+#: src/features/organization/plan-screen.tsx
+msgid "{0} used"
 msgstr ""
 
 #. placeholder {0}: answer.split(/\s+/).filter(Boolean).length
@@ -704,6 +715,10 @@ msgstr "{toCheck, plural, one {A # mezőt meg kell nézni.} other {A # mezőket 
 msgid "{toCheck, plural, one {# to check} other {# to check}}"
 msgstr "{toCheck, plural, one {# ellenőrizni} other {# ellenőrizni}}"
 
+#: src/features/organization/plan-screen.tsx
+msgid "{trialDays} days left"
+msgstr ""
+
 #: src/features/letters/write.tsx
 #: src/features/workspace/tabs/apply.tsx
 msgid "{words, plural, one {# word} other {# words}}"
@@ -822,6 +837,14 @@ msgstr "Egy számjegyekkel írt dátum országonként másképp értelmezhető."
 msgid "A page is rotated."
 msgstr "Egy oldal el van forgatva."
 
+#: src/features/organization/plan-screen.tsx
+msgid "A payment is overdue. Please contact your organization's owner."
+msgstr ""
+
+#: src/features/organization/plan-screen.tsx
+msgid "A payment is overdue. Please contact your organization's owner. Service pauses after {graceEnd}."
+msgstr ""
+
 #: src/features/applications/prior-no-response.tsx
 msgid "A previous application to this company was closed with No response. You can still apply."
 msgstr "Ehhez a céghez korábban már küldtél jelentkezést, amely Nincs válasz eredménnyel zárult. Ettől még jelentkezhetsz."
@@ -919,6 +942,7 @@ msgstr "Műveletek a következőhöz: {0}, {1}"
 
 #: src/features/ai/web-access.tsx
 #: src/features/branding/domains-screen.tsx
+#: src/features/organization/plan-screen.tsx
 msgid "Active"
 msgstr "Aktív"
 
@@ -1390,6 +1414,10 @@ msgstr "Az AI-szolgáltatókat nem sikerült betölteni. Töltse be újra az új
 #: src/features/applications/add-sheet.tsx
 msgid "AI providers couldn't be loaded. Retry or fill the details manually."
 msgstr "Nem sikerült betölteni az AI-szolgáltatókat. Próbáld újra, vagy add meg kézzel az adatokat."
+
+#: src/features/organization/plan-screen.tsx
+msgid "AI quota"
+msgstr ""
 
 #: src/features/applications/add-sheet.tsx
 msgid "AI reads pasted text only when you ask. Links can use the page’s own job data without AI."
@@ -3170,6 +3198,10 @@ msgstr "Nem sikerült betölteni a kísérőlevelet."
 #: src/features/check/job-match.tsx
 msgid "Couldn't load the linked posting."
 msgstr "Nem sikerült betölteni a linkelt álláshirdetést."
+
+#: src/features/organization/plan-screen.tsx
+msgid "Couldn't load the plan."
+msgstr ""
 
 #: app/builder/[id]/page.tsx
 #: app/builder/[id]/write.tsx
@@ -5907,6 +5939,7 @@ msgid "Leave it empty to remove the link."
 msgstr "A hivatkozás eltávolításához hagyja üresen."
 
 #: src/features/design/template-group.tsx
+#: src/features/organization/plan-screen.tsx
 msgid "Left"
 msgstr "Balra"
 
@@ -7809,6 +7842,10 @@ msgstr "A jelszavak nem egyeznek."
 msgid "Past conversations"
 msgstr "Korábbi beszélgetések"
 
+#: src/features/organization/plan-screen.tsx
+msgid "Past due"
+msgstr ""
+
 #: src/features/applications/add-sheet.tsx
 msgid "Paste a job link or posting, then check the role and company. Nothing is saved until you choose Save job."
 msgstr "Illesszen be egy álláshivatkozást vagy álláshirdetést, majd ellenőrizze a szerepkört és a céget. A Munka mentése választásáig semmi sem kerül mentésre."
@@ -7905,6 +7942,10 @@ msgstr "havonta"
 msgid "Per year"
 msgstr "Évente"
 
+#: src/features/organization/plan-screen.tsx
+msgid "Period ends"
+msgstr ""
+
 #: app/(tabs)/settings/account.tsx
 msgid "Permanently removes everything. Opens your browser account settings."
 msgstr "Véglegesen eltávolít mindent. Megnyitja a böngésző fiók beállításait."
@@ -7983,6 +8024,11 @@ msgstr "Egyszerű szöveg (.txt)"
 #: src/features/share/download.tsx
 msgid "Plain text with headings. Paste into application forms and notes."
 msgstr "Egyszerű szöveg címsorokkal. Illessze be az állásjelentkezési űrlapokba és jegyzetekbe."
+
+#: app/(tabs)/settings/index.tsx
+#: src/features/organization/plan-screen.tsx
+msgid "Plan"
+msgstr ""
 
 #: src/features/workspace/tabs/prepare.tsx
 msgid "Plan again"
@@ -9794,6 +9840,10 @@ msgstr ""
 msgid "Searching the web…"
 msgstr "Keresés a neten…"
 
+#: src/features/organization/plan-screen.tsx
+msgid "Seats"
+msgstr ""
+
 #: src/features/career/offers.tsx
 msgid "Second offer"
 msgstr "Második ajánlat"
@@ -10592,6 +10642,10 @@ msgstr "Most kezdődik"
 msgid "State or region"
 msgstr ""
 
+#: src/features/organization/plan-screen.tsx
+msgid "Status"
+msgstr "Állapot"
+
 #: src/features/documents/new-document.tsx
 msgid "Stay in Documents"
 msgstr "Maradjon itt: Dokumentumok"
@@ -10719,6 +10773,10 @@ msgstr "Alátámasztva"
 
 #: src/features/workspace/answer-library.tsx
 msgid "Supporting Knowledge facts and stories"
+msgstr ""
+
+#: src/features/organization/plan-screen.tsx
+msgid "Suspended"
 msgstr ""
 
 #: src/features/career/offers.tsx
@@ -11520,6 +11578,10 @@ msgstr "Ebben a hónapban"
 msgid "This organization has no free seats. Remove a member or an invitation, or ask the owner to add seats."
 msgstr ""
 
+#: src/features/organization/plan-screen.tsx
+msgid "This organization is suspended. You can view and export your data."
+msgstr ""
+
 #: src/features/organization/entitlement-message.ts
 #: src/features/organization/entitlements.tsx
 msgid "This organization is suspended. You can view and export your data. Contact your administrator."
@@ -11548,6 +11610,10 @@ msgstr "Ennek a PDF-nak nincs szövegrétege, így az elemző semmit sem olvas k
 #: src/features/ats-checker/check.ts
 msgid "This PDF is password protected. Save an unprotected copy and try again."
 msgstr "Ez a PDF jelszóval védett. Mentsd el egy nem védett másolatként, és próbáld újra."
+
+#: src/features/organization/plan-screen.tsx
+msgid "This plan has no pooled AI credits."
+msgstr ""
 
 #: src/features/assistant/messages.tsx
 msgid "This question couldn't be asked. Send a new message to continue."
@@ -11790,6 +11856,10 @@ msgstr "A kuka üres"
 msgid "Trash was already empty"
 msgstr ""
 
+#: src/features/organization/plan-screen.tsx
+msgid "Trial"
+msgstr ""
+
 #: src/features/workspace/parts.tsx
 msgid "Trimming words"
 msgstr "Szavak lefaragása"
@@ -11809,6 +11879,7 @@ msgstr "Próbálja ki a következőt: {suggestion}"
 #: src/features/branding/branding-screen.tsx
 #: src/features/branding/domains-screen.tsx
 #: src/features/letters/write.tsx
+#: src/features/organization/plan-screen.tsx
 #: src/features/settings/api-keys.tsx
 #: src/features/settings/clipper-sign-ins.tsx
 #: src/features/workspace/parts.tsx
@@ -12252,6 +12323,10 @@ msgstr "Használd ki ezt az időt"
 #: src/features/ats-checker/messages.ts
 msgid "Use your editor's normal bullet list, so stray glyphs do not land mid-sentence."
 msgstr "Használd a szerkesztőd normál felsorolásfunkcióját, hogy elkóborolt karakterjelek ne kerüljenek mondat közepére."
+
+#: src/features/organization/plan-screen.tsx
+msgid "Used"
+msgstr "Felhasználva"
 
 #: src/features/workspace/tabs/saved.tsx
 msgid "used {used}"
@@ -13020,6 +13095,10 @@ msgstr ""
 
 #: src/features/branding/domains-screen.tsx
 msgid "Your organization is served on this domain."
+msgstr ""
+
+#: src/features/organization/plan-screen.tsx
+msgid "Your organization's owner manages the plan and payments on the web."
 msgstr ""
 
 #: src/features/ats-checker/messages.ts

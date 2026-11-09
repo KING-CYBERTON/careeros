@@ -344,7 +344,9 @@ describe.skipIf(!configured)("billing webhook and the fake provider", () => {
 
 			const approved = await decide("approve");
 			expect(approved.status).toBe(303);
-			expect(approved.headers.get("location")).toBe(`${PLATFORM_ORIGIN}/dashboard?billing=approved`);
+			expect(approved.headers.get("location")).toBe(
+				`${PLATFORM_ORIGIN}/dashboard/organization/billing/return?billing=approved`,
+			);
 			expect(await org(user.orgId)).toMatchObject({
 				status: "active",
 				plan_id: "starter",
