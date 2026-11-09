@@ -21,6 +21,7 @@ const RPC_ONLY = [
 	"admin.announcements.list",
 	"admin.announcements.save",
 	"admin.audit.list",
+	"admin.email.sendTest",
 	"admin.impersonation.start",
 	"admin.metrics",
 	"admin.orgs.get",

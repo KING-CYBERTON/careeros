@@ -41,6 +41,9 @@ vi.mock("@careeros/billing", () => ({
 	runWithEntitlementsCache: (fn: () => unknown) => fn(),
 }));
 vi.mock("@careeros/platform-admin", () => platformAdmin);
+// CAREEROS (P6-T02): the test send itself is covered in email-test.test.ts; here only the gates around it.
+const testSend = vi.hoisted(() => vi.fn());
+vi.mock("./email-test", () => ({ sendTestEmailToAdmin: testSend }));
 vi.mock("../../middleware/entitlements", () => ({
 	enforceOrganizationStatus: async ({ next }: { next: () => unknown }) => next(),
 	SUSPENDED_ORG_ALLOWED_WRITES: new Map(),
@@ -294,5 +297,39 @@ describe("announcements for members", () => {
 			dismissed: true,
 		});
 		expect(platformAdmin.dismissAnnouncement).toHaveBeenCalledWith("admin-1", "a1");
+	});
+});
+
+// CAREEROS (P6-T02): "Send test email" has no recipient input and mails the signed-in admin only.
+describe("sending a test email", () => {
+	const send = (authentication: unknown, host: unknown = { kind: "platform" }, input?: unknown) =>
+		call(adminRouter.email.sendTest, ["admin", "email", "sendTest"], authentication, host)(input);
+	const admin = session({ user: { id: "admin-1", email: "admin@example.test" } });
+
+	beforeEach(() => {
+		testSend.mockReset().mockResolvedValue({ provider: "plunk", outcome: "queued" });
+		platformAdmin.assertPlatformAdmin.mockResolvedValue(undefined);
+	});
+
+	it("checks the actor in the database, then mails the session user's own address", async () => {
+		await expect(send(admin)).resolves.toEqual({ provider: "plunk", outcome: "queued" });
+		expect(platformAdmin.assertPlatformAdmin).toHaveBeenCalledWith("admin-1");
+		expect(testSend).toHaveBeenCalledWith("admin-1", "admin@example.test");
+	});
+
+	it("ignores a recipient in the input", async () => {
+		await send(admin, undefined, { to: "victim@example.test" });
+		expect(testSend).toHaveBeenCalledWith("admin-1", "admin@example.test");
+	});
+
+	it("sends nothing for a user who is not an admin, an API key, or any host but the platform", async () => {
+		platformAdmin.assertPlatformAdmin.mockRejectedValue(new platformAdmin.AdminError("not_admin"));
+		await expect(send(admin)).rejects.toMatchObject({ code: "NOT_FOUND" });
+		await expect(send(session({ method: "apiKey" }))).rejects.toMatchObject({ code: "NOT_FOUND" });
+		platformAdmin.assertPlatformAdmin.mockResolvedValue(undefined);
+		await expect(send(admin, { kind: "unknown", matchesOrgPattern: false })).rejects.toMatchObject({
+			code: "NOT_FOUND",
+		});
+		expect(testSend).not.toHaveBeenCalled();
 	});
 });

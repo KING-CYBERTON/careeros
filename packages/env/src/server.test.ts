@@ -29,6 +29,11 @@ beforeEach(() => {
 		"PAYSTACK_PUBLIC_KEY",
 		"PAYSTACK_ALLOW_TEST_KEY",
 		"FLAG_ALLOW_FAKE_BILLING",
+		"EMAIL_PROVIDER",
+		"PLUNK_SECRET_KEY",
+		"PLUNK_API_URL",
+		"PLUNK_WEBHOOK_SECRET",
+		"EMAIL_FROM_ADDRESS",
 	])
 		vi.stubEnv(name, undefined);
 });
@@ -395,5 +400,71 @@ describe("paystack configuration", () => {
 		vi.stubEnv("AUTH_SECRET", "a".repeat(40));
 		configure("sk_live_placeholder", "pk_live_placeholder");
 		expect((await import("./server")).env.BILLING_PROVIDER).toBe("paystack");
+	});
+});
+
+// CAREEROS (P6-T02): email delivery through Plunk.
+describe("email provider configuration", () => {
+	const configure = (overrides: Record<string, string | undefined> = {}) => {
+		vi.stubEnv("NODE_ENV", "test");
+		const values: Record<string, string | undefined> = {
+			EMAIL_PROVIDER: "plunk",
+			PLUNK_SECRET_KEY: "sk_placeholder_key",
+			EMAIL_FROM_ADDRESS: "no-reply@example.test",
+			PLUNK_WEBHOOK_SECRET: "w".repeat(32),
+			...overrides,
+		};
+		for (const [name, value] of Object.entries(values)) vi.stubEnv(name, value);
+	};
+
+	it("leaves the provider unset by default and needs nothing", async () => {
+		const { env } = await import("./server");
+		expect(env.EMAIL_PROVIDER).toBeUndefined();
+		expect(env.PLUNK_API_URL).toBe("https://next-api.useplunk.com");
+	});
+
+	it("accepts a complete plunk configuration", async () => {
+		configure();
+		const { env } = await import("./server");
+		expect(env.EMAIL_PROVIDER).toBe("plunk");
+		expect(env.EMAIL_FROM_ADDRESS).toBe("no-reply@example.test");
+	});
+
+	it.each(["PLUNK_SECRET_KEY", "EMAIL_FROM_ADDRESS", "PLUNK_WEBHOOK_SECRET"])("requires %s for plunk", async (name) => {
+		configure({ [name]: undefined });
+		await expect(import("./server")).rejects.toThrow(
+			"EMAIL_PROVIDER=plunk requires PLUNK_SECRET_KEY, EMAIL_FROM_ADDRESS and PLUNK_WEBHOOK_SECRET",
+		);
+	});
+
+	it("refuses a key that does not start with sk_", async () => {
+		configure({ PLUNK_SECRET_KEY: "pk_public_key" });
+		await expect(import("./server")).rejects.toThrow("must be a Plunk secret key");
+	});
+
+	it("refuses a webhook secret shorter than 32 characters", async () => {
+		configure({ PLUNK_WEBHOOK_SECRET: "short" });
+		await expect(import("./server")).rejects.toThrow("at least 32 characters");
+	});
+
+	it("does not ask for Plunk settings when another provider is chosen", async () => {
+		vi.stubEnv("NODE_ENV", "test");
+		vi.stubEnv("EMAIL_PROVIDER", "smtp");
+		expect((await import("./server")).env.EMAIL_PROVIDER).toBe("smtp");
+	});
+
+	it("refuses an unknown provider and a sender address that is not an address", async () => {
+		vi.spyOn(console, "error").mockImplementation(() => {});
+		vi.stubEnv("EMAIL_PROVIDER", "sendgrid");
+		await expect(import("./server")).rejects.toThrow("Invalid environment variables");
+		vi.resetModules();
+		vi.stubEnv("EMAIL_PROVIDER", "log");
+		vi.stubEnv("EMAIL_FROM_ADDRESS", "not an address");
+		await expect(import("./server")).rejects.toThrow("Invalid environment variables");
+	});
+
+	it("takes a custom API address and drops a trailing slash", async () => {
+		configure({ PLUNK_API_URL: "https://plunk.example.test/" });
+		expect((await import("./server")).env.PLUNK_API_URL).toBe("https://plunk.example.test");
 	});
 });

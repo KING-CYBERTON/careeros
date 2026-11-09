@@ -50,6 +50,8 @@ export function AdminLayout() {
 						["/admin/metrics", <Trans key="m">Metrics</Trans>],
 						["/admin/announcements", <Trans key="a">Announcements</Trans>],
 						["/admin/audit", <Trans key="l">Audit log</Trans>],
+						// CAREEROS (P6-T02)
+						["/admin/email", <Trans key="e">Email</Trans>],
 					] as const
 				).map(([to, label]) => (
 					<Link
