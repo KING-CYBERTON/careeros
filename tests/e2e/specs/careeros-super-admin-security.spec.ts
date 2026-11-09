@@ -158,7 +158,14 @@ test("the console's pages and procedures do not exist on an organization host or
 	const port = new URL(String(baseURL)).port;
 	const suffix = port ? `:${port}` : "";
 	const customHost = `jobs-${slug}.example.test${suffix}`;
-	const hosts = [`${slug}.orgs.test${suffix}`, customHost];
+	// A custom domain resolves to an organization only when the server has Cloudflare custom hostnames configured
+	// (CF_SAAS_*); without them the host is unknown and the request is turned away earlier as a cross-site call (403,
+	// the same for every procedure, not specific to the console). The custom domain case is covered over HTTP in
+	// apps/server/src/http/super-admin-security.integration.test.ts, which enables custom domains.
+	const customDomainsOn = Boolean(
+		process.env.CF_SAAS_API_TOKEN && process.env.CF_ZONE_ID && process.env.CF_SAAS_CNAME_TARGET,
+	);
+	const hosts = customDomainsOn ? [`${slug}.orgs.test${suffix}`, customHost] : [`${slug}.orgs.test${suffix}`];
 	await withSeedPool((pool) =>
 		pool.query(
 			"insert into organization_domain (id, organization_id, hostname, status, verification_token) values ($1, $2, $3, 'active', 'token')",

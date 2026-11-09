@@ -557,12 +557,33 @@ describe.skipIf(!configured)("Super Admin security over HTTP", () => {
 				 (SELECT two_factor_enabled FROM "user" WHERE id = $1) AS two_factor`,
 				[support.member.id],
 			);
-			for (const [path, methods] of refused)
+			const allowedMediaTypes = new Map<string, string[]>();
+			for (const endpoint of Object.values(
+				auth.api as unknown as Record<
+					string,
+					{ path?: string; options?: { metadata?: { allowedMediaTypes?: string[] } } }
+				>,
+			))
+				if (endpoint.path) allowedMediaTypes.set(endpoint.path, endpoint.options?.metadata?.allowedMediaTypes ?? []);
+			// /oauth2/delete-consent is not in this loop: Better Auth's global hook answers it (and revokes tokens) before the
+			// support-session guard runs. It has its own test below (Q424), which fails today.
+			for (const [path, methods] of refused.filter(([refusedPath]) => refusedPath !== "/oauth2/delete-consent"))
 				for (const method of Object.keys(methods).filter((verb) => verb === "get" || verb === "post")) {
+					// Send the content type the endpoint accepts (its own metadata), so Better Auth's body check does not
+					// answer first and the support-session guard is what is exercised.
+					const accepted = allowedMediaTypes.get(path) ?? [];
+					const form = accepted.length > 0 && !accepted.includes("application/json");
 					const response = await hono.request(`${support.origin}/api/auth${path}`, {
 						method: method.toUpperCase(),
-						headers: { cookie: support.cookie, origin: support.origin, "content-type": "application/json" },
-						...(method === "post" ? { body: "{}" } : {}),
+						headers: {
+							cookie: support.cookie,
+							origin: support.origin,
+							"content-type": form ? "application/x-www-form-urlencoded" : "application/json",
+						},
+						// update-client nests the metadata under `update`; the server's own payload check answers 400 without it.
+						...(method === "post"
+							? { body: form ? "" : path === "/oauth2/update-client" ? '{"client_id":"x","update":{}}' : "{}" }
+							: {}),
 					});
 					const text = await response.text();
 					expect(response.status, `${method.toUpperCase()} ${path}: ${text.slice(0, 160)}`).toBe(403);
@@ -580,11 +601,11 @@ describe.skipIf(!configured)("Super Admin security over HTTP", () => {
 			await rpc(support.origin, "impersonation.end", {}, memberSession(support));
 		});
 
-		// Q421 (DEFECT, fails today): a support session must not be able to mint a credential that outlives it. Better Auth's
+		// Q421 (fixed by #99, P3-T09): a support session must not be able to mint a credential that outlives it. Better Auth's
 		// OAuth provider endpoints are not in IMPERSONATION_REFUSED_AUTH_PATHS, so the impersonator registers an OAuth client
 		// in the member's name (scope api:read api:write api:delete, offline_access), consents to it and holds a bearer token
 		// that works after the 60 minutes, with no support record behind it. Reproduced: both registration endpoints answer
-		// 201 and /revoke-other-sessions answers 200 inside a live support session. Left failing on purpose (not skipped).
+		// 201 and /revoke-other-sessions answers 200 inside a live support session. Passes since #99.
 		it("cannot mint a credential that outlives the session (OAuth clients and consent) or end the member's other sessions", async () => {
 			const support = await startSupport();
 			const client = {
@@ -607,6 +628,47 @@ describe.skipIf(!configured)("Super Admin security over HTTP", () => {
 				expect(response.status, `${path}: ${text.slice(0, 160)}`).toBe(403);
 				expect(text, path).toContain("IMPERSONATION_NOT_ALLOWED");
 			}
+			await rpc(support.origin, "impersonation.end", {}, memberSession(support));
+		});
+
+		// Q424 (DEFECT, fails today): Better Auth's global before-hook for /oauth2/delete-consent (packages/auth/src/config.ts)
+		// revokes the member's refresh and access tokens for the client BEFORE the support-session guard (a plugin hook that
+		// runs after it) refuses the call. The response is 403, but the member's OAuth grant is already revoked. Left failing
+		// on purpose (not skipped).
+		it("does not revoke the member's OAuth tokens through /oauth2/delete-consent in a support session", async () => {
+			const support = await startSupport();
+			const clientId = `q424-${run}`;
+			const consentId = `q424c-${run}`;
+			const tokenId = `q424t-${run}`;
+			await owner.query(`INSERT INTO oauth_client (id, client_id, user_id, redirect_uris) VALUES ($1, $2, $3, $4)`, [
+				`q424o-${run}`,
+				clientId,
+				support.member.id,
+				["https://client.example.test/callback"],
+			]);
+			await owner.query(`INSERT INTO oauth_consent (id, client_id, user_id, scopes) VALUES ($1, $2, $3, $4)`, [
+				consentId,
+				clientId,
+				support.member.id,
+				["openid"],
+			]);
+			await owner.query(
+				`INSERT INTO oauth_access_token (id, token, client_id, user_id, scopes) VALUES ($1, $2, $3, $4, $5)`,
+				[tokenId, `q424-token-${run}`, clientId, support.member.id, ["openid"]],
+			);
+			const response = await hono.request(`${support.origin}/api/auth/oauth2/delete-consent`, {
+				method: "POST",
+				// A non-browser caller chooses its Origin header; a trusted one passes Better Auth's own cross-origin check.
+				headers: { cookie: support.cookie, origin: PLATFORM_ORIGIN, "content-type": "application/json" },
+				body: JSON.stringify({ id: consentId }),
+			});
+			const text = await response.text();
+			const token = await ownerRows<{ revoked: Date | null }>(`SELECT revoked FROM oauth_access_token WHERE id = $1`, [
+				tokenId,
+			]);
+			expect(response.status, text.slice(0, 160)).toBe(403);
+			expect(text).toContain("IMPERSONATION_NOT_ALLOWED");
+			expect(token.at(0)?.revoked ?? null, "the member's token is untouched").toBeNull();
 			await rpc(support.origin, "impersonation.end", {}, memberSession(support));
 		});
 
