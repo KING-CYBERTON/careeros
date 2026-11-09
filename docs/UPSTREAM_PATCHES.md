@@ -646,3 +646,7 @@ New CareerOS files (not upstream): `packages/platform-admin/`, `packages/api/src
 | `apps/server/src/http/billing-fake.ts`                                               | P3-T06 | The fake checkout page uses `Referrer-Policy: same-origin` so Chrome sends the page's own `Origin` and the decision form is accepted (Q487) | Low (test page only)                       |
 | `docs/spec.json`                                                                     | P3-T06 | Regenerated for `GET /billing/invoices`                                                                                                     | None (generated)                           |
 | `docs/guides/managing-billing.mdx`, `docs/docs.json`, `docs/images/guides/billing/*` | P3-T06 | User guide with fictional screenshots, in the Account group                                                                                 | None                                       |
+
+## P3-T09: Super Admin hardening
+
+No upstream file is edited. CareerOS files changed: `packages/platform-admin/src/policy.ts` (refused paths and `normalizeAuthPath`), `packages/billing/src/billing.integration.test.ts`, new `packages/auth/src/support-session-paths.integration.test.ts`, migration `20261108224408_audit_platform_refuse_admin`.
