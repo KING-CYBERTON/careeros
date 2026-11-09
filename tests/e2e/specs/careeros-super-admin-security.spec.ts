@@ -1,3 +1,4 @@
+import type { Page } from "@playwright/test";
 import { randomUUID } from "node:crypto";
 import { readdirSync } from "node:fs";
 import { join } from "node:path";
@@ -26,6 +27,27 @@ const REASON = "e2e: security test support ticket";
 async function setRole(email: string, role: string, twoFactor: boolean) {
 	await withSeedPool((pool) =>
 		pool.query(`update "user" set role = $2, two_factor_enabled = $3 where email = $1`, [email, role, twoFactor]),
+	);
+}
+
+/**
+ * A request from inside the member's page, to the host the page is on. Only the browser resolves `*.orgs.test` (through
+ * ORG_HOST_LAUNCH_OPTIONS); Playwright's APIRequestContext does not, so `page.request` cannot reach an organization host.
+ */
+async function statusFromPage(page: Page, path: string, init?: { method: "GET" | "POST"; body?: unknown }) {
+	return await page.evaluate(
+		async ({ path: target, init: options }) => {
+			const response = await fetch(target, {
+				method: options?.method ?? "GET",
+				credentials: "include",
+				redirect: "manual",
+				...(options?.method === "POST"
+					? { headers: { "content-type": "application/json" }, body: JSON.stringify(options.body ?? {}) }
+					: {}),
+			});
+			return response.status;
+		},
+		{ path, init },
 	);
 }
 
@@ -305,14 +327,10 @@ test.describe("support sessions in a browser", () => {
 				await expect(member.getByTestId("impersonation-banner")).toBeVisible();
 
 				// The console does not exist on the member's host, and the admin API is refused in the support session.
-				const console_ = await member.request.get(`${org.origin}/admin/organizations`, { failOnStatusCode: false });
-				expect(console_.status()).toBe(404);
-				const refused = await member.request.post(`${org.origin}${rpcPath("admin.orgs.list")}`, {
-					headers: { "content-type": "application/json", origin: org.origin },
-					data: { json: {} },
-					failOnStatusCode: false,
-				});
-				expect(refused.status()).toBe(404);
+				expect(await statusFromPage(member, "/admin/organizations")).toBe(404);
+				expect(await statusFromPage(member, rpcPath("admin.orgs.list"), { method: "POST", body: { json: {} } })).toBe(
+					404,
+				);
 
 				// End now ends it for good.
 				await banner.getByRole("button", { name: "End now" }).click();
@@ -414,12 +432,9 @@ test.describe("support sessions in a browser", () => {
 				await member.goto(`${org.origin}/dashboard`);
 				await expect(member).toHaveURL(/\/auth\/login/);
 				await expect(member.getByTestId("impersonation-banner")).toHaveCount(0);
-				const refused = await member.request.post(`${org.origin}${rpcPath("impersonation.current")}`, {
-					headers: { "content-type": "application/json", origin: org.origin },
-					data: { json: {} },
-					failOnStatusCode: false,
-				});
-				expect(refused.status()).toBe(401);
+				expect(
+					await statusFromPage(member, rpcPath("impersonation.current"), { method: "POST", body: { json: {} } }),
+				).toBe(401);
 			} finally {
 				await context.close();
 			}
