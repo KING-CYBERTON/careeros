@@ -159,6 +159,28 @@ instead, so you can still copy verification links from there.
 | `SMTP_FROM`   | unset   | Sender address, for example `Reactive Resume <noreply@example.com>`.                                                                                                           |
 | `SMTP_SECURE` | `false` | `true` connects with TLS from the start (usually port `465`). `false` requires a successful STARTTLS upgrade and fails if the server does not support it (usually port `587`). |
 
+### Email through Plunk
+
+{/* CAREEROS: P6-T02 */}
+
+Hosted Plunk has no SMTP relay, so CareerOS sends through Plunk's HTTP API. `EMAIL_PROVIDER` picks how mail leaves the server: `plunk`, `smtp` or `log`. Left unset it is `smtp` when the four `SMTP_*` values above are set, and `log` otherwise (the behaviour described above). With `plunk` the server refuses to start unless the first, third and fourth variables below are set.
+
+| Variable               | Default                         | Description                                                                                                                        |
+| ---------------------- | ------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------- |
+| `EMAIL_PROVIDER`       | unset                           | `plunk`, `smtp` or `log`.                                                                                                          |
+| `PLUNK_SECRET_KEY`     | unset                           | Required with `plunk`. The secret key from Plunk (Settings, API Keys); it starts with `sk_`. Never commit it.                      |
+| `PLUNK_API_URL`        | `https://next-api.useplunk.com` | The Plunk API address. Change it only for a self-hosted Plunk.                                                                     |
+| `EMAIL_FROM_ADDRESS`   | unset                           | Required with `plunk`. The verified sending address, for example `no-reply@ayopa.co.ke`.                                           |
+| `PLUNK_WEBHOOK_SECRET` | unset                           | Required with `plunk`, at least 32 characters (`openssl rand -hex 32`). The Plunk workflow sends it back so events can be trusted. |
+
+All emails come from one verified address. Only the display name, the reply-to and the template brand change: platform and personal-account emails use the platform name, organization emails use the organization's name and its reply-to address when it has one.
+
+**DNS records.** Add the domain of `EMAIL_FROM_ADDRESS` in Plunk (Settings, Domains) and create the records Plunk shows you at your DNS host: three DKIM `CNAME` records, one SPF `TXT` record (merge it into your existing SPF record if you have one, because a domain may have only one), and one feedback `MX` record. A DMARC `TXT` record and a custom MAIL FROM domain are optional. Copy the values from the Plunk dashboard; they are different for each domain. Send mail only after Plunk shows the domain as verified.
+
+**Bounces and complaints.** Plunk reports them only through a workflow. In Plunk, create a workflow that starts on the events `email.bounce` and `email.complaint`, add a Webhook step that posts to `https://<your platform host>/api/email/webhook/plunk`, and give the step the header `x-careeros-webhook-secret` with the value of `PLUNK_WEBHOOK_SECRET`. Plunk does not sign events and does not retry, so the secret header is the only protection: use a fresh random value and keep it out of the repository. CareerOS answers 401 to a missing or wrong secret and reads nothing from the body. A permanent bounce and any complaint put the address on a suppression list (only a hash of the address is stored), and CareerOS never mails it again. Temporary bounces are ignored.
+
+**Check it.** Sign in to the Super Admin console on the platform host, open Email and choose Send test email. It mails your own address and shows `Queued` or the error code Plunk returned (`plan_limit` when the plan's monthly cap is reached, `rate_limited` at 1000 requests a minute).
+
 ## Storage
 
 Uploads such as profile pictures, files attached to applications and Assistant attachments are stored in one of three

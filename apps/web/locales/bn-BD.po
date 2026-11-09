@@ -2994,6 +2994,10 @@ msgstr ""
 msgid "check numbers and names before using it"
 msgstr "ব্যবহারের আগে সংখ্যা ও নাম যাচাই করুন"
 
+#: src/features/platform-admin/email-page.tsx
+msgid "Check that the platform can deliver email."
+msgstr ""
+
 #: src/components/layout/unknown-organization-screen.tsx
 msgid "Check the address, or ask the person who gave it to you for the right link."
 msgstr ""
@@ -5680,6 +5684,8 @@ msgstr "শিক্ষা বিভাগেও প্রতিষ্ঠান 
 
 #: src/features/org-admin/analytics-page.tsx
 #: src/features/org-admin/bulk-invite.tsx
+#: src/features/platform-admin/email-page.tsx
+#: src/features/platform-admin/layout.tsx
 #: src/features/resume/editor/check/parser-view.tsx
 #: src/features/resume/editor/write/basics-card.tsx
 #: src/features/settings/account/profile.tsx
@@ -5903,6 +5909,17 @@ msgstr "প্রবেশের বিকল্প"
 #: src/features/career/offers.tsx
 msgid "Equity"
 msgstr "ইকুইটি"
+
+#. placeholder {0}: result.code ?? "unknown"
+#: src/features/platform-admin/email-page.tsx
+msgid "Error code: {0}"
+msgstr ""
+
+#. placeholder {0}: result.code ?? "unknown"
+#. placeholder {1}: result.status
+#: src/features/platform-admin/email-page.tsx
+msgid "Error code: {0} (HTTP {1})"
+msgstr ""
 
 #: src/features/career/today.tsx
 msgid "Every {days} days at {clock} · next {next}"
@@ -8884,6 +8901,10 @@ msgstr "কোনো ইমেল ঠিকানা নেই"
 msgid "No email address was found."
 msgstr "কোনো ইমেইল ঠিকানা পাওয়া যায়নি।"
 
+#: src/features/platform-admin/email-page.tsx
+msgid "No email provider is configured on this server, so the message was only logged."
+msgstr ""
+
 #: src/features/org-admin/audit-page.tsx
 #: src/features/platform-admin/audit-page.tsx
 msgid "No entries."
@@ -9310,6 +9331,10 @@ msgstr "পরামর্শ দেওয়ার কিছু নেই।"
 #: src/features/career/workspace/practise.tsx
 msgid "Nothing was heard. Try again, or type your answer."
 msgstr "কিছু শোনা যায়নি। আবার চেষ্টা করুন, অথবা আপনার উত্তর টাইপ করুন।"
+
+#: src/features/platform-admin/email-page.tsx
+msgid "Nothing was sent"
+msgstr ""
 
 #: src/features/career/knowledge/preferences.tsx
 msgid "Notice period"
@@ -10633,6 +10658,10 @@ msgstr "প্রশ্নগুলো কপি করা হয়েছে"
 #: src/features/career/workspace/prepare.tsx
 msgid "Questions to ask"
 msgstr "যে প্রশ্নগুলো করবেন"
+
+#: src/features/platform-admin/email-page.tsx
+msgid "Queued"
+msgstr ""
 
 #: src/routes/builder/$resumeId/-components/design-panel.tsx
 msgid "Raise the design sheet"
@@ -12371,6 +12400,10 @@ msgstr ""
 msgid "Send reset link"
 msgstr "রিসেট লিঙ্ক পাঠান"
 
+#: src/features/platform-admin/email-page.tsx
+msgid "Send test email"
+msgstr ""
+
 #: src/features/ats-checker/messages.ts
 msgid "Send the resume itself rather than a portfolio wrapper."
 msgstr "পোর্টফোলিও র‍্যাপারের বদলে জীবনবৃত্তান্তটি নিজেই পাঠান।"
@@ -12390,6 +12423,10 @@ msgstr "প্রেরকের বিবরণ চিঠিতে অনুল
 #: src/features/auth/pages/forgot-password.tsx
 msgid "Sending password reset email..."
 msgstr "পাসওয়ার্ড রিসেটের ইমেইল পাঠানো হচ্ছে..."
+
+#: src/features/platform-admin/email-page.tsx
+msgid "Sends a fixed message to the address of your own account, and shows the provider's answer."
+msgstr ""
 
 #: src/features/career/role-suggestions.tsx
 msgid "Sends only your selected resume and up to 20 active shared facts to this connection. No application profile, saved answers or private application facts. Your provider may charge."
@@ -13703,6 +13740,10 @@ msgstr ""
 msgid "The address must contain only lowercase letters and numbers, separated by single dashes."
 msgstr "ঠিকানায় শুধুমাত্র ছোট হাতের লাতিন অক্ষর এবং সংখ্যা থাকতে হবে, যা একক ড্যাশ দ্বারা পৃথক করা হবে।"
 
+#: src/features/platform-admin/email-page.tsx
+msgid "The address of your account bounced or complained before, so it is not mailed again."
+msgstr ""
+
 #: src/features/platform-admin/announcements-page.tsx
 msgid "The announcement could not be ended."
 msgstr ""
@@ -13919,6 +13960,10 @@ msgstr "চাকরির পোস্টিং পড়া যায়নি
 msgid "The posting saved with this application."
 msgstr "চাকরির পোস্টিং এই চাকরির আবেদনের সাথে সংরক্ষণ করা হয়েছে।"
 
+#: src/features/platform-admin/email-page.tsx
+msgid "The provider accepted the message. It should arrive in your inbox shortly."
+msgstr ""
+
 #: src/features/assistant/provider-setup.tsx
 msgid "The provider didn't answer. Check the key and the model."
 msgstr "প্রদানকারী উত্তর দেয়নি। কী এবং মডেল পরীক্ষা করুন।"
@@ -13930,6 +13975,10 @@ msgstr "প্রদানকারী উত্তর দেয়নি। ক
 #: src/features/auth/pages/error.tsx
 msgid "The provider didn't share an email address, which is required. Allow email access when the provider asks, or use another sign-in method."
 msgstr "প্রদানকারী কোনো ইমেইল ঠিকানা শেয়ার করেনি, যা প্রয়োজন। প্রদানকারী জিজ্ঞাসা করলে ইমেইল অ্যাক্সেসের অনুমতি দিন, অথবা অন্য কোনো সাইন-ইন পদ্ধতি ব্যবহার করুন।"
+
+#: src/features/platform-admin/email-page.tsx
+msgid "The provider refused the message"
+msgstr ""
 
 #: src/features/auth/pages/error.tsx
 msgid "The provider rejected this sign-in attempt. Try again."
@@ -14042,6 +14091,10 @@ msgstr ""
 #: src/features/settings/ai/providers.tsx
 msgid "The test didn't run. Try again."
 msgstr "পরীক্ষাটি চলেনি। আবার চেষ্টা করুন।"
+
+#: src/features/platform-admin/email-page.tsx
+msgid "The test email could not be sent."
+msgstr ""
 
 #: src/features/ats-checker/messages.ts
 msgid "The text comes out unreadable."
@@ -15977,6 +16030,10 @@ msgstr ""
 
 #: src/features/branding/domains-page.tsx
 msgid "Your address above keeps working. Ask your administrator to upgrade the plan to add your own domain."
+msgstr ""
+
+#: src/features/platform-admin/email-page.tsx
+msgid "Your address is on the suppression list"
 msgstr ""
 
 #: src/features/career/coach.tsx

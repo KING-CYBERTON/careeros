@@ -9,6 +9,8 @@
 		"./renewal": "./src/renewal.ts",
 		"./subjects": "./src/subjects.ts",
 		"./transport": "./src/transport.ts",
+		"./suppression": "./src/suppression.ts",
+		"./test-send": "./src/test-send.ts",
 		"./templates/auth": "./src/templates/auth.tsx"
 	},
 	"scripts": {
@@ -19,8 +21,10 @@
 		"test:ci": "vp test run --reporter=default --reporter=github-actions --reporter=json --reporter=junit --outputFile.json=reports/vitest-results.json --outputFile.junit=reports/vitest-junit.xml --passWithNoTests"
 	},
 	"dependencies": {
+		"@reactive-resume/db": "workspace:*",
 		"@reactive-resume/env": "workspace:*",
 		"@reactive-resume/utils": "workspace:*",
+		"drizzle-orm": "catalog:",
 		"nodemailer": "^10.3.1",
 		"react": "catalog:",
 		"react-email": "^6.11.6"

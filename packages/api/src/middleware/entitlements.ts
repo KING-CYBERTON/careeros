@@ -86,6 +86,7 @@ export const SUSPENDED_ORG_ALLOWED_WRITES: ReadonlyMap<string, string> = new Map
 	["admin.announcements.save", "platform console: acts on the platform, not on the admin's organization"],
 	["admin.announcements.end", "platform console: acts on the platform, not on the admin's organization"],
 	["admin.impersonation.start", "platform console: acts on the platform, not on the admin's organization"],
+	["admin.email.sendTest", "platform console: acts on the platform, not on the admin's organization"],
 	// A member of a suspended organization can still dismiss a banner for themselves and end a support session.
 	["announcements.dismiss", "dismissing an announcement is per user and changes nothing in the organization"],
 	["impersonation.end", "ending a support session must always work, whatever state the organization is in"],

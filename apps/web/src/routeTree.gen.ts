@@ -25,6 +25,7 @@ import { Route as HomeTermsRouteImport } from "./routes/_home/terms";
 import { Route as AdminIndexRouteImport } from "./routes/admin/index";
 import { Route as AdminAnnouncementsRouteImport } from "./routes/admin/announcements";
 import { Route as AdminAuditRouteImport } from "./routes/admin/audit";
+import { Route as AdminEmailRouteImport } from "./routes/admin/email";
 import { Route as AdminMetricsRouteImport } from "./routes/admin/metrics";
 import { Route as AgentIndexRouteImport } from "./routes/agent/index";
 import { Route as AgentThreadIdRouteImport } from "./routes/agent/$threadId";
@@ -163,6 +164,11 @@ const AdminAnnouncementsRoute = AdminAnnouncementsRouteImport.update({
 const AdminAuditRoute = AdminAuditRouteImport.update({
   id: "/audit",
   path: "/audit",
+  getParentRoute: () => AdminRouteRoute,
+} as any);
+const AdminEmailRoute = AdminEmailRouteImport.update({
+  id: "/email",
+  path: "/email",
   getParentRoute: () => AdminRouteRoute,
 } as any);
 const AdminMetricsRoute = AdminMetricsRouteImport.update({
@@ -510,6 +516,7 @@ export interface FileRoutesByFullPath {
   "/terms": typeof HomeTermsRoute;
   "/admin/announcements": typeof AdminAnnouncementsRoute;
   "/admin/audit": typeof AdminAuditRoute;
+  "/admin/email": typeof AdminEmailRoute;
   "/admin/metrics": typeof AdminMetricsRoute;
   "/agent/$threadId": typeof AgentThreadIdRoute;
   "/agent/new": typeof AgentNewRoute;
@@ -578,6 +585,7 @@ export interface FileRoutesByTo {
   "/terms": typeof HomeTermsRoute;
   "/admin/announcements": typeof AdminAnnouncementsRoute;
   "/admin/audit": typeof AdminAuditRoute;
+  "/admin/email": typeof AdminEmailRoute;
   "/admin/metrics": typeof AdminMetricsRoute;
   "/agent/$threadId": typeof AgentThreadIdRoute;
   "/agent/new": typeof AgentNewRoute;
@@ -657,6 +665,7 @@ export interface FileRoutesById {
   "/_home/terms": typeof HomeTermsRoute;
   "/admin/announcements": typeof AdminAnnouncementsRoute;
   "/admin/audit": typeof AdminAuditRoute;
+  "/admin/email": typeof AdminEmailRoute;
   "/admin/metrics": typeof AdminMetricsRoute;
   "/agent/$threadId": typeof AgentThreadIdRoute;
   "/agent/new": typeof AgentNewRoute;
@@ -737,6 +746,7 @@ export interface FileRouteTypes {
     | "/terms"
     | "/admin/announcements"
     | "/admin/audit"
+    | "/admin/email"
     | "/admin/metrics"
     | "/agent/$threadId"
     | "/agent/new"
@@ -805,6 +815,7 @@ export interface FileRouteTypes {
     | "/terms"
     | "/admin/announcements"
     | "/admin/audit"
+    | "/admin/email"
     | "/admin/metrics"
     | "/agent/$threadId"
     | "/agent/new"
@@ -883,6 +894,7 @@ export interface FileRouteTypes {
     | "/_home/terms"
     | "/admin/announcements"
     | "/admin/audit"
+    | "/admin/email"
     | "/admin/metrics"
     | "/agent/$threadId"
     | "/agent/new"
@@ -1067,6 +1079,13 @@ declare module "@tanstack/react-router" {
       path: "/audit";
       fullPath: "/admin/audit";
       preLoaderRoute: typeof AdminAuditRouteImport;
+      parentRoute: typeof AdminRouteRoute;
+    };
+    "/admin/email": {
+      id: "/admin/email";
+      path: "/email";
+      fullPath: "/admin/email";
+      preLoaderRoute: typeof AdminEmailRouteImport;
       parentRoute: typeof AdminRouteRoute;
     };
     "/admin/metrics": {
@@ -1519,6 +1538,7 @@ const HomeRouteRouteWithChildren = HomeRouteRoute._addFileChildren(
 interface AdminRouteRouteChildren {
   AdminAnnouncementsRoute: typeof AdminAnnouncementsRoute;
   AdminAuditRoute: typeof AdminAuditRoute;
+  AdminEmailRoute: typeof AdminEmailRoute;
   AdminMetricsRoute: typeof AdminMetricsRoute;
   AdminIndexRoute: typeof AdminIndexRoute;
   AdminOrganizationsOrganizationIdRoute: typeof AdminOrganizationsOrganizationIdRoute;
@@ -1528,6 +1548,7 @@ interface AdminRouteRouteChildren {
 const AdminRouteRouteChildren: AdminRouteRouteChildren = {
   AdminAnnouncementsRoute: AdminAnnouncementsRoute,
   AdminAuditRoute: AdminAuditRoute,
+  AdminEmailRoute: AdminEmailRoute,
   AdminMetricsRoute: AdminMetricsRoute,
   AdminIndexRoute: AdminIndexRoute,
   AdminOrganizationsOrganizationIdRoute: AdminOrganizationsOrganizationIdRoute,
