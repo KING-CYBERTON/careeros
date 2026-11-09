@@ -387,6 +387,12 @@ msgstr "{0} less"
 msgid "{0} more"
 msgstr "{0} more"
 
+#. placeholder {0}: plan.seatsUsed
+#. placeholder {1}: plan.seatLimit
+#: src/features/organization/plan-screen.tsx
+msgid "{0} of {1}"
+msgstr "{0} of {1}"
+
 #. placeholder {0}: shown.length
 #. placeholder {1}: TEMPLATES.length
 #: src/features/design/template-group.tsx
@@ -429,6 +435,11 @@ msgstr "{0} selected"
 #: src/features/career/today.tsx
 msgid "{0} updated; {1} failed. Failed roles remain selected. Refresh or retry."
 msgstr "{0} updated; {1} failed. Failed roles remain selected. Refresh or retry."
+
+#. placeholder {0}: plan.seatsUsed
+#: src/features/organization/plan-screen.tsx
+msgid "{0} used"
+msgstr "{0} used"
 
 #. placeholder {0}: answer.split(/\s+/).filter(Boolean).length
 #. placeholder {1}: [...answer].length
@@ -704,6 +715,10 @@ msgstr "{toCheck, plural, one {# field needs a look.} other {# fields need a loo
 msgid "{toCheck, plural, one {# to check} other {# to check}}"
 msgstr "{toCheck, plural, one {# to check} other {# to check}}"
 
+#: src/features/organization/plan-screen.tsx
+msgid "{trialDays} days left"
+msgstr "{trialDays} days left"
+
 #: src/features/letters/write.tsx
 #: src/features/workspace/tabs/apply.tsx
 msgid "{words, plural, one {# word} other {# words}}"
@@ -822,6 +837,14 @@ msgstr "A numeric date reads differently in different countries."
 msgid "A page is rotated."
 msgstr "A page is rotated."
 
+#: src/features/organization/plan-screen.tsx
+msgid "A payment is overdue. Please contact your organization's owner."
+msgstr "A payment is overdue. Please contact your organization's owner."
+
+#: src/features/organization/plan-screen.tsx
+msgid "A payment is overdue. Please contact your organization's owner. Service pauses after {graceEnd}."
+msgstr "A payment is overdue. Please contact your organization's owner. Service pauses after {graceEnd}."
+
 #: src/features/applications/prior-no-response.tsx
 msgid "A previous application to this company was closed with No response. You can still apply."
 msgstr "A previous application to this company was closed with No response. You can still apply."
@@ -919,6 +942,7 @@ msgstr "Actions for {0} at {1}"
 
 #: src/features/ai/web-access.tsx
 #: src/features/branding/domains-screen.tsx
+#: src/features/organization/plan-screen.tsx
 msgid "Active"
 msgstr "Active"
 
@@ -1390,6 +1414,10 @@ msgstr "AI providers couldn't be loaded. Reload to try again."
 #: src/features/applications/add-sheet.tsx
 msgid "AI providers couldn't be loaded. Retry or fill the details manually."
 msgstr "AI providers couldn't be loaded. Retry or fill the details manually."
+
+#: src/features/organization/plan-screen.tsx
+msgid "AI quota"
+msgstr "AI quota"
 
 #: src/features/applications/add-sheet.tsx
 msgid "AI reads pasted text only when you ask. Links can use the page’s own job data without AI."
@@ -3170,6 +3198,10 @@ msgstr "Couldn't load the cover letter."
 #: src/features/check/job-match.tsx
 msgid "Couldn't load the linked posting."
 msgstr "Couldn't load the linked posting."
+
+#: src/features/organization/plan-screen.tsx
+msgid "Couldn't load the plan."
+msgstr "Couldn't load the plan."
 
 #: app/builder/[id]/page.tsx
 #: app/builder/[id]/write.tsx
@@ -5907,6 +5939,7 @@ msgid "Leave it empty to remove the link."
 msgstr "Leave it empty to remove the link."
 
 #: src/features/design/template-group.tsx
+#: src/features/organization/plan-screen.tsx
 msgid "Left"
 msgstr "Left"
 
@@ -7809,6 +7842,10 @@ msgstr "Passwords do not match."
 msgid "Past conversations"
 msgstr "Past conversations"
 
+#: src/features/organization/plan-screen.tsx
+msgid "Past due"
+msgstr "Past due"
+
 #: src/features/applications/add-sheet.tsx
 msgid "Paste a job link or posting, then check the role and company. Nothing is saved until you choose Save job."
 msgstr "Paste a job link or posting, then check the role and company. Nothing is saved until you choose Save job."
@@ -7905,6 +7942,10 @@ msgstr "Per month"
 msgid "Per year"
 msgstr "Per year"
 
+#: src/features/organization/plan-screen.tsx
+msgid "Period ends"
+msgstr "Period ends"
+
 #: app/(tabs)/settings/account.tsx
 msgid "Permanently removes everything. Opens your browser account settings."
 msgstr "Permanently removes everything. Opens your browser account settings."
@@ -7983,6 +8024,11 @@ msgstr "Plain text (.txt)"
 #: src/features/share/download.tsx
 msgid "Plain text with headings. Paste into application forms and notes."
 msgstr "Plain text with headings. Paste into application forms and notes."
+
+#: app/(tabs)/settings/index.tsx
+#: src/features/organization/plan-screen.tsx
+msgid "Plan"
+msgstr "Plan"
 
 #: src/features/workspace/tabs/prepare.tsx
 msgid "Plan again"
@@ -9794,6 +9840,10 @@ msgstr "Searches"
 msgid "Searching the web…"
 msgstr "Searching the web…"
 
+#: src/features/organization/plan-screen.tsx
+msgid "Seats"
+msgstr "Seats"
+
 #: src/features/career/offers.tsx
 msgid "Second offer"
 msgstr "Second offer"
@@ -10592,6 +10642,10 @@ msgstr "Starts now"
 msgid "State or region"
 msgstr "State or region"
 
+#: src/features/organization/plan-screen.tsx
+msgid "Status"
+msgstr "Status"
+
 #: src/features/documents/new-document.tsx
 msgid "Stay in Documents"
 msgstr "Stay in Documents"
@@ -10720,6 +10774,10 @@ msgstr "Supported"
 #: src/features/workspace/answer-library.tsx
 msgid "Supporting Knowledge facts and stories"
 msgstr "Supporting Knowledge facts and stories"
+
+#: src/features/organization/plan-screen.tsx
+msgid "Suspended"
+msgstr "Suspended"
 
 #: src/features/career/offers.tsx
 msgid "Swap"
@@ -11520,6 +11578,10 @@ msgstr "This month"
 msgid "This organization has no free seats. Remove a member or an invitation, or ask the owner to add seats."
 msgstr "This organization has no free seats. Remove a member or an invitation, or ask the owner to add seats."
 
+#: src/features/organization/plan-screen.tsx
+msgid "This organization is suspended. You can view and export your data."
+msgstr "This organization is suspended. You can view and export your data."
+
 #: src/features/organization/entitlement-message.ts
 #: src/features/organization/entitlements.tsx
 msgid "This organization is suspended. You can view and export your data. Contact your administrator."
@@ -11548,6 +11610,10 @@ msgstr "This PDF has no text layer, so a parser reads nothing from it."
 #: src/features/ats-checker/check.ts
 msgid "This PDF is password protected. Save an unprotected copy and try again."
 msgstr "This PDF is password protected. Save an unprotected copy and try again."
+
+#: src/features/organization/plan-screen.tsx
+msgid "This plan has no pooled AI credits."
+msgstr "This plan has no pooled AI credits."
 
 #: src/features/assistant/messages.tsx
 msgid "This question couldn't be asked. Send a new message to continue."
@@ -11790,6 +11856,10 @@ msgstr "Trash is empty"
 msgid "Trash was already empty"
 msgstr "Trash was already empty"
 
+#: src/features/organization/plan-screen.tsx
+msgid "Trial"
+msgstr "Trial"
+
 #: src/features/workspace/parts.tsx
 msgid "Trimming words"
 msgstr "Trimming words"
@@ -11809,6 +11879,7 @@ msgstr "Try {suggestion}"
 #: src/features/branding/branding-screen.tsx
 #: src/features/branding/domains-screen.tsx
 #: src/features/letters/write.tsx
+#: src/features/organization/plan-screen.tsx
 #: src/features/settings/api-keys.tsx
 #: src/features/settings/clipper-sign-ins.tsx
 #: src/features/workspace/parts.tsx
@@ -12252,6 +12323,10 @@ msgstr "Use this time"
 #: src/features/ats-checker/messages.ts
 msgid "Use your editor's normal bullet list, so stray glyphs do not land mid-sentence."
 msgstr "Use your editor's normal bullet list, so stray glyphs do not land mid-sentence."
+
+#: src/features/organization/plan-screen.tsx
+msgid "Used"
+msgstr "Used"
 
 #: src/features/workspace/tabs/saved.tsx
 msgid "used {used}"
@@ -13021,6 +13096,10 @@ msgstr "Your organization has used all of this month's AI allowance. Add your ow
 #: src/features/branding/domains-screen.tsx
 msgid "Your organization is served on this domain."
 msgstr "Your organization is served on this domain."
+
+#: src/features/organization/plan-screen.tsx
+msgid "Your organization's owner manages the plan and payments on the web."
+msgstr "Your organization's owner manages the plan and payments on the web."
 
 #: src/features/ats-checker/messages.ts
 msgid "Your phone number is written in an unusual shape."

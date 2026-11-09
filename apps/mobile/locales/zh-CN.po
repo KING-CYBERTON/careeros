@@ -387,6 +387,12 @@ msgstr "{0} 少"
 msgid "{0} more"
 msgstr "多 {0}"
 
+#. placeholder {0}: plan.seatsUsed
+#. placeholder {1}: plan.seatLimit
+#: src/features/organization/plan-screen.tsx
+msgid "{0} of {1}"
+msgstr ""
+
 #. placeholder {0}: shown.length
 #. placeholder {1}: TEMPLATES.length
 #: src/features/design/template-group.tsx
@@ -428,6 +434,11 @@ msgstr "已选择{0}"
 #. placeholder {1}: failed.length
 #: src/features/career/today.tsx
 msgid "{0} updated; {1} failed. Failed roles remain selected. Refresh or retry."
+msgstr ""
+
+#. placeholder {0}: plan.seatsUsed
+#: src/features/organization/plan-screen.tsx
+msgid "{0} used"
 msgstr ""
 
 #. placeholder {0}: answer.split(/\s+/).filter(Boolean).length
@@ -704,6 +715,10 @@ msgstr "{toCheck, plural, one {# 字段需要查看。} other {# 字段需要查
 msgid "{toCheck, plural, one {# to check} other {# to check}}"
 msgstr "{toCheck, plural, one {#检查} other {#检查}}"
 
+#: src/features/organization/plan-screen.tsx
+msgid "{trialDays} days left"
+msgstr ""
+
 #: src/features/letters/write.tsx
 #: src/features/workspace/tabs/apply.tsx
 msgid "{words, plural, one {# word} other {# words}}"
@@ -822,6 +837,14 @@ msgstr "数字格式的日期在不同国家的读法不同。"
 msgid "A page is rotated."
 msgstr "有一页被旋转了。"
 
+#: src/features/organization/plan-screen.tsx
+msgid "A payment is overdue. Please contact your organization's owner."
+msgstr ""
+
+#: src/features/organization/plan-screen.tsx
+msgid "A payment is overdue. Please contact your organization's owner. Service pauses after {graceEnd}."
+msgstr ""
+
 #: src/features/applications/prior-no-response.tsx
 msgid "A previous application to this company was closed with No response. You can still apply."
 msgstr "之前向该公司提交的申请以“没有回应”关闭。您仍然可以申请。"
@@ -919,6 +942,7 @@ msgstr "{0} 在 {1} 的操作"
 
 #: src/features/ai/web-access.tsx
 #: src/features/branding/domains-screen.tsx
+#: src/features/organization/plan-screen.tsx
 msgid "Active"
 msgstr "积极的"
 
@@ -1390,6 +1414,10 @@ msgstr "无法加载 AI 提供程序。重新加载再试一次。"
 #: src/features/applications/add-sheet.tsx
 msgid "AI providers couldn't be loaded. Retry or fill the details manually."
 msgstr "无法加载 AI 提供商。请重试，或手动填写详情。"
+
+#: src/features/organization/plan-screen.tsx
+msgid "AI quota"
+msgstr ""
 
 #: src/features/applications/add-sheet.tsx
 msgid "AI reads pasted text only when you ask. Links can use the page’s own job data without AI."
@@ -3170,6 +3198,10 @@ msgstr "无法加载求职信。"
 #: src/features/check/job-match.tsx
 msgid "Couldn't load the linked posting."
 msgstr "无法加载关联的招聘信息。"
+
+#: src/features/organization/plan-screen.tsx
+msgid "Couldn't load the plan."
+msgstr ""
 
 #: app/builder/[id]/page.tsx
 #: app/builder/[id]/write.tsx
@@ -5907,6 +5939,7 @@ msgid "Leave it empty to remove the link."
 msgstr "将其留空以删除链接。"
 
 #: src/features/design/template-group.tsx
+#: src/features/organization/plan-screen.tsx
 msgid "Left"
 msgstr "左边"
 
@@ -7809,6 +7842,10 @@ msgstr "密码不匹配。"
 msgid "Past conversations"
 msgstr "过去的谈话"
 
+#: src/features/organization/plan-screen.tsx
+msgid "Past due"
+msgstr ""
+
 #: src/features/applications/add-sheet.tsx
 msgid "Paste a job link or posting, then check the role and company. Nothing is saved until you choose Save job."
 msgstr "粘贴职位链接或招聘信息，再检查职位和公司。选择“保存工作”后才会保存。"
@@ -7905,6 +7942,10 @@ msgstr "每月"
 msgid "Per year"
 msgstr "每年"
 
+#: src/features/organization/plan-screen.tsx
+msgid "Period ends"
+msgstr ""
+
 #: app/(tabs)/settings/account.tsx
 msgid "Permanently removes everything. Opens your browser account settings."
 msgstr "永久删除所有内容。打开您的浏览器帐户设置。"
@@ -7983,6 +8024,11 @@ msgstr "纯文本 (.txt)"
 #: src/features/share/download.tsx
 msgid "Plain text with headings. Paste into application forms and notes."
 msgstr "带标题的纯文本。粘贴到工作申请表和注释中。"
+
+#: app/(tabs)/settings/index.tsx
+#: src/features/organization/plan-screen.tsx
+msgid "Plan"
+msgstr ""
 
 #: src/features/workspace/tabs/prepare.tsx
 msgid "Plan again"
@@ -9794,6 +9840,10 @@ msgstr ""
 msgid "Searching the web…"
 msgstr "正在网上搜索..."
 
+#: src/features/organization/plan-screen.tsx
+msgid "Seats"
+msgstr ""
+
 #: src/features/career/offers.tsx
 msgid "Second offer"
 msgstr "第二份录用邀请"
@@ -10592,6 +10642,10 @@ msgstr "现在开始"
 msgid "State or region"
 msgstr ""
 
+#: src/features/organization/plan-screen.tsx
+msgid "Status"
+msgstr "状态"
+
 #: src/features/documents/new-document.tsx
 msgid "Stay in Documents"
 msgstr "留在文档"
@@ -10719,6 +10773,10 @@ msgstr "有证据"
 
 #: src/features/workspace/answer-library.tsx
 msgid "Supporting Knowledge facts and stories"
+msgstr ""
+
+#: src/features/organization/plan-screen.tsx
+msgid "Suspended"
 msgstr ""
 
 #: src/features/career/offers.tsx
@@ -11520,6 +11578,10 @@ msgstr "本月"
 msgid "This organization has no free seats. Remove a member or an invitation, or ask the owner to add seats."
 msgstr ""
 
+#: src/features/organization/plan-screen.tsx
+msgid "This organization is suspended. You can view and export your data."
+msgstr ""
+
 #: src/features/organization/entitlement-message.ts
 #: src/features/organization/entitlements.tsx
 msgid "This organization is suspended. You can view and export your data. Contact your administrator."
@@ -11548,6 +11610,10 @@ msgstr "此 PDF 没有文本层，因此解析器不会从中读取任何内容�
 #: src/features/ats-checker/check.ts
 msgid "This PDF is password protected. Save an unprotected copy and try again."
 msgstr "此 PDF 受密码保护。请保存一份不受保护的副本后重试。"
+
+#: src/features/organization/plan-screen.tsx
+msgid "This plan has no pooled AI credits."
+msgstr ""
 
 #: src/features/assistant/messages.tsx
 msgid "This question couldn't be asked. Send a new message to continue."
@@ -11790,6 +11856,10 @@ msgstr "垃圾箱已空"
 msgid "Trash was already empty"
 msgstr ""
 
+#: src/features/organization/plan-screen.tsx
+msgid "Trial"
+msgstr ""
+
 #: src/features/workspace/parts.tsx
 msgid "Trimming words"
 msgstr "正在删减字词"
@@ -11809,6 +11879,7 @@ msgstr "尝试{suggestion}"
 #: src/features/branding/branding-screen.tsx
 #: src/features/branding/domains-screen.tsx
 #: src/features/letters/write.tsx
+#: src/features/organization/plan-screen.tsx
 #: src/features/settings/api-keys.tsx
 #: src/features/settings/clipper-sign-ins.tsx
 #: src/features/workspace/parts.tsx
@@ -12252,6 +12323,10 @@ msgstr "利用这个时间"
 #: src/features/ats-checker/messages.ts
 msgid "Use your editor's normal bullet list, so stray glyphs do not land mid-sentence."
 msgstr "使用编辑器自带的普通项目符号列表功能，避免出现落在句子中间的杂散符号。"
+
+#: src/features/organization/plan-screen.tsx
+msgid "Used"
+msgstr "已使用"
 
 #: src/features/workspace/tabs/saved.tsx
 msgid "used {used}"
@@ -13020,6 +13095,10 @@ msgstr ""
 
 #: src/features/branding/domains-screen.tsx
 msgid "Your organization is served on this domain."
+msgstr ""
+
+#: src/features/organization/plan-screen.tsx
+msgid "Your organization's owner manages the plan and payments on the web."
 msgstr ""
 
 #: src/features/ats-checker/messages.ts

@@ -324,6 +324,11 @@ msgstr "{0, plural, one {# ମିନିଟ୍ ପୂର୍ବରୁ ଆରମ୍
 msgid "{0, plural, one {Tags for # document} other {Tags for # documents}}"
 msgstr "{0, plural, one {# ଡକ୍ୟୁମେଣ୍ଟ୍ ପାଇଁ ଟ୍ୟାଗ୍} other {# ଡକ୍ୟୁମେଣ୍ଟ୍ ପାଇଁ ଟ୍ୟାଗ୍}}"
 
+#. placeholder {0}: plan.seatLimit
+#: src/features/billing/plans.tsx
+msgid "{0, plural, one {Up to # seat} other {Up to # seats}}"
+msgstr ""
+
 #. placeholder {0}: fact.usedBy.savedItems
 #: src/features/career/knowledge/facts.tsx
 msgid "{0, plural, one {used in # saved item} other {used in # saved items}}"
@@ -349,6 +354,11 @@ msgstr "{0} (କପି)"
 msgid "{0} (mine)"
 msgstr ""
 
+#. placeholder {0}: plan.aiCreditsPerSeat
+#: src/features/billing/plans.tsx
+msgid "{0} AI credits per seat each month"
+msgstr ""
+
 #. placeholder {0}: insights.closed
 #: src/features/applications/components/insights-view.tsx
 msgid "{0} closed"
@@ -358,6 +368,11 @@ msgstr "{0} ବନ୍ଦ |"
 #. placeholder {1}: row.calls
 #: src/features/org-admin/ai-usage-page.tsx
 msgid "{0} credits · {1} calls"
+msgstr ""
+
+#. placeholder {0}: trialDays ?? 0
+#: src/features/billing/summary.tsx
+msgid "{0} days left in the trial."
 msgstr ""
 
 #. placeholder {0}: semantics.dates.length
@@ -454,6 +469,11 @@ msgstr "{1}ଟି ଅନୁକୂଳିତ ଆବେଦନ ମଧ୍ୟରୁ {0
 msgid "{0} of {1} terms found"
 msgstr "{0} ମଧ୍ୟରୁ {1}ଟି ଶବ୍ଦ ମିଳିଲା"
 
+#. placeholder {0}: billing.memberCount
+#: src/features/billing/summary.tsx
+msgid "{0} of {seatLimit}"
+msgstr ""
+
 #. placeholder {0}: document.posting.company
 #: src/features/assistant/conversation.tsx
 msgid "{0} posting"
@@ -498,6 +518,17 @@ msgstr "{0}ଟି ଠିକ୍ କରିବାକୁ ଅଛି"
 #. placeholder {1}: failed.length
 #: src/features/career/today.tsx
 msgid "{0} updated; {1} failed. Failed roles remain selected. Refresh or retry."
+msgstr ""
+
+#. placeholder {0}: billing.memberCount
+#: src/features/billing/summary.tsx
+msgid "{0} used"
+msgstr ""
+
+#. placeholder {0}: credits.used
+#. placeholder {1}: Math.max(0, credits.allowance - credits.used)
+#: src/features/billing/summary.tsx
+msgid "{0} used, {1} left"
 msgstr ""
 
 #. placeholder {0}: answer.split(/\s+/).filter(Boolean).length
@@ -1165,6 +1196,7 @@ msgstr ""
 msgid "Actions"
 msgstr "କାର୍ଯ୍ୟ"
 
+#: src/features/billing/summary.tsx
 #: src/features/branding/domains.ts
 #: src/features/platform-admin/organizations-page.tsx
 #: src/features/settings/ai/web-access.tsx
@@ -1697,8 +1729,13 @@ msgstr ""
 msgid "AI couldn't fill the details. The posting is retained; complete the fields manually."
 msgstr "AI ସବିଶେଷ ତଥ୍ୟ ପୂରଣ କରିପାରିବ ନାହିଁ | ଚାକିରି ପୋଷ୍ଟିଂ ରଖାଯାଇଛି; କ୍ଷେତ୍ରଗୁଡ଼ିକୁ ହସ୍ତକୃତ ଭାବରେ ସମ୍ପୂର୍ଣ୍ଣ କରନ୍ତୁ |"
 
+#: src/features/billing/summary.tsx
 #: src/features/platform-admin/organizations-page.tsx
 msgid "AI credits"
+msgstr ""
+
+#: src/features/billing/summary.tsx
+msgid "AI credits used this period"
 msgstr ""
 
 #: src/features/resume/share/format.ts
@@ -1880,6 +1917,7 @@ msgstr "କ skills ଶଳ, ପ୍ରୋଫାଇଲ୍ ଏବଂ ଆଗ୍ରହ
 msgid "Amharic"
 msgstr "ଆମହାରିକ୍"
 
+#: src/features/billing/invoices.tsx
 #: src/features/platform-admin/organization-page.tsx
 msgid "Amount"
 msgstr ""
@@ -1925,6 +1963,10 @@ msgstr ""
 #: src/features/platform-admin/announcements-page.tsx
 #: src/features/platform-admin/layout.tsx
 msgid "Announcements"
+msgstr ""
+
+#: src/features/billing/plans.tsx
+msgid "Annual"
 msgstr ""
 
 #: src/features/branding/domains.ts
@@ -2219,6 +2261,10 @@ msgstr "ଆବେଦନ"
 msgid "Approve"
 msgstr ""
 
+#: src/features/billing/billing-page.tsx
+msgid "Approve the payment on your phone."
+msgstr ""
+
 #: src/libs/locale.ts
 msgid "Arabic"
 msgstr "ଆରବୀ"
@@ -2305,6 +2351,10 @@ msgstr "ଏଥିରେ କାର୍ଯ୍ୟ କରିବାକୁ ସହାୟ
 #: src/features/career/workspace/shell.tsx
 msgid "Ask the coach"
 msgstr "କୋଚ୍‌କୁ ପଚାରନ୍ତୁ"
+
+#: src/features/billing/billing-page.tsx
+msgid "Ask the owner of your organization about the plan or payments."
+msgstr ""
 
 #: src/features/branding/domains-page.tsx
 msgid "Ask the platform administrator to set up custom domains. Your address above keeps working."
@@ -2436,6 +2486,11 @@ msgstr "ଆବେଦନଗୁଡ଼ିକକୁ ଫେରନ୍ତୁ"
 msgid "Back to authentication settings"
 msgstr "ପ୍ରମାଣୀକରଣ ସେଟିଂସ୍‌କୁ ଫେରନ୍ତୁ"
 
+#: src/features/billing/receipt-page.tsx
+#: src/features/billing/return-page.tsx
+msgid "Back to billing"
+msgstr ""
+
 #: src/features/career/workspace/shell.tsx
 msgid "Back to current"
 msgstr "ବର୍ତ୍ତମାନକୁ ଫେରନ୍ତୁ"
@@ -2521,6 +2576,19 @@ msgstr "ବଙ୍ଗାଳୀ"
 #: src/features/resume/share/download-tab.tsx
 msgid "Best for applying"
 msgstr "ଆବେଦନ ପାଇଁ ସର୍ବୋତ୍ତମ |"
+
+#: src/features/billing/billing-page.tsx
+#: src/routes/dashboard/settings/route.tsx
+msgid "Billing"
+msgstr ""
+
+#: src/features/billing/plans.tsx
+msgid "Billing interval"
+msgstr ""
+
+#: src/features/billing/billing-page.tsx
+msgid "Billing is managed by the platform"
+msgstr ""
 
 #: src/features/settings/account/application-profile.tsx
 msgid "Blank fields mean unknown. Nothing is inferred from your resume. Self-identification is not collected here. Enter references yourself and review their details before sharing."
@@ -2699,6 +2767,7 @@ msgstr "ସଫ୍ଟୱେର୍ ତୁମର ରେଜୁମ୍ ପ read ି �
 #: src/features/applications/components/import-applications-sheet.tsx
 #: src/features/applications/components/interview-dialog.tsx
 #: src/features/applications/components/manage-lanes-sheet.tsx
+#: src/features/billing/plans.tsx
 #: src/features/career/knowledge/facts.tsx
 #: src/features/career/knowledge/stories.tsx
 #: src/features/career/offer-entry.tsx
@@ -2721,6 +2790,33 @@ msgstr "ବାତିଲ୍ କରନ୍ତୁ"
 #. placeholder {0}: invitation.email
 #: src/features/organization/members-page.tsx
 msgid "Cancel invitation for {0}"
+msgstr ""
+
+#: src/features/billing/billing-page.tsx
+msgid "Cancel subscription"
+msgstr ""
+
+#: src/features/billing/billing-page.tsx
+msgid "Cancel this subscription?"
+msgstr ""
+
+#. placeholder {0}: periodEnd ?? "the period ends"
+#: src/features/billing/summary.tsx
+msgid "Canceled. The organization keeps working until {0}."
+msgstr ""
+
+#: src/features/billing/billing-page.tsx
+msgid "Cancellation sent. It shows once the payment provider confirms."
+msgstr ""
+
+#: src/features/billing/invoices.tsx
+#: src/features/billing/plans.tsx
+#: src/features/billing/summary.tsx
+msgid "Card"
+msgstr ""
+
+#: src/features/billing/plans.tsx
+msgid "Card renews automatically."
 msgstr ""
 
 #: src/routes/dashboard/-components/app-shell.tsx
@@ -2752,6 +2848,11 @@ msgstr "ପ୍ରମାଣପତ୍ରଗୁଡିକ"
 msgid "Change"
 msgstr "ପରିବର୍ତ୍ତନ କରନ୍ତୁ |"
 
+#. placeholder {0}: plan.name
+#: src/features/billing/plans.tsx
+msgid "Change {0}"
+msgstr ""
+
 #: src/features/career/coach-chat.tsx
 #: src/features/settings/ai/web-access.tsx
 msgid "Change connection"
@@ -2780,6 +2881,10 @@ msgstr "ଫଟୋ ପରିବର୍ତ୍ତନ କରନ୍ତୁ |"
 
 #: src/features/platform-admin/organization-page.tsx
 msgid "Change plan"
+msgstr ""
+
+#: src/features/billing/plans.tsx
+msgid "Change seats or interval"
 msgstr ""
 
 #: src/features/applications/components/detail/next-step-card.tsx
@@ -2986,6 +3091,15 @@ msgstr "ଚାଇନିଜ୍ (ସରଳୀକୃତ)"
 #: src/libs/locale.ts
 msgid "Chinese (Traditional)"
 msgstr "ଚାଇନିଜ୍ (ପାରମ୍ପରିକ)"
+
+#: src/features/billing/plans.tsx
+msgid "Choose"
+msgstr ""
+
+#. placeholder {0}: plan.name
+#: src/features/billing/plans.tsx
+msgid "Choose {0}"
+msgstr ""
 
 #: src/features/career/workspace/preparation.tsx
 msgid "Choose a base resume"
@@ -3351,6 +3465,10 @@ msgstr "ନୂଆ ସାକ୍ଷାତକାର ଯୋଡ଼ିବା ପୂର
 msgid "Confirm the time, link and who you'll meet. Glance at the resume and letter you sent."
 msgstr "ସମୟ, ଲିଙ୍କ୍ ଓ କାହାକୁ ଭେଟିବେ ତାହା ନିଶ୍ଚିତ କରନ୍ତୁ। ଆପଣ ପଠାଇଥିବା ରେଜ୍ୟୁମେ ଓ ଚିଠିକୁ ଥରେ ଦେଖିନିଅନ୍ତୁ।"
 
+#: src/features/billing/return-page.tsx
+msgid "Confirmation may take a few minutes. You can leave this page; your plan updates as soon as the payment is confirmed."
+msgstr ""
+
 #: src/features/assistant/provider-setup.tsx
 #: src/features/resume/share/custom-domain-field.tsx
 #: src/features/settings/account/security.tsx
@@ -3471,6 +3589,14 @@ msgstr "ଫୋନ୍ ଯୋଗାଯୋଗ କରନ୍ତୁ |"
 msgid "Contact role"
 msgstr "ଯୋଗାଯୋଗ ଭୂମିକା"
 
+#: src/features/billing/plans.tsx
+msgid "Contact us"
+msgstr ""
+
+#: src/features/billing/plans.tsx
+msgid "Contact us to buy this plan."
+msgstr ""
+
 #: src/features/applications/components/detail/contacts.tsx
 #: src/features/applications/components/import-applications-sheet.tsx
 msgid "Contacts"
@@ -3501,6 +3627,10 @@ msgstr "ଜାରି ରଖନ୍ତୁ"
 #: src/features/auth/pages/login.tsx
 msgid "Continue as guest"
 msgstr "ଅତିଥି ଭାବରେ ଜାରି ରଖନ୍ତୁ"
+
+#: src/features/billing/plans.tsx
+msgid "Continue to payment"
+msgstr ""
 
 #: src/features/assistant/conversation.tsx
 #: src/features/career/coach-chat.tsx
@@ -3671,6 +3801,10 @@ msgstr "ଫାଇଲ୍ ସଂଲଗ୍ନ କରିପାରିଲା ନାହ
 msgid "Couldn't cancel the invitation. Try again."
 msgstr ""
 
+#: src/features/billing/billing-page.tsx
+msgid "Couldn't cancel."
+msgstr ""
+
 #: src/features/org-admin/cohorts-page.tsx
 msgid "Couldn't change the cohort. Try again."
 msgstr ""
@@ -3691,6 +3825,10 @@ msgstr ""
 #: src/features/discovery/searches.tsx
 msgid "Couldn't change the schedule. Try again."
 msgstr "ସମୟସୂଚୀ ବଦଳାଇହେଲା ନାହିଁ। ପୁଣି ଚେଷ୍ଟା କରନ୍ତୁ।"
+
+#: src/features/billing/billing-page.tsx
+msgid "Couldn't change the seats."
+msgstr ""
 
 #: src/features/career/today.tsx
 msgid "Couldn't change this schedule. Try again."
@@ -3919,6 +4057,10 @@ msgstr ""
 msgid "Couldn't load applications. Try again."
 msgstr "ଆବେଦନଗୁଡ଼ିକ ଲୋଡ୍ କରିହେଲା ନାହିଁ। ପୁଣି ଚେଷ୍ଟା କରନ୍ତୁ।"
 
+#: src/features/billing/billing-page.tsx
+msgid "Couldn't load billing"
+msgstr ""
+
 #: src/features/settings/ai/connected-apps.tsx
 msgid "Couldn't load connected applications. Refresh the page to try again."
 msgstr "ସଂଯୁକ୍ତ ଆପ୍ଲିକେସନଗୁଡ଼ିକ ଲୋଡ୍ କରିହେଲା ନାହିଁ। ପୁଣି ଚେଷ୍ଟା କରିବାକୁ ପୃଷ୍ଠା ରିଫ୍ରେଶ୍ କରନ୍ତୁ।"
@@ -3934,6 +4076,10 @@ msgstr ""
 #: src/features/career/knowledge/stories.tsx
 msgid "Couldn't load interviews. Retry"
 msgstr "ସାକ୍ଷାତକାରଗୁଡ଼ିକ ଲୋଡ୍ କରିହେଲା ନାହିଁ। ପୁନଃଚେଷ୍ଟା କରନ୍ତୁ"
+
+#: src/features/billing/billing-page.tsx
+msgid "Couldn't load invoices"
+msgstr ""
 
 #: src/features/organization/members-page.tsx
 msgid "Couldn't load members"
@@ -4305,8 +4451,16 @@ msgstr "ରେକର୍ଡିଂ ଆରମ୍ଭ କରିହେଲା ନାହ
 msgid "Couldn't start the conversation. Try again."
 msgstr "ବାର୍ତ୍ତାଳାପ ଆରମ୍ଭ କରିପାରିଲା ନାହିଁ | ପୁନର୍ବାର ଚେଷ୍ଟା କରନ୍ତୁ |"
 
+#: src/features/billing/billing-page.tsx
+msgid "Couldn't start the payment."
+msgstr ""
+
 #: src/features/discovery/searches.tsx
 msgid "Couldn't start the run. Try again."
+msgstr ""
+
+#: src/features/billing/billing-page.tsx
+msgid "Couldn't start the trial."
 msgstr ""
 
 #: src/features/career/role-suggestions.tsx
@@ -4624,6 +4778,14 @@ msgstr "ବର୍ତ୍ତମାନର ଧ୍ୟାନ, ପ୍ରାସଙ୍ଗ
 msgid "Current password"
 msgstr "ବର୍ତ୍ତମାନର ପାସୱାର୍ଡ"
 
+#: src/features/billing/summary.tsx
+msgid "Current period"
+msgstr ""
+
+#: src/features/billing/plans.tsx
+msgid "Current plan"
+msgstr ""
+
 #: src/components/input/color-picker.tsx
 #: src/features/resume/editor/design/style-groups.tsx
 msgid "Custom"
@@ -4705,6 +4867,7 @@ msgstr ""
 #: src/features/applications/components/detail/activity.tsx
 #: src/features/applications/components/detail/next-step-card.tsx
 #: src/features/applications/components/interview-dialog.tsx
+#: src/features/billing/invoices.tsx
 #: src/features/resume/editor/design/entries-group.tsx
 #: src/features/resume/editor/write/dates-field.tsx
 #: src/routes/builder/letter/-components/write-panel.tsx
@@ -5588,6 +5751,10 @@ msgstr ""
 msgid "Ends"
 msgstr ""
 
+#: src/features/billing/summary.tsx
+msgid "Ends at period end"
+msgstr ""
+
 #: src/libs/locale.ts
 msgid "English"
 msgstr "ଇଂରାଜୀ"
@@ -5650,6 +5817,10 @@ msgstr "ଉଦାହରଣ .com ପରି ଏକ ୱେବ୍ ଠିକଣା �
 
 #: src/features/discovery/search-messages.ts
 msgid "Enter a whole number from 0 to {MAX_AI_TOP_N}."
+msgstr ""
+
+#: src/features/billing/plans.tsx
+msgid "Enter a whole number of seats, at least 1."
 msgstr ""
 
 #: src/features/settings/ai/providers.tsx
@@ -6219,6 +6390,10 @@ msgstr "ଆଜି ମିଳିଲା"
 #: src/features/career/today.tsx
 msgid "Found yesterday"
 msgstr "ଗତକାଲି ମିଳିଲା"
+
+#: src/features/billing/plans.tsx
+msgid "Free"
+msgstr ""
 
 #: src/libs/seo.ts
 msgid "Free ATS resume checker"
@@ -6940,8 +7115,16 @@ msgstr ""
 msgid "Invited"
 msgstr ""
 
+#: src/features/billing/invoices.tsx
+msgid "Invoice"
+msgstr ""
+
 #: src/features/platform-admin/organization-page.tsx
 msgid "Invoice or bank reference"
+msgstr ""
+
+#: src/features/billing/invoices.tsx
+msgid "Invoices"
 msgstr ""
 
 #: src/features/career/offers.tsx
@@ -7193,6 +7376,10 @@ msgstr "ସମ୍ପାଦନା ଜାରି ରଖନ୍ତୁ"
 #: src/features/documents/trash-page.tsx
 msgid "Keep in Trash"
 msgstr "ଆବର୍ଜନାରେ ରଖନ୍ତୁ |"
+
+#: src/features/billing/billing-page.tsx
+msgid "Keep it"
+msgstr ""
 
 #: src/features/career/workspace/prepare.tsx
 msgid "Keep it honest"
@@ -7706,6 +7893,14 @@ msgstr "ତାଲିକା (List)"
 msgid "List the tools and technologies you use. Recruiters search skills more than any other field."
 msgstr "ଆପଣ ବ୍ୟବହାର କରୁଥିବା ଉପକରଣ ଏବଂ ପ୍ରଯୁକ୍ତିଗୁଡ଼ିକୁ ତାଲିକାଭୁକ୍ତ କରନ୍ତୁ। ନିଯୁକ୍ତିକାରୀମାନେ ଅନ୍ୟ କୌଣସି ଫିଲ୍ଡଠାରୁ ଅଧିକ ଦକ୍ଷତା ଖୋଜନ୍ତି।"
 
+#: src/features/billing/plans.tsx
+msgid "Listed price per month:"
+msgstr ""
+
+#: src/features/billing/plans.tsx
+msgid "Listed price per year:"
+msgstr ""
+
 #: src/features/career/workspace/practise.tsx
 msgid "Listening… Stop when you're done."
 msgstr "ଶୁଣୁଛି… ଶେଷ ହେଲେ ବନ୍ଦ କରନ୍ତୁ।"
@@ -7877,6 +8072,16 @@ msgstr "ନିମ୍ନ"
 msgid "Lower the design sheet"
 msgstr "ଡିଜାଇନ୍ ସିଟ୍ କମ୍ କରନ୍ତୁ |"
 
+#: src/features/billing/invoices.tsx
+#: src/features/billing/plans.tsx
+#: src/features/billing/summary.tsx
+msgid "M-Pesa"
+msgstr ""
+
+#: src/features/billing/plans.tsx
+msgid "M-Pesa pays one period at a time. You pay again when the period ends."
+msgstr ""
+
 #: src/features/resume/share/web-page-text.ts
 msgid "Made with {appName}"
 msgstr ""
@@ -7942,6 +8147,10 @@ msgstr "ମାଲୟ"
 #: src/libs/locale.ts
 msgid "Malayalam"
 msgstr "ମଲୟାଳମ"
+
+#: src/features/billing/billing-page.tsx
+msgid "Manage"
+msgstr ""
 
 #: src/routes/dashboard/applications/index.tsx
 msgid "Manage stages"
@@ -8082,6 +8291,10 @@ msgstr ""
 msgid "Members & invites"
 msgstr ""
 
+#: src/features/billing/summary.tsx
+msgid "Members can view and export data but not change it until a payment is made."
+msgstr ""
+
 #: src/features/platform-admin/announcements-page.tsx
 msgid "Message (plain text, up to 1,000 characters)"
 msgstr ""
@@ -8097,6 +8310,10 @@ msgstr "କୋଚ୍‌କୁ ବାର୍ତ୍ତା ପଠାନ୍ତୁ"
 #: src/features/career/shared.tsx
 msgid "Messages"
 msgstr "ବାର୍ତ୍ତା"
+
+#: src/features/billing/invoices.tsx
+msgid "Method"
+msgstr ""
 
 #: src/features/platform-admin/layout.tsx
 #: src/features/platform-admin/metrics-page.tsx
@@ -8136,6 +8353,7 @@ msgstr "ମଡେଲ୍: {label} |"
 msgid "Month"
 msgstr ""
 
+#: src/features/billing/plans.tsx
 #: src/features/platform-admin/organization-page.tsx
 msgid "Monthly"
 msgstr ""
@@ -8746,6 +8964,10 @@ msgstr ""
 msgid "No other stage counts as {0}. Add one first, so its applications have somewhere to go."
 msgstr "{0} ଭାବେ ଗଣାଯାଉଥିବା ଅନ୍ୟ ପର୍ଯ୍ୟାୟ ନାହିଁ। ଏଥିରେ ଥିବା ଆବେଦନଗୁଡ଼ିକୁ ଘୁଞ୍ଚାଇବା ପାଇଁ ପ୍ରଥମେ ସେପରି ଏକ ପର୍ଯ୍ୟାୟ ଯୋଡ଼ନ୍ତୁ।"
 
+#: src/features/billing/invoices.tsx
+msgid "No payments yet."
+msgstr ""
+
 #: src/features/organization/members-page.tsx
 msgid "No pending invitations."
 msgstr ""
@@ -9241,6 +9463,10 @@ msgstr ""
 msgid "Only owners and admins can manage members"
 msgstr ""
 
+#: src/features/billing/billing-page.tsx
+msgid "Only owners and admins can open billing"
+msgstr ""
+
 #: src/features/org-admin/access.tsx
 msgid "Only owners and admins of an organization can open this page"
 msgstr ""
@@ -9266,6 +9492,10 @@ msgstr "ଏକାଥରକେ କେବଳ ପ୍ରଥମ {MAX_IMPORT} ଧା�
 #: src/features/ats-checker/messages.ts
 msgid "Only the first pages were checked."
 msgstr "କେବଳ ପ୍ରଥମ ପୃଷ୍ଠାଗୁଡ଼ିକ ଯାଞ୍ଚ କରାଯାଇଥିଲା।"
+
+#: src/features/billing/billing-page.tsx
+msgid "Only the owner can change the plan, seats or payment details."
+msgstr ""
 
 #: src/features/platform-admin/announcements-page.tsx
 msgid "Only this organization (id, optional)"
@@ -9301,6 +9531,10 @@ msgstr "AI ସେଟିଂସମୂହ ଖୋଲନ୍ତୁ |"
 
 #: src/features/discovery/review-queue.tsx
 msgid "Open application"
+msgstr ""
+
+#: src/features/billing/billing-banner.tsx
+msgid "Open billing"
 msgstr ""
 
 #: src/features/career/today.tsx
@@ -9671,6 +9905,10 @@ msgstr "ପାସୱାର୍ଡ ସେଟ୍ |"
 msgid "Past conversations"
 msgstr "ଅତୀତ ବାର୍ତ୍ତାଳାପ |"
 
+#: src/features/billing/summary.tsx
+msgid "Past due"
+msgstr ""
+
 #: src/features/applications/components/add-application-dialog.tsx
 msgid "Paste a job link or posting, then check the role and company."
 msgstr "ଏକ ଚାକିରି ଲିଙ୍କ୍ କିମ୍ବା ଚାକିରି ପୋଷ୍ଟିଂ ଲେପନ କରନ୍ତୁ, ତା’ପରେ ଭୂମିକା ଏବଂ କମ୍ପାନୀ ଯାଞ୍ଚ କରନ୍ତୁ |"
@@ -9746,14 +9984,41 @@ msgstr "ବିରତ · {line}"
 msgid "Paused schedules keep their settings."
 msgstr "ବିରତ ସମୟସୂଚୀ ସେମାନଙ୍କ ସେଟିଂସ୍ ରଖେ।"
 
+#. placeholder {0}: plan.name
+#: src/features/billing/plans.tsx
+msgid "Pay for {0}"
+msgstr ""
+
 #: src/features/career/knowledge/preferences.tsx
 #: src/features/career/offer-entry.tsx
 #: src/features/settings/account/application-profile.tsx
 msgid "Pay period"
 msgstr "ଦେୟ ଅବଧି"
 
+#: src/features/billing/return-page.tsx
+msgid "Payment"
+msgstr ""
+
+#. placeholder {0}: graceEnd ?? "the grace end date"
+#: src/features/billing/summary.tsx
+msgid "Payment failed. Pay by {0} to avoid suspension."
+msgstr ""
+
+#: src/features/billing/plans.tsx
+#: src/features/billing/summary.tsx
+msgid "Payment method"
+msgstr ""
+
+#: src/features/billing/return-page.tsx
+msgid "Payment received, updating your plan"
+msgstr ""
+
 #: src/features/platform-admin/organization-page.tsx
 msgid "Payment recorded."
+msgstr ""
+
+#: src/features/billing/invoices.tsx
+msgid "Payments made for this organization."
 msgstr ""
 
 #: src/features/resume/stylesheet/editor.tsx
@@ -9776,9 +10041,17 @@ msgstr "ପ୍ରତି ଘଣ୍ଟା"
 msgid "Per month"
 msgstr "ପ୍ରତି ମାସ"
 
+#: src/features/billing/plans.tsx
+msgid "per seat"
+msgstr ""
+
 #: src/features/career/offer-entry.tsx
 msgid "Per year"
 msgstr "ପ୍ରତି ବର୍ଷ"
+
+#: src/features/billing/invoices.tsx
+msgid "Period"
+msgstr ""
 
 #: src/features/platform-admin/organization-page.tsx
 msgid "Period end"
@@ -9876,6 +10149,7 @@ msgstr "ସାଧାରଣ ଟେକ୍ସଟ୍ (.txt)"
 msgid "Plain text with headings. Paste into application forms and notes."
 msgstr "ହେଡିଙ୍ଗ୍ ସହିତ ସାଧା ପାଠ | ଚାକିରି ଆବେଦନ ଫର୍ମ ଏବଂ ନୋଟରେ ଲେପନ କରନ୍ତୁ |"
 
+#: src/features/billing/invoices.tsx
 #: src/features/platform-admin/organization-page.tsx
 #: src/features/platform-admin/organizations-page.tsx
 msgid "Plan"
@@ -9904,6 +10178,10 @@ msgstr "ଆପଣଙ୍କ ଚାକିରି ଖୋଜାର ଯୋଜନା �
 #: src/features/career/shared.tsx
 msgid "Planning your week"
 msgstr "ଆପଣଙ୍କ ସପ୍ତାହର ଯୋଜନା କରୁଛି"
+
+#: src/features/billing/billing-page.tsx
+msgid "Plans"
+msgstr ""
 
 #: src/features/platform-admin/audit-page.tsx
 msgid "Platform"
@@ -10174,6 +10452,10 @@ msgstr "ମୁଦ୍ରଣ"
 #: src/features/ats-checker/messages.ts
 msgid "Print or export the form to a flat PDF before sending it."
 msgstr "ପଠାଇବା ପୂର୍ବରୁ ଫର୍ମକୁ ଏକ ଫ୍ଲାଟ୍ PDF ରେ ପ୍ରିଣ୍ଟ୍ କିମ୍ବା ରପ୍ତାନି କରନ୍ତୁ।"
+
+#: src/features/billing/invoices.tsx
+msgid "Print receipt"
+msgstr ""
 
 #: src/features/resume/share/share-panel.tsx
 msgid "Privacy"
@@ -10556,6 +10838,11 @@ msgstr ""
 msgid "Recalled"
 msgstr "ମନେ ପକାଯାଇଥିବା"
 
+#: src/features/billing/invoices.tsx
+#: src/features/billing/receipt-page.tsx
+msgid "Receipt"
+msgstr ""
+
 #: src/features/career/coach.tsx
 msgid "Recent"
 msgstr "ସାମ୍ପ୍ରତିକ"
@@ -10640,6 +10927,10 @@ msgstr "ଲାଲ୍"
 #: src/features/resume/stylesheet/toolbar.tsx
 msgid "Redo resume change"
 msgstr "ରେଜୁ ରିମେମ୍ ପରିବର୍ତ୍ତନ |"
+
+#: src/features/billing/invoices.tsx
+msgid "Reference"
+msgstr ""
 
 #. placeholder {0}: index + 1
 #: src/features/settings/account/application-profile.tsx
@@ -10971,6 +11262,10 @@ msgstr "ସଂସ୍କରଣର ନାମ ପରିବର୍ତ୍ତନ କର
 #: src/routes/builder/letter/-components/letter-bar.tsx
 msgid "Rename…"
 msgstr "ନାମ ପରିବର୍ତ୍ତନ କରନ୍ତୁ…"
+
+#: src/features/billing/summary.tsx
+msgid "Renews or ends on {periodEnd}."
+msgstr ""
 
 #: src/features/applications/components/application-detail-sheet.tsx
 msgid "Reopen"
@@ -11951,6 +12246,14 @@ msgstr "ୱେବ୍‌ରେ ଖୋଜୁଛି"
 msgid "Searching the web…"
 msgstr "ୱେବ୍ ଖୋଜୁଛି…"
 
+#: src/features/billing/billing-page.tsx
+msgid "Seat change sent. It shows once the payment provider confirms."
+msgstr ""
+
+#: src/features/billing/billing-page.tsx
+#: src/features/billing/invoices.tsx
+#: src/features/billing/plans.tsx
+#: src/features/billing/summary.tsx
 #: src/features/platform-admin/organization-page.tsx
 #: src/features/platform-admin/organizations-page.tsx
 msgid "Seats"
@@ -12779,6 +13082,10 @@ msgstr "ପର୍ଯ୍ୟାୟ"
 msgid "Start"
 msgstr "ଆରମ୍ଭ କରନ୍ତୁ |"
 
+#: src/features/billing/billing-page.tsx
+msgid "Start 14-day trial"
+msgstr ""
+
 #: src/features/career/workspace/prepare.tsx
 msgid "Start a debrief"
 msgstr "ଏକ ସମୀକ୍ଷା ଆରମ୍ଭ କରନ୍ତୁ"
@@ -13062,6 +13369,7 @@ msgstr ""
 msgid "Suspend organization"
 msgstr ""
 
+#: src/features/billing/summary.tsx
 #: src/features/platform-admin/organizations-page.tsx
 msgid "Suspended"
 msgstr ""
@@ -13588,6 +13896,14 @@ msgstr "ପୃଷ୍ଠାଗୁଡ଼ିକ ଛବି, ପଛରେ କୌଣ�
 msgid "The payment could not be recorded."
 msgstr ""
 
+#: src/features/billing/billing-page.tsx
+msgid "The payment provider has no billing page to open."
+msgstr ""
+
+#: src/features/billing/return-page.tsx
+msgid "The payment was not completed. Nothing was charged and your plan has not changed."
+msgstr ""
+
 #: src/features/branding/branding-page.tsx
 msgid "The platform default shows again."
 msgstr ""
@@ -14028,12 +14344,20 @@ msgstr "ଏହି PDF ପାସୱାର୍ଡ ସୁରକ୍ଷିତ। ଏ�
 msgid "This period"
 msgstr ""
 
+#: src/features/billing/plans.tsx
+msgid "This plan allows at most {seatLimit} seats."
+msgstr ""
+
 #: src/features/assistant/question-card.tsx
 msgid "This question couldn't be asked. Send a new message to continue."
 msgstr ""
 
 #: src/features/assistant/question-card.tsx
 msgid "This question didn't finish."
+msgstr ""
+
+#: src/features/billing/receipt-page.tsx
+msgid "This receipt was not found"
 msgstr ""
 
 #: src/features/settings/account/application-profile.tsx
@@ -14270,6 +14594,10 @@ msgstr "ଆବର୍ଜନା ଖାଲି ଅଛି |"
 msgid "Trash was already empty"
 msgstr ""
 
+#: src/features/billing/summary.tsx
+msgid "Trial"
+msgstr ""
+
 #: src/features/platform-admin/organization-page.tsx
 msgid "Trial ends"
 msgstr ""
@@ -14310,6 +14638,7 @@ msgstr "ଏକ ନମୁନା ଚେଷ୍ଟା କରନ୍ତୁ |"
 msgid "Try again"
 msgstr "ପୁଣି ଚେଷ୍ଟା କରନ୍ତୁ"
 
+#: src/features/billing/billing-page.tsx
 #: src/features/branding/branding-page.tsx
 #: src/features/branding/domains-page.tsx
 #: src/features/org-admin/ai-usage-page.tsx
@@ -14523,6 +14852,10 @@ msgstr ""
 msgid "Unknown role"
 msgstr ""
 
+#: src/features/billing/plans.tsx
+msgid "Unlimited seats"
+msgstr ""
+
 #: src/features/documents/document-actions.tsx
 msgid "Unlink"
 msgstr "ଲିଙ୍କ୍ କରନ୍ତୁ |"
@@ -14589,9 +14922,17 @@ msgstr ""
 msgid "Upcoming interviews"
 msgstr "ଆଗାମୀ ସାକ୍ଷାତକାର |"
 
+#: src/features/billing/billing-page.tsx
+msgid "Update card or cancel"
+msgstr ""
+
 #: src/dialogs/resume/index.tsx
 msgid "Update resume"
 msgstr "ରେଜ୍ୟୁମେ ଅଦ୍ୟତନ କରନ୍ତୁ"
+
+#: src/features/billing/billing-page.tsx
+msgid "Update seats"
+msgstr ""
 
 #: src/features/applications/components/application-form-sheet.tsx
 msgid "Update this application's details."
@@ -15624,6 +15965,10 @@ msgstr "ଆପଣ {MAX_APPLICATION_LANES} ପର୍ଯ୍ୟାୟର ସୀମ�
 msgid "You've reached the limit. Remove a domain to add another."
 msgstr ""
 
+#: src/features/billing/billing-page.tsx
+msgid "Your 14-day trial has started."
+msgstr ""
+
 #: src/features/settings/account/data.tsx
 msgid "Your account was deleted."
 msgstr "ଆପଣଙ୍କର ଖାତା ବିଲୋପ ହେଲା |"
@@ -15793,6 +16138,11 @@ msgstr "ରେଜୁମ୍ ରେ ତୁମର ହେଡଲାଇନ୍ ବଦ�
 msgid "your Knowledge"
 msgstr "ଆପଣଙ୍କ ଜ୍ଞାନ"
 
+#. placeholder {0}: graceEnd ?? "the grace end date"
+#: src/features/billing/billing-banner.tsx
+msgid "Your last payment failed. Pay by {0} to avoid suspension. "
+msgstr ""
+
 #: src/features/ats-checker/messages.ts
 msgid "Your lines are packed very tightly."
 msgstr "ଆପଣଙ୍କ ଲାଇନ୍‌ଗୁଡ଼ିକ ଅତ୍ୟଧିକ ଘନ।"
@@ -15833,6 +16183,15 @@ msgstr "ଆପଣଙ୍କ ଆରମ୍ଭ"
 msgid "Your opening, the stories to bring and questions to ask. It becomes your checklist 10 minutes before the call."
 msgstr "ଆପଣଙ୍କ ଆରମ୍ଭ, ଆଣିବାକୁ ଥିବା କାହାଣୀ ଓ ପଚାରିବାକୁ ଥିବା ପ୍ରଶ୍ନ। କଲ୍‌ର 10 ମିନିଟ୍ ପୂର୍ବରୁ ଏହା ଆପଣଙ୍କ ଚେକଲିଷ୍ଟ ହୋଇଯାଏ।"
 
+#: src/features/billing/billing-page.tsx
+#: src/features/billing/plans.tsx
+msgid "Your organization has {memberCount} members, so it needs at least {memberCount} seats. Remove members first."
+msgstr ""
+
+#: src/features/billing/billing-banner.tsx
+msgid "Your organization has an overdue payment. Please contact your organization's owner."
+msgstr ""
+
 #: src/libs/orpc/ai-quota.ts
 msgid "Your organization has used 80% of this month's AI allowance."
 msgstr ""
@@ -15846,6 +16205,18 @@ msgstr ""
 msgid "Your organization is served on this domain."
 msgstr ""
 
+#: src/features/billing/billing-banner.tsx
+msgid "Your organization is suspended. Make a payment to restore it. "
+msgstr ""
+
+#: src/features/billing/billing-page.tsx
+msgid "Your organization keeps working until {end}, when the paid period ends. Nothing is charged after that."
+msgstr ""
+
+#: src/features/billing/billing-page.tsx
+msgid "Your organization keeps working until the paid period ends. Nothing is charged after that."
+msgstr ""
+
 #: src/routes/builder/letter/-components/letter-shell.tsx
 msgid "Your phone number changed on the resume. The letter updated too."
 msgstr "ରେଜୁମେରେ ତୁମର ଫୋନ୍ ନମ୍ବର ବଦଳିଗଲା | ଚିଠି ମଧ୍ୟ ଅପଡେଟ୍ ହୋଇଛି |"
@@ -15853,6 +16224,10 @@ msgstr "ରେଜୁମେରେ ତୁମର ଫୋନ୍ ନମ୍ବର ବ�
 #: src/features/ats-checker/messages.ts
 msgid "Your phone number is written in an unusual shape."
 msgstr "ଆପଣଙ୍କ ଫୋନ୍ ନମ୍ବର ଏକ ଅସାଧାରଣ ଆକାରରେ ଲେଖାଯାଇଛି।"
+
+#: src/features/billing/summary.tsx
+msgid "Your plan"
+msgstr ""
 
 #: src/features/discovery/search-messages.ts
 msgid "Your plan allows at most {cap} jobs per run."
@@ -15864,6 +16239,18 @@ msgstr ""
 
 #: src/features/discovery/searches.tsx
 msgid "Your plan doesn't include job discovery. Ask your administrator about upgrading."
+msgstr ""
+
+#: src/features/billing/billing-page.tsx
+msgid "Your plan is set for you. There is nothing to pay here."
+msgstr ""
+
+#: src/features/billing/return-page.tsx
+msgid "Your plan is updated."
+msgstr ""
+
+#: src/features/billing/billing-page.tsx
+msgid "Your plan, seats, payments and AI credits."
 msgstr ""
 
 #: src/features/career/coach.tsx
@@ -15939,6 +16326,11 @@ msgstr "ଆପଣଙ୍କ କାହାଣୀ"
 #: src/features/career/workspace/practise.tsx
 msgid "Your story couldn't be loaded."
 msgstr "ଆପଣଙ୍କ କାହାଣୀ ଲୋଡ୍ କରିହେଲା ନାହିଁ।"
+
+#. placeholder {0}: trialDays ?? 0
+#: src/features/billing/billing-banner.tsx
+msgid "Your trial ends in {0} days. Pick a plan to keep going. "
+msgstr ""
 
 #: src/features/career/workspace/prepare.tsx
 msgid "Your two-minute introduction"
