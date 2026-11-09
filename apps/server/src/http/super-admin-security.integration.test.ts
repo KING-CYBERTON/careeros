@@ -436,6 +436,10 @@ describe.skipIf(!configured)("Super Admin security over HTTP", () => {
 		it("lasts 60 minutes at most: after the record's expiry the next request is refused, even with a live session row", async () => {
 			const support = await startSupport();
 			expect((await rpc(support.origin, "branding.get", {}, memberSession(support))).status).toBe(200);
+			const live = await hono.request(`${support.origin}/api/auth/get-session`, {
+				headers: { cookie: support.cookie, origin: support.origin },
+			});
+			expect(await live.json(), "get-session while the support session is live").not.toBeNull();
 			const [record] = await ownerRows<{ expires_at: Date; started_at: Date }>(
 				`SELECT expires_at, started_at FROM impersonation WHERE id = $1`,
 				[support.id],
@@ -457,6 +461,14 @@ describe.skipIf(!configured)("Super Admin security over HTTP", () => {
 				const reply = await rpc(support.origin, procedure, {}, memberSession(support));
 				expect(reply.status, `${procedure} after expiry`).toBe(401);
 			}
+			// The web app learns it is signed in from /api/auth/get-session: it must say "no session" too, and clear the cookie.
+			const getSession = async (cookie: string) =>
+				await hono.request(`${support.origin}/api/auth/get-session`, { headers: { cookie, origin: support.origin } });
+			const gone = await getSession(support.cookie);
+			expect(gone.status).toBe(200);
+			expect(await gone.json(), "get-session after the record's expiry").toBeNull();
+			expect(gone.headers.getSetCookie().join("\n")).toMatch(/session_token=;|Max-Age=0/i);
+			expect(await (await getSession(people.member.cookie)).json(), "an ordinary session is unaffected").not.toBeNull();
 			// A normal session of the same member is not affected.
 			expect((await rpc(support.origin, "branding.get", {}, { cookie: people.member.cookie })).status).toBe(200);
 

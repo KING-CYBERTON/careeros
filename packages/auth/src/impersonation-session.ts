@@ -1,7 +1,8 @@
 import type { BetterAuthPlugin } from "better-auth";
+import { isImpersonationActive } from "@careeros/platform-admin";
 import { isAuthPathRefusedWhileImpersonating } from "@careeros/platform-admin/policy";
 import { APIError, createAuthEndpoint, createAuthMiddleware, getSessionFromCtx } from "better-auth/api";
-import { setSessionCookie } from "better-auth/cookies";
+import { deleteSessionCookie, setSessionCookie } from "better-auth/cookies";
 
 // CAREEROS (P3-T07, requirement 3): the Better Auth half of support (impersonation) sessions.
 //
@@ -24,6 +25,25 @@ export const impersonationSession = {
 							code: "IMPERSONATION_NOT_ALLOWED",
 							message: "This is not available during a support session.",
 						});
+				}),
+			},
+		],
+		after: [
+			{
+				// CAREEROS (Q427): the web app learns it is signed in from /get-session. A support session whose record has
+				// ended or expired (the record's clock, not the session row's) answers "no session" there too, and its cookie
+				// is cleared, as every oRPC request already does.
+				matcher: (ctx) => ctx.path === "/get-session",
+				handler: createAuthMiddleware(async (ctx) => {
+					const returned = ctx.context.returned as
+						| { session?: { id?: string; impersonatedBy?: string | null }; user?: { id?: string } }
+						| null
+						| undefined;
+					const impersonatedBy = returned?.session?.impersonatedBy;
+					if (!impersonatedBy || !returned?.session?.id || !returned.user?.id) return;
+					if (await isImpersonationActive(returned.session.id, returned.user.id, impersonatedBy)) return;
+					deleteSessionCookie(ctx);
+					return ctx.json(null);
 				}),
 			},
 		],
