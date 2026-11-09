@@ -25,5 +25,7 @@ export * from "./job-discovery";
 export * from "./billing";
 // CAREEROS: AI usage metering (P3-T03)
 export * from "./ai-usage";
+// CAREEROS (P5-T04): email templates per application stage
+export * from "./email-template";
 // CAREEROS: Super Admin console tables: announcements, their dismissals and impersonation sessions (P3-T07)
 export * from "./platform-admin";

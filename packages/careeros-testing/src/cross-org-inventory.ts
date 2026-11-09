@@ -195,6 +195,13 @@ export const NO_TENANT_ID: Record<string, string> = {
 		"takes no tenant id: reads an uploaded CSV against the caller's own organization (P3-T08)",
 	"POST /org-admin/invitations/bulk":
 		"takes no tenant id: invites the uploaded CSV's addresses to the caller's own organization (P3-T08)",
+	// CAREEROS (P5-T04): email templates. The organization is the request's, the owner is the signed-in member.
+	"GET /email-templates":
+		"takes no tenant id: lists the built-ins, the caller's own organization's defaults and the caller's own templates (P5-T04)",
+	"POST /email-templates":
+		"takes no tenant id: creates a template for the caller in the caller's own organization (P5-T04)",
+	"POST /email-templates/org":
+		"takes no tenant id: creates a default in the caller's own organization; owners and admins only (P5-T04)",
 	"GET /billing": "takes no tenant id: the caller's own organization (P3-T04)",
 	"GET /billing/invoices":
 		"takes no tenant id: lists the caller's own organization's payments from its audit rows; asserted empty of Organization A's (P3-T06)",
@@ -299,6 +306,8 @@ export const ID_KINDS = [
 	// CAREEROS (P3-T08): Org Admin console
 	"cohort",
 	"member",
+	// CAREEROS (P5-T04): an email template (a default of Organization A)
+	"emailTemplate",
 	// CAREEROS (P5-T02): a Job Clipper sign-in
 	"clipperToken",
 ] as const;
@@ -329,6 +338,7 @@ const PREFIX_KIND: [RegExp, IdKind][] = [
 	[/^\/discovery\/sources(\/|$)/, "jobSource"],
 	[/^\/discovery\/jobs(\/|$)/, "discoveredJob"],
 	[/^\/org-admin\/cohorts(\/|$)/, "cohort"],
+	[/^\/email-templates(\/|$)/, "emailTemplate"],
 	[/^\/clipper\/tokens(\/|$)/, "clipperToken"],
 ];
 
@@ -370,6 +380,8 @@ const FIELD_KIND: Record<string, IdKind> = {
 	// CAREEROS (P3-T08)
 	cohortId: "cohort",
 	memberIds: "member",
+	// CAREEROS (P5-T04)
+	templateId: "emailTemplate",
 	// Not tenant ids: the client's own correlation values, sent so the request still validates.
 	sessionId: "resume",
 	toolCallId: "message",

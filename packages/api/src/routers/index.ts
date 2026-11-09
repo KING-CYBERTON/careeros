@@ -17,6 +17,8 @@ import { customDomainRouter } from "../features/custom-domain/router";
 // CAREEROS: job discovery (P4-T01)
 import { discoveryRouter } from "../features/discovery/router";
 import { documentsRouter } from "../features/documents/router";
+// CAREEROS: email templates per application stage (P5-T04)
+import { emailTemplatesRouter } from "../features/email-templates/router";
 import { flagsRouter } from "../features/flags/router";
 // CAREEROS: Org Admin console (P3-T08)
 import { orgAdminRouter } from "../features/org-admin/router";
@@ -60,6 +62,8 @@ export default {
 	// CAREEROS: job discovery (P4-T01)
 	discovery: discoveryRouter,
 	documents: documentsRouter,
+	// CAREEROS: email templates per application stage (P5-T04)
+	emailTemplates: emailTemplatesRouter,
 	flags: flagsRouter,
 	// CAREEROS: read-only entitlements and audit log of the organization (P3-T01)
 	organization: organizationRouter,
