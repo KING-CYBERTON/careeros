@@ -20,6 +20,7 @@ const MIGRATION = new URL("../../../migrations/20261102174208_plans_entitlements
 // CAREEROS (P3-T03): the `ai_usage` table (a later migration) uses `careeros_uuidv7()`, which this migration creates, so
 // the down test first reverts it and applies it again at the end.
 const AI_USAGE_MIGRATION = new URL("../../../migrations/20261102185233_ai_usage/", import.meta.url);
+const PAYSTACK_MIGRATION = new URL("../../../migrations/20261109022928_p3_t05_paystack/", import.meta.url);
 
 describe.skipIf(!configured)("plans, subscriptions, flags, audit log and entitlements", () => {
 	const run = randomUUID().slice(0, 8);
@@ -521,7 +522,7 @@ describe.skipIf(!configured)("plans, subscriptions, flags, audit log and entitle
 
 		it("careeros_audit_platform writes a row without an organization and returns its id", async () => {
 			const written = await ownerRows<{ id: string }>(
-				`SELECT careeros_audit_platform($1, $2, 'admin.impersonation_started', 'user', $3, '{"minutes": 30}', '203.0.113.7') AS id`,
+				`SELECT careeros_audit_platform($1, $2, 'billing.platform_event', 'user', $3, '{"minutes": 30}', '203.0.113.7') AS id`,
 				[ids.admin, ids.ownerA, ids.memberA],
 			);
 			const id = written[0]?.id ?? "";
@@ -533,7 +534,7 @@ describe.skipIf(!configured)("plans, subscriptions, flags, audit log and entitle
 				organization_id: null,
 				actor_user_id: ids.admin,
 				impersonator_user_id: ids.ownerA,
-				action: "admin.impersonation_started",
+				action: "billing.platform_event",
 				target_type: "user",
 				target_id: ids.memberA,
 				metadata: { minutes: 30 },
@@ -542,6 +543,18 @@ describe.skipIf(!configured)("plans, subscriptions, flags, audit log and entitle
 			await expect(
 				owner.query(`SELECT careeros_audit_platform(NULL, NULL, 'Bad Action', NULL, NULL, NULL, NULL)`),
 			).rejects.toMatchObject({ code: "23514" });
+			// P3-T09 (Q422): console (admin.*) rows are written only by the console's own definer functions.
+			const before = await ownerRows<{ n: string }>(`SELECT count(*) AS n FROM audit_log`);
+			await expect(
+				owner.query(
+					`SELECT careeros_audit_platform($1, NULL, 'admin.org_status_set', 'organization', $2, '{}', NULL)`,
+					[ids.admin, ids.orgA],
+				),
+			).rejects.toMatchObject({ code: "42501" });
+			await expect(
+				asApp(ids.orgA, `SELECT careeros_audit_platform(NULL, NULL, 'admin.forged', NULL, NULL, NULL, NULL)`),
+			).rejects.toMatchObject({ code: "42501" });
+			expect((await ownerRows<{ n: string }>(`SELECT count(*) AS n FROM audit_log`))[0]?.n).toBe(before[0]?.n);
 			// The app role runs the function (only TypeScript callers decide who may), but cannot read the row it wrote.
 			const viaApp = await asApp(
 				ids.orgA,
@@ -734,10 +747,13 @@ describe.skipIf(!configured)("plans, subscriptions, flags, audit log and entitle
 			const up = await readFile(new URL("migration.sql", MIGRATION), "utf8");
 			const laterDown = await readFile(new URL("down.sql", AI_USAGE_MIGRATION), "utf8");
 			const laterUp = await readFile(new URL("migration.sql", AI_USAGE_MIGRATION), "utf8");
+			const paystackDown = await readFile(new URL("down.sql", PAYSTACK_MIGRATION), "utf8");
+			const paystackUp = await readFile(new URL("migration.sql", PAYSTACK_MIGRATION), "utf8");
 			const scratch = await createIsolatedTestDatabase("billing_down");
 			const client = new Pool({ connectionString: scratch.ownerUrl });
 			try {
-				// The later migration depends on this one: take it off first, put it back last.
+				// The later migrations depend on this one: take them off first (newest first), put them back last.
+				await client.query(paystackDown);
 				await client.query(laterDown);
 				await client.query(`INSERT INTO organization (id, name, slug) VALUES ('down-org', 'Down', 'down-org')`);
 				// The organization has left the defaults (plan 'pro') and has an audit row: the down migration refuses.
@@ -763,6 +779,7 @@ describe.skipIf(!configured)("plans, subscriptions, flags, audit log and entitle
 					await connection.query(laterUp);
 					const restored = await connection.query(`SELECT to_regclass('public.ai_usage') AS ai_usage`);
 					expect(restored.rows[0]).toEqual({ ai_usage: "ai_usage" });
+					await connection.query(paystackUp);
 				} finally {
 					connection.release();
 				}

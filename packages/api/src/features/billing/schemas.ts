@@ -46,6 +46,11 @@ export const checkoutInput = z.object({
 	planId: z.enum(["starter", "pro"]).describe("The plan to buy."),
 	interval: intervalSchema,
 	seats: z.number().int().min(1).max(10_000),
+	// CAREEROS (P3-T05): how to pay. Omitted means card.
+	method: z
+		.enum(["card", "mpesa"])
+		.optional()
+		.describe("`card` renews by itself; `mpesa` pays one period at a time. Omitted means card."),
 });
 
 export const checkoutOutput = z.object({
@@ -65,3 +70,22 @@ export const acceptedOutput = z.object({
 export const portalOutput = z.object({ url: z.string() });
 
 export const trialOutput = z.object({ trialEndsAt: z.date() });
+
+// CAREEROS (P3-T06): the payments list behind the billing page (invoices and receipts). Read from the organization's
+// audit rows for verified payments, so it holds ids, amounts and periods only, never card data.
+export const invoiceSchema = z.object({
+	id: z.string(),
+	date: z.date(),
+	amount: z.number().int().nullable().describe("In the smallest unit of `currency` (cents for USD and KES)."),
+	currency: z.string().nullable(),
+	provider: z.string().describe("The payment provider that took the payment, or `manual` for an invoice paid by hand."),
+	method: z.enum(["card", "mpesa"]).nullable().describe("How it was paid, when the provider said."),
+	reference: z.string().nullable(),
+	planId: z.string().nullable(),
+	seats: z.number().int().nullable(),
+	interval: intervalSchema.nullable(),
+	periodStart: z.date().nullable(),
+	periodEnd: z.date().nullable(),
+});
+
+export const invoicesOutput = z.object({ invoices: z.array(invoiceSchema) });

@@ -27,6 +27,9 @@ export type SubscriptionState = {
 	periodEnd: Date | null;
 	trialEndsAt: Date | null;
 	graceEndsAt: Date | null;
+	/** CAREEROS (P3-T05): a seat change that starts with the next paid period (see the `subscription` table). */
+	pendingSeats?: number | null;
+	pendingReplacesSubscriptionId?: string | null;
 };
 
 /** Everything the machine needs to know about one organization. */
@@ -97,6 +100,10 @@ function eventAudit(action: string, event: BillingEvent, extra: Record<string, u
 			seats: event.seats,
 			amount: event.amount,
 			currency: event.currency,
+			// CAREEROS (P3-T06): the billing page lists payments from these audit rows, with the period each one paid for.
+			interval: event.interval,
+			periodStart: event.periodStart?.toISOString() ?? null,
+			periodEnd: event.periodEnd?.toISOString() ?? null,
 			...extra,
 		},
 	};
@@ -124,6 +131,10 @@ function fromPayment(state: BillingState, event: BillingEvent): Transition {
 		graceEndsAt: null,
 		providerCustomerId: event.providerCustomerId ?? current.providerCustomerId,
 		providerSubscriptionId: event.providerSubscriptionId ?? current.providerSubscriptionId,
+		// CAREEROS (P3-T05): the payment for the pending seat count has arrived, so the change has taken effect.
+		...(current.pendingSeats != null && event.seats === current.pendingSeats
+			? { pendingSeats: null, pendingReplacesSubscriptionId: null }
+			: {}),
 	});
 	return {
 		applied: true,
@@ -196,6 +207,13 @@ function fromCancellation(state: BillingState, event: BillingEvent, now: Date): 
 	const current = state.subscription;
 	if (current.status !== "active" && current.status !== "past_due" && current.status !== "canceled")
 		return notApplied("no_subscription");
+	// CAREEROS (P3-T05): a cancellation names a provider subscription. One we replaced (a seat change starts a new
+	// subscription and disables the old one) or one that is no longer ours is not the customer cancelling.
+	const named = event.providerSubscriptionId ?? null;
+	if (named !== null && named === (current.pendingReplacesSubscriptionId ?? null))
+		return notApplied("replaced_subscription");
+	if (named !== null && current.providerSubscriptionId !== null && named !== current.providerSubscriptionId)
+		return notApplied("other_subscription");
 	return {
 		applied: true,
 		reason: null,
@@ -235,6 +253,13 @@ function startTrial(state: BillingState, now: Date): Transition {
 	};
 }
 
+/** Providers whose customers pay one period at a time when they have no provider subscription (P3-T05). */
+const ONE_PERIOD_PROVIDERS = ["paystack"];
+
+export function isOnePeriodPlan(sub: Pick<SubscriptionState, "provider" | "providerSubscriptionId">): boolean {
+	return ONE_PERIOD_PROVIDERS.includes(sub.provider) && sub.providerSubscriptionId === null;
+}
+
 function timePassed(state: BillingState, now: Date): Transition {
 	const { subscription: sub } = state;
 	if (state.orgStatus === "suspended") return notApplied("already_suspended");
@@ -259,6 +284,29 @@ function timePassed(state: BillingState, now: Date): Transition {
 			subscription: {},
 			audit: [
 				{ action: "billing.grace_expired", metadata: { source: "job", graceEndsAt: sub.graceEndsAt.toISOString() } },
+			],
+		};
+	// CAREEROS (P3-T05): a plan paid one period at a time (Paystack with M-Pesa has no provider subscription, so nothing
+	// renews it and no provider event ever says the period ended) lapses into the grace period when its paid period ends
+	// unpaid, like a failed card renewal.
+	if (
+		state.orgStatus === "active" &&
+		sub.status === "active" &&
+		isOnePeriodPlan(sub) &&
+		sub.periodEnd !== null &&
+		sub.periodEnd.getTime() <= at
+	)
+		return {
+			applied: true,
+			reason: null,
+			planId: null,
+			orgStatus: "past_due",
+			subscription: diff(sub, {
+				status: "past_due",
+				graceEndsAt: sub.graceEndsAt ?? new Date(at + GRACE_DAYS * DAY_MS),
+			}),
+			audit: [
+				{ action: "billing.period_expired", metadata: { source: "job", periodEnd: sub.periodEnd.toISOString() } },
 			],
 		};
 	// A canceled subscription runs to the end of the period that was paid for (no known end means it has ended).

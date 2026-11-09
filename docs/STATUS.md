@@ -2,10 +2,10 @@
 
 > Written by Opus after every plan, review and merge. Every thread reads this file first.
 
-**Current phase:** Phases 0, 1 and 2 meet their exit criteria (staging verified live by Stephen on 2026-11-02). P2-C04 merged in #64; tags `v0.0.1`, `v0.1.0`, `v0.2.0` wait on Stephen pushing them (this session cannot push tags). 3 — Admin & Billing: [phase plan](plans/P3-PHASE-PLAN.md), D1, D2 prices and D10 open with Stephen. Go-to-market release (Stephen, D11): [GTM plan](plans/GTM-PLAN.md) runs job discovery, the clipper and launch basics alongside Phase 3
+**Current phase:** Phases 0, 1 and 2 meet their exit criteria (staging verified live by Stephen on 2026-11-02). P2-C04 merged in #64; tags `v0.0.1`, `v0.1.0`, `v0.2.0` wait on Stephen pushing them (this session cannot push tags). 3 — Admin & Billing: [phase plan](plans/P3-PHASE-PLAN.md); every Phase 3 task is merged except the P3-Q03 security suite (in CI). D1 = Paystack; D2 prices open with Stephen. Go-to-market release (Stephen, D11): [GTM plan](plans/GTM-PLAN.md) runs job discovery, the clipper and launch basics alongside Phase 3
 **Current version:** none yet (first tag will be `0.0.1` at Phase 0 exit)
 **Base:** Reactive Resume v6.0.10, upstream commit `a69e48318aab3c1c3ea57d2c0467710ef0d8342f` (2026-10-31)
-**Last updated:** 2026-11-02 by Opus (Thread 1)
+**Last updated:** 2026-11-09 by Opus (Thread 1)
 
 ## Phase 0 exit criteria (PRODUCT.md §13)
 
@@ -93,28 +93,35 @@ All Phase 2 tasks are merged. P2-C03 (from exit review M1, [spec](plans/cicd/P2-
 
 ## Phase 3 and go-to-market tasks
 
-| Task           | Spec                                                                                   | State                                             | PR                                                       |
-| -------------- | -------------------------------------------------------------------------------------- | ------------------------------------------------- | -------------------------------------------------------- |
-| P3-T01         | [plans/P3-T01-plans-entitlements-tables.md](plans/P3-T01-plans-entitlements-tables.md) | **Merged** · [review](reviews/P3-T01-review-1.md) | [#67](https://github.com/KING-CYBERTON/careeros/pull/67) |
-| P3-T02         | [plans/P3-T02-entitlement-enforcement.md](plans/P3-T02-entitlement-enforcement.md)     | In build                                          | —                                                        |
-| P3-T03         | [plans/P3-T03-ai-metering.md](plans/P3-T03-ai-metering.md)                             | In build                                          | —                                                        |
-| P3-T04         | [plans/P3-T04-billing-core.md](plans/P3-T04-billing-core.md)                           | In build                                          | —                                                        |
-| P3-T05, P3-T06 | —                                                                                      | Wait on D1 (payment provider) and D10             | —                                                        |
-| P3-T07         | [plans/P3-T07-super-admin-console.md](plans/P3-T07-super-admin-console.md)             | Approved; starts after T03                        | —                                                        |
-| P3-T08         | [plans/P3-T08-org-admin-console.md](plans/P3-T08-org-admin-console.md)                 | Approved; starts after T02                        | —                                                        |
-| P4-T01         | [plans/P4-T01-discovery-data-fetchers.md](plans/P4-T01-discovery-data-fetchers.md)     | **Merged** · [review](reviews/P4-T01-review-1.md) | [#68](https://github.com/KING-CYBERTON/careeros/pull/68) |
-| P4-T02         | [plans/P4-T02-discovery-runs-ai-review.md](plans/P4-T02-discovery-runs-ai-review.md)   | Approved; starts after P3-T03                     | —                                                        |
-| P5-T01         | [plans/P5-T01-extension-scaffold.md](plans/P5-T01-extension-scaffold.md)               | **Merged** · [review](reviews/P5-T01-review-1.md) | [#66](https://github.com/KING-CYBERTON/careeros/pull/66) |
-| P5-T02         | [plans/P5-T02-clipper-sign-in.md](plans/P5-T02-clipper-sign-in.md)                     | In build                                          | —                                                        |
-| P6-T01         | [plans/P6-T01-legal-pages.md](plans/P6-T01-legal-pages.md)                             | **Merged** · [review](reviews/P6-T01-review-1.md) | [#73](https://github.com/KING-CYBERTON/careeros/pull/73) |
+| Task   | Spec                                                                                   | State                                                                                        | PR                                                         |
+| ------ | -------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------- | ---------------------------------------------------------- |
+| P3-T01 | [plans/P3-T01-plans-entitlements-tables.md](plans/P3-T01-plans-entitlements-tables.md) | **Merged** · [review](reviews/P3-T01-review-1.md)                                            | [#67](https://github.com/KING-CYBERTON/careeros/pull/67)   |
+| P3-T02 | [plans/P3-T02-entitlement-enforcement.md](plans/P3-T02-entitlement-enforcement.md)     | **Merged** · [review](reviews/P3-T02-review-1.md)                                            | [#76](https://github.com/KING-CYBERTON/careeros/pull/76)   |
+| P3-T03 | [plans/P3-T03-ai-metering.md](plans/P3-T03-ai-metering.md)                             | **Merged** · [review](reviews/P3-T03-review-1.md)                                            | [#74](https://github.com/KING-CYBERTON/careeros/pull/74)   |
+| P3-T04 | [plans/P3-T04-billing-core.md](plans/P3-T04-billing-core.md)                           | **Merged** · [review](reviews/P3-T04-review-1.md)                                            | [#77](https://github.com/KING-CYBERTON/careeros/pull/77)   |
+| P3-T05 | [plans/P3-T05-paystack-provider.md](plans/P3-T05-paystack-provider.md)                 | **Merged** · [review](reviews/P3-T05-review-1.md) · live once Stephen adds the Paystack keys | [#101](https://github.com/KING-CYBERTON/careeros/pull/101) |
+| P3-T06 | [plans/P3-T06-billing-ui.md](plans/P3-T06-billing-ui.md)                               | **Merged** · [review](reviews/P3-T06-review-1.md)                                            | [#100](https://github.com/KING-CYBERTON/careeros/pull/100) |
+| P3-T07 | [plans/P3-T07-super-admin-console.md](plans/P3-T07-super-admin-console.md)             | **Merged** · [review](reviews/P3-T07-review-1.md)                                            | [#93](https://github.com/KING-CYBERTON/careeros/pull/93)   |
+| P3-T08 | [plans/P3-T08-org-admin-console.md](plans/P3-T08-org-admin-console.md)                 | **Merged** · [review](reviews/P3-T08-review-1.md)                                            | [#89](https://github.com/KING-CYBERTON/careeros/pull/89)   |
+| P3-T09 | [plans/P3-T09-super-admin-hardening.md](plans/P3-T09-super-admin-hardening.md)         | **Merged** · [review](reviews/P3-T07-review-1.md)                                            | [#99](https://github.com/KING-CYBERTON/careeros/pull/99)   |
+| P3-Q03 | [plans/P3-Q03-super-admin-security.md](plans/P3-Q03-super-admin-security.md)           | In CI                                                                                        | [#97](https://github.com/KING-CYBERTON/careeros/pull/97)   |
+| P4-T01 | [plans/P4-T01-discovery-data-fetchers.md](plans/P4-T01-discovery-data-fetchers.md)     | **Merged** · [review](reviews/P4-T01-review-1.md)                                            | [#68](https://github.com/KING-CYBERTON/careeros/pull/68)   |
+| P4-T02 | [plans/P4-T02-discovery-runs-ai-review.md](plans/P4-T02-discovery-runs-ai-review.md)   | **Merged** · [review](reviews/P4-T02-review-1.md)                                            | [#91](https://github.com/KING-CYBERTON/careeros/pull/91)   |
+| P4-T03 | [plans/P4-T03-discovery-setup-form.md](plans/P4-T03-discovery-setup-form.md)           | **Merged** · [review](reviews/P4-T02-review-1.md)                                            | [#96](https://github.com/KING-CYBERTON/careeros/pull/96)   |
+| P5-T01 | [plans/P5-T01-extension-scaffold.md](plans/P5-T01-extension-scaffold.md)               | **Merged** · [review](reviews/P5-T01-review-1.md)                                            | [#66](https://github.com/KING-CYBERTON/careeros/pull/66)   |
+| P5-T02 | [plans/P5-T02-clipper-sign-in.md](plans/P5-T02-clipper-sign-in.md)                     | **Merged** · [review](reviews/P5-T02-review-1.md)                                            | [#78](https://github.com/KING-CYBERTON/careeros/pull/78)   |
+| P5-T03 | [plans/P5-T03-clipping.md](plans/P5-T03-clipping.md)                                   | **Merged** · [review](reviews/P5-T03-review-1.md)                                            | [#95](https://github.com/KING-CYBERTON/careeros/pull/95)   |
+| P5-C01 | [plans/P5-C01-extension-packaging.md](plans/P5-C01-extension-packaging.md)             | **Merged** · [review](reviews/P5-T03-review-1.md)                                            | [#94](https://github.com/KING-CYBERTON/careeros/pull/94)   |
+| P6-T01 | [plans/P6-T01-legal-pages.md](plans/P6-T01-legal-pages.md)                             | **Merged** · [review](reviews/P6-T01-review-1.md)                                            | [#73](https://github.com/KING-CYBERTON/careeros/pull/73)   |
 
 ### Waiting on Stephen (Phase 3 and go-to-market)
 
-- **D1:** the payment provider (recommended: Paystack). **D2:** real prices. **D10:** mobile shows billing read-only.
-- The AI quota per plan, a Daraja account and Paybill if M-Pesa goes direct, and the first customer segment.
+- **Staging:** restart the self-hosted runner so `careeros-deploy-staging` picks up the queued deploys (`cd /home/deploy/actions-runner && sudo ./svc.sh stop && sudo ./svc.sh start`). Staging still serves the 2026-11-02 build.
+- **Paystack (D1 decided 2026-11-08):** a Paystack account, test keys in the staging environment (`BILLING_PROVIDER=paystack`, `PAYSTACK_SECRET_KEY`, `PAYSTACK_PUBLIC_KEY`, `PAYSTACK_ALLOW_TEST_KEY=true`) and the webhook URL `https://careeros-staging.ayopa.co.ke/api/billing/webhook/paystack` in the Paystack dashboard (Q465).
+- **D2:** real prices. **D10** applied: mobile shows billing read-only.
 - **G8:** production hosting. A Chrome Web Store developer account and a Microsoft Partner Center account for the clipper.
-- **G10:** approve the legal drafts in `docs/legal/` (the `[TO CONFIRM]` items need the operator's details or a lawyer) before launch.
-- Push the tags `v0.0.1`, `v0.1.0` and `v0.2.0`.
+- **G10:** approve the legal drafts in `docs/legal/` (the `[TO CONFIRM]` items need the operator's details or a lawyer) before launch; the store data-handling answers (Q404) depend on them.
+- Push the tags `v0.0.1` (`6035783`), `v0.1.0` (`4a5bc88`) and `v0.2.0` (`1954263`).
 
 ## Blockers
 

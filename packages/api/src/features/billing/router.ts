@@ -6,11 +6,20 @@ import {
 	billingSchema,
 	checkoutInput,
 	checkoutOutput,
+	invoicesOutput,
 	portalOutput,
 	seatsInput,
 	trialOutput,
 } from "./schemas";
-import { cancelSubscription, changeSeats, createCheckout, customerPortal, getBilling, startTrial } from "./service";
+import {
+	cancelSubscription,
+	changeSeats,
+	createCheckout,
+	customerPortal,
+	getBilling,
+	listInvoices,
+	startTrial,
+} from "./service";
 
 // CAREEROS (P3-T04): billing for organization owners; owners and admins can read. Write procedures are owner only.
 // A suspended organization may still call the five write procedures: they are in SUSPENDED_ORG_ALLOWED_WRITES.
@@ -34,6 +43,23 @@ export const billingRouter = {
 		.errors({ FORBIDDEN: { status: 403, message: "Only an owner or admin of the organization can see billing." } })
 		.output(billingSchema)
 		.handler(({ context }) => getBilling(context.user.id)),
+
+	// CAREEROS (P3-T06): the payments list for the billing page, owners and admins.
+	invoices: protectedProcedure
+		.route({
+			...route,
+			method: "GET",
+			path: "/billing/invoices",
+			operationId: "listBillingInvoices",
+			summary: "List the organization's payments",
+			description:
+				"Returns the payments the organization has made (newest first, up to 100): date, amount, currency, provider, method, reference and the period each paid for. It holds no card data. Only an owner or admin can read it. Requires authentication.",
+		})
+		.input(z.object({}).optional())
+		.use(accountRateLimit)
+		.errors({ FORBIDDEN: { status: 403, message: "Only an owner or admin of the organization can see billing." } })
+		.output(invoicesOutput)
+		.handler(({ context }) => listInvoices(context.user.id)),
 
 	startTrial: protectedProcedure
 		.route({

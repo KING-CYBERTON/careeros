@@ -1,3 +1,4 @@
+import type { CheckoutMethod } from "@careeros/billing";
 import type { BillingInterval } from "@reactive-resume/db/schema";
 import {
 	getEntitlements,
@@ -9,10 +10,10 @@ import {
 	startTrial as startOrganizationTrial,
 	TRIAL_PLAN_ID,
 } from "@careeros/billing";
-import { ProviderUnsupportedError } from "@careeros/billing";
+import { PaystackError, ProviderUnsupportedError, recordPendingSeatChange } from "@careeros/billing";
 import { requireOrgId } from "@careeros/tenancy";
 import { ORPCError } from "@orpc/server";
-import { and, eq } from "drizzle-orm";
+import { and, desc, eq, inArray } from "drizzle-orm";
 import { db } from "@reactive-resume/db/client";
 import * as schema from "@reactive-resume/db/schema";
 import { env } from "@reactive-resume/env/server";
@@ -52,7 +53,22 @@ function requireProvider() {
 	return provider;
 }
 
-const returnUrl = () => new URL("/dashboard", env.APP_URL).toString();
+/** What an owner may be told when the payment provider fails: never the provider's own text. */
+function providerFailure(error: unknown, unsupported: string): unknown {
+	if (error instanceof ProviderUnsupportedError) return new ORPCError("PRECONDITION_FAILED", { message: unsupported });
+	if (error instanceof PaystackError) {
+		console.error(`[billing] provider call failed status=${error.status ?? "none"}`);
+		return new ORPCError("BAD_GATEWAY", {
+			message: error.retryable
+				? "The payment provider is not answering. Try again in a moment."
+				: "The payment provider refused the request. Check the details and try again.",
+		});
+	}
+	return error;
+}
+
+// CAREEROS (P3-T06): the provider sends the customer back to the billing return page, which waits for the confirmation.
+const returnUrl = () => new URL("/dashboard/organization/billing/return", env.APP_URL).toString();
 
 /** Seats must cover the people already in the organization; a downgrade below the member count is refused here. */
 function checkSeats(seats: number, memberCount: number, seatLimit: number | null) {
@@ -115,6 +131,64 @@ export async function getBilling(userId: string) {
 	};
 }
 
+// CAREEROS (P3-T06): the payments of the organization, from the audit rows the state machine and the manual payment
+// function write for a verified payment. RLS scopes the read; the organization filter is stated as well.
+const PAYMENT_ACTIONS = ["billing.checkout_completed", "billing.payment_succeeded", "billing.manual_payment"];
+
+const text = (value: unknown, max = 128): string | null =>
+	typeof value === "string" && value.length > 0 ? value.slice(0, max) : null;
+const whole = (value: unknown): number | null =>
+	typeof value === "number" && Number.isInteger(value) && value >= 0 ? value : null;
+const moment = (value: unknown): Date | null => {
+	if (typeof value !== "string") return null;
+	const date = new Date(value);
+	return Number.isNaN(date.getTime()) ? null : date;
+};
+
+export async function listInvoices(userId: string) {
+	const { organizationId, role } = await roleOf(userId);
+	if (role !== "owner" && role !== "admin")
+		throw new ORPCError("FORBIDDEN", { message: "Only an owner or admin of the organization can see billing." });
+	const rows = await db
+		.select({ id: schema.auditLog.id, metadata: schema.auditLog.metadata, createdAt: schema.auditLog.createdAt })
+		.from(schema.auditLog)
+		.where(and(eq(schema.auditLog.organizationId, organizationId), inArray(schema.auditLog.action, PAYMENT_ACTIONS)))
+		.orderBy(desc(schema.auditLog.createdAt))
+		.limit(100);
+	const seen = new Set<string>();
+	const invoices = [];
+	for (const row of rows) {
+		const meta = row.metadata;
+		const amount = whole(meta.amount);
+		const currency = text(meta.currency, 3);
+		const periodEnd = moment(meta.periodEnd);
+		// A checkout and the payment it made can both be audited: list the payment once.
+		const key = amount !== null && periodEnd ? `${currency}:${amount}:${periodEnd.toISOString()}` : null;
+		if (key) {
+			if (seen.has(key)) continue;
+			seen.add(key);
+		}
+		const interval: BillingInterval | null =
+			meta.interval === "month" || meta.interval === "year" ? meta.interval : null;
+		const method: "card" | "mpesa" | null = meta.method === "card" || meta.method === "mpesa" ? meta.method : null;
+		invoices.push({
+			id: row.id,
+			date: row.createdAt,
+			amount,
+			currency,
+			provider: text(meta.source, 32) ?? "unknown",
+			method,
+			reference: text(meta.reference) ?? text(meta.providerEventId),
+			planId: text(meta.planId, 64),
+			seats: whole(meta.seats),
+			interval,
+			periodStart: moment(meta.periodStart),
+			periodEnd,
+		});
+	}
+	return { invoices };
+}
+
 export async function startTrial(userId: string) {
 	const organizationId = await requireOwner(userId);
 	requireProvider();
@@ -133,7 +207,7 @@ export async function startTrial(userId: string) {
 
 export async function createCheckout(
 	userId: string,
-	input: { planId: string; interval: BillingInterval; seats: number },
+	input: { planId: string; interval: BillingInterval; seats: number; method?: CheckoutMethod | undefined },
 ) {
 	const organizationId = await requireOwner(userId);
 	const provider = requireProvider();
@@ -148,14 +222,21 @@ export async function createCheckout(
 		.where(eq(schema.user.id, userId))
 		.limit(1);
 	if (!account) throw new ORPCError("UNAUTHORIZED", { message: "Sign in again." });
-	const result = await provider.createCheckout({
-		orgId: organizationId,
-		planId: plan.id,
-		interval: input.interval,
-		seats: input.seats,
-		customerEmail: account.email,
-		returnUrl: returnUrl(),
-	});
+	let result;
+	try {
+		result = await provider.createCheckout({
+			orgId: organizationId,
+			planId: plan.id,
+			interval: input.interval,
+			seats: input.seats,
+			customerEmail: account.email,
+			returnUrl: returnUrl(),
+			// CAREEROS (P3-T05): the chosen way to pay
+			...(input.method && { method: input.method }),
+		});
+	} catch (error) {
+		throw providerFailure(error, "This plan cannot be bought online. Contact us.");
+	}
 	return "redirectUrl" in result
 		? { redirectUrl: result.redirectUrl, stkPushRequested: false }
 		: { redirectUrl: null, stkPushRequested: true };
@@ -183,13 +264,11 @@ export async function changeSeats(userId: string, input: { seats: number }) {
 			interval,
 			seats: input.seats,
 			providerSubscriptionId: sub.providerSubscriptionId,
+			// CAREEROS (P3-T05): recorded before the provider disables the old subscription (see ChangeSeatsInput)
+			onPending: (change) => recordPendingSeatChange(organizationId, change, userId),
 		});
 	} catch (error) {
-		if (error instanceof ProviderUnsupportedError)
-			throw new ORPCError("PRECONDITION_FAILED", {
-				message: "The payment provider does not support changing seats here.",
-			});
-		throw error;
+		throw providerFailure(error, "The payment provider does not support changing seats here.");
 	}
 	return { accepted: true };
 }
@@ -204,9 +283,7 @@ export async function cancelSubscription(userId: string) {
 			periodEnd: sub.periodEnd,
 		});
 	} catch (error) {
-		if (error instanceof ProviderUnsupportedError)
-			throw new ORPCError("PRECONDITION_FAILED", { message: "The payment provider does not support cancelling here." });
-		throw error;
+		throw providerFailure(error, "The payment provider does not support cancelling here.");
 	}
 	return { accepted: true };
 }
@@ -215,11 +292,17 @@ export async function customerPortal(userId: string) {
 	const organizationId = await requireOwner(userId);
 	const provider = requireProvider();
 	const state = await loadBillingState(organizationId);
-	const url = await provider.customerPortalUrl({
-		orgId: organizationId,
-		providerCustomerId: state.subscription.providerCustomerId,
-		returnUrl: returnUrl(),
-	});
+	let url;
+	try {
+		url = await provider.customerPortalUrl({
+			orgId: organizationId,
+			providerCustomerId: state.subscription.providerCustomerId,
+			providerSubscriptionId: state.subscription.providerSubscriptionId,
+			returnUrl: returnUrl(),
+		});
+	} catch (error) {
+		throw providerFailure(error, "The payment provider has no billing portal.");
+	}
 	if (!url) throw new ORPCError("PRECONDITION_FAILED", { message: "The payment provider has no billing portal." });
 	return { url };
 }

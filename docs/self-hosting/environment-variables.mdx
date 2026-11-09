@@ -241,6 +241,19 @@ Saved AI providers and Assistant conversations are kept in PostgreSQL, so they r
 
 Without `CRON_SECRET`, the HTTP runner returns `404`; an invalid bearer token returns `401`. On Vercel, set the secret in the Production environment and redeploy so Vercel Cron can supply it. Users must still opt in to each schedule. See [Career scheduling](/contributing/career-platform#operate-scheduled-work) for deployment timing and verification, and [Self-hosting on Vercel](/self-hosting/vercel#scheduled-career-work) for its setup.
 
+## Payments (Paystack)
+
+<!-- CAREEROS: P3-T05 -->
+
+| Variable                  | Default | Description                                                                                                                              |
+| ------------------------- | ------- | ---------------------------------------------------------------------------------------------------------------------------------------- |
+| `BILLING_PROVIDER`        | `none`  | Set to `paystack` to take card and M-Pesa payments. The `fake` provider is for tests and is refused in production.                       |
+| `PAYSTACK_SECRET_KEY`     | unset   | Required with `paystack`. Starts with `sk_`; `sk_test_` is refused in production unless `PAYSTACK_ALLOW_TEST_KEY=true`. Never commit it. |
+| `PAYSTACK_PUBLIC_KEY`     | unset   | Required with `paystack`. Starts with `pk_`.                                                                                             |
+| `PAYSTACK_ALLOW_TEST_KEY` | `false` | Allows a test key on a staging deployment that runs with `NODE_ENV=production`.                                                          |
+
+In the Paystack dashboard, set the webhook URL to `https://<your platform host>/api/billing/webhook/paystack`. Paystack signs every call with your secret key; CareerOS ignores a call whose signature does not match. Use a Paystack test account while trying it out.
+
 ## Web access
 
 The built-in reader is active without credentials. Search and enhanced reading use one optional connection:

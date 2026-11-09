@@ -387,6 +387,12 @@ msgstr "{0} తక్కువ"
 msgid "{0} more"
 msgstr "{0} ఎక్కువ"
 
+#. placeholder {0}: plan.seatsUsed
+#. placeholder {1}: plan.seatLimit
+#: src/features/organization/plan-screen.tsx
+msgid "{0} of {1}"
+msgstr ""
+
 #. placeholder {0}: shown.length
 #. placeholder {1}: TEMPLATES.length
 #: src/features/design/template-group.tsx
@@ -428,6 +434,11 @@ msgstr "{0} ఎంచుకోబడింది"
 #. placeholder {1}: failed.length
 #: src/features/career/today.tsx
 msgid "{0} updated; {1} failed. Failed roles remain selected. Refresh or retry."
+msgstr ""
+
+#. placeholder {0}: plan.seatsUsed
+#: src/features/organization/plan-screen.tsx
+msgid "{0} used"
 msgstr ""
 
 #. placeholder {0}: answer.split(/\s+/).filter(Boolean).length
@@ -704,6 +715,10 @@ msgstr "{toCheck, plural, one {# ఫీల్డ్‌ని పరిశీల�
 msgid "{toCheck, plural, one {# to check} other {# to check}}"
 msgstr "{toCheck, plural, one {తనిఖీ చేయడానికి #} other {తనిఖీ చేయడానికి #}}"
 
+#: src/features/organization/plan-screen.tsx
+msgid "{trialDays} days left"
+msgstr ""
+
 #: src/features/letters/write.tsx
 #: src/features/workspace/tabs/apply.tsx
 msgid "{words, plural, one {# word} other {# words}}"
@@ -822,6 +837,14 @@ msgstr "సంఖ్యా తేదీ వేర్వేరు దేశాల
 msgid "A page is rotated."
 msgstr "ఒక పేజీ తిప్పబడింది."
 
+#: src/features/organization/plan-screen.tsx
+msgid "A payment is overdue. Please contact your organization's owner."
+msgstr ""
+
+#: src/features/organization/plan-screen.tsx
+msgid "A payment is overdue. Please contact your organization's owner. Service pauses after {graceEnd}."
+msgstr ""
+
 #: src/features/applications/prior-no-response.tsx
 msgid "A previous application to this company was closed with No response. You can still apply."
 msgstr "ఈ కంపెనీకి చేసిన మునుపటి దరఖాస్తు “స్పందన లేదు” ఫలితంతో ముగిసింది. మీరు ఇప్పటికీ దరఖాస్తు చేయవచ్చు."
@@ -919,6 +942,7 @@ msgstr "{1} వద్ద {0} కోసం చర్యలు"
 
 #: src/features/ai/web-access.tsx
 #: src/features/branding/domains-screen.tsx
+#: src/features/organization/plan-screen.tsx
 msgid "Active"
 msgstr "చురుకుగా"
 
@@ -1390,6 +1414,10 @@ msgstr "AI ప్రొవైడర్‌లను లోడ్ చేయడం 
 #: src/features/applications/add-sheet.tsx
 msgid "AI providers couldn't be loaded. Retry or fill the details manually."
 msgstr "AI ప్రొవైడర్‌లను లోడ్ చేయడం సాధ్యపడలేదు. మళ్ళీ ప్రయత్నించండి లేదా వివరాలను మాన్యువల్‌గా పూరించండి."
+
+#: src/features/organization/plan-screen.tsx
+msgid "AI quota"
+msgstr ""
 
 #: src/features/applications/add-sheet.tsx
 msgid "AI reads pasted text only when you ask. Links can use the page’s own job data without AI."
@@ -3170,6 +3198,10 @@ msgstr "కవర్ లెటర్‌ను లోడ్ చేయడం స�
 #: src/features/check/job-match.tsx
 msgid "Couldn't load the linked posting."
 msgstr "లింక్ చేసిన జాబ్ పోస్టింగ్‌ని లోడ్ చేయడం సాధ్యపడలేదు."
+
+#: src/features/organization/plan-screen.tsx
+msgid "Couldn't load the plan."
+msgstr ""
 
 #: app/builder/[id]/page.tsx
 #: app/builder/[id]/write.tsx
@@ -5907,6 +5939,7 @@ msgid "Leave it empty to remove the link."
 msgstr "లింక్‌ను తీసివేయడానికి దాన్ని ఖాళీగా వదిలేయండి."
 
 #: src/features/design/template-group.tsx
+#: src/features/organization/plan-screen.tsx
 msgid "Left"
 msgstr "ఎడమ"
 
@@ -7809,6 +7842,10 @@ msgstr "పాస్‌వర్డ్‌లు సరిపోలడం లే�
 msgid "Past conversations"
 msgstr "గత సంభాషణలు"
 
+#: src/features/organization/plan-screen.tsx
+msgid "Past due"
+msgstr ""
+
 #: src/features/applications/add-sheet.tsx
 msgid "Paste a job link or posting, then check the role and company. Nothing is saved until you choose Save job."
 msgstr "ఉద్యోగ లింక్ లేదా ప్రకటనను అతికించి, పదవి, కంపెనీని తనిఖీ చేయండి. “ఉద్యోగాన్ని సేవ్ చేయండి” ఎంచుకునే వరకు ఏదీ సేవ్ కాదు."
@@ -7905,6 +7942,10 @@ msgstr "నెలకు"
 msgid "Per year"
 msgstr "సంవత్సరానికి"
 
+#: src/features/organization/plan-screen.tsx
+msgid "Period ends"
+msgstr ""
+
 #: app/(tabs)/settings/account.tsx
 msgid "Permanently removes everything. Opens your browser account settings."
 msgstr "అన్నింటినీ శాశ్వతంగా తొలగిస్తుంది. మీ బ్రౌజర్ ఖాతా సెట్టింగ్‌లను తెరుస్తుంది."
@@ -7983,6 +8024,11 @@ msgstr "సాదా టెక్స్ట్ (.txt)"
 #: src/features/share/download.tsx
 msgid "Plain text with headings. Paste into application forms and notes."
 msgstr "శీర్షికలతో సాదా వచనం. జాబ్ అప్లికేషన్ ఫారమ్‌లు మరియు నోట్స్‌లో అతికించండి."
+
+#: app/(tabs)/settings/index.tsx
+#: src/features/organization/plan-screen.tsx
+msgid "Plan"
+msgstr ""
 
 #: src/features/workspace/tabs/prepare.tsx
 msgid "Plan again"
@@ -9794,6 +9840,10 @@ msgstr ""
 msgid "Searching the web…"
 msgstr "వెబ్‌లో శోధిస్తోంది..."
 
+#: src/features/organization/plan-screen.tsx
+msgid "Seats"
+msgstr ""
+
 #: src/features/career/offers.tsx
 msgid "Second offer"
 msgstr "రెండవ ఆఫర్"
@@ -10592,6 +10642,10 @@ msgstr "ఇప్పుడే ప్రారంభమవుతుంది"
 msgid "State or region"
 msgstr ""
 
+#: src/features/organization/plan-screen.tsx
+msgid "Status"
+msgstr "స్థితి"
+
 #: src/features/documents/new-document.tsx
 msgid "Stay in Documents"
 msgstr "పత్రాలులో ఉండండి"
@@ -10719,6 +10773,10 @@ msgstr "ఆధారం ఉంది"
 
 #: src/features/workspace/answer-library.tsx
 msgid "Supporting Knowledge facts and stories"
+msgstr ""
+
+#: src/features/organization/plan-screen.tsx
+msgid "Suspended"
 msgstr ""
 
 #: src/features/career/offers.tsx
@@ -11520,6 +11578,10 @@ msgstr "ఈ నెల"
 msgid "This organization has no free seats. Remove a member or an invitation, or ask the owner to add seats."
 msgstr ""
 
+#: src/features/organization/plan-screen.tsx
+msgid "This organization is suspended. You can view and export your data."
+msgstr ""
+
 #: src/features/organization/entitlement-message.ts
 #: src/features/organization/entitlements.tsx
 msgid "This organization is suspended. You can view and export your data. Contact your administrator."
@@ -11548,6 +11610,10 @@ msgstr "ఈ PDFకి టెక్స్ట్ లేయర్ లేదు, క
 #: src/features/ats-checker/check.ts
 msgid "This PDF is password protected. Save an unprotected copy and try again."
 msgstr "ఈ PDF పాస్‌వర్డ్‌తో రక్షించబడింది. రక్షణ లేని కాపీని సేవ్ చేసి మళ్లీ ప్రయత్నించండి."
+
+#: src/features/organization/plan-screen.tsx
+msgid "This plan has no pooled AI credits."
+msgstr ""
 
 #: src/features/assistant/messages.tsx
 msgid "This question couldn't be asked. Send a new message to continue."
@@ -11790,6 +11856,10 @@ msgstr "ట్రాష్ ఖాళీగా ఉంది"
 msgid "Trash was already empty"
 msgstr ""
 
+#: src/features/organization/plan-screen.tsx
+msgid "Trial"
+msgstr ""
+
 #: src/features/workspace/parts.tsx
 msgid "Trimming words"
 msgstr "పదాలను తగ్గిస్తోంది"
@@ -11809,6 +11879,7 @@ msgstr "{suggestion}ని ప్రయత్నించండి"
 #: src/features/branding/branding-screen.tsx
 #: src/features/branding/domains-screen.tsx
 #: src/features/letters/write.tsx
+#: src/features/organization/plan-screen.tsx
 #: src/features/settings/api-keys.tsx
 #: src/features/settings/clipper-sign-ins.tsx
 #: src/features/workspace/parts.tsx
@@ -12252,6 +12323,10 @@ msgstr "ఈ సమయాన్ని ఉపయోగించండి"
 #: src/features/ats-checker/messages.ts
 msgid "Use your editor's normal bullet list, so stray glyphs do not land mid-sentence."
 msgstr "మీ ఎడిటర్ యొక్క సాధారణ బుల్లెట్ జాబితాను ఉపయోగించండి, తద్వారా తప్పుదారి గ్లిఫ్‌లు వాక్యం మధ్యలో పడవు."
+
+#: src/features/organization/plan-screen.tsx
+msgid "Used"
+msgstr "ఉపయోగించినవి"
 
 #: src/features/workspace/tabs/saved.tsx
 msgid "used {used}"
@@ -13020,6 +13095,10 @@ msgstr ""
 
 #: src/features/branding/domains-screen.tsx
 msgid "Your organization is served on this domain."
+msgstr ""
+
+#: src/features/organization/plan-screen.tsx
+msgid "Your organization's owner manages the plan and payments on the web."
 msgstr ""
 
 #: src/features/ats-checker/messages.ts

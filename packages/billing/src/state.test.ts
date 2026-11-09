@@ -369,3 +369,125 @@ describe("the full lifecycle in order", () => {
 		expect(state.subscription.graceEndsAt).toBeNull();
 	});
 });
+
+// P3-T05: plans paid one period at a time (Paystack with M-Pesa), and seat changes that start with the next period.
+describe("one-period plans (Paystack, M-Pesa)", () => {
+	const mpesa = (overrides: Partial<BillingState["subscription"]> = {}) =>
+		paying({ provider: "paystack", providerSubscriptionId: null, ...overrides });
+
+	it("lapses into the grace period when the paid period ends unpaid, then is suspended", () => {
+		const state = mpesa({ periodEnd: at(0) });
+		const lapsed = nextState(state, { type: "time.passed" }, at(0));
+		expect(lapsed).toMatchObject({ applied: true, orgStatus: "past_due" });
+		expect(lapsed.subscription).toEqual({ status: "past_due", graceEndsAt: at(GRACE_DAYS) });
+		expect(lapsed.audit[0]?.action).toBe("billing.period_expired");
+		const later = {
+			...state,
+			orgStatus: "past_due",
+			subscription: { ...state.subscription, ...lapsed.subscription },
+		};
+		expect(nextState(later, { type: "time.passed" }, at(GRACE_DAYS - 1)).applied).toBe(false);
+		expect(nextState(later, { type: "time.passed" }, at(GRACE_DAYS))).toMatchObject({
+			applied: true,
+			orgStatus: "suspended",
+		});
+	});
+
+	it("does nothing before the period ends", () => {
+		expect(nextState(mpesa({ periodEnd: at(1) }), { type: "time.passed" }, at(0))).toMatchObject({
+			applied: false,
+			reason: "nothing_due",
+		});
+	});
+
+	it("does not touch a card subscription (the provider sends payment.failed) or a manual or fake payment", () => {
+		for (const sub of [
+			{ provider: "paystack", providerSubscriptionId: "SUB_1" },
+			{ provider: "fake", providerSubscriptionId: null },
+			{ provider: "manual", providerSubscriptionId: null },
+		])
+			expect(nextState(paying({ ...sub, periodEnd: at(-1) }), { type: "time.passed" }, at(0)).applied).toBe(false);
+	});
+
+	it("a payment after the lapse makes it active again and clears the grace period", () => {
+		const lapsed = { ...mpesa({ status: "past_due", periodEnd: at(0), graceEndsAt: at(5) }), orgStatus: "past_due" };
+		const t = nextState(
+			lapsed,
+			event("checkout.completed", {
+				provider: "paystack",
+				planId: "starter",
+				seats: 10,
+				interval: "month",
+				periodStart: at(2),
+				periodEnd: at(32),
+			}),
+			at(2),
+		);
+		expect(t.orgStatus).toBe("active");
+		expect(t.subscription).toMatchObject({ status: "active", graceEndsAt: null, periodEnd: at(32) });
+	});
+});
+
+describe("seat changes that start with the next period", () => {
+	const pending = (overrides: Partial<BillingState["subscription"]> = {}) =>
+		paying({
+			provider: "paystack",
+			providerSubscriptionId: "SUB_old",
+			pendingSeats: 12,
+			pendingReplacesSubscriptionId: "SUB_old",
+			...overrides,
+		});
+
+	it("the cancellation of the replaced subscription is not the customer cancelling", () => {
+		const t = nextState(pending(), event("subscription.canceled", { providerSubscriptionId: "SUB_old" }), NOW);
+		expect(t).toMatchObject({ applied: false, reason: "replaced_subscription" });
+	});
+
+	it("a cancellation of a subscription that is no longer the organization's is ignored", () => {
+		const state = pending({
+			providerSubscriptionId: "SUB_new",
+			pendingReplacesSubscriptionId: null,
+			pendingSeats: null,
+		});
+		expect(nextState(state, event("subscription.canceled", { providerSubscriptionId: "SUB_old" }), NOW)).toMatchObject({
+			applied: false,
+			reason: "other_subscription",
+		});
+	});
+
+	it("the customer cancelling the current subscription still cancels", () => {
+		const state = pending({ providerSubscriptionId: "SUB_new", pendingReplacesSubscriptionId: "SUB_old" });
+		const t = nextState(state, event("subscription.canceled", { providerSubscriptionId: "SUB_new" }), NOW);
+		expect(t).toMatchObject({ applied: true });
+		expect(t.subscription).toEqual({ status: "canceled" });
+	});
+
+	it("a cancellation that names no subscription still applies (the fake provider and M-Pesa)", () => {
+		expect(nextState(pending(), event("subscription.canceled"), NOW).applied).toBe(true);
+	});
+
+	it("the payment for the new seat count takes effect and clears the pending change", () => {
+		const t = nextState(
+			pending(),
+			event("payment.succeeded", {
+				provider: "paystack",
+				seats: 12,
+				planId: "starter",
+				interval: "month",
+				periodStart: at(20),
+				periodEnd: at(50),
+			}),
+			at(20),
+		);
+		expect(t.subscription).toMatchObject({ seats: 12, pendingSeats: null, pendingReplacesSubscriptionId: null });
+	});
+
+	it("a payment for the old seat count leaves the pending change in place", () => {
+		const t = nextState(
+			pending(),
+			event("payment.succeeded", { provider: "paystack", seats: 10, periodStart: at(20), periodEnd: at(50) }),
+			at(20),
+		);
+		expect(t.subscription).not.toHaveProperty("pendingSeats");
+	});
+});

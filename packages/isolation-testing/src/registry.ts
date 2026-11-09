@@ -766,6 +766,11 @@ export const globalTables: readonly AllowListEntry[] = [
 			"P3-T01: the catalogue of plans (price, seat limit, AI credits, features). Global like a price list: it has no organization_id, every role may read it, and only the owner role writes it (SELECT-only policy and grants for careeros_app). It holds no tenant data",
 	},
 	{
+		table: "billing_provider_plan",
+		reason:
+			"P3-T05: the payment provider's plan codes (one per CareerOS plan, interval, currency, seat count and price), created lazily and cached. Global like the price list: it has no organization_id and holds no tenant data, only provider plan codes and prices. The app role has no privilege on it and reaches it only through careeros_billing_provider_plan_get, _put and _by_code (definer functions); row level security is forced, with a policy for the owner role alone",
+	},
+	{
 		table: "announcement_dismissal",
 		reason:
 			"P3-T07: which member dismissed which platform announcement (a user id and an announcement id). It has no organization_id: a dismissal belongs to the person, whatever organization they act in, and goes with the account (ON DELETE CASCADE). The app role has no privilege on it; careeros_announcement_dismiss is the only writer",
