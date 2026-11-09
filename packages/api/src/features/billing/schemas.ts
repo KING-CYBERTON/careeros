@@ -46,6 +46,11 @@ export const checkoutInput = z.object({
 	planId: z.enum(["starter", "pro"]).describe("The plan to buy."),
 	interval: intervalSchema,
 	seats: z.number().int().min(1).max(10_000),
+	// CAREEROS (P3-T05): how to pay. Omitted means card.
+	method: z
+		.enum(["card", "mpesa"])
+		.optional()
+		.describe("`card` renews by itself; `mpesa` pays one period at a time. Omitted means card."),
 });
 
 export const checkoutOutput = z.object({

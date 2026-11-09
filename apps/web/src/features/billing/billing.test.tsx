@@ -221,6 +221,29 @@ it("shows the card or M-Pesa choice only when asked to, with a note for each", (
 	expect(screen.getByTestId("method-note").textContent).toMatch(/one period at a time/);
 });
 
+it("shows the card or M-Pesa selector on the checkout page and sends the method, card by default", async () => {
+	state.checkout.mockResolvedValue({ redirectUrl: null, stkPushRequested: false });
+	await page();
+	fireEvent.click(screen.getByRole("button", { name: "Change Starter" }));
+	await screen.findByTestId("checkout-form");
+	expect(screen.getByRole("radio", { name: "Card" })).toBeTruthy();
+	expect(screen.getByRole("radio", { name: "M-Pesa" })).toBeTruthy();
+	fireEvent.click(screen.getByRole("button", { name: "Continue to payment" }));
+	await waitFor(() => expect(state.checkout).toHaveBeenCalled());
+	expect(state.checkout.mock.calls[0]?.[0]).toMatchObject({ planId: "starter", interval: "month", method: "card" });
+});
+
+it("sends mpesa when M-Pesa is chosen", async () => {
+	state.checkout.mockResolvedValue({ redirectUrl: null, stkPushRequested: false });
+	await page();
+	fireEvent.click(screen.getByRole("button", { name: "Change Starter" }));
+	await screen.findByTestId("checkout-form");
+	fireEvent.click(screen.getByRole("radio", { name: "M-Pesa" }));
+	fireEvent.click(screen.getByRole("button", { name: "Continue to payment" }));
+	await waitFor(() => expect(state.checkout).toHaveBeenCalled());
+	expect(state.checkout.mock.calls[0]?.[0]).toMatchObject({ method: "mpesa" });
+});
+
 it("hides every action from an admin", async () => {
 	state.billing = make({ canManage: false });
 	await page();

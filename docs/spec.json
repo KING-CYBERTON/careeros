@@ -43935,6 +43935,14 @@
 										"type": "integer",
 										"minimum": 1,
 										"maximum": 10000
+									},
+									"method": {
+										"enum": [
+											"card",
+											"mpesa"
+										],
+										"type": "string",
+										"description": "`card` renews by itself; `mpesa` pays one period at a time. Omitted means card."
 									}
 								},
 								"required": [

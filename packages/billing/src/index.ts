@@ -41,6 +41,7 @@ export {
 	BILLING_PROVIDER_IDS,
 	WebhookIgnored,
 	WebhookPayloadError,
+	WebhookRetry,
 	WebhookSignatureError,
 	type BillingEvent,
 	type BillingEventType,
@@ -48,19 +49,38 @@ export {
 } from "./events";
 export { applyBillingEvent, type IntakeOutcome, type IntakeResult } from "./intake";
 export { runBillingJobs, type BillingJobResult } from "./jobs";
+export {
+	reminderKind,
+	REMINDER_ACTION,
+	runRenewalReminders,
+	type ReminderDelivery,
+	type ReminderKind,
+	type ReminderResult,
+	type ReminderSender,
+} from "./reminders";
+export { recordPendingSeatChange } from "./pending-seats";
 export { recordManualPayment, type ManualPaymentInput } from "./manual-payment";
 export { listActivePlans, loadPlanPrices, type PlanListing } from "./plans";
 export { isSelfServicePlan, priceFor, SELF_SERVICE_PLAN_IDS, type Currency, type PlanPrices } from "./pricing";
 export {
+	CHECKOUT_METHODS,
+	addInterval,
 	createFakeProvider,
+	createPaystackProvider,
+	databasePaystackStore,
 	fakeDecisionEvent,
 	FAKE_SIGNATURE_HEADER,
 	manualProvider,
 	newFakeEventId,
+	PAYSTACK_SIGNATURE_HEADER,
+	PaystackError,
+	paystackSignature,
 	ProviderUnsupportedError,
+	readCheckoutMetadata,
 	readFakeSession,
 	resolveBillingProvider,
 	signFakeEvent,
+	signCheckoutMetadata,
 	signFakeSession,
 	type BillingProvider,
 	type BillingProviderConfig,
@@ -68,14 +88,18 @@ export {
 	type CancelInput,
 	type ChangeSeatsInput,
 	type CheckoutInput,
+	type CheckoutMethod,
 	type CheckoutResult,
 	type FakeCheckoutSession,
 	type FakeEventBody,
+	type PaystackStore,
+	type PendingSeatChange,
 	type PortalInput,
 	type SignedFakeEvent,
 } from "./providers";
 export {
 	GRACE_DAYS,
+	isOnePeriodPlan,
 	nextState,
 	PERSONAL_PLAN_ID,
 	TRIAL_PLAN_ID,

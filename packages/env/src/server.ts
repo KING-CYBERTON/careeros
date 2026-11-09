@@ -239,10 +239,17 @@ export const env = createEnv({
 
 		// CAREEROS (P3-T04, phase plan D1, D9): the payment provider. `none` turns billing off: every organization behaves
 		// as its plan says and no payment is taken. `fake` is for tests and staging only and is refused in production.
-		// `paystack` and `stripe` are accepted values that wait for P3-T05 (no adapter exists yet).
+		// `paystack` is the P3-T05 adapter; `stripe` is accepted but has no adapter yet.
 		BILLING_PROVIDER: z.enum(["fake", "paystack", "stripe", "none"]).default("none"),
 		// CAREEROS (P3-T04): the HMAC secret the fake provider signs its events with. Required while BILLING_PROVIDER=fake.
 		BILLING_FAKE_SECRET: z.string().min(16, "BILLING_FAKE_SECRET must be at least 16 characters").optional(),
+
+		// CAREEROS (P3-T05): Paystack keys (dashboard > Settings > API Keys). Required while BILLING_PROVIDER=paystack. The
+		// secret key also signs the webhook, so it is server only: never returned by an API, never logged.
+		PAYSTACK_SECRET_KEY: z.string().trim().min(1).optional(),
+		PAYSTACK_PUBLIC_KEY: z.string().trim().min(1).optional(),
+		// CAREEROS (P3-T05): lets a production build run on an `sk_test_` key, for staging only.
+		PAYSTACK_ALLOW_TEST_KEY: z.stringbool().default(false),
 
 		// Optional search and enhanced reading; custom URLs are operator-controlled Firecrawl services.
 		WEB_ACCESS_PROVIDER: z.enum(["firecrawl", "tavily", "exa"]).optional(),
@@ -302,6 +309,24 @@ if (env.BILLING_PROVIDER === "fake") {
 		);
 	}
 	if (!env.BILLING_FAKE_SECRET) throw new Error("BILLING_PROVIDER=fake requires BILLING_FAKE_SECRET.");
+}
+
+// CAREEROS (P3-T05): Paystack needs both keys, and a production build refuses a test key unless staging says so.
+if (env.BILLING_PROVIDER === "paystack") {
+	if (!env.PAYSTACK_SECRET_KEY || !env.PAYSTACK_PUBLIC_KEY)
+		throw new Error("BILLING_PROVIDER=paystack requires PAYSTACK_SECRET_KEY and PAYSTACK_PUBLIC_KEY.");
+	if (!/^sk_(test|live)_/.test(env.PAYSTACK_SECRET_KEY))
+		throw new Error("PAYSTACK_SECRET_KEY must be a Paystack secret key (sk_test_... or sk_live_...).");
+	if (!/^pk_(test|live)_/.test(env.PAYSTACK_PUBLIC_KEY))
+		throw new Error("PAYSTACK_PUBLIC_KEY must be a Paystack public key (pk_test_... or pk_live_...).");
+	if (
+		process.env.NODE_ENV === "production" &&
+		env.PAYSTACK_SECRET_KEY.startsWith("sk_test_") &&
+		!env.PAYSTACK_ALLOW_TEST_KEY
+	)
+		throw new Error(
+			"PAYSTACK_SECRET_KEY is a test key and is refused when NODE_ENV=production. Set PAYSTACK_ALLOW_TEST_KEY=true on staging.",
+		);
 }
 
 if (
