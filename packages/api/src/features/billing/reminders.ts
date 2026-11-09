@@ -9,7 +9,7 @@ import { sendEmail } from "@reactive-resume/email/transport";
 // links to the billing page on the platform host, where the owner pays the next period.
 
 /** Where the owner pays. The billing page itself is P3-T06's; the link is a path on the platform host. */
-export const BILLING_PAGE_PATH = "/dashboard/settings/billing";
+export const BILLING_PAGE_PATH = "/dashboard/organization/billing";
 
 const formatDate = (date: Date) =>
 	new Intl.DateTimeFormat("en-GB", { day: "numeric", month: "long", year: "numeric", timeZone: "UTC" }).format(date);

@@ -259,7 +259,7 @@ describe.skipIf(!configured)("the Paystack provider", () => {
 			const init = await checkout(user, { planId: "starter", interval: "month", seats: 10, method: "card" });
 			expect(init).toMatchObject({ currency: "KES", amount: STARTER_MONTH, channels: ["card"], email: user.email });
 			expect(init.plan).toMatch(/^PLN_it/);
-			expect(init.callback_url).toBe(`${PLATFORM_ORIGIN}/dashboard`);
+			expect(init.callback_url).toBe(`${PLATFORM_ORIGIN}/dashboard/organization/billing/return`);
 			expect(callsTo("POST", "/plan").at(-1)?.body).toMatchObject({ interval: "monthly", amount: STARTER_MONTH });
 
 			const response = await post(sign(charge(init, { customer: `CUS_${user.userId.slice(-10)}` })));

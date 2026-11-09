@@ -5,7 +5,7 @@ import { renewalReminderCopy } from "./billing-strings";
 import { RenewalReminderEmail } from "./templates/auth";
 
 // CAREEROS (P3-T05): the renewal reminder words and template.
-const url = "https://careeros.example.test/dashboard/settings/billing";
+const url = "https://careeros.example.test/dashboard/organization/billing";
 
 describe("renewal reminder copy", () => {
 	it("names the organization, the product and the end date, differently for three days out and the last day", () => {
