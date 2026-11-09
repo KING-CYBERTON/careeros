@@ -9,6 +9,9 @@ import { env } from "@reactive-resume/env/server";
 const BASE_HEADERS = { "Cache-Control": "no-store", "Referrer-Policy": "no-referrer" } as const;
 const PAGE_HEADERS = {
 	...BASE_HEADERS,
+	// CAREEROS (P3-T06): under `no-referrer` Chrome sends `Origin: null` with the page's own form post, so the origin
+	// check below refused every real browser. `same-origin` keeps the address out of other sites and sends the origin.
+	"Referrer-Policy": "same-origin",
 	"Content-Type": "text/html; charset=utf-8",
 	"Content-Security-Policy":
 		"default-src 'none'; style-src 'unsafe-inline'; form-action 'self'; frame-ancestors 'none'; base-uri 'none'",
