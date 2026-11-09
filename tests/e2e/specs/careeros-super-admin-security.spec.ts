@@ -35,6 +35,11 @@ async function setRole(email: string, role: string, twoFactor: boolean) {
  * ORG_HOST_LAUNCH_OPTIONS); Playwright's APIRequestContext does not, so `page.request` cannot reach an organization host.
  */
 async function statusFromPage(page: Page, path: string, init?: { method: "GET" | "POST"; body?: unknown }) {
+	return (await replyFromPage(page, path, init)).status;
+}
+
+/** As `statusFromPage`, with the error's `data.code` (oRPC's `{ json: { data: { code } } }`) when the body has one. */
+async function replyFromPage(page: Page, path: string, init?: { method: "GET" | "POST"; body?: unknown }) {
 	return await page.evaluate(
 		async ({ path: target, init: options }) => {
 			const response = await fetch(target, {
@@ -45,7 +50,8 @@ async function statusFromPage(page: Page, path: string, init?: { method: "GET" |
 					? { headers: { "content-type": "application/json" }, body: JSON.stringify(options.body ?? {}) }
 					: {}),
 			});
-			return response.status;
+			const body = (await response.json().catch(() => null)) as { json?: { data?: { code?: string } } } | null;
+			return { status: response.status, code: body?.json?.data?.code };
 		},
 		{ path, init },
 	);
@@ -326,10 +332,15 @@ test.describe("support sessions in a browser", () => {
 				await member.reload();
 				await expect(member.getByTestId("impersonation-banner")).toBeVisible();
 
-				// The console does not exist on the member's host, and the admin API is refused in the support session.
+				// The console page does not exist on the member's host. The admin API is refused first by the support-session
+				// guard (protectedProcedureWithoutOrg, packages/api/src/context.ts: every `admin.*` path is refused while
+				// impersonating), which runs before adminProcedure's host check: 403 with its code, not the host's 404.
 				expect(await statusFromPage(member, "/admin/organizations")).toBe(404);
-				expect(await statusFromPage(member, rpcPath("admin.orgs.list"), { method: "POST", body: { json: {} } })).toBe(
-					404,
+				expect(await replyFromPage(member, rpcPath("admin.orgs.list"), { method: "POST", body: { json: {} } })).toEqual(
+					{
+						status: 403,
+						code: "IMPERSONATION_NOT_ALLOWED",
+					},
 				);
 
 				// End now ends it for good.
