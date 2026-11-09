@@ -76,6 +76,7 @@ describe("platform admin policy", () => {
 		"/revoke-session",
 		"/revoke-sessions",
 		"/revoke-other-sessions",
+		"/verify-password",
 		// Normalization: case, repeated and trailing slashes, encoding, dot segments, the /api/auth prefix.
 		"/OAuth2/create-client",
 		"/oauth2//register",

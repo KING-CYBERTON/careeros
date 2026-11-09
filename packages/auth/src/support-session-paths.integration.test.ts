@@ -53,7 +53,6 @@ const ALLOWED_WHILE_IMPERSONATING: Record<string, string> = {
 	"/api-key/list": "returns key metadata, never a key value",
 	"/reset-password/:token": "needs the token from the member's mailbox, which the admin does not hold",
 	"/update-session": "session fields only; it cannot extend the support session, whose expiry is the record's",
-	"/verify-password": "answers whether a password the caller supplies is right; hands out nothing",
 	"/update-user": "profile fields; the member's role and email are not reachable through it",
 };
 
@@ -176,6 +175,7 @@ describe.skipIf(!configured)("support session path policy follows Better Auth's 
 			"/oauth2/create-client",
 			"/oauth2/register",
 			"/oauth2/consent",
+			"/verify-password",
 			"/get-access-token",
 			"/refresh-token",
 			"/revoke-session",

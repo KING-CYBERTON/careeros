@@ -69,6 +69,8 @@ export const IMPERSONATION_REFUSED_AUTH_PATHS: ReadonlySet<string> = new Set([
 	"/revoke-session",
 	"/revoke-sessions",
 	"/revoke-other-sessions",
+	// P3-T09 (Q441): a yes or no answer about the member's password is an oracle a support session must not offer.
+	"/verify-password",
 	// P5-T02: approving or denying a Job Clipper device sign-in would hand the admin a credential in the member's name.
 	"/device/approve",
 	"/device/deny",
