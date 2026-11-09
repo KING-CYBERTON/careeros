@@ -13,7 +13,7 @@ import { dash } from "@better-auth/infra";
 import { oauthProvider } from "@better-auth/oauth-provider";
 import { passkey } from "@better-auth/passkey";
 // CAREEROS: the session operations of the sign-in handoff (P2-T05)
-import { DISABLED_ADMIN_AUTH_PATHS } from "@careeros/platform-admin/policy";
+import { DISABLED_ADMIN_AUTH_PATHS, isAuthPathRefusedWhileImpersonating } from "@careeros/platform-admin/policy";
 import { hostTrustedOrigins } from "@careeros/tenancy";
 import { compare, hash } from "bcryptjs";
 import { APIError, betterAuth } from "better-auth";
@@ -616,6 +616,17 @@ const getAuthConfig = () => {
 					return;
 				}
 				if (ctx.path === "/oauth2/delete-consent") {
+					// CAREEROS (Q424): this hook runs before the support-session plugin guard and revokes tokens, so refuse first.
+					if (isAuthPathRefusedWhileImpersonating(ctx.path)) {
+						const supportSession = await auth.api
+							.getSession({ headers: ctx.headers ?? new Headers(), query: { disableCookieCache: true } })
+							.catch(() => null);
+						if ((supportSession?.session as { impersonatedBy?: string | null } | undefined)?.impersonatedBy)
+							throw new APIError("FORBIDDEN", {
+								code: "IMPERSONATION_NOT_ALLOWED",
+								message: "This is not available during a support session.",
+							});
+					}
 					const origin = ctx.headers?.get("origin");
 					if ((origin && !TRUSTED_ORIGINS.includes(origin)) || ctx.headers?.get("sec-fetch-site") === "cross-site") {
 						throw new APIError("FORBIDDEN", { message: "Cross-origin consent changes are not allowed." });

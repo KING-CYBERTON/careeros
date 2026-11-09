@@ -13,6 +13,12 @@ import {
 	OVERRIDES,
 	readOperations,
 } from "@careeros/testing/cross-org-inventory";
+import {
+	EXPECTED_REFUSAL,
+	rpcPath,
+	SUPER_ADMIN_PROCEDURES,
+	type SuperAdminSeed,
+} from "@careeros/testing/super-admin-inventory";
 import { ORG_HOST_PATTERN, orgHostsConfigured } from "../fixtures/org-hosts";
 import { withSeedPool } from "../fixtures/seed-db";
 import { expect, test } from "../fixtures/test";
@@ -412,6 +418,66 @@ test("an id from another organization never reads, changes or links Organization
 		console.log(
 			`cross-org fuzz: ${fuzzed.length} id-taking operations, ${planned.length} requests per mode, ${mcpPlans.length} MCP tools, ${Object.keys(NO_TENANT_ID).length} skipped; org-host pass: ${hostRequests} requests, ${hostRefusals} refused by the host gate`,
 		);
+		expect(failures, failures.join("\n")).toEqual([]);
+	} finally {
+		await orgs.dispose();
+	}
+});
+
+// CAREEROS (P3-Q03): the Super Admin console is RPC only (not in the OpenAPI document the fuzz above is built from), so
+// its procedures are fuzzed from the shared inventory, which apps/server's unit test keeps equal to the router. User B
+// belongs to Organization B, has a session and an API key, and names Organization A's ids in every procedure: the answer
+// is a refusal that carries nothing of A's, and A is unchanged.
+test("the Super Admin console refuses a member of Organization B who names Organization A's ids", async ({
+	playwright,
+	baseURL,
+	account,
+}, testInfo) => {
+	test.setTimeout(120_000);
+	const root = String(baseURL ?? testInfo.project.use.baseURL ?? "http://localhost:3000");
+	const orgs = await createTwoOrgs(playwright, root, account);
+	const failures: string[] = [];
+	try {
+		const seed: SuperAdminSeed = {
+			orgId: orgs.a.organizationId,
+			userId: orgs.authOrg.memberUserId,
+			announcementId: orgs.ids.application,
+			planId: "starter",
+			unique: orgs.a.organizationId,
+		};
+		const adminRows = async () =>
+			await withSeedPool(async (seedPool) => {
+				const { rows } = await seedPool.query<{ n: string }>(
+					"select count(*)::text as n from audit_log where action like 'admin.%'",
+				);
+				return rows[0]?.n;
+			});
+		const auditBefore = await adminRows();
+		const before = await snapshotOrgA(orgs);
+		for (const [mode, request, refusal] of [
+			["cookie", orgs.b.session, EXPECTED_REFUSAL.member],
+			["api key", orgs.bKeyed, EXPECTED_REFUSAL["API key"]],
+			["anonymous", orgs.anonymous, EXPECTED_REFUSAL.anonymous],
+		] as const) {
+			await pool(SUPER_ADMIN_PROCEDURES.slice(), 4, async (procedure) => {
+				const label = `${procedure.path} [${mode}]`;
+				const response = await request.post(rpcPath(procedure.path), {
+					headers: { "content-type": "application/json", origin: root },
+					data: { json: procedure.input(seed) },
+					failOnStatusCode: false,
+					timeout: 20_000,
+				});
+				const text = await response.text();
+				const leaks = findLeaks(text, orgs.markers, orgs.foreignIds, []);
+				if (leaks.length > 0) return void failures.push(`${label}: carries Organization A's ${leaks.join(", ")}`);
+				if (response.status() !== refusal.status)
+					failures.push(`${label}: expected ${refusal.status}, got ${response.status()}: ${text.slice(0, 200)}`);
+			});
+		}
+		const after = await snapshotOrgA(orgs);
+		for (const key of new Set([...Object.keys(before), ...Object.keys(after)]))
+			if (before[key] !== after[key]) failures.push(`Organization A changed: ${key}`);
+		if ((await adminRows()) !== auditBefore) failures.push("a refused console call wrote an admin audit row");
 		expect(failures, failures.join("\n")).toEqual([]);
 	} finally {
 		await orgs.dispose();
