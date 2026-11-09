@@ -55,6 +55,18 @@ export class WebhookPayloadError extends Error {
 	}
 }
 
+/**
+ * Thrown by `verifyWebhook` after a good signature when the event cannot be processed NOW but may be later: the provider
+ * could not be reached to double-check a payment, or the event names a subscription whose first payment has not been
+ * recorded yet. Answered with 500, so the provider retries (CAREEROS P3-T05). Carries a short code, never a payload.
+ */
+export class WebhookRetry extends Error {
+	constructor(message = "The webhook event cannot be processed yet.") {
+		super(message);
+		this.name = "WebhookRetry";
+	}
+}
+
 /** Thrown by `verifyWebhook` after a good signature for an event type we do not act on. Answered with 200. */
 export class WebhookIgnored extends Error {
 	constructor(message = "The webhook event type is not handled.") {

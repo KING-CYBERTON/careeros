@@ -631,6 +631,13 @@ New CareerOS files (not upstream): `packages/platform-admin/`, `packages/api/src
 | `apps/web/package.json`, `apps/mobile/package.json`, `packages/api/package.json`, `pnpm-lock.yaml` | P4-T03 | Depend on the new workspace package `@careeros/discovery-form` (JSON has no comments) | Low (one line each) |
 | `apps/web/locales/*.po`, `apps/mobile/locales/*.po` | P4-T03 | Generated (Lingui extract) for the search form and section | Low (marked `CAREEROS:`) |
 | `docs/guides/finding-roles-automatically.mdx`, `docs/guides/career-workspace-reference.mdx`, `docs/contributing/career-platform.mdx` | P4-T03 | A "Watch company job boards" section, a reference paragraph, and `job-searches.png` in the screenshot map | Low (marked `CAREEROS:`) |
+| `.env.example` | P3-T05 | `PAYSTACK_SECRET_KEY`, `PAYSTACK_PUBLIC_KEY`, `PAYSTACK_ALLOW_TEST_KEY` placeholders | Low (marked `CAREEROS:`) |
+| `packages/env/src/server.ts` | P3-T05 | Paystack keys, prefix checks, test key refused in production | Low (marked `CAREEROS:`) |
+| `turbo.json` | P3-T05 | Paystack variables in `globalPassThroughEnv` and the test task env arrays | Low (marked `CAREEROS:`) |
+| `packages/email/package.json` | P3-T05 | Exports `./billing-strings` and `./renewal` (JSON has no comments) | Low (marked `CAREEROS:`) |
+| `packages/email/src/templates/auth.tsx` | P3-T05 | `RenewalReminderEmail` appended | Low (marked `CAREEROS:`) |
+| `packages/db/src/schema/billing.ts` | P3-T05 | Pending seat columns and `billingProviderPlan` table | Low (marked `CAREEROS:`) |
+| `docs/self-hosting/environment-variables.mdx` | P3-T05 | A Paystack section | Low (marked `CAREEROS:`) |
 
 ## P3-T06: organization billing page
 

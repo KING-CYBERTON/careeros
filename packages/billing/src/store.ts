@@ -45,6 +45,8 @@ export async function loadBillingState(orgId: string): Promise<BillingState> {
 			periodEnd: sub.currentPeriodEnd,
 			trialEndsAt: sub.trialEndsAt,
 			graceEndsAt: sub.graceEndsAt,
+			pendingSeats: sub.pendingSeats,
+			pendingReplacesSubscriptionId: sub.pendingReplacesSubscriptionId,
 		},
 	};
 }
@@ -60,6 +62,8 @@ const COLUMN: Record<string, string> = {
 	periodEnd: "current_period_end",
 	trialEndsAt: "trial_ends_at",
 	graceEndsAt: "grace_ends_at",
+	pendingSeats: "pending_seats",
+	pendingReplacesSubscriptionId: "pending_replaces_subscription_id",
 };
 
 /** The `careeros_set_subscription` field object for a patch: snake_case columns, dates as ISO strings. */

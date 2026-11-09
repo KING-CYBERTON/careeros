@@ -1,3 +1,4 @@
+import type { RenewalReminderCopy } from "../billing-strings";
 import type { EmailBrand } from "../brand";
 import * as React from "react";
 import {
@@ -235,6 +236,28 @@ export function InvitationEmail({ url, organizationName, inviterName, brand }: I
 			actionLabel="Accept invitation"
 			actionUrl={url}
 			outro="If you were not expecting this invitation, you can safely ignore this email."
+		/>
+	);
+}
+
+// CAREEROS (P3-T05): the reminder an organization owner gets when a plan paid by M-Pesa is about to end. The words come
+// from `renewalReminderCopy` (billing-strings.ts); `copy` is built by the sender so the subject and the body agree.
+interface RenewalReminderEmailProps extends EmailBrandProps {
+	url: string;
+	copy: RenewalReminderCopy;
+}
+
+export function RenewalReminderEmail({ url, copy, brand }: RenewalReminderEmailProps) {
+	return (
+		<AuthEmailLayout
+			brand={brand}
+			preview={copy.preview}
+			heading={copy.heading}
+			intro={copy.intro}
+			details={copy.details}
+			actionLabel={copy.actionLabel}
+			actionUrl={url}
+			outro={copy.outro}
 		/>
 	);
 }

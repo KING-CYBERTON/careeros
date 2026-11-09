@@ -119,6 +119,10 @@ BEGIN
 	IF to_regclass('public.billing_event') IS NOT NULL THEN
 		REVOKE ALL ON TABLE public.billing_event FROM careeros_app;
 	END IF;
+	-- P3-T05: billing_provider_plan is reached only through the careeros_billing_provider_plan_* definer functions.
+	IF to_regclass('public.billing_provider_plan') IS NOT NULL THEN
+		REVOKE ALL ON TABLE public.billing_provider_plan FROM careeros_app;
+	END IF;
 END
 $$;
 

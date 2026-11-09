@@ -83,6 +83,11 @@ export const subscription = pg.pgTable(
 		trialEndsAt: pg.timestamp("trial_ends_at", { withTimezone: true }),
 		graceEndsAt: pg.timestamp("grace_ends_at", { withTimezone: true }),
 		aiOverageAllowed: pg.boolean("ai_overage_allowed").notNull().default(false),
+		// CAREEROS (P3-T05): a seat change that takes effect at the next paid period. `pendingSeats` is the new count;
+		// `pendingReplacesSubscriptionId` is the provider subscription being replaced, so its own cancellation event is not
+		// mistaken for the customer cancelling. Both are cleared when the payment for the new count arrives.
+		pendingSeats: pg.integer("pending_seats"),
+		pendingReplacesSubscriptionId: pg.text("pending_replaces_subscription_id"),
 		createdAt: pg.timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
 		updatedAt: pg.timestamp("updated_at", { withTimezone: true }).notNull().defaultNow(),
 	},
@@ -90,6 +95,7 @@ export const subscription = pg.pgTable(
 		pg.check("subscription_provider_check", sql`${t.provider} in (${list(SUBSCRIPTION_PROVIDERS)})`),
 		pg.check("subscription_status_check", sql`${t.status} in (${list(SUBSCRIPTION_STATUSES)})`),
 		pg.check("subscription_seats_check", sql`${t.seats} > 0`),
+		pg.check("subscription_pending_seats_check", sql`${t.pendingSeats} is null or ${t.pendingSeats} > 0`),
 		pg.check("subscription_billing_interval_check", sql`${t.billingInterval} in (${list(BILLING_INTERVALS)})`),
 		pg.index("subscription_plan_idx").on(t.planId),
 	],
@@ -181,5 +187,42 @@ export const billingEvent = pg.pgTable(
 		pg.uniqueIndex("billing_event_provider_event_key").on(t.provider, t.providerEventId),
 		pg.index("billing_event_org_received_idx").on(t.organizationId, t.receivedAt.desc()),
 		pg.check("billing_event_outcome_check", sql`${t.outcome} in (${list(BILLING_EVENT_OUTCOMES)})`),
+	],
+);
+
+/**
+ * CAREEROS (P3-T05): the provider's plan for one (CareerOS plan, interval, currency, seats, amount), created lazily and
+ * cached here. Paystack plans have a fixed amount and no quantity, so each seat count has its own plan code, and the
+ * amount is part of the key: a price change in the `plan` table makes a new provider plan rather than an old price.
+ * Global and platform only: the app role has no privilege on the table and reads and writes it through definer functions.
+ */
+export const billingProviderPlan = pg.pgTable(
+	"billing_provider_plan",
+	{
+		id: pg
+			.text("id")
+			.notNull()
+			.primaryKey()
+			.default(sql`gen_random_uuid()::text`),
+		provider: pg.text("provider").notNull(),
+		planId: pg
+			.text("plan_id")
+			.notNull()
+			.references(() => plan.id),
+		billingInterval: pg.text("billing_interval").notNull(),
+		currency: pg.text("currency").notNull(),
+		seats: pg.integer("seats").notNull(),
+		/** In the provider's smallest unit (cents). */
+		amount: pg.bigint("amount", { mode: "number" }).notNull(),
+		providerPlanCode: pg.text("provider_plan_code").notNull(),
+		createdAt: pg.timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
+	},
+	(t) => [
+		pg
+			.uniqueIndex("billing_provider_plan_key")
+			.on(t.provider, t.planId, t.billingInterval, t.currency, t.seats, t.amount),
+		pg.uniqueIndex("billing_provider_plan_code_key").on(t.provider, t.providerPlanCode),
+		pg.check("billing_provider_plan_interval_check", sql`${t.billingInterval} in (${list(BILLING_INTERVALS)})`),
+		pg.check("billing_provider_plan_seats_check", sql`${t.seats} > 0 and ${t.amount} >= 0`),
 	],
 );
