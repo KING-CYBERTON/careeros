@@ -612,6 +612,7 @@ New CareerOS files (not upstream): `packages/platform-admin/`, `packages/api/src
 | `apps/mobile/scripts/store-review.test.mjs` | P3-T03 | A fake for `./ai-quota` in the module loader (the notices need the toast UI) | Low (marked `CAREEROS:`) |
 | `packages/api/vitest.org.setup.ts` | P3-T03 | The shared billing stub gives the organization the pro plan's credit pool (300) instead of 0, so the AI quota check does not refuse every platform and server-managed AI call in router tests | Low (marked `CAREEROS:`) |
 | `packages/auth/src/config.ts` | P4-T02 | Calls `careeros_move_guest_discovery` in the guest link transaction (after the applications, before the agent move) | Low (marked `CAREEROS:`) |
+| `packages/auth/src/config.ts` | P3-Q03 (Q424) | In the global before-hook for `/oauth2/delete-consent`, refuses with 403 `IMPERSONATION_NOT_ALLOWED` in a support session before any token is revoked; imports `isAuthPathRefusedWhileImpersonating` | Low (one guard, marked `CAREEROS:`) |
 | `packages/api/src/features/auth/service.ts`, `router.ts` | P4-T02 | The account export gains a `discovery` section (automations, runs, jobs) | Low (marked `CAREEROS:`) |
 | `packages/api/package.json` | P4-T02 | Export `./features/discovery/scheduler` for the server's loop and cron route | Low (marked `CAREEROS:`) |
 | `packages/api/vitest.org.setup.ts` | P4-T02 | The shared billing stub gives the organization `discoveryAiTopN: 25` | Low (marked `CAREEROS:`) |
