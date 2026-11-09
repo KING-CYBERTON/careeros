@@ -30,7 +30,15 @@ export type ChangeSeatsInput = {
 	interval: BillingInterval;
 	seats: number;
 	providerSubscriptionId: string | null;
+	/**
+	 * CAREEROS (P3-T05): for a provider that applies a seat change at the next period (Paystack), called BEFORE the old
+	 * provider subscription is disabled, so the cancellation event that follows is recognised as a replacement and not
+	 * as the customer cancelling. `replacesSubscriptionId` is null when there is no provider subscription (M-Pesa).
+	 */
+	onPending?: (change: PendingSeatChange) => Promise<void>;
 };
+
+export type PendingSeatChange = { seats: number; replacesSubscriptionId: string | null };
 
 export type CancelInput = {
 	orgId: string;
@@ -42,6 +50,8 @@ export type CancelInput = {
 export type PortalInput = {
 	orgId: string;
 	providerCustomerId: string | null;
+	/** CAREEROS (P3-T05): Paystack's manage link is per subscription. */
+	providerSubscriptionId?: string | null;
 	returnUrl: string;
 };
 

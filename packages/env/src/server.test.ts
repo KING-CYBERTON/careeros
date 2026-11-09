@@ -25,6 +25,9 @@ beforeEach(() => {
 		"CF_SAAS_CNAME_TARGET",
 		"BILLING_PROVIDER",
 		"BILLING_FAKE_SECRET",
+		"PAYSTACK_SECRET_KEY",
+		"PAYSTACK_PUBLIC_KEY",
+		"PAYSTACK_ALLOW_TEST_KEY",
 	])
 		vi.stubEnv(name, undefined);
 });
@@ -309,5 +312,55 @@ describe("billing provider configuration", () => {
 		vi.stubEnv("BILLING_PROVIDER", "paypal");
 		vi.spyOn(console, "error").mockImplementation(() => {});
 		await expect(import("./server")).rejects.toThrow("Invalid environment variables");
+	});
+});
+
+// CAREEROS (P3-T05): the Paystack keys.
+describe("paystack configuration", () => {
+	const test = { secret: "sk_test_placeholder", pub: "pk_test_placeholder" };
+	const configure = (secret?: string, pub?: string) => {
+		vi.stubEnv("BILLING_PROVIDER", "paystack");
+		if (secret) vi.stubEnv("PAYSTACK_SECRET_KEY", secret);
+		if (pub) vi.stubEnv("PAYSTACK_PUBLIC_KEY", pub);
+	};
+
+	it("accepts test keys outside production", async () => {
+		vi.stubEnv("NODE_ENV", "test");
+		configure(test.secret, test.pub);
+		expect((await import("./server")).env.BILLING_PROVIDER).toBe("paystack");
+	});
+
+	it("requires both keys", async () => {
+		vi.stubEnv("NODE_ENV", "test");
+		configure(test.secret);
+		await expect(import("./server")).rejects.toThrow("requires PAYSTACK_SECRET_KEY and PAYSTACK_PUBLIC_KEY");
+	});
+
+	it("refuses a key of the wrong shape", async () => {
+		vi.stubEnv("NODE_ENV", "test");
+		configure("not-a-secret-key", test.pub);
+		await expect(import("./server")).rejects.toThrow("must be a Paystack secret key");
+	});
+
+	it("refuses a test secret key in production", async () => {
+		vi.stubEnv("NODE_ENV", "production");
+		vi.stubEnv("AUTH_SECRET", "a".repeat(40));
+		configure(test.secret, test.pub);
+		await expect(import("./server")).rejects.toThrow("is a test key and is refused when NODE_ENV=production");
+	});
+
+	it("allows a test secret key in production when staging says so", async () => {
+		vi.stubEnv("NODE_ENV", "production");
+		vi.stubEnv("AUTH_SECRET", "a".repeat(40));
+		vi.stubEnv("PAYSTACK_ALLOW_TEST_KEY", "true");
+		configure(test.secret, test.pub);
+		expect((await import("./server")).env.PAYSTACK_ALLOW_TEST_KEY).toBe(true);
+	});
+
+	it("accepts a live key in production", async () => {
+		vi.stubEnv("NODE_ENV", "production");
+		vi.stubEnv("AUTH_SECRET", "a".repeat(40));
+		configure("sk_live_placeholder", "pk_live_placeholder");
+		expect((await import("./server")).env.BILLING_PROVIDER).toBe("paystack");
 	});
 });

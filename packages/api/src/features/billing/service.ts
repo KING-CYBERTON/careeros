@@ -10,7 +10,7 @@ import {
 	startTrial as startOrganizationTrial,
 	TRIAL_PLAN_ID,
 } from "@careeros/billing";
-import { ProviderUnsupportedError } from "@careeros/billing";
+import { PaystackError, ProviderUnsupportedError, recordPendingSeatChange } from "@careeros/billing";
 import { requireOrgId } from "@careeros/tenancy";
 import { ORPCError } from "@orpc/server";
 import { and, eq } from "drizzle-orm";
@@ -51,6 +51,20 @@ function requireProvider() {
 	const provider = getBillingProvider();
 	if (!provider) throw new ORPCError("PRECONDITION_FAILED", { message: "Billing is not enabled on this server." });
 	return provider;
+}
+
+/** What an owner may be told when the payment provider fails: never the provider's own text. */
+function providerFailure(error: unknown, unsupported: string): unknown {
+	if (error instanceof ProviderUnsupportedError) return new ORPCError("PRECONDITION_FAILED", { message: unsupported });
+	if (error instanceof PaystackError) {
+		console.error(`[billing] provider call failed status=${error.status ?? "none"}`);
+		return new ORPCError("BAD_GATEWAY", {
+			message: error.retryable
+				? "The payment provider is not answering. Try again in a moment."
+				: "The payment provider refused the request. Check the details and try again.",
+		});
+	}
+	return error;
 }
 
 const returnUrl = () => new URL("/dashboard", env.APP_URL).toString();
@@ -149,16 +163,21 @@ export async function createCheckout(
 		.where(eq(schema.user.id, userId))
 		.limit(1);
 	if (!account) throw new ORPCError("UNAUTHORIZED", { message: "Sign in again." });
-	const result = await provider.createCheckout({
-		orgId: organizationId,
-		planId: plan.id,
-		interval: input.interval,
-		seats: input.seats,
-		customerEmail: account.email,
-		returnUrl: returnUrl(),
-		// CAREEROS (P3-T05): the chosen way to pay
-		...(input.method && { method: input.method }),
-	});
+	let result;
+	try {
+		result = await provider.createCheckout({
+			orgId: organizationId,
+			planId: plan.id,
+			interval: input.interval,
+			seats: input.seats,
+			customerEmail: account.email,
+			returnUrl: returnUrl(),
+			// CAREEROS (P3-T05): the chosen way to pay
+			...(input.method && { method: input.method }),
+		});
+	} catch (error) {
+		throw providerFailure(error, "This plan cannot be bought online. Contact us.");
+	}
 	return "redirectUrl" in result
 		? { redirectUrl: result.redirectUrl, stkPushRequested: false }
 		: { redirectUrl: null, stkPushRequested: true };
@@ -186,13 +205,11 @@ export async function changeSeats(userId: string, input: { seats: number }) {
 			interval,
 			seats: input.seats,
 			providerSubscriptionId: sub.providerSubscriptionId,
+			// CAREEROS (P3-T05): recorded before the provider disables the old subscription (see ChangeSeatsInput)
+			onPending: (change) => recordPendingSeatChange(organizationId, change, userId),
 		});
 	} catch (error) {
-		if (error instanceof ProviderUnsupportedError)
-			throw new ORPCError("PRECONDITION_FAILED", {
-				message: "The payment provider does not support changing seats here.",
-			});
-		throw error;
+		throw providerFailure(error, "The payment provider does not support changing seats here.");
 	}
 	return { accepted: true };
 }
@@ -207,9 +224,7 @@ export async function cancelSubscription(userId: string) {
 			periodEnd: sub.periodEnd,
 		});
 	} catch (error) {
-		if (error instanceof ProviderUnsupportedError)
-			throw new ORPCError("PRECONDITION_FAILED", { message: "The payment provider does not support cancelling here." });
-		throw error;
+		throw providerFailure(error, "The payment provider does not support cancelling here.");
 	}
 	return { accepted: true };
 }
@@ -218,11 +233,17 @@ export async function customerPortal(userId: string) {
 	const organizationId = await requireOwner(userId);
 	const provider = requireProvider();
 	const state = await loadBillingState(organizationId);
-	const url = await provider.customerPortalUrl({
-		orgId: organizationId,
-		providerCustomerId: state.subscription.providerCustomerId,
-		returnUrl: returnUrl(),
-	});
+	let url;
+	try {
+		url = await provider.customerPortalUrl({
+			orgId: organizationId,
+			providerCustomerId: state.subscription.providerCustomerId,
+			providerSubscriptionId: state.subscription.providerSubscriptionId,
+			returnUrl: returnUrl(),
+		});
+	} catch (error) {
+		throw providerFailure(error, "The payment provider has no billing portal.");
+	}
 	if (!url) throw new ORPCError("PRECONDITION_FAILED", { message: "The payment provider has no billing portal." });
 	return { url };
 }

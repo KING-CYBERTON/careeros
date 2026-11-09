@@ -1,4 +1,10 @@
-import { applyBillingEvent, WebhookIgnored, WebhookPayloadError, WebhookSignatureError } from "@careeros/billing";
+import {
+	applyBillingEvent,
+	WebhookIgnored,
+	WebhookPayloadError,
+	WebhookRetry,
+	WebhookSignatureError,
+} from "@careeros/billing";
 import { getBillingProvider } from "./provider";
 
 // CAREEROS (P3-T04, phase plan D9): the provider-independent part of a webhook, below the HTTP adapter
@@ -38,6 +44,9 @@ export async function processBillingWebhook(
 		if (error instanceof WebhookSignatureError) return { kind: "bad_signature" };
 		if (error instanceof WebhookPayloadError) return { kind: "bad_payload" };
 		if (error instanceof WebhookIgnored) return { kind: "ignored" };
+		// CAREEROS (P3-T05): signed, but not processable yet (the provider could not confirm a payment, or the event names a
+		// customer whose first payment is not recorded yet). A real processing error, so the route answers 500 and retries.
+		if (error instanceof WebhookRetry) throw error;
 		// Anything else out of a verifier is a failure to verify, not a processing error: do not let it reach the database.
 		return { kind: "bad_signature" };
 	}
