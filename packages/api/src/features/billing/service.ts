@@ -1,3 +1,4 @@
+import type { CheckoutMethod } from "@careeros/billing";
 import type { BillingInterval } from "@reactive-resume/db/schema";
 import {
 	getEntitlements,
@@ -133,7 +134,7 @@ export async function startTrial(userId: string) {
 
 export async function createCheckout(
 	userId: string,
-	input: { planId: string; interval: BillingInterval; seats: number },
+	input: { planId: string; interval: BillingInterval; seats: number; method?: CheckoutMethod | undefined },
 ) {
 	const organizationId = await requireOwner(userId);
 	const provider = requireProvider();
@@ -155,6 +156,8 @@ export async function createCheckout(
 		seats: input.seats,
 		customerEmail: account.email,
 		returnUrl: returnUrl(),
+		// CAREEROS (P3-T05): the chosen way to pay
+		...(input.method && { method: input.method }),
 	});
 	return "redirectUrl" in result
 		? { redirectUrl: result.redirectUrl, stkPushRequested: false }

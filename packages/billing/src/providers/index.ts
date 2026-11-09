@@ -48,7 +48,9 @@ export {
 	type BillingProvider,
 	type CancelInput,
 	type ChangeSeatsInput,
+	CHECKOUT_METHODS,
 	type CheckoutInput,
+	type CheckoutMethod,
 	type CheckoutResult,
 	type PortalInput,
 } from "./types";

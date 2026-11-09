@@ -4,6 +4,11 @@ import type { BillingInterval } from "@reactive-resume/db/schema";
 // CAREEROS (P3-T04, phase plan D1): what a payment provider adapter must do. The core knows only this interface, so a
 // real provider (P3-T05) plugs in without touching plans, seats or quotas.
 
+// CAREEROS (P3-T05): how the customer pays. Card renews by itself on providers that support subscriptions; M-Pesa pays
+// one period at a time. A provider that has only one way to pay (the fake one) ignores it.
+export const CHECKOUT_METHODS = ["card", "mpesa"] as const;
+export type CheckoutMethod = (typeof CHECKOUT_METHODS)[number];
+
 export type CheckoutInput = {
 	orgId: string;
 	planId: string;
@@ -12,6 +17,8 @@ export type CheckoutInput = {
 	customerEmail: string;
 	/** Where the provider sends the customer back to. Built by the server, never taken from the client. */
 	returnUrl: string;
+	/** CAREEROS (P3-T05): how to pay; a provider treats a missing method as `card`. */
+	method?: CheckoutMethod;
 };
 
 /** Either a page to send the browser to, or a prompt already pushed to the customer's phone (M-Pesa STK push). */

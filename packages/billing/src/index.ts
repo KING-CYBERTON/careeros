@@ -52,6 +52,7 @@ export { recordManualPayment, type ManualPaymentInput } from "./manual-payment";
 export { listActivePlans, loadPlanPrices, type PlanListing } from "./plans";
 export { isSelfServicePlan, priceFor, SELF_SERVICE_PLAN_IDS, type Currency, type PlanPrices } from "./pricing";
 export {
+	CHECKOUT_METHODS,
 	createFakeProvider,
 	fakeDecisionEvent,
 	FAKE_SIGNATURE_HEADER,
@@ -68,6 +69,7 @@ export {
 	type CancelInput,
 	type ChangeSeatsInput,
 	type CheckoutInput,
+	type CheckoutMethod,
 	type CheckoutResult,
 	type FakeCheckoutSession,
 	type FakeEventBody,
