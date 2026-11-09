@@ -240,9 +240,6 @@ async function loadSource(userId: string, input: RenderInput): Promise<{ subject
 		if (!builtIn) throw notFound();
 		return input.source ?? { subject: builtIn.subject, body: builtIn.body };
 	}
-	// The text of a stored template is the stored text; a client cannot replace it.
-	if (input.source)
-		throw new ORPCError("BAD_REQUEST", { message: "Only a built-in template can be given a source text." });
 	const [row] = await db
 		.select({ subject: schema.emailTemplate.subject, body: schema.emailTemplate.body })
 		.from(schema.emailTemplate)
@@ -264,6 +261,10 @@ export async function renderForApplication(userId: string, input: RenderInput) {
 	const source = await loadSource(userId, input);
 	// Another member's application is "not found", exactly like one that does not exist.
 	const application = await applicationService.getById({ id: input.applicationId, userId });
+	// Only after the template and the application are known to be the caller's: a foreign or unknown id answers "not
+	// found" whatever else the request holds. The text of a stored template is the stored text; a client cannot replace it.
+	if (input.source && !isBuiltInId(input.templateId))
+		throw new ORPCError("BAD_REQUEST", { message: "Only a built-in template can be given a source text." });
 	const [person] = await db
 		.select({ name: schema.user.name, email: schema.user.email, timezone: schema.user.timezone })
 		.from(schema.user)

@@ -398,6 +398,13 @@ describe.skipIf(!configured)("Email templates (API)", () => {
 				await expect(as(memberB, orgB).render({ templateId: id, applicationId: applicationB })).rejects.toMatchObject({
 					code: "NOT_FOUND",
 				});
+				// A source text does not turn "not found" into a validation error: foreign and unknown ids look alike.
+				const source = { subject: "s", body: "b" };
+				for (const templateId of [id, `unknown-${run}`]) {
+					await expect(
+						as(memberB, orgB).render({ templateId, applicationId: applicationB, source }),
+					).rejects.toMatchObject({ code: "NOT_FOUND" });
+				}
 			}
 			const rows = (
 				await owner.query(`SELECT id, name, archived_at FROM email_template WHERE organization_id = $1 ORDER BY id`, [
