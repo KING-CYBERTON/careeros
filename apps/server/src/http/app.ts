@@ -40,6 +40,8 @@ import { handleFakeCheckoutDecision, handleFakeCheckoutPage } from "./billing-fa
 import { BILLING_WEBHOOK_MAX_BYTES, handleBillingWebhook } from "./billing-webhook";
 import { handleCareerJobs } from "./career-jobs";
 import { handleCustomDomain, handleTraefikProvider } from "./custom-domain";
+// CAREEROS (P6-T02): the Plunk email event webhook
+import { EMAIL_WEBHOOK_MAX_BYTES, handleEmailWebhook } from "./email-webhook";
 // CAREEROS (P5-T01): CORS for the extension's read of the host-branding route
 import {
 	EXTENSION_CLIPPER_CORS_ROUTES,
@@ -151,6 +153,8 @@ export function createApp(options: AppOptions = {}) {
 	// CAREEROS (P3-T04): a provider event is a small JSON document; the fake test page posts two short strings
 	app.use("/api/billing/webhook/*", limitBody(BILLING_WEBHOOK_MAX_BYTES));
 	app.use("/api/billing/fake/*", limitBody(8 * 1024));
+	// CAREEROS (P6-T02): a Plunk event is a small JSON document
+	app.use("/api/email/webhook/*", limitBody(EMAIL_WEBHOOK_MAX_BYTES));
 
 	app.post("/api/storage/stage", (c) => prepareStagedBody(c.req.raw));
 	app.all("/api/rpc/*", (c) => withStagedBody(c.req.raw, (request) => handleRpc(request, client(c), c.get("host"))));
@@ -168,6 +172,8 @@ export function createApp(options: AppOptions = {}) {
 	app.post("/api/billing/webhook/:provider", (c) =>
 		handleBillingWebhook(c.req.raw, c.get("host"), c.req.param("provider"), client(c)),
 	);
+	// CAREEROS (P6-T02): platform host only, shared secret header first
+	app.post("/api/email/webhook/plunk", (c) => handleEmailWebhook(c.req.raw, c.get("host"), client(c)));
 	app.get("/api/billing/fake/checkout", (c) => handleFakeCheckoutPage(c.req.raw, c.get("host"), client(c)));
 	app.post("/api/billing/fake/decision", (c) => handleFakeCheckoutDecision(c.req.raw, c.get("host"), client(c)));
 	app.get("/api/auth/oauth", (c) => handleOAuth(c.req.raw));

@@ -840,6 +840,9 @@ importers:
       '@reactive-resume/db':
         specifier: workspace:*
         version: link:../../packages/db
+      '@reactive-resume/email':
+        specifier: workspace:*
+        version: link:../../packages/email
       '@reactive-resume/env':
         specifier: workspace:*
         version: link:../../packages/env
@@ -1873,12 +1876,18 @@ importers:
 
   packages/email:
     dependencies:
+      '@reactive-resume/db':
+        specifier: workspace:*
+        version: link:../db
       '@reactive-resume/env':
         specifier: workspace:*
         version: link:../env
       '@reactive-resume/utils':
         specifier: workspace:*
         version: link:../utils
+      drizzle-orm:
+        specifier: 'catalog:'
+        version: 1.0.0-rc.4(@cloudflare/workers-types@5.20261029.1)(@types/pg@8.23.1)(expo-sqlite@58.0.14(expo@58.0.21)(react-native@0.88.1(@babel/core@7.29.7(supports-color@7.2.0))(@react-native/metro-config@0.88.1(@babel/core@7.29.7(supports-color@7.2.0))(supports-color@7.2.0))(@types/react@19.3.0)(react@19.3.1)(supports-color@7.2.0))(react@19.3.1))(pg@8.23.1)(zod@4.6.7)
       nodemailer:
         specifier: ^10.3.1
         version: 10.3.1

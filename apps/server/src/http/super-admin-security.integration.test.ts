@@ -21,7 +21,11 @@ const configured = Boolean(process.env.CAREEROS_TEST_DATABASE_URL && process.env
 
 // The shared setup file replaces the tenancy module; this test needs the real host resolver and organization scope.
 vi.unmock("@careeros/tenancy");
-vi.mock("@reactive-resume/email/transport", () => ({ sendEmail: vi.fn(async () => undefined) }));
+// CAREEROS (P6-T02): `deliverEmail` too, because the console procedure admin.email.sendTest is served in this suite and must send nothing.
+vi.mock("@reactive-resume/email/transport", () => ({
+	sendEmail: vi.fn(async () => undefined),
+	deliverEmail: vi.fn(async () => ({ provider: "log", outcome: "logged" })),
+}));
 
 const PASSWORD = "correct-horse-battery";
 const PLATFORM = "localhost:3000";

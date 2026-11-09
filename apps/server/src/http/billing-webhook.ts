@@ -20,7 +20,7 @@ const json = (body: unknown, status: number, headers: HeadersInit = {}) =>
 const notFound = () => json({ defined: false, code: "NOT_FOUND", status: 404, message: "Not found" }, 404);
 
 /** Reads at most `limit` bytes of the body; undefined when it is larger. */
-async function readCapped(request: Request, limit: number): Promise<Uint8Array | undefined> {
+export async function readCapped(request: Request, limit: number): Promise<Uint8Array | undefined> {
 	const declared = Number(request.headers.get("content-length"));
 	if (Number.isFinite(declared) && declared > limit) return undefined;
 	if (!request.body) return new Uint8Array();

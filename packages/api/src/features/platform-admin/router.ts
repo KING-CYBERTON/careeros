@@ -25,6 +25,7 @@ import z from "zod";
 import { orgSubdomainOrigin } from "@reactive-resume/auth/email-brand";
 import { protectedProcedure, protectedProcedureWithoutOrg } from "../../context";
 import { accountRateLimit } from "../../middleware/rate-limit";
+import { sendTestEmailToAdmin } from "./email-test";
 
 // CAREEROS (P3-T07, phase plan D6, D7): the Super Admin console's procedures and the two member-facing pieces (the
 // announcement banner and the support-session banner). Every admin procedure:
@@ -204,6 +205,21 @@ export const adminRouter = {
 			.route({ ...route, method: "POST", operationId: "adminEndAnnouncement", summary: "End an announcement now" })
 			.input(z.object({ id }))
 			.handler(({ context, input }) => run(() => endAnnouncement(context.actorId, input.id))),
+	},
+
+	// CAREEROS (P6-T02): mails the signed-in admin themself with a fixed template and returns the provider's answer. No
+	// recipient input. The platform-admin check runs in the database first, then the send, then a non-`admin.*` audit row.
+	email: {
+		sendTest: adminProcedure
+			.route({ ...route, method: "POST", operationId: "adminSendTestEmail", summary: "Send a test email to yourself" })
+			.input(z.object({}).optional())
+			.use(accountRateLimit)
+			.handler(({ context }) =>
+				run(async () => {
+					await assertPlatformAdmin(context.actorId);
+					return sendTestEmailToAdmin(context.actorId, context.user.email);
+				}),
+			),
 	},
 
 	impersonation: {

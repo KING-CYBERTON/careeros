@@ -81,6 +81,8 @@ export const SUPER_ADMIN_PROCEDURES: readonly SuperAdminProcedure[] = [
 		}),
 	},
 	{ path: "admin.announcements.end", effect: "write", input: (s) => ({ id: s.announcementId }) },
+	// CAREEROS (P6-T02): mails the signed-in admin themself; sends mail and writes one `email.test_sent` platform audit row.
+	{ path: "admin.email.sendTest", effect: "write", input: () => ({}) },
 	{
 		path: "admin.impersonation.start",
 		effect: "write",

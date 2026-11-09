@@ -784,6 +784,11 @@ export const globalTables: readonly AllowListEntry[] = [
 			"P3-T05: the payment provider's plan codes (one per CareerOS plan, interval, currency, seat count and price), created lazily and cached. Global like the price list: it has no organization_id and holds no tenant data, only provider plan codes and prices. The app role has no privilege on it and reaches it only through careeros_billing_provider_plan_get, _put and _by_code (definer functions); row level security is forced, with a policy for the owner role alone",
 	},
 	{
+		table: "email_suppression",
+		reason:
+			"P6-T02: addresses the email provider reported as hard bounced or complained about, kept as sha256 of the lower-cased address (the address itself is never stored). Global: a bounce is about the address, not an organization, so it has no organization_id and holds no tenant data. The app role has no privilege on it and reaches it only through careeros_email_is_suppressed and careeros_email_suppress (definer functions); row level security is forced, with a policy for the owner role alone",
+	},
+	{
 		table: "announcement_dismissal",
 		reason:
 			"P3-T07: which member dismissed which platform announcement (a user id and an announcement id). It has no organization_id: a dismissal belongs to the person, whatever organization they act in, and goes with the account (ON DELETE CASCADE). The app role has no privilege on it; careeros_announcement_dismiss is the only writer",

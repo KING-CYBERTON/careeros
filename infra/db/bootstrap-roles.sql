@@ -123,6 +123,10 @@ BEGIN
 	IF to_regclass('public.billing_provider_plan') IS NOT NULL THEN
 		REVOKE ALL ON TABLE public.billing_provider_plan FROM careeros_app;
 	END IF;
+	-- P6-T02: email_suppression is reached only through careeros_email_is_suppressed and careeros_email_suppress.
+	IF to_regclass('public.email_suppression') IS NOT NULL THEN
+		REVOKE ALL ON TABLE public.email_suppression FROM careeros_app;
+	END IF;
 END
 $$;
 

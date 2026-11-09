@@ -214,6 +214,19 @@ export const env = createEnv({
 		SMTP_PASS: z.string().min(1).optional(),
 		SMTP_FROM: z.string().min(1).optional(),
 		SMTP_SECURE: z.stringbool().default(false),
+		// CAREEROS (P6-T02): how email leaves the platform. Unset: smtp when the SMTP_* variables are complete (upstream
+		// behaviour), else log. `plunk` sends through Plunk's HTTP API (hosted Plunk has no SMTP relay) and needs the
+		// variables below. The keys are server only: never returned by an API, never logged.
+		EMAIL_PROVIDER: z.enum(["plunk", "smtp", "log"]).optional(),
+		PLUNK_SECRET_KEY: z.string().trim().min(1).optional(),
+		PLUNK_API_URL: z
+			.url({ protocol: /^https?$/ })
+			.transform((value) => value.replace(/\/+$/, ""))
+			.default("https://next-api.useplunk.com"),
+		// The verified sending address, for example no-reply@ayopa.co.ke. Only the display name changes per organization.
+		EMAIL_FROM_ADDRESS: z.email().optional(),
+		// Shared secret of the Plunk workflow's Webhook step (header x-careeros-webhook-secret). Plunk does not sign events.
+		PLUNK_WEBHOOK_SECRET: z.string().min(1).optional(),
 
 		// Storage (Optional)
 		STORAGE_BACKEND: z.enum(["local", "s3", "blob", "r2"]),
@@ -327,6 +340,16 @@ if (env.BILLING_PROVIDER === "paystack") {
 		throw new Error(
 			"PAYSTACK_SECRET_KEY is a test key and is refused when NODE_ENV=production. Set PAYSTACK_ALLOW_TEST_KEY=true on staging.",
 		);
+}
+
+// CAREEROS (P6-T02): the plunk provider needs its key, a verified sender address and the webhook secret.
+if (env.EMAIL_PROVIDER === "plunk") {
+	if (!env.PLUNK_SECRET_KEY || !env.EMAIL_FROM_ADDRESS || !env.PLUNK_WEBHOOK_SECRET)
+		throw new Error("EMAIL_PROVIDER=plunk requires PLUNK_SECRET_KEY, EMAIL_FROM_ADDRESS and PLUNK_WEBHOOK_SECRET.");
+	if (!env.PLUNK_SECRET_KEY.startsWith("sk_"))
+		throw new Error("PLUNK_SECRET_KEY must be a Plunk secret key (it starts with sk_).");
+	if (env.PLUNK_WEBHOOK_SECRET.length < 32)
+		throw new Error("PLUNK_WEBHOOK_SECRET must be at least 32 characters (openssl rand -hex 32).");
 }
 
 if (

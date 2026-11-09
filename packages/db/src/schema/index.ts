@@ -29,3 +29,5 @@ export * from "./ai-usage";
 export * from "./email-template";
 // CAREEROS: Super Admin console tables: announcements, their dismissals and impersonation sessions (P3-T07)
 export * from "./platform-admin";
+// CAREEROS (P6-T02): addresses the email provider reported as bounced or complained about
+export * from "./email";

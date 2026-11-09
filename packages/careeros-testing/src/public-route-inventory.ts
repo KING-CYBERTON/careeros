@@ -10,14 +10,17 @@ export type PublicRouteClass =
 	/** Anyone may call it, but nothing happens before the provider's signature over the raw body checks out. */
 	| "public-signature-verified"
 	/** Anyone holding an unforgeable, signed, short-lived token may call it. */
-	| "public-capability-token";
+	| "public-capability-token"
+	/** Anyone holding the shared secret may call it; the sender cannot sign its events, so a static secret header is the proof. */
+	| "public-shared-secret";
 
 export type PublicRoute = {
 	class: PublicRouteClass;
 	/** Which host may serve it. Anything else answers 404. */
 	host: "platform";
 	/** Where the organization the request acts on comes from. Never the host, a header or an unsigned field. */
-	orgFrom: "signed-metadata" | "signed-token";
+	/** `none`: the route acts on no organization. */
+	orgFrom: "signed-metadata" | "signed-token" | "none";
 	reason: string;
 };
 
@@ -42,5 +45,16 @@ export const BILLING_PUBLIC_ROUTES: Record<string, PublicRoute> = {
 		host: "platform",
 		orgFrom: "signed-token",
 		reason: "The fake provider's approve-or-decline action; the same signed session token",
+	},
+};
+
+/** `METHOD /path` of the Hono route, for the email area (`/api/email/*`, P6-T02). */
+export const EMAIL_PUBLIC_ROUTES: Record<string, PublicRoute> = {
+	"POST /api/email/webhook/plunk": {
+		class: "public-shared-secret",
+		host: "platform",
+		orgFrom: "none",
+		reason:
+			"Plunk event webhook (P6-T02). Plunk does not sign events, so the header x-careeros-webhook-secret is compared in constant time with PLUNK_WEBHOOK_SECRET before the body is read; a missing or wrong secret is 401. It touches no organization: a permanent bounce or a complaint adds sha256 of the address to the global suppression list through a definer function, and every other event does nothing",
 	},
 };

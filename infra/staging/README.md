@@ -245,6 +245,19 @@ node tooling/careeros/platform-admin.mjs list
 
 Each change writes a platform audit row (`admin.role_granted` or `admin.role_revoked`) with the operator's name and no email address. A new admin must turn on two-factor authentication in Settings before the console opens; until then every console call answers 403. Support (impersonation) sessions need `ORG_HOST_PATTERN` set, because they start on the member's organization subdomain.
 
+## Email through Plunk (P6-T02)
+
+Staging sends email through Plunk (hosted; it has no SMTP relay). Until `EMAIL_PROVIDER` is set, staging only logs emails.
+
+1. In Plunk, add the staging sending domain (Settings, Domains) and create the records it shows at the DNS host: 3 DKIM `CNAME`, 1 SPF `TXT` (merge into an existing SPF record), 1 feedback `MX`; DMARC and MAIL FROM are optional. Wait until Plunk shows the domain as verified.
+2. In Plunk, copy the secret key (Settings, API Keys; it starts with `sk_`).
+3. Generate the webhook secret: `openssl rand -hex 32`.
+4. Edit the server `.env` and set `EMAIL_PROVIDER="plunk"`, `PLUNK_SECRET_KEY`, `EMAIL_FROM_ADDRESS` (an address on the verified domain) and `PLUNK_WEBHOOK_SECRET`. The server refuses to start with `plunk` and any of the four missing. Keep `PLUNK_API_URL` at its default.
+5. In Plunk, create a workflow triggered by `email.bounce` and `email.complaint`, with a Webhook step to `https://careeros-staging.ayopa.co.ke/api/email/webhook/plunk` and the header `x-careeros-webhook-secret: <the secret from step 3>`.
+6. Redeploy, sign in to `/admin` as a platform admin, open Email and choose Send test email. Expect `Queued` and a message in your inbox. The migration `p6_t02_email_suppression` creates the suppression list on deploy.
+
+Never put a real key or secret in `.env.staging.example` or in the repository.
+
 ## Security notes
 
 - No container publishes host ports; only `cloudflared` makes outbound connections.
