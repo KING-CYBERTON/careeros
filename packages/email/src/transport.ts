@@ -46,6 +46,7 @@ type ProviderEnv = Pick<
 const smtpComplete = (config: ProviderEnv) =>
 	Boolean(config.SMTP_HOST && config.SMTP_USER && config.SMTP_PASS && config.SMTP_FROM);
 
+// CAREEROS: P6-T02a - packages/api/src/features/flags/email-configured.ts mirrors this; keep the two in step.
 export const resolveEmailProvider = (config: ProviderEnv = env): EmailProvider => {
 	if (config.EMAIL_PROVIDER === "plunk") return config.PLUNK_SECRET_KEY && config.EMAIL_FROM_ADDRESS ? "plunk" : "log";
 	if (config.EMAIL_PROVIDER) return config.EMAIL_PROVIDER;

@@ -3,6 +3,7 @@ import { env } from "@reactive-resume/env/server";
 import { publicProcedure } from "../../context";
 import { isCareerSchedulingEnabled } from "../career/runner";
 import { isCustomDomainsEnabled } from "../custom-domain/service";
+import { isEmailConfigured } from "./email-configured";
 
 export type FeatureFlags = {
 	disableSignups: boolean;
@@ -15,9 +16,6 @@ export type FeatureFlags = {
 	customDomains?: boolean;
 	olacvSuggestion?: boolean;
 };
-
-// Mirrors isSmtpEnabled() in packages/email/src/transport.ts (kept local to avoid an api -> email dependency).
-const isSmtpEnabled = () => Boolean(env.SMTP_HOST && env.SMTP_USER && env.SMTP_PASS && env.SMTP_FROM);
 
 export const flagsRouter = {
 	get: publicProcedure
@@ -37,7 +35,7 @@ export const flagsRouter = {
 				disableSignups: z.boolean().describe("Whether new user signups are disabled on this instance."),
 				disableEmailAuth: z.boolean().describe("Whether email-based authentication is disabled on this instance."),
 				allowGuestLogin: z.boolean().describe("Whether visitors can continue as a guest on this instance."),
-				smtpEnabled: z.boolean().describe("Whether outbound email (SMTP) is configured on this instance."),
+				smtpEnabled: z.boolean().describe("Whether outbound email (SMTP or Plunk) is configured on this instance."),
 				careerSchedulingEnabled: z
 					.boolean()
 					.describe("Whether scheduled career work is configured on this deployment."),
@@ -58,7 +56,8 @@ export const flagsRouter = {
 			disableSignups: env.FLAG_DISABLE_SIGNUPS,
 			disableEmailAuth: env.FLAG_DISABLE_EMAIL_AUTH,
 			allowGuestLogin: env.FLAG_ENABLE_GUEST_LOGIN && !env.FLAG_DISABLE_SIGNUPS,
-			smtpEnabled: isSmtpEnabled(),
+			// CAREEROS: P6-T02a - wire name stays smtpEnabled for old mobile binaries; it now also counts Plunk.
+			smtpEnabled: isEmailConfigured(env),
 			careerSchedulingEnabled: isCareerSchedulingEnabled(),
 			appUrl: new URL(env.APP_URL).origin,
 			...(env.APP_ALIAS_URL ? { aliasUrl: new URL(env.APP_ALIAS_URL).origin } : {}),
