@@ -5,6 +5,8 @@ import { useRouter } from "expo-router";
 import { openBrowserAsync } from "expo-web-browser";
 import { useState } from "react";
 import { View } from "react-native";
+// CAREEROS (P4-T03): the searches section above the queue
+import { SearchesSection } from "./searches";
 import { client, orpc } from "@/api/client";
 import { useSession } from "@/auth/session";
 import { useCareerAction } from "@/features/career/hooks";
@@ -63,6 +65,10 @@ export function JobsScreen() {
 
 	return (
 		<Screen onRefresh={() => query.refetch()}>
+			<SearchesSection />
+			<Text variant="title" accessibilityRole="header">
+				{t`Jobs found for you`}
+			</Text>
 			<Text color="ink3">{t`Postings your automations found, best match first. Save one to your applications, or dismiss it and it never comes back.`}</Text>
 			<Segmented
 				label={t`Show jobs`}
