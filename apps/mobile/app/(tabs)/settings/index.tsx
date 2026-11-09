@@ -54,6 +54,13 @@ export default function SettingsScreen() {
 				<ListRow title={t`AI & developer`} leading="robot" chevron onPress={() => router.push(routes.settings("ai"))} />
 				{/* CAREEROS (P3-T06, D10): the plan and AI quota, read-only for every member; billing is web only */}
 				<ListRow title={t`Plan`} leading="sparkle" chevron onPress={() => router.push(routes.settings("plan"))} />
+				{/* CAREEROS (P5-T04): every member writes to employers from templates */}
+				<ListRow
+					title={t`Email templates`}
+					leading="envelope-simple"
+					chevron
+					onPress={() => router.push(routes.settings("email-templates"))}
+				/>
 			</SettingsGroup>
 			{/* CAREEROS (P2-T07): shown to owners and admins only; the API enforces the same rule. */}
 			{canManageBrand ? (

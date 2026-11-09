@@ -345,6 +345,8 @@ msgid "{0} (copy)"
 msgstr "{0} (copy)"
 
 #. placeholder {0}: current.name
+#. placeholder {0}: selected.name
+#: src/features/email-templates/write-email-sheet.tsx
 #: src/features/resume/builder/draft.ts
 msgid "{0} (mine)"
 msgstr "{0} (mine)"
@@ -1074,6 +1076,10 @@ msgstr "A personal workspace has one seat"
 #: src/features/platform-admin/impersonation-banner.tsx
 msgid "A platform administrator is signed in as you for support."
 msgstr "A platform administrator is signed in as you for support."
+
+#: src/features/email-templates/built-in-text.ts
+msgid "A question about working at {company}"
+msgstr "A question about working at {company}"
 
 #: src/features/applications/components/detail/next-step-card.tsx
 msgid "A reminder to check in, shown as the next step until you do."
@@ -1890,6 +1896,10 @@ msgstr "Already interviewing"
 msgid "Already invited"
 msgstr "Already invited"
 
+#: src/features/email-templates/my-templates-page.tsx
+msgid "Also available to you"
+msgstr "Also available to you"
+
 #: src/features/resume/editor/check/check-panel.tsx
 msgid "Also check the exported PDF"
 msgstr "Also check the exported PDF"
@@ -2026,6 +2036,10 @@ msgstr "Any font, in Advanced"
 #: src/features/platform-admin/organizations-page.tsx
 msgid "Any plan"
 msgstr "Any plan"
+
+#: src/features/email-templates/template-editor.tsx
+msgid "Any stage"
+msgstr "Any stage"
 
 #: src/features/platform-admin/organizations-page.tsx
 msgid "Any status"
@@ -2264,14 +2278,25 @@ msgstr "Approve the payment on your phone."
 msgid "Arabic"
 msgstr "Arabic"
 
+#: src/features/email-templates/my-templates-page.tsx
+#: src/features/email-templates/org-templates-page.tsx
 #: src/features/org-admin/cohorts-page.tsx
 msgid "Archive"
 msgstr "Archive"
 
 #. placeholder {0}: cohort.name
+#. placeholder {0}: entry.name
+#: src/features/email-templates/my-templates-page.tsx
+#: src/features/email-templates/org-templates-page.tsx
 #: src/features/org-admin/cohorts-page.tsx
 msgid "Archive {0}"
 msgstr "Archive {0}"
+
+#. placeholder {0}: entry.name
+#: src/features/email-templates/my-templates-page.tsx
+#: src/features/email-templates/org-templates-page.tsx
+msgid "Archive {0}?"
+msgstr "Archive {0}?"
 
 #: src/features/org-admin/cohorts-page.tsx
 msgid "Archived"
@@ -2703,6 +2728,10 @@ msgstr "Browsers where you signed in to the Job Clipper extension. Revoke one an
 #: src/features/homepage/ui.tsx
 msgid "Build your resume"
 msgstr "Build your resume"
+
+#: src/features/email-templates/labels.ts
+msgid "Built-in"
+msgstr "Built-in"
 
 #: src/features/settings/ai/web-access.tsx
 msgid "Built-in reader"
@@ -3248,6 +3277,8 @@ msgstr "Client ID"
 #: src/features/career/workspace/coach-sheet.tsx
 #: src/features/career/workspace/prepare.tsx
 #: src/features/documents/new-document-dialog.tsx
+#: src/features/email-templates/template-editor.tsx
+#: src/features/email-templates/write-email-sheet.tsx
 #: src/features/resume/editor/check/page-layer.tsx
 #: src/features/resume/editor/chrome/download-sheet.tsx
 #: src/features/resume/share/dns-records-dialog.tsx
@@ -3668,6 +3699,7 @@ msgstr "Copied."
 #: src/features/branding/domains-page.tsx
 #: src/features/career/coach-chat.tsx
 #: src/features/career/workspace/answer-library.tsx
+#: src/features/email-templates/write-email-sheet.tsx
 #: src/features/resume/share/copy-link-button.tsx
 #: src/features/resume/share/copy-text.tsx
 #: src/features/settings/ai/api-keys.tsx
@@ -3787,6 +3819,11 @@ msgstr "Couldn't add the passkey. Try again."
 msgid "Couldn't answer the invitation. Try again."
 msgstr "Couldn't answer the invitation. Try again."
 
+#: src/features/email-templates/my-templates-page.tsx
+#: src/features/email-templates/org-templates-page.tsx
+msgid "Couldn't archive the template. Try again."
+msgstr "Couldn't archive the template. Try again."
+
 #: src/features/assistant/conversation.tsx
 #: src/features/career/coach-thread.tsx
 msgid "Couldn't attach the file. Try again."
@@ -3880,6 +3917,10 @@ msgstr "Couldn't copy the transcript. Try again."
 #: src/features/resume/share/copy-text.tsx
 msgid "Couldn't copy to the clipboard. Try again."
 msgstr "Couldn't copy to the clipboard. Try again."
+
+#: src/features/email-templates/write-email-sheet.tsx
+msgid "Couldn't copy. Select the text and copy it yourself."
+msgstr "Couldn't copy. Select the text and copy it yourself."
 
 #: src/features/branding/domains-page.tsx
 msgid "Couldn't copy. Select the text instead."
@@ -4337,6 +4378,12 @@ msgstr "Couldn't save the story. Try again."
 msgid "Couldn't save the tags. Try again."
 msgstr "Couldn't save the tags. Try again."
 
+#: src/features/email-templates/my-templates-page.tsx
+#: src/features/email-templates/org-templates-page.tsx
+#: src/features/email-templates/write-email-sheet.tsx
+msgid "Couldn't save the template. Try again."
+msgstr "Couldn't save the template. Try again."
+
 #: src/features/settings/preferences.tsx
 msgid "Couldn't save the timezone. Try again."
 msgstr "Couldn't save the timezone. Try again."
@@ -4782,6 +4829,7 @@ msgid "Current plan"
 msgstr "Current plan"
 
 #: src/components/input/color-picker.tsx
+#: src/features/email-templates/labels.ts
 #: src/features/resume/editor/design/style-groups.tsx
 msgid "Custom"
 msgstr "Custom"
@@ -4822,6 +4870,15 @@ msgstr "Custom styles"
 #: src/features/resume/stylesheet/editor.tsx
 msgid "Custom styles aren't applied. Fix these errors to apply them:"
 msgstr "Custom styles aren't applied. Fix these errors to apply them:"
+
+#: src/features/email-templates/org-templates-page.tsx
+msgid "Customise"
+msgstr "Customise"
+
+#. placeholder {0}: entry.name
+#: src/features/email-templates/org-templates-page.tsx
+msgid "Customise {0}"
+msgstr "Customise {0}"
 
 #: src/libs/locale.ts
 msgid "Czech"
@@ -5537,10 +5594,18 @@ msgstr "earlier messages in this chat"
 #: src/features/career/workspace/preparation.tsx
 #: src/features/career/workspace/shell.tsx
 #: src/features/discovery/searches.tsx
+#: src/features/email-templates/my-templates-page.tsx
+#: src/features/email-templates/org-templates-page.tsx
 #: src/features/resume/editor/write/basics-card.tsx
 #: src/features/settings/ai/providers.tsx
 msgid "Edit"
 msgstr "Edit"
+
+#. placeholder {0}: entry.name
+#: src/features/email-templates/my-templates-page.tsx
+#: src/features/email-templates/org-templates-page.tsx
+msgid "Edit {0}"
+msgstr "Edit {0}"
 
 #. Screen reader label for button that edits a keyword chip. Variable is the current keyword text.
 #: src/components/input/chip-input.tsx
@@ -5624,6 +5689,11 @@ msgstr "Edit schedule"
 msgid "Edit search"
 msgstr "Edit search"
 
+#: src/features/email-templates/my-templates-page.tsx
+#: src/features/email-templates/org-templates-page.tsx
+msgid "Edit template"
+msgstr "Edit template"
+
 #: src/features/resume/editor/check/issues.ts
 msgid "Edit the email"
 msgstr "Edit the email"
@@ -5700,6 +5770,10 @@ msgstr "Email address"
 msgid "Email address won't be recognized"
 msgstr "Email address won't be recognized"
 
+#: src/features/email-templates/write-email-sheet.tsx
+msgid "Email copied"
+msgstr "Email copied"
+
 #: src/features/career/schedule-sheet.tsx
 msgid "Email copies are unavailable on this server. In-app notifications still appear in Today."
 msgstr "Email copies are unavailable on this server. In-app notifications still appear in Today."
@@ -5711,6 +5785,11 @@ msgstr "Email delivery isn't set up on this server, so the address isn't verifie
 #: src/features/branding/branding-page.tsx
 msgid "Email sender name"
 msgstr "Email sender name"
+
+#: src/features/email-templates/my-templates-page.tsx
+#: src/routes/dashboard/settings/route.tsx
+msgid "Email templates"
+msgstr "Email templates"
 
 #: src/features/applications/components/detail/next-step-card.tsx
 msgid "Email the recruiter"
@@ -5915,6 +5994,10 @@ msgstr "Every day"
 msgid "Every entry has dates in a form systems read, in order, and none in the future."
 msgstr "Every entry has dates in a form systems read, in order, and none in the future."
 
+#: src/features/email-templates/org-templates-page.tsx
+msgid "Every member of your organization sees this template."
+msgstr "Every member of your organization sees this template."
+
 #: src/features/platform-admin/audit-page.tsx
 msgid "Every organization and the platform, newest first."
 msgstr "Every organization and the platform, newest first."
@@ -6105,6 +6188,10 @@ msgstr "file read"
 msgid "Fill fields"
 msgstr "Fill fields"
 
+#: src/features/email-templates/write-email-sheet.tsx
+msgid "Fill in the [bracketed] parts before you send it."
+msgstr "Fill in the [bracketed] parts before you send it."
+
 #: src/features/applications/components/add-application-dialog.tsx
 msgid "Fill in the role and company. Connect an AI provider in Settings to read them from the posting."
 msgstr "Fill in the role and company. Connect an AI provider in Settings to read them from the posting."
@@ -6220,12 +6307,17 @@ msgstr "Focus, experience, why this role"
 msgid "Follow up"
 msgstr "Follow up"
 
+#: src/features/email-templates/built-in-text.ts
+msgid "Follow up after applying"
+msgstr "Follow up after applying"
+
 #. placeholder {0}: when(change.at)
 #: src/features/career/workspace/messages.tsx
 msgid "Follow up on {0}"
 msgstr "Follow up on {0}"
 
 #: src/features/applications/components/detail/next-step-card.tsx
+#: src/features/email-templates/labels.ts
 msgid "Follow-up"
 msgstr "Follow-up"
 
@@ -6240,6 +6332,10 @@ msgstr "Follow-up note"
 #: src/features/career/schedule-sheet.tsx
 msgid "Follow-up reminder"
 msgstr "Follow-up reminder"
+
+#: src/features/email-templates/built-in-text.ts
+msgid "Following up on my {role} application"
+msgstr "Following up on my {role} application"
 
 #: src/features/branding/branding-page.tsx
 msgid "Font"
@@ -6448,6 +6544,10 @@ msgstr "From your experience entries"
 msgid "From your message"
 msgstr "From your message"
 
+#: src/features/email-templates/my-templates-page.tsx
+msgid "From your organization and the built-in set. You can't change these here."
+msgstr "From your organization and the built-in set. You can't change these here."
+
 #: src/features/career/knowledge/facts.tsx
 msgid "From your resume"
 msgstr "From your resume"
@@ -6650,6 +6750,84 @@ msgstr "heard back"
 #: src/libs/locale.ts
 msgid "Hebrew"
 msgstr "Hebrew"
+
+#: src/features/email-templates/built-in-text.ts
+msgid "Hello {contactName},\n"
+"\n"
+"I applied for the {role} position at {company} and wanted to ask where my application stands. I am still very interested in the role, and I would be glad to send anything that would help your review.\n"
+"\n"
+"Thank you for your time.\n"
+"\n"
+"{fullName}\n"
+"{myEmail}"
+msgstr "Hello {contactName},\n"
+"\n"
+"I applied for the {role} position at {company} and wanted to ask where my application stands. I am still very interested in the role, and I would be glad to send anything that would help your review.\n"
+"\n"
+"Thank you for your time.\n"
+"\n"
+"{fullName}\n"
+"{myEmail}"
+
+#: src/features/email-templates/built-in-text.ts
+msgid "Hello {contactName},\n"
+"\n"
+"My name is {fullName}, and I am looking at {role} opportunities at {company}. I admire what your team is building, and I would value ten minutes of your time to hear how you got started there and what the team looks for.\n"
+"\n"
+"I know your days are full, so please say no if the timing is wrong. Any pointer you can share would help.\n"
+"\n"
+"Kind regards,\n"
+"{firstName}\n"
+"{myEmail}"
+msgstr "Hello {contactName},\n"
+"\n"
+"My name is {fullName}, and I am looking at {role} opportunities at {company}. I admire what your team is building, and I would value ten minutes of your time to hear how you got started there and what the team looks for.\n"
+"\n"
+"I know your days are full, so please say no if the timing is wrong. Any pointer you can share would help.\n"
+"\n"
+"Kind regards,\n"
+"{firstName}\n"
+"{myEmail}"
+
+#: src/features/email-templates/built-in-text.ts
+msgid "Hello {contactName},\n"
+"\n"
+"Thank you for offering me the {role} position at {company}. I am glad to be considered and I am excited about joining the team. Before I accept, I would like to talk through the pay and the start date. Given the scope of the role and my experience, I would like to discuss [the terms you have in mind].\n"
+"\n"
+"Could we find a time this week to go through it together?\n"
+"\n"
+"With thanks,\n"
+"{fullName}\n"
+"{myEmail}"
+msgstr "Hello {contactName},\n"
+"\n"
+"Thank you for offering me the {role} position at {company}. I am glad to be considered and I am excited about joining the team. Before I accept, I would like to talk through the pay and the start date. Given the scope of the role and my experience, I would like to discuss [the terms you have in mind].\n"
+"\n"
+"Could we find a time this week to go through it together?\n"
+"\n"
+"With thanks,\n"
+"{fullName}\n"
+"{myEmail}"
+
+#: src/features/email-templates/built-in-text.ts
+msgid "Hello {contactName},\n"
+"\n"
+"Thank you for taking the time to meet with me on {interviewDate} about the {role} role at {company}. Our conversation left me more excited about the work, and I would welcome the chance to take the next step.\n"
+"\n"
+"If there is anything I can send to help with your decision, just let me know.\n"
+"\n"
+"Best regards,\n"
+"{fullName}\n"
+"{myEmail}"
+msgstr "Hello {contactName},\n"
+"\n"
+"Thank you for taking the time to meet with me on {interviewDate} about the {role} role at {company}. Our conversation left me more excited about the work, and I would welcome the chance to take the next step.\n"
+"\n"
+"If there is anything I can send to help with your decision, just let me know.\n"
+"\n"
+"Best regards,\n"
+"{fullName}\n"
+"{myEmail}"
 
 #: src/features/settings/root.tsx
 msgid "Help & docs"
@@ -7189,6 +7367,14 @@ msgstr "It ends at {0}"
 msgid "It has entries but isn't placed on a page."
 msgstr "It has entries but isn't placed on a page."
 
+#: src/features/email-templates/write-email-sheet.tsx
+msgid "It is saved as it reads now. To reuse it for other applications, put {{company}} and the other variables back where the details are."
+msgstr "It is saved as it reads now. To reuse it for other applications, put {{company}} and the other variables back where the details are."
+
+#: src/features/email-templates/my-templates-page.tsx
+msgid "It leaves your list. Emails you already sent are not affected."
+msgstr "It leaves your list. Emails you already sent are not affected."
+
 #: src/features/career/knowledge/stories.tsx
 msgid "It may have been deleted. Choose another story or add a new one."
 msgstr "It may have been deleted. Choose another story or add a new one."
@@ -7467,6 +7653,7 @@ msgstr "Keywords"
 msgid "Khmer"
 msgstr "Khmer"
 
+#: src/features/email-templates/template-editor.tsx
 #: src/features/platform-admin/announcements-page.tsx
 msgid "Kind"
 msgstr "Kind"
@@ -8289,6 +8476,15 @@ msgstr "Members & invites"
 msgid "Members can view and export data but not change it until a payment is made."
 msgstr "Members can view and export data but not change it until a payment is made."
 
+#: src/features/email-templates/org-templates-page.tsx
+msgid "Members see the built-in template again instead."
+msgstr "Members see the built-in template again instead."
+
+#: src/features/email-templates/template-editor.tsx
+#: src/features/email-templates/write-email-sheet.tsx
+msgid "Message"
+msgstr "Message"
+
 #: src/features/platform-admin/announcements-page.tsx
 msgid "Message (plain text, up to 1,000 characters)"
 msgstr "Message (plain text, up to 1,000 characters)"
@@ -8317,6 +8513,10 @@ msgstr "Metrics"
 #: src/features/career/workspace/practise.tsx
 msgid "Microphone blocked. Allow it in your browser settings, or type your answer."
 msgstr "Microphone blocked. Allow it in your browser settings, or type your answer."
+
+#: src/features/email-templates/labels.ts
+msgid "Mine"
+msgstr "Mine"
 
 #: src/features/career/knowledge/preferences.tsx
 msgid "Minimum base salary"
@@ -8530,6 +8730,7 @@ msgstr "MRR"
 #: src/features/documents/documents-page.tsx
 #: src/features/documents/new-document-dialog.tsx
 #: src/features/documents/trash-page.tsx
+#: src/features/email-templates/template-editor.tsx
 #: src/features/org-admin/analytics-page.tsx
 #: src/features/org-admin/cohorts-page.tsx
 #: src/features/resume/editor/check/parser-view.tsx
@@ -8619,6 +8820,10 @@ msgstr "Needs sponsorship in {0}"
 msgid "Needs you"
 msgstr "Needs you"
 
+#: src/features/email-templates/labels.ts
+msgid "Negotiation"
+msgstr "Negotiation"
+
 #: src/libs/locale.ts
 msgid "Nepali"
 msgstr "Nepali"
@@ -8626,6 +8831,10 @@ msgstr "Nepali"
 #: src/features/resume/editor/write/entries.tsx
 msgid "Network"
 msgstr "Network"
+
+#: src/features/email-templates/labels.ts
+msgid "Networking"
+msgstr "Networking"
 
 #: src/features/career/knowledge/facts.tsx
 #: src/features/settings/ai/api-keys.tsx
@@ -8729,6 +8938,11 @@ msgstr "New section"
 msgid "New stage color"
 msgstr "New stage color"
 
+#: src/features/email-templates/my-templates-page.tsx
+#: src/features/email-templates/org-templates-page.tsx
+msgid "New template"
+msgstr "New template"
+
 #: src/features/platform-admin/audit-page.tsx
 msgid "Newer"
 msgstr "Newer"
@@ -8771,6 +8985,10 @@ msgstr "Next step: {0}"
 #: src/features/career/workspace/messages.tsx
 msgid "Next step: {0}. Adds a reminder to Today."
 msgstr "Next step: {0}. Adds a reminder to Today."
+
+#: src/features/email-templates/built-in-text.ts
+msgid "Next steps on the {role} offer"
+msgstr "Next steps on the {role} offer"
 
 #: src/features/settings/account/application-profile.tsx
 msgid "No"
@@ -8874,6 +9092,10 @@ msgstr "No education section was found."
 #: src/features/resume/editor/check/issues.ts
 msgid "No email address"
 msgstr "No email address"
+
+#: src/features/email-templates/write-email-sheet.tsx
+msgid "No email address for this contact yet. Add it in your mail app."
+msgstr "No email address for this contact yet. Add it in your mail app."
 
 #: src/features/ats-checker/messages.ts
 msgid "No email address was found."
@@ -9553,6 +9775,10 @@ msgstr "Open in {0}"
 msgid "Open in editor"
 msgstr "Open in editor"
 
+#: src/features/email-templates/write-email-sheet.tsx
+msgid "Open in mail app"
+msgstr "Open in mail app"
+
 #: src/features/career/workspace/saved.tsx
 msgid "Open in Offers"
 msgstr "Open in Offers"
@@ -9681,6 +9907,11 @@ msgstr "Or upload a resume PDF"
 msgid "Orange"
 msgstr "Orange"
 
+#: src/routes/dashboard/settings/route.tsx
+msgid "Org email templates"
+msgstr "Org email templates"
+
+#: src/features/email-templates/labels.ts
 #: src/features/organization/switcher.tsx
 #: src/features/platform-admin/audit-page.tsx
 #: src/features/platform-admin/metrics-page.tsx
@@ -9688,6 +9919,10 @@ msgstr "Orange"
 #: src/features/resume/editor/write/entries.tsx
 msgid "Organization"
 msgstr "Organization"
+
+#: src/features/email-templates/org-templates-page.tsx
+msgid "Organization email templates"
+msgstr "Organization email templates"
 
 #: src/features/platform-admin/audit-page.tsx
 msgid "Organization id"
@@ -10142,6 +10377,10 @@ msgstr "Plain text (.txt)"
 #: src/features/resume/share/download-tab.tsx
 msgid "Plain text with headings. Paste into application forms and notes."
 msgstr "Plain text with headings. Paste into application forms and notes."
+
+#: src/features/email-templates/template-editor.tsx
+msgid "Plain text. These are filled in from the application when you use the template, and show as [name] when there is nothing to fill in:"
+msgstr "Plain text. These are filled in from the application when you use the template, and show as [name] when there is nothing to fill in:"
 
 #: src/features/billing/invoices.tsx
 #: src/features/platform-admin/organization-page.tsx
@@ -10656,6 +10895,10 @@ msgstr "Re-export with fonts embedded, and check the text copies out cleanly."
 #: src/features/ats-checker/messages.ts
 msgid "Re-export with fonts embedded, then open the file and check that the text copies out cleanly."
 msgstr "Re-export with fonts embedded, then open the file and check that the text copies out cleanly."
+
+#: src/features/email-templates/built-in-text.ts
+msgid "Reach out to someone at the company"
+msgstr "Reach out to someone at the company"
 
 #: src/features/platform-admin/organization-page.tsx
 msgid "Reactivate"
@@ -11370,6 +11613,10 @@ msgstr "Resetting your password..."
 msgid "Respond by"
 msgstr "Respond by"
 
+#: src/features/email-templates/built-in-text.ts
+msgid "Respond to an offer"
+msgstr "Respond to an offer"
+
 #: src/features/documents/document-actions.tsx
 #: src/features/documents/trash-page.tsx
 #: src/features/org-admin/cohorts-page.tsx
@@ -11822,6 +12069,10 @@ msgstr "Save another offer to compare"
 msgid "Save as application…"
 msgstr "Save as application…"
 
+#: src/features/email-templates/write-email-sheet.tsx
+msgid "Save as my template"
+msgstr "Save as my template"
+
 #: src/dialogs/resume/index.tsx
 #: src/features/applications/components/application-form-sheet.tsx
 #: src/features/branding/branding-page.tsx
@@ -11882,6 +12133,12 @@ msgstr "Save story"
 #: src/features/documents/document-actions.tsx
 msgid "Save tags"
 msgstr "Save tags"
+
+#: src/features/email-templates/my-templates-page.tsx
+#: src/features/email-templates/org-templates-page.tsx
+#: src/features/email-templates/write-email-sheet.tsx
+msgid "Save template"
+msgstr "Save template"
 
 #: src/features/ats-checker/messages.ts
 msgid "Save the file with every page upright."
@@ -12008,6 +12265,10 @@ msgstr "Saved to Saved · Practice"
 #: src/features/discovery/review-queue.tsx
 msgid "Saved to your applications."
 msgstr "Saved to your applications."
+
+#: src/features/email-templates/write-email-sheet.tsx
+msgid "Saved to your templates"
+msgstr "Saved to your templates"
 
 #. placeholder {0}: new URL(url).host
 #: src/features/resume/share/address-field.tsx
@@ -12660,6 +12921,10 @@ msgstr "Show section icons"
 msgid "Show templates"
 msgstr "Show templates"
 
+#: src/features/email-templates/write-email-sheet.tsx
+msgid "Show templates for every stage"
+msgstr "Show templates for every stage"
+
 #: src/features/resume/editor/check/check-panel.tsx
 msgid "Show them again"
 msgstr "Show them again"
@@ -13101,6 +13366,10 @@ msgstr "Start each one with a concrete verb: built, led, reduced, migrated."
 msgid "Start from"
 msgstr "Start from"
 
+#: src/features/career/workspace/messages.tsx
+msgid "Start from a template for this stage, edit it, and send it from your own email."
+msgstr "Start from a template for this stage, edit it, and send it from your own email."
+
 #: src/features/documents/new-document-dialog.tsx
 msgid "Start from one you have and link the application."
 msgstr "Start from one you have and link the application."
@@ -13273,6 +13542,11 @@ msgstr "Stronger verb"
 msgid "Stylesheet editor"
 msgstr "Stylesheet editor"
 
+#: src/features/email-templates/template-editor.tsx
+#: src/features/email-templates/write-email-sheet.tsx
+msgid "Subject"
+msgstr "Subject"
+
 #: src/features/applications/components/detail/sent-documents.tsx
 msgid "Submission recorded {date}. The sent versions never change; current drafts stay editable. This record does not confirm employer receipt."
 msgstr "Submission recorded {date}. The sent versions never change; current drafts stay editable. This record does not confirm employer receipt."
@@ -13310,6 +13584,10 @@ msgstr "Suggest again"
 #: src/features/career/role-suggestions.tsx
 msgid "Suggest target roles (optional AI)"
 msgstr "Suggest target roles (optional AI)"
+
+#: src/features/email-templates/template-editor.tsx
+msgid "Suggested for"
+msgstr "Suggested for"
 
 #: src/features/documents/new-document-dialog.tsx
 msgid "Suggested from the source and the job. Change it anytime."
@@ -13522,6 +13800,7 @@ msgstr "Tell me about a time you disagreed with a colleague. How did you resolve
 msgid "Telugu"
 msgstr "Telugu"
 
+#: src/features/email-templates/write-email-sheet.tsx
 #: src/libs/resume/section.tsx
 #: src/routes/builder/$resumeId/-components/design-panel.tsx
 #: src/routes/builder/$resumeId/-components/document-details.tsx
@@ -13529,14 +13808,28 @@ msgstr "Telugu"
 msgid "Template"
 msgstr "Template"
 
+#: src/features/email-templates/my-templates-page.tsx
+#: src/features/email-templates/org-templates-page.tsx
+msgid "Template archived"
+msgstr "Template archived"
+
 #. placeholder {0}: templates[template].name
 #: src/features/resume/editor/design/template-group.tsx
 msgid "Template changed to {0}"
 msgstr "Template changed to {0}"
 
+#: src/features/email-templates/my-templates-page.tsx
+#: src/features/email-templates/org-templates-page.tsx
+msgid "Template saved"
+msgstr "Template saved"
+
 #: src/routes/builder/letter/-components/design-panel.tsx
 msgid "Template, type and colors follow the resume, so the pair always matches."
 msgstr "Template, type and colors follow the resume, so the pair always matches."
+
+#: src/features/email-templates/org-templates-page.tsx
+msgid "Templates"
+msgstr "Templates"
 
 #: src/features/ats-checker/checker.tsx
 msgid "Terms from the posting"
@@ -13641,6 +13934,18 @@ msgstr "Text under {minimum} pt can be misread when a system re-renders it."
 #: src/libs/locale.ts
 msgid "Thai"
 msgstr "Thai"
+
+#: src/features/email-templates/built-in-text.ts
+msgid "Thank you after an interview"
+msgstr "Thank you after an interview"
+
+#: src/features/email-templates/built-in-text.ts
+msgid "Thank you for meeting with me on {interviewDate}"
+msgstr "Thank you for meeting with me on {interviewDate}"
+
+#: src/features/email-templates/labels.ts
+msgid "Thank-you"
+msgstr "Thank-you"
 
 #: src/features/auth/pages/device.tsx
 msgid "That code is not valid or has expired. Start again from the extension."
@@ -14034,6 +14339,15 @@ msgstr "The support session could not be ended."
 msgid "The support session could not start."
 msgstr "The support session could not start."
 
+#: src/features/email-templates/org-templates-page.tsx
+#: src/features/email-templates/write-email-sheet.tsx
+msgid "The templates couldn't be loaded."
+msgstr "The templates couldn't be loaded."
+
+#: src/features/email-templates/org-templates-page.tsx
+msgid "The templates your members see under Write email. Customise one to replace the built-in text for everyone."
+msgstr "The templates your members see under Write email. Customise one to replace the built-in text for everyone."
+
 #: src/features/settings/ai/providers.tsx
 msgid "The test didn't run. Try again."
 msgstr "The test didn't run. Try again."
@@ -14188,6 +14502,10 @@ msgstr "This document is locked. Unlock it to get suggestions."
 #: src/features/branding/domains.ts
 msgid "This domain no longer serves your organization and is being deleted."
 msgstr "This domain no longer serves your organization and is being deleted."
+
+#: src/features/email-templates/write-email-sheet.tsx
+msgid "This email is too long to open in your mail app, so it was copied instead."
+msgstr "This email is too long to open in your mail app, so it was copied instead."
 
 #: src/features/career/workspace/answer-library.tsx
 msgid "This employer"
@@ -14438,6 +14756,10 @@ msgstr "This story is unavailable or uses facts that are switched off."
 msgid "This support link did not work"
 msgstr "This support link did not work"
 
+#: src/features/email-templates/write-email-sheet.tsx
+msgid "This template couldn't be filled in. Try again."
+msgstr "This template couldn't be filled in. Try again."
+
 #: src/features/applications/components/interview-dialog.tsx
 msgid "This time does not exist in the selected timezone. Choose another time."
 msgstr "This time does not exist in the selected timezone. Choose another time."
@@ -14515,6 +14837,11 @@ msgstr "Title"
 #: src/routes/builder/letter/-components/write-panel.tsx
 msgid "To"
 msgstr "To"
+
+#. placeholder {0}: render.data.to
+#: src/features/email-templates/write-email-sheet.tsx
+msgid "To: {0}"
+msgstr "To: {0}"
 
 #: src/features/applications/components/calendar-view.tsx
 #: src/features/resume/share/share-panel.tsx
@@ -14623,6 +14950,9 @@ msgstr "Try a sample"
 #: src/features/discovery/review-queue.tsx
 #: src/features/discovery/searches.tsx
 #: src/features/documents/library-error.tsx
+#: src/features/email-templates/my-templates-page.tsx
+#: src/features/email-templates/org-templates-page.tsx
+#: src/features/email-templates/write-email-sheet.tsx
 #: src/features/resume/editor/write/improve.tsx
 #: src/features/resume/preview/preview.browser.tsx
 #: src/features/resume/share/download-tab.tsx
@@ -15748,6 +16078,12 @@ msgstr "Write down what they asked while it's fresh. The coach compares your ans
 msgid "Write each role as a clear title and company line, with the dates alongside."
 msgstr "Write each role as a clear title and company line, with the dates alongside."
 
+#: src/features/career/workspace/messages.tsx
+#: src/features/career/workspace/shell.tsx
+#: src/features/email-templates/write-email-sheet.tsx
+msgid "Write email"
+msgstr "Write email"
+
 #: src/features/ats-checker/messages.ts
 msgid "Write it as one uninterrupted piece, with no special spacing."
 msgstr "Write it as one uninterrupted piece, with no special spacing."
@@ -15771,6 +16107,11 @@ msgstr "Write one about something you did, in five parts. Leave Result and Refle
 #: src/features/ats-checker/messages.ts
 msgid "Write the full address so it is recognized as a link."
 msgstr "Write the full address so it is recognized as a link."
+
+#. placeholder {0}: application.company
+#: src/features/career/workspace/messages.tsx
+msgid "Write to {0}"
+msgstr "Write to {0}"
 
 #: src/features/career/workspace/fit.tsx
 msgid "Write what you did."
@@ -15894,6 +16235,10 @@ msgstr "You forgot this before, so it wasn't saved again."
 msgid "You have no searches yet. Add one with the job titles, skills and places you want, plus the company job boards to watch. It runs on its own, and the best matches show up in the queue."
 msgstr "You have no searches yet. Add one with the job titles, skills and places you want, plus the company job boards to watch. It runs on its own, and the best matches show up in the queue."
 
+#: src/features/email-templates/my-templates-page.tsx
+msgid "You have no templates of your own yet. You can also save one from Write email."
+msgstr "You have no templates of your own yet. You can also save one from Write email."
+
 #: src/features/organization/members-page.tsx
 msgid "You need to belong to an organization to manage its members."
 msgstr "You need to belong to an organization to manage its members."
@@ -15909,6 +16254,10 @@ msgstr "You said: “{said}” Ask both companies before deciding."
 #: src/features/career/workspace/messages.tsx
 msgid "You send it from your own email."
 msgstr "You send it from your own email."
+
+#: src/features/email-templates/write-email-sheet.tsx
+msgid "You send it from your own email. Nothing is sent from here."
+msgstr "You send it from your own email. Nothing is sent from here."
 
 #: src/features/settings/account/security.tsx
 msgid "You sign in without one"
@@ -16210,6 +16559,10 @@ msgstr "Your organization keeps working until {end}, when the paid period ends. 
 msgid "Your organization keeps working until the paid period ends. Nothing is charged after that."
 msgstr "Your organization keeps working until the paid period ends. Nothing is charged after that."
 
+#: src/features/email-templates/my-templates-page.tsx
+msgid "Your own templates for writing to employers. They appear under Write email on every application."
+msgstr "Your own templates for writing to employers. They appear under Write email on every application."
+
 #: src/routes/builder/letter/-components/letter-shell.tsx
 msgid "Your phone number changed on the resume. The letter updated too."
 msgstr "Your phone number changed on the resume. The letter updated too."
@@ -16319,6 +16672,14 @@ msgstr "your stories"
 #: src/features/career/workspace/practise.tsx
 msgid "Your story couldn't be loaded."
 msgstr "Your story couldn't be loaded."
+
+#: src/features/email-templates/my-templates-page.tsx
+msgid "Your templates"
+msgstr "Your templates"
+
+#: src/features/email-templates/my-templates-page.tsx
+msgid "Your templates couldn't be loaded."
+msgstr "Your templates couldn't be loaded."
 
 #. placeholder {0}: trialDays ?? 0
 #: src/features/billing/billing-banner.tsx

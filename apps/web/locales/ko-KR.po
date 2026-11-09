@@ -350,6 +350,8 @@ msgid "{0} (copy)"
 msgstr "{0}(복사본)"
 
 #. placeholder {0}: current.name
+#. placeholder {0}: selected.name
+#: src/features/email-templates/write-email-sheet.tsx
 #: src/features/resume/builder/draft.ts
 msgid "{0} (mine)"
 msgstr ""
@@ -1078,6 +1080,10 @@ msgstr ""
 
 #: src/features/platform-admin/impersonation-banner.tsx
 msgid "A platform administrator is signed in as you for support."
+msgstr ""
+
+#: src/features/email-templates/built-in-text.ts
+msgid "A question about working at {company}"
 msgstr ""
 
 #: src/features/applications/components/detail/next-step-card.tsx
@@ -1895,6 +1901,10 @@ msgstr "이미 인터뷰 중"
 msgid "Already invited"
 msgstr ""
 
+#: src/features/email-templates/my-templates-page.tsx
+msgid "Also available to you"
+msgstr ""
+
 #: src/features/resume/editor/check/check-panel.tsx
 msgid "Also check the exported PDF"
 msgstr "내보낸 PDF도 확인하세요."
@@ -2030,6 +2040,10 @@ msgstr "고급의 모든 글꼴"
 
 #: src/features/platform-admin/organizations-page.tsx
 msgid "Any plan"
+msgstr ""
+
+#: src/features/email-templates/template-editor.tsx
+msgid "Any stage"
 msgstr ""
 
 #: src/features/platform-admin/organizations-page.tsx
@@ -2269,13 +2283,24 @@ msgstr ""
 msgid "Arabic"
 msgstr "아랍어"
 
+#: src/features/email-templates/my-templates-page.tsx
+#: src/features/email-templates/org-templates-page.tsx
 #: src/features/org-admin/cohorts-page.tsx
 msgid "Archive"
 msgstr ""
 
 #. placeholder {0}: cohort.name
+#. placeholder {0}: entry.name
+#: src/features/email-templates/my-templates-page.tsx
+#: src/features/email-templates/org-templates-page.tsx
 #: src/features/org-admin/cohorts-page.tsx
 msgid "Archive {0}"
+msgstr ""
+
+#. placeholder {0}: entry.name
+#: src/features/email-templates/my-templates-page.tsx
+#: src/features/email-templates/org-templates-page.tsx
+msgid "Archive {0}?"
 msgstr ""
 
 #: src/features/org-admin/cohorts-page.tsx
@@ -2708,6 +2733,10 @@ msgstr ""
 #: src/features/homepage/ui.tsx
 msgid "Build your resume"
 msgstr "이력서 작성"
+
+#: src/features/email-templates/labels.ts
+msgid "Built-in"
+msgstr ""
 
 #: src/features/settings/ai/web-access.tsx
 msgid "Built-in reader"
@@ -3253,6 +3282,8 @@ msgstr "클라이언트 ID"
 #: src/features/career/workspace/coach-sheet.tsx
 #: src/features/career/workspace/prepare.tsx
 #: src/features/documents/new-document-dialog.tsx
+#: src/features/email-templates/template-editor.tsx
+#: src/features/email-templates/write-email-sheet.tsx
 #: src/features/resume/editor/check/page-layer.tsx
 #: src/features/resume/editor/chrome/download-sheet.tsx
 #: src/features/resume/share/dns-records-dialog.tsx
@@ -3673,6 +3704,7 @@ msgstr ""
 #: src/features/branding/domains-page.tsx
 #: src/features/career/coach-chat.tsx
 #: src/features/career/workspace/answer-library.tsx
+#: src/features/email-templates/write-email-sheet.tsx
 #: src/features/resume/share/copy-link-button.tsx
 #: src/features/resume/share/copy-text.tsx
 #: src/features/settings/ai/api-keys.tsx
@@ -3792,6 +3824,11 @@ msgstr "암호키를 추가할 수 없습니다. 다시 시도해 보세요."
 msgid "Couldn't answer the invitation. Try again."
 msgstr ""
 
+#: src/features/email-templates/my-templates-page.tsx
+#: src/features/email-templates/org-templates-page.tsx
+msgid "Couldn't archive the template. Try again."
+msgstr ""
+
 #: src/features/assistant/conversation.tsx
 #: src/features/career/coach-thread.tsx
 msgid "Couldn't attach the file. Try again."
@@ -3885,6 +3922,10 @@ msgstr "대화 기록을 복사할 수 없습니다. 다시 시도해 보세요.
 #: src/features/resume/share/copy-text.tsx
 msgid "Couldn't copy to the clipboard. Try again."
 msgstr "클립보드에 복사할 수 없습니다. 다시 시도해 보세요."
+
+#: src/features/email-templates/write-email-sheet.tsx
+msgid "Couldn't copy. Select the text and copy it yourself."
+msgstr ""
 
 #: src/features/branding/domains-page.tsx
 msgid "Couldn't copy. Select the text instead."
@@ -4342,6 +4383,12 @@ msgstr "이야기를 저장할 수 없습니다. 다시 시도해 보세요."
 msgid "Couldn't save the tags. Try again."
 msgstr "태그를 저장할 수 없습니다. 다시 시도해 보세요."
 
+#: src/features/email-templates/my-templates-page.tsx
+#: src/features/email-templates/org-templates-page.tsx
+#: src/features/email-templates/write-email-sheet.tsx
+msgid "Couldn't save the template. Try again."
+msgstr ""
+
 #: src/features/settings/preferences.tsx
 msgid "Couldn't save the timezone. Try again."
 msgstr "시간대를 저장할 수 없습니다. 다시 시도해 보세요."
@@ -4787,6 +4834,7 @@ msgid "Current plan"
 msgstr ""
 
 #: src/components/input/color-picker.tsx
+#: src/features/email-templates/labels.ts
 #: src/features/resume/editor/design/style-groups.tsx
 msgid "Custom"
 msgstr "사용자 지정"
@@ -4827,6 +4875,15 @@ msgstr "사용자 지정 스타일"
 #: src/features/resume/stylesheet/editor.tsx
 msgid "Custom styles aren't applied. Fix these errors to apply them:"
 msgstr "사용자 정의 스타일은 적용되지 않습니다. 적용하려면 다음 오류를 수정하세요."
+
+#: src/features/email-templates/org-templates-page.tsx
+msgid "Customise"
+msgstr ""
+
+#. placeholder {0}: entry.name
+#: src/features/email-templates/org-templates-page.tsx
+msgid "Customise {0}"
+msgstr ""
 
 #: src/libs/locale.ts
 msgid "Czech"
@@ -5542,10 +5599,18 @@ msgstr "이 채팅의 이전 메시지"
 #: src/features/career/workspace/preparation.tsx
 #: src/features/career/workspace/shell.tsx
 #: src/features/discovery/searches.tsx
+#: src/features/email-templates/my-templates-page.tsx
+#: src/features/email-templates/org-templates-page.tsx
 #: src/features/resume/editor/write/basics-card.tsx
 #: src/features/settings/ai/providers.tsx
 msgid "Edit"
 msgstr "편집하다"
+
+#. placeholder {0}: entry.name
+#: src/features/email-templates/my-templates-page.tsx
+#: src/features/email-templates/org-templates-page.tsx
+msgid "Edit {0}"
+msgstr ""
 
 #. Screen reader label for button that edits a keyword chip. Variable is the current keyword text.
 #: src/components/input/chip-input.tsx
@@ -5629,6 +5694,11 @@ msgstr "스케줄 편집"
 msgid "Edit search"
 msgstr ""
 
+#: src/features/email-templates/my-templates-page.tsx
+#: src/features/email-templates/org-templates-page.tsx
+msgid "Edit template"
+msgstr ""
+
 #: src/features/resume/editor/check/issues.ts
 msgid "Edit the email"
 msgstr "이메일 편집"
@@ -5705,6 +5775,10 @@ msgstr "이메일 주소"
 msgid "Email address won't be recognized"
 msgstr "이메일 주소가 인식되지 않습니다"
 
+#: src/features/email-templates/write-email-sheet.tsx
+msgid "Email copied"
+msgstr ""
+
 #: src/features/career/schedule-sheet.tsx
 msgid "Email copies are unavailable on this server. In-app notifications still appear in Today."
 msgstr ""
@@ -5715,6 +5789,11 @@ msgstr "이 서버에는 이메일 전송이 설정되어 있지 않으므로 �
 
 #: src/features/branding/branding-page.tsx
 msgid "Email sender name"
+msgstr ""
+
+#: src/features/email-templates/my-templates-page.tsx
+#: src/routes/dashboard/settings/route.tsx
+msgid "Email templates"
 msgstr ""
 
 #: src/features/applications/components/detail/next-step-card.tsx
@@ -5920,6 +5999,10 @@ msgstr "매일"
 msgid "Every entry has dates in a form systems read, in order, and none in the future."
 msgstr "모든 항목에는 시스템 읽기 형식의 날짜가 순서대로 있고 미래의 날짜는 없습니다."
 
+#: src/features/email-templates/org-templates-page.tsx
+msgid "Every member of your organization sees this template."
+msgstr ""
+
 #: src/features/platform-admin/audit-page.tsx
 msgid "Every organization and the platform, newest first."
 msgstr ""
@@ -6110,6 +6193,10 @@ msgstr "파일 읽기"
 msgid "Fill fields"
 msgstr "항목 채우기"
 
+#: src/features/email-templates/write-email-sheet.tsx
+msgid "Fill in the [bracketed] parts before you send it."
+msgstr ""
+
 #: src/features/applications/components/add-application-dialog.tsx
 msgid "Fill in the role and company. Connect an AI provider in Settings to read them from the posting."
 msgstr "직무와 회사를 입력하세요. 설정에서 AI 제공자를 연결하면 채용 공고에서 읽어 올 수 있습니다."
@@ -6225,12 +6312,17 @@ msgstr "집중 분야, 경험, 이 직무를 원하는 이유"
 msgid "Follow up"
 msgstr "다시 연락하기"
 
+#: src/features/email-templates/built-in-text.ts
+msgid "Follow up after applying"
+msgstr ""
+
 #. placeholder {0}: when(change.at)
 #: src/features/career/workspace/messages.tsx
 msgid "Follow up on {0}"
 msgstr "{0}에 후속 연락"
 
 #: src/features/applications/components/detail/next-step-card.tsx
+#: src/features/email-templates/labels.ts
 msgid "Follow-up"
 msgstr "후속 조치"
 
@@ -6245,6 +6337,10 @@ msgstr "후속 조치 메모"
 #: src/features/career/schedule-sheet.tsx
 msgid "Follow-up reminder"
 msgstr "후속 연락 알림"
+
+#: src/features/email-templates/built-in-text.ts
+msgid "Following up on my {role} application"
+msgstr ""
 
 #: src/features/branding/branding-page.tsx
 msgid "Font"
@@ -6453,6 +6549,10 @@ msgstr "귀하의 경험 항목에서"
 msgid "From your message"
 msgstr "메시지에서"
 
+#: src/features/email-templates/my-templates-page.tsx
+msgid "From your organization and the built-in set. You can't change these here."
+msgstr ""
+
 #: src/features/career/knowledge/facts.tsx
 msgid "From your resume"
 msgstr "이력서에서"
@@ -6655,6 +6755,53 @@ msgstr "답장을 들었다"
 #: src/libs/locale.ts
 msgid "Hebrew"
 msgstr "헤브루어"
+
+#: src/features/email-templates/built-in-text.ts
+msgid "Hello {contactName},\n"
+"\n"
+"I applied for the {role} position at {company} and wanted to ask where my application stands. I am still very interested in the role, and I would be glad to send anything that would help your review.\n"
+"\n"
+"Thank you for your time.\n"
+"\n"
+"{fullName}\n"
+"{myEmail}"
+msgstr ""
+
+#: src/features/email-templates/built-in-text.ts
+msgid "Hello {contactName},\n"
+"\n"
+"My name is {fullName}, and I am looking at {role} opportunities at {company}. I admire what your team is building, and I would value ten minutes of your time to hear how you got started there and what the team looks for.\n"
+"\n"
+"I know your days are full, so please say no if the timing is wrong. Any pointer you can share would help.\n"
+"\n"
+"Kind regards,\n"
+"{firstName}\n"
+"{myEmail}"
+msgstr ""
+
+#: src/features/email-templates/built-in-text.ts
+msgid "Hello {contactName},\n"
+"\n"
+"Thank you for offering me the {role} position at {company}. I am glad to be considered and I am excited about joining the team. Before I accept, I would like to talk through the pay and the start date. Given the scope of the role and my experience, I would like to discuss [the terms you have in mind].\n"
+"\n"
+"Could we find a time this week to go through it together?\n"
+"\n"
+"With thanks,\n"
+"{fullName}\n"
+"{myEmail}"
+msgstr ""
+
+#: src/features/email-templates/built-in-text.ts
+msgid "Hello {contactName},\n"
+"\n"
+"Thank you for taking the time to meet with me on {interviewDate} about the {role} role at {company}. Our conversation left me more excited about the work, and I would welcome the chance to take the next step.\n"
+"\n"
+"If there is anything I can send to help with your decision, just let me know.\n"
+"\n"
+"Best regards,\n"
+"{fullName}\n"
+"{myEmail}"
+msgstr ""
 
 #: src/features/settings/root.tsx
 msgid "Help & docs"
@@ -7194,6 +7341,14 @@ msgstr ""
 msgid "It has entries but isn't placed on a page."
 msgstr "항목이 있지만 페이지에 배치되지 않습니다."
 
+#: src/features/email-templates/write-email-sheet.tsx
+msgid "It is saved as it reads now. To reuse it for other applications, put {{company}} and the other variables back where the details are."
+msgstr ""
+
+#: src/features/email-templates/my-templates-page.tsx
+msgid "It leaves your list. Emails you already sent are not affected."
+msgstr ""
+
 #: src/features/career/knowledge/stories.tsx
 msgid "It may have been deleted. Choose another story or add a new one."
 msgstr "삭제되었을 수 있습니다. 다른 스토리를 선택하거나 새로 추가하세요."
@@ -7472,6 +7627,7 @@ msgstr "키워드"
 msgid "Khmer"
 msgstr "크메르어"
 
+#: src/features/email-templates/template-editor.tsx
 #: src/features/platform-admin/announcements-page.tsx
 msgid "Kind"
 msgstr ""
@@ -8294,6 +8450,15 @@ msgstr ""
 msgid "Members can view and export data but not change it until a payment is made."
 msgstr ""
 
+#: src/features/email-templates/org-templates-page.tsx
+msgid "Members see the built-in template again instead."
+msgstr ""
+
+#: src/features/email-templates/template-editor.tsx
+#: src/features/email-templates/write-email-sheet.tsx
+msgid "Message"
+msgstr ""
+
 #: src/features/platform-admin/announcements-page.tsx
 msgid "Message (plain text, up to 1,000 characters)"
 msgstr ""
@@ -8322,6 +8487,10 @@ msgstr ""
 #: src/features/career/workspace/practise.tsx
 msgid "Microphone blocked. Allow it in your browser settings, or type your answer."
 msgstr "마이크가 차단되었습니다. 브라우저 설정에서 허용하거나 답변을 입력하세요."
+
+#: src/features/email-templates/labels.ts
+msgid "Mine"
+msgstr ""
 
 #: src/features/career/knowledge/preferences.tsx
 msgid "Minimum base salary"
@@ -8535,6 +8704,7 @@ msgstr ""
 #: src/features/documents/documents-page.tsx
 #: src/features/documents/new-document-dialog.tsx
 #: src/features/documents/trash-page.tsx
+#: src/features/email-templates/template-editor.tsx
 #: src/features/org-admin/analytics-page.tsx
 #: src/features/org-admin/cohorts-page.tsx
 #: src/features/resume/editor/check/parser-view.tsx
@@ -8624,6 +8794,10 @@ msgstr ""
 msgid "Needs you"
 msgstr "확인 필요"
 
+#: src/features/email-templates/labels.ts
+msgid "Negotiation"
+msgstr ""
+
 #: src/libs/locale.ts
 msgid "Nepali"
 msgstr "네팔어"
@@ -8631,6 +8805,10 @@ msgstr "네팔어"
 #: src/features/resume/editor/write/entries.tsx
 msgid "Network"
 msgstr "네트워크"
+
+#: src/features/email-templates/labels.ts
+msgid "Networking"
+msgstr ""
 
 #: src/features/career/knowledge/facts.tsx
 #: src/features/settings/ai/api-keys.tsx
@@ -8734,6 +8912,11 @@ msgstr "새로운 섹션"
 msgid "New stage color"
 msgstr "새 단계 색상"
 
+#: src/features/email-templates/my-templates-page.tsx
+#: src/features/email-templates/org-templates-page.tsx
+msgid "New template"
+msgstr ""
+
 #: src/features/platform-admin/audit-page.tsx
 msgid "Newer"
 msgstr ""
@@ -8776,6 +8959,10 @@ msgstr "다음 단계: {0}"
 #: src/features/career/workspace/messages.tsx
 msgid "Next step: {0}. Adds a reminder to Today."
 msgstr "다음 단계: {0}. 오늘에 알림을 추가합니다."
+
+#: src/features/email-templates/built-in-text.ts
+msgid "Next steps on the {role} offer"
+msgstr ""
 
 #: src/features/settings/account/application-profile.tsx
 msgid "No"
@@ -8879,6 +9066,10 @@ msgstr "학력 섹션을 찾을 수 없습니다."
 #: src/features/resume/editor/check/issues.ts
 msgid "No email address"
 msgstr "이메일 주소 없음"
+
+#: src/features/email-templates/write-email-sheet.tsx
+msgid "No email address for this contact yet. Add it in your mail app."
+msgstr ""
 
 #: src/features/ats-checker/messages.ts
 msgid "No email address was found."
@@ -9558,6 +9749,10 @@ msgstr "{0}에서 열기"
 msgid "Open in editor"
 msgstr "편집기에서 열기"
 
+#: src/features/email-templates/write-email-sheet.tsx
+msgid "Open in mail app"
+msgstr ""
+
 #: src/features/career/workspace/saved.tsx
 msgid "Open in Offers"
 msgstr "오퍼에서 열기"
@@ -9686,6 +9881,11 @@ msgstr "또는 이력서 PDF 업로드"
 msgid "Orange"
 msgstr "주황색"
 
+#: src/routes/dashboard/settings/route.tsx
+msgid "Org email templates"
+msgstr ""
+
+#: src/features/email-templates/labels.ts
 #: src/features/organization/switcher.tsx
 #: src/features/platform-admin/audit-page.tsx
 #: src/features/platform-admin/metrics-page.tsx
@@ -9693,6 +9893,10 @@ msgstr "주황색"
 #: src/features/resume/editor/write/entries.tsx
 msgid "Organization"
 msgstr "기관"
+
+#: src/features/email-templates/org-templates-page.tsx
+msgid "Organization email templates"
+msgstr ""
 
 #: src/features/platform-admin/audit-page.tsx
 msgid "Organization id"
@@ -10147,6 +10351,10 @@ msgstr "일반 텍스트(.txt)"
 #: src/features/resume/share/download-tab.tsx
 msgid "Plain text with headings. Paste into application forms and notes."
 msgstr "제목이 포함된 일반 텍스트입니다. 입사지원서와 메모에 붙여넣으세요."
+
+#: src/features/email-templates/template-editor.tsx
+msgid "Plain text. These are filled in from the application when you use the template, and show as [name] when there is nothing to fill in:"
+msgstr ""
 
 #: src/features/billing/invoices.tsx
 #: src/features/platform-admin/organization-page.tsx
@@ -10661,6 +10869,10 @@ msgstr "폰트를 임베드하여 다시 내보낸 뒤, 텍스트가 깔끔하�
 #: src/features/ats-checker/messages.ts
 msgid "Re-export with fonts embedded, then open the file and check that the text copies out cleanly."
 msgstr "폰트를 임베드하여 다시 내보낸 뒤 파일을 열어 텍스트가 깔끔하게 복사되는지 확인하세요."
+
+#: src/features/email-templates/built-in-text.ts
+msgid "Reach out to someone at the company"
+msgstr ""
 
 #: src/features/platform-admin/organization-page.tsx
 msgid "Reactivate"
@@ -11375,6 +11587,10 @@ msgstr "비밀번호를 재설정하는 중입니다..."
 msgid "Respond by"
 msgstr "회신 기한"
 
+#: src/features/email-templates/built-in-text.ts
+msgid "Respond to an offer"
+msgstr ""
+
 #: src/features/documents/document-actions.tsx
 #: src/features/documents/trash-page.tsx
 #: src/features/org-admin/cohorts-page.tsx
@@ -11827,6 +12043,10 @@ msgstr "비교할 오퍼를 하나 더 저장하세요"
 msgid "Save as application…"
 msgstr "지원서로 저장…"
 
+#: src/features/email-templates/write-email-sheet.tsx
+msgid "Save as my template"
+msgstr ""
+
 #: src/dialogs/resume/index.tsx
 #: src/features/applications/components/application-form-sheet.tsx
 #: src/features/branding/branding-page.tsx
@@ -11887,6 +12107,12 @@ msgstr "스토리 저장"
 #: src/features/documents/document-actions.tsx
 msgid "Save tags"
 msgstr "태그 저장"
+
+#: src/features/email-templates/my-templates-page.tsx
+#: src/features/email-templates/org-templates-page.tsx
+#: src/features/email-templates/write-email-sheet.tsx
+msgid "Save template"
+msgstr ""
 
 #: src/features/ats-checker/messages.ts
 msgid "Save the file with every page upright."
@@ -12012,6 +12238,10 @@ msgstr "저장됨 · 연습에 저장됨"
 
 #: src/features/discovery/review-queue.tsx
 msgid "Saved to your applications."
+msgstr ""
+
+#: src/features/email-templates/write-email-sheet.tsx
+msgid "Saved to your templates"
 msgstr ""
 
 #. placeholder {0}: new URL(url).host
@@ -12665,6 +12895,10 @@ msgstr "섹션 아이콘 표시"
 msgid "Show templates"
 msgstr "템플릿 표시"
 
+#: src/features/email-templates/write-email-sheet.tsx
+msgid "Show templates for every stage"
+msgstr ""
+
 #: src/features/resume/editor/check/check-panel.tsx
 msgid "Show them again"
 msgstr "다시 보여주세요"
@@ -13106,6 +13340,10 @@ msgstr "각 항목을 구체적인 동사로 시작하세요: 구축했다, 이�
 msgid "Start from"
 msgstr "다음에서 시작"
 
+#: src/features/career/workspace/messages.tsx
+msgid "Start from a template for this stage, edit it, and send it from your own email."
+msgstr ""
+
 #: src/features/documents/new-document-dialog.tsx
 msgid "Start from one you have and link the application."
 msgstr "가지고 있는 것부터 시작하여 입사 지원서를 연결하세요."
@@ -13278,6 +13516,11 @@ msgstr "더 강한 동사"
 msgid "Stylesheet editor"
 msgstr "스타일시트 편집기"
 
+#: src/features/email-templates/template-editor.tsx
+#: src/features/email-templates/write-email-sheet.tsx
+msgid "Subject"
+msgstr ""
+
 #: src/features/applications/components/detail/sent-documents.tsx
 msgid "Submission recorded {date}. The sent versions never change; current drafts stay editable. This record does not confirm employer receipt."
 msgstr ""
@@ -13314,6 +13557,10 @@ msgstr "다시 제안"
 
 #: src/features/career/role-suggestions.tsx
 msgid "Suggest target roles (optional AI)"
+msgstr ""
+
+#: src/features/email-templates/template-editor.tsx
+msgid "Suggested for"
 msgstr ""
 
 #: src/features/documents/new-document-dialog.tsx
@@ -13527,6 +13774,7 @@ msgstr "동료와 의견이 달랐던 때를 말씀해 주세요. 어떻게 해�
 msgid "Telugu"
 msgstr "텔루구어"
 
+#: src/features/email-templates/write-email-sheet.tsx
 #: src/libs/resume/section.tsx
 #: src/routes/builder/$resumeId/-components/design-panel.tsx
 #: src/routes/builder/$resumeId/-components/document-details.tsx
@@ -13534,14 +13782,28 @@ msgstr "텔루구어"
 msgid "Template"
 msgstr "템플릿"
 
+#: src/features/email-templates/my-templates-page.tsx
+#: src/features/email-templates/org-templates-page.tsx
+msgid "Template archived"
+msgstr ""
+
 #. placeholder {0}: templates[template].name
 #: src/features/resume/editor/design/template-group.tsx
 msgid "Template changed to {0}"
 msgstr "템플릿이 {0}로 변경되었습니다."
 
+#: src/features/email-templates/my-templates-page.tsx
+#: src/features/email-templates/org-templates-page.tsx
+msgid "Template saved"
+msgstr ""
+
 #: src/routes/builder/letter/-components/design-panel.tsx
 msgid "Template, type and colors follow the resume, so the pair always matches."
 msgstr "템플릿, 유형 및 색상은 이력서를 따르므로 쌍이 항상 일치합니다."
+
+#: src/features/email-templates/org-templates-page.tsx
+msgid "Templates"
+msgstr ""
 
 #: src/features/ats-checker/checker.tsx
 msgid "Terms from the posting"
@@ -13646,6 +13908,18 @@ msgstr "{minimum} pt 아래의 텍스트는 시스템이 다시 렌더링할 때
 #: src/libs/locale.ts
 msgid "Thai"
 msgstr "태국어"
+
+#: src/features/email-templates/built-in-text.ts
+msgid "Thank you after an interview"
+msgstr ""
+
+#: src/features/email-templates/built-in-text.ts
+msgid "Thank you for meeting with me on {interviewDate}"
+msgstr ""
+
+#: src/features/email-templates/labels.ts
+msgid "Thank-you"
+msgstr ""
 
 #: src/features/auth/pages/device.tsx
 msgid "That code is not valid or has expired. Start again from the extension."
@@ -14039,6 +14313,15 @@ msgstr ""
 msgid "The support session could not start."
 msgstr ""
 
+#: src/features/email-templates/org-templates-page.tsx
+#: src/features/email-templates/write-email-sheet.tsx
+msgid "The templates couldn't be loaded."
+msgstr ""
+
+#: src/features/email-templates/org-templates-page.tsx
+msgid "The templates your members see under Write email. Customise one to replace the built-in text for everyone."
+msgstr ""
+
 #: src/features/settings/ai/providers.tsx
 msgid "The test didn't run. Try again."
 msgstr "테스트가 실행되지 않았습니다. 다시 시도해 보세요."
@@ -14192,6 +14475,10 @@ msgstr "이 문서는 잠겨 있습니다. 제안을 받으려면 잠금을 해�
 
 #: src/features/branding/domains.ts
 msgid "This domain no longer serves your organization and is being deleted."
+msgstr ""
+
+#: src/features/email-templates/write-email-sheet.tsx
+msgid "This email is too long to open in your mail app, so it was copied instead."
 msgstr ""
 
 #: src/features/career/workspace/answer-library.tsx
@@ -14443,6 +14730,10 @@ msgstr "이 스토리를 사용할 수 없거나 꺼진 사실을 사용하고 �
 msgid "This support link did not work"
 msgstr ""
 
+#: src/features/email-templates/write-email-sheet.tsx
+msgid "This template couldn't be filled in. Try again."
+msgstr ""
+
 #: src/features/applications/components/interview-dialog.tsx
 msgid "This time does not exist in the selected timezone. Choose another time."
 msgstr "선택한 시간대에 존재하지 않는 시간입니다. 다른 시간을 선택하세요."
@@ -14520,6 +14811,11 @@ msgstr "제목"
 #: src/routes/builder/letter/-components/write-panel.tsx
 msgid "To"
 msgstr "에게"
+
+#. placeholder {0}: render.data.to
+#: src/features/email-templates/write-email-sheet.tsx
+msgid "To: {0}"
+msgstr ""
 
 #: src/features/applications/components/calendar-view.tsx
 #: src/features/resume/share/share-panel.tsx
@@ -14628,6 +14924,9 @@ msgstr "샘플을 사용해 보세요"
 #: src/features/discovery/review-queue.tsx
 #: src/features/discovery/searches.tsx
 #: src/features/documents/library-error.tsx
+#: src/features/email-templates/my-templates-page.tsx
+#: src/features/email-templates/org-templates-page.tsx
+#: src/features/email-templates/write-email-sheet.tsx
 #: src/features/resume/editor/write/improve.tsx
 #: src/features/resume/preview/preview.browser.tsx
 #: src/features/resume/share/download-tab.tsx
@@ -15753,6 +16052,12 @@ msgstr "기억이 생생할 때 받은 질문을 적어 두세요. 코치가 답
 msgid "Write each role as a clear title and company line, with the dates alongside."
 msgstr "각 직무를 명확한 직함과 회사명 줄로 작성하고, 옆에 날짜를 함께 표기하세요."
 
+#: src/features/career/workspace/messages.tsx
+#: src/features/career/workspace/shell.tsx
+#: src/features/email-templates/write-email-sheet.tsx
+msgid "Write email"
+msgstr ""
+
 #: src/features/ats-checker/messages.ts
 msgid "Write it as one uninterrupted piece, with no special spacing."
 msgstr "특수한 간격 없이 하나의 이어진 텍스트로 작성하세요."
@@ -15776,6 +16081,11 @@ msgstr "자신이 한 일에 대한 이야기를 다섯 부분으로 나누어 �
 #: src/features/ats-checker/messages.ts
 msgid "Write the full address so it is recognized as a link."
 msgstr "링크로 인식되도록 전체 주소를 입력하세요."
+
+#. placeholder {0}: application.company
+#: src/features/career/workspace/messages.tsx
+msgid "Write to {0}"
+msgstr ""
 
 #: src/features/career/workspace/fit.tsx
 msgid "Write what you did."
@@ -15899,6 +16209,10 @@ msgstr "이전에 잊은 내용이라 다시 저장하지 않았습니다."
 msgid "You have no searches yet. Add one with the job titles, skills and places you want, plus the company job boards to watch. It runs on its own, and the best matches show up in the queue."
 msgstr ""
 
+#: src/features/email-templates/my-templates-page.tsx
+msgid "You have no templates of your own yet. You can also save one from Write email."
+msgstr ""
+
 #: src/features/organization/members-page.tsx
 msgid "You need to belong to an organization to manage its members."
 msgstr ""
@@ -15914,6 +16228,10 @@ msgstr "내가 한 말: “{said}” 결정하기 전에 두 회사 모두에 �
 #: src/features/career/workspace/messages.tsx
 msgid "You send it from your own email."
 msgstr "내 이메일에서 직접 보내세요."
+
+#: src/features/email-templates/write-email-sheet.tsx
+msgid "You send it from your own email. Nothing is sent from here."
+msgstr ""
 
 #: src/features/settings/account/security.tsx
 msgid "You sign in without one"
@@ -16215,6 +16533,10 @@ msgstr ""
 msgid "Your organization keeps working until the paid period ends. Nothing is charged after that."
 msgstr ""
 
+#: src/features/email-templates/my-templates-page.tsx
+msgid "Your own templates for writing to employers. They appear under Write email on every application."
+msgstr ""
+
 #: src/routes/builder/letter/-components/letter-shell.tsx
 msgid "Your phone number changed on the resume. The letter updated too."
 msgstr "이력서에 기재된 전화번호가 변경되었습니다. 편지도 업데이트되었습니다."
@@ -16324,6 +16646,14 @@ msgstr "내 스토리"
 #: src/features/career/workspace/practise.tsx
 msgid "Your story couldn't be loaded."
 msgstr "스토리를 불러올 수 없습니다."
+
+#: src/features/email-templates/my-templates-page.tsx
+msgid "Your templates"
+msgstr ""
+
+#: src/features/email-templates/my-templates-page.tsx
+msgid "Your templates couldn't be loaded."
+msgstr ""
 
 #. placeholder {0}: trialDays ?? 0
 #: src/features/billing/billing-banner.tsx

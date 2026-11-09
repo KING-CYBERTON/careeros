@@ -16,6 +16,8 @@ export const Route = createFileRoute("/dashboard/applications/$applicationId/{-$
 		// Practise opens with Speak selected ("Rehearse one answer aloud").
 		speak: z.boolean().optional().catch(undefined),
 		story: z.string().min(1).optional().catch(undefined),
+		// CAREEROS (P5-T04): the "Write email" sheet
+		email: z.literal(true).optional().catch(undefined),
 	}),
 	component: RouteComponent,
 });

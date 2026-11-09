@@ -350,6 +350,8 @@ msgid "{0} (copy)"
 msgstr "{0} (kópia)"
 
 #. placeholder {0}: current.name
+#. placeholder {0}: selected.name
+#: src/features/email-templates/write-email-sheet.tsx
 #: src/features/resume/builder/draft.ts
 msgid "{0} (mine)"
 msgstr ""
@@ -1078,6 +1080,10 @@ msgstr ""
 
 #: src/features/platform-admin/impersonation-banner.tsx
 msgid "A platform administrator is signed in as you for support."
+msgstr ""
+
+#: src/features/email-templates/built-in-text.ts
+msgid "A question about working at {company}"
 msgstr ""
 
 #: src/features/applications/components/detail/next-step-card.tsx
@@ -1895,6 +1901,10 @@ msgstr "Už pohovor"
 msgid "Already invited"
 msgstr ""
 
+#: src/features/email-templates/my-templates-page.tsx
+msgid "Also available to you"
+msgstr ""
+
 #: src/features/resume/editor/check/check-panel.tsx
 msgid "Also check the exported PDF"
 msgstr "Skontrolujte tiež exportovaný PDF"
@@ -2030,6 +2040,10 @@ msgstr "Ľubovoľné písmo v rozšírenom režime"
 
 #: src/features/platform-admin/organizations-page.tsx
 msgid "Any plan"
+msgstr ""
+
+#: src/features/email-templates/template-editor.tsx
+msgid "Any stage"
 msgstr ""
 
 #: src/features/platform-admin/organizations-page.tsx
@@ -2269,13 +2283,24 @@ msgstr ""
 msgid "Arabic"
 msgstr "Arabčina"
 
+#: src/features/email-templates/my-templates-page.tsx
+#: src/features/email-templates/org-templates-page.tsx
 #: src/features/org-admin/cohorts-page.tsx
 msgid "Archive"
 msgstr ""
 
 #. placeholder {0}: cohort.name
+#. placeholder {0}: entry.name
+#: src/features/email-templates/my-templates-page.tsx
+#: src/features/email-templates/org-templates-page.tsx
 #: src/features/org-admin/cohorts-page.tsx
 msgid "Archive {0}"
+msgstr ""
+
+#. placeholder {0}: entry.name
+#: src/features/email-templates/my-templates-page.tsx
+#: src/features/email-templates/org-templates-page.tsx
+msgid "Archive {0}?"
 msgstr ""
 
 #: src/features/org-admin/cohorts-page.tsx
@@ -2708,6 +2733,10 @@ msgstr ""
 #: src/features/homepage/ui.tsx
 msgid "Build your resume"
 msgstr "Zostavte si svoj životopis"
+
+#: src/features/email-templates/labels.ts
+msgid "Built-in"
+msgstr ""
 
 #: src/features/settings/ai/web-access.tsx
 msgid "Built-in reader"
@@ -3253,6 +3282,8 @@ msgstr "ID klienta"
 #: src/features/career/workspace/coach-sheet.tsx
 #: src/features/career/workspace/prepare.tsx
 #: src/features/documents/new-document-dialog.tsx
+#: src/features/email-templates/template-editor.tsx
+#: src/features/email-templates/write-email-sheet.tsx
 #: src/features/resume/editor/check/page-layer.tsx
 #: src/features/resume/editor/chrome/download-sheet.tsx
 #: src/features/resume/share/dns-records-dialog.tsx
@@ -3673,6 +3704,7 @@ msgstr ""
 #: src/features/branding/domains-page.tsx
 #: src/features/career/coach-chat.tsx
 #: src/features/career/workspace/answer-library.tsx
+#: src/features/email-templates/write-email-sheet.tsx
 #: src/features/resume/share/copy-link-button.tsx
 #: src/features/resume/share/copy-text.tsx
 #: src/features/settings/ai/api-keys.tsx
@@ -3792,6 +3824,11 @@ msgstr "Nepodarilo sa pridať prístupový kľúč. Skúste to znova."
 msgid "Couldn't answer the invitation. Try again."
 msgstr ""
 
+#: src/features/email-templates/my-templates-page.tsx
+#: src/features/email-templates/org-templates-page.tsx
+msgid "Couldn't archive the template. Try again."
+msgstr ""
+
 #: src/features/assistant/conversation.tsx
 #: src/features/career/coach-thread.tsx
 msgid "Couldn't attach the file. Try again."
@@ -3885,6 +3922,10 @@ msgstr "Prepis sa nepodarilo skopírovať. Skúste to znova."
 #: src/features/resume/share/copy-text.tsx
 msgid "Couldn't copy to the clipboard. Try again."
 msgstr "Nepodarilo sa skopírovať do schránky. Skúste to znova."
+
+#: src/features/email-templates/write-email-sheet.tsx
+msgid "Couldn't copy. Select the text and copy it yourself."
+msgstr ""
 
 #: src/features/branding/domains-page.tsx
 msgid "Couldn't copy. Select the text instead."
@@ -4342,6 +4383,12 @@ msgstr "Príbeh sa nepodarilo uložiť. Skúste to znova."
 msgid "Couldn't save the tags. Try again."
 msgstr "Tagy sa nepodarilo uložiť. Skúste to znova."
 
+#: src/features/email-templates/my-templates-page.tsx
+#: src/features/email-templates/org-templates-page.tsx
+#: src/features/email-templates/write-email-sheet.tsx
+msgid "Couldn't save the template. Try again."
+msgstr ""
+
 #: src/features/settings/preferences.tsx
 msgid "Couldn't save the timezone. Try again."
 msgstr "Časové pásmo sa nepodarilo uložiť. Skúste to znova."
@@ -4787,6 +4834,7 @@ msgid "Current plan"
 msgstr ""
 
 #: src/components/input/color-picker.tsx
+#: src/features/email-templates/labels.ts
 #: src/features/resume/editor/design/style-groups.tsx
 msgid "Custom"
 msgstr "Vlastné"
@@ -4827,6 +4875,15 @@ msgstr "Vlastné štýly"
 #: src/features/resume/stylesheet/editor.tsx
 msgid "Custom styles aren't applied. Fix these errors to apply them:"
 msgstr "Vlastné štýly sa nepoužijú. Ak ich chcete použiť, opravte tieto chyby:"
+
+#: src/features/email-templates/org-templates-page.tsx
+msgid "Customise"
+msgstr ""
+
+#. placeholder {0}: entry.name
+#: src/features/email-templates/org-templates-page.tsx
+msgid "Customise {0}"
+msgstr ""
 
 #: src/libs/locale.ts
 msgid "Czech"
@@ -5542,10 +5599,18 @@ msgstr "predchádzajúce správy v tomto chate"
 #: src/features/career/workspace/preparation.tsx
 #: src/features/career/workspace/shell.tsx
 #: src/features/discovery/searches.tsx
+#: src/features/email-templates/my-templates-page.tsx
+#: src/features/email-templates/org-templates-page.tsx
 #: src/features/resume/editor/write/basics-card.tsx
 #: src/features/settings/ai/providers.tsx
 msgid "Edit"
 msgstr "Upraviť"
+
+#. placeholder {0}: entry.name
+#: src/features/email-templates/my-templates-page.tsx
+#: src/features/email-templates/org-templates-page.tsx
+msgid "Edit {0}"
+msgstr ""
 
 #. Screen reader label for button that edits a keyword chip. Variable is the current keyword text.
 #: src/components/input/chip-input.tsx
@@ -5629,6 +5694,11 @@ msgstr "Upraviť naplánovanú úlohu"
 msgid "Edit search"
 msgstr ""
 
+#: src/features/email-templates/my-templates-page.tsx
+#: src/features/email-templates/org-templates-page.tsx
+msgid "Edit template"
+msgstr ""
+
 #: src/features/resume/editor/check/issues.ts
 msgid "Edit the email"
 msgstr "Upravte e-mail"
@@ -5705,6 +5775,10 @@ msgstr "E‑mailová adresa"
 msgid "Email address won't be recognized"
 msgstr "E-mailová adresa nebude rozpoznaná"
 
+#: src/features/email-templates/write-email-sheet.tsx
+msgid "Email copied"
+msgstr ""
+
 #: src/features/career/schedule-sheet.tsx
 msgid "Email copies are unavailable on this server. In-app notifications still appear in Today."
 msgstr ""
@@ -5715,6 +5789,11 @@ msgstr "Na tomto serveri nie je nastavené doručovanie e-mailov, takže adresa 
 
 #: src/features/branding/branding-page.tsx
 msgid "Email sender name"
+msgstr ""
+
+#: src/features/email-templates/my-templates-page.tsx
+#: src/routes/dashboard/settings/route.tsx
+msgid "Email templates"
 msgstr ""
 
 #: src/features/applications/components/detail/next-step-card.tsx
@@ -5920,6 +5999,10 @@ msgstr "Každý deň"
 msgid "Every entry has dates in a form systems read, in order, and none in the future."
 msgstr "Každý záznam má dátumy vo formulárových systémoch prečítané v poradí a žiadne v budúcnosti."
 
+#: src/features/email-templates/org-templates-page.tsx
+msgid "Every member of your organization sees this template."
+msgstr ""
+
 #: src/features/platform-admin/audit-page.tsx
 msgid "Every organization and the platform, newest first."
 msgstr ""
@@ -6110,6 +6193,10 @@ msgstr "prečítaný súbor"
 msgid "Fill fields"
 msgstr "Vyplniť polia"
 
+#: src/features/email-templates/write-email-sheet.tsx
+msgid "Fill in the [bracketed] parts before you send it."
+msgstr ""
+
 #: src/features/applications/components/add-application-dialog.tsx
 msgid "Fill in the role and company. Connect an AI provider in Settings to read them from the posting."
 msgstr "Vyplňte pozíciu a spoločnosť. Pripojte poskytovateľa AI v Nastaveniach, aby sa načítali z inzerátu."
@@ -6225,12 +6312,17 @@ msgstr "Zameranie, skúsenosti, prečo táto pozícia"
 msgid "Follow up"
 msgstr "Ozvať sa znova"
 
+#: src/features/email-templates/built-in-text.ts
+msgid "Follow up after applying"
+msgstr ""
+
 #. placeholder {0}: when(change.at)
 #: src/features/career/workspace/messages.tsx
 msgid "Follow up on {0}"
 msgstr "Ozvať sa znova: {0}"
 
 #: src/features/applications/components/detail/next-step-card.tsx
+#: src/features/email-templates/labels.ts
 msgid "Follow-up"
 msgstr "Sledovanie"
 
@@ -6245,6 +6337,10 @@ msgstr "Následná poznámka"
 #: src/features/career/schedule-sheet.tsx
 msgid "Follow-up reminder"
 msgstr "Pripomienka ozvať sa"
+
+#: src/features/email-templates/built-in-text.ts
+msgid "Following up on my {role} application"
+msgstr ""
 
 #: src/features/branding/branding-page.tsx
 msgid "Font"
@@ -6453,6 +6549,10 @@ msgstr "Z vašich skúseností"
 msgid "From your message"
 msgstr "Z vašej správy"
 
+#: src/features/email-templates/my-templates-page.tsx
+msgid "From your organization and the built-in set. You can't change these here."
+msgstr ""
+
 #: src/features/career/knowledge/facts.tsx
 msgid "From your resume"
 msgstr "Z vášho životopisu"
@@ -6655,6 +6755,53 @@ msgstr "počul späť"
 #: src/libs/locale.ts
 msgid "Hebrew"
 msgstr "Hebrejčina"
+
+#: src/features/email-templates/built-in-text.ts
+msgid "Hello {contactName},\n"
+"\n"
+"I applied for the {role} position at {company} and wanted to ask where my application stands. I am still very interested in the role, and I would be glad to send anything that would help your review.\n"
+"\n"
+"Thank you for your time.\n"
+"\n"
+"{fullName}\n"
+"{myEmail}"
+msgstr ""
+
+#: src/features/email-templates/built-in-text.ts
+msgid "Hello {contactName},\n"
+"\n"
+"My name is {fullName}, and I am looking at {role} opportunities at {company}. I admire what your team is building, and I would value ten minutes of your time to hear how you got started there and what the team looks for.\n"
+"\n"
+"I know your days are full, so please say no if the timing is wrong. Any pointer you can share would help.\n"
+"\n"
+"Kind regards,\n"
+"{firstName}\n"
+"{myEmail}"
+msgstr ""
+
+#: src/features/email-templates/built-in-text.ts
+msgid "Hello {contactName},\n"
+"\n"
+"Thank you for offering me the {role} position at {company}. I am glad to be considered and I am excited about joining the team. Before I accept, I would like to talk through the pay and the start date. Given the scope of the role and my experience, I would like to discuss [the terms you have in mind].\n"
+"\n"
+"Could we find a time this week to go through it together?\n"
+"\n"
+"With thanks,\n"
+"{fullName}\n"
+"{myEmail}"
+msgstr ""
+
+#: src/features/email-templates/built-in-text.ts
+msgid "Hello {contactName},\n"
+"\n"
+"Thank you for taking the time to meet with me on {interviewDate} about the {role} role at {company}. Our conversation left me more excited about the work, and I would welcome the chance to take the next step.\n"
+"\n"
+"If there is anything I can send to help with your decision, just let me know.\n"
+"\n"
+"Best regards,\n"
+"{fullName}\n"
+"{myEmail}"
+msgstr ""
 
 #: src/features/settings/root.tsx
 msgid "Help & docs"
@@ -7194,6 +7341,14 @@ msgstr ""
 msgid "It has entries but isn't placed on a page."
 msgstr "Obsahuje položky, ale nie je umiestnený na stránke."
 
+#: src/features/email-templates/write-email-sheet.tsx
+msgid "It is saved as it reads now. To reuse it for other applications, put {{company}} and the other variables back where the details are."
+msgstr ""
+
+#: src/features/email-templates/my-templates-page.tsx
+msgid "It leaves your list. Emails you already sent are not affected."
+msgstr ""
+
 #: src/features/career/knowledge/stories.tsx
 msgid "It may have been deleted. Choose another story or add a new one."
 msgstr "Možno bol odstránený. Vyberte iný príbeh alebo pridajte nový."
@@ -7472,6 +7627,7 @@ msgstr "Kľúčové slová"
 msgid "Khmer"
 msgstr "Khmerčina"
 
+#: src/features/email-templates/template-editor.tsx
 #: src/features/platform-admin/announcements-page.tsx
 msgid "Kind"
 msgstr ""
@@ -8294,6 +8450,15 @@ msgstr ""
 msgid "Members can view and export data but not change it until a payment is made."
 msgstr ""
 
+#: src/features/email-templates/org-templates-page.tsx
+msgid "Members see the built-in template again instead."
+msgstr ""
+
+#: src/features/email-templates/template-editor.tsx
+#: src/features/email-templates/write-email-sheet.tsx
+msgid "Message"
+msgstr ""
+
 #: src/features/platform-admin/announcements-page.tsx
 msgid "Message (plain text, up to 1,000 characters)"
 msgstr ""
@@ -8322,6 +8487,10 @@ msgstr ""
 #: src/features/career/workspace/practise.tsx
 msgid "Microphone blocked. Allow it in your browser settings, or type your answer."
 msgstr "Mikrofón je zablokovaný. Povoľte ho v nastaveniach prehliadača alebo odpoveď napíšte."
+
+#: src/features/email-templates/labels.ts
+msgid "Mine"
+msgstr ""
 
 #: src/features/career/knowledge/preferences.tsx
 msgid "Minimum base salary"
@@ -8535,6 +8704,7 @@ msgstr ""
 #: src/features/documents/documents-page.tsx
 #: src/features/documents/new-document-dialog.tsx
 #: src/features/documents/trash-page.tsx
+#: src/features/email-templates/template-editor.tsx
 #: src/features/org-admin/analytics-page.tsx
 #: src/features/org-admin/cohorts-page.tsx
 #: src/features/resume/editor/check/parser-view.tsx
@@ -8624,6 +8794,10 @@ msgstr ""
 msgid "Needs you"
 msgstr "Čaká na vás"
 
+#: src/features/email-templates/labels.ts
+msgid "Negotiation"
+msgstr ""
+
 #: src/libs/locale.ts
 msgid "Nepali"
 msgstr "Nepálčina"
@@ -8631,6 +8805,10 @@ msgstr "Nepálčina"
 #: src/features/resume/editor/write/entries.tsx
 msgid "Network"
 msgstr "Sieť"
+
+#: src/features/email-templates/labels.ts
+msgid "Networking"
+msgstr ""
 
 #: src/features/career/knowledge/facts.tsx
 #: src/features/settings/ai/api-keys.tsx
@@ -8734,6 +8912,11 @@ msgstr "Nová sekcia"
 msgid "New stage color"
 msgstr "Farba novej etapy"
 
+#: src/features/email-templates/my-templates-page.tsx
+#: src/features/email-templates/org-templates-page.tsx
+msgid "New template"
+msgstr ""
+
 #: src/features/platform-admin/audit-page.tsx
 msgid "Newer"
 msgstr ""
@@ -8776,6 +8959,10 @@ msgstr "Ďalší krok: {0}"
 #: src/features/career/workspace/messages.tsx
 msgid "Next step: {0}. Adds a reminder to Today."
 msgstr "Ďalší krok: {0}. Pridá pripomienku do sekcie Dnes."
+
+#: src/features/email-templates/built-in-text.ts
+msgid "Next steps on the {role} offer"
+msgstr ""
 
 #: src/features/settings/account/application-profile.tsx
 msgid "No"
@@ -8879,6 +9066,10 @@ msgstr "Nebola nájdená sekcia vzdelania."
 #: src/features/resume/editor/check/issues.ts
 msgid "No email address"
 msgstr "Žiadna e-mailová adresa"
+
+#: src/features/email-templates/write-email-sheet.tsx
+msgid "No email address for this contact yet. Add it in your mail app."
+msgstr ""
 
 #: src/features/ats-checker/messages.ts
 msgid "No email address was found."
@@ -9558,6 +9749,10 @@ msgstr "Otvoriť na karte {0}"
 msgid "Open in editor"
 msgstr "Otvorte v editore"
 
+#: src/features/email-templates/write-email-sheet.tsx
+msgid "Open in mail app"
+msgstr ""
+
 #: src/features/career/workspace/saved.tsx
 msgid "Open in Offers"
 msgstr "Otvoriť v Ponukách"
@@ -9686,6 +9881,11 @@ msgstr "Alebo nahrajte PDF životopisu"
 msgid "Orange"
 msgstr "Oranžová"
 
+#: src/routes/dashboard/settings/route.tsx
+msgid "Org email templates"
+msgstr ""
+
+#: src/features/email-templates/labels.ts
 #: src/features/organization/switcher.tsx
 #: src/features/platform-admin/audit-page.tsx
 #: src/features/platform-admin/metrics-page.tsx
@@ -9693,6 +9893,10 @@ msgstr "Oranžová"
 #: src/features/resume/editor/write/entries.tsx
 msgid "Organization"
 msgstr "Organizácia"
+
+#: src/features/email-templates/org-templates-page.tsx
+msgid "Organization email templates"
+msgstr ""
 
 #: src/features/platform-admin/audit-page.tsx
 msgid "Organization id"
@@ -10147,6 +10351,10 @@ msgstr "Obyčajný text (.txt)"
 #: src/features/resume/share/download-tab.tsx
 msgid "Plain text with headings. Paste into application forms and notes."
 msgstr "Obyčajný text s nadpismi. Vložte do formulárov žiadostí o zamestnanie a poznámok."
+
+#: src/features/email-templates/template-editor.tsx
+msgid "Plain text. These are filled in from the application when you use the template, and show as [name] when there is nothing to fill in:"
+msgstr ""
 
 #: src/features/billing/invoices.tsx
 #: src/features/platform-admin/organization-page.tsx
@@ -10661,6 +10869,10 @@ msgstr "Exportujte znova s vloženými písmami a overte, že sa text čisto sko
 #: src/features/ats-checker/messages.ts
 msgid "Re-export with fonts embedded, then open the file and check that the text copies out cleanly."
 msgstr "Exportujte znova s vloženými písmami, potom otvorte súbor a overte, že sa text čisto skopíruje."
+
+#: src/features/email-templates/built-in-text.ts
+msgid "Reach out to someone at the company"
+msgstr ""
 
 #: src/features/platform-admin/organization-page.tsx
 msgid "Reactivate"
@@ -11375,6 +11587,10 @@ msgstr "Obnovujem tvoje heslo..."
 msgid "Respond by"
 msgstr "Odpovedať do"
 
+#: src/features/email-templates/built-in-text.ts
+msgid "Respond to an offer"
+msgstr ""
+
 #: src/features/documents/document-actions.tsx
 #: src/features/documents/trash-page.tsx
 #: src/features/org-admin/cohorts-page.tsx
@@ -11827,6 +12043,10 @@ msgstr "Uložte ďalšiu ponuku na porovnanie"
 msgid "Save as application…"
 msgstr "Uložiť ako žiadosť o prácu…"
 
+#: src/features/email-templates/write-email-sheet.tsx
+msgid "Save as my template"
+msgstr ""
+
 #: src/dialogs/resume/index.tsx
 #: src/features/applications/components/application-form-sheet.tsx
 #: src/features/branding/branding-page.tsx
@@ -11887,6 +12107,12 @@ msgstr "Uložiť príbeh"
 #: src/features/documents/document-actions.tsx
 msgid "Save tags"
 msgstr "Uložiť tagy"
+
+#: src/features/email-templates/my-templates-page.tsx
+#: src/features/email-templates/org-templates-page.tsx
+#: src/features/email-templates/write-email-sheet.tsx
+msgid "Save template"
+msgstr ""
 
 #: src/features/ats-checker/messages.ts
 msgid "Save the file with every page upright."
@@ -12012,6 +12238,10 @@ msgstr "Uložené do Uložených · Nácvik"
 
 #: src/features/discovery/review-queue.tsx
 msgid "Saved to your applications."
+msgstr ""
+
+#: src/features/email-templates/write-email-sheet.tsx
+msgid "Saved to your templates"
 msgstr ""
 
 #. placeholder {0}: new URL(url).host
@@ -12665,6 +12895,10 @@ msgstr "Zobraziť ikony sekcií"
 msgid "Show templates"
 msgstr "Zobraziť šablóny"
 
+#: src/features/email-templates/write-email-sheet.tsx
+msgid "Show templates for every stage"
+msgstr ""
+
 #: src/features/resume/editor/check/check-panel.tsx
 msgid "Show them again"
 msgstr "Ukážte ich znova"
@@ -13106,6 +13340,10 @@ msgstr "Začnite každú konkrétnym slovesom: vybudoval, viedol, znížil, migr
 msgid "Start from"
 msgstr "Začnite od"
 
+#: src/features/career/workspace/messages.tsx
+msgid "Start from a template for this stage, edit it, and send it from your own email."
+msgstr ""
+
 #: src/features/documents/new-document-dialog.tsx
 msgid "Start from one you have and link the application."
 msgstr "Začnite od tej, ktorú máte, a prepojte žiadosť o zamestnanie."
@@ -13278,6 +13516,11 @@ msgstr "Silnejšie sloveso"
 msgid "Stylesheet editor"
 msgstr "Editor štýlov"
 
+#: src/features/email-templates/template-editor.tsx
+#: src/features/email-templates/write-email-sheet.tsx
+msgid "Subject"
+msgstr ""
+
 #: src/features/applications/components/detail/sent-documents.tsx
 msgid "Submission recorded {date}. The sent versions never change; current drafts stay editable. This record does not confirm employer receipt."
 msgstr ""
@@ -13314,6 +13557,10 @@ msgstr "Navrhnite znova"
 
 #: src/features/career/role-suggestions.tsx
 msgid "Suggest target roles (optional AI)"
+msgstr ""
+
+#: src/features/email-templates/template-editor.tsx
+msgid "Suggested for"
 msgstr ""
 
 #: src/features/documents/new-document-dialog.tsx
@@ -13527,6 +13774,7 @@ msgstr "Povedzte mi o situácii, keď ste nesúhlasili s kolegom. Ako ste to vyr
 msgid "Telugu"
 msgstr "Telugčina"
 
+#: src/features/email-templates/write-email-sheet.tsx
 #: src/libs/resume/section.tsx
 #: src/routes/builder/$resumeId/-components/design-panel.tsx
 #: src/routes/builder/$resumeId/-components/document-details.tsx
@@ -13534,14 +13782,28 @@ msgstr "Telugčina"
 msgid "Template"
 msgstr "Šablóna"
 
+#: src/features/email-templates/my-templates-page.tsx
+#: src/features/email-templates/org-templates-page.tsx
+msgid "Template archived"
+msgstr ""
+
 #. placeholder {0}: templates[template].name
 #: src/features/resume/editor/design/template-group.tsx
 msgid "Template changed to {0}"
 msgstr "Šablóna zmenená na {0}"
 
+#: src/features/email-templates/my-templates-page.tsx
+#: src/features/email-templates/org-templates-page.tsx
+msgid "Template saved"
+msgstr ""
+
 #: src/routes/builder/letter/-components/design-panel.tsx
 msgid "Template, type and colors follow the resume, so the pair always matches."
 msgstr "Šablóna, typ a farby nasledujú po resumé, takže pár sa vždy zhoduje."
+
+#: src/features/email-templates/org-templates-page.tsx
+msgid "Templates"
+msgstr ""
 
 #: src/features/ats-checker/checker.tsx
 msgid "Terms from the posting"
@@ -13646,6 +13908,18 @@ msgstr "Text pod {minimum} pt môže byť nesprávne prečítaný, keď ho syst�
 #: src/libs/locale.ts
 msgid "Thai"
 msgstr "Thajčina"
+
+#: src/features/email-templates/built-in-text.ts
+msgid "Thank you after an interview"
+msgstr ""
+
+#: src/features/email-templates/built-in-text.ts
+msgid "Thank you for meeting with me on {interviewDate}"
+msgstr ""
+
+#: src/features/email-templates/labels.ts
+msgid "Thank-you"
+msgstr ""
 
 #: src/features/auth/pages/device.tsx
 msgid "That code is not valid or has expired. Start again from the extension."
@@ -14039,6 +14313,15 @@ msgstr ""
 msgid "The support session could not start."
 msgstr ""
 
+#: src/features/email-templates/org-templates-page.tsx
+#: src/features/email-templates/write-email-sheet.tsx
+msgid "The templates couldn't be loaded."
+msgstr ""
+
+#: src/features/email-templates/org-templates-page.tsx
+msgid "The templates your members see under Write email. Customise one to replace the built-in text for everyone."
+msgstr ""
+
 #: src/features/settings/ai/providers.tsx
 msgid "The test didn't run. Try again."
 msgstr "Test neprebehol. Skúste to znova."
@@ -14192,6 +14475,10 @@ msgstr "Tento dokument je uzamknutý. Odomknite ho a získajte návrhy."
 
 #: src/features/branding/domains.ts
 msgid "This domain no longer serves your organization and is being deleted."
+msgstr ""
+
+#: src/features/email-templates/write-email-sheet.tsx
+msgid "This email is too long to open in your mail app, so it was copied instead."
 msgstr ""
 
 #: src/features/career/workspace/answer-library.tsx
@@ -14443,6 +14730,10 @@ msgstr "Tento príbeh nie je k dispozícii alebo používa vypnuté fakty."
 msgid "This support link did not work"
 msgstr ""
 
+#: src/features/email-templates/write-email-sheet.tsx
+msgid "This template couldn't be filled in. Try again."
+msgstr ""
+
 #: src/features/applications/components/interview-dialog.tsx
 msgid "This time does not exist in the selected timezone. Choose another time."
 msgstr "Tento čas vo vybranom časovom pásme neexistuje. Vyberte iný čas."
@@ -14520,6 +14811,11 @@ msgstr "Názov"
 #: src/routes/builder/letter/-components/write-panel.tsx
 msgid "To"
 msgstr "Komu"
+
+#. placeholder {0}: render.data.to
+#: src/features/email-templates/write-email-sheet.tsx
+msgid "To: {0}"
+msgstr ""
 
 #: src/features/applications/components/calendar-view.tsx
 #: src/features/resume/share/share-panel.tsx
@@ -14628,6 +14924,9 @@ msgstr "Vyskúšajte vzorku"
 #: src/features/discovery/review-queue.tsx
 #: src/features/discovery/searches.tsx
 #: src/features/documents/library-error.tsx
+#: src/features/email-templates/my-templates-page.tsx
+#: src/features/email-templates/org-templates-page.tsx
+#: src/features/email-templates/write-email-sheet.tsx
 #: src/features/resume/editor/write/improve.tsx
 #: src/features/resume/preview/preview.browser.tsx
 #: src/features/resume/share/download-tab.tsx
@@ -15753,6 +16052,12 @@ msgstr "Zapíšte si, na čo sa pýtali, kým to máte v čerstvej pamäti. Kou�
 msgid "Write each role as a clear title and company line, with the dates alongside."
 msgstr "Zapíšte každú pozíciu ako jasný riadok s názvom a spoločnosťou, s dátumami vedľa."
 
+#: src/features/career/workspace/messages.tsx
+#: src/features/career/workspace/shell.tsx
+#: src/features/email-templates/write-email-sheet.tsx
+msgid "Write email"
+msgstr ""
+
 #: src/features/ats-checker/messages.ts
 msgid "Write it as one uninterrupted piece, with no special spacing."
 msgstr "Napíšte to ako jeden neprerušený celok bez špeciálneho rozostupovania."
@@ -15776,6 +16081,11 @@ msgstr "Napíšte príbeh v piatich častiach o niečom, čo ste urobili. Polia 
 #: src/features/ats-checker/messages.ts
 msgid "Write the full address so it is recognized as a link."
 msgstr "Napíšte celú adresu, aby bola rozpoznaná ako odkaz."
+
+#. placeholder {0}: application.company
+#: src/features/career/workspace/messages.tsx
+msgid "Write to {0}"
+msgstr ""
 
 #: src/features/career/workspace/fit.tsx
 msgid "Write what you did."
@@ -15899,6 +16209,10 @@ msgstr "Toto ste predtým nechali zabudnúť, preto sa znova neuložilo."
 msgid "You have no searches yet. Add one with the job titles, skills and places you want, plus the company job boards to watch. It runs on its own, and the best matches show up in the queue."
 msgstr ""
 
+#: src/features/email-templates/my-templates-page.tsx
+msgid "You have no templates of your own yet. You can also save one from Write email."
+msgstr ""
+
 #: src/features/organization/members-page.tsx
 msgid "You need to belong to an organization to manage its members."
 msgstr ""
@@ -15914,6 +16228,10 @@ msgstr "Povedali ste: „{said}“ Pred rozhodnutím sa opýtajte oboch spoločn
 #: src/features/career/workspace/messages.tsx
 msgid "You send it from your own email."
 msgstr "Posielate ju z vlastného e-mailu."
+
+#: src/features/email-templates/write-email-sheet.tsx
+msgid "You send it from your own email. Nothing is sent from here."
+msgstr ""
 
 #: src/features/settings/account/security.tsx
 msgid "You sign in without one"
@@ -16215,6 +16533,10 @@ msgstr ""
 msgid "Your organization keeps working until the paid period ends. Nothing is charged after that."
 msgstr ""
 
+#: src/features/email-templates/my-templates-page.tsx
+msgid "Your own templates for writing to employers. They appear under Write email on every application."
+msgstr ""
+
 #: src/routes/builder/letter/-components/letter-shell.tsx
 msgid "Your phone number changed on the resume. The letter updated too."
 msgstr "Vaše telefónne číslo sa v životopise zmenilo. List bol tiež aktualizovaný."
@@ -16324,6 +16646,14 @@ msgstr "vaše príbehy"
 #: src/features/career/workspace/practise.tsx
 msgid "Your story couldn't be loaded."
 msgstr "Váš príbeh sa nepodarilo načítať."
+
+#: src/features/email-templates/my-templates-page.tsx
+msgid "Your templates"
+msgstr ""
+
+#: src/features/email-templates/my-templates-page.tsx
+msgid "Your templates couldn't be loaded."
+msgstr ""
 
 #. placeholder {0}: trialDays ?? 0
 #: src/features/billing/billing-banner.tsx

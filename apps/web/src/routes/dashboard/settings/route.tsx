@@ -26,6 +26,9 @@ type Page = {
 		| "/dashboard/settings/analytics"
 		| "/dashboard/settings/ai-usage"
 		| "/dashboard/settings/audit"
+		// CAREEROS (P5-T04)
+		| "/dashboard/settings/email-templates"
+		| "/dashboard/settings/org-email-templates"
 		// CAREEROS (P3-T06)
 		| "/dashboard/organization/billing";
 	icon: IconName;
@@ -37,6 +40,8 @@ const SETTINGS_PAGES: Page[] = [
 	{ to: "/dashboard/settings/account", icon: "user-circle", label: () => t`Account` },
 	{ to: "/dashboard/settings/preferences", icon: "sliders-horizontal", label: () => t`Preferences` },
 	{ to: "/dashboard/settings/ai", icon: "sparkle", label: () => t`AI & developer` },
+	// CAREEROS (P5-T04): every member writes to employers from templates
+	{ to: "/dashboard/settings/email-templates", icon: "envelope-simple", label: () => t`Email templates` },
 ];
 
 // CAREEROS: shown to owners and admins only; the server enforces the same rule (P1-T03)
@@ -55,6 +60,8 @@ const ORG_ADMIN_PAGES: Page[] = [
 	{ to: "/dashboard/settings/analytics", icon: "chart-line-up", label: () => t`Analytics` },
 	{ to: "/dashboard/settings/ai-usage", icon: "sparkle", label: () => t`AI usage` },
 	{ to: "/dashboard/settings/audit", icon: "list-checks", label: () => t`Audit log` },
+	// CAREEROS (P5-T04): the templates every member of the organization sees
+	{ to: "/dashboard/settings/org-email-templates", icon: "file-text", label: () => t`Org email templates` },
 ];
 
 // CAREEROS (P3-T06): billing, for owners and admins (the page and the API check again; only the owner can act)
