@@ -267,6 +267,7 @@ describe("coverage check", () => {
 			"discovery_run",
 			"cohort",
 			"discovered_job",
+			"email_template",
 			"ai_usage",
 		]);
 	});

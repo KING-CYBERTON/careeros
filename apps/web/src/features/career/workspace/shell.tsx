@@ -37,6 +37,8 @@ import { formatDuration, interviewKindOf, isInterview } from "@/features/applica
 import { getDisplayLane, getLaneLabel } from "@/features/applications/lanes";
 import { describeNextStep, getNextStep } from "@/features/applications/next-step";
 import { useApplicationLanes } from "@/features/applications/use-application-lanes";
+// CAREEROS (P5-T04): the email template sheet
+import { WriteEmailSheet } from "@/features/email-templates/write-email-sheet";
 import { D1, EASE } from "@/libs/motion";
 import { orpc } from "@/libs/orpc/client";
 
@@ -46,6 +48,8 @@ export type WorkspaceSearch = {
 	version?: string | undefined;
 	speak?: boolean | undefined;
 	story?: string | undefined;
+	// CAREEROS (P5-T04): the "Write email" sheet
+	email?: true | undefined;
 };
 
 /** What every tab receives: the application, and a saved version to show read-only ("Open in Prepare"). */
@@ -60,6 +64,8 @@ export type WorkspaceTabProps = {
 	story?: string | undefined;
 	now: Date;
 	go: (tab: WorkspaceTab, search?: WorkspaceSearch) => void;
+	// CAREEROS (P5-T04): opens the "Write email" sheet
+	onWriteEmail?: (() => void) | undefined;
 };
 
 const DAY = 86_400_000;
@@ -176,6 +182,8 @@ export function Workspace({ applicationId, tab: requested, search }: WorkspacePr
 		go,
 		speak: search.speak === true,
 		story: search.story,
+		// CAREEROS (P5-T04)
+		onWriteEmail: () => openSearch({ email: true }),
 	};
 	// Messages shows the newest read message: it waits for a decision while its changes aren't applied.
 	const newestReply = saved.data?.find((item) => item.data.kind === "reply");
@@ -206,6 +214,7 @@ export function Workspace({ applicationId, tab: requested, search }: WorkspacePr
 							interview={interview}
 							now={now}
 							onEdit={() => openSearch({ edit: "interview" })}
+							onWriteEmail={() => openSearch({ email: true })}
 						/>
 					</aside>
 				) : (
@@ -224,6 +233,7 @@ export function Workspace({ applicationId, tab: requested, search }: WorkspacePr
 								interview={interview}
 								now={now}
 								onEdit={() => openSearch({ edit: "interview" })}
+								onWriteEmail={() => openSearch({ email: true })}
 							/>
 						</div>
 					</details>
@@ -337,6 +347,12 @@ export function Workspace({ applicationId, tab: requested, search }: WorkspacePr
 				interview={editOpen ? (editingInterview ?? null) : null}
 				open={search.edit === "interview"}
 				onOpenChange={(open) => (open ? openSearch({ edit: "interview" }) : closeSearch({ edit: undefined }))}
+			/>
+			{/* CAREEROS (P5-T04): write to the employer from a template; sent from the member's own mail app */}
+			<WriteEmailSheet
+				application={application}
+				open={search.email === true}
+				onOpenChange={(open) => (open ? openSearch({ email: true }) : closeSearch({ email: undefined }))}
 			/>
 		</div>
 	);
@@ -455,10 +471,12 @@ type ContextColumnProps = {
 	interview: InterviewTimelineEntry | undefined;
 	now: Date;
 	onEdit: () => void;
+	// CAREEROS (P5-T04)
+	onWriteEmail: () => void;
 };
 
 /** NEXT STEP, WHO YOU'LL MEET, WHAT YOU SENT and NOTES: the job at a glance beside every tab. */
-function ContextColumn({ application, interview, now, onEdit }: ContextColumnProps) {
+function ContextColumn({ application, interview, now, onEdit, onWriteEmail }: ContextColumnProps) {
 	const { i18n } = useLingui();
 	const { day, date, time, timeZone } = useCareerTime();
 	const documents = useQuery(orpc.documents.list.queryOptions({ input: { trashed: false } }));
@@ -538,6 +556,11 @@ function ContextColumn({ application, interview, now, onEdit }: ContextColumnPro
 								<Trans>Add to calendar</Trans>
 							</Button>
 						)}
+						{/* CAREEROS (P5-T04): write to the employer from a template */}
+						<Button size="sm" variant="ghost" onClick={onWriteEmail}>
+							<Icon name="envelope-simple" size={16} />
+							<Trans>Write email</Trans>
+						</Button>
 					</div>
 				</div>
 			</section>

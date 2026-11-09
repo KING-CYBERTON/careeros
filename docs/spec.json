@@ -72940,6 +72940,1860 @@
 				]
 			}
 		},
+		"/email-templates": {
+			"get": {
+				"operationId": "listEmailTemplates",
+				"summary": "List the email templates you can use",
+				"description": "Returns your own templates, the defaults of your organization, and a built-in template for every kind your organization has not customised, each with its source. Archived templates are left out. Requires authentication.",
+				"tags": [
+					"Email templates"
+				],
+				"parameters": [],
+				"responses": {
+					"200": {
+						"description": "OK",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "array",
+									"items": {
+										"type": "object",
+										"properties": {
+											"id": {
+												"type": "string",
+												"description": "The template id, or builtin:<kind> for one shipped with the product."
+											},
+											"source": {
+												"enum": [
+													"builtin",
+													"org",
+													"mine"
+												],
+												"type": "string",
+												"description": "builtin: shipped with the product. org: set by the organization. mine: yours."
+											},
+											"kind": {
+												"enum": [
+													"follow_up",
+													"thank_you",
+													"networking",
+													"negotiation",
+													"custom"
+												],
+												"type": "string"
+											},
+											"stageCategories": {
+												"type": "array",
+												"items": {
+													"enum": [
+														"saved",
+														"applied",
+														"screening",
+														"interview",
+														"offer",
+														"closed"
+													],
+													"type": "string"
+												},
+												"description": "The application stages it suggests itself for. Empty: any."
+											},
+											"name": {
+												"type": "string"
+											},
+											"subject": {
+												"type": "string"
+											},
+											"body": {
+												"type": "string"
+											}
+										},
+										"required": [
+											"id",
+											"source",
+											"kind",
+											"stageCategories",
+											"name",
+											"subject",
+											"body"
+										]
+									}
+								}
+							}
+						}
+					},
+					"default": {
+						"description": "Structured API error. See status and code; do not branch on message text.",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"required": [
+										"defined",
+										"code",
+										"status",
+										"message"
+									],
+									"properties": {
+										"defined": {
+											"type": "boolean"
+										},
+										"code": {
+											"type": "string"
+										},
+										"status": {
+											"type": "integer"
+										},
+										"message": {
+											"type": "string"
+										},
+										"data": {}
+									}
+								}
+							}
+						}
+					}
+				},
+				"security": [
+					{
+						"apiKey": []
+					},
+					{
+						"bearerAuth": []
+					},
+					{
+						"cookieAuth": []
+					}
+				],
+				"x-codeSamples": [
+					{
+						"lang": "bash",
+						"label": "cURL",
+						"source": "curl \"https://careeros.example/api/openapi/email-templates\" --header \"x-api-key: <api-key>\""
+					}
+				]
+			},
+			"post": {
+				"operationId": "createEmailTemplate",
+				"summary": "Create an email template of your own",
+				"description": "Creates a template only you can see and use: a kind, an optional stage it suggests itself for, a name, a subject and a plain-text body of at most 10 000 characters. Requires authentication.",
+				"tags": [
+					"Email templates"
+				],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"type": "object",
+								"properties": {
+									"kind": {
+										"enum": [
+											"follow_up",
+											"thank_you",
+											"networking",
+											"negotiation",
+											"custom"
+										],
+										"type": "string"
+									},
+									"stageCategory": {
+										"anyOf": [
+											{
+												"enum": [
+													"saved",
+													"applied",
+													"screening",
+													"interview",
+													"offer",
+													"closed"
+												],
+												"type": "string"
+											},
+											{
+												"type": "null"
+											}
+										],
+										"description": "The application stage it suggests itself for."
+									},
+									"name": {
+										"type": "string",
+										"minLength": 1,
+										"maxLength": 100
+									},
+									"subject": {
+										"type": "string",
+										"minLength": 1,
+										"maxLength": 300
+									},
+									"body": {
+										"type": "string",
+										"maxLength": 10000,
+										"description": "Plain text. {{firstName}} style variables are filled in when it is used."
+									}
+								},
+								"required": [
+									"kind",
+									"name",
+									"subject",
+									"body"
+								]
+							}
+						}
+					}
+				},
+				"responses": {
+					"200": {
+						"description": "OK",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"id": {
+											"type": "string",
+											"description": "The template id, or builtin:<kind> for one shipped with the product."
+										},
+										"source": {
+											"enum": [
+												"builtin",
+												"org",
+												"mine"
+											],
+											"type": "string",
+											"description": "builtin: shipped with the product. org: set by the organization. mine: yours."
+										},
+										"kind": {
+											"enum": [
+												"follow_up",
+												"thank_you",
+												"networking",
+												"negotiation",
+												"custom"
+											],
+											"type": "string"
+										},
+										"stageCategories": {
+											"type": "array",
+											"items": {
+												"enum": [
+													"saved",
+													"applied",
+													"screening",
+													"interview",
+													"offer",
+													"closed"
+												],
+												"type": "string"
+											},
+											"description": "The application stages it suggests itself for. Empty: any."
+										},
+										"name": {
+											"type": "string"
+										},
+										"subject": {
+											"type": "string"
+										},
+										"body": {
+											"type": "string"
+										}
+									},
+									"required": [
+										"id",
+										"source",
+										"kind",
+										"stageCategories",
+										"name",
+										"subject",
+										"body"
+									]
+								}
+							}
+						}
+					},
+					"default": {
+						"description": "Structured API error. See status and code; do not branch on message text.",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"required": [
+										"defined",
+										"code",
+										"status",
+										"message"
+									],
+									"properties": {
+										"defined": {
+											"type": "boolean"
+										},
+										"code": {
+											"type": "string"
+										},
+										"status": {
+											"type": "integer"
+										},
+										"message": {
+											"type": "string"
+										},
+										"data": {}
+									}
+								}
+							}
+						}
+					}
+				},
+				"security": [
+					{
+						"apiKey": []
+					},
+					{
+						"bearerAuth": []
+					},
+					{
+						"cookieAuth": []
+					}
+				],
+				"x-codeSamples": [
+					{
+						"lang": "bash",
+						"label": "cURL",
+						"source": "curl --request POST \"https://careeros.example/api/openapi/email-templates\" --header \"x-api-key: <api-key>\" --header \"Content-Type: application/json\" --data '{\n  \"kind\": \"follow_up\",\n  \"name\": \"<string>\",\n  \"subject\": \"<string>\",\n  \"body\": \"<string>\"\n}'"
+					}
+				]
+			}
+		},
+		"/email-templates/{id}": {
+			"patch": {
+				"operationId": "updateEmailTemplate",
+				"summary": "Change an email template of your own",
+				"description": "Changes the fields given of one of your own templates. Requires authentication.",
+				"tags": [
+					"Email templates"
+				],
+				"parameters": [
+					{
+						"name": "id",
+						"in": "path",
+						"required": true,
+						"schema": {
+							"type": "string",
+							"minLength": 1,
+							"maxLength": 64
+						}
+					}
+				],
+				"requestBody": {
+					"required": false,
+					"content": {
+						"application/json": {
+							"schema": {
+								"type": "object",
+								"properties": {
+									"kind": {
+										"enum": [
+											"follow_up",
+											"thank_you",
+											"networking",
+											"negotiation",
+											"custom"
+										],
+										"type": "string"
+									},
+									"stageCategory": {
+										"anyOf": [
+											{
+												"enum": [
+													"saved",
+													"applied",
+													"screening",
+													"interview",
+													"offer",
+													"closed"
+												],
+												"type": "string"
+											},
+											{
+												"type": "null"
+											}
+										],
+										"description": "The application stage it suggests itself for."
+									},
+									"name": {
+										"type": "string",
+										"minLength": 1,
+										"maxLength": 100
+									},
+									"subject": {
+										"type": "string",
+										"minLength": 1,
+										"maxLength": 300
+									},
+									"body": {
+										"type": "string",
+										"maxLength": 10000,
+										"description": "Plain text. {{firstName}} style variables are filled in when it is used."
+									}
+								}
+							}
+						}
+					}
+				},
+				"responses": {
+					"200": {
+						"description": "OK",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"id": {
+											"type": "string",
+											"description": "The template id, or builtin:<kind> for one shipped with the product."
+										},
+										"source": {
+											"enum": [
+												"builtin",
+												"org",
+												"mine"
+											],
+											"type": "string",
+											"description": "builtin: shipped with the product. org: set by the organization. mine: yours."
+										},
+										"kind": {
+											"enum": [
+												"follow_up",
+												"thank_you",
+												"networking",
+												"negotiation",
+												"custom"
+											],
+											"type": "string"
+										},
+										"stageCategories": {
+											"type": "array",
+											"items": {
+												"enum": [
+													"saved",
+													"applied",
+													"screening",
+													"interview",
+													"offer",
+													"closed"
+												],
+												"type": "string"
+											},
+											"description": "The application stages it suggests itself for. Empty: any."
+										},
+										"name": {
+											"type": "string"
+										},
+										"subject": {
+											"type": "string"
+										},
+										"body": {
+											"type": "string"
+										}
+									},
+									"required": [
+										"id",
+										"source",
+										"kind",
+										"stageCategories",
+										"name",
+										"subject",
+										"body"
+									]
+								}
+							}
+						}
+					},
+					"404": {
+						"description": "404",
+						"content": {
+							"application/json": {
+								"schema": {
+									"oneOf": [
+										{
+											"type": "object",
+											"properties": {
+												"defined": {
+													"const": true
+												},
+												"code": {
+													"const": "NOT_FOUND"
+												},
+												"status": {
+													"const": 404
+												},
+												"message": {
+													"type": "string",
+													"default": "Not found."
+												},
+												"data": {}
+											},
+											"required": [
+												"defined",
+												"code",
+												"status",
+												"message"
+											]
+										},
+										{
+											"type": "object",
+											"properties": {
+												"defined": {
+													"const": false
+												},
+												"code": {
+													"type": "string"
+												},
+												"status": {
+													"type": "number"
+												},
+												"message": {
+													"type": "string"
+												},
+												"data": {}
+											},
+											"required": [
+												"defined",
+												"code",
+												"status",
+												"message"
+											]
+										}
+									]
+								}
+							}
+						}
+					},
+					"default": {
+						"description": "Structured API error. See status and code; do not branch on message text.",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"required": [
+										"defined",
+										"code",
+										"status",
+										"message"
+									],
+									"properties": {
+										"defined": {
+											"type": "boolean"
+										},
+										"code": {
+											"type": "string"
+										},
+										"status": {
+											"type": "integer"
+										},
+										"message": {
+											"type": "string"
+										},
+										"data": {}
+									}
+								}
+							}
+						}
+					}
+				},
+				"security": [
+					{
+						"apiKey": []
+					},
+					{
+						"bearerAuth": []
+					},
+					{
+						"cookieAuth": []
+					}
+				],
+				"x-codeSamples": [
+					{
+						"lang": "bash",
+						"label": "cURL",
+						"source": "curl --request PATCH \"https://careeros.example/api/openapi/email-templates/<id>\" --header \"x-api-key: <api-key>\" --header \"Content-Type: application/json\" --data '{}'"
+					}
+				]
+			}
+		},
+		"/email-templates/{id}/archive": {
+			"post": {
+				"operationId": "archiveEmailTemplate",
+				"summary": "Archive an email template of your own",
+				"description": "Takes one of your own templates out of your list. Requires authentication.",
+				"tags": [
+					"Email templates"
+				],
+				"parameters": [
+					{
+						"name": "id",
+						"in": "path",
+						"required": true,
+						"schema": {
+							"type": "string",
+							"minLength": 1,
+							"maxLength": 64
+						}
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "OK",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"id": {
+											"type": "string"
+										}
+									},
+									"required": [
+										"id"
+									]
+								}
+							}
+						}
+					},
+					"404": {
+						"description": "404",
+						"content": {
+							"application/json": {
+								"schema": {
+									"oneOf": [
+										{
+											"type": "object",
+											"properties": {
+												"defined": {
+													"const": true
+												},
+												"code": {
+													"const": "NOT_FOUND"
+												},
+												"status": {
+													"const": 404
+												},
+												"message": {
+													"type": "string",
+													"default": "Not found."
+												},
+												"data": {}
+											},
+											"required": [
+												"defined",
+												"code",
+												"status",
+												"message"
+											]
+										},
+										{
+											"type": "object",
+											"properties": {
+												"defined": {
+													"const": false
+												},
+												"code": {
+													"type": "string"
+												},
+												"status": {
+													"type": "number"
+												},
+												"message": {
+													"type": "string"
+												},
+												"data": {}
+											},
+											"required": [
+												"defined",
+												"code",
+												"status",
+												"message"
+											]
+										}
+									]
+								}
+							}
+						}
+					},
+					"default": {
+						"description": "Structured API error. See status and code; do not branch on message text.",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"required": [
+										"defined",
+										"code",
+										"status",
+										"message"
+									],
+									"properties": {
+										"defined": {
+											"type": "boolean"
+										},
+										"code": {
+											"type": "string"
+										},
+										"status": {
+											"type": "integer"
+										},
+										"message": {
+											"type": "string"
+										},
+										"data": {}
+									}
+								}
+							}
+						}
+					}
+				},
+				"security": [
+					{
+						"apiKey": []
+					},
+					{
+						"bearerAuth": []
+					},
+					{
+						"cookieAuth": []
+					}
+				],
+				"x-codeSamples": [
+					{
+						"lang": "bash",
+						"label": "cURL",
+						"source": "curl --request POST \"https://careeros.example/api/openapi/email-templates/<id>/archive\" --header \"x-api-key: <api-key>\""
+					}
+				]
+			}
+		},
+		"/email-templates/org": {
+			"post": {
+				"operationId": "createOrganizationEmailTemplate",
+				"summary": "Create an email template default for the organization",
+				"description": "Creates a default every member of the current organization sees. A default of a kind replaces the built-in template of that kind. Only an owner or admin of an organization can do it. Requires authentication.",
+				"tags": [
+					"Email templates"
+				],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"type": "object",
+								"properties": {
+									"kind": {
+										"enum": [
+											"follow_up",
+											"thank_you",
+											"networking",
+											"negotiation",
+											"custom"
+										],
+										"type": "string"
+									},
+									"stageCategory": {
+										"anyOf": [
+											{
+												"enum": [
+													"saved",
+													"applied",
+													"screening",
+													"interview",
+													"offer",
+													"closed"
+												],
+												"type": "string"
+											},
+											{
+												"type": "null"
+											}
+										],
+										"description": "The application stage it suggests itself for."
+									},
+									"name": {
+										"type": "string",
+										"minLength": 1,
+										"maxLength": 100
+									},
+									"subject": {
+										"type": "string",
+										"minLength": 1,
+										"maxLength": 300
+									},
+									"body": {
+										"type": "string",
+										"maxLength": 10000,
+										"description": "Plain text. {{firstName}} style variables are filled in when it is used."
+									}
+								},
+								"required": [
+									"kind",
+									"name",
+									"subject",
+									"body"
+								]
+							}
+						}
+					}
+				},
+				"responses": {
+					"200": {
+						"description": "OK",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"id": {
+											"type": "string",
+											"description": "The template id, or builtin:<kind> for one shipped with the product."
+										},
+										"source": {
+											"enum": [
+												"builtin",
+												"org",
+												"mine"
+											],
+											"type": "string",
+											"description": "builtin: shipped with the product. org: set by the organization. mine: yours."
+										},
+										"kind": {
+											"enum": [
+												"follow_up",
+												"thank_you",
+												"networking",
+												"negotiation",
+												"custom"
+											],
+											"type": "string"
+										},
+										"stageCategories": {
+											"type": "array",
+											"items": {
+												"enum": [
+													"saved",
+													"applied",
+													"screening",
+													"interview",
+													"offer",
+													"closed"
+												],
+												"type": "string"
+											},
+											"description": "The application stages it suggests itself for. Empty: any."
+										},
+										"name": {
+											"type": "string"
+										},
+										"subject": {
+											"type": "string"
+										},
+										"body": {
+											"type": "string"
+										}
+									},
+									"required": [
+										"id",
+										"source",
+										"kind",
+										"stageCategories",
+										"name",
+										"subject",
+										"body"
+									]
+								}
+							}
+						}
+					},
+					"403": {
+						"description": "403",
+						"content": {
+							"application/json": {
+								"schema": {
+									"oneOf": [
+										{
+											"type": "object",
+											"properties": {
+												"defined": {
+													"const": true
+												},
+												"code": {
+													"const": "FORBIDDEN"
+												},
+												"status": {
+													"const": 403
+												},
+												"message": {
+													"type": "string",
+													"default": "Only an owner or admin of an organization can do this."
+												},
+												"data": {}
+											},
+											"required": [
+												"defined",
+												"code",
+												"status",
+												"message"
+											]
+										},
+										{
+											"type": "object",
+											"properties": {
+												"defined": {
+													"const": false
+												},
+												"code": {
+													"type": "string"
+												},
+												"status": {
+													"type": "number"
+												},
+												"message": {
+													"type": "string"
+												},
+												"data": {}
+											},
+											"required": [
+												"defined",
+												"code",
+												"status",
+												"message"
+											]
+										}
+									]
+								}
+							}
+						}
+					},
+					"404": {
+						"description": "404",
+						"content": {
+							"application/json": {
+								"schema": {
+									"oneOf": [
+										{
+											"type": "object",
+											"properties": {
+												"defined": {
+													"const": true
+												},
+												"code": {
+													"const": "NOT_FOUND"
+												},
+												"status": {
+													"const": 404
+												},
+												"message": {
+													"type": "string",
+													"default": "Not found."
+												},
+												"data": {}
+											},
+											"required": [
+												"defined",
+												"code",
+												"status",
+												"message"
+											]
+										},
+										{
+											"type": "object",
+											"properties": {
+												"defined": {
+													"const": false
+												},
+												"code": {
+													"type": "string"
+												},
+												"status": {
+													"type": "number"
+												},
+												"message": {
+													"type": "string"
+												},
+												"data": {}
+											},
+											"required": [
+												"defined",
+												"code",
+												"status",
+												"message"
+											]
+										}
+									]
+								}
+							}
+						}
+					},
+					"default": {
+						"description": "Structured API error. See status and code; do not branch on message text.",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"required": [
+										"defined",
+										"code",
+										"status",
+										"message"
+									],
+									"properties": {
+										"defined": {
+											"type": "boolean"
+										},
+										"code": {
+											"type": "string"
+										},
+										"status": {
+											"type": "integer"
+										},
+										"message": {
+											"type": "string"
+										},
+										"data": {}
+									}
+								}
+							}
+						}
+					}
+				},
+				"security": [
+					{
+						"apiKey": []
+					},
+					{
+						"bearerAuth": []
+					},
+					{
+						"cookieAuth": []
+					}
+				],
+				"x-codeSamples": [
+					{
+						"lang": "bash",
+						"label": "cURL",
+						"source": "curl --request POST \"https://careeros.example/api/openapi/email-templates/org\" --header \"x-api-key: <api-key>\" --header \"Content-Type: application/json\" --data '{\n  \"kind\": \"follow_up\",\n  \"name\": \"<string>\",\n  \"subject\": \"<string>\",\n  \"body\": \"<string>\"\n}'"
+					}
+				]
+			}
+		},
+		"/email-templates/org/{id}": {
+			"patch": {
+				"operationId": "updateOrganizationEmailTemplate",
+				"summary": "Change an email template default of the organization",
+				"description": "Changes the fields given of a default of the current organization. Only an owner or admin can do it. Requires authentication.",
+				"tags": [
+					"Email templates"
+				],
+				"parameters": [
+					{
+						"name": "id",
+						"in": "path",
+						"required": true,
+						"schema": {
+							"type": "string",
+							"minLength": 1,
+							"maxLength": 64
+						}
+					}
+				],
+				"requestBody": {
+					"required": false,
+					"content": {
+						"application/json": {
+							"schema": {
+								"type": "object",
+								"properties": {
+									"kind": {
+										"enum": [
+											"follow_up",
+											"thank_you",
+											"networking",
+											"negotiation",
+											"custom"
+										],
+										"type": "string"
+									},
+									"stageCategory": {
+										"anyOf": [
+											{
+												"enum": [
+													"saved",
+													"applied",
+													"screening",
+													"interview",
+													"offer",
+													"closed"
+												],
+												"type": "string"
+											},
+											{
+												"type": "null"
+											}
+										],
+										"description": "The application stage it suggests itself for."
+									},
+									"name": {
+										"type": "string",
+										"minLength": 1,
+										"maxLength": 100
+									},
+									"subject": {
+										"type": "string",
+										"minLength": 1,
+										"maxLength": 300
+									},
+									"body": {
+										"type": "string",
+										"maxLength": 10000,
+										"description": "Plain text. {{firstName}} style variables are filled in when it is used."
+									}
+								}
+							}
+						}
+					}
+				},
+				"responses": {
+					"200": {
+						"description": "OK",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"id": {
+											"type": "string",
+											"description": "The template id, or builtin:<kind> for one shipped with the product."
+										},
+										"source": {
+											"enum": [
+												"builtin",
+												"org",
+												"mine"
+											],
+											"type": "string",
+											"description": "builtin: shipped with the product. org: set by the organization. mine: yours."
+										},
+										"kind": {
+											"enum": [
+												"follow_up",
+												"thank_you",
+												"networking",
+												"negotiation",
+												"custom"
+											],
+											"type": "string"
+										},
+										"stageCategories": {
+											"type": "array",
+											"items": {
+												"enum": [
+													"saved",
+													"applied",
+													"screening",
+													"interview",
+													"offer",
+													"closed"
+												],
+												"type": "string"
+											},
+											"description": "The application stages it suggests itself for. Empty: any."
+										},
+										"name": {
+											"type": "string"
+										},
+										"subject": {
+											"type": "string"
+										},
+										"body": {
+											"type": "string"
+										}
+									},
+									"required": [
+										"id",
+										"source",
+										"kind",
+										"stageCategories",
+										"name",
+										"subject",
+										"body"
+									]
+								}
+							}
+						}
+					},
+					"403": {
+						"description": "403",
+						"content": {
+							"application/json": {
+								"schema": {
+									"oneOf": [
+										{
+											"type": "object",
+											"properties": {
+												"defined": {
+													"const": true
+												},
+												"code": {
+													"const": "FORBIDDEN"
+												},
+												"status": {
+													"const": 403
+												},
+												"message": {
+													"type": "string",
+													"default": "Only an owner or admin of an organization can do this."
+												},
+												"data": {}
+											},
+											"required": [
+												"defined",
+												"code",
+												"status",
+												"message"
+											]
+										},
+										{
+											"type": "object",
+											"properties": {
+												"defined": {
+													"const": false
+												},
+												"code": {
+													"type": "string"
+												},
+												"status": {
+													"type": "number"
+												},
+												"message": {
+													"type": "string"
+												},
+												"data": {}
+											},
+											"required": [
+												"defined",
+												"code",
+												"status",
+												"message"
+											]
+										}
+									]
+								}
+							}
+						}
+					},
+					"404": {
+						"description": "404",
+						"content": {
+							"application/json": {
+								"schema": {
+									"oneOf": [
+										{
+											"type": "object",
+											"properties": {
+												"defined": {
+													"const": true
+												},
+												"code": {
+													"const": "NOT_FOUND"
+												},
+												"status": {
+													"const": 404
+												},
+												"message": {
+													"type": "string",
+													"default": "Not found."
+												},
+												"data": {}
+											},
+											"required": [
+												"defined",
+												"code",
+												"status",
+												"message"
+											]
+										},
+										{
+											"type": "object",
+											"properties": {
+												"defined": {
+													"const": false
+												},
+												"code": {
+													"type": "string"
+												},
+												"status": {
+													"type": "number"
+												},
+												"message": {
+													"type": "string"
+												},
+												"data": {}
+											},
+											"required": [
+												"defined",
+												"code",
+												"status",
+												"message"
+											]
+										}
+									]
+								}
+							}
+						}
+					},
+					"default": {
+						"description": "Structured API error. See status and code; do not branch on message text.",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"required": [
+										"defined",
+										"code",
+										"status",
+										"message"
+									],
+									"properties": {
+										"defined": {
+											"type": "boolean"
+										},
+										"code": {
+											"type": "string"
+										},
+										"status": {
+											"type": "integer"
+										},
+										"message": {
+											"type": "string"
+										},
+										"data": {}
+									}
+								}
+							}
+						}
+					}
+				},
+				"security": [
+					{
+						"apiKey": []
+					},
+					{
+						"bearerAuth": []
+					},
+					{
+						"cookieAuth": []
+					}
+				],
+				"x-codeSamples": [
+					{
+						"lang": "bash",
+						"label": "cURL",
+						"source": "curl --request PATCH \"https://careeros.example/api/openapi/email-templates/org/<id>\" --header \"x-api-key: <api-key>\" --header \"Content-Type: application/json\" --data '{}'"
+					}
+				]
+			}
+		},
+		"/email-templates/org/{id}/archive": {
+			"post": {
+				"operationId": "archiveOrganizationEmailTemplate",
+				"summary": "Archive an email template default of the organization",
+				"description": "Archives a default of the current organization, so its members see the built-in template of that kind again. Only an owner or admin can do it. Requires authentication.",
+				"tags": [
+					"Email templates"
+				],
+				"parameters": [
+					{
+						"name": "id",
+						"in": "path",
+						"required": true,
+						"schema": {
+							"type": "string",
+							"minLength": 1,
+							"maxLength": 64
+						}
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "OK",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"id": {
+											"type": "string"
+										}
+									},
+									"required": [
+										"id"
+									]
+								}
+							}
+						}
+					},
+					"403": {
+						"description": "403",
+						"content": {
+							"application/json": {
+								"schema": {
+									"oneOf": [
+										{
+											"type": "object",
+											"properties": {
+												"defined": {
+													"const": true
+												},
+												"code": {
+													"const": "FORBIDDEN"
+												},
+												"status": {
+													"const": 403
+												},
+												"message": {
+													"type": "string",
+													"default": "Only an owner or admin of an organization can do this."
+												},
+												"data": {}
+											},
+											"required": [
+												"defined",
+												"code",
+												"status",
+												"message"
+											]
+										},
+										{
+											"type": "object",
+											"properties": {
+												"defined": {
+													"const": false
+												},
+												"code": {
+													"type": "string"
+												},
+												"status": {
+													"type": "number"
+												},
+												"message": {
+													"type": "string"
+												},
+												"data": {}
+											},
+											"required": [
+												"defined",
+												"code",
+												"status",
+												"message"
+											]
+										}
+									]
+								}
+							}
+						}
+					},
+					"404": {
+						"description": "404",
+						"content": {
+							"application/json": {
+								"schema": {
+									"oneOf": [
+										{
+											"type": "object",
+											"properties": {
+												"defined": {
+													"const": true
+												},
+												"code": {
+													"const": "NOT_FOUND"
+												},
+												"status": {
+													"const": 404
+												},
+												"message": {
+													"type": "string",
+													"default": "Not found."
+												},
+												"data": {}
+											},
+											"required": [
+												"defined",
+												"code",
+												"status",
+												"message"
+											]
+										},
+										{
+											"type": "object",
+											"properties": {
+												"defined": {
+													"const": false
+												},
+												"code": {
+													"type": "string"
+												},
+												"status": {
+													"type": "number"
+												},
+												"message": {
+													"type": "string"
+												},
+												"data": {}
+											},
+											"required": [
+												"defined",
+												"code",
+												"status",
+												"message"
+											]
+										}
+									]
+								}
+							}
+						}
+					},
+					"default": {
+						"description": "Structured API error. See status and code; do not branch on message text.",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"required": [
+										"defined",
+										"code",
+										"status",
+										"message"
+									],
+									"properties": {
+										"defined": {
+											"type": "boolean"
+										},
+										"code": {
+											"type": "string"
+										},
+										"status": {
+											"type": "integer"
+										},
+										"message": {
+											"type": "string"
+										},
+										"data": {}
+									}
+								}
+							}
+						}
+					}
+				},
+				"security": [
+					{
+						"apiKey": []
+					},
+					{
+						"bearerAuth": []
+					},
+					{
+						"cookieAuth": []
+					}
+				],
+				"x-codeSamples": [
+					{
+						"lang": "bash",
+						"label": "cURL",
+						"source": "curl --request POST \"https://careeros.example/api/openapi/email-templates/org/<id>/archive\" --header \"x-api-key: <api-key>\""
+					}
+				]
+			}
+		},
+		"/email-templates/render": {
+			"post": {
+				"operationId": "renderEmailTemplate",
+				"summary": "Fill an email template in from an application",
+				"description": "Returns the subject, the body and the contact's address for a template filled in from one of your own applications. Unknown variables stay as typed and missing values become a placeholder such as [company]. Nothing is stored or sent. Requires authentication.",
+				"tags": [
+					"Email templates"
+				],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"type": "object",
+								"properties": {
+									"templateId": {
+										"type": "string",
+										"minLength": 1,
+										"maxLength": 64,
+										"description": "A template of yours, an organization default, or builtin:<kind>."
+									},
+									"applicationId": {
+										"type": "string",
+										"minLength": 1,
+										"maxLength": 64,
+										"description": "One of your own applications."
+									},
+									"locale": {
+										"type": "string",
+										"minLength": 2,
+										"maxLength": 35,
+										"description": "A BCP 47 language tag for the interview date."
+									},
+									"source": {
+										"type": "object",
+										"properties": {
+											"subject": {
+												"type": "string",
+												"minLength": 1,
+												"maxLength": 300
+											},
+											"body": {
+												"type": "string",
+												"maxLength": 10000
+											}
+										},
+										"required": [
+											"subject",
+											"body"
+										],
+										"description": "Only for a built-in: the text to use in place of its English source, so it can be shown translated."
+									}
+								},
+								"required": [
+									"templateId",
+									"applicationId"
+								]
+							}
+						}
+					}
+				},
+				"responses": {
+					"200": {
+						"description": "OK",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"subject": {
+											"type": "string"
+										},
+										"body": {
+											"type": "string"
+										},
+										"to": {
+											"anyOf": [
+												{
+													"type": "string"
+												},
+												{
+													"type": "null"
+												}
+											],
+											"description": "The contact's email address, when it is known."
+										},
+										"missing": {
+											"type": "array",
+											"items": {
+												"enum": [
+													"firstName",
+													"fullName",
+													"company",
+													"role",
+													"contactName",
+													"interviewDate",
+													"myEmail"
+												],
+												"type": "string"
+											},
+											"description": "The variables the template uses that had no value to fill in."
+										}
+									},
+									"required": [
+										"subject",
+										"body",
+										"to",
+										"missing"
+									]
+								}
+							}
+						}
+					},
+					"400": {
+						"description": "400",
+						"content": {
+							"application/json": {
+								"schema": {
+									"oneOf": [
+										{
+											"type": "object",
+											"properties": {
+												"defined": {
+													"const": true
+												},
+												"code": {
+													"const": "BAD_REQUEST"
+												},
+												"status": {
+													"const": 400
+												},
+												"message": {
+													"type": "string",
+													"default": "Invalid request."
+												},
+												"data": {}
+											},
+											"required": [
+												"defined",
+												"code",
+												"status",
+												"message"
+											]
+										},
+										{
+											"type": "object",
+											"properties": {
+												"defined": {
+													"const": false
+												},
+												"code": {
+													"type": "string"
+												},
+												"status": {
+													"type": "number"
+												},
+												"message": {
+													"type": "string"
+												},
+												"data": {}
+											},
+											"required": [
+												"defined",
+												"code",
+												"status",
+												"message"
+											]
+										}
+									]
+								}
+							}
+						}
+					},
+					"404": {
+						"description": "404",
+						"content": {
+							"application/json": {
+								"schema": {
+									"oneOf": [
+										{
+											"type": "object",
+											"properties": {
+												"defined": {
+													"const": true
+												},
+												"code": {
+													"const": "NOT_FOUND"
+												},
+												"status": {
+													"const": 404
+												},
+												"message": {
+													"type": "string",
+													"default": "Not found."
+												},
+												"data": {}
+											},
+											"required": [
+												"defined",
+												"code",
+												"status",
+												"message"
+											]
+										},
+										{
+											"type": "object",
+											"properties": {
+												"defined": {
+													"const": false
+												},
+												"code": {
+													"type": "string"
+												},
+												"status": {
+													"type": "number"
+												},
+												"message": {
+													"type": "string"
+												},
+												"data": {}
+											},
+											"required": [
+												"defined",
+												"code",
+												"status",
+												"message"
+											]
+										}
+									]
+								}
+							}
+						}
+					},
+					"default": {
+						"description": "Structured API error. See status and code; do not branch on message text.",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"required": [
+										"defined",
+										"code",
+										"status",
+										"message"
+									],
+									"properties": {
+										"defined": {
+											"type": "boolean"
+										},
+										"code": {
+											"type": "string"
+										},
+										"status": {
+											"type": "integer"
+										},
+										"message": {
+											"type": "string"
+										},
+										"data": {}
+									}
+								}
+							}
+						}
+					}
+				},
+				"security": [
+					{
+						"apiKey": []
+					},
+					{
+						"bearerAuth": []
+					},
+					{
+						"cookieAuth": []
+					}
+				],
+				"x-codeSamples": [
+					{
+						"lang": "bash",
+						"label": "cURL",
+						"source": "curl --request POST \"https://careeros.example/api/openapi/email-templates/render\" --header \"x-api-key: <api-key>\" --header \"Content-Type: application/json\" --data '{\n  \"templateId\": \"<string>\",\n  \"applicationId\": \"<string>\"\n}'"
+					}
+				]
+			}
+		},
 		"/flags": {
 			"get": {
 				"operationId": "getFeatureFlags",

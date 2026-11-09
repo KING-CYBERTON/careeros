@@ -105,6 +105,8 @@ async function seedRowsWithoutEndpoint(a: Party, tag: string) {
 		discoveredJob: `xorga-posting-${tag}`,
 		// CAREEROS (P3-T08): a cohort of Organization A. The marker is in its name so any echo is detected.
 		cohort: `xorga-cohort-${tag}`,
+		// CAREEROS (P5-T04): a default email template of Organization A. The marker is in its subject and body.
+		emailTemplate: `xorga-emailtemplate-${tag}`,
 		// CAREEROS (P5-T02): one of A's Job Clipper sign-ins. Only a hash goes in, as in production.
 		clipperToken: `xorga-clipper-${tag}`,
 	};
@@ -142,6 +144,10 @@ async function seedRowsWithoutEndpoint(a: Party, tag: string) {
 			a.organizationId,
 			`Xorga${tag} cohort`,
 		]);
+		await pool.query(
+			`insert into email_template (id, organization_id, kind, name, subject, body) values ($1, $2, 'custom', $3, $4, $5)`,
+			[ids.emailTemplate, a.organizationId, `Xorga${tag} template`, `Xorga${tag} subject`, `Xorga${tag} body`],
+		);
 		await pool.query(`insert into job_source (id, organization_id, user_id, name) values ($1, $2, $3, $4)`, [
 			ids.jobSource,
 			a.organizationId,
@@ -528,6 +534,8 @@ export async function createTwoOrgs(playwright: Playwright, baseURL: string, own
 			// CAREEROS (P3-T08)
 			cohort: extra.cohort,
 			member: authOrg.memberId,
+			// CAREEROS (P5-T04)
+			emailTemplate: extra.emailTemplate,
 			clipperToken: extra.clipperToken,
 		};
 		const missing = Object.entries(ids).filter(([, value]) => !value);

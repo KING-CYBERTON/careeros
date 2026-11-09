@@ -72,9 +72,11 @@ import { Route as DashboardSettingsAuditRouteImport } from "./routes/dashboard/s
 import { Route as DashboardSettingsBrandingRouteImport } from "./routes/dashboard/settings/branding";
 import { Route as DashboardSettingsCohortsRouteImport } from "./routes/dashboard/settings/cohorts";
 import { Route as DashboardSettingsDomainsRouteImport } from "./routes/dashboard/settings/domains";
+import { Route as DashboardSettingsEmailTemplatesRouteImport } from "./routes/dashboard/settings/email-templates";
 import { Route as DashboardSettingsIntegrationsRouteRouteImport } from "./routes/dashboard/settings/integrations/route";
 import { Route as DashboardSettingsJobSearchRouteImport } from "./routes/dashboard/settings/job-search";
 import { Route as DashboardSettingsMembersRouteImport } from "./routes/dashboard/settings/members";
+import { Route as DashboardSettingsOrgEmailTemplatesRouteImport } from "./routes/dashboard/settings/org-email-templates";
 import { Route as DashboardSettingsPreferencesRouteImport } from "./routes/dashboard/settings/preferences";
 import { Route as DashboardSettingsProfileRouteImport } from "./routes/dashboard/settings/profile";
 import { Route as DashboardApplicationsApplicationIdChar123TabChar125RouteImport } from "./routes/dashboard/applications/$applicationId.{-$tab}";
@@ -413,6 +415,12 @@ const DashboardSettingsDomainsRoute =
     path: "/domains",
     getParentRoute: () => DashboardSettingsRouteRoute,
   } as any);
+const DashboardSettingsEmailTemplatesRoute =
+  DashboardSettingsEmailTemplatesRouteImport.update({
+    id: "/email-templates",
+    path: "/email-templates",
+    getParentRoute: () => DashboardSettingsRouteRoute,
+  } as any);
 const DashboardSettingsIntegrationsRouteRoute =
   DashboardSettingsIntegrationsRouteRouteImport.update({
     id: "/integrations",
@@ -429,6 +437,12 @@ const DashboardSettingsMembersRoute =
   DashboardSettingsMembersRouteImport.update({
     id: "/members",
     path: "/members",
+    getParentRoute: () => DashboardSettingsRouteRoute,
+  } as any);
+const DashboardSettingsOrgEmailTemplatesRoute =
+  DashboardSettingsOrgEmailTemplatesRouteImport.update({
+    id: "/org-email-templates",
+    path: "/org-email-templates",
     getParentRoute: () => DashboardSettingsRouteRoute,
   } as any);
 const DashboardSettingsPreferencesRoute =
@@ -555,8 +569,10 @@ export interface FileRoutesByFullPath {
   "/dashboard/settings/branding": typeof DashboardSettingsBrandingRoute;
   "/dashboard/settings/cohorts": typeof DashboardSettingsCohortsRoute;
   "/dashboard/settings/domains": typeof DashboardSettingsDomainsRoute;
+  "/dashboard/settings/email-templates": typeof DashboardSettingsEmailTemplatesRoute;
   "/dashboard/settings/job-search": typeof DashboardSettingsJobSearchRoute;
   "/dashboard/settings/members": typeof DashboardSettingsMembersRoute;
+  "/dashboard/settings/org-email-templates": typeof DashboardSettingsOrgEmailTemplatesRoute;
   "/dashboard/settings/preferences": typeof DashboardSettingsPreferencesRoute;
   "/dashboard/settings/profile": typeof DashboardSettingsProfileRoute;
   "/admin/organizations/": typeof AdminOrganizationsIndexRoute;
@@ -625,8 +641,10 @@ export interface FileRoutesByTo {
   "/dashboard/settings/branding": typeof DashboardSettingsBrandingRoute;
   "/dashboard/settings/cohorts": typeof DashboardSettingsCohortsRoute;
   "/dashboard/settings/domains": typeof DashboardSettingsDomainsRoute;
+  "/dashboard/settings/email-templates": typeof DashboardSettingsEmailTemplatesRoute;
   "/dashboard/settings/job-search": typeof DashboardSettingsJobSearchRoute;
   "/dashboard/settings/members": typeof DashboardSettingsMembersRoute;
+  "/dashboard/settings/org-email-templates": typeof DashboardSettingsOrgEmailTemplatesRoute;
   "/dashboard/settings/preferences": typeof DashboardSettingsPreferencesRoute;
   "/dashboard/settings/profile": typeof DashboardSettingsProfileRoute;
   "/admin/organizations": typeof AdminOrganizationsIndexRoute;
@@ -705,8 +723,10 @@ export interface FileRoutesById {
   "/dashboard/settings/branding": typeof DashboardSettingsBrandingRoute;
   "/dashboard/settings/cohorts": typeof DashboardSettingsCohortsRoute;
   "/dashboard/settings/domains": typeof DashboardSettingsDomainsRoute;
+  "/dashboard/settings/email-templates": typeof DashboardSettingsEmailTemplatesRoute;
   "/dashboard/settings/job-search": typeof DashboardSettingsJobSearchRoute;
   "/dashboard/settings/members": typeof DashboardSettingsMembersRoute;
+  "/dashboard/settings/org-email-templates": typeof DashboardSettingsOrgEmailTemplatesRoute;
   "/dashboard/settings/preferences": typeof DashboardSettingsPreferencesRoute;
   "/dashboard/settings/profile": typeof DashboardSettingsProfileRoute;
   "/admin/organizations/": typeof AdminOrganizationsIndexRoute;
@@ -785,8 +805,10 @@ export interface FileRouteTypes {
     | "/dashboard/settings/branding"
     | "/dashboard/settings/cohorts"
     | "/dashboard/settings/domains"
+    | "/dashboard/settings/email-templates"
     | "/dashboard/settings/job-search"
     | "/dashboard/settings/members"
+    | "/dashboard/settings/org-email-templates"
     | "/dashboard/settings/preferences"
     | "/dashboard/settings/profile"
     | "/admin/organizations/"
@@ -855,8 +877,10 @@ export interface FileRouteTypes {
     | "/dashboard/settings/branding"
     | "/dashboard/settings/cohorts"
     | "/dashboard/settings/domains"
+    | "/dashboard/settings/email-templates"
     | "/dashboard/settings/job-search"
     | "/dashboard/settings/members"
+    | "/dashboard/settings/org-email-templates"
     | "/dashboard/settings/preferences"
     | "/dashboard/settings/profile"
     | "/admin/organizations"
@@ -934,8 +958,10 @@ export interface FileRouteTypes {
     | "/dashboard/settings/branding"
     | "/dashboard/settings/cohorts"
     | "/dashboard/settings/domains"
+    | "/dashboard/settings/email-templates"
     | "/dashboard/settings/job-search"
     | "/dashboard/settings/members"
+    | "/dashboard/settings/org-email-templates"
     | "/dashboard/settings/preferences"
     | "/dashboard/settings/profile"
     | "/admin/organizations/"
@@ -1410,6 +1436,13 @@ declare module "@tanstack/react-router" {
       preLoaderRoute: typeof DashboardSettingsDomainsRouteImport;
       parentRoute: typeof DashboardSettingsRouteRoute;
     };
+    "/dashboard/settings/email-templates": {
+      id: "/dashboard/settings/email-templates";
+      path: "/email-templates";
+      fullPath: "/dashboard/settings/email-templates";
+      preLoaderRoute: typeof DashboardSettingsEmailTemplatesRouteImport;
+      parentRoute: typeof DashboardSettingsRouteRoute;
+    };
     "/dashboard/settings/integrations": {
       id: "/dashboard/settings/integrations";
       path: "/integrations";
@@ -1429,6 +1462,13 @@ declare module "@tanstack/react-router" {
       path: "/members";
       fullPath: "/dashboard/settings/members";
       preLoaderRoute: typeof DashboardSettingsMembersRouteImport;
+      parentRoute: typeof DashboardSettingsRouteRoute;
+    };
+    "/dashboard/settings/org-email-templates": {
+      id: "/dashboard/settings/org-email-templates";
+      path: "/org-email-templates";
+      fullPath: "/dashboard/settings/org-email-templates";
+      preLoaderRoute: typeof DashboardSettingsOrgEmailTemplatesRouteImport;
       parentRoute: typeof DashboardSettingsRouteRoute;
     };
     "/dashboard/settings/preferences": {
@@ -1667,8 +1707,10 @@ interface DashboardSettingsRouteRouteChildren {
   DashboardSettingsBrandingRoute: typeof DashboardSettingsBrandingRoute;
   DashboardSettingsCohortsRoute: typeof DashboardSettingsCohortsRoute;
   DashboardSettingsDomainsRoute: typeof DashboardSettingsDomainsRoute;
+  DashboardSettingsEmailTemplatesRoute: typeof DashboardSettingsEmailTemplatesRoute;
   DashboardSettingsJobSearchRoute: typeof DashboardSettingsJobSearchRoute;
   DashboardSettingsMembersRoute: typeof DashboardSettingsMembersRoute;
+  DashboardSettingsOrgEmailTemplatesRoute: typeof DashboardSettingsOrgEmailTemplatesRoute;
   DashboardSettingsPreferencesRoute: typeof DashboardSettingsPreferencesRoute;
   DashboardSettingsProfileRoute: typeof DashboardSettingsProfileRoute;
   DashboardSettingsIndexRoute: typeof DashboardSettingsIndexRoute;
@@ -1688,8 +1730,11 @@ const DashboardSettingsRouteRouteChildren: DashboardSettingsRouteRouteChildren =
     DashboardSettingsBrandingRoute: DashboardSettingsBrandingRoute,
     DashboardSettingsCohortsRoute: DashboardSettingsCohortsRoute,
     DashboardSettingsDomainsRoute: DashboardSettingsDomainsRoute,
+    DashboardSettingsEmailTemplatesRoute: DashboardSettingsEmailTemplatesRoute,
     DashboardSettingsJobSearchRoute: DashboardSettingsJobSearchRoute,
     DashboardSettingsMembersRoute: DashboardSettingsMembersRoute,
+    DashboardSettingsOrgEmailTemplatesRoute:
+      DashboardSettingsOrgEmailTemplatesRoute,
     DashboardSettingsPreferencesRoute: DashboardSettingsPreferencesRoute,
     DashboardSettingsProfileRoute: DashboardSettingsProfileRoute,
     DashboardSettingsIndexRoute: DashboardSettingsIndexRoute,

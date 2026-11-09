@@ -336,7 +336,9 @@ msgid "{0} (copy)"
 msgstr "{0} (ನಕಲು)"
 
 #. placeholder {0}: document.name
+#. placeholder {0}: selected.name
 #: src/draft/adapters.ts
+#: src/features/email-templates/write-email-sheet.tsx
 msgid "{0} (mine)"
 msgstr "{0} (ಗಣಿ)"
 
@@ -848,6 +850,10 @@ msgstr ""
 #: src/features/applications/prior-no-response.tsx
 msgid "A previous application to this company was closed with No response. You can still apply."
 msgstr "ಈ ಕಂಪನಿಗೆ ಹಿಂದಿನ ಅರ್ಜಿಯನ್ನು ಪ್ರತಿಕ್ರಿಯೆ ಇಲ್ಲ ಎಂಬ ಫಲಿತಾಂಶದೊಂದಿಗೆ ಮುಚ್ಚಲಾಗಿದೆ. ನೀವು ಇನ್ನೂ ಅರ್ಜಿ ಸಲ್ಲಿಸಬಹುದು."
+
+#: src/features/email-templates/built-in-text.ts
+msgid "A question about working at {company}"
+msgstr ""
 
 #: src/features/application-detail/sheets.tsx
 msgid "A reminder to check in, shown as the next step until you do."
@@ -1498,6 +1504,10 @@ msgstr "ಈಗಾಗಲೇ ಮುಚ್ಚಲಾಗಿದೆ · ಪುಟದಲ�
 msgid "Already covered:"
 msgstr "ಈಗಾಗಲೇ ಸೇರಿಸಲಾಗಿದೆ:"
 
+#: src/features/email-templates/templates-screen.tsx
+msgid "Also available to you"
+msgstr ""
+
 #: src/features/check/screen.tsx
 msgid "Also check the exported PDF"
 msgstr "ರಫ್ತು ಮಾಡಲಾದ PDF ಅನ್ನು ಸಹ ಪರಿಶೀಲಿಸಿ"
@@ -1601,6 +1611,10 @@ msgstr "ಯಾವುದಾದರೂ"
 #: src/features/design/style-groups.tsx
 msgid "Any font, in Advanced"
 msgstr "ಯಾವುದೇ ಫಾಂಟ್, ಸುಧಾರಿತ"
+
+#: src/features/email-templates/template-editor.tsx
+msgid "Any stage"
+msgstr ""
 
 #: src/features/share/web-page.tsx
 msgid "Anyone with the link will be able to view your resume."
@@ -1797,6 +1811,19 @@ msgstr "“{0}” ಬಳಸುವ ಅಪ್ಲಿಕೇಶನ್‌ಗಳು ಕ
 #: src/features/settings/locale-names.ts
 msgid "Arabic"
 msgstr "ಅರೇಬಿಕ್"
+
+#: src/features/email-templates/templates-screen.tsx
+msgid "Archive"
+msgstr ""
+
+#. placeholder {0}: archiving?.name ?? ""
+#: src/features/email-templates/templates-screen.tsx
+msgid "Archive {0}?"
+msgstr ""
+
+#: src/features/email-templates/template-editor.tsx
+msgid "Archive template"
+msgstr ""
 
 #: src/features/write/fields.ts
 msgid "Area of study"
@@ -2168,6 +2195,10 @@ msgstr "ಬ್ರೀಫಿಂಗ್ ರಿಫ್ರೆಶ್ ವಿರಾಮಗ�
 msgid "Browsers where you signed in to the Job Clipper extension. You sign in from the extension on a computer."
 msgstr ""
 
+#: src/features/email-templates/labels.ts
+msgid "Built-in"
+msgstr ""
+
 #: src/features/ai/web-access.tsx
 msgid "Built-in reader"
 msgstr "ಅಂತರ್ನಿರ್ಮಿತ ರೀಡರ್"
@@ -2215,6 +2246,7 @@ msgstr "ಸಾಫ್ಟ್‌ವೇರ್ ನಿಮ್ಮ ರೆಸ್ಯೂಮ�
 #: src/features/check/parser.tsx
 #: src/features/check/writing.tsx
 #: src/features/discovery/search-form.tsx
+#: src/features/email-templates/template-editor.tsx
 #: src/features/search/search-screen.tsx
 #: src/features/workspace/preparation.tsx
 #: src/features/workspace/tabs/fit.tsx
@@ -2960,6 +2992,7 @@ msgstr ""
 msgid "Copies it"
 msgstr "ಇದನ್ನು ನಕಲಿಸುತ್ತದೆ"
 
+#: src/features/email-templates/write-email-sheet.tsx
 #: src/features/share/link.tsx
 #: src/features/workspace/answer-library.tsx
 msgid "Copy"
@@ -3026,6 +3059,10 @@ msgstr "ವರ್ಷವನ್ನು ಸರಿಪಡಿಸಿ, ಅಥವಾ ನ�
 msgid "Couldn't add the domain. Check the name and try again."
 msgstr ""
 
+#: src/features/email-templates/templates-screen.tsx
+msgid "Couldn't archive the template. Try again."
+msgstr ""
+
 #: src/features/assistant/chat-view.tsx
 msgid "Couldn't attach the file. Try again."
 msgstr "ಫೈಲ್ ಲಗತ್ತಿಸಲು ಸಾಧ್ಯವಾಗಲಿಲ್ಲ. ಮತ್ತೆ ಪ್ರಯತ್ನಿಸಿ."
@@ -3087,6 +3124,10 @@ msgstr "ಉಳಿಸುವಿಕೆಯನ್ನು ದೃಢೀಕರಿಸಲ�
 #: src/features/assistant/chat-view.tsx
 msgid "Couldn't copy the transcript. Try again."
 msgstr "ಪ್ರತಿಲಿಪಿಯನ್ನು ನಕಲಿಸಲು ಸಾಧ್ಯವಾಗಲಿಲ್ಲ. ಮತ್ತೆ ಪ್ರಯತ್ನಿಸಿ."
+
+#: src/features/email-templates/write-email-sheet.tsx
+msgid "Couldn't copy. Select the text and copy it yourself."
+msgstr ""
 
 #: src/features/branding/domains-screen.tsx
 msgid "Couldn't copy. Select the text instead."
@@ -3394,6 +3435,11 @@ msgstr "ಟಿಪ್ಪಣಿಗಳನ್ನು ಉಳಿಸಲು ಸಾಧ್�
 msgid "Couldn't save the tags. Try again."
 msgstr "ಟ್ಯಾಗ್‌ಗಳನ್ನು ಉಳಿಸಲು ಸಾಧ್ಯವಾಗಲಿಲ್ಲ. ಮತ್ತೆ ಪ್ರಯತ್ನಿಸಿ."
 
+#: src/features/email-templates/templates-screen.tsx
+#: src/features/email-templates/write-email-sheet.tsx
+msgid "Couldn't save the template. Try again."
+msgstr ""
+
 #: app/(tabs)/settings/preferences.tsx
 msgid "Couldn't save the theme. Try again."
 msgstr "ಥೀಮ್ ಅನ್ನು ಉಳಿಸಲು ಸಾಧ್ಯವಾಗಲಿಲ್ಲ. ಮತ್ತೆ ಪ್ರಯತ್ನಿಸಿ."
@@ -3671,6 +3717,7 @@ msgstr ""
 
 #: src/features/design/advanced.tsx
 #: src/features/design/style-groups.tsx
+#: src/features/email-templates/labels.ts
 #: src/features/letters/design.tsx
 #: src/features/write/pickers.tsx
 msgid "Custom"
@@ -4420,6 +4467,10 @@ msgstr ""
 msgid "Edit STARR story"
 msgstr "STARR ಕಥೆಯನ್ನು ಸಂಪಾದಿಸಿ"
 
+#: src/features/email-templates/templates-screen.tsx
+msgid "Edit template"
+msgstr ""
+
 #: src/features/check/issues.ts
 msgid "Edit the email"
 msgstr "ಇಮೇಲ್ ಸಂಪಾದಿಸಿ"
@@ -4459,8 +4510,17 @@ msgstr "ಇಮೇಲ್ (ಐಚ್ಛಿಕ)"
 msgid "Email address won't be recognized"
 msgstr "ಇಮೇಲ್ ವಿಳಾಸವನ್ನು ಗುರುತಿಸಲಾಗುವುದಿಲ್ಲ"
 
+#: src/features/email-templates/write-email-sheet.tsx
+msgid "Email copied"
+msgstr ""
+
 #: src/features/branding/branding-screen.tsx
 msgid "Email sender name"
+msgstr ""
+
+#: app/(tabs)/settings/index.tsx
+#: src/features/email-templates/templates-screen.tsx
+msgid "Email templates"
 msgstr ""
 
 #: src/features/application-detail/sheets.tsx
@@ -4763,6 +4823,10 @@ msgstr "ವಿವರಗಳನ್ನು ಹಸ್ತಚಾಲಿತವಾಗಿ �
 msgid "Fill empty fields with AI"
 msgstr "ಖಾಲಿ ಜಾಗಗಳನ್ನು AI ನೊಂದಿಗೆ ಭರ್ತಿ ಮಾಡಿ"
 
+#: src/features/email-templates/write-email-sheet.tsx
+msgid "Fill in the [bracketed] parts before you send it."
+msgstr ""
+
 #: src/features/letters/write.tsx
 msgid "Filled from the application. The greeting follows the name."
 msgstr "ಉದ್ಯೋಗ ಅರ್ಜಿಯಿಂದ ಭರ್ತಿ ಮಾಡಲಾಗಿದೆ. ಶುಭಾಶಯವು ಹೆಸರನ್ನು ಅನುಸರಿಸುತ್ತದೆ."
@@ -4850,12 +4914,17 @@ msgstr "ಗಮನ, ಅನುಭವ, ಈ ಹುದ್ದೆ ಏಕೆ"
 msgid "Follow up"
 msgstr "ಮತ್ತೆ ಸಂಪರ್ಕಿಸಿ"
 
+#: src/features/email-templates/built-in-text.ts
+msgid "Follow up after applying"
+msgstr ""
+
 #: src/features/workspace/tabs/messages.tsx
 msgid "Follow up on {at}"
 msgstr "{at} ನಲ್ಲಿ ಅನುಸರಿಸಿ"
 
 #: src/features/application-detail/sheets.tsx
 #: src/features/applications-board/calendar-screen.tsx
+#: src/features/email-templates/labels.ts
 msgid "Follow-up"
 msgstr "ಫಾಲೋ-ಅಪ್"
 
@@ -4870,6 +4939,10 @@ msgstr "ಫಾಲೋ-ಅಪ್ ಟಿಪ್ಪಣಿ"
 #: src/features/career/schedule-sheet.tsx
 msgid "Follow-up reminder"
 msgstr "ಫಾಲೋ-ಅಪ್ ಜ್ಞಾಪನೆ"
+
+#: src/features/email-templates/built-in-text.ts
+msgid "Following up on my {role} application"
+msgstr ""
 
 #: src/features/branding/branding-screen.tsx
 msgid "Font"
@@ -4998,6 +5071,10 @@ msgstr "ಫಿಟ್‌ನಿಂದ"
 #: src/features/assistant/assistant-screen.tsx
 msgid "From your experience entries"
 msgstr "ನಿಮ್ಮ ಅನುಭವದ ನಮೂದುಗಳಿಂದ"
+
+#: src/features/email-templates/templates-screen.tsx
+msgid "From your organization and the built-in set. You can't change these here."
+msgstr ""
 
 #: src/features/career/search-regions-field.tsx
 msgid "From your timezone"
@@ -5149,6 +5226,53 @@ msgstr "ಮತ್ತೆ ಕೇಳಿದ"
 #: src/features/settings/locale-names.ts
 msgid "Hebrew"
 msgstr "ಹೀಬ್ರೂ"
+
+#: src/features/email-templates/built-in-text.ts
+msgid "Hello {contactName},\n"
+"\n"
+"I applied for the {role} position at {company} and wanted to ask where my application stands. I am still very interested in the role, and I would be glad to send anything that would help your review.\n"
+"\n"
+"Thank you for your time.\n"
+"\n"
+"{fullName}\n"
+"{myEmail}"
+msgstr ""
+
+#: src/features/email-templates/built-in-text.ts
+msgid "Hello {contactName},\n"
+"\n"
+"My name is {fullName}, and I am looking at {role} opportunities at {company}. I admire what your team is building, and I would value ten minutes of your time to hear how you got started there and what the team looks for.\n"
+"\n"
+"I know your days are full, so please say no if the timing is wrong. Any pointer you can share would help.\n"
+"\n"
+"Kind regards,\n"
+"{firstName}\n"
+"{myEmail}"
+msgstr ""
+
+#: src/features/email-templates/built-in-text.ts
+msgid "Hello {contactName},\n"
+"\n"
+"Thank you for offering me the {role} position at {company}. I am glad to be considered and I am excited about joining the team. Before I accept, I would like to talk through the pay and the start date. Given the scope of the role and my experience, I would like to discuss [the terms you have in mind].\n"
+"\n"
+"Could we find a time this week to go through it together?\n"
+"\n"
+"With thanks,\n"
+"{fullName}\n"
+"{myEmail}"
+msgstr ""
+
+#: src/features/email-templates/built-in-text.ts
+msgid "Hello {contactName},\n"
+"\n"
+"Thank you for taking the time to meet with me on {interviewDate} about the {role} role at {company}. Our conversation left me more excited about the work, and I would welcome the chance to take the next step.\n"
+"\n"
+"If there is anything I can send to help with your decision, just let me know.\n"
+"\n"
+"Best regards,\n"
+"{fullName}\n"
+"{myEmail}"
+msgstr ""
 
 #: app/(tabs)/settings/index.tsx
 msgid "Help & docs"
@@ -5579,6 +5703,14 @@ msgstr ""
 msgid "It has entries but isn't placed on a page."
 msgstr "ಇದು ನಮೂದುಗಳನ್ನು ಹೊಂದಿದೆ ಆದರೆ ಪುಟದಲ್ಲಿ ಇರಿಸಲಾಗಿಲ್ಲ."
 
+#: src/features/email-templates/write-email-sheet.tsx
+msgid "It is saved as it reads now. To reuse it for other applications, put the variables back where the details are."
+msgstr ""
+
+#: src/features/email-templates/templates-screen.tsx
+msgid "It leaves your list. Emails you already sent are not affected."
+msgstr ""
+
 #: src/features/branding/domains-screen.tsx
 msgid "It stops serving your organization right away (other servers within about a minute). Members can still use your address."
 msgstr ""
@@ -5784,6 +5916,10 @@ msgstr "ಕೀವರ್ಡ್‌ಗಳು"
 #: src/features/settings/locale-names.ts
 msgid "Khmer"
 msgstr "ಖ್ಮೇರ್"
+
+#: src/features/email-templates/template-editor.tsx
+msgid "Kind"
+msgstr ""
 
 #: src/features/share/letter.ts
 msgid "Kind regards,"
@@ -6516,6 +6652,8 @@ msgid "Meets your minimum base salary."
 msgstr "ನಿಮ್ಮ ಕನಿಷ್ಠ ಮೂಲ ವೇತನವನ್ನು ಪೂರೈಸುತ್ತದೆ."
 
 #: src/features/career/facts.tsx
+#: src/features/email-templates/template-editor.tsx
+#: src/features/email-templates/write-email-sheet.tsx
 msgid "Message"
 msgstr "ಸಂದೇಶ"
 
@@ -6527,6 +6665,10 @@ msgstr "ಸಹಾಯಕರಿಗೆ ಸಂದೇಶ ಕಳುಹಿಸಿ"
 #: src/shell/workspace-chrome.tsx
 msgid "Messages"
 msgstr "ಸಂದೇಶಗಳು"
+
+#: src/features/email-templates/labels.ts
+msgid "Mine"
+msgstr ""
 
 #: src/features/career/preferences.tsx
 msgid "Minimum base salary"
@@ -6740,6 +6882,7 @@ msgstr "ಅರ್ಜಿ ಸಲ್ಲಿಸಿದ ಹಂತಕ್ಕೆ ಸರಿ
 #: src/features/documents/document-sheets.tsx
 #: src/features/documents/library.tsx
 #: src/features/documents/new-document.tsx
+#: src/features/email-templates/template-editor.tsx
 #: src/features/history/history.tsx
 #: src/features/letters/share.tsx
 #: src/features/settings/profile.tsx
@@ -6811,6 +6954,10 @@ msgstr ""
 msgid "Needs you"
 msgstr "ನಿಮ್ಮ ಗಮನ ಬೇಕು"
 
+#: src/features/email-templates/labels.ts
+msgid "Negotiation"
+msgstr ""
+
 #: src/features/settings/locale-names.ts
 msgid "Nepali"
 msgstr "ನೇಪಾಳಿ"
@@ -6818,6 +6965,10 @@ msgstr "ನೇಪಾಳಿ"
 #: src/features/write/fields.ts
 msgid "Network"
 msgstr "ನೆಟ್ವರ್ಕ್"
+
+#: src/features/email-templates/labels.ts
+msgid "Networking"
+msgstr ""
 
 #: src/features/career/preferences.tsx
 #: src/features/settings/api-keys.tsx
@@ -6902,6 +7053,10 @@ msgstr "ಹೊಸ ವಿಭಾಗ"
 msgid "New STARR story"
 msgstr "ಹೊಸ STARR ಕಥೆ"
 
+#: src/features/email-templates/templates-screen.tsx
+msgid "New template"
+msgstr ""
+
 #: src/features/documents/library.tsx
 msgid "Next"
 msgstr ""
@@ -6943,6 +7098,10 @@ msgstr "ಮುಂದಿನ ಹಂತ: {note}"
 #: src/features/workspace/tabs/messages.tsx
 msgid "Next step: {note}. Adds a reminder to Today."
 msgstr "ಮುಂದಿನ ಹಂತ: {note}. ಇಂದು ಗೆ ಜ್ಞಾಪನೆಯನ್ನು ಸೇರಿಸುತ್ತದೆ."
+
+#: src/features/email-templates/built-in-text.ts
+msgid "Next steps on the {role} offer"
+msgstr ""
 
 #: src/features/documents/library.tsx
 msgid "Next unsynced drafts"
@@ -7030,6 +7189,10 @@ msgstr "ಯಾವುದೇ ಶಿಕ್ಷಣ ವಿಭಾಗ ಕಂಡುಬಂ
 msgid "No email address"
 msgstr "ಇಮೇಲ್ ವಿಳಾಸವಿಲ್ಲ"
 
+#: src/features/email-templates/write-email-sheet.tsx
+msgid "No email address for this contact yet. Add it in your mail app."
+msgstr ""
+
 #: src/features/ats-checker/messages.ts
 msgid "No email address was found."
 msgstr "ಯಾವುದೇ ಇಮೇಲ್ ವಿಳಾಸ ಕಂಡುಬಂದಿಲ್ಲ."
@@ -7073,6 +7236,10 @@ msgstr "ಯಾವುದೇ ಲಿಂಕ್ ಮಾಡಲಾದ ಅರ್ಜಿ �
 #: src/features/check/issues.ts
 msgid "No location"
 msgstr "ಸ್ಥಳವಿಲ್ಲ"
+
+#: src/features/email-templates/write-email-sheet.tsx
+msgid "No mail app could open it, so the email was copied instead."
+msgstr ""
 
 #: src/features/documents/library.tsx
 #: src/ui/fields.tsx
@@ -7585,6 +7752,10 @@ msgstr "{tabName} ನಲ್ಲಿ ತೆರೆಯಿರಿ"
 msgid "Open in editor"
 msgstr "ಇನ್ ಎಡಿಟರ್ ತೆರೆಯಿರಿ"
 
+#: src/features/email-templates/write-email-sheet.tsx
+msgid "Open in mail app"
+msgstr ""
+
 #: src/features/workspace/tabs/saved.tsx
 msgid "Open in Offers"
 msgstr "“ಆಫರ್‌ಗಳು” ನಲ್ಲಿ ತೆರೆಯಿರಿ"
@@ -7703,6 +7874,7 @@ msgid "Or in your own words…"
 msgstr "ಅಥವಾ ನಿಮ್ಮ ಮಾತಿನಲ್ಲಿ..."
 
 #: app/(tabs)/settings/index.tsx
+#: src/features/email-templates/labels.ts
 #: src/features/write/fields.ts
 msgid "Organization"
 msgstr "ಸಂಸ್ಥೆ"
@@ -7741,6 +7913,10 @@ msgstr "ಅವಧಿ ಮೀರಿದೆ: ಪಠ್ಯವು ಅಂದಿನಿ�
 #: src/features/application-detail/detail-screen.tsx
 msgid "Outcome"
 msgstr "ಫಲಿತಾಂಶ"
+
+#: src/features/email-templates/templates-screen.tsx
+msgid "Owners and admins edit the organization's templates in the web app, under Settings."
+msgstr ""
 
 #: src/features/branding/domains-screen.tsx
 msgid "Ownership is proven. The certificate is being issued; this usually takes a few minutes."
@@ -8423,6 +8599,10 @@ msgstr "ಪ್ರಕಾಶಕರು"
 msgid "Put a plain email address near the top of the first page. It is what most systems file you under."
 msgstr "ಸರಳ ಇಮೇಲ್ ವಿಳಾಸವನ್ನು ಮೊದಲ ಪುಟದ ಮೇಲ್ಭಾಗದ ಬಳಿ ಇರಿಸಿ. ಹೆಚ್ಚಿನ ಸಿಸ್ಟಂಗಳು ಇದರಡಿಯಲ್ಲಿಯೇ ನಿಮ್ಮನ್ನು ಫೈಲ್ ಮಾಡುತ್ತವೆ."
 
+#: src/features/email-templates/template-editor.tsx
+msgid "Put variables such as {examples} where the details go."
+msgstr ""
+
 #: src/features/share/link.tsx
 msgid "QR code"
 msgstr "QR ಕೋಡ್"
@@ -8482,6 +8662,10 @@ msgstr "ಫಾಂಟ್‌ಗಳನ್ನು ಎಂಬೆಡ್ ಮಾಡಿ ಮ
 #: src/features/ats-checker/messages.ts
 msgid "Re-export with fonts embedded, then open the file and check that the text copies out cleanly."
 msgstr "ಫಾಂಟ್‌ಗಳನ್ನು ಎಂಬೆಡ್ ಮಾಡಿ ಮರು-ಎಕ್ಸ್‌ಪೋರ್ಟ್ ಮಾಡಿ, ನಂತರ ಫೈಲ್ ತೆರೆದು ಪಠ್ಯ ಸ್ವಚ್ಛವಾಗಿ ಕಾಪಿ ಆಗುತ್ತದೆಯೇ ಎಂದು ಪರಿಶೀಲಿಸಿ."
+
+#: src/features/email-templates/built-in-text.ts
+msgid "Reach out to someone at the company"
+msgstr ""
 
 #: src/features/workspace/tabs/prepare.tsx
 msgid "Read briefing"
@@ -9041,6 +9225,10 @@ msgstr "ವಿನ್ಯಾಸ ಡೀಫಾಲ್ಟ್‌ಗಳನ್ನು ಮ�
 msgid "Respond by"
 msgstr "ಉತ್ತರಿಸುವ ಗಡುವು"
 
+#: src/features/email-templates/built-in-text.ts
+msgid "Respond to an offer"
+msgstr ""
+
 #: src/features/career/offers.tsx
 msgid "Response deadline has passed."
 msgstr "ಪ್ರತಿಕ್ರಿಯೆಯ ಗಡುವು ಮುಗಿದಿದೆ."
@@ -9507,6 +9695,10 @@ msgstr "ಉಳಿಸಿ ಮತ್ತು ಪರೀಕ್ಷಿಸಿ"
 msgid "Save another offer to compare"
 msgstr "ಹೋಲಿಸಲು ಇನ್ನೊಂದು ಆಫರ್ ಅನ್ನು ಉಳಿಸಿ"
 
+#: src/features/email-templates/write-email-sheet.tsx
+msgid "Save as my template"
+msgstr ""
+
 #: src/features/application-detail/sheets.tsx
 #: src/features/branding/branding-screen.tsx
 #: src/features/discovery/search-form.tsx
@@ -9565,6 +9757,10 @@ msgstr "ವೇಳಾಪಟ್ಟಿಯನ್ನು ಉಳಿಸಿ"
 #: src/features/career/stories.tsx
 msgid "Save story"
 msgstr "ಕಥೆಯನ್ನು ಉಳಿಸಿ"
+
+#: src/features/email-templates/template-editor.tsx
+msgid "Save template"
+msgstr ""
 
 #: src/features/share/download.tsx
 msgid "Save the cover letter before exporting it."
@@ -9661,6 +9857,10 @@ msgstr "“ಉಳಿಸಲಾಗಿದೆ” ಗೆ ಉಳಿಸಲಾಗಿದ�
 
 #: src/features/discovery/review-queue.tsx
 msgid "Saved to your applications"
+msgstr ""
+
+#: src/features/email-templates/write-email-sheet.tsx
+msgid "Saved to your templates"
 msgstr ""
 
 #: src/features/applications/add-sheet.tsx
@@ -10215,6 +10415,10 @@ msgstr "ಓದಿದ ವಸ್ತುಗಳನ್ನು ತೋರಿಸಿ"
 msgid "Show section icons"
 msgstr "ವಿಭಾಗದ ಐಕಾನ್‌ಗಳನ್ನು ತೋರಿಸಿ"
 
+#: src/features/email-templates/write-email-sheet.tsx
+msgid "Show templates for every stage"
+msgstr ""
+
 #: src/features/application-detail/detail-screen.tsx
 msgid "Showing saved details. They couldn't be refreshed."
 msgstr "ಉಳಿಸಿದ ವಿವರಗಳನ್ನು ತೋರಿಸಲಾಗುತ್ತಿದೆ. ಅವುಗಳನ್ನು ರಿಫ್ರೆಶ್ ಮಾಡಲು ಸಾಧ್ಯವಾಗಲಿಲ್ಲ."
@@ -10706,6 +10910,11 @@ msgstr "ಸ್ಟ್ರೈಕ್‌ಥ್ರೂ"
 msgid "Stronger verb"
 msgstr "ಬಲವಾದ ಕ್ರಿಯಾಪದ"
 
+#: src/features/email-templates/template-editor.tsx
+#: src/features/email-templates/write-email-sheet.tsx
+msgid "Subject"
+msgstr ""
+
 #: src/features/application-detail/sections.tsx
 msgid "Submission recorded {date}. The sent versions never change; current drafts stay editable. This record does not confirm employer receipt."
 msgstr ""
@@ -10742,6 +10951,10 @@ msgstr "90 ದಿನಗಳಲ್ಲಿ ಯಶಸ್ಸು · ಮುಂದಿನ 
 
 #: src/features/career/role-suggestions.tsx
 msgid "Suggest target roles (optional AI)"
+msgstr ""
+
+#: src/features/email-templates/template-editor.tsx
+msgid "Suggested for"
 msgstr ""
 
 #: src/features/workspace/tabs/messages.tsx
@@ -10925,14 +11138,23 @@ msgstr "ತೆಲುಗು"
 
 #: src/features/design/design-pane.tsx
 #: src/features/document-menu/index.tsx
+#: src/features/email-templates/write-email-sheet.tsx
 #: src/features/letters/design.tsx
 msgid "Template"
 msgstr "ಟೆಂಪ್ಲೇಟ್"
+
+#: src/features/email-templates/templates-screen.tsx
+msgid "Template archived"
+msgstr ""
 
 #. placeholder {0}: templateName(template)
 #: src/features/design/draft.ts
 msgid "Template changed to {0}"
 msgstr "ಟೆಂಪ್ಲೇಟ್ ಅನ್ನು {0} ಗೆ ಬದಲಾಯಿಸಲಾಗಿದೆ"
+
+#: src/features/email-templates/templates-screen.tsx
+msgid "Template saved"
+msgstr ""
 
 #: src/features/letters/design.tsx
 msgid "Template, type and colors follow the resume, so the pair always matches."
@@ -11020,6 +11242,18 @@ msgstr "{minimum} pt ಅಡಿಯಲ್ಲಿರುವ ಪಠ್ಯವನ್ನ�
 #: src/features/settings/locale-names.ts
 msgid "Thai"
 msgstr "ಥಾಯ್"
+
+#: src/features/email-templates/built-in-text.ts
+msgid "Thank you after an interview"
+msgstr ""
+
+#: src/features/email-templates/built-in-text.ts
+msgid "Thank you for meeting with me on {interviewDate}"
+msgstr ""
+
+#: src/features/email-templates/labels.ts
+msgid "Thank-you"
+msgstr ""
 
 #: src/features/branding/domains-screen.tsx
 msgid "That domain isn't available, or you have reached the limit."
@@ -11297,6 +11531,10 @@ msgstr "ಸೇವೆಯ ಕೋಟಾ ಮುಗಿದಿದೆ. ಸೇವೆಯ�
 msgid "The service rejected the credentials. Check the API key."
 msgstr "ಸೇವೆ ರುಜುವಾತುಗಳನ್ನು ತಿರಸ್ಕರಿಸಿದೆ. API ಕೀಯನ್ನು ಪರಿಶೀಲಿಸಿ."
 
+#: src/features/email-templates/write-email-sheet.tsx
+msgid "The templates couldn't be loaded."
+msgstr ""
+
 #: src/features/ai/error.ts
 msgid "The test didn't run. Try again."
 msgstr "ಪರೀಕ್ಷೆ ನಡೆಯಲಿಲ್ಲ. ಮತ್ತೆ ಪ್ರಯತ್ನಿಸಿ."
@@ -11443,6 +11681,10 @@ msgstr "ಈ ಡಾಕ್ಯುಮೆಂಟ್ ಇನ್ನು ಮುಂದೆ �
 
 #: src/features/branding/domains-screen.tsx
 msgid "This domain no longer serves your organization and is being deleted."
+msgstr ""
+
+#: src/features/email-templates/write-email-sheet.tsx
+msgid "This email is too long to open in your mail app, so it was copied instead."
 msgstr ""
 
 #: src/features/workspace/answer-library.tsx
@@ -11687,6 +11929,10 @@ msgstr "ಈ ಸೈನ್-ಇನ್ ಪ್ರಯತ್ನದ ಅವಧಿ ಮೀ�
 msgid "This story is unavailable or uses facts that are switched off."
 msgstr "ಈ ಕಥೆ ಲಭ್ಯವಿಲ್ಲ ಅಥವಾ ಆಫ್ ಮಾಡಿರುವ ಸಂಗತಿಗಳನ್ನು ಬಳಸುತ್ತದೆ."
 
+#: src/features/email-templates/write-email-sheet.tsx
+msgid "This template couldn't be filled in. Try again."
+msgstr ""
+
 #: src/features/application-detail/interview-sheet.tsx
 msgid "This time does not exist in the selected timezone. Choose another time."
 msgstr "ಆಯ್ಕೆಮಾಡಿದ ಸಮಯ ವಲಯದಲ್ಲಿ ಈ ಸಮಯ ಅಸ್ತಿತ್ವದಲ್ಲಿಲ್ಲ. ಬೇರೆ ಸಮಯವನ್ನು ಆರಿಸಿ."
@@ -11773,6 +12019,10 @@ msgstr "ಪರಿಶೀಲಿಸಲು"
 #: src/features/application-detail/sheets.tsx
 msgid "To get a reminder, allow notifications in your device settings."
 msgstr "ಜ್ಞಾಪನೆಯನ್ನು ಪಡೆಯಲು, ನಿಮ್ಮ ಸಾಧನದ ಸೆಟ್ಟಿಂಗ್‌ಗಳಲ್ಲಿ ಅಧಿಸೂಚನೆಗಳನ್ನು ಅನುಮತಿಸಿ."
+
+#: src/features/email-templates/write-email-sheet.tsx
+msgid "To: {to}"
+msgstr ""
 
 #: app/(tabs)/career/_layout.tsx
 #: src/features/applications-board/calendar-screen.tsx
@@ -11878,6 +12128,8 @@ msgstr "{suggestion} ಪ್ರಯತ್ನಿಸಿ"
 #: src/features/application-detail/detail-screen.tsx
 #: src/features/branding/branding-screen.tsx
 #: src/features/branding/domains-screen.tsx
+#: src/features/email-templates/templates-screen.tsx
+#: src/features/email-templates/write-email-sheet.tsx
 #: src/features/letters/write.tsx
 #: src/features/organization/plan-screen.tsx
 #: src/features/settings/api-keys.tsx
@@ -12789,6 +13041,12 @@ msgstr "ನೆನಪು ತಾಜಾ ಇರುವಾಗಲೇ ಅವರು ಏ�
 msgid "Write each role as a clear title and company line, with the dates alongside."
 msgstr "ಪ್ರತಿ ಪಾತ್ರವನ್ನು ಸ್ಪಷ್ಟ ಶೀರ್ಷಿಕೆ ಮತ್ತು ಕಂಪನಿಯ ಸಾಲಿನಂತೆ, ಜೊತೆಗೆ ದಿನಾಂಕಗಳೊಂದಿಗೆ ಬರೆಯಿರಿ."
 
+#: src/features/application-detail/detail-screen.tsx
+#: src/features/email-templates/write-email-sheet.tsx
+#: src/features/workspace/shell.tsx
+msgid "Write email"
+msgstr ""
+
 #: src/features/ats-checker/messages.ts
 msgid "Write it as one uninterrupted piece, with no special spacing."
 msgstr "ಅದನ್ನು ಯಾವುದೇ ವಿಶೇಷ ಅಂತರವಿಲ್ಲದೆ, ಒಂದು ನಿರಂತರ ತುಣುಕಾಗಿ ಬರೆಯಿರಿ."
@@ -12889,6 +13147,10 @@ msgstr "ಸೈನ್-ಇನ್ ಪೂರ್ಣಗೊಳ್ಳುವ ಮೊದಲ
 msgid "You forgot this before, so it wasn't saved again."
 msgstr "ನೀವು ಇದನ್ನು ಮೊದಲೇ ಮರೆಯುವಂತೆ ಹೇಳಿದ್ದರಿಂದ, ಇದನ್ನು ಮತ್ತೆ ಉಳಿಸಲಾಗಿಲ್ಲ."
 
+#: src/features/email-templates/templates-screen.tsx
+msgid "You have no templates of your own yet. You can also save one from Write email."
+msgstr ""
+
 #: src/ui/overlays.tsx
 msgid "You have unsaved changes."
 msgstr "ನೀವು ಉಳಿಸದ ಬದಲಾವಣೆಗಳನ್ನು ಹೊಂದಿರುವಿರಿ."
@@ -12896,6 +13158,10 @@ msgstr "ನೀವು ಉಳಿಸದ ಬದಲಾವಣೆಗಳನ್ನು ಹ
 #: src/features/workspace/tabs/messages.tsx
 msgid "You send it from your own email."
 msgstr "ನೀವು ಅದನ್ನು ನಿಮ್ಮದೇ ಇಮೇಲ್‌ನಿಂದ ಕಳುಹಿಸುತ್ತೀರಿ."
+
+#: src/features/email-templates/write-email-sheet.tsx
+msgid "You send it from your own email. Nothing is sent from here."
+msgstr ""
 
 #: src/features/settings/sign-out.tsx
 msgid "You will be signed out of {server}. Any edits not yet synced from this device will be lost."
@@ -13101,6 +13367,10 @@ msgstr ""
 msgid "Your organization's owner manages the plan and payments on the web."
 msgstr ""
 
+#: src/features/email-templates/templates-screen.tsx
+msgid "Your own templates for writing to employers. They appear under Write email on every application."
+msgstr ""
+
 #: src/features/ats-checker/messages.ts
 msgid "Your phone number is written in an unusual shape."
 msgstr "ನಿಮ್ಮ ಫೋನ್ ಸಂಖ್ಯೆಯನ್ನು ಅಸಾಮಾನ್ಯ ರೂಪದಲ್ಲಿ ಬರೆಯಲಾಗಿದೆ."
@@ -13201,6 +13471,14 @@ msgstr "ನಿಮ್ಮ ಕಥೆಗಳು"
 #: src/features/workspace/tabs/practise.tsx
 msgid "Your story couldn't be loaded."
 msgstr "ನಿಮ್ಮ ಕಥೆಯನ್ನು ಲೋಡ್ ಮಾಡಲು ಸಾಧ್ಯವಾಗಲಿಲ್ಲ."
+
+#: src/features/email-templates/templates-screen.tsx
+msgid "Your templates"
+msgstr ""
+
+#: src/features/email-templates/templates-screen.tsx
+msgid "Your templates couldn't be loaded."
+msgstr ""
 
 #: src/features/workspace/tabs/prepare.tsx
 msgid "Your two-minute introduction"

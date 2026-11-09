@@ -11,6 +11,8 @@ import { useSession } from "@/auth/session";
 import { applicationError } from "@/features/applications/error";
 import { useApplication, useApplicationMutations } from "@/features/applications/queries";
 import { getClosedReasonLabel } from "@/features/applications/stages";
+// CAREEROS (P5-T04): the "Write email" sheet
+import { WriteEmailSheet } from "@/features/email-templates/write-email-sheet";
 import { syncReminders } from "@/features/reminders";
 import { routes } from "@/routes";
 import { Banner, Button, Card, ConfirmDialog, EmptyState, Screen, showToast, Text, useTheme } from "@/ui";
@@ -22,7 +24,8 @@ import type { ApplicationLane } from "@/features/applications/lanes";
 type Overlay =
 	| { kind: "interview"; interview: InterviewTimelineEntry | null }
 	| { kind: "close" | "applied"; lane?: ApplicationLane }
-	| { kind: "posting" | "delete" }
+	// CAREEROS (P5-T04): "email" is the Write email sheet
+	| { kind: "posting" | "delete" | "email" }
 	| null;
 
 /** One application: stage stepper, next step, what was sent, facts, contacts, notes, timeline and attachments. */
@@ -130,6 +133,14 @@ export function ApplicationDetail({ id }: ApplicationDetailProps) {
 			<WhatYouSent application={application} />
 			<Facts application={application} />
 			<Contacts application={application} />
+			{/* CAREEROS (P5-T04): write to the employer from a template for this stage */}
+			<Button
+				variant="secondary"
+				fullWidth
+				icon="envelope-simple"
+				label={t`Write email`}
+				onPress={() => setOverlay({ kind: "email" })}
+			/>
 			<Notes key={application.id} application={application} />
 			<Timeline application={application} onOpenInterview={openInterview} />
 			<Attachments application={application} />
@@ -172,6 +183,7 @@ export function ApplicationDetail({ id }: ApplicationDetailProps) {
 				onClose={close}
 			/>
 			<PostingSheet application={application} open={overlay?.kind === "posting"} onClose={close} />
+			<WriteEmailSheet application={application} open={overlay?.kind === "email"} onClose={close} />
 			<ConfirmDialog
 				open={overlay?.kind === "delete"}
 				title={t`Delete this application?`}

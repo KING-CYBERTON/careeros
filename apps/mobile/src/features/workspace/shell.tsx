@@ -21,6 +21,8 @@ import { applicationError } from "@/features/applications/error";
 import { useApplicationLanes } from "@/features/applications/lane-queries";
 import { getLaneLabel, resolveLane } from "@/features/applications/lanes";
 import { useApplication } from "@/features/applications/queries";
+// CAREEROS (P5-T04): the "Write email" sheet
+import { WriteEmailSheet } from "@/features/email-templates/write-email-sheet";
 import { routes } from "@/routes";
 import { useWorkspaceChrome } from "@/shell/workspace-chrome";
 import { Banner, Button, EmptyState, Screen, Text, useTheme } from "@/ui";
@@ -80,6 +82,8 @@ export function WorkspaceScreen({ tab, children }: WorkspaceScreenProps) {
 	const workspace = useWorkspace(id);
 	const [coach, setCoach] = useState(false);
 	const [addingInterview, setAddingInterview] = useState(false);
+	// CAREEROS (P5-T04)
+	const [writingEmail, setWritingEmail] = useState(false);
 	const application = query.data;
 
 	if (query.isPending)
@@ -137,7 +141,11 @@ export function WorkspaceScreen({ tab, children }: WorkspaceScreenProps) {
 				contentInsetAdjustmentBehavior="automatic"
 				contentContainerStyle={{ padding: space.s4, gap: space.s4, paddingBottom: space.s12 }}
 			>
-				<Header application={application} onAskCoach={() => setCoach(true)} />
+				<Header
+					application={application}
+					onAskCoach={() => setCoach(true)}
+					onWriteEmail={() => setWritingEmail(true)}
+				/>
 				<TabBadges saved={saved.data} interview={interview} now={now} />
 				{blocked ? (
 					<View style={{ gap: space.s3 }}>
@@ -195,13 +203,16 @@ export function WorkspaceScreen({ tab, children }: WorkspaceScreenProps) {
 				open={addingInterview}
 				onClose={() => setAddingInterview(false)}
 			/>
+			{/* CAREEROS (P5-T04): write to the employer from a template; sent from the member's own mail app */}
+			<WriteEmailSheet application={application} open={writingEmail} onClose={() => setWritingEmail(false)} />
 		</View>
 	);
 }
 
-type HeaderProps = { application: Application; onAskCoach: () => void };
+// CAREEROS (P5-T04): onWriteEmail
+type HeaderProps = { application: Application; onAskCoach: () => void; onWriteEmail: () => void };
 
-function Header({ application, onAskCoach }: HeaderProps) {
+function Header({ application, onAskCoach, onWriteEmail }: HeaderProps) {
 	const lanes = useApplicationLanes();
 	const { t } = useLingui();
 	const { radius, space } = useTheme();
@@ -240,6 +251,8 @@ function Header({ application, onAskCoach }: HeaderProps) {
 			</View>
 			<View style={{ flexDirection: "row", flexWrap: "wrap", gap: space.s2 }}>
 				<Button icon="sparkle" label={t`Ask the coach`} onPress={onAskCoach} />
+				{/* CAREEROS (P5-T04) */}
+				<Button variant="secondary" icon="envelope-simple" label={t`Write email`} onPress={onWriteEmail} />
 				{application.status === "offer" ? (
 					<Button
 						variant="secondary"

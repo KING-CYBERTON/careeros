@@ -34,7 +34,7 @@ import { orpc } from "@/libs/orpc/client";
 type ReplyItem = SavedItem & { data: SavedData<"reply"> };
 
 /** W15–W17: paste what the employer wrote, read it, reply, and apply the changes it implies only if you choose. */
-export function MessagesTab({ application, version, now }: WorkspaceTabProps) {
+export function MessagesTab({ application, version, now, onWriteEmail }: WorkspaceTabProps) {
 	const saved = useSavedItems(application.id);
 	const workspace = useWorkspace(application.id);
 	const readOnly = version?.data.kind === "reply";
@@ -50,6 +50,8 @@ export function MessagesTab({ application, version, now }: WorkspaceTabProps) {
 	return (
 		<div className="grid items-start gap-5 @3xl:grid-cols-[minmax(0,1fr)_280px] @5xl:grid-cols-[minmax(0,1fr)_360px]">
 			<div className="grid gap-4">
+				{/* CAREEROS (P5-T04): write to the employer from a template for this stage */}
+				{!readOnly && onWriteEmail && <WriteEmailCard application={application} onWrite={onWriteEmail} />}
 				{!readOnly && <OfferEntry application={application} />}
 				<PasteBox
 					key={`paste-${version?.id ?? "live"}`}
@@ -357,5 +359,27 @@ function ProposalCard({ reply, application, now, readOnly }: ProposalCardProps) 
 				</Swap>
 			)}
 		</aside>
+	);
+}
+
+type WriteEmailCardProps = { application: WorkspaceTabProps["application"]; onWrite: () => void };
+
+/** CAREEROS (P5-T04): a template for this stage, filled in from the application, sent from your own mail app. */
+function WriteEmailCard({ application, onWrite }: WriteEmailCardProps) {
+	return (
+		<section className="flex flex-wrap items-center gap-3 rounded-xl border border-line bg-surface p-4">
+			<div className="grid min-w-0 flex-1 gap-0.5">
+				<h2 className="text-sm font-semibold">
+					<Trans>Write to {application.company}</Trans>
+				</h2>
+				<p className="text-[13px] text-ink-2">
+					<Trans>Start from a template for this stage, edit it, and send it from your own email.</Trans>
+				</p>
+			</div>
+			<Button variant="secondary" onClick={onWrite}>
+				<Icon name="envelope-simple" size={18} />
+				<Trans>Write email</Trans>
+			</Button>
+		</section>
 	);
 }
