@@ -458,6 +458,16 @@ test.describe("host isolation", () => {
 					sameSite: "Lax",
 				},
 			]);
+			// A real owner picks A in the organization switcher first: their oldest membership (their personal workspace) is the default active organization.
+			const setActive = await send(playwright, baseURL, {
+				method: "POST",
+				path: "/api/auth/organization/set-active",
+				host: a.host,
+				origin: a.origin,
+				cookie: a.owner.cookie,
+				data: { organizationId: a.id },
+			});
+			expect(setActive.response.status(), setActive.body).toBe(200);
 			const owner = await ownerContext.newPage();
 			await owner.goto(`${a.origin}/dashboard/settings/members`);
 			const row = owner.getByTestId("member-row").filter({ hasText: invitee.account.email });
