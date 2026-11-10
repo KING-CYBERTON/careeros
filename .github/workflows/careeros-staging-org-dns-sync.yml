@@ -1,0 +1,76 @@
+# CAREEROS: P2-C05 — give every staging organization an address without a manual step. Reads the organization slugs
+# from the staging database (read only) and creates the missing managed Cloudflare CNAMEs. It never deletes a record.
+# The `staging-dns` environment has no required reviewers, so scheduled runs are not held for approval. Its token is
+# DNS: Edit only. With a setting missing the run posts a notice and succeeds, so the schedule stays green until setup.
+name: careeros-staging-org-dns-sync
+
+on:
+  schedule:
+    - cron: "*/10 * * * *"
+  workflow_run:
+    workflows: [careeros-deploy-staging]
+    types: [completed]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+# One run at a time; never cancel one that is running.
+concurrency:
+  group: careeros-staging-org-dns-sync
+  cancel-in-progress: false
+
+jobs:
+  sync:
+    name: sync organization DNS records
+    # Only this runner can reach the staging database.
+    runs-on: [self-hosted, staging]
+    environment: staging-dns
+    timeout-minutes: 10
+    if: >-
+      github.event_name != 'workflow_run' ||
+      github.event.workflow_run.conclusion == 'success'
+    env:
+      STAGING_DIR: /opt/careeros/staging
+      CF_STAGING_INFRA_TOKEN: ${{ secrets.CF_STAGING_DNS_TOKEN }}
+      CF_ZONE_ID: ${{ vars.CF_ZONE_ID }}
+      CF_TUNNEL_ID: ${{ vars.CF_TUNNEL_ID }}
+      ORG_HOST_PATTERN: ${{ vars.ORG_HOST_PATTERN }}
+    steps:
+      - name: Check settings
+        id: settings
+        run: |
+          set -euo pipefail
+          missing=""
+          for name in CF_STAGING_INFRA_TOKEN CF_ZONE_ID CF_TUNNEL_ID ORG_HOST_PATTERN; do
+            if [[ -z "${!name:-}" ]]; then missing="$missing $name"; fi
+          done
+          if [[ -n "$missing" ]]; then
+            echo "::notice::Staging DNS sync is not set up yet; missing in the staging-dns environment:$missing (the token is the secret CF_STAGING_DNS_TOKEN). Nothing was changed."
+            echo "ready=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "ready=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Check out source
+        if: steps.settings.outputs.ready == 'true'
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Set up Node.js
+        if: steps.settings.outputs.ready == 'true'
+        uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version-file: ".nvmrc"
+
+      # Read only: the local superuser inside the container needs no password and bypasses RLS.
+      - name: Sync
+        if: steps.settings.outputs.ready == 'true'
+        run: |
+          set -euo pipefail
+          script="$PWD/infra/staging/cloudflare.mjs"
+          cd "$STAGING_DIR"
+          docker compose -p careeros_staging -f compose.staging.yml exec -T postgres \
+            psql -U postgres -d postgres -Atc "select slug from organization where slug is not null" \
+            | node "$script" org-dns-sync --apply
