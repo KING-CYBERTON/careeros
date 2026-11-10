@@ -1,4 +1,5 @@
 import { randomUUID } from "node:crypto";
+import { markEmailVerified, setOrganizationPlan } from "../fixtures/careeros-org";
 import {
 	cookiePairs,
 	createHostOrgs,
@@ -7,6 +8,7 @@ import {
 	ORG_HOST_PATTERN,
 	orgHostsConfigured,
 	send,
+	signInOnHost,
 } from "../fixtures/org-hosts";
 import { withSeedPool } from "../fixtures/seed-db";
 import { expect, test } from "../fixtures/test";
@@ -380,5 +382,100 @@ test.describe("host isolation", () => {
 		const lines = cookiePairs(response).join("\n");
 		expect(lines).toMatch(/session_token=[^;]+/);
 		expect(lines).not.toMatch(/Domain=/i);
+	});
+
+	// CAREEROS (P2-T03a): a signed-in non-member must reach the invitation on the organization's host, and only that.
+	test("an existing user who belongs only to another organization accepts an Admin invitation on A's host", async ({
+		browser,
+		playwright,
+	}) => {
+		test.setTimeout(120_000);
+		const { a, b } = orgs;
+		const invitee = b.member;
+		// Accepting needs a verified address; a personal organization has one seat, so A moves to a plan with room.
+		await markEmailVerified(invitee.account);
+		await setOrganizationPlan(a.id, "pro");
+
+		const invite = await send(playwright, baseURL, {
+			method: "POST",
+			path: "/api/auth/organization/invite-member",
+			host: a.host,
+			origin: a.origin,
+			cookie: a.owner.cookie,
+			data: { email: invitee.account.email, role: "admin", organizationId: a.id },
+		});
+		expect(invite.response.status(), invite.body).toBe(200);
+		const invitationId = await withSeedPool(async (pool) => {
+			const { rows } = await pool.query<{ id: string }>(
+				"select id from invitation where organization_id = $1 and email = $2 and status = 'pending'",
+				[a.id, invitee.account.email],
+			);
+			return rows[0]?.id ?? "";
+		});
+		expect(invitationId).not.toBe("");
+
+		const cookieOf = (header: string) => {
+			const [name = "", ...rest] = header.split("; ")[0]?.split("=") ?? [];
+			return { name, value: rest.join("=") };
+		};
+		// The invitee is signed in on A's host (a host-only session), while belonging only to their own organization.
+		const { name, value } = cookieOf(await signInOnHost(playwright, baseURL, a, invitee.account));
+		const context = await browser.newContext();
+		try {
+			await context.addCookies([
+				{ name, value, domain: `${a.slug}.orgs.test`, path: "/", httpOnly: true, sameSite: "Lax" },
+			]);
+			const page = await context.newPage();
+			await page.goto(`${a.origin}/auth/accept-invitation/${invitationId}`);
+			await expect(page.getByRole("heading", { name: `Join ${a.slug}` })).toBeVisible({ timeout: 30_000 });
+			await expect(page).not.toHaveURL(/organization-access/);
+			await page.getByRole("button", { name: "Accept" }).click();
+			await page.waitForURL(new RegExp(`${a.slug}\\.orgs\\.test.*/dashboard`), { timeout: 30_000 });
+		} finally {
+			await context.close();
+		}
+
+		const role = await withSeedPool(async (pool) => {
+			const { rows } = await pool.query<{ role: string }>(
+				"select role from member where organization_id = $1 and user_id = $2",
+				[a.id, invitee.userId],
+			);
+			return rows[0]?.role;
+		});
+		expect(role).toBe("admin");
+
+		// The owner's member list shows them as Admin.
+		const ownerContext = await browser.newContext();
+		try {
+			const ownerCookie = cookieOf(a.owner.cookie);
+			await ownerContext.addCookies([
+				{
+					name: ownerCookie.name,
+					value: ownerCookie.value,
+					domain: `${a.slug}.orgs.test`,
+					path: "/",
+					httpOnly: true,
+					sameSite: "Lax",
+				},
+			]);
+			// A real owner picks A in the organization switcher first: their oldest membership (their personal workspace) is the default active organization.
+			const setActive = await send(playwright, baseURL, {
+				method: "POST",
+				path: "/api/auth/organization/set-active",
+				host: a.host,
+				origin: a.origin,
+				cookie: a.owner.cookie,
+				data: { organizationId: a.id },
+			});
+			expect(setActive.response.status(), setActive.body).toBe(200);
+			const owner = await ownerContext.newPage();
+			await owner.goto(`${a.origin}/dashboard/settings/members`);
+			const row = owner.getByTestId("member-row").filter({ hasText: invitee.account.email });
+			await expect(row).toBeVisible({ timeout: 30_000 });
+			// An owner changes roles through a select, so the shown role is its value ("Admin" is the option label).
+			await expect(row.getByRole("combobox")).toHaveValue("admin");
+		} finally {
+			await ownerContext.close();
+		}
 	});
 });
