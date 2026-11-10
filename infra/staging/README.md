@@ -206,13 +206,24 @@ Never paste a token into chat, an issue, a pull request or git.
 5. Run **Actions -> careeros-staging-cloudflare -> Run workflow** for each command below. Run each one first as a dry run (leave `apply` off), read the plan, then run it again with `apply` ticked:
    1. `tunnel-ingress`
    2. `fallback-origin`
-   3. `org-dns` with `slug` set to each test organization
 
-   The environment's required reviewers must approve each run.
+   The environment's required reviewers must approve each run. Organization records are no longer created by hand: see "Organization records are created automatically" below.
 
 A dry run (no `apply`) only reads from Cloudflare, but it does read, so it needs the real tokens and settings; with a setting missing the run fails by name before any call. Slugs cannot start or end with a hyphen.
 
 The same script runs locally with the settings in the environment: `node infra/staging/cloudflare.mjs <command> [slug] [--apply]`. It is a dry run unless `--apply` is given, never prints a token, and each command only changes what differs.
+
+### Organization records are created automatically (P2-C05)
+
+The workflow `careeros-staging-org-dns-sync` runs every 10 minutes, after each successful staging deploy, and on demand. On the staging runner it reads every organization slug from the database (read only) and runs `node infra/staging/cloudflare.mjs org-dns-sync --apply`, which creates the managed CNAME for each slug that has none. A new organization's address works within about 10 minutes. It never changes or deletes a record (at most 50 creations per run; invalid slugs are skipped with a notice). Removal stays manual with `org-dns-remove`, and `org-dns <slug> --apply` stays available when you need a record immediately.
+
+Owner actions, once:
+
+1. Create a second API token, `CF_STAGING_DNS_TOKEN`: zone `ayopa.co.ke`, **DNS: Edit** only (no tunnel permission).
+2. In GitHub **Settings -> Environments** create `staging-dns` with **no required reviewers** (scheduled runs would otherwise wait for approval).
+3. In that environment add the secret `CF_STAGING_DNS_TOKEN` and the variables `CF_ZONE_ID`, `CF_TUNNEL_ID` and `ORG_HOST_PATTERN` (the same values as in `staging`).
+
+Until all four are set, each run posts a notice naming what is missing and succeeds. Run `org-dns-sync` locally with the settings in the environment (token as `CF_STAGING_INFRA_TOKEN`): `printf 'acme\n' | node infra/staging/cloudflare.mjs org-dns-sync` (a dry run without `--apply`).
 
 ### The tunnel ingress is owned by the script
 

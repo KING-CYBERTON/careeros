@@ -2,7 +2,8 @@
 // the tunnel ingress, the Cloudflare for SaaS fallback origin and one proxied CNAME per organization host.
 // Plain Node 24, no dependencies, global fetch. Settings come from the environment only, never from arguments.
 // Usage: node infra/staging/cloudflare.mjs <command> [slug] [--apply]
-//   tunnel-ingress | fallback-origin | org-dns <slug> | org-dns-remove <slug> | status
+//   tunnel-ingress | fallback-origin | org-dns <slug> | org-dns-remove <slug> | org-dns-sync | status
+// P2-C05: `org-dns-sync` reads slugs (one per line) from stdin and creates the missing managed CNAMEs; it never deletes.
 // Dry run by default: reads current state, prints the writes it would make, makes none. Tokens are never printed.
 import { fileURLToPath } from "node:url";
 
@@ -16,7 +17,10 @@ const MAX_LABEL = 63;
 const ID = /^[A-Za-z0-9-]{1,64}$/;
 const HOST = /^[a-z0-9]([a-z0-9.-]{0,251}[a-z0-9])?$/;
 
-export const COMMANDS = ["tunnel-ingress", "fallback-origin", "org-dns", "org-dns-remove", "status"];
+/** P2-C05: the most records one `org-dns-sync` run creates (a guard against a runaway slug list). */
+export const SYNC_CAP = 50;
+
+export const COMMANDS = ["tunnel-ingress", "fallback-origin", "org-dns", "org-dns-remove", "org-dns-sync", "status"];
 
 /** Settings each command needs; checked before any API call so a missing one fails with its name. */
 const REQUIRED = {
@@ -31,6 +35,7 @@ const REQUIRED = {
 	],
 	"org-dns": ["CF_STAGING_INFRA_TOKEN", "CF_ZONE_ID", "CF_TUNNEL_ID", "ORG_HOST_PATTERN"],
 	"org-dns-remove": ["CF_STAGING_INFRA_TOKEN", "CF_ZONE_ID", "CF_TUNNEL_ID", "ORG_HOST_PATTERN"],
+	"org-dns-sync": ["CF_STAGING_INFRA_TOKEN", "CF_ZONE_ID", "CF_TUNNEL_ID", "ORG_HOST_PATTERN"],
 	status: [
 		"CF_STAGING_INFRA_TOKEN",
 		"CF_SAAS_API_TOKEN",
@@ -152,10 +157,9 @@ async function findCname(ctx, name) {
 	return Array.isArray(list) ? list.find((r) => r?.name === name) : undefined;
 }
 
-/** Ensures a proxied, tagged CNAME to the tunnel. Refuses to touch a record this script did not create. */
-async function ensureCname(ctx, name) {
-	const { env, say } = ctx;
-	const wanted = {
+/** The record body for a managed, proxied CNAME to the tunnel (shared by `org-dns` and `org-dns-sync`). */
+function managedCnameBody(env, name) {
+	return {
 		type: "CNAME",
 		name,
 		content: `${env.CF_TUNNEL_ID}.cfargotunnel.com`,
@@ -163,6 +167,12 @@ async function ensureCname(ctx, name) {
 		ttl: 1,
 		comment: MANAGED_COMMENT,
 	};
+}
+
+/** Ensures a proxied, tagged CNAME to the tunnel. Refuses to touch a record this script did not create. */
+async function ensureCname(ctx, name) {
+	const { env, say } = ctx;
+	const wanted = managedCnameBody(env, name);
 	const existing = await findCname(ctx, name);
 	const base = `/zones/${env.CF_ZONE_ID}/dns_records`;
 	if (!existing) {
@@ -214,6 +224,61 @@ async function orgDns(ctx, slug) {
 	await ensureCname(ctx, host);
 }
 
+/** Every CNAME name in the zone, read once (paged), so the sync can tell which hosts already have a record. */
+async function listCnameNames(ctx) {
+	const { cf, env } = ctx;
+	const names = new Set();
+	for (let page = 1; page <= 100; page++) {
+		const q = new URLSearchParams({ type: "CNAME", per_page: "100", page: String(page) });
+		const list = await cf("GET", `/zones/${env.CF_ZONE_ID}/dns_records?${q}`, env.CF_STAGING_INFRA_TOKEN);
+		const rows = Array.isArray(list) ? list : [];
+		for (const r of rows) if (typeof r?.name === "string") names.add(r.name);
+		if (rows.length < 100) break;
+	}
+	return names;
+}
+
+/** P2-C05: creates the managed CNAME for each stdin slug that lacks one. Never changes or deletes a record. */
+async function orgDnsSync(ctx, slugs) {
+	const { env, say } = ctx;
+	const seen = new Set(slugs.map((s) => s.trim()).filter((s) => s.length > 0));
+	const existing = await listCnameNames(ctx);
+	let created = 0;
+	let skipped = 0;
+	let capped = false;
+	for (const slug of seen) {
+		let host;
+		try {
+			host = buildOrgHost(slug, ctx.pattern);
+		} catch (error) {
+			// One bad slug never stops the run.
+			say(`Notice: skipped an invalid slug (${JSON.stringify(slug.slice(0, 80))}): ${error.message}`);
+			skipped++;
+			continue;
+		}
+		if (existing.has(host)) {
+			skipped++;
+			continue;
+		}
+		if (created >= SYNC_CAP) {
+			capped = true;
+			skipped++;
+			continue;
+		}
+		await write(
+			ctx,
+			"POST",
+			`/zones/${env.CF_ZONE_ID}/dns_records`,
+			env.CF_STAGING_INFRA_TOKEN,
+			managedCnameBody(env, host),
+		);
+		existing.add(host);
+		created++;
+	}
+	if (capped) say(`Notice: the cap of ${SYNC_CAP} creations per run was reached; the rest wait for the next run.`);
+	say(`Summary: ${seen.size} slugs seen, ${created} ${ctx.apply ? "created" : "to create"}, ${skipped} skipped.`);
+}
+
 async function orgDnsRemove(ctx, slug) {
 	const { env, say } = ctx;
 	const host = buildOrgHost(slug, ctx.pattern);
@@ -259,8 +324,15 @@ async function status(ctx) {
 	if (!managed.length) say("- (none)");
 }
 
+async function readStdin(io) {
+	if (io.stdin !== undefined) return io.stdin;
+	let text = "";
+	for await (const chunk of process.stdin) text += chunk;
+	return text;
+}
+
 /**
- * Runs the CLI. `io` is for tests: { fetch, stdout(text), stderr(text) }. Returns the exit code.
+ * Runs the CLI. `io` is for tests: { fetch, stdin (text), stdout(text), stderr(text) }. Returns the exit code.
  */
 export async function main(argv, env, io = {}) {
 	const fetchImpl = io.fetch ?? globalThis.fetch;
@@ -321,6 +393,7 @@ export async function main(argv, env, io = {}) {
 		else if (command === "fallback-origin") await fallbackOrigin(ctx);
 		else if (command === "org-dns") await orgDns(ctx, slug);
 		else if (command === "org-dns-remove") await orgDnsRemove(ctx, slug);
+		else if (command === "org-dns-sync") await orgDnsSync(ctx, (await readStdin(io)).split("\n"));
 		else await status(ctx);
 	} catch (error) {
 		if (error instanceof UserError || error instanceof CloudflareError) {

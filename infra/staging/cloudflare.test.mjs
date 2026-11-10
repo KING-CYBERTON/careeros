@@ -204,3 +204,92 @@ test("status is read only and lists managed records", async () => {
 	assert.match(out, /acme-careeros\.example\.test/);
 	assert.equal(writes(state).length, 0);
 });
+
+// CAREEROS: P2-C05. org-dns-sync reads slugs from stdin and creates only the missing managed records.
+async function runSync(args, state, stdin, env = ENV) {
+	let out = "";
+	let err = "";
+	const code = await main(args, env, {
+		fetch: state.fetch,
+		stdin,
+		stdout: (t) => (out += t),
+		stderr: (t) => (err += t),
+	});
+	return { code, out, err };
+}
+
+test("org-dns-sync dry run makes no writes", async () => {
+	const state = fakeCloudflare();
+	const { code, out } = await runSync(["org-dns-sync"], state, "acme\nbeta\n");
+	assert.equal(code, 0);
+	assert.match(out, /PLAN: POST/);
+	assert.match(out, /2 slugs seen, 2 to create, 0 skipped/);
+	assert.equal(writes(state).length, 0);
+});
+
+test("org-dns-sync --apply creates only the missing records, and a second apply creates none", async () => {
+	const state = fakeCloudflare({ records: [managed("acme-careeros.example.test")] });
+	const first = await runSync(["org-dns-sync", "--apply"], state, "acme\nbeta\ngamma\nbeta\n\n");
+	assert.equal(first.code, 0);
+	assert.match(first.out, /3 slugs seen, 2 created, 1 skipped/);
+	assert.deepEqual(
+		writes(state).map((c) => c.method),
+		["POST", "POST"],
+	);
+	const created = state.records.filter((r) => r.id !== "rx");
+	assert.deepEqual(created.map((r) => r.name).sort(), ["beta-careeros.example.test", "gamma-careeros.example.test"]);
+	for (const r of created) {
+		assert.equal(r.comment, MANAGED_COMMENT);
+		assert.equal(r.proxied, true);
+		assert.equal(r.content, "tunnel-placeholder.cfargotunnel.com");
+	}
+	state.calls.length = 0;
+	const second = await runSync(["org-dns-sync", "--apply"], state, "acme\nbeta\ngamma\n");
+	assert.equal(second.code, 0);
+	assert.match(second.out, /0 created/);
+	assert.equal(writes(state).length, 0);
+});
+
+test("org-dns-sync skips invalid slugs and keeps going", async () => {
+	const state = fakeCloudflare();
+	const { code, out } = await runSync(
+		["org-dns-sync", "--apply"],
+		state,
+		"Acme\na.b\n-a\nx".concat("x".repeat(63), "\nok\n"),
+	);
+	assert.equal(code, 0);
+	assert.match(out, /Notice: skipped an invalid slug/);
+	assert.match(out, /5 slugs seen, 1 created, 4 skipped/);
+	assert.deepEqual(
+		state.records.map((r) => r.name),
+		["ok-careeros.example.test"],
+	);
+});
+
+test("org-dns-sync caps creations at 50 per run", async () => {
+	const state = fakeCloudflare();
+	const slugs = Array.from({ length: 60 }, (_, i) => `org${i}`).join("\n");
+	const { code, out } = await runSync(["org-dns-sync", "--apply"], state, slugs);
+	assert.equal(code, 0);
+	assert.equal(writes(state).length, 50);
+	assert.match(out, /cap of 50/);
+	assert.match(out, /60 slugs seen, 50 created, 10 skipped/);
+});
+
+test("org-dns-sync never deletes and never prints a token", async () => {
+	const state = fakeCloudflare({ records: [managed("gone-careeros.example.test")] });
+	const r = await runSync(["org-dns-sync", "--apply"], state, `acme\n${INFRA}\n`);
+	assert.equal(r.code, 0);
+	assert.ok(state.calls.every((c) => c.method !== "DELETE"));
+	assert.ok(state.records.some((x) => x.name === "gone-careeros.example.test"));
+	for (const secret of [INFRA, SAAS]) assert.ok(!r.out.includes(secret) && !r.err.includes(secret));
+});
+
+test("org-dns-sync names a missing setting and takes no slug argument", async () => {
+	const state = fakeCloudflare();
+	const a = await runSync(["org-dns-sync"], state, "acme\n", { ...ENV, CF_ZONE_ID: "" });
+	assert.equal(a.code, 1);
+	assert.match(a.err, /Missing setting: CF_ZONE_ID/);
+	assert.equal(state.calls.length, 0);
+	assert.equal((await runSync(["org-dns-sync", "acme"], state, "")).code, 2);
+});
