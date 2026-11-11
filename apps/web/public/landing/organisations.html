@@ -1,0 +1,337 @@
+<!doctype html>
+<!-- CAREEROS: landing page preview, served as a static file at /landing/. Built with the taste-skill kit in assets/ (MIT). -->
+<html lang="en" data-type="software" data-radius="sharp" data-ground="sage" data-buttons="tonal" data-motion>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>CareerOS for organisations: universities and bootcamps</title>
+<meta name="description" content="Give your students and clients a resume builder, an application tracker, job discovery and an AI assistant in one workspace.">
+<meta property="og:type" content="website">
+<meta property="og:title" content="CareerOS: career platform for universities and bootcamps">
+<meta property="og:description" content="A resume builder, application tracker, job discovery and AI assistant in one workspace.">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<meta name="robots" content="noindex">
+<meta name="theme-color" content="#f8f7f3">
+<meta name="site-kind" content="software">
+<meta name="page-type" content="software">
+<link rel="stylesheet" href="fonts.css">
+<link rel="stylesheet" href="assets/system.css">
+<link rel="stylesheet" href="assets/ui/cards.css">
+<link rel="stylesheet" href="assets/motion/motion.css">
+<link rel="stylesheet" href="assets/backgrounds/backgrounds.css">
+<link rel="stylesheet" href="assets/layout/layout.css">
+<link rel="stylesheet" href="assets/icons/icon.css">
+<style>
+:root {
+  --p-bg: #f8f7f3; --p-surface: #f0efeb; --p-ink: #1c1b15; --p-muted: #66655e;
+  --p-accent: #337344; --p-accent-ink: #f8f7f3; --p-action: #337344; --p-action-ink: #f8f7f3;
+  --p-inv-bg: #1c1b15; --p-inv-surface: #292821; --p-inv-ink: #f8f7f3; --p-inv-muted: #9c9b96;
+  --p-inv-accent: #337344; --p-inv-accent-ink: #f8f7f3; --p-inv-action: #337344; --p-inv-action-ink: #f8f7f3;
+  --font-display: "Instrument Serif", Georgia, serif;
+  --font-text: "Figtree Variable", system-ui, sans-serif;
+  --font-mono: ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+  --display-weight: 400;
+  --display-tracking: -0.012em;
+  --display-tracking-xl: -0.016em;
+  --ly-scale: 1.12;
+}
+</style>
+<link rel="stylesheet" href="assets/ui/base.css">
+<link rel="stylesheet" href="assets/ui/window/fragment.css">
+<link rel="stylesheet" href="assets/ui/doc/fragment.css">
+<link rel="stylesheet" href="assets/ui/checklist/fragment.css">
+<link rel="stylesheet" href="assets/ui/search/fragment.css">
+<link rel="stylesheet" href="assets/ui/chat/fragment.css">
+<link rel="stylesheet" href="assets/ui/notify/fragment.css">
+<link rel="stylesheet" href="assets/ui/toggles/fragment.css">
+<link rel="stylesheet" href="assets/ui/stat/fragment.css">
+<link rel="stylesheet" href="assets/layout/demo.css">
+<script src="enter.js"></script>
+<script src="assets/backgrounds/backgrounds.js"></script>
+<style>
+  /* the hero's lit ground and its small card (inside the visual) */
+  .hero__art { background:
+      radial-gradient(70% 60% at 18% 12%, color-mix(in oklab, var(--ground-surface) 80%, white), transparent 70%),
+      radial-gradient(60% 50% at 90% 100%, color-mix(in oklab, var(--ground-bg) 80%, var(--ground-accent)), transparent 70%),
+      var(--ground-bg); }
+  .hero__art > .ly-piece--note { left: var(--s-6); bottom: var(--s-6); width: 300px; z-index: 2; }
+  .d-note__line { display: flex; align-items: center; gap: 10px; padding: 7px 0; font-size: 13px; color: #3d4247; border-top: 1px solid rgb(0 0 0 / .06); }
+  .d-note__line:first-of-type { border-top: 0; }
+  .d-note__line i { width: 18px; height: 18px; border-radius: 50%; flex: none; display: grid; place-items: center; background: #e7f4ec; color: #17673f; font-style: normal; font-size: 13px; font-weight: 700; }
+  .d-note__line i.warn { background: #fdf0dc; color: #8a5300; }
+  .d-note__line b { font-weight: 500; color: #16181a; }
+  .hero__proof { font-size: var(--t-small); color: var(--muted); }
+  .ly-piece--main .d-row { grid-template-columns: 36px minmax(0, 1fr) 56px 96px; }
+  .ly-piece--main .d-main { padding-right: var(--ly-cut-room); }
+  .d-chip--saved { background: #eeede8; color: #55534b; }
+  .d-chip--talk { background: #fdf0dc; color: #8a5300; }
+  @media (max-width: 639px) { .ly-piece--main .d-row { grid-template-columns: 36px minmax(0, 1fr) 96px; } }
+  @media (max-width: 1023px) { .hero__art > .ly-piece--note { left: var(--s-4); bottom: var(--s-4); width: 270px; } }
+  /* app-frame (sections-library.md) */
+  .app.ui { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); margin-top: var(--s-7); background: var(--u-bg); border: 1px solid var(--u-border); border-radius: var(--u-r); box-shadow: var(--u-shadow); }
+  .app > .app__pane { position: relative; min-width: 0; min-height: 0; overflow: hidden; }
+  .app > .app__pane + .app__pane { border-left: 1px solid var(--u-line); }
+  .app > .app__pane > .ui-panel { width: 100%; border: 0; border-radius: 0; box-shadow: none; }
+  .app > .app__pane::after { content: ""; position: absolute; inset: auto 0 0 0; height: 64px; background: linear-gradient(transparent, var(--u-bg)); pointer-events: none; }
+  .app > .app__pane--open { padding: var(--s-6); }
+  @media (min-width: 1024px) and (max-width: 1279px) { .app.ui { grid-template-columns: minmax(0, 4fr) minmax(0, 8fr); } }
+  @media (max-width: 1023px) {
+    .app.ui { grid-template-columns: minmax(0, 1fr); grid-template-rows: auto minmax(0, 1fr); }
+    .app > .app__pane--list { max-height: 252px; }
+    .app > .app__pane--list::after { display: none; }
+    .app .ui-win__side { display: none; }
+    .app .ui-win__body { grid-template-columns: minmax(0, 1fr); }
+    .app > .app__pane + .app__pane { border-left: 0; border-top: 1px solid var(--u-line); }
+  }
+  @media (max-width: 639px) {
+    .app.ui { grid-template-rows: minmax(0, 1fr); }
+    .app > .app__pane--list { display: none; }
+    .app > .app__pane + .app__pane { border-top: 0; }
+    .app > .app__pane--open { padding: var(--s-4); }
+  }
+  .d-row small { color: #5d6268; display: block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  @media (max-width: 639px) { .hero__art .d-tabs { display: none; } }
+  @media (max-width: 639px) { #admin .frame { aspect-ratio: 3 / 2; } #admin ul.stack-2 { display: none; } }
+  @media (max-width: 639px) { #pricing .card--plan { gap: 14px; } #pricing .card--plan .checks { margin-top: 0; } }
+  #members .panel { --p-h: 300px; }
+  @media (max-width: 639px) { #members .panel { --p-h: 180px; } #members .ui-chat__day { display: none; } #members .stage { --fade-h: 40px; } }
+  /* Background tiles: client request. They flip and take a colour under the cursor. */
+  [data-tiles] { position: relative; overflow: hidden; --tile-line: color-mix(in oklab, var(--p-ink, #1C1B15) 7%, transparent); }
+  .ground-inverse[data-tiles] { --tile-line: color-mix(in oklab, #fff 9%, transparent); }
+  [data-tiles] > :not(.tiles) { position: relative; z-index: 1; }
+  .tiles { position: absolute; inset: 0; z-index: 0; display: grid; grid-template-columns: repeat(var(--tile-cols), 1fr); grid-auto-rows: var(--tile-size); perspective: 900px; pointer-events: none; }
+  .tiles > i { display: block; border-right: 1px solid var(--tile-line); border-bottom: 1px solid var(--tile-line); background: var(--tile-rest, transparent); transition: transform .8s cubic-bezier(.22,1,.36,1), background-color .8s ease; }
+  .tiles > i.is-lit { transform: rotateY(180deg); background: var(--tile-c); transition-duration: .3s, .2s; }
+  @media (prefers-reduced-motion: reduce) { .tiles > i, .tiles > i.is-lit { transform: none; transition: background-color .3s ease; } }
+</style>
+</head>
+<body>
+<!-- type: software
+     deal: hero collage, nav nav-centre (dealt nav-cards, dealt again: no photographs), close close-type, footer footer-dark,
+           rhythm space, buttons tonal, mark dots, ground sage; palette and type are the client's own (CareerOS Desk and Paper)
+     moments: none; background tiles that flip under the cursor were asked for by the client -->
+
+<header class="nav nav--centre">
+  <div class="wrap nav__bar">
+    <a class="skip-link" href="#top">Skip to content</a>
+    <a class="nav__logo" href="index.html"><span class="mark" data-mark="dots" aria-hidden="true"></span>CareerOS</a>
+    <nav class="nav__links" aria-label="Main">
+      <div class="nav__item">
+        <a class="nav__link" href="index.html#builder">Product <svg class="chev" viewBox="0 0 12 12" aria-hidden="true"><path d="M3 4.5l3 3 3-3" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+        <div class="nav__menu">
+          <div class="wrap grid">
+            <div class="menu-col span-3">
+              <p class="t-label">For job seekers</p>
+              <a href="index.html#builder">Resume editor<span>18 templates, PDF and Word</span></a>
+              <a href="index.html#members">Application tracker<span>List, board and calendar</span></a>
+              <a href="index.html#members">Job discovery<span>Scheduled searches, review queue</span></a>
+            </div>
+            <div class="menu-col span-3">
+              <p class="t-label">For organisations</p>
+              <a href="#admin">Admin console<span>Invitations, outcome counts, CSV</span></a>
+              <a href="#pricing">Organisation plans<span>Starter, Pro and Enterprise</span></a>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="nav__item"><a class="nav__link" href="index.html">Home</a></div>
+      <div class="nav__item"><a class="nav__link" href="#admin">Admin</a></div>
+      <div class="nav__item"><a class="nav__link" href="#pricing">Pricing</a></div>
+      <div class="nav__item"><a class="nav__link" href="#questions">Questions</a></div>
+    </nav>
+    <div class="nav__actions">
+      <a class="btn btn--primary" href="/auth/register">Try CareerOS</a>
+    </div>
+    <button class="nav__toggle" type="button" aria-expanded="false" aria-label="Menu">
+      <svg width="18" height="18" viewBox="0 0 18 18" aria-hidden="true"><path d="M2 5h14M2 13h14" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+    </button>
+  </div>
+</header>
+
+<main id="top">
+  <section class="hero hero--collage" data-tiles data-enter aria-labelledby="hero-h">
+    <div class="wrap"><div class="hero-text grid hero__grid">
+      <div class="hero__text span-5">
+        <h1 id="hero-h">Career platform for universities and bootcamps</h1>
+        <p class="hero__lead">CareerOS gives your students a resume builder with 18 templates, an application tracker, job discovery and an AI assistant, all in one workspace.</p>
+        <div class="btn-row"><a class="btn btn--primary" href="/auth/register">Try CareerOS</a><a class="btn btn--secondary" href="#pricing">See pricing</a></div>
+        <p class="hero__proof">Built for universities, bootcamps, recruitment agencies and career coaches.</p>
+      </div>
+      <div class="hero__art span-6 start-7" role="img" aria-label="A member's application list with six roles and their stages, and a card showing this week's goal with a follow-up due on Friday">
+        <div class="ly-piece ly-piece--main d-win" aria-hidden="true">
+          <div class="d-win__bar"><span class="d-win__dots"><i></i><i></i><i></i></span><span>CareerOS · Applications</span></div>
+          <div class="d-win__body">
+            <div class="d-side">
+              <span><i></i>Resumes</span><span><i></i>Cover letters</span><span class="is-on"><i></i>Applications</span><span><i></i>Discovery</span><span><i></i>Assistant</span>
+              <span class="d-side__label">Goals</span><span><i></i>This week</span><span><i></i>Target role</span>
+            </div>
+            <div class="d-main">
+              <div class="d-main__head"><h4>Applications</h4><span class="d-btn">Add a job</span></div>
+              <div class="d-tabs"><span class="is-on">All 14</span><span>Interviews 2</span><span>Offers 1</span></div>
+              <div class="d-rows">
+                <div class="d-row"><span class="d-thumb" style="background:#dfe8dc"></span><div><b>Data analyst</b><small>Retail bank · Nairobi</small></div><span class="num">12 Nov</span><span class="d-chip">Applied</span></div>
+                <div class="d-row"><span class="d-thumb" style="background:#e9e4d6"></span><div><b>Junior developer</b><small>Software studio · Remote</small></div><span class="num">10 Nov</span><span class="d-chip d-chip--talk">Interview</span></div>
+                <div class="d-row"><span class="d-thumb" style="background:#d9c7a6"></span><div><b>Graduate trainee</b><small>Energy company · Mombasa</small></div><span class="num">9 Nov</span><span class="d-chip d-chip--saved">Saved</span></div>
+                <div class="d-row"><span class="d-thumb" style="background:#dbe3ea"></span><div><b>Programme officer</b><small>Education NGO · Kisumu</small></div><span class="num">7 Nov</span><span class="d-chip">Applied</span></div>
+                <div class="d-row"><span class="d-thumb" style="background:#f0e2c8"></span><div><b>Marketing assistant</b><small>Media house · Nairobi</small></div><span class="num">4 Nov</span><span class="d-chip d-chip--talk">Interview</span></div>
+                <div class="d-row"><span class="d-thumb" style="background:#e4ded2"></span><div><b>Accounts clerk</b><small>Logistics firm · Nakuru</small></div><span class="num">2 Nov</span><span class="d-chip d-chip--saved">Saved</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="ly-piece ly-piece--note d-card" aria-hidden="true" data-ly-steps="700">
+          <div class="d-card__row"><h5>This week's goal</h5><span class="d-chip" data-step data-step-at="4">4 of 5 sent</span></div>
+          <div class="d-note__line" data-step><i>✓</i><span>Resume tailored for <b>Data analyst</b></span></div>
+          <div class="d-note__line" data-step><i>✓</i><span>Application sent on <b>12 Nov</b></span></div>
+          <div class="d-note__line" data-step><i class="warn">!</i><span>Follow up due <b>Friday</b></span></div>
+        </div>
+      </div>
+    </div></div>
+  </section>
+
+  <section class="section" data-tiles id="admin" aria-labelledby="admin-h">
+    <div class="wrap">
+      <div class="grid grid--top fill">
+        <div class="span-5 stack-5">
+          <h2 id="admin-h">Admin console with outcome counts</h2>
+          <p class="t-lead">Admins invite members by email and see how many applications, interviews and offers the group has reached. The numbers export to CSV for your reports.</p>
+          <ul class="stack-2">
+            <li>AI use is metered per organisation, inside each plan's allowance.</li>
+            <li>Roles for owners, admins and members.</li>
+          </ul>
+          <p><a class="link" href="index.html#builder">See what members get</a></p>
+        </div>
+        <div class="frame frame--split frame--lit frame--fill span-6 start-7">
+          <div class="stage stage--fade-b"><div class="at-rise fit to-edge" style="--fit-max:400px;--ax:max(24px, 50% - 200px);--ay:48px;--ay-sm:24px">
+            <div class="ui ui-panel ui-stat" data-ui="stat" data-ui-opts='{"fill":true}' data-from="194" data-to="212" data-suffix="">
+              <div class="ui-stat__head">
+                <div class="ui-stat__top">
+                  <span class="ui-stat__label">Applications sent</span>
+                  <span class="ui-stat__range">Last 14 days<svg class="ui-icon" viewBox="0 0 16 16" aria-hidden="true"><path d="m4.5 6.5 3.5 3.5 3.5-3.5"/></svg></span>
+                </div>
+                <div class="ui-stat__line">
+                  <span class="ui-stat__num" data-stat-num>212</span>
+                  <span class="ui-chip ui-chip--plain ui-stat__delta"><svg viewBox="0 0 12 12" aria-hidden="true"><path d="M6 9.5v-7M3 5.5l3-3 3 3" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>18</span>
+                  <span class="ui-stat__sub">vs. the 14 days before</span>
+                </div>
+              </div>
+              <div class="ui-stat__chart">
+                <svg class="ui-stat__svg" viewBox="0 0 400 120" preserveAspectRatio="none" aria-hidden="true">
+                  <path class="ui-stat__grid" d="M0 30.5H400M0 60.5H400M0 90.5H400"/>
+                  <path class="ui-stat__cover" fill-rule="evenodd" d=""/>
+                  <g class="ui-stat__bars"><rect rx="3" x="0.00" y="49.04" width="21.14" height="70.96"/><rect rx="3" x="29.14" y="40.86" width="21.14" height="79.14"/><rect rx="3" x="58.29" y="44.95" width="21.14" height="75.05"/><rect rx="3" x="87.43" y="36.76" width="21.14" height="83.24"/><rect rx="3" x="116.57" y="42.22" width="21.14" height="77.78"/><rect rx="3" x="145.71" y="34.04" width="21.14" height="85.96"/><rect rx="3" x="174.86" y="38.13" width="21.14" height="81.87"/><rect rx="3" x="204.00" y="29.94" width="21.14" height="90.06"/><rect rx="3" x="233.14" y="35.40" width="21.14" height="84.60"/><rect rx="3" x="262.29" y="25.85" width="21.14" height="94.15"/><rect rx="3" x="291.43" y="31.31" width="21.14" height="88.69"/><rect rx="3" x="320.57" y="23.12" width="21.14" height="96.88"/><rect rx="3" x="349.71" y="27.21" width="21.14" height="92.79"/><rect rx="3" x="378.86" y="16.30" width="21.14" height="103.70"/></g>
+                </svg>
+                <div class="ui-stat__axis" aria-hidden="true"><span>29 Oct</span><span>5 Nov</span><span>Today</span></div>
+              </div>
+            </div>
+          </div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" data-tiles id="pricing" style="--hm: 2" aria-labelledby="pricing-h">
+    <div class="wrap">
+      <div class="section-head">
+        <h2 id="pricing-h">Pricing</h2>
+        <p>Three plans for organisations, paid by card or M-Pesa, in US dollars or Kenyan shillings.</p>
+      </div>
+      <div class="grid">
+        <article class="card card--plan span-4">
+          <h3>Starter</h3>
+          <p>For coaches and small agencies</p>
+          <div class="price"><span class="t-stat">Up to 50 seats</span></div>
+          <p class="t-small muted">One monthly price</p>
+          <a class="btn btn--secondary" href="/auth/register">Try CareerOS</a>
+          <ul class="checks">
+            <li>Subdomain and branding</li>
+            <li>Core features</li>
+            <li>AI quota</li>
+          </ul>
+        </article>
+        <article class="card card--plan is-featured span-4">
+          <h3>Pro</h3>
+          <p>For bootcamps, agencies and colleges</p>
+          <div class="price"><span class="t-stat">Per seat</span></div>
+          <p class="t-small muted">Billed each month</p>
+          <a class="btn btn--primary" href="/auth/register">Try CareerOS</a>
+          <ul class="checks">
+            <li>Custom domain</li>
+            <li>Job discovery</li>
+            <li>Admin analytics</li>
+            <li>Larger AI quota</li>
+            <li>Email templates</li>
+          </ul>
+        </article>
+        <article class="card card--plan span-4">
+          <h3>Enterprise</h3>
+          <p>For universities, governments and NGOs</p>
+          <div class="price"><span class="t-stat">Annual contract</span></div>
+          <p class="t-small muted">One yearly agreement</p>
+          <a class="btn btn--secondary" href="mailto:hello@careeros.example?subject=Enterprise%20plan">Email us</a>
+          <ul class="checks">
+            <li>Single sign-on</li>
+            <li>Dedicated deployment option</li>
+            <li>Data residency</li>
+            <li>Service level agreement</li>
+            <li>Custom onboarding</li>
+          </ul>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" data-tiles id="questions" aria-labelledby="questions-h">
+    <div class="wrap">
+      <div class="grid grid--top">
+        <div class="span-5 stack-4">
+          <h2 id="questions-h">Questions</h2>
+          <p class="muted">The ones organisations ask before they sign up.</p>
+          <p><a class="link" href="mailto:hello@careeros.example">Send a question</a></p>
+        </div>
+        <div class="faq span-6 start-7">
+          <div class="faq__item"><h3>Is our data kept apart on the platform?</h3><p>Yes. Each organisation's data is separated at the database level, and that separation is tested with every release.</p></div>
+          <div class="faq__item"><h3>How do we pay for a plan?</h3><p>By card or M-Pesa, in US dollars or Kenyan shillings. Pro is billed per seat each month.</p></div>
+          <div class="faq__item"><h3>Is AI use limited on each plan?</h3><p>Yes. Each plan includes an AI quota, and usage is metered per organisation.</p></div>
+          <div class="faq__item"><h3>What can admins see about applications?</h3><p>Counts of applications, interviews and offers across the group, with a CSV export for reports.</p></div>
+          <div class="faq__item"><h3>What do members get on the platform?</h3><p>The resume editor, the application tracker and the AI assistant on every plan. Job discovery comes with Pro and Enterprise.</p></div>
+          <div class="faq__item"><h3>Can members take their resumes with them?</h3><p>Yes. Resumes export to PDF, Word and JSON at any time.</p></div>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="footer closing footer--dark ground-inverse" data-tiles id="contact" aria-labelledby="close-h">
+  <div class="wrap">
+    <div class="closing__cta close--type">
+      <div class="section-head">
+        <h2 id="close-h">Try CareerOS with your first cohort</h2>
+        <p class="t-small muted">Create an account, invite your members and follow their applications.</p>
+      </div>
+      <a class="btn btn--primary btn--xl btn--wide" href="/auth/register">Try CareerOS<svg class="m-arrow" viewBox="0 0 12 12" aria-hidden="true"><path class="m-arrow__stem" d="M1 6h8"/><path class="m-arrow__head" d="M4.5 2.5 8 6l-3.5 3.5"/></svg></a>
+    </div>
+    <div class="closing__links">
+      <div class="grid">
+        <div class="span-4 stack-4">
+          <a class="nav__logo" href="index.html"><span class="mark" data-mark="dots" aria-hidden="true"></span>CareerOS</a>
+          <p class="footer__lede">A career platform for universities, bootcamps, recruitment agencies and career coaches.</p>
+        </div>
+        <div class="span-2 start-7 footer__col"><h3>Product</h3><ul><li><a href="index.html#builder">Resume editor</a></li><li><a href="index.html#members">Workspace</a></li></ul></div>
+        <div class="span-2 footer__col"><h3>Organisations</h3><ul><li><a href="#admin">Admin console</a></li><li><a href="#pricing">Plans</a></li></ul></div>
+        <div class="span-2 footer__col"><h3>Help</h3><ul><li><a href="#questions">Questions</a></li><li><a href="#contact">Contact</a></li></ul></div>
+      </div>
+      <div class="footer__legal">
+        <span>&copy; 2026 CareerOS</span>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script type="module" src="assets/system.js"></script>
+<script type="module" src="assets/motion/motion.js"></script>
+<script type="module" src="assets/layout/layout.js"></script>
+<script src="tiles.js"></script>
+</body>
+</html>
