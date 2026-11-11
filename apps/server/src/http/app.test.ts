@@ -28,6 +28,8 @@ const mocks = vi.hoisted(() => ({
 	handleLlms: vi.fn(),
 	serveWebDistStatic: vi.fn(),
 	handleWebApp: vi.fn(),
+	// CAREEROS (P6-M02): the marketing pages; null means "no page here", so the app answers.
+	handleLandingPage: vi.fn(),
 }));
 
 vi.mock("@reactive-resume/env/server", async (original) => {
@@ -81,6 +83,12 @@ vi.mock("../static/web", () => ({
 	isProfilePath: () => false,
 }));
 
+vi.mock("../static/landing", () => ({
+	handleLandingPage: mocks.handleLandingPage,
+	landingRedirect: (pathname: string) =>
+		({ "/site": "/", "/site/index.html": "/", "/landing/organisations.html": "/organisations" })[pathname] ?? null,
+}));
+
 vi.mock("../mcp/handler", () => ({
 	handleMcp: mocks.handleMcp,
 }));
@@ -101,6 +109,7 @@ const transportEnv = (remoteAddress: string) =>
 beforeEach(() => {
 	vi.clearAllMocks();
 	mocks.trustedProxies.length = 0;
+	mocks.handleLandingPage.mockResolvedValue(null);
 	mocks.handleAuth.mockResolvedValue(new Response("auth"));
 	mocks.handleOAuth.mockResolvedValue(new Response("oauth"));
 	mocks.handleRpc.mockResolvedValue(new Response("rpc"));
@@ -253,6 +262,44 @@ describe("createApp", () => {
 		expect(response.status).toBe(200);
 		expect(await response.text()).toBe("web");
 		expect(mocks.serveWebDistStatic).not.toHaveBeenCalled();
+	});
+
+	// CAREEROS (P6-M02)
+	it("shows the marketing page at / and /organisations when there is one, and the app otherwise", async () => {
+		const { createApp } = await import("./app");
+		const app = createApp();
+		mocks.handleLandingPage.mockImplementation(async (pathname: string) => new Response(`marketing ${pathname}`));
+
+		expect(await (await app.fetch(new Request("http://localhost:3001/"))).text()).toBe("marketing /");
+		expect(await (await app.fetch(new Request("http://localhost:3001/index.html"))).text()).toBe("marketing /");
+		expect(await (await app.fetch(new Request("http://localhost:3001/organisations"))).text()).toBe(
+			"marketing /organisations",
+		);
+		expect(mocks.handleLandingPage).toHaveBeenCalledWith("/", PLATFORM_HOST, undefined);
+		expect(mocks.handleWebApp).not.toHaveBeenCalled();
+
+		mocks.handleLandingPage.mockResolvedValue(null);
+		mocks.serveWebDistStatic.mockImplementation((_context: unknown, next: () => Promise<void>) => next());
+		expect(await (await app.fetch(new Request("http://localhost:3001/organisations"))).text()).toBe("web");
+	});
+
+	it("redirects a marketing page's file name to its address and leaves the folder's other files to static", async () => {
+		const { createApp } = await import("./app");
+		const app = createApp();
+
+		const page = await app.fetch(new Request("http://localhost:3001/site/index.html"));
+		const retired = await app.fetch(new Request("http://localhost:3001/landing/organisations.html"));
+		const folder = await app.fetch(new Request("http://localhost:3001/site"));
+
+		expect([page.status, page.headers.get("location")]).toEqual([301, "/"]);
+		expect([retired.status, retired.headers.get("location")]).toEqual([301, "/organisations"]);
+		expect([folder.status, folder.headers.get("location")]).toEqual([301, "/"]);
+		expect(mocks.serveWebDistStatic).not.toHaveBeenCalled();
+
+		mocks.serveWebDistStatic.mockImplementation((_context: unknown, next: () => Promise<void>) => next());
+		const asset = await app.fetch(new Request("http://localhost:3001/site/tiles.js"));
+		expect(asset.status).not.toBe(301);
+		expect(mocks.serveWebDistStatic).toHaveBeenCalled();
 	});
 
 	it("compresses the web app's HTML but never API streams or the Vercel app", async () => {

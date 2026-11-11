@@ -19,6 +19,11 @@ export const RESERVED_SEGMENTS = [
 	"terms",
 	"privacy",
 	"dpa",
+	// CAREEROS: the organisations page, the folder the marketing pages' files are served from, and the retired
+	// /landing folder, which redirects (P6-M02).
+	"organisations",
+	"site",
+	"landing",
 ] as const;
 
 /** Whether `pathname` is in one of the signed-in app's sections. */

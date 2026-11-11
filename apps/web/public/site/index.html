@@ -1,5 +1,5 @@
 <!doctype html>
-<!-- CAREEROS: landing page preview, served as a static file at /landing/. Built with the taste-skill kit in assets/ (MIT). -->
+<!-- CAREEROS: marketing page, served at a clean address by apps/server/src/static/landing.ts. Built with the taste-skill kit in assets/ (MIT). -->
 <html lang="en" data-type="software" data-radius="sharp" data-ground="sage" data-buttons="tonal" data-motion>
 <head>
 <meta charset="utf-8">
@@ -11,17 +11,17 @@
 <meta property="og:description" content="A resume builder, application tracker, job discovery and AI assistant in one workspace.">
 <meta name="twitter:card" content="summary_large_image">
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
-<meta name="robots" content="noindex">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"SoftwareApplication","name":"CareerOS","applicationCategory":"BusinessApplication","operatingSystem":"Web","description":"A job search workspace with a resume builder, an application tracker, job discovery and an AI assistant."}</script>
 <meta name="theme-color" content="#f8f7f3">
 <meta name="site-kind" content="software">
 <meta name="page-type" content="software">
-<link rel="stylesheet" href="fonts.css">
-<link rel="stylesheet" href="assets/system.css">
-<link rel="stylesheet" href="assets/ui/cards.css">
-<link rel="stylesheet" href="assets/motion/motion.css">
-<link rel="stylesheet" href="assets/backgrounds/backgrounds.css">
-<link rel="stylesheet" href="assets/layout/layout.css">
-<link rel="stylesheet" href="assets/icons/icon.css">
+<link rel="stylesheet" href="/site/fonts.css">
+<link rel="stylesheet" href="/site/assets/system.css">
+<link rel="stylesheet" href="/site/assets/ui/cards.css">
+<link rel="stylesheet" href="/site/assets/motion/motion.css">
+<link rel="stylesheet" href="/site/assets/backgrounds/backgrounds.css">
+<link rel="stylesheet" href="/site/assets/layout/layout.css">
+<link rel="stylesheet" href="/site/assets/icons/icon.css">
 <style>
 :root {
   --p-bg: #f8f7f3; --p-surface: #f0efeb; --p-ink: #1c1b15; --p-muted: #66655e;
@@ -37,18 +37,18 @@
   --ly-scale: 1.12;
 }
 </style>
-<link rel="stylesheet" href="assets/ui/base.css">
-<link rel="stylesheet" href="assets/ui/window/fragment.css">
-<link rel="stylesheet" href="assets/ui/doc/fragment.css">
-<link rel="stylesheet" href="assets/ui/checklist/fragment.css">
-<link rel="stylesheet" href="assets/ui/search/fragment.css">
-<link rel="stylesheet" href="assets/ui/chat/fragment.css">
-<link rel="stylesheet" href="assets/ui/notify/fragment.css">
-<link rel="stylesheet" href="assets/ui/toggles/fragment.css">
-<link rel="stylesheet" href="assets/ui/stat/fragment.css">
-<link rel="stylesheet" href="assets/layout/demo.css">
-<script src="enter.js"></script>
-<script src="assets/backgrounds/backgrounds.js"></script>
+<link rel="stylesheet" href="/site/assets/ui/base.css">
+<link rel="stylesheet" href="/site/assets/ui/window/fragment.css">
+<link rel="stylesheet" href="/site/assets/ui/doc/fragment.css">
+<link rel="stylesheet" href="/site/assets/ui/checklist/fragment.css">
+<link rel="stylesheet" href="/site/assets/ui/search/fragment.css">
+<link rel="stylesheet" href="/site/assets/ui/chat/fragment.css">
+<link rel="stylesheet" href="/site/assets/ui/notify/fragment.css">
+<link rel="stylesheet" href="/site/assets/ui/toggles/fragment.css">
+<link rel="stylesheet" href="/site/assets/ui/stat/fragment.css">
+<link rel="stylesheet" href="/site/assets/layout/demo.css">
+<script src="/site/enter.js"></script>
+<script src="/site/assets/backgrounds/backgrounds.js"></script>
 <style>
   /* the hero's lit ground and its small card (inside the visual) */
   .hero__art { background:
@@ -100,10 +100,13 @@
   [data-tiles] { position: relative; overflow: hidden; --tile-line: color-mix(in oklab, var(--p-ink, #1C1B15) 7%, transparent); }
   .ground-inverse[data-tiles] { --tile-line: color-mix(in oklab, #fff 9%, transparent); }
   [data-tiles] > :not(.tiles) { position: relative; z-index: 1; }
-  .tiles { position: absolute; inset: 0; z-index: 0; display: grid; grid-template-columns: repeat(var(--tile-cols), 1fr); grid-auto-rows: var(--tile-size); perspective: 900px; pointer-events: none; }
-  .tiles > i { display: block; border-right: 1px solid var(--tile-line); border-bottom: 1px solid var(--tile-line); background: var(--tile-rest, transparent); transition: transform .8s cubic-bezier(.22,1,.36,1), background-color .8s ease; }
-  .tiles > i.is-lit { transform: rotateY(180deg); background: var(--tile-c); transition-duration: .3s, .2s; }
-  @media (prefers-reduced-motion: reduce) { .tiles > i, .tiles > i.is-lit { transform: none; transition: background-color .3s ease; } }
+  .tiles { position: absolute; inset: 0; z-index: 0; pointer-events: none; perspective: 900px; background-image: linear-gradient(to right, var(--tile-line) 1px, transparent 1px), linear-gradient(to bottom, var(--tile-line) 1px, transparent 1px); background-size: var(--tile-size) var(--tile-size); }
+  .tiles > i { position: absolute; left: calc(var(--c) * var(--tile-size)); top: calc(var(--r) * var(--tile-size)); width: var(--tile-size); height: var(--tile-size); background: var(--tile-c); }
+  .tiles > i.is-lit { animation: tile-flip 1.3s cubic-bezier(.22,1,.36,1) both; }
+  @keyframes tile-flip { 0% { transform: rotateY(-180deg); opacity: 0; } 25% { transform: rotateY(0); opacity: 1; } 60% { transform: rotateY(0); opacity: 1; } 100% { transform: rotateY(180deg); opacity: 0; } }
+  @media (prefers-reduced-motion: reduce) { @keyframes tile-flip { 0% { opacity: 0; } 25% { opacity: 1; } 60% { opacity: 1; } 100% { opacity: 0; } } }
+  /* The kit's sidebar label is too pale for small text on white (contrast 3.3); this passes at 5.3. */
+  .hero__art .d-side span.d-side__label { color: #666b70; }
 </style>
 </head>
 <body>
@@ -115,7 +118,7 @@
 <header class="nav nav--centre">
   <div class="wrap nav__bar">
     <a class="skip-link" href="#top">Skip to content</a>
-    <a class="nav__logo" href="#top"><span class="mark" data-mark="dots" aria-hidden="true"></span>CareerOS</a>
+    <a class="nav__logo" href="/"><span class="mark" data-mark="dots" aria-hidden="true"></span>CareerOS</a>
     <nav class="nav__links" aria-label="Main">
       <div class="nav__item">
         <a class="nav__link" href="#builder">Product <svg class="chev" viewBox="0 0 12 12" aria-hidden="true"><path d="M3 4.5l3 3 3-3" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
@@ -129,18 +132,19 @@
             </div>
             <div class="menu-col span-3">
               <p class="t-label">For organisations</p>
-              <a href="organisations.html">CareerOS for organisations<span>Universities, bootcamps, agencies</span></a>
-              <a href="organisations.html#pricing">Organisation plans<span>Starter, Pro and Enterprise</span></a>
+              <a href="/organisations">CareerOS for organisations<span>Universities, bootcamps, agencies</span></a>
+              <a href="/organisations#pricing">Organisation plans<span>Starter, Pro and Enterprise</span></a>
             </div>
           </div>
         </div>
       </div>
       <div class="nav__item"><a class="nav__link" href="#members">Features</a></div>
-      <div class="nav__item"><a class="nav__link" href="organisations.html">For organisations</a></div>
+      <div class="nav__item"><a class="nav__link" href="/organisations">For organisations</a></div>
       <div class="nav__item"><a class="nav__link" href="#pricing">Pricing</a></div>
       <div class="nav__item"><a class="nav__link" href="#questions">Questions</a></div>
     </nav>
     <div class="nav__actions">
+      <a class="nav__link" href="/auth/login">Sign in</a>
       <a class="btn btn--primary" href="/auth/register">Try CareerOS</a>
     </div>
     <button class="nav__toggle" type="button" aria-expanded="false" aria-label="Menu">
@@ -385,7 +389,7 @@
           <p>For universities, bootcamps, agencies and coaches</p>
           <div class="price"><span class="t-stat">Three plans</span></div>
           <p class="t-small muted">Starter, Pro and Enterprise</p>
-          <a class="btn btn--secondary" href="organisations.html#pricing">See organisation plans</a>
+          <a class="btn btn--secondary" href="/organisations#pricing">See organisation plans</a>
           <ul class="checks">
             <li>Seats for your students or clients</li>
             <li>Admin console and analytics</li>
@@ -429,23 +433,26 @@
     <div class="closing__links">
       <div class="grid">
         <div class="span-4 stack-4">
-          <a class="nav__logo" href="#top"><span class="mark" data-mark="dots" aria-hidden="true"></span>CareerOS</a>
+          <a class="nav__logo" href="/"><span class="mark" data-mark="dots" aria-hidden="true"></span>CareerOS</a>
           <p class="footer__lede">A job search workspace for job seekers, and a career platform for the organisations that support them.</p>
         </div>
         <div class="span-2 start-7 footer__col"><h3>Product</h3><ul><li><a href="#builder">Resume editor</a></li><li><a href="#members">Workspace</a></li><li><a href="#pricing">Pricing</a></li></ul></div>
-        <div class="span-2 footer__col"><h3>Organisations</h3><ul><li><a href="organisations.html">For organisations</a></li><li><a href="organisations.html#admin">Admin console</a></li><li><a href="organisations.html#pricing">Plans</a></li></ul></div>
+        <div class="span-2 footer__col"><h3>Organisations</h3><ul><li><a href="/organisations">For organisations</a></li><li><a href="/organisations#admin">Admin console</a></li><li><a href="/organisations#pricing">Plans</a></li></ul></div>
         <div class="span-2 footer__col"><h3>Help</h3><ul><li><a href="#questions">Questions</a></li><li><a href="#contact">Contact</a></li></ul></div>
       </div>
       <div class="footer__legal">
         <span>&copy; 2026 CareerOS</span>
+        <a href="/terms">Terms</a>
+        <a href="/privacy">Privacy</a>
+        <a href="/licenses">Open-source licenses</a>
       </div>
     </div>
   </div>
 </footer>
 
-<script type="module" src="assets/system.js"></script>
-<script type="module" src="assets/motion/motion.js"></script>
-<script type="module" src="assets/layout/layout.js"></script>
-<script src="tiles.js"></script>
+<script type="module" src="/site/assets/system.js"></script>
+<script type="module" src="/site/assets/motion/motion.js"></script>
+<script type="module" src="/site/assets/layout/layout.js"></script>
+<script src="/site/tiles.js"></script>
 </body>
 </html>

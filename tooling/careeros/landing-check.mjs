@@ -1,4 +1,4 @@
-// CAREEROS: checks the static landing pages in apps/web/public/landing before they are deployed. The server sends
+// CAREEROS: checks the static marketing pages in apps/web/public/site before they are deployed. The server sends
 // every .html file with a content security policy that allows scripts and stylesheets from this site only, so a page
 // with an inline script or a stylesheet from another host would load broken. The check also follows every local link.
 import { existsSync, readdirSync, readFileSync } from "node:fs";
@@ -6,7 +6,14 @@ import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 
 // Addresses outside the landing folder that the pages may link to. The app serves all of them.
-export const APP_PATHS = new Set(["/favicon.svg", "/auth/register", "/auth/login"]);
+export const APP_PATHS = new Set(["/favicon.svg", "/auth/register", "/auth/login", "/terms", "/privacy", "/licenses"]);
+
+// The clean address of each page (apps/server/src/static/landing.ts) and the folder its files are served from.
+export const PAGE_PATHS = new Map([
+	["/", "index.html"],
+	["/organisations", "organisations.html"],
+]);
+const FOLDER = "/site/";
 
 function attributes(html, name) {
 	return [...html.matchAll(new RegExp(`\\s${name}="([^"]*)"`, "g"))].map((match) => match[1]);
@@ -18,7 +25,8 @@ export function checkPage(name, html, read) {
 	const report = (message) => problems.push(`${name}: ${message}`);
 	const ids = (text) => new Set(attributes(text, "id"));
 
-	if (/<script(?![^>]*\ssrc=)[^>]*>/i.test(html)) report("inline <script> is blocked by the content security policy");
+	if (/<script(?![^>]*\ssrc=)(?![^>]*application\/ld\+json)[^>]*>/i.test(html))
+		report("inline <script> is blocked by the content security policy");
 	if (/\son[a-z]+="/i.test(html)) report("inline event handler is blocked by the content security policy");
 	if (!/<title>[^<]+<\/title>/.test(html)) report("missing <title>");
 
@@ -31,7 +39,11 @@ export function checkPage(name, html, read) {
 		if (address.startsWith("mailto:")) continue;
 		if (/^(?:https?:)?\/\//.test(address)) continue;
 		const [path, anchor] = address.split("#");
-		const file = path.split("?")[0];
+		let file = path.split("?")[0];
+		if (/^(?:index|organisations)\.html$/.test(file))
+			report(`link shows a file name; use the page's address: ${address}`);
+		if (PAGE_PATHS.has(file)) file = PAGE_PATHS.get(file);
+		else if (file.startsWith(FOLDER)) file = file.slice(FOLDER.length);
 		if (file.startsWith("/")) {
 			if (!APP_PATHS.has(file)) report(`link to an address the check does not know: ${address}`);
 			continue;
@@ -65,7 +77,7 @@ export function checkFolder(folder) {
 
 if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
 	const root = join(dirname(fileURLToPath(import.meta.url)), "..", "..");
-	const problems = checkFolder(join(root, "apps", "web", "public", "landing"));
+	const problems = checkFolder(join(root, "apps", "web", "public", "site"));
 	for (const problem of problems) console.error(`::error::${problem}`);
 	if (problems.length > 0) process.exit(1);
 	console.log("Landing pages: no problems found.");

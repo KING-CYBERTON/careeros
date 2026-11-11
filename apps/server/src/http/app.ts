@@ -25,12 +25,13 @@ import {
 import { handleRpc } from "../rpc/handler";
 // CAREEROS: organization logo and favicon (P2-T01)
 import { handleBrandingAssetRequest } from "../static/branding";
+// CAREEROS (P2-T02): handleWebManifest serves the per-host manifest
+import { handleLandingPage, landingRedirect } from "../static/landing";
 import { handleResumeCard } from "../static/resume-card";
 import { serveResumePage } from "../static/resume-page";
 import { handleSchemaJson } from "../static/schema";
 import { handleLlms, handlePagesSitemap, handleResumesSitemap, handleRobots, handleSitemap } from "../static/seo";
 import { handleUpload } from "../static/uploads";
-// CAREEROS (P2-T02): handleWebManifest serves the per-host manifest
 import { handleWebApp, handleWebManifest, isProfilePath, isPublicResumePath, serveWebDistStatic } from "../static/web";
 import { handleAlias } from "./alias";
 import { handleAppleAppSiteAssociation, handleAndroidAssetLinks } from "./app-links";
@@ -233,13 +234,27 @@ export function createApp(options: AppOptions = {}) {
 	// return it verbatim, skipping the OpenGraph/Twitter/canonical/JSON-LD injection in handleWebApp.
 	// An instance can show one resume at its root instead of the marketing home; the configuration alone picks it.
 	const rootResumeId = env.ROOT_RESUME_ID;
-	app.on("GET", ["/", "/index.html"], (c) =>
+	// CAREEROS (P6-M02): on the platform host the home page is the marketing page; an organization's address keeps its
+	// own branded home, and so does a build without the marketing files.
+	app.on("GET", ["/", "/index.html"], async (c) =>
 		rootResumeId
 			? serveResumePage(c.req.raw, { id: rootResumeId }, client(c), { host: c.get("host") })
-			: handleWebApp(c.req.raw, options.readWebFile, c.get("host")),
+			: ((await handleLandingPage("/", c.get("host"), options.readWebFile)) ??
+				handleWebApp(c.req.raw, options.readWebFile, c.get("host"))),
 	);
 	if (rootResumeId)
 		app.post("/", limitBody(16 * 1024), (c) => serveResumePage(c.req.raw, { id: rootResumeId }, client(c)));
+	// CAREEROS (P6-M02): the organisations page at its clean address, on the platform host only. Anything else (an
+	// organization's address, a build without the pages) carries on to the app below. A request for a page's file,
+	// or for the retired /landing folder, moves to the page's address so no file name shows.
+	app.get("/organisations", async (c, next) => {
+		const page = await handleLandingPage(c.req.path, c.get("host"), options.readWebFile);
+		return page ?? next();
+	});
+	app.on("GET", ["/site", "/site/*", "/landing", "/landing/*"], (c, next) => {
+		const target = landingRedirect(c.req.path);
+		return target ? c.redirect(target, 301) : next();
+	});
 	if (options.serveStatic !== false && serveWebDistStatic) app.use("/*", serveWebDistStatic);
 	// A resume's web page, rendered here, and its password form; files with the same shape of address were served
 	// just above. `/<username>` is the account's primary resume, on every domain the app answers.
