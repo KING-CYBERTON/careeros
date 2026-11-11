@@ -1,11 +1,16 @@
 import z from "zod";
 import { protectedProcedure } from "../../context";
-import { accountRateLimit } from "../../middleware/rate-limit";
+import { accountRateLimit, pdfExportRateLimit } from "../../middleware/rate-limit";
 import {
 	acceptedOutput,
+	billingProfileInput,
+	billingProfileSchema,
 	billingSchema,
 	checkoutInput,
 	checkoutOutput,
+	invoiceInput,
+	invoiceOutput,
+	invoicePdfOutput,
 	invoicesOutput,
 	portalOutput,
 	seatsInput,
@@ -17,8 +22,12 @@ import {
 	createCheckout,
 	customerPortal,
 	getBilling,
+	getBillingProfile,
+	getInvoice,
+	getInvoicePdf,
 	listInvoices,
 	startTrial,
+	updateBillingProfile,
 } from "./service";
 
 // CAREEROS (P3-T04): billing for organization owners; owners and admins can read. Write procedures are owner only.
@@ -53,13 +62,92 @@ export const billingRouter = {
 			operationId: "listBillingInvoices",
 			summary: "List the organization's payments",
 			description:
-				"Returns the payments the organization has made (newest first, up to 100): date, amount, currency, provider, method, reference and the period each paid for. It holds no card data. Only an owner or admin can read it. Requires authentication.",
+				"Returns the payments the organization has made (newest first, up to 100): invoice number, date, amount, currency, provider, method, reference and the period each paid for. It holds no card data. Only an owner or admin can read it. Requires authentication.",
 		})
 		.input(z.object({}).optional())
 		.use(accountRateLimit)
 		.errors({ FORBIDDEN: { status: 403, message: "Only an owner or admin of the organization can see billing." } })
 		.output(invoicesOutput)
 		.handler(({ context }) => listInvoices(context.user.id)),
+
+	// CAREEROS (P3-T10): one payment as an invoice, and the same invoice as a PDF file.
+	invoice: protectedProcedure
+		.route({
+			...route,
+			method: "GET",
+			path: "/billing/invoices/{id}",
+			operationId: "getBillingInvoice",
+			summary: "Get one invoice",
+			description:
+				"Returns one payment as an invoice: the seller and customer details, the invoice number, the line items, the subtotal, tax and total (amounts in the smallest unit of the currency). An id of another organization is not found. Only an owner or admin can read it. Requires authentication.",
+		})
+		.input(invoiceInput)
+		.use(accountRateLimit)
+		.errors({
+			FORBIDDEN: { status: 403, message: "Only an owner or admin of the organization can see billing." },
+			NOT_FOUND: { status: 404, message: "This invoice was not found." },
+		})
+		.output(invoiceOutput)
+		.handler(({ context, input }) => getInvoice(context.user.id, input.id)),
+
+	invoicePdf: protectedProcedure
+		.route({
+			...route,
+			method: "GET",
+			path: "/billing/invoices/{id}/pdf",
+			operationId: "downloadBillingInvoice",
+			summary: "Download one invoice as a PDF",
+			description:
+				"Renders the invoice as an A4 PDF, named after the invoice number. An id of another organization is not found. Only an owner or admin can download it. Requires authentication.",
+			outputStructure: "detailed",
+		})
+		.input(invoiceInput)
+		.use(pdfExportRateLimit)
+		.errors({
+			FORBIDDEN: { status: 403, message: "Only an owner or admin of the organization can see billing." },
+			NOT_FOUND: { status: 404, message: "This invoice was not found." },
+		})
+		.output(invoicePdfOutput)
+		.handler(async ({ context, input }) => {
+			const body = await getInvoicePdf(context.user.id, input.id);
+			return { headers: { "content-disposition": `attachment; filename="${body.name}"` }, body };
+		}),
+
+	// CAREEROS (P3-T10): the customer details printed on invoices.
+	profile: protectedProcedure
+		.route({
+			...route,
+			method: "GET",
+			path: "/billing/profile",
+			operationId: "getBillingProfile",
+			summary: "Get the billing details printed on invoices",
+			description:
+				"Returns the legal name, address, tax PIN and billing email the organization prints on its invoices. Only an owner or admin can read it. Requires authentication.",
+		})
+		.input(z.object({}).optional())
+		.use(accountRateLimit)
+		.errors({ FORBIDDEN: { status: 403, message: "Only an owner or admin of the organization can see billing." } })
+		.output(billingProfileSchema)
+		.handler(({ context }) => getBillingProfile(context.user.id)),
+
+	updateProfile: protectedProcedure
+		.route({
+			...route,
+			method: "POST",
+			path: "/billing/profile",
+			operationId: "updateBillingProfile",
+			summary: "Update the billing details printed on invoices",
+			description:
+				"Saves the legal name, address, tax PIN and billing email. Send only what changes; an empty string clears a field. The details print on every invoice, earlier ones included. Only the owner can do this. Requires authentication.",
+		})
+		.input(billingProfileInput)
+		.use(accountRateLimit)
+		.errors({
+			...ownerOnly,
+			BAD_REQUEST: { status: 400, message: "The billing details are not valid." },
+		})
+		.output(billingProfileSchema)
+		.handler(({ context, input }) => updateBillingProfile(context.user.id, input)),
 
 	startTrial: protectedProcedure
 		.route({

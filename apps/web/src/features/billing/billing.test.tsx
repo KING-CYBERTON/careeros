@@ -11,6 +11,8 @@ import { I18nProvider } from "@lingui/react";
 const state = vi.hoisted(() => ({
 	billing: undefined as unknown,
 	invoices: { invoices: [] } as unknown,
+	profile: { legalName: null, address: null, taxPin: null, billingEmail: null, updatedAt: null } as unknown,
+	updateProfile: vi.fn(),
 	credits: { used: 40, allowance: 100 } as unknown,
 	billingError: null as unknown,
 	checkout: vi.fn(),
@@ -41,6 +43,8 @@ vi.mock("@/libs/orpc/client", () => ({
 				}),
 			},
 			invoices: { queryOptions: () => ({ queryKey: ["billing", "invoices"], queryFn: async () => state.invoices }) },
+			profile: { queryOptions: () => ({ queryKey: ["billing", "profile"], queryFn: async () => state.profile }) },
+			updateProfile: { mutationOptions: () => ({ mutationFn: state.updateProfile }) },
 			checkout: { mutationOptions: () => ({ mutationFn: state.checkout }) },
 			startTrial: { mutationOptions: () => ({ mutationFn: async () => ({}) }) },
 			changeSeats: { mutationOptions: () => ({ mutationFn: async () => ({ accepted: true }) }) },
@@ -139,6 +143,8 @@ const make = (over: Record<string, unknown> = {}, sub: Record<string, unknown> =
 beforeEach(() => {
 	state.billing = make();
 	state.invoices = { invoices: [] };
+	state.profile = { legalName: null, address: null, taxPin: null, billingEmail: null, updatedAt: null };
+	state.updateProfile.mockReset();
 	state.billingError = null;
 	state.flags = { organization: { status: "active" } };
 	state.role = "owner";
@@ -273,11 +279,12 @@ it("tells a member the page is for owners and admins", async () => {
 	expect(await screen.findByTestId("billing-denied")).toBeTruthy();
 });
 
-it("lists payments and offers a receipt for each", async () => {
+it("lists payments as invoices: number, date, amount, method, a Paid badge and a View action", async () => {
 	state.invoices = {
 		invoices: [
 			{
 				id: "a1",
+				number: "INV-7F3K2Q-0003",
 				date: new Date("2026-11-01T10:00:00Z"),
 				amount: 123_400,
 				currency: "KES",
@@ -293,10 +300,62 @@ it("lists payments and offers a receipt for each", async () => {
 	};
 	await page();
 	const row = await screen.findByTestId("invoice-row");
+	expect(row.textContent).toContain("INV-7F3K2Q-0003");
 	expect(row.textContent).toMatch(/KES\s1,234/);
 	expect(row.textContent).toContain("M-Pesa");
-	expect(row.textContent).toContain("REF-1");
-	expect(row.textContent).toContain("Receipt");
+	expect(screen.getByTestId("invoice-status").textContent).toBe("Paid");
+	expect(row.textContent).toContain("View");
+	const headers = [...screen.getByTestId("invoice-table").querySelectorAll("th")].map((th) => th.textContent);
+	expect(headers).toEqual(["Invoice no.", "Date", "Amount", "Method", "Status", ""]);
+});
+
+// --- billing details (P3-T10) ---------------------------------------------------------------------------------
+
+it("lets the owner edit and save the billing details", async () => {
+	state.profile = {
+		legalName: "Acme Careers Ltd",
+		address: "1 Sample Road\nNairobi",
+		taxPin: null,
+		billingEmail: null,
+		updatedAt: new Date("2026-11-01T00:00:00Z"),
+	};
+	state.updateProfile.mockResolvedValue({});
+	await page();
+	const form = await screen.findByTestId("billing-details-form");
+	expect(form.textContent).not.toContain("Only the owner");
+	const name = screen.getByLabelText("Legal name") as HTMLInputElement;
+	expect(name.value).toBe("Acme Careers Ltd");
+	expect((screen.getByLabelText("Address") as HTMLTextAreaElement).value).toBe("1 Sample Road\nNairobi");
+	const save = screen.getByRole("button", { name: "Save billing details" }) as HTMLButtonElement;
+	expect(save.disabled).toBe(true);
+	fireEvent.change(screen.getByLabelText("KRA PIN"), { target: { value: "P051234567Z" } });
+	expect(save.disabled).toBe(false);
+	fireEvent.click(save);
+	await waitFor(() => expect(state.updateProfile).toHaveBeenCalled());
+	expect(state.updateProfile.mock.calls[0]?.[0]).toEqual({
+		legalName: "Acme Careers Ltd",
+		address: "1 Sample Road\nNairobi",
+		taxPin: "P051234567Z",
+		billingEmail: "",
+	});
+	expect(screen.getByText("Printed on your invoices.")).toBeTruthy();
+});
+
+it("shows an admin the billing details read-only", async () => {
+	state.billing = make({ canManage: false });
+	state.profile = {
+		legalName: "Acme Careers Ltd",
+		address: null,
+		taxPin: null,
+		billingEmail: null,
+		updatedAt: new Date("2026-11-01T00:00:00Z"),
+	};
+	await page();
+	await screen.findByTestId("billing-details-form");
+	expect((screen.getByLabelText("Legal name") as HTMLInputElement).disabled).toBe(true);
+	expect((screen.getByLabelText("Address") as HTMLTextAreaElement).disabled).toBe(true);
+	expect(screen.queryByRole("button", { name: "Save billing details" })).toBeNull();
+	expect(screen.getByTestId("billing-details-readonly")).toBeTruthy();
 });
 
 it("shows the summary without prices anywhere outside the plan table", async () => {

@@ -1,4 +1,5 @@
 import type { CheckoutMethod } from "@careeros/billing";
+import type { InvoiceDocument } from "@careeros/invoice";
 import type { BillingInterval } from "@reactive-resume/db/schema";
 import {
 	getEntitlements,
@@ -10,13 +11,15 @@ import {
 	startTrial as startOrganizationTrial,
 	TRIAL_PLAN_ID,
 } from "@careeros/billing";
-import { PaystackError, ProviderUnsupportedError, recordPendingSeatChange } from "@careeros/billing";
+import { audit, PaystackError, ProviderUnsupportedError, recordPendingSeatChange } from "@careeros/billing";
+import { buildLines, invoiceNumber, splitTax } from "@careeros/invoice";
 import { requireOrgId } from "@careeros/tenancy";
 import { ORPCError } from "@orpc/server";
 import { and, desc, eq, inArray } from "drizzle-orm";
 import { db } from "@reactive-resume/db/client";
 import * as schema from "@reactive-resume/db/schema";
 import { env } from "@reactive-resume/env/server";
+import { PLATFORM_DEFAULT_APP_NAME } from "@reactive-resume/utils/brand";
 import { getBillingProvider, isBillingEnabled } from "./provider";
 
 // CAREEROS (P3-T04): what an organization owner can do about billing. The organization is always the caller's own (the
@@ -145,24 +148,42 @@ const moment = (value: unknown): Date | null => {
 	return Number.isNaN(date.getTime()) ? null : date;
 };
 
-export async function listInvoices(userId: string) {
-	const { organizationId, role } = await roleOf(userId);
-	if (role !== "owner" && role !== "admin")
-		throw new ORPCError("FORBIDDEN", { message: "Only an owner or admin of the organization can see billing." });
+/** One payment of the organization, with the invoice number it was issued under (P3-T10, D3). */
+type Payment = {
+	id: string;
+	date: Date;
+	amount: number | null;
+	currency: string | null;
+	provider: string;
+	method: "card" | "mpesa" | null;
+	reference: string | null;
+	planId: string | null;
+	seats: number | null;
+	interval: BillingInterval | null;
+	periodStart: Date | null;
+	periodEnd: Date | null;
+	number: string;
+};
+
+/**
+ * The organization's payments, newest first, each numbered by its 1-based position in the de-duplicated history ordered
+ * by `created_at, id` (P3-T10, D3). The whole history is read, not only the newest 100, so a number never depends on how
+ * many payments are listed; the audit log is append only, so a number never changes once issued.
+ */
+async function loadPayments(organizationId: string): Promise<Payment[]> {
 	const rows = await db
 		.select({ id: schema.auditLog.id, metadata: schema.auditLog.metadata, createdAt: schema.auditLog.createdAt })
 		.from(schema.auditLog)
 		.where(and(eq(schema.auditLog.organizationId, organizationId), inArray(schema.auditLog.action, PAYMENT_ACTIONS)))
-		.orderBy(desc(schema.auditLog.createdAt))
-		.limit(100);
+		.orderBy(desc(schema.auditLog.createdAt), desc(schema.auditLog.id));
 	const seen = new Set<string>();
-	const invoices = [];
+	const kept: Omit<Payment, "number">[] = [];
 	for (const row of rows) {
 		const meta = row.metadata;
 		const amount = whole(meta.amount);
 		const currency = text(meta.currency, 3);
 		const periodEnd = moment(meta.periodEnd);
-		// A checkout and the payment it made can both be audited: list the payment once.
+		// A checkout and the payment it made can both be audited: list the payment once (the newer row).
 		const key = amount !== null && periodEnd ? `${currency}:${amount}:${periodEnd.toISOString()}` : null;
 		if (key) {
 			if (seen.has(key)) continue;
@@ -171,7 +192,7 @@ export async function listInvoices(userId: string) {
 		const interval: BillingInterval | null =
 			meta.interval === "month" || meta.interval === "year" ? meta.interval : null;
 		const method: "card" | "mpesa" | null = meta.method === "card" || meta.method === "mpesa" ? meta.method : null;
-		invoices.push({
+		kept.push({
 			id: row.id,
 			date: row.createdAt,
 			amount,
@@ -186,7 +207,167 @@ export async function listInvoices(userId: string) {
 			periodEnd,
 		});
 	}
-	return { invoices };
+	return kept.map((payment, index) => ({
+		...payment,
+		number: invoiceNumber(env.CAREEROS_INVOICE_PREFIX, organizationId, kept.length - index),
+	}));
+}
+
+async function requireBillingReader(userId: string): Promise<string> {
+	const { organizationId, role } = await roleOf(userId);
+	if (role !== "owner" && role !== "admin")
+		throw new ORPCError("FORBIDDEN", { message: "Only an owner or admin of the organization can see billing." });
+	return organizationId;
+}
+
+export async function listInvoices(userId: string) {
+	const organizationId = await requireBillingReader(userId);
+	return { invoices: (await loadPayments(organizationId)).slice(0, 100) };
+}
+
+const splitLines = (value: string | null | undefined, separator: string): string[] =>
+	(value ?? "")
+		.split(separator)
+		.map((line) => line.trim())
+		.filter((line) => line.length > 0);
+
+/**
+ * CAREEROS (P3-T10): one payment as an invoice. The seller comes from server configuration, the customer from the
+ * organization's billing details (the organization's name until the owner enters them). The amount paid is the total:
+ * checkout adds no VAT, so VAT is the part of the total at the configured rate (D2). An id that is not a payment of the
+ * caller's organization is NOT_FOUND, never FORBIDDEN, so ids of other organizations are not confirmed.
+ */
+export async function getInvoice(userId: string, id: string): Promise<InvoiceDocument> {
+	const organizationId = await requireBillingReader(userId);
+	const payment = (await loadPayments(organizationId)).find((entry) => entry.id === id);
+	if (!payment) throw new ORPCError("NOT_FOUND", { message: "This invoice was not found." });
+	const [plan] = payment.planId
+		? await db
+				.select({ name: schema.plan.name, pricingModel: schema.plan.pricingModel })
+				.from(schema.plan)
+				.where(eq(schema.plan.id, payment.planId))
+				.limit(1)
+		: [];
+	const [profile] = await db
+		.select()
+		.from(schema.organizationBillingProfile)
+		.where(eq(schema.organizationBillingProfile.organizationId, organizationId))
+		.limit(1);
+	const [organization] = await db
+		.select({ name: schema.organization.name })
+		.from(schema.organization)
+		.where(eq(schema.organization.id, organizationId))
+		.limit(1);
+
+	const total = payment.amount ?? 0;
+	const rate = env.CAREEROS_INVOICE_VAT_RATE;
+	const { net, vat } = splitTax(total, rate);
+	const method = payment.method ?? (payment.provider === "manual" ? "invoice" : null);
+	return {
+		number: payment.number,
+		status: "paid",
+		issuedAt: payment.date,
+		paidAt: payment.date,
+		currency: payment.currency ?? "USD",
+		seller: {
+			name: env.CAREEROS_INVOICE_SELLER_NAME ?? PLATFORM_DEFAULT_APP_NAME,
+			addressLines: splitLines(env.CAREEROS_INVOICE_SELLER_ADDRESS, "|"),
+			email: env.CAREEROS_INVOICE_SELLER_EMAIL ?? null,
+			phone: env.CAREEROS_INVOICE_SELLER_PHONE ?? null,
+			taxPin: env.CAREEROS_INVOICE_SELLER_TAX_PIN ?? null,
+			logo: "platform",
+		},
+		customer: {
+			name: profile?.legalName ?? organization?.name ?? "",
+			addressLines: splitLines(profile?.address, "\n"),
+			taxPin: profile?.taxPin ?? null,
+			email: profile?.billingEmail ?? null,
+		},
+		payment: {
+			method,
+			reference: payment.reference,
+			periodStart: payment.periodStart,
+			periodEnd: payment.periodEnd,
+		},
+		lines: buildLines({
+			planName: plan?.name ?? "Subscription",
+			interval: payment.interval,
+			seats: payment.seats,
+			pricingModel: plan?.pricingModel === "per_seat" ? "per_seat" : "flat",
+			net,
+			periodStart: payment.periodStart,
+			periodEnd: payment.periodEnd,
+		}),
+		subtotal: net,
+		tax: rate > 0 ? { label: env.CAREEROS_INVOICE_TAX_LABEL, ratePercent: rate, amount: vat } : null,
+		total,
+		amountPaid: total,
+		amountDue: 0,
+		footer: env.CAREEROS_INVOICE_FOOTER ?? null,
+	};
+}
+
+/** The invoice as a PDF file (P3-T10, D4), for the same readers as `getInvoice`. */
+export async function getInvoicePdf(userId: string, id: string): Promise<File> {
+	const invoice = await getInvoice(userId, id);
+	try {
+		const { createInvoicePdfFile } = await import("@reactive-resume/pdf/invoice");
+		return await createInvoicePdfFile(invoice, { locale: "en-KE", webFontBaseUrl: process.env.WEB_FONT_BASE_URL });
+	} catch (error) {
+		console.error("[billing] Invoice PDF rendering failed", error instanceof Error ? error.message : "");
+		throw new ORPCError("INTERNAL_SERVER_ERROR", { message: "Couldn't generate the invoice. Try again." });
+	}
+}
+
+export type BillingProfileInput = {
+	legalName?: string | null | undefined;
+	address?: string | null | undefined;
+	taxPin?: string | null | undefined;
+	billingEmail?: string | null | undefined;
+};
+
+const profileOf = (row?: typeof schema.organizationBillingProfile.$inferSelect) => ({
+	legalName: row?.legalName ?? null,
+	address: row?.address ?? null,
+	taxPin: row?.taxPin ?? null,
+	billingEmail: row?.billingEmail ?? null,
+	updatedAt: row?.updatedAt ?? null,
+});
+
+/** The details printed on the organization's invoices, for owners and admins. */
+export async function getBillingProfile(userId: string) {
+	const organizationId = await requireBillingReader(userId);
+	const [row] = await db
+		.select()
+		.from(schema.organizationBillingProfile)
+		.where(eq(schema.organizationBillingProfile.organizationId, organizationId))
+		.limit(1);
+	return profileOf(row);
+}
+
+/**
+ * Saves the billing details (owner only). Send only what changes; the schema turns an empty string into null, which
+ * clears a field. The audit row names the changed fields, never their values.
+ */
+export async function updateBillingProfile(userId: string, input: BillingProfileInput) {
+	const organizationId = await requireOwner(userId);
+	const values = {
+		...(input.legalName !== undefined && { legalName: input.legalName }),
+		...(input.address !== undefined && { address: input.address }),
+		...(input.taxPin !== undefined && { taxPin: input.taxPin }),
+		...(input.billingEmail !== undefined && { billingEmail: input.billingEmail }),
+	};
+	const now = new Date();
+	const [row] = await db
+		.insert(schema.organizationBillingProfile)
+		.values({ organizationId, ...values, updatedAt: now, updatedBy: userId })
+		.onConflictDoUpdate({
+			target: schema.organizationBillingProfile.organizationId,
+			set: { ...values, updatedAt: now, updatedBy: userId },
+		})
+		.returning();
+	await audit({ actorUserId: userId }, "billing.profile_updated", null, { fields: Object.keys(values) });
+	return profileOf(row);
 }
 
 export async function startTrial(userId: string) {

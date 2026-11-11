@@ -211,6 +211,11 @@ export const NO_TENANT_ID: Record<string, string> = {
 	"POST /billing/seats": "takes no tenant id: the caller's own organization; the body is a seat count (P3-T04)",
 	"POST /billing/cancel": "takes no tenant id: the caller's own organization (P3-T04)",
 	"POST /billing/portal": "takes no tenant id: the caller's own organization (P3-T04)",
+	// CAREEROS (P3-T10): the billing details printed on invoices. `GET/POST /billing/invoices/{id}[/pdf]` are fuzzed with
+	// Organization A's payment id (the `invoice` kind).
+	"GET /billing/profile": "takes no tenant id: the caller's own organization's billing details (P3-T10)",
+	"POST /billing/profile":
+		"takes no tenant id: saves the caller's own organization's billing details; the body is text fields (P3-T10)",
 	"GET /organization/settings": "takes no tenant id: the caller's own organization",
 	"PATCH /organization/settings": "takes no tenant id: the caller's own organization",
 	"GET /organization/domains/info": "takes no tenant id: the caller's own organization's address (P2-T07)",
@@ -310,6 +315,8 @@ export const ID_KINDS = [
 	"emailTemplate",
 	// CAREEROS (P5-T02): a Job Clipper sign-in
 	"clipperToken",
+	// CAREEROS (P3-T10): a payment of Organization A, which is its invoice (the audit row's id)
+	"invoice",
 ] as const;
 export type IdKind = (typeof ID_KINDS)[number];
 export type SeedIds = Record<IdKind, string>;
@@ -340,6 +347,7 @@ const PREFIX_KIND: [RegExp, IdKind][] = [
 	[/^\/org-admin\/cohorts(\/|$)/, "cohort"],
 	[/^\/email-templates(\/|$)/, "emailTemplate"],
 	[/^\/clipper\/tokens(\/|$)/, "clipperToken"],
+	[/^\/billing\/invoices(\/|$)/, "invoice"],
 ];
 
 /** Operations whose bare `id` cannot be told from the path alone. */

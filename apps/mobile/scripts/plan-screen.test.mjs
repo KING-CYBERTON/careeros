@@ -77,6 +77,11 @@ test("no purchase, upgrade, seat change, cancel or invoice call exists anywhere 
 			/billing\.cancel/,
 			/billing\.startTrial/,
 			/billing\.invoices/,
+			// CAREEROS (P3-T10): invoices, their PDF and the billing details are web only too.
+			/billing\.invoice\b/,
+			/billing\.invoicePdf/,
+			/billing\.profile/,
+			/billing\.updateProfile/,
 			/organization\/billing/,
 			/\/api\/billing/,
 		])

@@ -11,6 +11,7 @@ import { Input } from "@reactive-resume/ui/components/input";
 import { Label } from "@reactive-resume/ui/components/label";
 import { Skeleton } from "@reactive-resume/ui/components/skeleton";
 import { toast } from "@reactive-resume/ui/components/toast";
+import { BillingDetails } from "./billing-details";
 import { methodSelectable, toCheckoutInput } from "./checkout-adapter";
 import { InvoiceList } from "./invoices";
 import { minimumSeats, seatProblem } from "./lib";
@@ -111,6 +112,7 @@ function BillingBody() {
 					locale={locale}
 				/>
 			)}
+			<BillingDetails canEdit={data.canManage} />
 			{invoices.data ? (
 				<InvoiceList invoices={invoices.data.invoices} locale={locale} />
 			) : invoices.error ? (

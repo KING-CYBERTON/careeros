@@ -140,6 +140,17 @@ BEGIN
 END
 $$;
 
+-- P3-T10: the billing details of an organization are read, added and changed by the app role, never deleted (the row goes
+-- with its organization through the foreign key). Repeated after the blanket GRANT on every run; skipped when the
+-- table does not exist yet.
+DO $$
+BEGIN
+	IF to_regclass('public.organization_billing_profile') IS NOT NULL THEN
+		REVOKE DELETE, TRUNCATE ON TABLE public.organization_billing_profile FROM careeros_app;
+	END IF;
+END
+$$;
+
 -- P3-T07: the Super Admin console's tables are reached only through definer functions (careeros_admin_*,
 -- careeros_impersonation_*, careeros_announcement*); the app role has no privilege on them at all. Repeated after the
 -- blanket GRANT on every run; skipped for tables a database does not have yet.

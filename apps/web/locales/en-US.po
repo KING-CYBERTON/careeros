@@ -1619,6 +1619,7 @@ msgstr "Added to Prepare"
 msgid "Added: {label}"
 msgstr "Added: {label}"
 
+#: src/features/billing/billing-details.tsx
 #: src/features/resume/share/address-field.tsx
 msgid "Address"
 msgstr "Address"
@@ -1922,10 +1923,19 @@ msgstr "Also shows the icons on skills, profiles and interests."
 msgid "Amharic"
 msgstr "Amharic"
 
+#: src/features/billing/invoice-sheet.tsx
 #: src/features/billing/invoices.tsx
 #: src/features/platform-admin/organization-page.tsx
 msgid "Amount"
 msgstr "Amount"
+
+#: src/features/billing/invoice-sheet.tsx
+msgid "Amount due"
+msgstr "Amount due"
+
+#: src/features/billing/invoice-sheet.tsx
+msgid "Amount paid"
+msgstr "Amount paid"
 
 #: src/features/ats-checker/messages.ts
 msgid "An embedded font could not be read."
@@ -2597,10 +2607,26 @@ msgstr "Bengali"
 msgid "Best for applying"
 msgstr "Best for applying"
 
+#: src/features/billing/invoice-sheet.tsx
+msgid "Bill to"
+msgstr "Bill to"
+
 #: src/features/billing/billing-page.tsx
 #: src/routes/dashboard/settings/route.tsx
 msgid "Billing"
 msgstr "Billing"
+
+#: src/features/billing/billing-details.tsx
+msgid "Billing details"
+msgstr "Billing details"
+
+#: src/features/billing/billing-details.tsx
+msgid "Billing details saved."
+msgstr "Billing details saved."
+
+#: src/features/billing/billing-details.tsx
+msgid "Billing email"
+msgstr "Billing email"
 
 #: src/features/billing/plans.tsx
 msgid "Billing interval"
@@ -2833,6 +2859,7 @@ msgstr "Canceled. The organization keeps working until {0}."
 msgid "Cancellation sent. It shows once the payment provider confirms."
 msgstr "Cancellation sent. It shows once the payment provider confirms."
 
+#: src/features/billing/invoice-sheet.tsx
 #: src/features/billing/invoices.tsx
 #: src/features/billing/plans.tsx
 #: src/features/billing/summary.tsx
@@ -4006,6 +4033,10 @@ msgstr "Couldn't disconnect your {providerName} account. Try again."
 msgid "Couldn't dismiss this job. Try again."
 msgstr "Couldn't dismiss this job. Try again."
 
+#: src/features/billing/receipt-page.tsx
+msgid "Couldn't download the invoice."
+msgstr "Couldn't download the invoice."
+
 #: src/features/documents/document-actions.tsx
 msgid "Couldn't duplicate the document. Try again."
 msgstr "Couldn't duplicate the document. Try again."
@@ -4141,6 +4172,10 @@ msgstr "Couldn't load organizations"
 msgid "Couldn't load the audit log"
 msgstr "Couldn't load the audit log"
 
+#: src/features/billing/billing-details.tsx
+msgid "Couldn't load the billing details."
+msgstr "Couldn't load the billing details."
+
 #: src/features/branding/branding-page.tsx
 msgid "Couldn't load the branding"
 msgstr "Couldn't load the branding"
@@ -4148,6 +4183,10 @@ msgstr "Couldn't load the branding"
 #: src/features/ats-checker/checker.tsx
 msgid "Couldn't load the sample file. Try again."
 msgstr "Couldn't load the sample file. Try again."
+
+#: src/features/billing/receipt-page.tsx
+msgid "Couldn't load this invoice"
+msgstr "Couldn't load this invoice"
 
 #: src/features/platform-admin/organization-page.tsx
 msgid "Couldn't load this organization"
@@ -4340,6 +4379,10 @@ msgstr "Couldn't save that to Knowledge. Try again."
 #: src/features/resume/editor/check/job-match.tsx
 msgid "Couldn't save the application. Try again."
 msgstr "Couldn't save the application. Try again."
+
+#: src/features/billing/billing-details.tsx
+msgid "Couldn't save the billing details."
+msgstr "Couldn't save the billing details."
 
 #: src/features/branding/branding-page.tsx
 msgid "Couldn't save the branding. Try again."
@@ -5174,6 +5217,7 @@ msgstr "Describe each role with short bullets. Solid paragraphs are harder to sk
 msgid "Describe the role"
 msgstr "Describe the role"
 
+#: src/features/billing/invoice-sheet.tsx
 #: src/features/resume/editor/write/entries.tsx
 msgid "Description"
 msgstr "Description"
@@ -5390,6 +5434,10 @@ msgstr "Download current PDF"
 msgid "Download failed. Try again."
 msgstr "Download failed. Try again."
 
+#: src/features/billing/receipt-page.tsx
+msgid "Download invoice"
+msgstr "Download invoice"
+
 #: src/features/career/workspace/preparation.tsx
 #: src/features/resume/editor/chrome/bar.tsx
 #: src/features/resume/share/web-page-text.ts
@@ -5534,6 +5582,10 @@ msgstr "Drop the pronouns and start from the verb. That is the convention in mos
 #: src/features/documents/documents-page.tsx
 msgid "Drop to import"
 msgstr "Drop to import"
+
+#: src/features/billing/invoice-sheet.tsx
+msgid "DUE"
+msgstr "DUE"
 
 #: src/dialogs/resume/index.tsx
 #: src/features/documents/document-actions.tsx
@@ -7304,9 +7356,19 @@ msgstr "Invite someone"
 msgid "Invited"
 msgstr "Invited"
 
+#: src/features/billing/invoice-sheet.tsx
 #: src/features/billing/invoices.tsx
+#: src/features/billing/receipt-page.tsx
 msgid "Invoice"
 msgstr "Invoice"
+
+#: src/features/billing/invoice-sheet.tsx
+msgid "INVOICE"
+msgstr "INVOICE"
+
+#: src/features/billing/invoices.tsx
+msgid "Invoice no."
+msgstr "Invoice no."
 
 #: src/features/platform-admin/organization-page.tsx
 msgid "Invoice or bank reference"
@@ -7358,6 +7420,10 @@ msgstr "Issue {0}: {1}"
 #: src/features/resume/editor/check/actions.ts
 msgid "Issue ignored"
 msgstr "Issue ignored"
+
+#: src/features/billing/invoice-sheet.tsx
+msgid "Issued {issued}"
+msgstr "Issued {issued}"
 
 #: src/features/resume/editor/write/entries.tsx
 msgid "Issuer"
@@ -7696,6 +7762,14 @@ msgstr "Knowledge:"
 msgid "Korean"
 msgstr "Korean"
 
+#: src/features/billing/billing-details.tsx
+msgid "KRA PIN"
+msgstr "KRA PIN"
+
+#: src/features/billing/invoice-sheet.tsx
+msgid "KRA PIN {customerPin}"
+msgstr "KRA PIN {customerPin}"
+
 #. Short field label for custom display text associated with a URL
 #: src/components/input/url-input.tsx
 #: src/features/applications/components/detail/contacts.tsx
@@ -7837,6 +7911,10 @@ msgstr "Legacy Word files aren't supported. Open the file in Word and save it as
 #: src/features/branding/branding-page.tsx
 msgid "Legal links"
 msgstr "Legal links"
+
+#: src/features/billing/billing-details.tsx
+msgid "Legal name"
+msgstr "Legal name"
 
 #: src/routes/builder/$resumeId/-components/document-details.tsx
 #: src/routes/builder/letter/-components/write-panel.tsx
@@ -8270,6 +8348,7 @@ msgstr "Low"
 msgid "Lower the design sheet"
 msgstr "Lower the design sheet"
 
+#: src/features/billing/invoice-sheet.tsx
 #: src/features/billing/invoices.tsx
 #: src/features/billing/plans.tsx
 #: src/features/billing/summary.tsx
@@ -8518,6 +8597,7 @@ msgstr "Message the coach"
 msgid "Messages"
 msgstr "Messages"
 
+#: src/features/billing/invoice-sheet.tsx
 #: src/features/billing/invoices.tsx
 msgid "Method"
 msgstr "Method"
@@ -9318,6 +9398,10 @@ msgstr "No work experience shows"
 msgid "No work-experience section was found."
 msgstr "No work-experience section was found."
 
+#: src/features/billing/invoice-sheet.tsx
+msgid "No. {number}"
+msgstr "No. {number}"
+
 #: src/features/applications/components/add-application-dialog.tsx
 #: src/features/applications/components/application-detail-sheet.tsx
 #: src/features/applications/components/list-view.tsx
@@ -9738,6 +9822,10 @@ msgstr "Only the first pages were checked."
 msgid "Only the owner can change the plan, seats or payment details."
 msgstr "Only the owner can change the plan, seats or payment details."
 
+#: src/features/billing/billing-details.tsx
+msgid "Only the owner can change these details."
+msgstr "Only the owner can change these details."
+
 #: src/features/platform-admin/announcements-page.tsx
 msgid "Only this organization (id, optional)"
 msgstr "Only this organization (id, optional)"
@@ -10091,6 +10179,18 @@ msgstr "Pages already open on your organization's address pick up changes within
 msgid "Pagination"
 msgstr "Pagination"
 
+#: src/features/billing/invoices.tsx
+msgid "Paid"
+msgstr "Paid"
+
+#: src/features/billing/invoice-sheet.tsx
+msgid "PAID"
+msgstr "PAID"
+
+#: src/features/billing/invoice-sheet.tsx
+msgid "Paid {paidOn}"
+msgstr "Paid {paidOn}"
+
 #: src/features/resume/editor/design/style-groups.tsx
 msgid "Paper"
 msgstr "Paper"
@@ -10249,6 +10349,7 @@ msgstr "Pay for {0}"
 msgid "Pay period"
 msgstr "Pay period"
 
+#: src/features/billing/invoice-sheet.tsx
 #: src/features/billing/return-page.tsx
 msgid "Payment"
 msgstr "Payment"
@@ -10303,7 +10404,7 @@ msgstr "per seat"
 msgid "Per year"
 msgstr "Per year"
 
-#: src/features/billing/invoices.tsx
+#: src/features/billing/invoice-sheet.tsx
 msgid "Period"
 msgstr "Period"
 
@@ -10391,6 +10492,10 @@ msgstr "Picking your stories"
 msgid "Picture"
 msgstr "Picture"
 
+#: src/features/billing/invoice-sheet.tsx
+msgid "PIN {sellerPin}"
+msgstr "PIN {sellerPin}"
+
 #: src/features/applications/components/insights-view.tsx
 msgid "Pipeline flow"
 msgstr "Pipeline flow"
@@ -10407,7 +10512,6 @@ msgstr "Plain text with headings. Paste into application forms and notes."
 msgid "Plain text. These are filled in from the application when you use the template, and show as [name] when there is nothing to fill in:"
 msgstr "Plain text. These are filled in from the application when you use the template, and show as [name] when there is nothing to fill in:"
 
-#: src/features/billing/invoices.tsx
 #: src/features/platform-admin/organization-page.tsx
 #: src/features/platform-admin/organizations-page.tsx
 msgid "Plan"
@@ -10703,6 +10807,7 @@ msgstr "Primary colour"
 msgid "Primary resume"
 msgstr "Primary resume"
 
+#: src/features/billing/receipt-page.tsx
 #: src/routes/builder/$resumeId/-components/document-menu.tsx
 msgid "Print"
 msgstr "Print"
@@ -10711,9 +10816,9 @@ msgstr "Print"
 msgid "Print or export the form to a flat PDF before sending it."
 msgstr "Print or export the form to a flat PDF before sending it."
 
-#: src/features/billing/invoices.tsx
-msgid "Print receipt"
-msgstr "Print receipt"
+#: src/features/billing/billing-details.tsx
+msgid "Printed on your invoices."
+msgstr "Printed on your invoices."
 
 #: src/features/resume/share/share-panel.tsx
 msgid "Privacy"
@@ -10864,6 +10969,10 @@ msgstr "QR code for {url}"
 #: src/dialogs/auth/enable-two-factor.tsx
 msgid "QR code for two-step verification"
 msgstr "QR code for two-step verification"
+
+#: src/features/billing/invoice-sheet.tsx
+msgid "Qty"
+msgstr "Qty"
 
 #: src/features/career/workspace/answer-library.tsx
 msgid "Question"
@@ -11104,11 +11213,6 @@ msgstr "Reason (recorded in the audit log)"
 msgid "Recalled"
 msgstr "Recalled"
 
-#: src/features/billing/invoices.tsx
-#: src/features/billing/receipt-page.tsx
-msgid "Receipt"
-msgstr "Receipt"
-
 #: src/features/career/coach.tsx
 msgid "Recent"
 msgstr "Recent"
@@ -11194,9 +11298,9 @@ msgstr "Red"
 msgid "Redo resume change"
 msgstr "Redo resume change"
 
-#: src/features/billing/invoices.tsx
-msgid "Reference"
-msgstr "Reference"
+#: src/features/billing/invoice-sheet.tsx
+msgid "Ref"
+msgstr "Ref"
 
 #. placeholder {0}: index + 1
 #: src/features/settings/account/application-profile.tsx
@@ -12102,6 +12206,10 @@ msgstr "Save as application…"
 msgid "Save as my template"
 msgstr "Save as my template"
 
+#: src/features/billing/billing-details.tsx
+msgid "Save billing details"
+msgstr "Save billing details"
+
 #: src/dialogs/resume/index.tsx
 #: src/features/applications/components/application-form-sheet.tsx
 #: src/features/branding/branding-page.tsx
@@ -12535,7 +12643,6 @@ msgid "Seat change sent. It shows once the payment provider confirms."
 msgstr "Seat change sent. It shows once the payment provider confirms."
 
 #: src/features/billing/billing-page.tsx
-#: src/features/billing/invoices.tsx
 #: src/features/billing/plans.tsx
 #: src/features/billing/summary.tsx
 #: src/features/platform-admin/organization-page.tsx
@@ -13487,6 +13594,7 @@ msgstr "State or region"
 msgid "Statistics"
 msgstr "Statistics"
 
+#: src/features/billing/invoices.tsx
 #: src/features/career/workspace/fit.tsx
 #: src/features/platform-admin/organizations-page.tsx
 msgid "Status"
@@ -13609,6 +13717,10 @@ msgstr "Submitted attached resume: {0}"
 #: src/features/platform-admin/organization-page.tsx
 msgid "Subscription"
 msgstr "Subscription"
+
+#: src/features/billing/invoice-sheet.tsx
+msgid "Subtotal"
+msgstr "Subtotal"
 
 #: src/features/career/workspace/prepare.tsx
 msgid "Success at 90 days · next step"
@@ -13812,6 +13924,10 @@ msgstr "Target roles"
 msgid "Task"
 msgstr "Task"
 
+#: src/features/billing/invoice-sheet.tsx
+msgid "TAX INVOICE"
+msgstr "TAX INVOICE"
+
 #: src/features/applications/components/interview-dialog.tsx
 msgid "Technical"
 msgstr "Technical"
@@ -13979,6 +14095,10 @@ msgstr "Thank you after an interview"
 #: src/features/email-templates/built-in-text.ts
 msgid "Thank you for meeting with me on {interviewDate}"
 msgstr "Thank you for meeting with me on {interviewDate}"
+
+#: src/features/billing/invoice-sheet.tsx
+msgid "Thank you for your business."
+msgstr "Thank you for your business."
 
 #: src/features/email-templates/labels.ts
 msgid "Thank-you"
@@ -14628,6 +14748,10 @@ msgstr "This invitation has expired, was canceled, or has already been answered.
 msgid "This invitation was sent to a different email address. Sign in with the address that received it."
 msgstr "This invitation was sent to a different email address. Sign in with the address that received it."
 
+#: src/features/billing/receipt-page.tsx
+msgid "This invoice was not found"
+msgstr "This invoice was not found"
+
 #: src/features/ats-checker/messages.ts
 msgid "This is a PDF Portfolio: the visible page is only a cover."
 msgstr "This is a PDF Portfolio: the visible page is only a cover."
@@ -14720,10 +14844,6 @@ msgstr "This question couldn't be asked. Send a new message to continue."
 #: src/features/assistant/question-card.tsx
 msgid "This question didn't finish."
 msgstr "This question didn't finish."
-
-#: src/features/billing/receipt-page.tsx
-msgid "This receipt was not found"
-msgstr "This receipt was not found"
 
 #: src/features/settings/account/application-profile.tsx
 msgid "This removes the saved profile and its references. Career preferences, documents and submitted answers stay unchanged. This cannot be undone."
@@ -14921,6 +15041,10 @@ msgstr "Too light for headings on white. It may be hard to read and print faintl
 #: src/features/settings/ai/web-access.tsx
 msgid "Too many requests. Try again later."
 msgstr "Too many requests. Try again later."
+
+#: src/features/billing/invoice-sheet.tsx
+msgid "Total"
+msgstr "Total"
 
 #: src/features/applications/components/application-form-sheet.tsx
 msgid "Track a job you're applying to and link the resume you sent."
@@ -15213,6 +15337,10 @@ msgstr "Undo"
 #: src/features/resume/stylesheet/toolbar.tsx
 msgid "Undo resume change"
 msgstr "Undo resume change"
+
+#: src/features/billing/invoice-sheet.tsx
+msgid "Unit price"
+msgstr "Unit price"
 
 #: src/features/career/offer-entry.tsx
 #: src/features/career/offers.tsx
@@ -15697,6 +15825,7 @@ msgstr "Video link, office address, or phone number"
 msgid "Vietnamese"
 msgstr "Vietnamese"
 
+#: src/features/billing/invoices.tsx
 #: src/features/career/coach-chat.tsx
 #: src/features/documents/documents-page.tsx
 #: src/routes/dashboard/applications/index.tsx

@@ -79,6 +79,7 @@ describe.skipIf(!configured)("the isolation registry on the migrated schema", ()
 			"cohort",
 			"discovered_job",
 			"email_template",
+			"organization_billing_profile",
 			"ai_usage",
 		]);
 	});

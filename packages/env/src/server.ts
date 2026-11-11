@@ -284,6 +284,22 @@ export const env = createEnv({
 		// CAREEROS (P3-T03): the models the platform key uses. Each must have a price in @careeros/ai-metering.
 		CAREEROS_AI_MODEL_GENERATION: z.string().trim().min(1).default("claude-sonnet-5-5"),
 		CAREEROS_AI_MODEL_FAST: z.string().trim().min(1).default("claude-haiku-5-5"),
+		// CAREEROS (P3-T10): the seller's details on invoices. All optional; the name falls back to the platform name.
+		// The address lines are separated by "|". A VAT rate of 0 (the default) hides the VAT row and the document is an
+		// "Invoice" rather than a "Tax invoice".
+		CAREEROS_INVOICE_SELLER_NAME: z.string().trim().min(1).max(200).optional(),
+		CAREEROS_INVOICE_SELLER_ADDRESS: z.string().trim().min(1).max(500).optional(),
+		CAREEROS_INVOICE_SELLER_EMAIL: z.string().trim().min(1).max(254).optional(),
+		CAREEROS_INVOICE_SELLER_PHONE: z.string().trim().min(1).max(64).optional(),
+		CAREEROS_INVOICE_SELLER_TAX_PIN: z.string().trim().min(1).max(32).optional(),
+		CAREEROS_INVOICE_TAX_LABEL: z.string().trim().min(1).max(32).default("VAT"),
+		CAREEROS_INVOICE_VAT_RATE: z.coerce.number().min(0).max(100).default(0),
+		CAREEROS_INVOICE_PREFIX: z
+			.string()
+			.trim()
+			.regex(/^[A-Z0-9]{1,8}$/)
+			.default("INV"),
+		CAREEROS_INVOICE_FOOTER: z.string().trim().min(1).max(500).optional(),
 
 		// Feature Flags
 		FLAG_DISABLE_SIGNUPS: z.stringbool().default(false),
