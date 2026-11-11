@@ -695,3 +695,14 @@ New code is in `packages/email-templates`, `packages/api/src/features/email-temp
 | `packages/db/src/schema/index.ts`                                                                           | P6-T02 | Exports the new `email_suppression` schema                                                                                                                                     | Low (marked `CAREEROS:`)          |
 | `apps/web/src/features/platform-admin/layout.tsx`, `apps/web/src/routeTree.gen.ts`, `apps/web/locales/*.po` | P6-T02 | "Email" link in the console navigation; the generated route tree and the extracted strings for the new page                                                                    | Low (generated files regenerated) |
 | `apps/server/src/http/billing-webhook.ts`, `apps/server/src/openapi/cross-org-inventory.test.ts`            | P6-T02 | `readCapped` exported for the email webhook; `admin.email.sendTest` added to the RPC-only list                                                                                 | Low                               |
+
+## P3-T11: OpenRouter as the platform AI provider
+
+| File                                             | Task   | Change                                                                                                                            | Merge risk               |
+| ------------------------------------------------ | ------ | --------------------------------------------------------------------------------------------------------------------------------- | ------------------------ |
+| `packages/env/src/server.ts`                     | P3-T11 | `CAREEROS_AI_PLATFORM_PROVIDER`, `OPENROUTER_API_KEY`                                                                             | Low (marked `CAREEROS:`) |
+| `turbo.json`                                     | P3-T11 | `OPENROUTER_API_KEY` in `globalPassThroughEnv` and the test env arrays; `CAREEROS_AI_PLATFORM_PROVIDER` in `globalPassThroughEnv` | Low                      |
+| .env.example, infra/staging/.env.staging.example | P3-T11 | Placeholders for the two variables                                                                                                | Low (marked `CAREEROS:`) |
+| `packages/api/src/features/ai/service.ts`        | P3-T11 | The `metered` guard no longer checks the provider name (D4)                                                                       | Low (marked `CAREEROS:`) |
+| `packages/api/src/features/agent/service.ts`     | P3-T11 | Comment only: `providerOptions.anthropic` stays gated on the resolved provider                                                    | Low (marked `CAREEROS:`) |
+| `docs/self-hosting/environment-variables.mdx`    | P3-T11 | "Platform AI through OpenRouter" section                                                                                          | Low                      |

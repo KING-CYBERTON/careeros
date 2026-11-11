@@ -101,9 +101,9 @@ const DOCX_DOCUMENT_XML_PATH = "word/document.xml";
 // Resume bodies are kilobytes; this leaves room for long documents without trusting the archive's declared size.
 const MAX_DOCX_DOCUMENT_XML_BYTES = 20 * 1024 * 1024;
 
-/** CAREEROS (P3-T03): the metering step. The platform key can only be used through a model that meters it. */
+/** CAREEROS (P3-T03, P3-T11 D4): the metering step (the guard holds whatever provider the caller passes). The platform key can only be used through a model that meters it. */
 function metered<M extends Parameters<typeof meterLanguageModel>[0]>(model: M, input: GetModelInput) {
-	if (isPlatformApiKey(input.apiKey) && input.provider === "anthropic" && input.metering?.source !== "platform")
+	if (isPlatformApiKey(input.apiKey) && input.metering?.source !== "platform")
 		throw new Error("PLATFORM_KEY_UNMETERED");
 	if (!input.metering) return model;
 	return meterLanguageModel(model, { metering: input.metering, provider: input.provider, modelId: input.model });

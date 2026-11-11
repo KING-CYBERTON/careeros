@@ -277,6 +277,10 @@ export const env = createEnv({
 		// CAREEROS (P3-T03): the platform's Claude key. Organizations on a plan with platform AI use it when a member has no
 		// provider of their own. Server only: never returned by an API, never logged, never stored in the database.
 		ANTHROPIC_API_KEY: z.string().trim().min(1).optional(),
+		// CAREEROS (P3-T11): which key the platform provider uses. `openrouter` reads OPENROUTER_API_KEY and never falls
+		// back to ANTHROPIC_API_KEY. Same rules as ANTHROPIC_API_KEY: server only, never returned, logged or stored.
+		CAREEROS_AI_PLATFORM_PROVIDER: z.enum(["anthropic", "openrouter"]).default("anthropic"),
+		OPENROUTER_API_KEY: z.string().trim().min(1).optional(),
 		// CAREEROS (P3-T03): the models the platform key uses. Each must have a price in @careeros/ai-metering.
 		CAREEROS_AI_MODEL_GENERATION: z.string().trim().min(1).default("claude-sonnet-5-5"),
 		CAREEROS_AI_MODEL_FAST: z.string().trim().min(1).default("claude-haiku-5-5"),

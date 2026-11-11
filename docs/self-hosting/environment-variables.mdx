@@ -232,6 +232,19 @@ Shared credentials stay in the environment and do not require `ENCRYPTION_SECRET
 | `AI_TEST_TIMEOUT_MS`    | `30000`          | How long **Save and test** waits for a provider to answer, in milliseconds. Raise it for local models that load slowly on first use.                                                                                                 |
 | `AI_REQUEST_TIMEOUT_MS` | `300000`         | How long a single AI action (importing a resume, reviewing, improving, reading a posting) waits for a provider, in milliseconds. Raise it for slow local models.                                                                     |
 
+### Platform AI through OpenRouter
+
+CareerOS can include AI in a plan ("Included with your plan"), paid for by you and counted against each organization's
+credits. By default it uses `ANTHROPIC_API_KEY`. To run it through [OpenRouter](https://openrouter.ai) instead, set
+`CAREEROS_AI_PLATFORM_PROVIDER=openrouter` and `OPENROUTER_API_KEY`. One provider runs at a time: with `openrouter`
+selected and no `OPENROUTER_API_KEY`, platform AI is off, and the Anthropic key is not used as a fallback.
+
+The model settings `CAREEROS_AI_MODEL_GENERATION` and `CAREEROS_AI_MODEL_FAST` keep their Claude ids
+(`claude-sonnet-5-5`, `claude-haiku-5-5`); CareerOS translates them to the OpenRouter ids
+(`anthropic/claude-sonnet-5.5`, `anthropic/claude-haiku-5.5`). A model id that contains `/` is sent as given, and must
+be one of those two ids; any other model is refused because it has no price. Credits are priced from the provider's
+token prices; OpenRouter's fee for buying its credits is yours and is not charged to members.
+
 <Warning>
   Changing `ENCRYPTION_SECRET` makes every saved AI and web-access key unreadable. People then need to enter their keys
   again.

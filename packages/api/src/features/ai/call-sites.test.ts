@@ -217,6 +217,18 @@ describe("getModel on the platform key", () => {
 		).toThrow("PLATFORM_KEY_UNMETERED");
 	});
 
+	// CAREEROS (P3-T11, D4): the guard does not depend on which provider the caller names.
+	it("refuses the platform key without platform metering whatever provider the caller passes", async () => {
+		const { getModel } = await import("./service");
+		for (const provider of ["openrouter", "openai", "anthropic"] as const) {
+			const input = { provider, model: "anthropic/claude-sonnet-5.5", apiKey: PLATFORM_KEY } as const;
+			expect(() => getModel(input)).toThrow("PLATFORM_KEY_UNMETERED");
+			expect(() =>
+				getModel({ ...input, metering: { feature: "resume.improve", userId: "u1", source: "own_key" } }),
+			).toThrow("PLATFORM_KEY_UNMETERED");
+		}
+	});
+
 	it("returns a model that records a platform row after a generate", async () => {
 		const { getModel } = await import("./service");
 		const model = getModel({

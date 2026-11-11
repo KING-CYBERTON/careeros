@@ -24,6 +24,7 @@ import {
 	platformAiAvailable,
 	platformApiKey,
 	platformModelFor,
+	platformProvider,
 	platformProviderId,
 } from "../ai/platform";
 import { testConnection } from "../ai/service";
@@ -207,7 +208,7 @@ async function platformReference(userId: string) {
 		organizationId,
 		userId,
 		label: PLATFORM_PROVIDER_LABEL,
-		provider: "anthropic",
+		provider: platformProvider(),
 		model: platformModelFor("agent.turn"),
 		baseUrl: null,
 		enabled: true,

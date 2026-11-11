@@ -92,6 +92,9 @@ vi.mock("../ai/credentials", () => ({
 	decryptCredential: vi.fn(() => "decrypted-key"),
 	encryptCredential: vi.fn(),
 }));
+vi.mock("@careeros/billing", () => ({
+	getEntitlements: vi.fn(async () => ({ features: { platform_ai: true } })),
+}));
 vi.mock("../ai/service", () => ({ testConnection: vi.fn() }));
 vi.mock("../ai/url-policy", () => ({ resolveAiBaseUrl: vi.fn() }));
 
@@ -268,6 +271,74 @@ describe("aiProvidersService", () => {
 			await expect(aiProvidersService.getRunnableById({ id: "any", userId: "user-1" })).rejects.toMatchObject({
 				code: "BAD_REQUEST",
 			});
+		});
+	});
+
+	// CAREEROS (P3-T11): the platform provider follows CAREEROS_AI_PLATFORM_PROVIDER.
+	describe("platform AI", () => {
+		const configure = (values: Record<string, unknown>) => {
+			Object.assign(envMock, {
+				CAREEROS_AI_MODEL_GENERATION: "claude-sonnet-5-5",
+				CAREEROS_AI_MODEL_FAST: "claude-haiku-5-5",
+				...values,
+			});
+		};
+		afterEach(() => {
+			for (const key of [
+				"CAREEROS_AI_PLATFORM_PROVIDER",
+				"ANTHROPIC_API_KEY",
+				"OPENROUTER_API_KEY",
+				"CAREEROS_AI_MODEL_GENERATION",
+				"CAREEROS_AI_MODEL_FAST",
+			])
+				delete envMock[key];
+		});
+
+		it("uses anthropic and the canonical model by default", async () => {
+			configure({ ANTHROPIC_API_KEY: "ant-key-placeholder" });
+			const runnable = await aiProvidersService.getRunnableById({
+				id: "platform-ai:org_test:user-1",
+				userId: "user-1",
+				feature: "resume.improve",
+			});
+			expect(runnable).toMatchObject({
+				provider: "anthropic",
+				model: "claude-sonnet-5-5",
+				apiKey: "ant-key-placeholder",
+				source: "platform",
+			});
+		});
+
+		it("uses openrouter, its key and the mapped model when selected", async () => {
+			configure({
+				CAREEROS_AI_PLATFORM_PROVIDER: "openrouter",
+				ANTHROPIC_API_KEY: "ant-key-placeholder",
+				OPENROUTER_API_KEY: "or-key-placeholder",
+			});
+			const runnable = await aiProvidersService.getRunnableById({
+				id: "platform-ai:org_test:user-1",
+				userId: "user-1",
+				feature: "resume.improve",
+			});
+			expect(runnable).toMatchObject({
+				provider: "openrouter",
+				model: "anthropic/claude-sonnet-5.5",
+				apiKey: "or-key-placeholder",
+				source: "platform",
+				metering: { feature: "resume.improve", userId: "user-1", source: "platform" },
+			});
+			expect(queryState.insertedRow).toMatchObject({ provider: "openrouter", model: "anthropic/claude-sonnet-5.5" });
+		});
+
+		it("is refused on openrouter with no OpenRouter key", async () => {
+			configure({ CAREEROS_AI_PLATFORM_PROVIDER: "openrouter", ANTHROPIC_API_KEY: "ant-key-placeholder" });
+			await expect(
+				aiProvidersService.getRunnableById({
+					id: "platform-ai:org_test:user-1",
+					userId: "user-1",
+					feature: "resume.improve",
+				}),
+			).rejects.toMatchObject({ code: "BAD_REQUEST" });
 		});
 	});
 });

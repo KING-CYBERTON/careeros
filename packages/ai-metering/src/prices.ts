@@ -9,6 +9,10 @@
 //   Cache writes (5-minute cache) cost 1.25 x the input price in every tier, so claude-sonnet-5-5 is $2.50 and
 //   claude-haiku-5-5 is $0.125 ($0.625 above 100K tokens) per million tokens (Q201, confirmed in review).
 //
+// OpenRouter (P3-T11, D3): it passes the provider's token prices through unchanged, so an OpenRouter slug is priced as
+// the canonical model it names (`MODEL_PRICE_ALIASES`). OpenRouter's fee on buying OpenRouter credits is operator
+// overhead and is not added to member credits.
+//
 // An unknown model has no entry and is refused (`AiModelNotPricedError`): the platform key never records a call at zero.
 
 /** Prices in USD per million tokens. */
@@ -30,6 +34,12 @@ export const PRICES_USD_PER_MTOK: Readonly<Record<string, ModelPrice>> = {
 	},
 };
 
+/** OpenRouter slug to canonical model id (P3-T11, D3). `ai_usage.model` keeps the slug that was sent. */
+export const MODEL_PRICE_ALIASES: Readonly<Record<string, string>> = {
+	"anthropic/claude-sonnet-5.5": "claude-sonnet-5-5",
+	"anthropic/claude-haiku-5.5": "claude-haiku-5-5",
+};
+
 export class AiModelNotPricedError extends Error {
 	readonly code = "AI_MODEL_NOT_PRICED";
 	constructor(readonly model: string) {
@@ -40,7 +50,11 @@ export class AiModelNotPricedError extends Error {
 
 /** The price entry for a model id. Throws for an unknown model: the call is refused, never recorded at zero. */
 export function priceFor(model: string): ModelPrice {
-	const price = Object.hasOwn(PRICES_USD_PER_MTOK, model) ? PRICES_USD_PER_MTOK[model] : undefined;
+	const canonical = Object.hasOwn(MODEL_PRICE_ALIASES, model) ? MODEL_PRICE_ALIASES[model] : model;
+	const price =
+		canonical !== undefined && Object.hasOwn(PRICES_USD_PER_MTOK, canonical)
+			? PRICES_USD_PER_MTOK[canonical]
+			: undefined;
 	if (!price) throw new AiModelNotPricedError(model);
 	return price;
 }
