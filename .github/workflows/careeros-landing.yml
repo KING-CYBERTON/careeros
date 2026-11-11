@@ -1,0 +1,118 @@
+# CAREEROS: GTM landing pages — their own workflow, apart from careeros-ci, so a change to the static pages in
+# apps/web/public/landing is checked in seconds and reaches staging without waiting for the image build.
+# check: runs on every pull request and push that touches the pages (GitHub-hosted runner, no secrets).
+# deploy: on develop only, copies the pages into the running staging app container. The copy lasts until the next
+#   image deploy, and that image is built from the same commit, so it carries the same pages. Pull request code never
+#   runs on the self-hosted runner.
+name: careeros-landing
+
+on:
+  pull_request:
+    branches: [develop, main]
+    paths:
+      - "apps/web/public/landing/**"
+      - "tooling/careeros/landing-check.*"
+      - ".github/workflows/careeros-landing.yml"
+  push:
+    branches: [develop]
+    paths:
+      - "apps/web/public/landing/**"
+      - "tooling/careeros/landing-check.*"
+      - ".github/workflows/careeros-landing.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
+jobs:
+  check:
+    name: check landing pages
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Check out source
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Set up Node.js
+        uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version-file: ".nvmrc"
+
+      # Plain Node, no install: the checker and its self-test use only the standard library.
+      - name: Self-test the checker
+        run: node --test tooling/careeros/landing-check.test.mjs
+
+      - name: Check the pages
+        run: node tooling/careeros/landing-check.mjs
+
+  deploy:
+    name: copy landing pages to staging
+    needs: check
+    # Never on a pull request: this job runs on the staging server.
+    if: github.ref == 'refs/heads/develop' && github.event_name != 'pull_request'
+    runs-on: [self-hosted, staging]
+    environment: staging
+    timeout-minutes: 10
+    env:
+      STAGING_URL: ${{ vars.STAGING_URL }}
+      WEB_ROOT: /app/apps/web/dist
+    steps:
+      - name: Check out source
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Find the running app container
+        id: app
+        run: |
+          set -euo pipefail
+          container="$(docker ps --quiet \
+            --filter label=com.docker.compose.project=careeros_staging \
+            --filter label=com.docker.compose.service=app | head -n 1)"
+          if [[ -z "$container" ]]; then
+            echo "::notice::The staging app is not running; the next image deploy carries the pages."
+            exit 0
+          fi
+          echo "container=$container" >> "$GITHUB_OUTPUT"
+
+      # The address of each stylesheet and script gets the commit in its query, so Cloudflare and browsers fetch the
+      # new files instead of serving cached ones. Old brotli copies are removed with the old folder.
+      - name: Copy the pages into the container
+        if: steps.app.outputs.container != ''
+        env:
+          CONTAINER: ${{ steps.app.outputs.container }}
+        run: |
+          set -euo pipefail
+          work="$(mktemp -d)"
+          trap 'rm -rf "$work"' EXIT
+          cp -R apps/web/public/landing "$work/landing"
+          version="${GITHUB_SHA:0:12}"
+          sed -i -E "s#(href|src)=\"((assets/[^\"#?]+|fonts|enter|tiles)\.(css|js))\"#\1=\"\2?v=${version}\"#g" "$work"/landing/*.html
+          docker exec --user root "$CONTAINER" rm -rf "$WEB_ROOT/landing.next"
+          docker cp "$work/landing" "$CONTAINER:$WEB_ROOT/landing.next"
+          docker exec --user root "$CONTAINER" sh -c \
+            "rm -rf '$WEB_ROOT/landing' && mv '$WEB_ROOT/landing.next' '$WEB_ROOT/landing' && chmod -R a+rX '$WEB_ROOT/landing'"
+          echo "Copied the landing pages at $version to staging." >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Check the pages answer
+        if: steps.app.outputs.container != '' && vars.STAGING_URL != ''
+        run: |
+          set -euo pipefail
+          for page in index.html organisations.html; do
+            body="$(curl --fail --silent --show-error --retry 5 --retry-delay 3 --retry-all-errors --max-time 20 \
+              "$STAGING_URL/landing/$page?v=${GITHUB_SHA:0:12}")"
+            if ! grep -q "CareerOS" <<<"$body"; then
+              echo "::error::$STAGING_URL/landing/$page did not return the landing page."
+              exit 1
+            fi
+          done
+          echo "Live at $STAGING_URL/landing/index.html" >> "$GITHUB_STEP_SUMMARY"
