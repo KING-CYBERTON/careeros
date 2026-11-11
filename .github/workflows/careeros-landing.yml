@@ -1,5 +1,5 @@
-# CAREEROS: GTM landing pages — their own workflow, apart from careeros-ci, so a change to the static pages in
-# apps/web/public/landing is checked in seconds and reaches staging without waiting for the image build.
+# CAREEROS: marketing pages (home page and organisations page) — their own workflow, apart from careeros-ci, so a
+# change to the static pages in apps/web/public/site is checked in seconds and reaches staging without waiting for the image build.
 # check: runs on every pull request and push that touches the pages (GitHub-hosted runner, no secrets).
 # deploy: on develop only, copies the pages into the running staging app container. The copy lasts until the next
 #   image deploy, and that image is built from the same commit, so it carries the same pages. Pull request code never
@@ -10,13 +10,13 @@ on:
   pull_request:
     branches: [develop, main]
     paths:
-      - "apps/web/public/landing/**"
+      - "apps/web/public/site/**"
       - "tooling/careeros/landing-check.*"
       - ".github/workflows/careeros-landing.yml"
   push:
     branches: [develop]
     paths:
-      - "apps/web/public/landing/**"
+      - "apps/web/public/site/**"
       - "tooling/careeros/landing-check.*"
       - ".github/workflows/careeros-landing.yml"
   workflow_dispatch:
@@ -94,25 +94,23 @@ jobs:
           set -euo pipefail
           work="$(mktemp -d)"
           trap 'rm -rf "$work"' EXIT
-          cp -R apps/web/public/landing "$work/landing"
+          cp -R apps/web/public/site "$work/site"
           version="${GITHUB_SHA:0:12}"
-          sed -i -E "s#(href|src)=\"((assets/[^\"#?]+|fonts|enter|tiles)\.(css|js))\"#\1=\"\2?v=${version}\"#g" "$work"/landing/*.html
-          docker exec --user root "$CONTAINER" rm -rf "$WEB_ROOT/landing.next"
-          docker cp "$work/landing" "$CONTAINER:$WEB_ROOT/landing.next"
+          sed -i -E "s#(href|src)=\"(/site/[^\"#?]+\.(css|js))\"#\1=\"\2?v=${version}\"#g" "$work"/site/*.html
+          docker exec --user root "$CONTAINER" rm -rf "$WEB_ROOT/site.next"
+          docker cp "$work/site" "$CONTAINER:$WEB_ROOT/site.next"
           docker exec --user root "$CONTAINER" sh -c \
-            "rm -rf '$WEB_ROOT/landing' && mv '$WEB_ROOT/landing.next' '$WEB_ROOT/landing' && chmod -R a+rX '$WEB_ROOT/landing'"
+            "rm -rf '$WEB_ROOT/site' && mv '$WEB_ROOT/site.next' '$WEB_ROOT/site' && chmod -R a+rX '$WEB_ROOT/site'"
           echo "Copied the landing pages at $version to staging." >> "$GITHUB_STEP_SUMMARY"
 
-      - name: Check the pages answer
+      # Fetches a file the copy just placed, not the pages' addresses: those are answered by the app
+      # (apps/server/src/static/landing.ts), so they follow the image deploy.
+      - name: Check the copied files answer
         if: steps.app.outputs.container != '' && vars.STAGING_URL != ''
         run: |
           set -euo pipefail
-          for page in index.html organisations.html; do
-            body="$(curl --fail --silent --show-error --retry 5 --retry-delay 3 --retry-all-errors --max-time 20 \
-              "$STAGING_URL/landing/$page?v=${GITHUB_SHA:0:12}")"
-            if ! grep -q "CareerOS" <<<"$body"; then
-              echo "::error::$STAGING_URL/landing/$page did not return the landing page."
-              exit 1
-            fi
+          for file in tiles.js fonts.css; do
+            curl --fail --silent --show-error --output /dev/null --retry 5 --retry-delay 3 --retry-all-errors \
+              --max-time 20 "$STAGING_URL/site/$file?v=${GITHUB_SHA:0:12}"
           done
-          echo "Live at $STAGING_URL/landing/index.html" >> "$GITHUB_STEP_SUMMARY"
+          echo "Live at $STAGING_URL/ and $STAGING_URL/organisations" >> "$GITHUB_STEP_SUMMARY"

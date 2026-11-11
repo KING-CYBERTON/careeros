@@ -45,6 +45,8 @@ function resolveWebDistPath() {
 }
 
 const staticRoot = resolveWebDistPath();
+// CAREEROS (P6-M02): the landing pages (static/landing.ts) read their files from the same web build.
+export const webDistRoot = staticRoot;
 const indexHtmlPath = `${staticRoot}/index.html`;
 // The marketing pages prerendered per locale by the web build (apps/web/vite.config.ts), as <page>/<locale>.html, kept
 // beside dist/ so they're never served at an address of their own.
@@ -290,6 +292,11 @@ export const serveWebDistStatic = env.CLOUDFLARE
 				// Vite fingerprints everything under /assets, so a file there never changes.
 				if (context.req.path.startsWith("/assets/")) {
 					context.header("Cache-Control", "public, max-age=31536000, immutable");
+				} else if (context.req.path.startsWith("/site/") && context.req.query("v")) {
+					// CAREEROS (P6-M02): the marketing pages ask for their stylesheets and scripts with the build's
+					// revision in the address (static/landing.ts), so each address names one version for good.
+					context.header("Cache-Control", "public, max-age=31536000, immutable");
+					context.header("Cache-Tag", "public");
 				} else {
 					// Other files keep their names when their content changes, so a release purges them from Cloudflare's
 					// cache by this tag. Browsers keep pictures, fonts and sounds for 30 days, the shortest lifetime Lighthouse

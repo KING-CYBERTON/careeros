@@ -39,8 +39,11 @@ export function handleRobots() {
 	return textResponse(body);
 }
 
-// The marketing pages; resumes whose owners opted in are listed on the sitemap's other pages.
-const sitemapPaths = ["/", "/ats-checker", "/resume-templates"];
+// The public app pages; resumes whose owners opted in are listed on the sitemap's other pages.
+const sitemapPaths = ["/ats-checker", "/resume-templates"];
+// CAREEROS (P6-M02): the marketing pages (static/landing.ts). They are in English only, so they have one entry each
+// and no language alternates.
+const marketingPaths = ["/", "/organisations"];
 
 const escapeXml = (value: string) =>
 	value.replaceAll("&", "&amp;").replaceAll("<", "&lt;").replaceAll(">", "&gt;").replaceAll('"', "&quot;");
@@ -71,6 +74,7 @@ export async function handleSitemap() {
 
 export function handlePagesSitemap() {
 	const baseUrl = appUrl();
+	const marketing = marketingPaths.map((path) => `  <url>\n    <loc>${escapeXml(`${baseUrl}${path}`)}</loc>\n  </url>`);
 	const urls = sitemapPaths.flatMap((path) => {
 		const pageUrl = `${baseUrl}${path}`;
 		const languages = getLocaleAlternates(pageUrl);
@@ -84,7 +88,7 @@ export function handlePagesSitemap() {
 	});
 	return xmlResponse(
 		'urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml"',
-		urls,
+		[...marketing, ...urls],
 	);
 }
 

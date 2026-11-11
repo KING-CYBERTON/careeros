@@ -31,8 +31,8 @@ export default defineConfig({
 			"**/reports/**",
 			"**/routeTree.gen.ts",
 			// CAREEROS: the landing pages are static HTML built with a vendored kit (GTM landing preview); neither is reformatted.
-			"apps/web/public/landing/assets/**",
-			"apps/web/public/landing/*.html",
+			"apps/web/public/site/assets/**",
+			"apps/web/public/site/*.html",
 		],
 		rules: {
 			"typescript/no-explicit-any": "error",
@@ -179,8 +179,8 @@ export default defineConfig({
 			"**/reports/**",
 			"**/routeTree.gen.ts",
 			// CAREEROS: the landing pages are static HTML built with a vendored kit (GTM landing preview); neither is reformatted.
-			"apps/web/public/landing/assets/**",
-			"apps/web/public/landing/*.html",
+			"apps/web/public/site/assets/**",
+			"apps/web/public/site/*.html",
 			"packages/pdf/src/semantic/__fixtures__/**/*.css",
 			"pnpm-lock.yaml",
 			"migrations/**",

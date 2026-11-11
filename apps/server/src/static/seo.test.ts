@@ -42,9 +42,15 @@ describe("localized sitemap", () => {
 		const locations = entries.map((entry) => entry.loc);
 
 		expect(response.headers.get("Content-Type")).toBe("application/xml; charset=UTF-8");
-		expect(entries).toHaveLength(162); // Three public pages, 54 real locales; x-default shares English's URL.
+		// Two localized public pages, 54 real locales (x-default shares English's URL), and the two marketing pages.
+		expect(entries).toHaveLength(110);
+		for (const path of ["/", "/organisations"]) {
+			const entry = entries.filter((candidate) => candidate.loc === `https://rxresu.me${path}`);
+			expect(entry).toHaveLength(1);
+			expect(entry[0]?.alternates).toEqual([]);
+		}
 		expect(new Set(locations).size).toBe(entries.length);
-		for (const path of ["/", "/ats-checker", "/resume-templates"]) {
+		for (const path of ["/ats-checker", "/resume-templates"]) {
 			const base = `https://rxresu.me${path}`;
 			expect(locations).toContain(base);
 			expect(locations).toContain(`${base}?locale=de-DE`);
