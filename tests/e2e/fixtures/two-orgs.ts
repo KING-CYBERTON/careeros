@@ -109,6 +109,8 @@ async function seedRowsWithoutEndpoint(a: Party, tag: string) {
 		emailTemplate: `xorga-emailtemplate-${tag}`,
 		// CAREEROS (P5-T02): one of A's Job Clipper sign-ins. Only a hash goes in, as in production.
 		clipperToken: `xorga-clipper-${tag}`,
+		// CAREEROS (P3-T10): one of A's payments (an invoice is a payment's audit row). The marker is in its reference.
+		invoice: `xorga-invoice-${tag}`,
 	};
 	await withSeedPool(async (pool) => {
 		await pool.query(
@@ -171,6 +173,25 @@ async function seedRowsWithoutEndpoint(a: Party, tag: string) {
 			`insert into clipper_token (id, token_hash, user_id, organization_id, host, label, expires_at)
 			 values ($1, $2, $3, $4, $5, 'Chrome on Linux', now() + interval '90 days')`,
 			[ids.clipperToken, `xorga${tag}hash`, a.userId, a.organizationId, `xorga-${tag}.example.test`],
+		);
+		await pool.query(
+			`insert into audit_log (id, organization_id, action, target_type, target_id, metadata)
+			 values ($1, $2, 'billing.payment_succeeded', 'subscription', $2, $3::jsonb)`,
+			[
+				ids.invoice,
+				a.organizationId,
+				JSON.stringify({
+					source: "manual",
+					reference: `xorga-${tag}-reference`,
+					planId: "starter",
+					seats: 2,
+					amount: 123_400,
+					currency: "KES",
+					interval: "month",
+					periodStart: "2026-11-01T00:00:00.000Z",
+					periodEnd: "2026-12-01T00:00:00.000Z",
+				}),
+			],
 		);
 		// Custom domains are switched off on the e2e server (no 412-free endpoint), so the row goes in directly.
 		await pool.query(
@@ -537,6 +558,8 @@ export async function createTwoOrgs(playwright: Playwright, baseURL: string, own
 			// CAREEROS (P5-T04)
 			emailTemplate: extra.emailTemplate,
 			clipperToken: extra.clipperToken,
+			// CAREEROS (P3-T10)
+			invoice: extra.invoice,
 		};
 		const missing = Object.entries(ids).filter(([, value]) => !value);
 		if (missing.length > 0)

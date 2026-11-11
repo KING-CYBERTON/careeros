@@ -232,6 +232,19 @@ Shared credentials stay in the environment and do not require `ENCRYPTION_SECRET
 | `AI_TEST_TIMEOUT_MS`    | `30000`          | How long **Save and test** waits for a provider to answer, in milliseconds. Raise it for local models that load slowly on first use.                                                                                                 |
 | `AI_REQUEST_TIMEOUT_MS` | `300000`         | How long a single AI action (importing a resume, reviewing, improving, reading a posting) waits for a provider, in milliseconds. Raise it for slow local models.                                                                     |
 
+### Platform AI through OpenRouter
+
+CareerOS can include AI in a plan ("Included with your plan"), paid for by you and counted against each organization's
+credits. By default it uses `ANTHROPIC_API_KEY`. To run it through [OpenRouter](https://openrouter.ai) instead, set
+`CAREEROS_AI_PLATFORM_PROVIDER=openrouter` and `OPENROUTER_API_KEY`. One provider runs at a time: with `openrouter`
+selected and no `OPENROUTER_API_KEY`, platform AI is off, and the Anthropic key is not used as a fallback.
+
+The model settings `CAREEROS_AI_MODEL_GENERATION` and `CAREEROS_AI_MODEL_FAST` keep their Claude ids
+(`claude-sonnet-5-5`, `claude-haiku-5-5`); CareerOS translates them to the OpenRouter ids
+(`anthropic/claude-sonnet-5.5`, `anthropic/claude-haiku-5.5`). A model id that contains `/` is sent as given, and must
+be one of those two ids; any other model is refused because it has no price. Credits are priced from the provider's
+token prices; OpenRouter's fee for buying its credits is yours and is not charged to members.
+
 <Warning>
   Changing `ENCRYPTION_SECRET` makes every saved AI and web-access key unreadable. People then need to enter their keys
   again.
@@ -275,6 +288,26 @@ Without `CRON_SECRET`, the HTTP runner returns `404`; an invalid bearer token re
 | `PAYSTACK_ALLOW_TEST_KEY` | `false` | Allows a test key on a staging deployment that runs with `NODE_ENV=production`.                                                          |
 
 In the Paystack dashboard, set the webhook URL to `https://<your platform host>/api/billing/webhook/paystack`. Paystack signs every call with your secret key; CareerOS ignores a call whose signature does not match. Use a Paystack test account while trying it out.
+
+## Invoices
+
+<!-- CAREEROS: P3-T10 -->
+
+The seller's details printed on every invoice. All are optional, so they can be set without a release. Restart the server after changing them.
+
+| Variable                          | Default | Description                                                                                                                      |
+| --------------------------------- | ------- | -------------------------------------------------------------------------------------------------------------------------------- |
+| `CAREEROS_INVOICE_SELLER_NAME`    | unset   | The business name. Falls back to the platform name.                                                                              |
+| `CAREEROS_INVOICE_SELLER_ADDRESS` | unset   | The postal address; separate lines with `\|`, for example `P.O. Box 00000\|Nairobi, Kenya`.                                      |
+| `CAREEROS_INVOICE_SELLER_EMAIL`   | unset   | The billing email printed under the address.                                                                                     |
+| `CAREEROS_INVOICE_SELLER_PHONE`   | unset   | The phone number printed under the address.                                                                                      |
+| `CAREEROS_INVOICE_SELLER_TAX_PIN` | unset   | The seller's tax PIN (KRA PIN in Kenya).                                                                                         |
+| `CAREEROS_INVOICE_TAX_LABEL`      | `VAT`   | The name of the tax row.                                                                                                         |
+| `CAREEROS_INVOICE_VAT_RATE`       | `0`     | A number from 0 to 100. Above 0, the invoice is a "Tax invoice" and shows the part of the total at this rate as VAT. 0 hides it. |
+| `CAREEROS_INVOICE_PREFIX`         | `INV`   | One to eight capital letters or digits at the start of every invoice number.                                                     |
+| `CAREEROS_INVOICE_FOOTER`         | unset   | A line printed above "Thank you for your business."                                                                              |
+
+Checkout does not add VAT on top of plan prices: the amount paid is the invoice total, and the VAT row shows the part of it that is tax (the total divided by one plus the rate). Whether to charge VAT on top of the listed prices is a business decision.
 
 ## Web access
 

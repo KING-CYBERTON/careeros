@@ -18,6 +18,16 @@ export function useInvoices(enabled = true) {
 	return useQuery({ ...orpc.billing.invoices.queryOptions({ input: undefined }), retry: false, enabled });
 }
 
+/** CAREEROS (P3-T10): one invoice, for owners and admins. A NOT_FOUND answer is final, so it is not retried. */
+export function useInvoice(id: string) {
+	return useQuery({ ...orpc.billing.invoice.queryOptions({ input: { id } }), retry: false });
+}
+
+/** CAREEROS (P3-T10): the details printed on invoices, for owners and admins. */
+export function useBillingProfile(enabled = true) {
+	return useQuery({ ...orpc.billing.profile.queryOptions({ input: undefined }), retry: false, enabled });
+}
+
 /** The pooled AI credits of the period, for owners and admins. */
 export function useAiCredits(enabled = true) {
 	return useQuery({ ...orpc.aiUsage.summary.queryOptions({ input: undefined }), retry: false, enabled });

@@ -5,6 +5,7 @@
 	"private": true,
 	"exports": {
 		"./icons": "./src/forme/phosphor-icons/all.ts",
+		"./invoice": "./src/invoice/index.tsx",
 		"./browser": "./src/browser.tsx",
 		"./native": "./src/native.tsx",
 		"./page-map": "./src/page-map.ts",
@@ -28,6 +29,7 @@
 		"test:ci": "vp test run --reporter=default --reporter=github-actions --reporter=json --reporter=junit --outputFile.json=reports/vitest-results.json --outputFile.junit=reports/vitest-junit.xml --passWithNoTests"
 	},
 	"dependencies": {
+		"@careeros/invoice": "workspace:*",
 		"@formepdf/core": "0.29.0",
 		"@formepdf/react": "0.29.0",
 		"@reactive-resume/fonts": "workspace:*",

@@ -1,5 +1,5 @@
 export { AI_FEATURE_KEYS, AI_FEATURES, isAiFeature, isFastFeature, type AiFeature } from "./features";
-export { AiModelNotPricedError, PRICES_USD_PER_MTOK, priceFor, type ModelPrice } from "./prices";
+export { AiModelNotPricedError, MODEL_PRICE_ALIASES, PRICES_USD_PER_MTOK, priceFor, type ModelPrice } from "./prices";
 export { costOfCall, creditsForCostMicros, MICRO_USD_PER_CREDIT, type CallCost, type TokenUsage } from "./credits";
 export { calendarMonthUtc, quotaPeriod, type QuotaPeriod } from "./period";
 export {

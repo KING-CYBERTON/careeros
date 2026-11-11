@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vite-plus/test";
 import { costOfCall, creditsForCostMicros, MICRO_USD_PER_CREDIT } from "./credits";
 import { tokenUsageOf } from "./meter-model";
-import { AiModelNotPricedError, priceFor, PRICES_USD_PER_MTOK } from "./prices";
+import { AiModelNotPricedError, MODEL_PRICE_ALIASES, priceFor, PRICES_USD_PER_MTOK } from "./prices";
 
 describe("credits", () => {
 	it("is 1 credit per USD 0.01 and rounds every positive cost up", () => {
@@ -139,5 +139,19 @@ describe("the price table", () => {
 		// Prototype keys are not models.
 		expect(() => priceFor("constructor")).toThrow(AiModelNotPricedError);
 		expect(() => priceFor("toString")).toThrow(AiModelNotPricedError);
+	});
+
+	// CAREEROS (P3-T11, D3): an OpenRouter slug is priced like the canonical model it names.
+	it("prices an OpenRouter slug like its canonical model", () => {
+		expect(priceFor("anthropic/claude-sonnet-5.5")).toBe(priceFor("claude-sonnet-5-5"));
+		expect(priceFor("anthropic/claude-haiku-5.5")).toBe(priceFor("claude-haiku-5-5"));
+		for (const canonical of Object.values(MODEL_PRICE_ALIASES)) expect(() => priceFor(canonical)).not.toThrow();
+		const usage = { inputTokens: 1_000_000, outputTokens: 100_000, cachedInputTokens: 400_000 };
+		expect(costOfCall("anthropic/claude-sonnet-5.5", usage)).toEqual(costOfCall("claude-sonnet-5-5", usage));
+	});
+
+	it("refuses an OpenRouter slug that is not in the alias table", () => {
+		expect(() => priceFor("anthropic/claude-opus-9")).toThrow(AiModelNotPricedError);
+		expect(() => priceFor("openai/gpt-5")).toThrow(AiModelNotPricedError);
 	});
 });

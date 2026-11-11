@@ -174,7 +174,7 @@ async function seedJobSource(orgId: string, db: pg.Pool): Promise<{ userId: stri
 /**
  * Every tenant table (one with an `organization_id` column) must be registered here. The five resume tables are
  * registered by P1-T04, the two cover letter tables by P1-T05 and the four application tables by P1-T06, the eleven career tables by P1-T07, the six assistant and AI tables by P1-T08 and
- * the three remaining ones by P1-T09, the two branding ones by P2-T01, the organization domain one by P2-T06, the three job discovery ones by P4-T01, the cohort one by P3-T08 and the email template one by P5-T04. The route
+ * the three remaining ones by P1-T09, the two branding ones by P2-T01, the organization domain one by P2-T06, the three job discovery ones by P4-T01, the cohort one by P3-T08 the email template one by P5-T04 and the billing profile one by P3-T10. The route
  * groups' API checks are attached by `packages/api` (it needs the router), which runs `runApiIsolationCheck` with this
  * entry's seed.
  */
@@ -662,6 +662,22 @@ export const isolationRegistry: readonly RegistryEntry[] = [
 				[id, orgId],
 			);
 			return id;
+		},
+	},
+	// CAREEROS (P3-T10): the customer details printed on invoices, one row per organization (the primary key is the
+	// organization id). Unlike branding, no trigger creates the row, so the seed inserts it.
+	{
+		table: "organization_billing_profile",
+		idColumn: "organization_id",
+		rowPerOrganization: true,
+		seed: async (orgId, db) => {
+			await ensureOrganization(db, orgId);
+			await db.query(
+				`INSERT INTO organization_billing_profile (organization_id, legal_name) VALUES ($1, 'Isolation Ltd')
+				 ON CONFLICT (organization_id) DO UPDATE SET legal_name = excluded.legal_name`,
+				[orgId],
+			);
+			return orgId;
 		},
 	},
 	// CAREEROS (P3-T03): AI usage metering. The app role can read and insert, never change or delete.

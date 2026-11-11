@@ -910,6 +910,8 @@ function createAgent(input: {
 			middleware: addToolInputExamplesMiddleware(),
 		}),
 		// The loop re-sends stable instructions every step; on anthropic, prompt caching pays from step 2.
+		// CAREEROS (P3-T11, D5): Anthropic-only request options apply only when the resolved provider is anthropic, so the
+		// platform provider on OpenRouter runs without them.
 		instructions:
 			input.provider.provider === "anthropic"
 				? {

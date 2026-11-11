@@ -226,3 +226,35 @@ export const billingProviderPlan = pg.pgTable(
 		pg.check("billing_provider_plan_seats_check", sql`${t.seats} > 0 and ${t.amount} >= 0`),
 	],
 );
+
+// CAREEROS (P3-T10): the customer details an owner prints on the organization's invoices. One row per organization (the
+// primary key is the organization id); a missing row means no details yet, and the invoice shows the organization's
+// name. The single-address CHECK mirrors `organization_branding.email_reply_to`.
+const BILLING_EMAIL = "^[^@[:space:][:cntrl:]<>,;]+@[^@[:space:][:cntrl:]<>,;]+$";
+
+export const organizationBillingProfile = pg.pgTable(
+	"organization_billing_profile",
+	{
+		organizationId: pg
+			.text("organization_id")
+			.notNull()
+			.primaryKey()
+			.references(() => organization.id, { onDelete: "cascade" }),
+		legalName: pg.text("legal_name"),
+		/** Lines separated by a newline. */
+		address: pg.text("address"),
+		taxPin: pg.text("tax_pin"),
+		billingEmail: pg.text("billing_email"),
+		updatedAt: pg.timestamp("updated_at", { withTimezone: true }).notNull().defaultNow(),
+		updatedBy: pg.text("updated_by").references(() => user.id, { onDelete: "set null" }),
+	},
+	(t) => [
+		pg.check("organization_billing_profile_legal_name_check", sql`char_length(${t.legalName}) <= 200`),
+		pg.check("organization_billing_profile_address_check", sql`char_length(${t.address}) <= 500`),
+		pg.check("organization_billing_profile_tax_pin_check", sql`char_length(${t.taxPin}) <= 32`),
+		pg.check(
+			"organization_billing_profile_billing_email_check",
+			sql`char_length(${t.billingEmail}) <= 254 and ${t.billingEmail} ~ ${sql.raw(`'${BILLING_EMAIL}'`)}`,
+		),
+	],
+);

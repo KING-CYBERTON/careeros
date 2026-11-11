@@ -5,7 +5,7 @@ import { generateText } from "ai";
 import { safetySystemPrompt } from "@reactive-resume/ai/prompts";
 import { dataBlock } from "../ai/data-block";
 import { aiDeadline } from "../ai/generate-json";
-import { platformAiAvailable, platformApiKey, platformModelFor } from "../ai/platform";
+import { platformAiAvailable, platformApiKey, platformModelFor, platformProvider } from "../ai/platform";
 import { getModel } from "../ai/service";
 
 // CAREEROS (P4-T02, GTM-PLAN G3 and G4): the AI match of a discovery run. One model call per job, on the platform key
@@ -106,7 +106,7 @@ export function createPlatformMatcher(options: PlatformMatcherOptions): AiMatche
 		},
 		match: async (job, profile) => {
 			model ??= build({
-				provider: "anthropic",
+				provider: platformProvider(),
 				model: platformModelFor(FEATURE),
 				apiKey: platformApiKey(),
 				metering,

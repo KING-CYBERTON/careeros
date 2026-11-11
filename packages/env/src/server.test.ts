@@ -34,6 +34,10 @@ beforeEach(() => {
 		"PLUNK_API_URL",
 		"PLUNK_WEBHOOK_SECRET",
 		"EMAIL_FROM_ADDRESS",
+		"CAREEROS_INVOICE_VAT_RATE",
+		"CAREEROS_INVOICE_PREFIX",
+		"CAREEROS_INVOICE_TAX_LABEL",
+		"CAREEROS_INVOICE_SELLER_NAME",
 	])
 		vi.stubEnv(name, undefined);
 });
@@ -466,5 +470,35 @@ describe("email provider configuration", () => {
 	it("takes a custom API address and drops a trailing slash", async () => {
 		configure({ PLUNK_API_URL: "https://plunk.example.test/" });
 		expect((await import("./server")).env.PLUNK_API_URL).toBe("https://plunk.example.test");
+	});
+});
+
+// CAREEROS (P3-T10): invoice settings are all optional.
+describe("invoice settings", () => {
+	it("defaults to no VAT, the INV prefix and the VAT label", async () => {
+		const { env } = await import("./server");
+		expect(env.CAREEROS_INVOICE_VAT_RATE).toBe(0);
+		expect(env.CAREEROS_INVOICE_PREFIX).toBe("INV");
+		expect(env.CAREEROS_INVOICE_TAX_LABEL).toBe("VAT");
+		expect(env.CAREEROS_INVOICE_SELLER_NAME).toBeUndefined();
+	});
+
+	it("reads a VAT rate and a prefix", async () => {
+		vi.stubEnv("CAREEROS_INVOICE_VAT_RATE", "16");
+		vi.stubEnv("CAREEROS_INVOICE_PREFIX", "ACME1");
+		const { env } = await import("./server");
+		expect(env.CAREEROS_INVOICE_VAT_RATE).toBe(16);
+		expect(env.CAREEROS_INVOICE_PREFIX).toBe("ACME1");
+	});
+
+	it.each([
+		["CAREEROS_INVOICE_VAT_RATE", "101"],
+		["CAREEROS_INVOICE_VAT_RATE", "-1"],
+		["CAREEROS_INVOICE_PREFIX", "inv"],
+		["CAREEROS_INVOICE_PREFIX", "TOOLONGPREFIX"],
+	])("rejects %s=%s", async (name, value) => {
+		vi.stubEnv(name, value);
+		vi.spyOn(console, "error").mockImplementation(() => {});
+		await expect(import("./server")).rejects.toThrow("Invalid environment variables");
 	});
 });

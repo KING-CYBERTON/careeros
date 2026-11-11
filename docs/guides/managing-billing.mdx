@@ -1,16 +1,16 @@
 ---
 title: "Managing your organization's billing"
-description: "See your plan, seats and AI credits, upgrade, change seats, pay by card or M-Pesa, read receipts and cancel, from the Billing page."
+description: "See your plan, seats and AI credits, upgrade, change seats, pay by card or M-Pesa, enter your billing details, open and download invoices and cancel, from the Billing page."
 ---
 
-**Billing** is where the owner of an organization pays for a plan. Owners and admins can see the plan, seats, status, AI credits and payments. Only the owner can upgrade, change seats, update the card or cancel. The screenshots use a fictional organization and test payments.
+**Billing** is where the owner of an organization pays for a plan. Owners and admins can see the plan, seats, status, AI credits, billing details and invoices. Only the owner can upgrade, change seats, update the card, change the billing details or cancel. The screenshots use a fictional organization and test payments.
 
 Open it from **Settings → Billing**, or go to `/dashboard/organization/billing`.
 
 <Frame caption="The Billing page after a payment: the plan, its status, seats, period and AI credits, then the plans, the manage actions and the invoices">
   <img
     src="/images/guides/billing/billing-overview.png"
-    alt="The Billing page showing the Starter plan as Active with one seat, the current period, AI credits used and left, three plan cards with prices, seat and cancel controls, and one invoice with a Receipt link"
+    alt="The Billing page showing the Starter plan as Active with one seat, the current period, AI credits used and left, three plan cards with prices, seat and cancel controls, and the list of invoices"
   />
 </Frame>
 
@@ -59,16 +59,35 @@ Once the organization pays, **Manage** appears for the owner:
 
 Changes show once the provider confirms them.
 
-## Invoices and receipts
+## Billing details
 
-**Invoices** lists each payment: date, amount, method, reference and the period it paid for. Choose **Receipt** for a page you can print. A receipt holds no card data.
+**Billing details** holds what is printed in the "Bill to" block of every invoice: a **Legal name**, an **Address** (one line per line), a **KRA PIN** and a **Billing email**. The note under the title says what it is for: "Printed on your invoices."
 
-<Frame caption="A printable receipt">
-  <img
-    src="/images/guides/billing/receipt.png"
-    alt="A receipt showing the date, amount, method, reference, plan, seats and period of one payment, with a Print receipt button"
-  />
-</Frame>
+- The owner edits the fields and chooses **Save billing details**. An empty field is left off the invoice. The billing email must be one plain address.
+- An admin sees the details but cannot change them.
+- Until the owner saves a legal name, an invoice shows the organization's name.
+- The details are printed on every invoice, earlier ones included: an invoice shows the details that are current when you open it. Changing the details does not change the invoice number, the amounts or the date.
+
+## Invoices
+
+**Invoices** lists each payment with its **Invoice no.**, date, amount, method and a **Paid** badge. Choose **View** to open the invoice.
+
+An invoice number looks like `INV-7F3K2Q-0003`: a prefix, a short code for your organization, and a counter that goes up by one with each payment. A number never changes once it has been issued.
+
+The invoice page shows an A4 sheet:
+
+- The platform's name and the seller's details (name, address, email, phone and tax PIN, when the operator has set them) and, on the right, the invoice title, number, issue date, paid date and the **PAID** badge.
+- **Bill to** (your billing details) and **Payment** (method, reference and the period paid for).
+- The line items with quantity, unit price and amount, then the **Subtotal**, the tax row, the **Total**, the **Amount paid** and the **Amount due**, which is zero because only completed payments are listed.
+
+When the operator charges VAT, the sheet is titled **Tax invoice** and shows a row such as "VAT 16%", which is the part of the total that is tax. Otherwise it is titled **Invoice** and has no tax row. The amount you paid is the total.
+
+Above the sheet:
+
+- **Download invoice** saves the invoice as a PDF named after the invoice number, for example `INV-7F3K2Q-0003.pdf`. It is a single A4 page for one line item.
+- **Print** prints the sheet on A4 paper with 18 mm margins and nothing else from the page.
+
+An invoice holds no card data. It is a commercial invoice and receipt for your payment; a tax invoice issued through the Kenya Revenue Authority's eTIMS system, with its control unit number and QR code, is not part of it yet.
 
 ## Notices
 
@@ -81,4 +100,4 @@ On a server where billing is switched off, the page shows the plan read-only and
 
 ## On the phone
 
-The mobile app has **Settings → Plan**, a read-only view of the plan, status, seats and AI quota for every member. It shows no prices and has no way to buy, upgrade or cancel, because app store rules restrict selling subscriptions outside in-app purchase. The owner manages billing on the web.
+The mobile app has **Settings → Plan**, a read-only view of the plan, status, seats and AI quota for every member. It shows no prices, invoices or billing details and has no way to buy, upgrade or cancel, because app store rules restrict selling subscriptions outside in-app purchase. The owner manages billing, billing details and invoices on the web.

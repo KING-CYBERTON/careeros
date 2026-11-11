@@ -268,6 +268,7 @@ describe("coverage check", () => {
 			"cohort",
 			"discovered_job",
 			"email_template",
+			"organization_billing_profile",
 			"ai_usage",
 		]);
 	});
