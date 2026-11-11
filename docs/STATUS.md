@@ -5,7 +5,7 @@
 **Current phase:** Phases 0, 1 and 2 meet their exit criteria (staging verified live by Stephen on 2026-11-02). P2-C04 merged in #64; tags `v0.0.1`, `v0.1.0`, `v0.2.0` wait on Stephen pushing them (this session cannot push tags). 3 — Admin & Billing: [phase plan](plans/P3-PHASE-PLAN.md); every Phase 3 task is merged except the P3-Q03 security suite (in CI). D1 = Paystack; D2 prices open with Stephen. Go-to-market release (Stephen, D11): [GTM plan](plans/GTM-PLAN.md) runs job discovery, the clipper and launch basics alongside Phase 3
 **Current version:** none yet (first tag will be `0.0.1` at Phase 0 exit)
 **Base:** Reactive Resume v6.0.10, upstream commit `a69e48318aab3c1c3ea57d2c0467710ef0d8342f` (2026-10-31)
-**Last updated:** 2026-11-09 by Opus (Thread 1)
+**Last updated:** 2026-11-11 by Opus (Thread 1)
 
 ## Phase 0 exit criteria (PRODUCT.md §13)
 
@@ -104,6 +104,9 @@ All Phase 2 tasks are merged. P2-C03 (from exit review M1, [spec](plans/cicd/P2-
 | P3-T07  | [plans/P3-T07-super-admin-console.md](plans/P3-T07-super-admin-console.md)             | **Merged** · [review](reviews/P3-T07-review-1.md)                                            | [#93](https://github.com/KING-CYBERTON/careeros/pull/93)   |
 | P3-T08  | [plans/P3-T08-org-admin-console.md](plans/P3-T08-org-admin-console.md)                 | **Merged** · [review](reviews/P3-T08-review-1.md)                                            | [#89](https://github.com/KING-CYBERTON/careeros/pull/89)   |
 | P3-T09  | [plans/P3-T09-super-admin-hardening.md](plans/P3-T09-super-admin-hardening.md)         | **Merged** · [review](reviews/P3-T07-review-1.md)                                            | [#99](https://github.com/KING-CYBERTON/careeros/pull/99)   |
+| P3-T10  | [plans/P3-T10-invoices.md](plans/P3-T10-invoices.md)                                   | Approved · in progress (QA improvement 9, Critical)                                          | —                                                          |
+| P3-T11  | [plans/P3-T11-openrouter-platform-ai.md](plans/P3-T11-openrouter-platform-ai.md)       | Approved · in progress (QA improvement 8)                                                    | —                                                          |
+| P3-T12  | [plans/P3-T12-organization-ai-key.md](plans/P3-T12-organization-ai-key.md)             | Approved · in progress (QA improvement 7)                                                    | —                                                          |
 | P3-Q03  | [plans/P3-Q03-super-admin-security.md](plans/P3-Q03-super-admin-security.md)           | In CI                                                                                        | [#97](https://github.com/KING-CYBERTON/careeros/pull/97)   |
 | P4-T01  | [plans/P4-T01-discovery-data-fetchers.md](plans/P4-T01-discovery-data-fetchers.md)     | **Merged** · [review](reviews/P4-T01-review-1.md)                                            | [#68](https://github.com/KING-CYBERTON/careeros/pull/68)   |
 | P4-T02  | [plans/P4-T02-discovery-runs-ai-review.md](plans/P4-T02-discovery-runs-ai-review.md)   | **Merged** · [review](reviews/P4-T02-review-1.md)                                            | [#91](https://github.com/KING-CYBERTON/careeros/pull/91)   |
