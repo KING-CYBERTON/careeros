@@ -143,6 +143,7 @@ All Phase 2 tasks are merged. P2-C03 (from exit review M1, [spec](plans/cicd/P2-
 
 ## Planning docs
 
+- [plans/launch/](plans/launch/README.md) (prod-to-market: launch plan M0 to M5, production readiness checklist, go-live runbook, document prompts; P6-C01 production spec drafted, waits on G8 and the production domain)
 - [plans/P2-PHASE-PLAN.md](plans/P2-PHASE-PLAN.md) (Phase 2 white-label approved; D2 and D3 decided by Stephen: `<slug>-careeros.ayopa.co.ke` staging hosts and Cloudflare for SaaS)
 - [plans/P1-PHASE-PLAN.md](plans/P1-PHASE-PLAN.md) (Phase 1 approved except D6; first specs P1-T01, P1-T02, P1-C01)
 - [plans/P0-VALIDATION.md](plans/P0-VALIDATION.md) · [plans/P0-UPSTREAM-INVENTORY.md](plans/P0-UPSTREAM-INVENTORY.md) (Q2 answered; Phase 1 split into 1a/1b)
