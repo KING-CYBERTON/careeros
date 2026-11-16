@@ -54,6 +54,8 @@ Running in parallel with it: the M1 feature freeze work (Thread 1 and 2), the le
 
 ## 5. Waiting on Stephen
 
+**Decided 2026-11-16:** G8 is a cloud VPS separate from staging, and the production domain is `itscareeros.com`. P6-C01 is approved.
+
 | Item                          | Recommendation                                                                                                                                                                                                    | Decide by          |
 | ----------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------ |
 | **G8 production hosting**     | A cloud VPS separate from the home lab (4 vCPU, 8 GB, about USD 15 to 25 a month), Docker Compose as on staging, Cloudflare in front. The home lab stays staging.                                                 | 2026-11-18         |

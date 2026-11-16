@@ -1,6 +1,6 @@
 # P6-C01: Production environment, release promotion and deploy on tag
 
-**Status:** Draft, waits on G8 (hosting) and the production domain (§15.1). Everything not marked "per option" is fixed. Opus marks it Approved once both are decided. **Thread:** 3 CI/CD. **Origin:** [GTM-PLAN.md](../GTM-PLAN.md) G8, [launch plan](../launch/LAUNCH-PLAN.md) M2. **Branch:** `ci/P6-C01-production`. **Questions:** start at Q600.
+**Status:** Approved (2026-11-16). Stephen decided G8 and the domain on 2026-11-16: a cloud VPS separate from staging (Ubuntu 24.04.5, 4 vCPU, 8 GB, 96 GB disk, prepared by hand, see "Server state" below) and the domain `itscareeros.com`. **Thread:** 3 CI/CD. **Origin:** [GTM-PLAN.md](../GTM-PLAN.md) G8, [launch plan](../launch/LAUNCH-PLAN.md) M2. **Branch:** `ci/P6-C01-production`. **Questions:** start at Q600.
 **Generated from:** [launch PROMPTS.md](../launch/PROMPTS.md) prompt 4.
 
 ## Goal
@@ -11,9 +11,9 @@ CareerOS runs in production on its own server or stack, with its own database, s
 
 1. **Separate stack.** Add `infra/production/` with `compose.production.yml`, `.env.production.example`, `deploy.sh`, `rollback.sh`, `mark-good.sh` and `README.md`. Reuse the staging scripts: either move the shared logic into `infra/shared/` and call it from both, or copy them with only the project name, paths and compose file changed. No volume, network, database, bucket, tunnel or secret is shared with staging. The compose project name is `careeros_production`; the stack lives in `/opt/careeros/production`.
 2. **Database.** Postgres 16 with the P1-C01 role split: migrations as `careeros_owner`, serving as `careeros_app` without BYPASSRLS, set by `infra/db/bootstrap-roles.sh` on every deploy. `STRICT_SCHEMA_CHECK=true`.
-3. **Storage.** S3-compatible. Per option: SeaweedFS in the stack (same as staging) or an external bucket (`STORAGE_BACKEND=s3`). Backups go to a different provider in either case (P6-C02).
-4. **Ingress.** Cloudflare in front. Per option: a Cloudflare Tunnel (no inbound ports, same as staging) or the server's public address proxied by Cloudflare with only 443 open to Cloudflare's ranges. The tunnel is the default.
-5. **Domains.** The platform host is the production domain's apex or `app.` host (per option). Org hosts use the pattern `{slug}.<production domain>` with a wildcard DNS record through the tunnel. Custom domains use Cloudflare for SaaS with a fallback origin on the production domain, set up by a production copy of `careeros-staging-cloudflare.yml` (or that workflow taking an environment input). The P2-C05 org DNS sync runs for production too.
+3. **Storage.** SeaweedFS in the stack, as on staging. The disk is 96 GB, so the README documents how to switch to an external bucket (`STORAGE_BACKEND=s3`) later without a code change. Backups go to a different provider (P6-C02).
+4. **Ingress.** A Cloudflare Tunnel, as on staging. The server's firewall allows only SSH inbound; the compose file publishes no ports.
+5. **Domains.** The platform host is `itscareeros.com` (the apex, which also serves the marketing home page); `www.itscareeros.com` redirects to it. Org hosts use the pattern `{slug}.itscareeros.com` with a wildcard DNS record through the tunnel. Host names stay in GitHub `production` environment variables and the server `.env`, never in a workflow or compose file. Custom domains use Cloudflare for SaaS with a fallback origin on the production domain, set up by a production copy of `careeros-staging-cloudflare.yml` (or that workflow taking an environment input). The P2-C05 org DNS sync runs for production too.
 6. **Release promotion.** Document in `infra/production/README.md` and `docs/RELEASING.md`: Opus opens a PR from `develop` to `main` for the candidate commit; after CI passes and Opus merges it, the annotated tag `vX.Y.Z` (or `vX.Y.Z-rc.N`) is set on that `main` commit. Pre-release tags go to staging first.
 7. **Deploy workflow.** Add `careeros-deploy-production.yml`:
    - Trigger: `workflow_run` of `careeros-image` for a `v*` tag, plus `workflow_dispatch` with inputs `tag` and `action` (`deploy` or `rollback`).
@@ -26,14 +26,14 @@ CareerOS runs in production on its own server or stack, with its own database, s
 10. **Production `.env` template.** `.env.production.example` lists names only, in groups: core (`APP_URL`, `AUTH_SECRET`, `ENCRYPTION_SECRET`), database (`DATABASE_URL` for the app role, `DATABASE_MIGRATION_URL` for the owner role), storage, Redis, email (Plunk), billing (Paystack live), AI (platform provider key and model ids), org hosts and Cloudflare for SaaS, tunnel token, `IMAGE_REPOSITORY`. Every value is a placeholder.
 11. **Docs.** `infra/production/README.md` covers one-time setup (server, `deploy` user, Docker, runner, tunnel, `.env`, DNS, Cloudflare for SaaS), everyday deploys, rollback and the security notes, in the style of `infra/staging/README.md`. A line in `CHANGELOG-CAREEROS.md`.
 
-## Per option (G8)
+## Server state (done by Stephen, 2026-11-16)
 
-| Line                    | Cloud VPS (recommended)                          | Home-lab server (same box as staging)                                             |
-| ----------------------- | ------------------------------------------------ | --------------------------------------------------------------------------------- |
-| Server                  | New VPS, 4 vCPU, 8 GB, 160 GB disk, Ubuntu 24.04 | Same machine; production gets its own `deploy-prod` user and runner               |
-| Requirement 1 isolation | Separate machine                                 | Separate compose project, user, volumes and runner; resource limits on each stack |
-| Requirement 3 storage   | External bucket recommended                      | SeaweedFS in the stack                                                            |
-| Risk                    | Monthly cost                                     | One power or network outage takes both environments down                          |
+Recorded step by step in the production setup log. The workflow and README must fit this state and must not redo it:
+
+- Ubuntu 24.04.5 LTS, updated and rebooted; 4 GB swap file.
+- Docker with Compose v5.7.1; user `deploy` (no password, no sudo) in the `docker` group.
+- `/opt/careeros/production` exists, owned by `deploy`, mode 0750.
+- `ufw` active: incoming denied except 22/tcp.
 
 ## Out of scope
 
