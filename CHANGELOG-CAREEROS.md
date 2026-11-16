@@ -1,5 +1,6 @@
 ## Unreleased
 
+- P6-C01: production stack in `infra/production/` (own compose project, tunnel, database and storage) and the `careeros-deploy-production` workflow: deploy a release tag on `main` or roll back from Actions, with `preflight.sh` refusing test keys and unsafe flags, a health check on the tag's commit and automatic rollback
 - P2-C05: staging creates a DNS record for every new organization automatically (`org-dns-sync`, every 10 minutes), so each workspace address works without a manual step
 - Phase 0 setup started from Reactive Resume v6.0.10 (a69e483)
 - P1-T03: personal organization at signup, invitations (accept page), organization switcher and Members & invites settings
