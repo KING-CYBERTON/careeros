@@ -9,7 +9,7 @@ These terms explain how you may use CareerOS (the "service"). Please read them. 
 
 ## 1. Who we are and who these terms are for
 
-CareerOS is operated by `[TO CONFIRM: legal name of the operator, registered address]` ("we", "us"). You can reach us at `[TO CONFIRM: contact email]`.
+CareerOS is operated by Ayopa Ltd, Nairobi, Kenya ("we", "us"). You can reach us at info@ayopa.co.ke.
 
 The service is for:
 
@@ -110,4 +110,4 @@ These terms are governed by the laws of `[TO CONFIRM: governing law, for example
 
 ## 14. Contact
 
-Questions about these terms: `[TO CONFIRM: contact email]`.
+Questions about these terms: info@ayopa.co.ke.

@@ -5,7 +5,7 @@
 
 **Last updated:** `[TO CONFIRM: date of approval]`
 
-This addendum is for **organizations** that use CareerOS for their members (for example universities, training programmes and employers). It forms part of the agreement between the organization (the "customer") and `[TO CONFIRM: legal name of the operator]` ("CareerOS", "we"). It applies where CareerOS handles personal data on behalf of the customer. It is written for Kenya's Data Protection Act 2019 and the GDPR. Individuals on the personal plan are covered by the privacy policy, not by this addendum.
+This addendum is for **organizations** that use CareerOS for their members (for example universities, training programmes and employers). It forms part of the agreement between the organization (the "customer") and Ayopa Ltd ("CareerOS", "we"). It applies where CareerOS handles personal data on behalf of the customer. It is written for Kenya's Data Protection Act 2019 and the GDPR. Individuals on the personal plan are covered by the privacy policy, not by this addendum.
 
 ## 1. Roles
 
@@ -53,8 +53,8 @@ The customer allows us to use the sub-processors below. We have a written agreem
 
 | Sub-processor                                                            | Service              | Data                           | Location                                                 |
 | ------------------------------------------------------------------------ | -------------------- | ------------------------------ | -------------------------------------------------------- |
-| Contabo                                                                  | Servers and database | All workspace data             | Germany `[TO CONFIRM: the server's Contabo region]`      |
-| Contabo (SeaweedFS run by us on the same server)                         | File storage         | Uploaded files                 | Germany `[TO CONFIRM: the server's Contabo region]`      |
+| Contabo                                                                  | Servers and database | All workspace data             | Germany (EU)                                             |
+| Contabo (SeaweedFS run by us on the same server)                         | File storage         | Uploaded files                 | Germany (EU)                                             |
 | Cloudflare                                                               | Web traffic          | IP addresses, requests         | Global network; Cloudflare, Inc. is in the United States |
 | Plunk (sends through Amazon SES)                                         | Sending emails       | Email addresses, email content | `[TO CONFIRM: Plunk and Amazon SES region]`              |
 | `[TO CONFIRM: AI provider, intended to be Anthropic for the Claude API]` | AI features          | Content in AI requests         | `[TO CONFIRM]`                                           |
@@ -91,4 +91,4 @@ When the agreement ends, the customer can export its members' data in the format
 - **Liability** under this addendum follows the limits in the agreement. `[TO CONFIRM: any specific rules for data protection claims.]`
 - **Order of documents.** If this addendum and the agreement conflict about personal data, this addendum wins.
 - **Governing law:** `[TO CONFIRM: same as the agreement, for example the Republic of Kenya]`.
-- **Contact for this addendum:** `[TO CONFIRM: contact email]`.
+- **Contact for this addendum:** info@ayopa.co.ke.
