@@ -51,16 +51,16 @@ We review these measures from time to time and may improve them. We will not low
 
 The customer allows us to use the sub-processors below. We have a written agreement with each one that requires protection equal to this addendum, and we remain responsible for them.
 
-| Sub-processor                                                                   | Service              | Data                           | Location       |
-| ------------------------------------------------------------------------------- | -------------------- | ------------------------------ | -------------- |
-| `[TO CONFIRM: hosting provider (G8)]`                                           | Servers and database | All workspace data             | `[TO CONFIRM]` |
-| `[TO CONFIRM: storage service]`                                                 | File storage         | Uploaded files                 | `[TO CONFIRM]` |
-| `[TO CONFIRM: content delivery and network protection, for example Cloudflare]` | Web traffic          | IP addresses, requests         | `[TO CONFIRM]` |
-| `[TO CONFIRM: email provider]`                                                  | Sending emails       | Email addresses, email content | `[TO CONFIRM]` |
-| `[TO CONFIRM: AI provider, intended to be Anthropic for the Claude API]`        | AI features          | Content in AI requests         | `[TO CONFIRM]` |
-| `[TO CONFIRM: web search or page reading provider, if used]`                    | AI web access        | Search words, web addresses    | `[TO CONFIRM]` |
-| `[TO CONFIRM: payment provider (D1)]`                                           | Payments             | Billing details                | `[TO CONFIRM]` |
-| `[TO CONFIRM: backup storage (G9)]`                                             | Backups              | Encrypted copies of all data   | `[TO CONFIRM]` |
+| Sub-processor                                                            | Service              | Data                           | Location                                                 |
+| ------------------------------------------------------------------------ | -------------------- | ------------------------------ | -------------------------------------------------------- |
+| Contabo                                                                  | Servers and database | All workspace data             | Germany `[TO CONFIRM: the server's Contabo region]`      |
+| Contabo (SeaweedFS run by us on the same server)                         | File storage         | Uploaded files                 | Germany `[TO CONFIRM: the server's Contabo region]`      |
+| Cloudflare                                                               | Web traffic          | IP addresses, requests         | Global network; Cloudflare, Inc. is in the United States |
+| Plunk (sends through Amazon SES)                                         | Sending emails       | Email addresses, email content | `[TO CONFIRM: Plunk and Amazon SES region]`              |
+| `[TO CONFIRM: AI provider, intended to be Anthropic for the Claude API]` | AI features          | Content in AI requests         | `[TO CONFIRM]`                                           |
+| `[TO CONFIRM: web search or page reading provider, if used]`             | AI web access        | Search words, web addresses    | `[TO CONFIRM]`                                           |
+| Paystack                                                                 | Payments             | Billing details                | `[TO CONFIRM: Paystack processing locations]`            |
+| Cloudflare R2                                                            | Backups              | Encrypted copies of all data   | `[TO CONFIRM: R2 bucket location hint]`                  |
 
 **Changes.** We will tell the customer at least `[TO CONFIRM: notice period, for example 30 days]` before adding or replacing a sub-processor, by email to the customer's admin or in the product. The customer may object on reasonable data protection grounds in that time. If we cannot resolve the objection, the customer may end the affected service and receive a refund for the unused period.
 
