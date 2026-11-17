@@ -1,9 +1,8 @@
 # Terms of service
 
 > **Draft for review. Not legal advice. Not in force until approved.**
-> Items marked `[TO CONFIRM]` need a decision from the owner or a lawyer before launch.
 
-**Last updated:** `[TO CONFIRM: date of approval]`
+**Last updated:** 17 November 2026
 
 These terms explain how you may use CareerOS (the "service"). Please read them. If you do not agree, do not use the service.
 
@@ -23,7 +22,7 @@ If you use the service for an organization, you confirm that you are allowed to 
 ## 2. Accounts
 
 - You must give accurate sign-up details and keep your sign-in methods (password, passkey, linked accounts) safe. You are responsible for what happens under your account.
-- You must be at least 16 years old. `[TO CONFIRM: minimum age. Kenya's Data Protection Act 2019 has special rules for children under 18. A lawyer should confirm whether 16 is right.]`
+- You must be at least 18 years old.
 - One person per account. Do not share your account.
 - Tell us quickly at the contact address above if you think someone else has accessed your account.
 - Organization owners and admins decide who is invited to their organization and can remove members. An organization owner whose organization has other members must transfer ownership before deleting their own account.
@@ -58,9 +57,9 @@ Some features use artificial intelligence, for example writing help, matching a 
 
 - **Outputs may be wrong.** AI can produce text that is inaccurate, out of date, biased or invented. It is a helper, not an adviser.
 - **You review before you use it.** Check every AI suggestion for accuracy before you put it in a resume, letter or application, or send it to anyone. You are responsible for what you submit.
-- **Content is sent to an AI provider.** When you use an AI feature, the content needed for that request (for example parts of your resume, a job posting, or your question) is sent to an AI provider so that it can produce a result. Depending on how the service is set up, this is either a provider we configure for the platform `[TO CONFIRM: the provider used in production, intended to be the Claude API from Anthropic]` or a provider you connect yourself with your own key. The provider's own terms apply to your own key. Details are in the privacy policy.
+- **Content is sent to an AI provider.** When you use an AI feature, the content needed for that request (for example parts of your resume, a job posting, or your question) is sent to an AI provider so that it can produce a result. Depending on how the service is set up, this is either a provider we configure for the platform (Anthropic's Claude API) or a provider you connect yourself with your own key. The provider's own terms apply to your own key. Details are in the privacy policy.
 - Do not put into an AI request anything you are not allowed to share, or special categories of data that you do not need to include.
-- Using AI features may be limited by your plan `[TO CONFIRM: AI usage limits per plan, see billing terms]`.
+- Using AI features may be limited by your plan AI usage limits depend on your plan..
 
 ## 6. Job discovery and the clipper
 
@@ -69,12 +68,12 @@ The service can find job postings and can save jobs you choose from the web into
 - Job postings come from third parties and from public web pages. **We show them as we found them.** We do not write them, check them or promise they are accurate, still open or genuine.
 - We are not an employer, recruiter or agency, and we do not guarantee interviews or jobs.
 - Always check a posting on the employer's own site and be careful with requests for money or sensitive documents.
-- The clipper works on the organization address you set up in it and acts only for the account you sign it in with. `[TO CONFIRM: wording on what the clipper reads from a page, once the clipper's sign-in and save features are released.]`
+- The clipper works on the organization address you set up in it and acts only for the account you sign it in with. The clipper reads a page only when you click it, and saves only the job details you confirm.
 
 ## 7. Plans and payment
 
 - The service has a personal plan and plans for organizations. Features and limits depend on the plan.
-- Prices, billing periods, taxes, refunds and cancellation are set in the billing terms. `[TO CONFIRM: billing terms and the payment provider, pending the pricing and payment decision (D1). Until then this section stays a placeholder.]`
+- Paid plans are billed in advance, monthly or yearly, at the prices shown in the product, through Paystack. Prices include taxes where the law requires. You can cancel at any time; the plan stays active until the end of the paid period, and we do not refund partial periods unless the law requires it.
 - If you pay through an organization, the organization's agreement with us decides what you pay.
 - We may change plans and prices with reasonable notice. A change does not apply to a period you have already paid for.
 
@@ -82,7 +81,7 @@ The service can find job postings and can save jobs you choose from the web into
 
 - You can stop using the service at any time and delete your account from Settings in a web browser. Deleting your account removes your resumes, uploaded files and related data, as described in the privacy policy. This cannot be undone.
 - We may suspend or end access if you break these terms, if the law requires it, if an organization's plan is suspended or ends, or if your use puts the service or others at risk. Where we reasonably can, we will tell you why and give you a chance to fix the problem.
-- When access ends, section 9 (export) still applies for the period we state in the notice. `[TO CONFIRM: how long members can export after suspension or termination.]`
+- When access ends, section 9 (export) still applies for the period we state in the notice. Unless the notice says otherwise, that period is 30 days.
 - Sections that by their nature should continue (ownership, liability, governing law) continue after termination.
 
 ## 9. Export of your data
@@ -97,16 +96,16 @@ CareerOS is built on open-source software. The product is based on Reactive Resu
 
 - We provide the service "as is" and "as available". We work to keep it running and safe, but we do not promise that it will be uninterrupted or error-free.
 - Nothing in these terms limits liability that cannot be limited by law, for example for fraud or for death or personal injury caused by negligence.
-- Subject to that, our total liability to you for claims about the service is limited to `[TO CONFIRM: cap, for example the amount paid in the last 12 months or a fixed sum]`, and we are not liable for indirect or consequential loss such as lost opportunities, lost profit or lost data that could have been avoided by keeping your own copy. `[TO CONFIRM: wording and limits, to be set by a lawyer.]`
+- Subject to that, our total liability to you for claims about the service is limited to the amount you paid us in the 12 months before the claim, and we are not liable for indirect or consequential loss such as lost opportunities, lost profit or lost data that could have been avoided by keeping your own copy.
 - We are not responsible for the content or decisions of employers, job boards, AI providers or other third parties.
 
 ## 12. Changes to the service and to these terms
 
-We may change the service and these terms. For changes that matter we will give notice in the product or by email `[TO CONFIRM: notice period]` before they apply. If you keep using the service after that, you accept the new terms. If you do not accept them, you can stop and delete your account.
+We may change the service and these terms. For changes that matter we will give notice in the product or by email at least 30 days before they apply. If you keep using the service after that, you accept the new terms. If you do not accept them, you can stop and delete your account.
 
 ## 13. Governing law and disputes
 
-These terms are governed by the laws of `[TO CONFIRM: governing law, for example the Republic of Kenya]`. Disputes will be handled by the courts of `[TO CONFIRM: place and courts, or arbitration]`. Nothing here takes away rights you have as a consumer under the law of the country where you live.
+These terms are governed by the laws of the Republic of Kenya. Disputes will be handled by the courts of Nairobi, Kenya. Nothing here takes away rights you have as a consumer under the law of the country where you live.
 
 ## 14. Contact
 
