@@ -2,7 +2,7 @@
 
 > Written by Opus after every plan, review and merge. Every thread reads this file first.
 
-**Current phase:** Phases 0, 1 and 2 meet their exit criteria (staging verified live by Stephen on 2026-11-02). P2-C04 merged in #64; tags `v0.0.1`, `v0.1.0`, `v0.2.0` wait on Stephen pushing them (this session cannot push tags). 3 — Admin & Billing: [phase plan](plans/P3-PHASE-PLAN.md); every Phase 3 task is merged except the P3-Q03 security suite (in CI). D1 = Paystack; D2 prices open with Stephen. Go-to-market release (Stephen, D11): [GTM plan](plans/GTM-PLAN.md) runs job discovery, the clipper and launch basics alongside Phase 3
+**Current phase:** Phases 0, 1 and 2 meet their exit criteria (staging verified live by Stephen on 2026-11-02). P2-C04 merged in #64; tags `v0.0.1`, `v0.1.0`, `v0.2.0` wait on Stephen pushing them (this session cannot push tags). 3 — Admin & Billing: [phase plan](plans/P3-PHASE-PLAN.md); every Phase 3 task is merged except the P3-Q03 security suite (in CI). D1 = Paystack; D2 = staging prices (2026-11-17); G10 legal wording approved. Go-to-market release (Stephen, D11): [GTM plan](plans/GTM-PLAN.md) runs job discovery, the clipper and launch basics alongside Phase 3
 **Current version:** none yet (first tag will be `0.0.1` at Phase 0 exit)
 **Base:** Reactive Resume v6.0.10, upstream commit `a69e48318aab3c1c3ea57d2c0467710ef0d8342f` (2026-10-31)
 **Last updated:** 2026-11-09 by Opus (Thread 1)
@@ -104,7 +104,7 @@ All Phase 2 tasks are merged. P2-C03 (from exit review M1, [spec](plans/cicd/P2-
 | P3-T07  | [plans/P3-T07-super-admin-console.md](plans/P3-T07-super-admin-console.md)             | **Merged** · [review](reviews/P3-T07-review-1.md)                                            | [#93](https://github.com/KING-CYBERTON/careeros/pull/93)   |
 | P3-T08  | [plans/P3-T08-org-admin-console.md](plans/P3-T08-org-admin-console.md)                 | **Merged** · [review](reviews/P3-T08-review-1.md)                                            | [#89](https://github.com/KING-CYBERTON/careeros/pull/89)   |
 | P3-T09  | [plans/P3-T09-super-admin-hardening.md](plans/P3-T09-super-admin-hardening.md)         | **Merged** · [review](reviews/P3-T07-review-1.md)                                            | [#99](https://github.com/KING-CYBERTON/careeros/pull/99)   |
-| P3-Q03  | [plans/P3-Q03-super-admin-security.md](plans/P3-Q03-super-admin-security.md)           | In CI                                                                                        | [#97](https://github.com/KING-CYBERTON/careeros/pull/97)   |
+| P3-Q03  | [plans/P3-Q03-super-admin-security.md](plans/P3-Q03-super-admin-security.md)           | **Merged** (#97)                                                                             | [#97](https://github.com/KING-CYBERTON/careeros/pull/97)   |
 | P4-T01  | [plans/P4-T01-discovery-data-fetchers.md](plans/P4-T01-discovery-data-fetchers.md)     | **Merged** · [review](reviews/P4-T01-review-1.md)                                            | [#68](https://github.com/KING-CYBERTON/careeros/pull/68)   |
 | P4-T02  | [plans/P4-T02-discovery-runs-ai-review.md](plans/P4-T02-discovery-runs-ai-review.md)   | **Merged** · [review](reviews/P4-T02-review-1.md)                                            | [#91](https://github.com/KING-CYBERTON/careeros/pull/91)   |
 | P4-T03  | [plans/P4-T03-discovery-setup-form.md](plans/P4-T03-discovery-setup-form.md)           | **Merged** · [review](reviews/P4-T02-review-1.md)                                            | [#96](https://github.com/KING-CYBERTON/careeros/pull/96)   |
@@ -113,15 +113,14 @@ All Phase 2 tasks are merged. P2-C03 (from exit review M1, [spec](plans/cicd/P2-
 | P5-T03  | [plans/P5-T03-clipping.md](plans/P5-T03-clipping.md)                                   | **Merged** · [review](reviews/P5-T03-review-1.md)                                            | [#95](https://github.com/KING-CYBERTON/careeros/pull/95)   |
 | P5-C01  | [plans/P5-C01-extension-packaging.md](plans/P5-C01-extension-packaging.md)             | **Merged** · [review](reviews/P5-T03-review-1.md)                                            | [#94](https://github.com/KING-CYBERTON/careeros/pull/94)   |
 | P6-T01  | [plans/P6-T01-legal-pages.md](plans/P6-T01-legal-pages.md)                             | **Merged** · [review](reviews/P6-T01-review-1.md)                                            | [#73](https://github.com/KING-CYBERTON/careeros/pull/73)   |
-| P6-T02a | [plans/P6-T02a-email-flag-fix.md](plans/P6-T02a-email-flag-fix.md)                     | Approved; in build                                                                           |                                                            |
+| P6-T02a | [plans/P6-T02a-email-flag-fix.md](plans/P6-T02a-email-flag-fix.md)                     | **Merged** (#106)                                                                            |                                                            |
 
 ### Waiting on Stephen (Phase 3 and go-to-market)
 
-- **Staging:** restart the self-hosted runner so `careeros-deploy-staging` picks up the queued deploys (`cd /home/deploy/actions-runner && sudo ./svc.sh stop && sudo ./svc.sh start`). Staging still serves the 2026-11-02 build.
 - **Paystack (D1 decided 2026-11-08):** a Paystack account, test keys in the staging environment (`BILLING_PROVIDER=paystack`, `PAYSTACK_SECRET_KEY`, `PAYSTACK_PUBLIC_KEY`, `PAYSTACK_ALLOW_TEST_KEY=true`) and the webhook URL `https://careeros-staging.ayopa.co.ke/api/billing/webhook/paystack` in the Paystack dashboard (Q465).
-- **D2:** real prices. **D10** applied: mobile shows billing read-only.
+- **D2 decided (Stephen, 2026-11-17):** production uses the staging prices as they stand in `migrations/20261102174208_plans_entitlements`: Personal free; Starter USD 49 / KES 6,500 a month (USD 490 / KES 65,000 a year), up to 50 seats; Pro USD 12 / KES 1,500 per seat a month (USD 120 / KES 15,000 a year); Enterprise on request. Drop the PLACEHOLDER comments in a later migration only if prices change. **D10** applied: mobile shows billing read-only.
 - **G8:** production hosting. A Chrome Web Store developer account and a Microsoft Partner Center account for the clipper.
-- **G10:** approve the legal drafts in `docs/legal/` (the `[TO CONFIRM]` items need the operator's details or a lawyer) before launch; the store data-handling answers (Q404) depend on them.
+- **G10 wording approved (Stephen, 2026-11-17).** Before launch the `[TO CONFIRM]` facts in `docs/legal/` still need filling: operator legal name, registered address and privacy contact email, approval date, notice and response periods, session and log retention, and the providers that depend on G8 (hosting, database, storage, backups). Known now: payments Paystack (D1), email Plunk (P6-T02), network Cloudflare. The store data-handling answers (Q404) can now be drafted.
 - Push the tags `v0.0.1` (`6035783`), `v0.1.0` (`4a5bc88`) and `v0.2.0` (`1954263`).
 
 ## Blockers
