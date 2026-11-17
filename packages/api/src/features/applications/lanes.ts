@@ -5,6 +5,8 @@ import type {
 	ApplicationTimelineEntry,
 } from "@reactive-resume/schema/applications/data";
 import type { ApplicationLane, ApplicationPipeline } from "@reactive-resume/schema/applications/lanes";
+// CAREEROS: the pipeline and its lanes are per (organization, user) (P1-T06, D11)
+import { requireOrgId } from "@careeros/tenancy";
 import { ORPCError } from "@orpc/client";
 import { and, eq, isNull } from "drizzle-orm";
 import { createDefaultOwnedApplicationLanes, MAX_APPLICATION_LANES } from "@reactive-resume/db/application-lanes";
@@ -15,18 +17,28 @@ import { lockUser } from "../documents/ownership";
 
 /** Call with the owner lock held. IDs are deterministic across migration, lazy seeding and retries. */
 export async function ensureApplicationPipeline(tx: DbOrTx, userId: string): Promise<ApplicationPipeline> {
-	await tx.insert(schema.applicationPipeline).values({ userId }).onConflictDoNothing();
-	await tx.insert(schema.applicationLane).values(createDefaultOwnedApplicationLanes(userId)).onConflictDoNothing();
+	// CAREEROS (P1-T06, D11): the pipeline is created, and read, in the current organization.
+	const organizationId = requireOrgId();
+	await tx.insert(schema.applicationPipeline).values({ organizationId, userId }).onConflictDoNothing();
+	await tx
+		.insert(schema.applicationLane)
+		.values(createDefaultOwnedApplicationLanes(userId, organizationId))
+		.onConflictDoNothing();
 	const [pipeline] = await tx
 		.select()
 		.from(schema.applicationPipeline)
-		.where(eq(schema.applicationPipeline.userId, userId));
+		.where(
+			and(eq(schema.applicationPipeline.organizationId, organizationId), eq(schema.applicationPipeline.userId, userId)),
+		);
 	const rows = await tx
 		.select()
 		.from(schema.applicationLane)
-		.where(eq(schema.applicationLane.userId, userId))
+		.where(and(eq(schema.applicationLane.organizationId, organizationId), eq(schema.applicationLane.userId, userId)))
 		.orderBy(schema.applicationLane.position, schema.applicationLane.id);
-	return { revision: pipeline?.revision ?? 0, lanes: rows.map(({ userId: _userId, ...lane }) => lane) };
+	return {
+		revision: pipeline?.revision ?? 0,
+		lanes: rows.map(({ userId: _userId, organizationId: _organizationId, ...lane }) => lane),
+	};
 }
 
 type TransitionInput = {
@@ -121,6 +133,7 @@ export async function applicationTransitionValues(
 	};
 }
 
+// CAREEROS (P1-T06, D11): every lane and pipeline query below also names the current organization.
 export const applicationLaneService = {
 	get: (userId: string) =>
 		db.transaction(async (tx) => {
@@ -141,7 +154,12 @@ export const applicationLaneService = {
 			await tx
 				.update(schema.applicationPipeline)
 				.set({ revision: pipeline.revision + 1 })
-				.where(eq(schema.applicationPipeline.userId, userId));
+				.where(
+					and(
+						eq(schema.applicationPipeline.organizationId, requireOrgId()),
+						eq(schema.applicationPipeline.userId, userId),
+					),
+				);
 			return ensureApplicationPipeline(tx, userId);
 		}),
 	create: (
@@ -162,6 +180,7 @@ export const applicationLaneService = {
 				throw new ORPCError("BAD_REQUEST", { message: "Only Closed lanes can preset an outcome." });
 			await tx.insert(schema.applicationLane).values({
 				id: generateId(),
+				organizationId: requireOrgId(),
 				userId,
 				label: input.label,
 				category: input.category,
@@ -182,7 +201,13 @@ export const applicationLaneService = {
 					...(input.label !== undefined ? { label: input.label } : {}),
 					...(input.color !== undefined ? { color: input.color } : {}),
 				})
-				.where(and(eq(schema.applicationLane.id, input.id), eq(schema.applicationLane.userId, userId)));
+				.where(
+					and(
+						eq(schema.applicationLane.organizationId, requireOrgId()),
+						eq(schema.applicationLane.id, input.id),
+						eq(schema.applicationLane.userId, userId),
+					),
+				);
 		}),
 	reorder: (userId: string, input: { expectedRevision: number; ids: string[] }) =>
 		applicationLaneService.mutate(userId, input.expectedRevision, async (tx, pipeline) => {
@@ -197,7 +222,13 @@ export const applicationLaneService = {
 				await tx
 					.update(schema.applicationLane)
 					.set({ position })
-					.where(and(eq(schema.applicationLane.id, id), eq(schema.applicationLane.userId, userId)));
+					.where(
+						and(
+							eq(schema.applicationLane.organizationId, requireOrgId()),
+							eq(schema.applicationLane.id, id),
+							eq(schema.applicationLane.userId, userId),
+						),
+					);
 		}),
 	retire: (userId: string, input: { id: string; replacementId: string; expectedRevision: number }) =>
 		applicationLaneService.mutate(userId, input.expectedRevision, async (tx, pipeline) => {
@@ -218,12 +249,19 @@ export const applicationLaneService = {
 			await tx
 				.update(schema.application)
 				.set({ laneId: replacement.id, updatedAt: schema.application.updatedAt })
-				.where(and(eq(schema.application.userId, userId), eq(schema.application.laneId, lane.id)));
+				.where(
+					and(
+						eq(schema.application.organizationId, requireOrgId()),
+						eq(schema.application.userId, userId),
+						eq(schema.application.laneId, lane.id),
+					),
+				);
 			await tx
 				.update(schema.applicationLane)
 				.set({ retiredAt: new Date() })
 				.where(
 					and(
+						eq(schema.applicationLane.organizationId, requireOrgId()),
 						eq(schema.applicationLane.id, lane.id),
 						eq(schema.applicationLane.userId, userId),
 						isNull(schema.applicationLane.retiredAt),

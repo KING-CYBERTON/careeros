@@ -1,3 +1,5 @@
+// CAREEROS: the report belongs to the reporter's active organization at report time (P1-T08)
+import { requireOrgId } from "@careeros/tenancy";
 import z from "zod";
 import { db } from "@reactive-resume/db/client";
 import { aiContentReport } from "@reactive-resume/db/schema";
@@ -27,7 +29,7 @@ export const reportAiContent = protectedProcedure
 	.handler(async ({ context, input }) => {
 		const [report] = await db
 			.insert(aiContentReport)
-			.values({ ...input, userId: context.user.id })
+			.values({ ...input, organizationId: requireOrgId(), userId: context.user.id })
 			.returning({ id: aiContentReport.id });
 		if (!report) throw new Error("Could not store the content report.");
 		return report;

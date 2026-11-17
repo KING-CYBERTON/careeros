@@ -1,13 +1,12 @@
-import { randomUUID } from "node:crypto";
-import { existsSync } from "node:fs";
-import { readdir, readFile } from "node:fs/promises";
 import { afterAll, beforeAll, beforeEach, describe, expect, it, vi } from "vite-plus/test";
+import { createIsolatedTestDatabase, type IsolatedTestDatabase } from "@careeros/testing";
 import { ORPCError } from "@orpc/client";
 import { eq } from "drizzle-orm";
 import { drizzle } from "drizzle-orm/node-postgres";
 import { Pool } from "pg";
 import * as tables from "@reactive-resume/db/schema";
 import { sampleResumeData } from "@reactive-resume/schema/resume/sample";
+import { ensureTestOrganization, TEST_ORGANIZATION_ID } from "../../test-organization";
 
 const fixture = vi.hoisted(() => ({
 	db: undefined as ReturnType<typeof drizzle> | undefined,
@@ -28,37 +27,23 @@ function getDb() {
 	if (!fixture.db) throw new Error("Database unavailable");
 	return fixture.db;
 }
-const databaseUrl = process.env.INTEGRATIONS_TEST_DATABASE_URL;
+const configured = Boolean(process.env.CAREEROS_TEST_DATABASE_URL && process.env.CAREEROS_TEST_APP_DATABASE_URL);
 
-describe.skipIf(!databaseUrl)("reviewed target role suggestions", () => {
+describe.skipIf(!configured)("reviewed target role suggestions", () => {
 	let suggest: typeof import("./role-suggestions").suggestTargetRoles;
-	let admin: Pool;
 	let pool: Pool;
-	const schemaName = `rx76_roles_${randomUUID().replaceAll("-", "")}`;
+	// CAREEROS (P1-Q08): its own database instead of a schema whose migration replay rewrites `public` objects.
+	let database: IsolatedTestDatabase;
 	beforeAll(async () => {
-		admin = new Pool({ connectionString: databaseUrl });
-		await admin.query(`CREATE SCHEMA ${schemaName}`);
-		pool = new Pool({
-			connectionString: databaseUrl,
-			options: `-c search_path=${schemaName} -c statement_timeout=10000`,
-		});
+		database = await createIsolatedTestDatabase("role_suggestions");
+		pool = new Pool({ connectionString: database.ownerUrl, options: "-c statement_timeout=10000" });
 		fixture.db = drizzle({ client: pool });
-		const migrations = new URL("../../../../../migrations/", import.meta.url);
-		const directories = (await readdir(migrations, { withFileTypes: true }))
-			.filter((entry) => entry.isDirectory() && /^\d+_/.test(entry.name))
-			.map((entry) => entry.name)
-			.sort();
-		for (const directory of directories) {
-			const file = new URL(`${directory}/migration.sql`, migrations);
-			if (existsSync(file)) await pool.query((await readFile(file, "utf8")).replaceAll('"public".', ""));
-		}
 		({ suggestTargetRoles: suggest } = await import("./role-suggestions"));
-	}, 30_000);
+	}, 60_000);
 
 	afterAll(async () => {
 		await pool?.end();
-		await admin?.query(`DROP SCHEMA IF EXISTS ${schemaName} CASCADE`);
-		await admin?.end();
+		await database?.drop();
 	});
 
 	const input = {
@@ -70,6 +55,7 @@ describe.skipIf(!databaseUrl)("reviewed target role suggestions", () => {
 	};
 	beforeEach(async () => {
 		await pool.query('TRUNCATE "user" CASCADE');
+		await ensureTestOrganization(pool);
 		await getDb()
 			.insert(tables.user)
 			.values([
@@ -82,13 +68,18 @@ describe.skipIf(!databaseUrl)("reviewed target role suggestions", () => {
 				},
 				{ id: "bob", name: "Bob Example", email: "bob@example.test", username: "bob", displayUsername: "bob" },
 			]);
-		await getDb()
-			.insert(tables.application)
-			.values({ id: "alice-app", userId: "alice", company: "Fictional", role: "Engineer" });
+		await getDb().insert(tables.application).values({
+			id: "alice-app",
+			organizationId: TEST_ORGANIZATION_ID,
+			userId: "alice",
+			company: "Fictional",
+			role: "Engineer",
+		});
 		await getDb()
 			.insert(tables.careerFact)
 			.values([
 				{
+					organizationId: TEST_ORGANIZATION_ID,
 					id: "private",
 					userId: "alice",
 					applicationId: "alice-app",
@@ -98,6 +89,7 @@ describe.skipIf(!databaseUrl)("reviewed target role suggestions", () => {
 					sourceKey: "p",
 				},
 				{
+					organizationId: TEST_ORGANIZATION_ID,
 					id: "active",
 					userId: "alice",
 					text: "I maintain reliable services.",
@@ -106,6 +98,7 @@ describe.skipIf(!databaseUrl)("reviewed target role suggestions", () => {
 					sourceKey: "a",
 				},
 				{
+					organizationId: TEST_ORGANIZATION_ID,
 					id: "excluded",
 					userId: "alice",
 					status: "excluded",
@@ -115,6 +108,7 @@ describe.skipIf(!databaseUrl)("reviewed target role suggestions", () => {
 					sourceKey: "e",
 				},
 				{
+					organizationId: TEST_ORGANIZATION_ID,
 					id: "forgotten",
 					userId: "alice",
 					status: "forgotten",
@@ -124,6 +118,7 @@ describe.skipIf(!databaseUrl)("reviewed target role suggestions", () => {
 					sourceKey: "f",
 				},
 				{
+					organizationId: TEST_ORGANIZATION_ID,
 					id: "foreign",
 					userId: "bob",
 					text: "BOB-PRIVATE",
@@ -181,9 +176,14 @@ describe.skipIf(!databaseUrl)("reviewed target role suggestions", () => {
 			code: "BAD_REQUEST",
 		});
 		await expect(suggest("alice", { ...input, providerId: "foreign" })).rejects.toMatchObject({ code: "NOT_FOUND" });
-		await getDb()
-			.insert(tables.resume)
-			.values({ id: "bob-resume", userId: "bob", name: "Private", slug: "private", data: sampleResumeData });
+		await getDb().insert(tables.resume).values({
+			organizationId: TEST_ORGANIZATION_ID,
+			id: "bob-resume",
+			userId: "bob",
+			name: "Private",
+			slug: "private",
+			data: sampleResumeData,
+		});
 		await expect(suggest("alice", { ...input, resumeId: "bob-resume" })).rejects.toMatchObject({ code: "NOT_FOUND" });
 		expect(fixture.generate).not.toHaveBeenCalled();
 	});
@@ -208,9 +208,14 @@ describe.skipIf(!databaseUrl)("reviewed target role suggestions", () => {
 		expect(fixture.generate).toHaveBeenCalledTimes(1);
 	});
 	it("shares only an explicitly chosen resume, blocks corrected-source replay and never guesses quotes", async () => {
-		await getDb()
-			.insert(tables.resume)
-			.values({ id: "alice-resume", userId: "alice", name: "Synthetic", slug: "synthetic", data: sampleResumeData });
+		await getDb().insert(tables.resume).values({
+			organizationId: TEST_ORGANIZATION_ID,
+			id: "alice-resume",
+			userId: "alice",
+			name: "Synthetic",
+			slug: "synthetic",
+			data: sampleResumeData,
+		});
 		fixture.generate.mockResolvedValue({
 			suggestions: [{ role: "Engineer", factIds: ["active"], resumeQuote: "made-up" }],
 		});
@@ -223,6 +228,7 @@ describe.skipIf(!databaseUrl)("reviewed target role suggestions", () => {
 		await getDb()
 			.insert(tables.careerFact)
 			.values({
+				organizationId: TEST_ORGANIZATION_ID,
 				userId: "alice",
 				text: "Old claim",
 				category: "experience",

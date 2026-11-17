@@ -17,9 +17,18 @@ import { cn } from "@reactive-resume/utils/style";
 import { MobileTabIndicator } from "@/components/layout/mobile-tab-indicator";
 import { useDialogStore } from "@/dialogs/store";
 import { GuestBanner } from "@/features/auth/components/guest-banner";
+// CAREEROS (P3-T06): trial, past due and suspension notices for owners; an overdue notice for members
+import { BillingBanner } from "@/features/billing/billing-banner";
 import { useCommandPaletteStore } from "@/features/command-palette/store";
+// CAREEROS: organization switcher and the no-organization notice (P1-T03)
+import { NoOrganizationNotice } from "@/features/organization/no-organization-notice";
+import { SuspendedBanner } from "@/features/organization/suspended-banner";
+import { OrganizationSwitcher } from "@/features/organization/switcher";
+// CAREEROS (P3-T07): platform announcements
+import { AnnouncementBanner } from "@/features/platform-admin/announcement-banner";
 import { isEditableElementFocused } from "@/features/resume/builder/draft";
 import { UserDropdownMenu } from "@/features/user/dropdown-menu";
+import { getBrand } from "@/libs/brand";
 import { orpc } from "@/libs/orpc/client";
 
 type NavItem = {
@@ -111,7 +120,18 @@ export function AppShell({ children }: AppShellProps) {
 			</a>
 			{breakpoint !== "mobile" && (breakpoint === "tablet" ? <Rail /> : <Sidebar />)}
 			<main id="main-content" className="min-w-0">
+				{/* CAREEROS (P3-T02): a suspended organization is read-only; the server refuses the writes */}
+				<SuspendedBanner />
+				{/* CAREEROS (P3-T06): billing notices, with a link to the billing page for the owner */}
+				<BillingBanner />
+				{/* CAREEROS (P3-T07): platform announcements for this member, dismissible */}
+				<AnnouncementBanner />
 				<GuestBanner />
+				{/* CAREEROS (P1-T03): the sidebar carries the switcher on desktop; tablets and phones get it here */}
+				<NoOrganizationNotice />
+				{(breakpoint === "mobile" || breakpoint === "tablet") && (
+					<OrganizationSwitcher className="mx-4 mt-4 w-auto max-w-xs" />
+				)}
 				{children}
 			</main>
 			{tabs && <MobileTabs />}
@@ -132,7 +152,7 @@ function Sidebar() {
 		>
 			<Link to="/" className="flex h-9 items-center gap-2.5 px-1.5">
 				<BrandIcon variant="icon" alt="" className="size-6 shrink-0" />
-				<span className="text-sm font-semibold">Reactive Resume</span>
+				<span className="text-sm font-semibold">{getBrand().appName}</span>
 			</Link>
 
 			<button
@@ -148,6 +168,9 @@ function Sidebar() {
 				</span>
 				<Kbd>⌘K</Kbd>
 			</button>
+
+			{/* CAREEROS: shown only with two or more organizations (P1-T03) */}
+			<OrganizationSwitcher />
 
 			<nav aria-label={t`App`} className="grid gap-0.5">
 				{items.map((item) => (
@@ -225,7 +248,7 @@ function Rail() {
 			aria-label={t`App navigation`}
 			className="sticky top-0 flex h-svh flex-col items-center gap-2 border-e border-line bg-surface py-3 [view-transition-name:app-nav]"
 		>
-			<Link to="/" aria-label="Reactive Resume" className="mb-1 grid size-8 place-items-center rounded-md">
+			<Link to="/" aria-label={getBrand().appName} className="mb-1 grid size-8 place-items-center rounded-md">
 				<BrandIcon variant="icon" alt="" className="size-6" />
 			</Link>
 			<RailTip label={t`Search`} icon="magnifying-glass">

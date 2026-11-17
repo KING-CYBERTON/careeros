@@ -10,32 +10,41 @@ import {
 	savedItemDataSchema,
 } from "@reactive-resume/schema/career";
 
+// CAREEROS (P1-T07): the tenant column (`organization_id`) is omitted from every output below; it is not API surface.
+const noTenant = { organizationId: true } as const;
+
 export const careerFactSchema = createSelectSchema(tables.careerFact, {
 	source: careerSourceSchema,
 	revisions: z.array(z.object({ text: z.string(), at: z.string() })),
-}).extend({
-	/** The application it's private to, by name; null for shared facts. */
-	company: z.string().nullable(),
-	/** Stories it backs and saved items that used it. */
-	usedBy: z.object({ stories: z.number(), savedItems: z.number() }),
-});
-export const careerStorySchema = createSelectSchema(tables.careerStory, { data: careerStoryInputSchema });
+})
+	.omit(noTenant)
+	.extend({
+		/** The application it's private to, by name; null for shared facts. */
+		company: z.string().nullable(),
+		/** Stories it backs and saved items that used it. */
+		usedBy: z.object({ stories: z.number(), savedItems: z.number() }),
+	});
+export const careerStorySchema = createSelectSchema(tables.careerStory, { data: careerStoryInputSchema }).omit(
+	noTenant,
+);
 export const savedItemSchema = createSelectSchema(tables.careerArtifact, {
 	data: savedItemDataSchema,
 	evidence: z.object({ factIds: z.array(z.string()), storyIds: z.array(z.string()) }),
-});
-export const careerScheduleSchema = createSelectSchema(tables.careerSchedule);
+}).omit(noTenant);
+export const careerScheduleSchema = createSelectSchema(tables.careerSchedule).omit(noTenant);
 export const careerNotificationSchema = createSelectSchema(tables.careerNotification, {
 	notice: careerNoticeSchema,
-}).extend({
-	/** Written from `notice` when it's read (English for now). */
-	title: z.string(),
-	body: z.string(),
-});
+})
+	.omit(noTenant)
+	.extend({
+		/** Written from `notice` when it's read (English for now). */
+		title: z.string(),
+		body: z.string(),
+	});
 export const careerOpportunitySchema = createSelectSchema(tables.careerOpportunity, {
 	discoverySource: discoverySourceSchema.nullable(),
 })
-	.omit({ description: true })
+	.omit({ description: true, organizationId: true })
 	.extend({
 		/** Target roles and locations from Preferences that the posting matches, in the user's words. */
 		matches: z.array(z.string()),
@@ -51,7 +60,7 @@ export const reviewedAnswerSchema = createSelectSchema(tables.careerAnswer, {
 	factIds: z.array(z.string()),
 	storyIds: z.array(z.string()),
 	evidence: z.array(answerEvidenceSchema),
-});
+}).omit(noTenant);
 export const reviewedAnswerViewSchema = reviewedAnswerSchema.extend({
 	evidence: z.array(answerEvidenceSchema.extend({ status: z.enum(["current", "changed", "removed"]) })),
 	stale: z.boolean(),

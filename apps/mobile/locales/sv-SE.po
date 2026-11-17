@@ -33,6 +33,11 @@ msgstr "\"{0}\" flyttade till papperskorgen"
 msgid "“{0}” stops being your primary resume."
 msgstr "”{0}” är inte längre ditt primära CV."
 
+#. placeholder {0}: selected?.label ?? ""
+#: src/features/settings/clipper-sign-ins.tsx
+msgid "“{0}” stops working. You can sign in again from the extension."
+msgstr ""
+
 #. placeholder {0}: purge?.documents[0]?.name
 #: src/features/documents/library.tsx
 msgid "“{0}” will be deleted for good and can't be restored."
@@ -331,7 +336,9 @@ msgid "{0} (copy)"
 msgstr "{0} (kopia)"
 
 #. placeholder {0}: document.name
+#. placeholder {0}: selected.name
 #: src/draft/adapters.ts
+#: src/features/email-templates/write-email-sheet.tsx
 msgid "{0} (mine)"
 msgstr "{0} (min)"
 
@@ -382,6 +389,12 @@ msgstr "{0} mindre"
 msgid "{0} more"
 msgstr "{0} mer"
 
+#. placeholder {0}: plan.seatsUsed
+#. placeholder {1}: plan.seatLimit
+#: src/features/organization/plan-screen.tsx
+msgid "{0} of {1}"
+msgstr ""
+
 #. placeholder {0}: shown.length
 #. placeholder {1}: TEMPLATES.length
 #: src/features/design/template-group.tsx
@@ -412,11 +425,6 @@ msgstr "{0} jobbannons"
 msgid "{0} returned “{1}”. Your message is kept."
 msgstr "{0} returnerade \"{1}\". Ditt meddelande bevaras."
 
-#. placeholder {0}: done.length
-#: src/features/career/today.tsx
-msgid "{0} roles updated."
-msgstr ""
-
 #. placeholder {0}: selectedIds.length
 #. placeholder {0}: selection.length
 #: src/features/applications/list-screen.tsx
@@ -428,6 +436,11 @@ msgstr "{0} har valts"
 #. placeholder {1}: failed.length
 #: src/features/career/today.tsx
 msgid "{0} updated; {1} failed. Failed roles remain selected. Refresh or retry."
+msgstr ""
+
+#. placeholder {0}: plan.seatsUsed
+#: src/features/organization/plan-screen.tsx
+msgid "{0} used"
 msgstr ""
 
 #. placeholder {0}: answer.split(/\s+/).filter(Boolean).length
@@ -498,14 +511,6 @@ msgstr "{company} · {tabName}"
 msgid "{completed, plural, one {# document updated} other {# documents updated}}"
 msgstr "{completed, plural, one {# dokument uppdaterat} other {# dokument uppdaterade}}"
 
-#: src/features/share/custom-domain.tsx
-msgid "{cost} a year"
-msgstr "{cost} om året"
-
-#: src/features/share/custom-domain.tsx
-msgid "{cost} the first year"
-msgstr "{cost} första året"
-
 #: src/features/write/section-sheet.tsx
 msgid "{count, plural, one {# column} other {# columns}}"
 msgstr "{count, plural, one {# kolumn} other {# kolumner}}"
@@ -513,6 +518,10 @@ msgstr "{count, plural, one {# kolumn} other {# kolumner}}"
 #: src/features/workspace/tabs/messages.tsx
 msgid "{count, plural, one {Apply # change} other {Apply # changes}}"
 msgstr "{count, plural, one {Tillämpa # ändring} other {Tillämpa # ändringar}}"
+
+#: src/features/branding/domains-screen.tsx
+msgid "{count} of {limit} domains used."
+msgstr ""
 
 #: src/features/workspace/tabs/debrief.tsx
 msgid "{day} · {length}m"
@@ -708,6 +717,10 @@ msgstr "{toCheck, plural, one {#-fältet behöver en titt.} other {#-fält behö
 msgid "{toCheck, plural, one {# to check} other {# to check}}"
 msgstr "{toCheck, plural, one {# för att kontrollera} other {# för att kontrollera}}"
 
+#: src/features/organization/plan-screen.tsx
+msgid "{trialDays} days left"
+msgstr ""
+
 #: src/features/letters/write.tsx
 #: src/features/workspace/tabs/apply.tsx
 msgid "{words, plural, one {# word} other {# words}}"
@@ -755,8 +768,12 @@ msgid "24 hours before"
 msgstr "24 timmar innan"
 
 #: src/features/letters/share.tsx
-msgid "A backup of this letter. Imports back into Reactive Resume as a letter."
-msgstr "En backup av detta brev. Importerar tillbaka till Reactive Resume som ett brev."
+msgid "A backup of this letter. Imports back into {appName} as a letter."
+msgstr ""
+
+#: src/features/discovery/messages.ts
+msgid "A board name has only letters, digits, hyphens and underscores."
+msgstr ""
 
 #: src/features/check/issues.ts
 msgid "A city and country let roles be matched to where you are."
@@ -822,9 +839,21 @@ msgstr "Ett numeriskt datum läses olika i olika länder."
 msgid "A page is rotated."
 msgstr "En sida är roterad."
 
+#: src/features/organization/plan-screen.tsx
+msgid "A payment is overdue. Please contact your organization's owner."
+msgstr ""
+
+#: src/features/organization/plan-screen.tsx
+msgid "A payment is overdue. Please contact your organization's owner. Service pauses after {graceEnd}."
+msgstr ""
+
 #: src/features/applications/prior-no-response.tsx
 msgid "A previous application to this company was closed with No response. You can still apply."
 msgstr "En tidigare ansökan till det här företaget avslutades med utfallet ”Inget svar”. Du kan fortfarande söka."
+
+#: src/features/email-templates/built-in-text.ts
+msgid "A question about working at {company}"
+msgstr ""
 
 #: src/features/application-detail/sheets.tsx
 msgid "A reminder to check in, shown as the next step until you do."
@@ -833,6 +862,10 @@ msgstr "En påminnelse om att checka in, visas som nästa steg tills du gör det
 #: src/features/check/issues.ts
 msgid "A role has no description"
 msgstr "En roll har ingen beskrivning"
+
+#: src/features/discovery/searches.tsx
+msgid "A search looks at the job boards you choose, on a schedule, and adds postings that match to the queue below."
+msgstr ""
 
 #: src/features/check/writing.tsx
 msgid "A second opinion on your wording"
@@ -914,6 +947,8 @@ msgid "Actions for {0} at {1}"
 msgstr "Åtgärder för {0} på {1}"
 
 #: src/features/ai/web-access.tsx
+#: src/features/branding/domains-screen.tsx
+#: src/features/organization/plan-screen.tsx
 msgid "Active"
 msgstr "Aktiv"
 
@@ -922,6 +957,10 @@ msgstr "Aktiv"
 msgid "Add"
 msgstr "Tillägga"
 
+#: src/features/discovery/search-form.tsx
+msgid "Add a board"
+msgstr ""
+
 #: src/features/applications/lane-settings.tsx
 msgid "Add a compatible replacement lane first."
 msgstr "Lägg först till en kompatibel ersättningsfas."
@@ -929,6 +968,10 @@ msgstr "Lägg först till en kompatibel ersättningsfas."
 #: src/features/career/search-regions-field.tsx
 msgid "Add a country"
 msgstr "Lägg till ett land"
+
+#: src/features/branding/domains-screen.tsx
+msgid "Add a domain"
+msgstr ""
 
 #: src/features/career/facts.tsx
 msgid "Add a fact"
@@ -1034,6 +1077,14 @@ msgstr "Lägg till en kommande intervju i jobbansökningarna först."
 msgid "Add application"
 msgstr "Lägg till ansökan"
 
+#: src/features/discovery/messages.ts
+msgid "Add at most {MAX_TERMS} entries."
+msgstr ""
+
+#: src/features/discovery/messages.ts
+msgid "Add at most 100 boards."
+msgstr ""
+
 #: src/features/settings/application-profile.tsx
 msgid "Add authorization country"
 msgstr ""
@@ -1057,6 +1108,10 @@ msgstr "Lägg till följebrev"
 #: src/features/check/issues.ts
 msgid "Add dates"
 msgstr "Lägg till datum"
+
+#: src/features/branding/domains-screen.tsx
+msgid "Add domain"
+msgstr ""
 
 #: src/features/write/fields.ts
 msgid "Add education"
@@ -1111,6 +1166,10 @@ msgstr "Lägg till erbjudande"
 msgid "Add offer terms manually, or use optional AI extraction in Messages."
 msgstr "Lägg till villkoren för jobberbjudandet manuellt eller använd valfri AI-extrahering i Meddelanden."
 
+#: src/features/discovery/search-form.tsx
+msgid "Add one at a time or separate them with commas."
+msgstr ""
+
 #: src/features/ats-checker/messages.ts
 msgid "Add one link that shows your work."
 msgstr "Lägg till en länk som visar ditt arbete."
@@ -1118,6 +1177,10 @@ msgstr "Lägg till en länk som visar ditt arbete."
 #: src/features/ats-checker/messages.ts
 msgid "Add one with its country code; some application forms require it before you can submit."
 msgstr "Lägg till ett med landskod; vissa ansökningsformulär kräver det innan du kan skicka in."
+
+#: src/features/discovery/searches.tsx
+msgid "Add one with the job titles, skills and places you want, plus the company job boards to watch. It runs on its own, and the best matches show up in the queue."
+msgstr ""
 
 #: src/features/design/layout-screen.tsx
 msgid "Add page"
@@ -1358,6 +1421,10 @@ msgstr "AI-leverantörer kunde inte laddas. Ladda om för att försöka igen."
 msgid "AI providers couldn't be loaded. Retry or fill the details manually."
 msgstr "AI-leverantörerna kunde inte läsas in. Försök igen eller fyll i uppgifterna manuellt."
 
+#: src/features/organization/plan-screen.tsx
+msgid "AI quota"
+msgstr ""
+
 #: src/features/applications/add-sheet.tsx
 msgid "AI reads pasted text only when you ask. Links can use the page’s own job data without AI."
 msgstr "AI läser bara inklistrad text när du frågar. Länkar kan använda sidans egna jobbdata utan AI."
@@ -1437,6 +1504,10 @@ msgstr "Redan täckt · välj en för att hitta den på sidan"
 msgid "Already covered:"
 msgstr "Redan täckt:"
 
+#: src/features/email-templates/templates-screen.tsx
+msgid "Also available to you"
+msgstr ""
+
 #: src/features/check/screen.tsx
 msgid "Also check the exported PDF"
 msgstr "Kontrollera även den exporterade PDF"
@@ -1482,6 +1553,10 @@ msgstr "ett fel"
 #: src/features/application-detail/sections.tsx
 msgid "and {0} more"
 msgstr "och {0} mer"
+
+#: src/features/branding/domains-screen.tsx
+msgid "Another account claimed this domain first."
+msgstr ""
 
 #: src/features/share/link.tsx
 msgid "Another of your resumes uses this address."
@@ -1529,12 +1604,17 @@ msgid "Answers copied"
 msgstr "Svaren kopierade"
 
 #: src/features/career/preferences.tsx
+#: src/features/discovery/messages.ts
 msgid "Any"
 msgstr "Obegränsat"
 
 #: src/features/design/style-groups.tsx
 msgid "Any font, in Advanced"
 msgstr "Alla teckensnitt, i Avancerat"
+
+#: src/features/email-templates/template-editor.tsx
+msgid "Any stage"
+msgstr ""
 
 #: src/features/share/web-page.tsx
 msgid "Anyone with the link will be able to view your resume."
@@ -1561,6 +1641,10 @@ msgstr "API-nyckeln har återkallats. Appar som använder det slutar fungera nu.
 #: src/features/settings/api-keys.tsx
 msgid "API keys"
 msgstr "API nycklar"
+
+#: src/features/branding/branding-screen.tsx
+msgid "App name"
+msgstr ""
 
 #: app/(tabs)/settings/preferences.tsx
 msgid "Appearance"
@@ -1728,6 +1812,19 @@ msgstr "Appar som använder ”{0}” slutar fungera. Detta kan inte ångras."
 msgid "Arabic"
 msgstr "Arabiska"
 
+#: src/features/email-templates/templates-screen.tsx
+msgid "Archive"
+msgstr ""
+
+#. placeholder {0}: archiving?.name ?? ""
+#: src/features/email-templates/templates-screen.tsx
+msgid "Archive {0}?"
+msgstr ""
+
+#: src/features/email-templates/template-editor.tsx
+msgid "Archive template"
+msgstr ""
+
 #: src/features/write/fields.ts
 msgid "Area of study"
 msgstr "Studieområde"
@@ -1781,9 +1878,13 @@ msgstr "Be assistenten arbeta in den"
 msgid "Ask the coach"
 msgstr "Fråga coachen"
 
-#: src/features/share/download.tsx
-msgid "Ask the community. Remove personal details before posting."
-msgstr "Fråga communityn. Ta bort personuppgifter innan du publicerar."
+#: src/auth/session-gate.tsx
+msgid "Ask the organization's administrator for an invitation, or sign out and use a different account."
+msgstr ""
+
+#: src/features/branding/domains-screen.tsx
+msgid "Ask the platform administrator to set up custom domains. Your address above keeps working."
+msgstr ""
 
 #: src/features/ai/error.ts
 msgid "Ask your server administrator to enable credential encryption or configure a shared connection."
@@ -1869,10 +1970,6 @@ msgstr "Automatiskt"
 #: src/features/history/history.tsx
 msgid "Autosaves are grouped by session and kept for 90 days. Named versions are kept until you delete them. Restoring saves the current state first."
 msgstr "Autosparningar grupperas efter session och sparas i 90 dagar. Namngivna versioner sparas tills du tar bort dem. När du återställer sparas det aktuella tillståndet först."
-
-#: src/features/share/custom-domain.tsx
-msgid "Available"
-msgstr "Ledig"
 
 #: src/features/ats-checker/messages.ts
 msgid "Avoid heavy letter-spacing effects, then re-export."
@@ -2010,6 +2107,16 @@ msgstr ""
 msgid "Board"
 msgstr "Tavla"
 
+#. placeholder {0}: index + 1
+#: src/features/discovery/search-form.tsx
+msgid "Board {0} name or link"
+msgstr ""
+
+#. placeholder {0}: index + 1
+#: src/features/discovery/search-form.tsx
+msgid "Board {0} source"
+msgstr ""
+
 #: src/features/design/advanced.tsx
 msgctxt "Body Text (paragraphs, lists, etc.)"
 msgid "Body"
@@ -2050,6 +2157,15 @@ msgstr "Hörnradie"
 msgid "Border width"
 msgstr "Kantbredd"
 
+#: app/(tabs)/settings/index.tsx
+#: src/features/branding/branding-screen.tsx
+msgid "Branding"
+msgstr ""
+
+#: src/features/branding/branding-screen.tsx
+msgid "Branding saved. Open tabs on your organization's address update within about a minute."
+msgstr ""
+
 #: src/features/ats-checker/messages.ts
 msgid "Break the resume into the usual sections so it can be segmented."
 msgstr "Dela upp CV:t i de vanliga avsnitten så att det kan segmenteras."
@@ -2075,6 +2191,14 @@ msgstr "Briefing uppdatering är på · {next}"
 msgid "Briefing refresh paused"
 msgstr "Uppdatering av genomgången är pausad"
 
+#: src/features/settings/clipper-sign-ins.tsx
+msgid "Browsers where you signed in to the Job Clipper extension. You sign in from the extension on a computer."
+msgstr ""
+
+#: src/features/email-templates/labels.ts
+msgid "Built-in"
+msgstr ""
+
 #: src/features/ai/web-access.tsx
 msgid "Built-in reader"
 msgstr "Inbyggd läsare"
@@ -2098,9 +2222,9 @@ msgstr "Punktlista"
 msgid "Burgundy"
 msgstr "Bourgogne"
 
-#: app/(tabs)/settings/index.tsx
-msgid "by <0>Amruth Pillai</0>"
-msgstr "av <0>Amruth Pillai</0>"
+#: src/auth/auth-header.tsx
+msgid "By creating an account you agree to the Terms and the Privacy policy."
+msgstr ""
 
 #: src/features/applications-board/views.tsx
 msgid "Calendar"
@@ -2121,6 +2245,8 @@ msgstr "Kan programvara läsa ditt CV?"
 #: src/features/ats-checker/checker.tsx
 #: src/features/check/parser.tsx
 #: src/features/check/writing.tsx
+#: src/features/discovery/search-form.tsx
+#: src/features/email-templates/template-editor.tsx
 #: src/features/search/search-screen.tsx
 #: src/features/workspace/preparation.tsx
 #: src/features/workspace/tabs/fit.tsx
@@ -2159,6 +2285,11 @@ msgstr "Katalanska"
 #: src/features/applications/lane-settings.tsx
 msgid "Category"
 msgstr "Kategori"
+
+#. placeholder {0}: domain.cfSslStatus
+#: src/features/branding/domains-screen.tsx
+msgid "Certificate: {0}"
+msgstr ""
 
 #: src/features/write/fields.ts
 msgid "Certifications"
@@ -2242,6 +2373,10 @@ msgstr "Kontrollera en exempelfil"
 msgid "Check again"
 msgstr "Kontrollera igen"
 
+#: src/features/branding/domains-screen.tsx
+msgid "Check again in {wait}s"
+msgstr ""
+
 #: src/features/ats-checker/checker.tsx
 msgid "Check another file"
 msgstr "Kontrollera en annan fil"
@@ -2267,6 +2402,10 @@ msgstr "Kontrollera matchning"
 msgid "Check it's accurate."
 msgstr "Kontrollera att det är korrekt."
 
+#: src/features/branding/domains-screen.tsx
+msgid "Check now"
+msgstr ""
+
 #: src/features/workspace/tabs/prepare.tsx
 msgid "Check the details"
 msgstr "Kontrollera detaljerna"
@@ -2286,6 +2425,10 @@ msgstr "Kontrollera fälten och försök igen. För oläsbara länkar, klistra i
 #: src/features/documents/queries.ts
 msgid "Check the file or fields and try again."
 msgstr "Kontrollera filen eller fälten och försök igen."
+
+#: src/features/discovery/messages.ts
+msgid "Check this field."
+msgstr ""
 
 #: src/features/workspace/tabs/fit.tsx
 msgid "Check this role against your evidence"
@@ -2377,6 +2520,14 @@ msgstr "Välj en PDF som är mindre än 10 MB. Den valda filen laddades inte upp
 msgid "Choose a photo smaller than 10 MB."
 msgstr "Välj ett foto som är mindre än 10 MB."
 
+#: src/features/branding/branding-screen.tsx
+msgid "Choose a PNG image."
+msgstr ""
+
+#: src/features/branding/branding-screen.tsx
+msgid "Choose a PNG or WebP image."
+msgstr ""
+
 #: src/features/applications/lane-settings.tsx
 msgid "Choose a replacement"
 msgstr "Välj en ersättning"
@@ -2421,6 +2572,14 @@ msgstr "Välj en ansökan och rätta till de markerade fälten innan du sparar."
 msgid "Choose an audio file"
 msgstr "Välj en ljudfil"
 
+#: src/features/branding/branding-screen.tsx
+msgid "Choose an image of 128 KB or less."
+msgstr ""
+
+#: src/features/branding/branding-screen.tsx
+msgid "Choose an image of 512 KB or less."
+msgstr ""
+
 #: src/features/documents/new-document.tsx
 msgid "Choose another file"
 msgstr "Välj en annan fil"
@@ -2432,6 +2591,10 @@ msgstr "Välj datum"
 #: src/features/settings/profile.tsx
 msgid "Choose from library"
 msgstr "Välj från biblioteket"
+
+#: src/features/branding/branding-screen.tsx
+msgid "Choose one of the listed fonts."
+msgstr ""
 
 #: src/features/applications-board/board-screen.tsx
 msgid "Choose outcome"
@@ -2567,10 +2730,6 @@ msgstr "Stängt: {closed}"
 msgid "Coach"
 msgstr "Coach"
 
-#: src/features/share/custom-domain.tsx
-msgid "Code copied"
-msgstr "Koden har kopierats"
-
 #: src/features/design/design-pane.tsx
 #: src/features/letters/design.tsx
 msgid "Color"
@@ -2583,6 +2742,10 @@ msgstr "Färg (#RRGGBB)"
 #: src/features/design/advanced.tsx
 msgid "Colors and level"
 msgstr "Färger och nivå"
+
+#: src/features/branding/branding-screen.tsx
+msgid "Colours and font"
+msgstr ""
 
 #: src/features/write/section-sheet.tsx
 msgid "Columns"
@@ -2641,8 +2804,8 @@ msgid "Complete {0} before saving."
 msgstr "Fyll i {0} innan du sparar."
 
 #: src/features/share/download.tsx
-msgid "Complete data backup. Imports back into Reactive Resume or JSON Resume tools."
-msgstr "Komplett säkerhetskopiering av data. Importerar tillbaka till Reactive Resume eller JSON Resume verktyg."
+msgid "Complete data backup. Imports back into {appName} or JSON Resume tools."
+msgstr ""
 
 #: src/features/ats-checker/messages.ts
 msgid "Compress or remove large images to keep uploads quick."
@@ -2677,10 +2840,6 @@ msgstr "Anslut"
 #: src/features/share/custom-domain.tsx
 msgid "Connect {0}"
 msgstr "Anslut {0}"
-
-#: src/features/share/custom-domain.tsx
-msgid "Connect {domain}"
-msgstr "Anslut {domain}"
 
 #: src/features/ai/web-access.tsx
 msgid "Connect a service"
@@ -2825,14 +2984,24 @@ msgstr "Kopierade"
 msgid "Copied to clipboard"
 msgstr "Kopierade till urklipp"
 
+#: src/features/branding/domains-screen.tsx
+msgid "Copied."
+msgstr ""
+
 #: src/features/share/custom-domain.tsx
 msgid "Copies it"
 msgstr "Kopierar texten"
 
+#: src/features/email-templates/write-email-sheet.tsx
 #: src/features/share/link.tsx
 #: src/features/workspace/answer-library.tsx
 msgid "Copy"
 msgstr "Kopiera"
+
+#. placeholder {0}: record.type
+#: src/features/branding/domains-screen.tsx
+msgid "Copy {0} value"
+msgstr ""
 
 #: src/features/workspace/preparation.tsx
 msgid "Copy a base resume for this job"
@@ -2842,13 +3011,13 @@ msgstr ""
 msgid "Copy a resume for a job"
 msgstr "Kopiera ett CV för ett jobb"
 
+#: src/features/branding/domains-screen.tsx
+msgid "Copy address"
+msgstr ""
+
 #: src/features/workspace/tabs/apply.tsx
 msgid "Copy answers"
 msgstr "Kopiera svar"
-
-#: src/features/share/custom-domain.tsx
-msgid "Copy code"
-msgstr "Kopiera kod"
 
 #: src/features/document-menu/index.tsx
 msgid "Copy created"
@@ -2886,6 +3055,14 @@ msgstr "Rätta uppgift"
 msgid "Correct the year, or write \"Present\" for ongoing work."
 msgstr "Korrigera året, eller skriv \"Present\" för pågående arbete."
 
+#: src/features/branding/domains-screen.tsx
+msgid "Couldn't add the domain. Check the name and try again."
+msgstr ""
+
+#: src/features/email-templates/templates-screen.tsx
+msgid "Couldn't archive the template. Try again."
+msgstr ""
+
 #: src/features/assistant/chat-view.tsx
 msgid "Couldn't attach the file. Try again."
 msgstr "Det gick inte att bifoga filen. Försök igen."
@@ -2894,6 +3071,7 @@ msgstr "Det gick inte att bifoga filen. Försök igen."
 msgid "Couldn't change the language. Try again."
 msgstr "Det gick inte att ändra språket. Försök igen."
 
+#: src/features/discovery/searches.tsx
 #: src/features/workspace/tabs/prepare.tsx
 msgid "Couldn't change the schedule. Try again."
 msgstr "Det gick inte att ändra schemat. Försök igen."
@@ -2909,6 +3087,10 @@ msgstr "Det gick inte att kontrollera eller spara den här adressen. Försök ig
 #: src/features/applications/prior-no-response.tsx
 msgid "Couldn't check prior applications. You can still save this application."
 msgstr "Det gick inte att kontrollera tidigare ansökningar. Du kan fortfarande spara den här ansökan."
+
+#: src/features/branding/domains-screen.tsx
+msgid "Couldn't check the domain. Try again."
+msgstr ""
 
 #: src/features/letters/write.tsx
 msgid "Couldn't check your AI providers."
@@ -2943,6 +3125,14 @@ msgstr "Det gick inte att bekräfta sparningen. Kontrollera ansökan innan du f�
 msgid "Couldn't copy the transcript. Try again."
 msgstr "Det gick inte att kopiera utskriften. Försök igen."
 
+#: src/features/email-templates/write-email-sheet.tsx
+msgid "Couldn't copy. Select the text and copy it yourself."
+msgstr ""
+
+#: src/features/branding/domains-screen.tsx
+msgid "Couldn't copy. Select the text instead."
+msgstr ""
+
 #: src/features/application-detail/sections.tsx
 #: src/features/workspace/preparation.tsx
 msgid "Couldn't create the letter. Try again."
@@ -2960,10 +3150,18 @@ msgstr "Det gick inte att radera konversationen. Försök igen."
 msgid "Couldn't delete the interview. Try again."
 msgstr "Det gick inte att ta bort intervjun. Försök igen."
 
+#: src/features/discovery/searches.tsx
+msgid "Couldn't delete this search. Try again."
+msgstr ""
+
 #: src/features/settings/export.tsx
 #: src/features/share/download.tsx
 msgid "Couldn't export. Try again."
 msgstr "Det gick inte att exportera. Försök igen."
+
+#: src/features/discovery/search-form.tsx
+msgid "Couldn't find the board name in this link."
+msgstr ""
 
 #: src/features/application-detail/sections.tsx
 #: src/features/workspace/preparation.tsx
@@ -3008,6 +3206,10 @@ msgstr "Det gick inte att ladda API-nycklar."
 msgid "Couldn't load applications."
 msgstr "Det gick inte att läsa in jobbansökningar."
 
+#: src/features/branding/domains-screen.tsx
+msgid "Couldn't load domains."
+msgstr ""
+
 #: src/features/documents/thumbnail.tsx
 msgid "Couldn't load letter"
 msgstr "Det gick inte att ladda följebrevet"
@@ -3024,6 +3226,10 @@ msgstr "Det gick inte att ladda CV:n."
 msgid "Couldn't load statistics."
 msgstr "Det gick inte att ladda statistik."
 
+#: src/features/branding/branding-screen.tsx
+msgid "Couldn't load the branding."
+msgstr ""
+
 #: src/features/assistant/assistant-screen.tsx
 #: src/features/letters/share.tsx
 #: src/features/letters/write.tsx
@@ -3033,6 +3239,10 @@ msgstr "Det gick inte att läsa in följebrevet."
 #: src/features/check/job-match.tsx
 msgid "Couldn't load the linked posting."
 msgstr "Det gick inte att läsa in den länkade jobbannonsen."
+
+#: src/features/organization/plan-screen.tsx
+msgid "Couldn't load the plan."
+msgstr ""
 
 #: app/builder/[id]/page.tsx
 #: app/builder/[id]/write.tsx
@@ -3062,6 +3272,10 @@ msgstr "Det gick inte att ladda detta. Kontrollera din anslutning och försök i
 msgid "Couldn't load versions."
 msgstr "Det gick inte att ladda versioner."
 
+#: src/features/settings/clipper-sign-ins.tsx
+msgid "Couldn't load your Job Clipper sign-ins."
+msgstr ""
+
 #: app/(tabs)/settings/account.tsx
 msgid "Couldn't load your profile."
 msgstr "Det gick inte att ladda din profil."
@@ -3073,6 +3287,10 @@ msgstr "Det gick inte att läsa in din allmänna adress."
 #: src/features/letters/write.tsx
 msgid "Couldn't load your resumes."
 msgstr "Det gick inte att ladda dina CV:n."
+
+#: src/features/discovery/searches.tsx
+msgid "Couldn't load your searches. Check your connection and try again."
+msgstr ""
 
 #: app/(tabs)/settings/preferences.tsx
 msgid "Couldn't load your timezone."
@@ -3090,11 +3308,11 @@ msgstr "Det gick inte att markera som ansökt. Försök igen."
 #: app/(tabs)/settings/index.tsx
 #: src/auth/auth-header.tsx
 #: src/features/settings/api-keys.tsx
-#: src/features/share/download.tsx
 msgid "Couldn't open the browser. Try again."
 msgstr "Det gick inte att öppna webbläsaren. Försök igen."
 
 #: src/features/career/today.tsx
+#: src/features/discovery/review-queue.tsx
 msgid "Couldn't open the posting. Try again."
 msgstr "Det gick inte att öppna platsannonsen. Försök igen."
 
@@ -3141,6 +3359,14 @@ msgstr "Det gick inte att uppdatera dina dokument."
 msgid "Couldn't remember that. Try again."
 msgstr "Det gick inte att komma ihåg det. Försök igen."
 
+#: src/features/branding/branding-screen.tsx
+msgid "Couldn't remove it. Try again."
+msgstr ""
+
+#: src/features/branding/domains-screen.tsx
+msgid "Couldn't remove the domain. Try again."
+msgstr ""
+
 #: src/features/application-detail/sections.tsx
 msgid "Couldn't remove the file. Try again."
 msgstr "Det gick inte att ta bort filen. Försök igen."
@@ -3162,6 +3388,10 @@ msgstr "Det gick inte att återge detta CV."
 msgid "Couldn't revoke the key. Try again."
 msgstr "Det gick inte att återkalla nyckeln. Försök igen."
 
+#: src/features/settings/clipper-sign-ins.tsx
+msgid "Couldn't revoke the sign-in. Try again."
+msgstr ""
+
 #: src/features/career/facts.tsx
 #: src/features/career/hooks.ts
 #: src/features/workspace/hooks.ts
@@ -3180,6 +3410,10 @@ msgstr "Det gick inte att spara ändringen. Försök igen."
 #: src/features/workspace/tabs/fit.tsx
 msgid "Couldn't save that to Knowledge. Try again."
 msgstr "Det gick inte att spara det i Kunskap. Försök igen."
+
+#: src/features/branding/branding-screen.tsx
+msgid "Couldn't save the branding. Check the highlighted fields and try again."
+msgstr ""
 
 #: src/features/application-detail/sheets.tsx
 msgid "Couldn't save the contacts. Try again."
@@ -3201,6 +3435,11 @@ msgstr "Det gick inte att spara anteckningarna. Din text finns fortfarande kvar.
 msgid "Couldn't save the tags. Try again."
 msgstr "Det gick inte att spara taggarna. Försök igen."
 
+#: src/features/email-templates/templates-screen.tsx
+#: src/features/email-templates/write-email-sheet.tsx
+msgid "Couldn't save the template. Try again."
+msgstr ""
+
 #: app/(tabs)/settings/preferences.tsx
 msgid "Couldn't save the theme. Try again."
 msgstr "Det gick inte att spara temat. Försök igen."
@@ -3208,6 +3447,10 @@ msgstr "Det gick inte att spara temat. Försök igen."
 #: app/(tabs)/settings/preferences.tsx
 msgid "Couldn't save the timezone. Try again."
 msgstr "Det gick inte att spara tidszonen. Försök igen."
+
+#: src/features/discovery/search-form.tsx
+msgid "Couldn't save this search. Check your connection and try again."
+msgstr ""
 
 #: src/features/letters/write.tsx
 msgid "Couldn't save your changes, so drafting didn't start. Nothing on the page changed."
@@ -3280,6 +3523,10 @@ msgstr "Det gick inte att börja spela in. Försök igen eller skriv ditt svar."
 msgid "Couldn't start the conversation. Try again."
 msgstr "Det gick inte att starta konversationen. Försök igen."
 
+#: src/features/discovery/searches.tsx
+msgid "Couldn't start the run. Try again."
+msgstr ""
+
 #: src/features/career/role-suggestions.tsx
 msgid "Couldn't suggest roles. Try again or enter roles manually."
 msgstr ""
@@ -3327,6 +3574,10 @@ msgstr "Det gick inte att uppdatera tidslinjen. Försök igen."
 #: src/features/application-detail/sections.tsx
 msgid "Couldn't upload the file. Try again."
 msgstr "Det gick inte att ladda upp filen. Försök igen."
+
+#: src/features/branding/branding-screen.tsx
+msgid "Couldn't upload the image. Try again."
+msgstr ""
 
 #: src/features/settings/profile.tsx
 msgid "Couldn't upload the photo."
@@ -3425,6 +3676,14 @@ msgstr "Skapa kopia"
 msgid "Create or import a resume first, then return to copy it for this job."
 msgstr "Skapa eller importera ett CV först och återvänd sedan för att kopiera det för det här jobbet."
 
+#: src/features/discovery/search-form.tsx
+msgid "Create search"
+msgstr ""
+
+#: src/features/branding/domains-screen.tsx
+msgid "Create the two records below at your DNS provider. We check every few minutes."
+msgstr ""
+
 #: src/features/document-menu/index.tsx
 #: src/features/history/history.tsx
 #: src/features/letters/share.tsx
@@ -3458,6 +3717,7 @@ msgstr ""
 
 #: src/features/design/advanced.tsx
 #: src/features/design/style-groups.tsx
+#: src/features/email-templates/labels.ts
 #: src/features/letters/design.tsx
 #: src/features/write/pickers.tsx
 msgid "Custom"
@@ -3469,6 +3729,14 @@ msgstr "Anpassad färg (hex)"
 
 #: src/features/write/date-field.tsx
 msgid "Custom date text"
+msgstr ""
+
+#: src/features/branding/domains-screen.tsx
+msgid "Custom domains are available on Pro"
+msgstr ""
+
+#: src/features/branding/domains-screen.tsx
+msgid "Custom domains aren't available on this server"
 msgstr ""
 
 #: src/features/write/basics-screen.tsx
@@ -3491,6 +3759,10 @@ msgstr "Anpassade stilar tillämpas inte. Åtgärda dessa fel för att tillämpa
 #: src/features/settings/locale-names.ts
 msgid "Czech"
 msgstr "Tjeckiska"
+
+#: src/features/discovery/messages.ts
+msgid "Daily"
+msgstr ""
 
 #. placeholder {0}: summary.peak
 #: src/features/share/link.tsx
@@ -3591,6 +3863,7 @@ msgstr "Standard"
 msgid "Degree"
 msgstr "Examen"
 
+#: src/features/discovery/searches.tsx
 #: src/features/history/history.tsx
 #: src/features/letters/share.tsx
 #: src/features/workspace/answer-library.tsx
@@ -3603,6 +3876,11 @@ msgstr "Radera"
 #: src/features/documents/library.tsx
 msgid "Delete “{0}” forever?"
 msgstr "Radera ”{0}” för alltid?"
+
+#. placeholder {0}: source.name
+#: src/features/discovery/searches.tsx
+msgid "Delete \"{0}\"?"
+msgstr ""
 
 #. placeholder {0}: menu ? versionTitle(menu) : ""
 #: src/features/history/history.tsx
@@ -3809,6 +4087,7 @@ msgstr "Olika valutor eller betalningsperioder. Ingen skillnad i pengar beräkna
 msgid "Direction"
 msgstr "Riktning"
 
+#: src/features/branding/branding-screen.tsx
 #: src/features/letters/write.tsx
 msgid "Discard"
 msgstr "Släng"
@@ -3831,6 +4110,7 @@ msgstr "Släng dina offlineredigeringar och ladda den sparade versionen."
 msgid "Discard your offline edits?"
 msgstr "Vill du ignorera dina offlineredigeringar?"
 
+#: src/features/discovery/review-queue.tsx
 #: src/features/letters/write.tsx
 #: src/ui/layout.tsx
 msgid "Dismiss"
@@ -3838,6 +4118,10 @@ msgstr "Avfärda"
 
 #: src/features/career/today.tsx
 msgid "Dismiss selected"
+msgstr ""
+
+#: src/features/discovery/review-queue.tsx
+msgid "Dismissed"
 msgstr ""
 
 #: src/features/career/role-suggestions.tsx
@@ -3879,9 +4163,22 @@ msgstr "Dokument för detta jobb"
 msgid "Documents you move here stay for 30 days."
 msgstr "Dokument du flyttar hit ligger kvar i 30 dagar."
 
+#: src/features/branding/domains-screen.tsx
+msgid "Domain"
+msgstr ""
+
+#: src/features/branding/domains-screen.tsx
+msgid "Domain added. Create the DNS records shown below."
+msgstr ""
+
 #: src/features/share/custom-domain.tsx
 msgid "Domain connected"
 msgstr "Domänen är ansluten"
+
+#: app/(tabs)/settings/index.tsx
+#: src/features/branding/domains-screen.tsx
+msgid "Domains"
+msgstr ""
 
 #. placeholder {0}: document.name
 #: src/features/assistant/assistant-screen.tsx
@@ -3896,10 +4193,6 @@ msgstr "Skicka inte {0} jobbannons"
 #: src/api/ai-consent.ts
 msgid "Don't share"
 msgstr "Dela inte"
-
-#: app/(tabs)/settings/index.tsx
-msgid "Donate on Open Collective"
-msgstr "Donera via Open Collective"
 
 #: app/(tabs)/settings/preferences.tsx
 #: src/features/applications/list-screen.tsx
@@ -4084,6 +4377,10 @@ msgstr "Nederländska"
 msgid "Each answer you get feedback on is kept here, newest first."
 msgstr "Varje svar du får feedback på sparas här, nyast först."
 
+#: src/features/discovery/messages.ts
+msgid "Each entry can have at most {MAX_TERM_LENGTH} characters."
+msgstr ""
+
 #: src/features/workspace/tabs/fit.tsx
 msgid "Each requirement in the posting is checked against the facts and stories in your Knowledge. Gaps show as missing evidence, never missing ability."
 msgstr "Varje krav i annonsen kontrolleras mot fakta och berättelser i din Kunskap. Luckor visas som saknade belägg, aldrig som saknad förmåga."
@@ -4100,6 +4397,7 @@ msgstr "tidigare meddelanden i den här chatten"
 #: src/features/application-detail/sections.tsx
 #: src/features/career/stories.tsx
 #: src/features/career/today.tsx
+#: src/features/discovery/searches.tsx
 #: src/features/write/basics-screen.tsx
 msgid "Edit"
 msgstr "Redigera"
@@ -4161,9 +4459,17 @@ msgstr ""
 msgid "Edit schedule"
 msgstr "Redigera schema"
 
+#: src/features/discovery/search-form.tsx
+msgid "Edit search"
+msgstr ""
+
 #: src/features/career/stories.tsx
 msgid "Edit STARR story"
 msgstr "Redigera STARR berättelse"
+
+#: src/features/email-templates/templates-screen.tsx
+msgid "Edit template"
+msgstr ""
 
 #: src/features/check/issues.ts
 msgid "Edit the email"
@@ -4203,6 +4509,19 @@ msgstr "E-post (valfritt)"
 #: src/features/check/issues.ts
 msgid "Email address won't be recognized"
 msgstr "E-postadressen kommer inte att kännas igen"
+
+#: src/features/email-templates/write-email-sheet.tsx
+msgid "Email copied"
+msgstr ""
+
+#: src/features/branding/branding-screen.tsx
+msgid "Email sender name"
+msgstr ""
+
+#: app/(tabs)/settings/index.tsx
+#: src/features/email-templates/templates-screen.tsx
+msgid "Email templates"
+msgstr ""
 
 #: src/features/application-detail/sheets.tsx
 msgid "Email the recruiter"
@@ -4286,6 +4605,10 @@ msgstr "Ange ett värde."
 msgid "Enter a web address, like example.com"
 msgstr "Ange en webbadress, som exempel.com"
 
+#: src/features/discovery/messages.ts
+msgid "Enter a whole number from 0 to {MAX_AI_TOP_N}."
+msgstr ""
+
 #: src/features/career/preferences.tsx
 msgid "Enter a whole number from 0 to 52, or leave blank."
 msgstr "Ange ett heltal från 0 till 52, eller lämna tomt."
@@ -4303,8 +4626,12 @@ msgid "Enter terms yourself. No AI request is made. Leave unknown amounts blank.
 msgstr "Fyll i villkoren själv. Ingen förfrågan skickas till AI. Lämna okända belopp tomma."
 
 #: app/(auth)/server.tsx
-msgid "Enter the address you open Reactive Resume at in a browser. The app checks it's a Reactive Resume server that allows app sign-in before you continue."
-msgstr "Ange adressen du öppnar Reactive Resume på i en webbläsare. Appen kontrollerar att det är en Reactive Resume-server som tillåter appinloggning innan du fortsätter."
+msgid "Enter the address you open {appName} at in a browser. The app checks it's a {appName} server that allows app sign-in before you continue."
+msgstr ""
+
+#: src/features/discovery/messages.ts
+msgid "Enter the board name or paste its link."
+msgstr ""
 
 #: src/features/letters/write.tsx
 msgid "Enter your details below. Choosing a resume replaces them and links its design."
@@ -4429,11 +4756,21 @@ msgid "Facts"
 msgstr "Fakta"
 
 #: src/features/ai/provider-list.tsx
+#: src/features/branding/domains-screen.tsx
+#: src/features/discovery/searches.tsx
 msgid "Failed"
 msgstr "Misslyckades"
 
 #: src/features/settings/application-profile.tsx
 msgid "Family name"
+msgstr ""
+
+#: src/features/branding/branding-screen.tsx
+msgid "Favicon"
+msgstr ""
+
+#: src/features/branding/branding-screen.tsx
+msgid "Favicon uploaded."
 msgstr ""
 
 #: app/(tabs)/settings/preferences.tsx
@@ -4486,6 +4823,10 @@ msgstr "Fyll i detaljerna manuellt"
 msgid "Fill empty fields with AI"
 msgstr "Fyll tomma fält med AI"
 
+#: src/features/email-templates/write-email-sheet.tsx
+msgid "Fill in the [bracketed] parts before you send it."
+msgstr ""
+
 #: src/features/letters/write.tsx
 msgid "Filled from the application. The greeting follows the name."
 msgstr "Fylls från jobbansökan. Hälsningen följer namnet."
@@ -4505,6 +4846,14 @@ msgstr "Letar efter det som fungerar"
 #: app/(auth)/sign-in.tsx
 msgid "Finish signing in in the browser"
 msgstr "Slutför inloggningen i webbläsaren"
+
+#: src/features/discovery/searches.tsx
+msgid "Finished"
+msgstr ""
+
+#: src/features/discovery/searches.tsx
+msgid "Finished with errors"
+msgstr ""
 
 #: src/features/settings/locale-names.ts
 msgid "Finnish"
@@ -4565,12 +4914,17 @@ msgstr "Fokus, erfarenhet, varför den här rollen"
 msgid "Follow up"
 msgstr "Följ upp"
 
+#: src/features/email-templates/built-in-text.ts
+msgid "Follow up after applying"
+msgstr ""
+
 #: src/features/workspace/tabs/messages.tsx
 msgid "Follow up on {at}"
 msgstr "Följ upp {at}"
 
 #: src/features/application-detail/sheets.tsx
 #: src/features/applications-board/calendar-screen.tsx
+#: src/features/email-templates/labels.ts
 msgid "Follow-up"
 msgstr "Uppföljning"
 
@@ -4585,6 +4939,14 @@ msgstr "Uppföljningsanteckning"
 #: src/features/career/schedule-sheet.tsx
 msgid "Follow-up reminder"
 msgstr "Påminnelse om uppföljning"
+
+#: src/features/email-templates/built-in-text.ts
+msgid "Following up on my {role} application"
+msgstr ""
+
+#: src/features/branding/branding-screen.tsx
+msgid "Font"
+msgstr ""
 
 #: src/features/design/advanced.tsx
 msgid "Font family"
@@ -4681,12 +5043,12 @@ msgstr ""
 
 #: src/api/ai-consent.ts
 #: src/features/career/schedule-sheet.tsx
-msgid "Found posting links are read by Reactive Resume and the sites being read."
+msgid "Found posting links are read by {appName} and the sites being read."
 msgstr ""
 
 #: src/api/ai-consent.ts
 #: src/features/career/schedule-sheet.tsx
-msgid "Found posting links are read by Reactive Resume and, when needed, {reader} and the sites being read. The reader may charge."
+msgid "Found posting links are read by {appName} and, when needed, {reader} and the sites being read. The reader may charge."
 msgstr ""
 
 #: src/features/design/style-groups.tsx
@@ -4709,6 +5071,10 @@ msgstr "Från fliken Matchning"
 #: src/features/assistant/assistant-screen.tsx
 msgid "From your experience entries"
 msgstr "Från dina erfarenhetsposter"
+
+#: src/features/email-templates/templates-screen.tsx
+msgid "From your organization and the built-in set. You can't change these here."
+msgstr ""
 
 #: src/features/career/search-regions-field.tsx
 msgid "From your timezone"
@@ -4754,10 +5120,6 @@ msgstr "\"Få feedback\" skickar frågan, ditt svar, den här annonsen och dina 
 msgid "Get new roles here every morning"
 msgstr "Få nya roller här varje morgon"
 
-#: src/features/share/download.tsx
-msgid "Get resume feedback on Discord"
-msgstr "Få feedback på ditt CV på Discord"
-
 #: src/features/letters/write.tsx
 msgid "Getting long. Try “Shorter”, or cut the least specific paragraph."
 msgstr "Blir lång. Försök med \"Kortare\" eller klipp av det minst specifika stycket."
@@ -4773,6 +5135,10 @@ msgstr "Ge varje roll och kvalifikation ett datumintervall."
 #: src/features/career/stories.tsx
 msgid "Give the story a title before you can save."
 msgstr "Ge berättelsen en titel innan du kan spara."
+
+#: src/features/discovery/messages.ts
+msgid "Give this search a name."
+msgstr ""
 
 #: src/features/settings/application-profile.tsx
 msgid "Given name"
@@ -4861,6 +5227,53 @@ msgstr "hörde tillbaka"
 msgid "Hebrew"
 msgstr "Hebreiska"
 
+#: src/features/email-templates/built-in-text.ts
+msgid "Hello {contactName},\n"
+"\n"
+"I applied for the {role} position at {company} and wanted to ask where my application stands. I am still very interested in the role, and I would be glad to send anything that would help your review.\n"
+"\n"
+"Thank you for your time.\n"
+"\n"
+"{fullName}\n"
+"{myEmail}"
+msgstr ""
+
+#: src/features/email-templates/built-in-text.ts
+msgid "Hello {contactName},\n"
+"\n"
+"My name is {fullName}, and I am looking at {role} opportunities at {company}. I admire what your team is building, and I would value ten minutes of your time to hear how you got started there and what the team looks for.\n"
+"\n"
+"I know your days are full, so please say no if the timing is wrong. Any pointer you can share would help.\n"
+"\n"
+"Kind regards,\n"
+"{firstName}\n"
+"{myEmail}"
+msgstr ""
+
+#: src/features/email-templates/built-in-text.ts
+msgid "Hello {contactName},\n"
+"\n"
+"Thank you for offering me the {role} position at {company}. I am glad to be considered and I am excited about joining the team. Before I accept, I would like to talk through the pay and the start date. Given the scope of the role and my experience, I would like to discuss [the terms you have in mind].\n"
+"\n"
+"Could we find a time this week to go through it together?\n"
+"\n"
+"With thanks,\n"
+"{fullName}\n"
+"{myEmail}"
+msgstr ""
+
+#: src/features/email-templates/built-in-text.ts
+msgid "Hello {contactName},\n"
+"\n"
+"Thank you for taking the time to meet with me on {interviewDate} about the {role} role at {company}. Our conversation left me more excited about the work, and I would welcome the chance to take the next step.\n"
+"\n"
+"If there is anything I can send to help with your decision, just let me know.\n"
+"\n"
+"Best regards,\n"
+"{fullName}\n"
+"{myEmail}"
+msgstr ""
+
 #: app/(tabs)/settings/index.tsx
 msgid "Help & docs"
 msgstr "Hjälp & dokument"
@@ -4935,6 +5348,10 @@ msgstr "Göm fotot"
 #: src/features/workspace/preparation.tsx
 msgid "Hides all steps"
 msgstr ""
+
+#: src/features/branding/branding-screen.tsx
+msgid "Highlight"
+msgstr "Markering"
 
 #: src/features/settings/locale-names.ts
 msgid "Hindi"
@@ -5011,6 +5428,10 @@ msgstr "Hur väl passar jag den här rollen?"
 msgid "Hungarian"
 msgstr "Ungerska"
 
+#: src/features/discovery/messages.ts
+msgid "Hybrid"
+msgstr ""
+
 #: src/features/design/advanced.tsx
 msgid "Hyphenation"
 msgstr "Orddelning"
@@ -5066,6 +5487,10 @@ msgstr "Ikon…"
 #: src/features/design/style-groups.tsx
 msgid "Icons in contact line"
 msgstr "Ikoner i kontaktlinjen"
+
+#: src/features/branding/branding-screen.tsx
+msgid "Identity"
+msgstr ""
 
 #: src/features/ats-checker/messages.ts
 msgid "If it came from a scan, that is expected. Otherwise remove it; recruiters read it as keyword stuffing."
@@ -5148,6 +5573,10 @@ msgstr "Förbättra den valda raden"
 #: src/features/write/improve.tsx
 msgid "Improving…"
 msgstr "Förbättrar..."
+
+#: src/features/ai/provider-list.tsx
+msgid "Included with your plan"
+msgstr ""
 
 #: src/features/applications/list-screen.tsx
 msgid "Including closed"
@@ -5266,9 +5695,25 @@ msgstr "Utfärdare"
 msgid "Issues"
 msgstr "frågor"
 
+#: src/features/branding/domains-screen.tsx
+msgid "Issuing certificate"
+msgstr ""
+
 #: src/features/check/issues.ts
 msgid "It has entries but isn't placed on a page."
 msgstr "Den har poster men är inte placerad på en sida."
+
+#: src/features/email-templates/write-email-sheet.tsx
+msgid "It is saved as it reads now. To reuse it for other applications, put the variables back where the details are."
+msgstr ""
+
+#: src/features/email-templates/templates-screen.tsx
+msgid "It leaves your list. Emails you already sent are not affected."
+msgstr ""
+
+#: src/features/branding/domains-screen.tsx
+msgid "It stops serving your organization right away (other servers within about a minute). Members can still use your address."
+msgstr ""
 
 #: src/features/application-detail/sections.tsx
 msgid "It's removed from the timeline for good."
@@ -5307,6 +5752,14 @@ msgstr "JavaScript"
 msgid "Job"
 msgstr "Jobb"
 
+#: src/features/discovery/search-form.tsx
+msgid "Job boards"
+msgstr ""
+
+#: src/features/settings/clipper-sign-ins.tsx
+msgid "Job Clipper sign-ins"
+msgstr ""
+
 #: src/features/application-detail/sheets.tsx
 #: src/features/workspace/preparation.tsx
 msgid "Job description"
@@ -5340,13 +5793,22 @@ msgstr "Jobbsökning är inte konfigurerad på den här servern. Klistra in en l
 msgid "Job search pipeline"
 msgstr "Jobbsökningsflöde"
 
+#: src/features/discovery/search-form.tsx
+msgid "Job titles"
+msgstr ""
+
+#: app/(tabs)/career/_layout.tsx
 #: src/features/search/search-screen.tsx
 msgid "Jobs"
 msgstr "Jobb"
 
-#: app/(tabs)/settings/index.tsx
-msgid "Join the Discord"
-msgstr "Gå med i Discord"
+#: src/features/discovery/review-queue.tsx
+msgid "Jobs found for you"
+msgstr ""
+
+#: src/features/discovery/search-form.tsx
+msgid "Jobs to score with AI per run"
+msgstr ""
 
 #: src/features/letters/share.tsx
 #: src/features/share/download.tsx
@@ -5446,6 +5908,7 @@ msgstr "Nyckelordslayout"
 msgid "Keyword overlap: {0}"
 msgstr ""
 
+#: src/features/discovery/search-form.tsx
 #: src/features/write/fields.ts
 msgid "Keywords"
 msgstr "Nyckelord"
@@ -5453,6 +5916,10 @@ msgstr "Nyckelord"
 #: src/features/settings/locale-names.ts
 msgid "Khmer"
 msgstr "Khmer"
+
+#: src/features/email-templates/template-editor.tsx
+msgid "Kind"
+msgstr ""
 
 #: src/features/share/letter.ts
 msgid "Kind regards,"
@@ -5531,6 +5998,15 @@ msgstr ""
 msgid "Last reviewed: {0}"
 msgstr ""
 
+#. placeholder {0}: date(latest.finishedAt ?? latest.startedAt)
+#: src/features/discovery/searches.tsx
+msgid "Last run: {0}"
+msgstr ""
+
+#: src/features/discovery/searches.tsx
+msgid "Last run: not run yet"
+msgstr ""
+
 #. placeholder {0}: time.when(row.lastSeenAt)
 #: src/features/career/today.tsx
 msgid "Last seen in search: {0}"
@@ -5589,18 +6065,27 @@ msgstr "Lämna tomt för att behålla den sparade nyckeln"
 msgid "Leave empty to reset the title to the original."
 msgstr "Lämna tomt för att återställa titeln till originalet."
 
+#: src/features/branding/branding-screen.tsx
+msgid "Leave empty to use the platform default."
+msgstr ""
+
 #: src/features/write/basics-screen.tsx
 #: src/features/write/rich-text-field.tsx
 msgid "Leave it empty to remove the link."
 msgstr "Lämna den tom för att ta bort länken."
 
 #: src/features/design/template-group.tsx
+#: src/features/organization/plan-screen.tsx
 msgid "Left"
 msgstr "Vänster"
 
 #: app/(tabs)/settings/index.tsx
 msgid "Legal"
 msgstr "Juridik"
+
+#: src/features/branding/branding-screen.tsx
+msgid "Legal links"
+msgstr ""
 
 #: src/features/letters/write.tsx
 msgid "Length"
@@ -5890,6 +6375,10 @@ msgstr ""
 msgid "Loading saved version…"
 msgstr "Laddar sparad version…"
 
+#: src/features/settings/clipper-sign-ins.tsx
+msgid "Loading sign-ins…"
+msgstr ""
+
 #: src/features/ai/web-access.tsx
 msgid "Loading web access…"
 msgstr "Laddar webbåtkomst..."
@@ -5924,6 +6413,10 @@ msgstr "Plats"
 msgid "Location match is unknown."
 msgstr "Platsmatchning är okänd."
 
+#: src/features/discovery/search-form.tsx
+msgid "Locations"
+msgstr "Platser"
+
 #: src/features/documents/library.tsx
 msgid "Lock"
 msgstr "Lås"
@@ -5946,6 +6439,14 @@ msgstr "Låsta dokument hoppades över. Lås upp dem först."
 #: src/features/write/outline.tsx
 msgid "Locked. Unlock to edit."
 msgstr "Låst. Lås upp för att redigera."
+
+#: src/features/branding/branding-screen.tsx
+msgid "Logo"
+msgstr ""
+
+#: src/features/branding/branding-screen.tsx
+msgid "Logo uploaded."
+msgstr ""
 
 #: src/features/documents/library.tsx
 msgid "Long press to select"
@@ -6099,6 +6600,16 @@ msgstr "Markerad som läst"
 msgid "Match “{resumeName}”"
 msgstr "Matcha ”{resumeName}”"
 
+#. placeholder {0}: scoreOf(job)
+#: src/features/discovery/review-queue.tsx
+msgid "Match {0}"
+msgstr ""
+
+#. placeholder {0}: scoreOf(job)
+#: src/features/discovery/review-queue.tsx
+msgid "Match {0} (quick)"
+msgstr ""
+
 #: src/features/search/search-screen.tsx
 msgid "Match system theme"
 msgstr "Matcha systemtema"
@@ -6123,10 +6634,6 @@ msgstr "Matchar cv:n"
 msgid "Matching your facts"
 msgstr "Matchar dina fakta"
 
-#: src/features/share/custom-domain.tsx
-msgid "May be available"
-msgstr "Kan vara ledig"
-
 #: src/features/search/search-screen.tsx
 msgid "MCP"
 msgstr "MCP"
@@ -6145,6 +6652,8 @@ msgid "Meets your minimum base salary."
 msgstr "Uppfyller din lägsta grundlön."
 
 #: src/features/career/facts.tsx
+#: src/features/email-templates/template-editor.tsx
+#: src/features/email-templates/write-email-sheet.tsx
 msgid "Message"
 msgstr "Meddelande"
 
@@ -6157,6 +6666,10 @@ msgstr "Skicka meddelande till assistenten"
 msgid "Messages"
 msgstr "Meddelanden"
 
+#: src/features/email-templates/labels.ts
+msgid "Mine"
+msgstr ""
+
 #: src/features/career/preferences.tsx
 msgid "Minimum base salary"
 msgstr "Lägsta grundlön"
@@ -6164,10 +6677,6 @@ msgstr "Lägsta grundlön"
 #: src/features/career/offers.tsx
 msgid "Minimum salary cannot be compared in these terms."
 msgstr "Minimilönen kan inte jämföras med dessa villkor."
-
-#: app/(tabs)/settings/index.tsx
-msgid "MIT License"
-msgstr "MIT-licens"
 
 #: src/features/workspace/tabs/debrief.tsx
 msgid "Mixed"
@@ -6368,10 +6877,12 @@ msgstr "När du flyttar till fasen ansökan skickad får du ange vad du faktiskt
 
 #: src/features/ai/provider-editor.tsx
 #: src/features/application-detail/sheets.tsx
+#: src/features/discovery/search-form.tsx
 #: src/features/document-menu/index.tsx
 #: src/features/documents/document-sheets.tsx
 #: src/features/documents/library.tsx
 #: src/features/documents/new-document.tsx
+#: src/features/email-templates/template-editor.tsx
 #: src/features/history/history.tsx
 #: src/features/letters/share.tsx
 #: src/features/settings/profile.tsx
@@ -6401,6 +6912,11 @@ msgstr "Namnge denna version"
 #: src/features/check/issues.ts
 msgid "Name, email, phone and location are found, and links are full addresses."
 msgstr "Namn, e-post, telefon och plats finns, och länkar är fullständiga adresser."
+
+#. placeholder {0}: record.name
+#: src/features/branding/domains-screen.tsx
+msgid "Name: {0}"
+msgstr ""
 
 #: src/features/history/history.tsx
 #: src/features/letters/share.tsx
@@ -6438,6 +6954,10 @@ msgstr ""
 msgid "Needs you"
 msgstr "Väntar på dig"
 
+#: src/features/email-templates/labels.ts
+msgid "Negotiation"
+msgstr ""
+
 #: src/features/settings/locale-names.ts
 msgid "Nepali"
 msgstr "Nepalesiska"
@@ -6446,13 +6966,19 @@ msgstr "Nepalesiska"
 msgid "Network"
 msgstr "Nätverk"
 
+#: src/features/email-templates/labels.ts
+msgid "Networking"
+msgstr ""
+
 #: src/features/career/preferences.tsx
 #: src/features/settings/api-keys.tsx
+#: src/features/settings/clipper-sign-ins.tsx
 msgid "Never"
 msgstr "Aldrig"
 
 #: app/_layout.tsx
 #: app/(tabs)/_layout.tsx
+#: src/features/discovery/review-queue.tsx
 #: src/features/documents/library.tsx
 #: src/shell/app-tabs.tsx
 msgid "New"
@@ -6487,11 +7013,20 @@ msgstr "Nytt följebrev istället"
 msgid "New document"
 msgstr "Nytt dokument"
 
+#. placeholder {0}: latest.new
+#: src/features/discovery/searches.tsx
+msgid "New jobs in the last run: {0}"
+msgstr ""
+
 #: src/features/design/layout-screen.tsx
 #: src/features/write/entry-sheet.tsx
 #: src/features/write/section-sheet.tsx
 msgid "New page"
 msgstr "Ny sida"
+
+#: src/features/discovery/review-queue.tsx
+msgid "New postings show up here after an automation runs."
+msgstr ""
 
 #: src/features/career/today.tsx
 msgid "New roles from your search"
@@ -6505,6 +7040,11 @@ msgstr "Nya roller, påminnelser och färdiga genomgångar visas här."
 msgid "New schedule"
 msgstr "Nytt schema"
 
+#: src/features/discovery/search-form.tsx
+#: src/features/discovery/searches.tsx
+msgid "New search"
+msgstr ""
+
 #: src/features/write/entry-sheet.tsx
 msgid "New section"
 msgstr "Nytt avsnitt"
@@ -6512,6 +7052,10 @@ msgstr "Nytt avsnitt"
 #: src/features/career/stories.tsx
 msgid "New STARR story"
 msgstr "Ny STARR-berättelse"
+
+#: src/features/email-templates/templates-screen.tsx
+msgid "New template"
+msgstr ""
 
 #: src/features/documents/library.tsx
 msgid "Next"
@@ -6533,6 +7077,15 @@ msgstr "Nästa sida"
 msgid "Next question"
 msgstr "Nästa fråga"
 
+#. placeholder {0}: date(source.nextRunAt)
+#: src/features/discovery/searches.tsx
+msgid "Next run: {0}"
+msgstr ""
+
+#: src/features/discovery/searches.tsx
+msgid "Next run: paused"
+msgstr ""
+
 #: src/features/application-detail/sections.tsx
 #: src/features/applications/list-screen.tsx
 msgid "Next step"
@@ -6545,6 +7098,10 @@ msgstr "Nästa steg: {note}"
 #: src/features/workspace/tabs/messages.tsx
 msgid "Next step: {note}. Adds a reminder to Today."
 msgstr "Nästa steg: {note}. Lägger till en påminnelse i I dag."
+
+#: src/features/email-templates/built-in-text.ts
+msgid "Next steps on the {role} offer"
+msgstr ""
 
 #: src/features/documents/library.tsx
 msgid "Next unsynced drafts"
@@ -6612,6 +7169,10 @@ msgstr "Inget datum"
 msgid "No dates were found."
 msgstr "Inga datum hittades."
 
+#: src/features/discovery/review-queue.tsx
+msgid "No dismissed jobs"
+msgstr ""
+
 #: src/features/workspace/tabs/apply.tsx
 msgid "no documents"
 msgstr ""
@@ -6628,6 +7189,10 @@ msgstr "Inget utbildningsavsnitt hittades."
 msgid "No email address"
 msgstr "Ingen e-postadress"
 
+#: src/features/email-templates/write-email-sheet.tsx
+msgid "No email address for this contact yet. Add it in your mail app."
+msgstr ""
+
 #: src/features/ats-checker/messages.ts
 msgid "No email address was found."
 msgstr "Ingen e-postadress hittades."
@@ -6643,6 +7208,10 @@ msgstr "Inga fakta matchar"
 #: src/features/write/pickers.tsx
 msgid "No icons match."
 msgstr "Inga ikoner matchar."
+
+#: src/features/settings/clipper-sign-ins.tsx
+msgid "No Job Clipper sign-ins yet."
+msgstr ""
 
 #: src/features/documents/new-document.tsx
 msgid "No job yet"
@@ -6667,6 +7236,10 @@ msgstr "Ingen länkad jobbansökan"
 #: src/features/check/issues.ts
 msgid "No location"
 msgstr "Ingen plats"
+
+#: src/features/email-templates/write-email-sheet.tsx
+msgid "No mail app could open it, so the email was copied instead."
+msgstr ""
 
 #: src/features/documents/library.tsx
 #: src/ui/fields.tsx
@@ -6711,10 +7284,6 @@ msgstr "Inget foto. De flesta ATS ignorerar foton; vissa regioner förväntar si
 msgid "No postings found. Try different keywords."
 msgstr "Inga jobbannonser hittades. Prova olika sökord."
 
-#: src/auth/messages.ts
-msgid "No Reactive Resume server answered at this address. Check the spelling, or ask your administrator whether the server allows app sign-in."
-msgstr "Ingen Reactive Resume-server svarade på den här adressen. Kontrollera stavningen eller fråga din administratör om servern tillåter appinloggning."
-
 #: src/features/check/job-match.tsx
 msgid "No recognizable terms in this posting."
 msgstr "Inga igenkännbara termer i den här annonsen."
@@ -6738,6 +7307,18 @@ msgstr "Inga resultat"
 #: src/features/letters/write.tsx
 msgid "No resume"
 msgstr "Ingen meritförteckning"
+
+#: src/features/discovery/review-queue.tsx
+msgid "No saved jobs yet"
+msgstr ""
+
+#: src/features/discovery/searches.tsx
+msgid "No searches yet"
+msgstr ""
+
+#: src/auth/messages.ts
+msgid "No server answered at this address. Check the spelling, or ask your administrator whether the server allows app sign-in."
+msgstr ""
 
 #: src/features/ats-checker/messages.ts
 msgid "No skills section was found."
@@ -6819,6 +7400,10 @@ msgstr "Normal"
 #: src/features/settings/locale-names.ts
 msgid "Norwegian"
 msgstr "Norska"
+
+#: src/auth/session-gate.tsx
+msgid "Not a member"
+msgstr ""
 
 #: src/features/workspace/tabs/messages.tsx
 msgid "Not applied"
@@ -6936,6 +7521,10 @@ msgstr "Inget att åtgärda"
 msgid "Nothing to fix. The remaining pages were simply not covered by this report."
 msgstr "Inget att åtgärda. De återstående sidorna omfattades helt enkelt inte av denna rapport."
 
+#: src/features/discovery/review-queue.tsx
+msgid "Nothing to review"
+msgstr ""
+
 #: src/features/career/preferences.tsx
 msgid "Notice period (weeks)"
 msgstr "Uppsägningstid (veckor)"
@@ -7025,6 +7614,10 @@ msgstr "Offline. Redigeringar sparas på den här enheten och synkroniseras när
 msgid "On"
 msgstr "Aktiverad"
 
+#: src/features/discovery/messages.ts
+msgid "On-site"
+msgstr ""
+
 #: src/features/share/link.tsx
 msgid "On. Anyone with the link can see your web page."
 msgstr "På. Alla med länken kan se din webbsida."
@@ -7066,6 +7659,14 @@ msgstr "Endast en igenkännbar avsnittsrubrik hittades."
 #: src/features/history/history.tsx
 msgid "Only one version so far. Every editing session adds one automatically."
 msgstr "Endast en version än så länge. Varje redigeringssession lägger till en automatiskt."
+
+#: src/features/branding/branding-screen.tsx
+msgid "Only owners and admins can change the organization's branding."
+msgstr ""
+
+#: src/features/branding/domains-screen.tsx
+msgid "Only owners and admins can manage the organization's domains."
+msgstr ""
 
 #: src/features/ai/provider-editor.tsx
 msgid "Only providers that pass their test can be turned on."
@@ -7130,6 +7731,7 @@ msgstr "Öppna AI-inställningarna"
 #: src/features/applications-board/board-screen.tsx
 #: src/features/applications/list-screen.tsx
 #: src/features/check/job-match.tsx
+#: src/features/discovery/review-queue.tsx
 msgid "Open application"
 msgstr "Öppna ansökan"
 
@@ -7149,6 +7751,10 @@ msgstr "Öppna i {tabName}"
 #: src/features/documents/new-document.tsx
 msgid "Open in editor"
 msgstr "Öppna i editorn"
+
+#: src/features/email-templates/write-email-sheet.tsx
+msgid "Open in mail app"
+msgstr ""
 
 #: src/features/workspace/tabs/saved.tsx
 msgid "Open in Offers"
@@ -7267,6 +7873,8 @@ msgstr "Alternativ för {title}"
 msgid "Or in your own words…"
 msgstr "Eller med dina egna ord..."
 
+#: app/(tabs)/settings/index.tsx
+#: src/features/email-templates/labels.ts
 #: src/features/write/fields.ts
 msgid "Organization"
 msgstr "Organisation"
@@ -7305,6 +7913,14 @@ msgstr "Inaktuell: texten har ändrats sedan dess."
 #: src/features/application-detail/detail-screen.tsx
 msgid "Outcome"
 msgstr "Resultat"
+
+#: src/features/email-templates/templates-screen.tsx
+msgid "Owners and admins edit the organization's templates in the web app, under Settings."
+msgstr ""
+
+#: src/features/branding/domains-screen.tsx
+msgid "Ownership is proven. The certificate is being issued; this usually takes a few minutes."
+msgstr ""
 
 #: app/builder/[id]/_layout.tsx
 #: app/builder/[id]/page.tsx
@@ -7402,6 +8018,10 @@ msgstr "Lösenorden stämmer inte överens."
 msgid "Past conversations"
 msgstr "Tidigare konversationer"
 
+#: src/features/organization/plan-screen.tsx
+msgid "Past due"
+msgstr ""
+
 #: src/features/applications/add-sheet.tsx
 msgid "Paste a job link or posting, then check the role and company. Nothing is saved until you choose Save job."
 msgstr "Klistra in en jobblänk eller annons och kontrollera tjänsten och företaget. Inget sparas förrän du väljer Spara jobbet."
@@ -7436,7 +8056,12 @@ msgstr "Klistra in din nyckel"
 msgid "Pasted description"
 msgstr "Klistrad beskrivning"
 
+#: src/features/discovery/searches.tsx
+msgid "Pause"
+msgstr ""
+
 #: src/features/career/today.tsx
+#: src/features/discovery/messages.ts
 msgid "Paused"
 msgstr "Pausad"
 
@@ -7460,20 +8085,20 @@ msgid "PDF check canceled. Retry when ready."
 msgstr "PDF-kontrollen avbröts. Försök igen när du är redo."
 
 #: src/features/application-detail/sections.tsx
-msgid "PDF only · up to 10 MB each. Linking a Reactive Resume enables AI match scoring and tailoring."
-msgstr "Endast PDF · högst 10 MB per fil. Länka ett Reactive Resume-dokument för AI-baserad matchningspoäng och anpassning."
+msgid "PDF only · up to 10 MB each. Linking a resume enables AI match scoring and tailoring."
+msgstr ""
 
 #: src/features/design/advanced.tsx
 msgid "PDF styles support a subset of CSS. Rotation, dashed and dotted borders, and some layout properties are ignored."
 msgstr "PDF-stilar stöder en delmängd av CSS. Rotation, streckade och prickade kanter och vissa layoutegenskaper ignoreras."
 
 #: src/features/documents/new-document.tsx
-msgid "PDF uses your AI provider when one is ready. Turn off the AI switch to read its text layer on your server. Word (.docx) needs an AI provider. Current and v4 Reactive Resume JSON, cover letters, JSON Resume and LinkedIn exports (.zip) are supported. Up to 10 MB."
-msgstr "PDF använder din AI-leverantör om den är redo. Stäng av AI för att läsa textlagret på din server. Word (.docx) kräver en AI-leverantör. Nuvarande och v4 Reactive Resume JSON, följebrev, JSON Resume och LinkedIn-exporter (.zip) stöds. Högst 10 MB."
+msgid "PDF uses your AI provider when one is ready. Turn off the AI switch to read its text layer on your server. Word (.docx) needs an AI provider. Current and v4 JSON, cover letters, JSON Resume and LinkedIn exports (.zip) are supported. Up to 10 MB."
+msgstr ""
 
 #: src/features/documents/new-document.tsx
-msgid "PDF, Word, Reactive Resume, JSON Resume or LinkedIn export."
-msgstr "PDF, Word, Reactive Resume, JSON Resume eller LinkedIn export."
+msgid "PDF, Word, JSON, JSON Resume or LinkedIn export."
+msgstr ""
 
 #: src/features/career/offer-entry.tsx
 #: src/features/career/offers.tsx
@@ -7492,6 +8117,10 @@ msgstr "Per månad"
 #: src/features/career/preferences.tsx
 msgid "Per year"
 msgstr "Per år"
+
+#: src/features/organization/plan-screen.tsx
+msgid "Period ends"
+msgstr ""
 
 #: app/(tabs)/settings/account.tsx
 msgid "Permanently removes everything. Opens your browser account settings."
@@ -7547,6 +8176,10 @@ msgstr "Välj en tid senare än nu."
 msgid "Pick one format and use it everywhere."
 msgstr "Välj ett format och använd det överallt."
 
+#: src/features/discovery/search-form.tsx
+msgid "Pick the board and enter the company's board name, or paste the link to its job page. The name is the part after the host, for example jobs.lever.co/acme or boards.greenhouse.io/acme (acme)."
+msgstr ""
+
 #: src/features/workspace/tabs/prepare.tsx
 msgid "Pick two examples"
 msgstr "Välj två exempel"
@@ -7568,6 +8201,11 @@ msgstr "Oformaterad text (.txt)"
 msgid "Plain text with headings. Paste into application forms and notes."
 msgstr "Vanlig text med rubriker. Klistra in i ansökningsformulär och anteckningar."
 
+#: app/(tabs)/settings/index.tsx
+#: src/features/organization/plan-screen.tsx
+msgid "Plan"
+msgstr ""
+
 #: src/features/workspace/tabs/prepare.tsx
 msgid "Plan again"
 msgstr "Planera igen"
@@ -7584,6 +8222,10 @@ msgstr "Planera vad du ska fråga"
 msgid "Planning your week"
 msgstr "Planerar din vecka"
 
+#: src/features/branding/branding-screen.tsx
+msgid "Platform default"
+msgstr ""
+
 #: src/features/workspace/tabs/practise.tsx
 msgid "Play recording"
 msgstr "Spela inspelning"
@@ -7592,6 +8234,14 @@ msgstr "Spela inspelning"
 #: src/features/letters/design-presets.ts
 msgid "Plum"
 msgstr "Plommonlila"
+
+#: src/features/branding/branding-screen.tsx
+msgid "PNG or WebP, up to 512 KB. Upload a PNG or WebP so the logo also shows in the mobile app and in emails; they don't show an SVG. To use an SVG, upload it from the web app."
+msgstr ""
+
+#: src/features/branding/branding-screen.tsx
+msgid "PNG, up to 128 KB. To use an ICO, upload it from the web app."
+msgstr ""
 
 #: src/features/settings/locale-names.ts
 msgid "Polish"
@@ -7634,6 +8284,10 @@ msgstr "Jobbannons"
 
 #: src/features/career/today.tsx
 msgid "Postings can change or close. Publication date unknown; search coverage is incomplete."
+msgstr ""
+
+#: src/features/discovery/review-queue.tsx
+msgid "Postings your automations found, best match first. Save one to your applications, or dismiss it and it never comes back."
 msgstr ""
 
 #: src/features/workspace/parts.tsx
@@ -7751,6 +8405,10 @@ msgstr "Tryck och håll ned för att förhandsgranska den på sidan."
 msgid "Press and hold, then drag to another column or page."
 msgstr "Tryck och håll ned, dra sedan till en annan kolumn eller sida."
 
+#: src/features/branding/branding-screen.tsx
+msgid "Preview of your branding"
+msgstr ""
+
 #: src/features/share/web-page.tsx
 msgid "Preview web page"
 msgstr "Förhandsvisa webbsidan"
@@ -7788,9 +8446,17 @@ msgstr ""
 msgid "Previous workspace tabs"
 msgstr "Tidigare flikar för arbetsytan"
 
+#: src/features/branding/branding-screen.tsx
+msgid "Primary button"
+msgstr ""
+
 #: src/features/design/advanced.tsx
 msgid "Primary color"
 msgstr "Primärfärg"
+
+#: src/features/branding/branding-screen.tsx
+msgid "Primary colour"
+msgstr ""
 
 #: src/features/share/web-page.tsx
 msgid "Primary resume"
@@ -7811,6 +8477,7 @@ msgstr "Integritet"
 
 #: app/(tabs)/settings/index.tsx
 #: src/auth/auth-header.tsx
+#: src/features/branding/branding-screen.tsx
 msgid "Privacy policy"
 msgstr "Integritetspolicy"
 
@@ -7822,6 +8489,10 @@ msgstr ""
 #: src/features/document-menu/index.tsx
 msgid "Private. Only you can see it."
 msgstr "Privat. Bara du kan se det."
+
+#: app/(tabs)/settings/licences.tsx
+msgid "Product"
+msgstr ""
 
 #: src/features/design/style-groups.tsx
 #: src/features/letters/design-presets.ts
@@ -7928,6 +8599,10 @@ msgstr "Utgivare"
 msgid "Put a plain email address near the top of the first page. It is what most systems file you under."
 msgstr "Placera en vanlig e-postadress nära toppen av första sidan. Det är vad de flesta system registrerar dig under."
 
+#: src/features/email-templates/template-editor.tsx
+msgid "Put variables such as {examples} where the details go."
+msgstr ""
+
 #: src/features/share/link.tsx
 msgid "QR code"
 msgstr "QR-kod"
@@ -7988,9 +8663,9 @@ msgstr "Exportera på nytt med inbäddade typsnitt, och kontrollera att texten k
 msgid "Re-export with fonts embedded, then open the file and check that the text copies out cleanly."
 msgstr "Exportera på nytt med inbäddade typsnitt, öppna sedan filen och kontrollera att texten kopieras ut felfritt."
 
-#: src/auth/auth-header.tsx
-msgid "Reactive Resume"
-msgstr "Reactive Resume"
+#: src/features/email-templates/built-in-text.ts
+msgid "Reach out to someone at the company"
+msgstr ""
 
 #: src/features/workspace/tabs/prepare.tsx
 msgid "Read briefing"
@@ -8006,6 +8681,7 @@ msgstr "Läs licens"
 
 #: src/features/applications/add-sheet.tsx
 #: src/features/career/today.tsx
+#: src/features/discovery/review-queue.tsx
 msgid "Read posting"
 msgstr "Läs jobbannonsen"
 
@@ -8212,10 +8888,6 @@ msgstr "Uppdatera genomgången 24 timmar innan"
 msgid "Refresh the briefing on the morning of"
 msgstr "Uppdatera genomgången samma morgon"
 
-#: src/features/share/custom-domain.tsx
-msgid "Register at OlaCV"
-msgstr "Registrera hos OlaCV"
-
 #: src/features/workspace/tabs/prepare.tsx
 msgid "Rehearse aloud"
 msgstr "Öva högt"
@@ -8290,9 +8962,16 @@ msgstr "Påminnelser visas här. Kopior via mejl är valfria och kräver en veri
 
 #: src/features/career/offers.tsx
 #: src/features/career/preferences.tsx
+#: src/features/discovery/messages.ts
 msgid "Remote"
 msgstr "Distans"
 
+#: src/features/discovery/search-form.tsx
+msgid "Remote preference"
+msgstr ""
+
+#: src/features/branding/branding-screen.tsx
+#: src/features/branding/domains-screen.tsx
 #: src/features/share/custom-domain.tsx
 #: src/ui/fields.tsx
 msgid "Remove"
@@ -8305,9 +8984,19 @@ msgstr "Ta bort"
 msgid "Remove {0}"
 msgstr "Ta bort {0}"
 
+#. placeholder {0}: domain.hostname
+#: src/features/branding/domains-screen.tsx
+msgid "Remove {0}?"
+msgstr ""
+
 #: src/features/assistant/messages.tsx
 msgid "Remove {name}"
 msgstr "Ta bort {name}"
+
+#. placeholder {0}: index + 1
+#: src/features/discovery/search-form.tsx
+msgid "Remove board {0}"
+msgstr ""
 
 #: src/features/ai/web-access.tsx
 msgid "Remove connection"
@@ -8316,6 +9005,10 @@ msgstr "Ta bort anslutningen"
 #: src/features/ai/web-access.tsx
 msgid "Remove connection?"
 msgstr "Ta bort anslutningen?"
+
+#: src/features/branding/domains-screen.tsx
+msgid "Remove domain"
+msgstr ""
 
 #: src/features/write/basics-screen.tsx
 msgid "Remove field"
@@ -8357,6 +9050,18 @@ msgstr ""
 msgid "Remove role"
 msgstr "Ta bort roll"
 
+#: src/features/branding/domains-screen.tsx
+msgid "Remove the domain and add it again once the cause is fixed."
+msgstr ""
+
+#: src/features/branding/branding-screen.tsx
+msgid "Remove the favicon?"
+msgstr ""
+
+#: src/features/branding/branding-screen.tsx
+msgid "Remove the logo?"
+msgstr ""
+
 #: src/features/share/web-page.tsx
 msgid "Remove the password?"
 msgstr "Ta bort lösenordet?"
@@ -8371,6 +9076,15 @@ msgstr ""
 
 #: src/features/workspace/answer-library.tsx
 msgid "Remove unavailable story reference"
+msgstr ""
+
+#. placeholder {0}: domain.hostname
+#: src/features/branding/domains-screen.tsx
+msgid "Removed {0}"
+msgstr ""
+
+#: src/features/branding/domains-screen.tsx
+msgid "Removing"
 msgstr ""
 
 #: src/features/document-menu/index.tsx
@@ -8423,6 +9137,7 @@ msgstr "Beställ om {title}"
 msgid "Repeats at this local time in the displayed timezone across clock changes. A skipped clock time moves forward. Missed runs combine into one search. Results and failures appear in Today; delivery depends on the server runner."
 msgstr ""
 
+#: src/features/branding/branding-screen.tsx
 #: src/features/write/improve.tsx
 msgid "Replace"
 msgstr "Ersätta"
@@ -8459,6 +9174,10 @@ msgstr "Svar"
 msgid "Reply copied"
 msgstr "Svaret kopierat"
 
+#: src/features/branding/branding-screen.tsx
+msgid "Reply-to address"
+msgstr ""
+
 #: src/features/ats-checker/checker.tsx
 msgid "Report"
 msgstr "Rapport"
@@ -8468,10 +9187,6 @@ msgstr "Rapport"
 #: src/features/ai/report-content.tsx
 msgid "Report AI content"
 msgstr "Rapportera AI-innehåll"
-
-#: app/(tabs)/settings/index.tsx
-msgid "Report an issue"
-msgstr "Rapportera ett problem"
 
 #: src/features/ai/report-content.tsx
 msgid "Report received by your server operator. Thank you."
@@ -8509,6 +9224,10 @@ msgstr "Återställ designstandarder"
 #: src/features/career/offers.tsx
 msgid "Respond by"
 msgstr "Svara senast"
+
+#: src/features/email-templates/built-in-text.ts
+msgid "Respond to an offer"
+msgstr ""
 
 #: src/features/career/offers.tsx
 msgid "Response deadline has passed."
@@ -8559,6 +9278,7 @@ msgstr "Resultat"
 #: app/builder/[id]/_layout.tsx
 #: src/features/applications/add-sheet.tsx
 #: src/features/career/facts.tsx
+#: src/features/discovery/searches.tsx
 #: src/features/documents/library.tsx
 #: src/features/letters/write.tsx
 #: src/features/workspace/preparation.tsx
@@ -8572,10 +9292,6 @@ msgstr "CV + bokstav"
 #: src/features/document-menu/index.tsx
 msgid "Resume details"
 msgstr "cv detaljer"
-
-#: app/(tabs)/settings/index.tsx
-msgid "Resume feedback, product help, and community ideas."
-msgstr "CV-feedback, produkthjälp och idéer från communityn."
 
 #: src/features/application-detail/sections.tsx
 #: src/features/workspace/tabs/apply.tsx
@@ -8643,6 +9359,7 @@ msgstr "Hämtade {0} med {1}. Hämtningstiden fastställer inte ursprungets fär
 #: src/features/check/screen.tsx
 #: src/features/check/writing.tsx
 #: src/features/design/design-pane.tsx
+#: src/features/discovery/searches.tsx
 #: src/features/documents/document-sheets.tsx
 #: src/features/documents/library.tsx
 #: src/features/documents/new-document.tsx
@@ -8802,6 +9519,7 @@ msgid "Reviewing needs an AI connection. What you write here stays on this devic
 msgstr "Granskning kräver en AI-anslutning. Det du skriver här finns kvar på den här enheten tills dess."
 
 #: src/features/settings/api-keys.tsx
+#: src/features/settings/clipper-sign-ins.tsx
 msgid "Revoke"
 msgstr "Återkalla"
 
@@ -8809,13 +9527,25 @@ msgstr "Återkalla"
 msgid "Revoke API key?"
 msgstr "Återkalla API-nyckeln?"
 
+#: src/features/settings/clipper-sign-ins.tsx
+msgid "Revoke Job Clipper sign-in?"
+msgstr ""
+
 #: src/features/settings/api-keys.tsx
 msgid "Revoke key"
 msgstr "Återkalla nyckel"
 
+#: src/features/settings/clipper-sign-ins.tsx
+msgid "Revoke sign-in"
+msgstr ""
+
 #: src/features/settings/api-keys.tsx
 msgid "Revoke this API key"
 msgstr "Återkalla den här API-nyckeln"
+
+#: src/features/settings/clipper-sign-ins.tsx
+msgid "Revoke this Job Clipper sign-in"
+msgstr ""
 
 #: src/features/check/writing.tsx
 msgid "Rewrite accepted"
@@ -8884,6 +9614,14 @@ msgstr "Linje"
 #: src/features/check/writing.tsx
 msgid "Run again"
 msgstr "Kör igen"
+
+#: src/features/discovery/searches.tsx
+msgid "Run now"
+msgstr ""
+
+#: src/features/discovery/searches.tsx
+msgid "Running"
+msgstr ""
 
 #. placeholder {0}: new Intl.DateTimeFormat(locale, { timeZone: timezone, dateStyle: "medium", timeStyle: "short" }).format(runAt)
 #: src/features/career/schedule-sheet.tsx
@@ -8957,7 +9695,13 @@ msgstr "Spara och testa"
 msgid "Save another offer to compare"
 msgstr "Spara ytterligare ett erbjudande att jämföra"
 
+#: src/features/email-templates/write-email-sheet.tsx
+msgid "Save as my template"
+msgstr ""
+
 #: src/features/application-detail/sheets.tsx
+#: src/features/branding/branding-screen.tsx
+#: src/features/discovery/search-form.tsx
 msgid "Save changes"
 msgstr "Spara ändringar"
 
@@ -9014,6 +9758,10 @@ msgstr "Spara schema"
 msgid "Save story"
 msgstr "Spara berättelse"
 
+#: src/features/email-templates/template-editor.tsx
+msgid "Save template"
+msgstr ""
+
 #: src/features/share/download.tsx
 msgid "Save the cover letter before exporting it."
 msgstr "Spara följebrevet innan du exporterar det."
@@ -9038,6 +9786,10 @@ msgstr "Spara villkoren i erbjudandet för att jämföra"
 msgid "Save this story to Knowledge?"
 msgstr "Spara den här berättelsen i Kunskap?"
 
+#: src/features/discovery/review-queue.tsx
+msgid "Save to applications"
+msgstr ""
+
 #: src/features/workspace/tabs/fit.tsx
 msgid "Save to Knowledge"
 msgstr "Spara i Kunskap"
@@ -9052,6 +9804,7 @@ msgstr "Spara ditt som ett nytt dokument och spara ditt här."
 
 #: src/features/applications/stages.ts
 #: src/features/career/preferences.tsx
+#: src/features/discovery/review-queue.tsx
 #: src/shell/builder-chrome.tsx
 msgid "Saved"
 msgstr "Sparad"
@@ -9102,6 +9855,14 @@ msgstr "Sparat i Kunskap, privat för den här ansökan."
 msgid "Saved to Saved · Practice"
 msgstr "Sparat i fliken Sparad · Övning"
 
+#: src/features/discovery/review-queue.tsx
+msgid "Saved to your applications"
+msgstr ""
+
+#: src/features/email-templates/write-email-sheet.tsx
+msgid "Saved to your templates"
+msgstr ""
+
 #: src/features/applications/add-sheet.tsx
 msgid "Saving the job. Wait for confirmation before making another change."
 msgstr "Sparar jobbet. Vänta på bekräftelse innan du gör en ny ändring."
@@ -9112,6 +9873,10 @@ msgstr "Sparar jobbet. Vänta på bekräftelse innan du gör en ny ändring."
 #: src/shell/builder-chrome.tsx
 msgid "Saving…"
 msgstr "Sparar…"
+
+#: src/features/discovery/search-form.tsx
+msgid "Schedule"
+msgstr ""
 
 #: src/features/application-detail/interview-sheet.tsx
 #: src/features/application-detail/sections.tsx
@@ -9178,6 +9943,14 @@ msgstr "Söka kommandon"
 msgid "Search covers documents, applications, assistant conversations and actions."
 msgstr "Sökning omfattar dokument, jobbansökningar, assistentsamtal och handlingar."
 
+#: src/features/discovery/search-form.tsx
+msgid "Search created"
+msgstr ""
+
+#: src/features/discovery/searches.tsx
+msgid "Search deleted"
+msgstr ""
+
 #: src/features/documents/library.tsx
 msgid "Search documents"
 msgstr "Sök i dokument"
@@ -9218,6 +9991,10 @@ msgstr "Sök efter språk"
 msgid "Search or run…"
 msgstr "Sök eller kör..."
 
+#: src/features/discovery/search-form.tsx
+msgid "Search saved"
+msgstr ""
+
 #: src/features/workspace/answer-library.tsx
 msgid "Search saved answers"
 msgstr ""
@@ -9255,13 +10032,29 @@ msgstr "Sök…"
 msgid "Searched the web"
 msgstr "Sökte på nätet"
 
+#: src/features/discovery/searches.tsx
+msgid "Searches"
+msgstr ""
+
 #: src/features/assistant/messages.tsx
 msgid "Searching the web…"
 msgstr "Söker på webben..."
 
+#: src/features/organization/plan-screen.tsx
+msgid "Seats"
+msgstr ""
+
 #: src/features/career/offers.tsx
 msgid "Second offer"
 msgstr "Andra erbjudandet"
+
+#: src/features/branding/branding-screen.tsx
+msgid "Secondary"
+msgstr ""
+
+#: src/features/branding/branding-screen.tsx
+msgid "Secondary colour"
+msgstr ""
 
 #: src/features/check/issues.ts
 msgid "Section headings"
@@ -9453,10 +10246,6 @@ msgstr "Ställ in webbsökning i Inställningar för att hitta roller."
 msgid "Settings"
 msgstr "Inställningar"
 
-#: app/(tabs)/settings/ai-mcp.tsx
-msgid "Setup guide"
-msgstr "Installationsguide"
-
 #: src/features/ai/report-content.tsx
 msgid "Sexual content"
 msgstr "Sexuellt innehåll"
@@ -9537,8 +10326,8 @@ msgid "Shorter"
 msgstr "Kortare"
 
 #: src/features/share/web-page.tsx
-msgid "Show “Made with Reactive Resume”"
-msgstr "Visa ”Skapad med Reactive Resume”"
+msgid "Show “Made with {appName}”"
+msgstr ""
 
 #. placeholder {0}: Math.min(remaining, COLUMN_PAGE_SIZE)
 #: src/features/applications-board/board-screen.tsx
@@ -9589,6 +10378,10 @@ msgstr "Visa ikoner"
 msgid "Show in search engines"
 msgstr "Visa i sökmotorer"
 
+#: src/features/discovery/review-queue.tsx
+msgid "Show jobs"
+msgstr ""
+
 #: src/features/ai/provider-editor.tsx
 msgid "Show key"
 msgstr "Visa nyckel"
@@ -9600,6 +10393,7 @@ msgstr "Visa länk i titel"
 #: app/(tabs)/settings/preferences.tsx
 #: src/features/application-detail/interview-sheet.tsx
 #: src/features/career/today.tsx
+#: src/features/discovery/review-queue.tsx
 msgid "Show more"
 msgstr "Visa mer"
 
@@ -9620,6 +10414,10 @@ msgstr "Visa lästa"
 #: src/features/design/advanced.tsx
 msgid "Show section icons"
 msgstr "Visa avsnittsikoner"
+
+#: src/features/email-templates/write-email-sheet.tsx
+msgid "Show templates for every stage"
+msgstr ""
 
 #: src/features/application-detail/detail-screen.tsx
 msgid "Showing saved details. They couldn't be refreshed."
@@ -9748,9 +10546,19 @@ msgstr "Inloggning och säkerhet"
 msgid "Sign-in didn't complete"
 msgstr "Inloggningen slutfördes inte"
 
+#: src/features/settings/clipper-sign-ins.tsx
+msgid "Sign-in revoked. The extension stops working on its next request."
+msgstr ""
+
 #: src/features/letters/write.tsx
 msgid "Sign-off"
 msgstr "Avslutningsfras"
+
+#. placeholder {0}: date(token.createdAt)
+#. placeholder {1}: date(token.lastUsedAt)
+#: src/features/settings/clipper-sign-ins.tsx
+msgid "Signed in {0} · Last used {1}"
+msgstr ""
 
 #. placeholder {0}: hostOf(server)
 #: src/auth/session-gate.tsx
@@ -9790,6 +10598,7 @@ msgstr "Storlek"
 msgid "Skill"
 msgstr "Färdighet"
 
+#: src/features/discovery/search-form.tsx
 #: src/features/write/fields.ts
 msgid "Skills"
 msgstr "Färdigheter"
@@ -9878,6 +10687,10 @@ msgstr "Viss text hamnar utanför sidan."
 msgid "Some text is rotated."
 msgstr "Viss text är roterad."
 
+#: src/features/branding/domains-screen.tsx
+msgid "Something went wrong while checking this domain. Remove it and add it again."
+msgstr ""
+
 #: src/features/documents/library.tsx
 msgid "Sort"
 msgstr "Sortera"
@@ -9902,10 +10715,6 @@ msgstr "Källa"
 #: src/features/career/facts.tsx
 msgid "Source and correction history"
 msgstr "Källa och korrigeringshistorik"
-
-#: app/(tabs)/settings/index.tsx
-msgid "Source code on GitHub"
-msgstr "Källkod på GitHub"
 
 #: src/features/workspace/answer-library.tsx
 msgid "Source employer"
@@ -10037,6 +10846,10 @@ msgstr "Börjar nu"
 msgid "State or region"
 msgstr ""
 
+#: src/features/organization/plan-screen.tsx
+msgid "Status"
+msgstr "Status"
+
 #: src/features/documents/new-document.tsx
 msgid "Stay in Documents"
 msgstr "Bo i Dokument"
@@ -10097,6 +10910,11 @@ msgstr "Genomstruken"
 msgid "Stronger verb"
 msgstr "Starkare verb"
 
+#: src/features/email-templates/template-editor.tsx
+#: src/features/email-templates/write-email-sheet.tsx
+msgid "Subject"
+msgstr ""
+
 #: src/features/application-detail/sections.tsx
 msgid "Submission recorded {date}. The sent versions never change; current drafts stay editable. This record does not confirm employer receipt."
 msgstr ""
@@ -10135,6 +10953,10 @@ msgstr "Framgång efter 90 dagar · nästa steg"
 msgid "Suggest target roles (optional AI)"
 msgstr ""
 
+#: src/features/email-templates/template-editor.tsx
+msgid "Suggested for"
+msgstr ""
+
 #: src/features/workspace/tabs/messages.tsx
 msgid "Suggested reply · edit before sending"
 msgstr "Föreslaget svar · redigera innan du skickar"
@@ -10153,6 +10975,7 @@ msgid "Summary"
 msgstr "Sammanfattning"
 
 #: app/(tabs)/settings/index.tsx
+#: src/features/branding/branding-screen.tsx
 msgid "Support"
 msgstr "Stöd"
 
@@ -10163,6 +10986,10 @@ msgstr "Styrkt"
 
 #: src/features/workspace/answer-library.tsx
 msgid "Supporting Knowledge facts and stories"
+msgstr ""
+
+#: src/features/organization/plan-screen.tsx
+msgid "Suspended"
 msgstr ""
 
 #: src/features/career/offers.tsx
@@ -10311,24 +11138,38 @@ msgstr "Telugu"
 
 #: src/features/design/design-pane.tsx
 #: src/features/document-menu/index.tsx
+#: src/features/email-templates/write-email-sheet.tsx
 #: src/features/letters/design.tsx
 msgid "Template"
 msgstr "Mall"
+
+#: src/features/email-templates/templates-screen.tsx
+msgid "Template archived"
+msgstr ""
 
 #. placeholder {0}: templateName(template)
 #: src/features/design/draft.ts
 msgid "Template changed to {0}"
 msgstr "Mall ändrad till {0}"
 
+#: src/features/email-templates/templates-screen.tsx
+msgid "Template saved"
+msgstr ""
+
 #: src/features/letters/design.tsx
 msgid "Template, type and colors follow the resume, so the pair always matches."
 msgstr "Mall, typ och färger följer cv:n, så paret matchar alltid."
+
+#: src/auth/auth-header.tsx
+msgid "Terms"
+msgstr ""
 
 #: src/features/ats-checker/checker.tsx
 msgid "Terms from the posting"
 msgstr "Termer från platsannonsen"
 
 #: app/(tabs)/settings/index.tsx
+#: src/features/branding/branding-screen.tsx
 msgid "Terms of service"
 msgstr "Användarvillkor"
 
@@ -10402,6 +11243,22 @@ msgstr "Text under {minimum} pt kan läsas fel när ett system återrenderar den
 msgid "Thai"
 msgstr "Thailändska"
 
+#: src/features/email-templates/built-in-text.ts
+msgid "Thank you after an interview"
+msgstr ""
+
+#: src/features/email-templates/built-in-text.ts
+msgid "Thank you for meeting with me on {interviewDate}"
+msgstr ""
+
+#: src/features/email-templates/labels.ts
+msgid "Thank-you"
+msgstr ""
+
+#: src/features/branding/domains-screen.tsx
+msgid "That domain isn't available, or you have reached the limit."
+msgstr ""
+
 #: src/features/ats-checker/check.ts
 msgid "That file couldn't be read as a PDF."
 msgstr "Den filen kunde inte läsas som en PDF."
@@ -10462,9 +11319,17 @@ msgstr "Assistenten använder din AI-leverantörs egen webbsökning där den st�
 msgid "The assistant uses your own key. Nothing is sent anywhere until you connect one."
 msgstr "Assistenten använder din egen nyckel. Ingenting skickas någonstans förrän du ansluter en."
 
+#: src/features/discovery/search-form.tsx
+msgid "The best matches of each run get an AI score and a short reason. Each scored job uses AI credits. Your plan may allow fewer. Enter 0 to skip AI."
+msgstr ""
+
 #: src/features/ai/web-access.tsx
 msgid "The built-in reader remains active."
 msgstr "Den inbyggda läsaren förblir aktiv."
+
+#: src/features/branding/domains-screen.tsx
+msgid "The certificate provider rejected this domain. Check that the CNAME record points where shown."
+msgstr ""
 
 #: src/features/check/writing.tsx
 msgid "The checks are mechanical. This asks a language model how a reader might react to your bullets and suggests rewrites. It isn't part of the score."
@@ -10498,6 +11363,10 @@ msgstr "Anslutningen kunde inte laddas eller sparas. Försök igen."
 #: src/features/letters/share.tsx
 msgid "The current state will be saved as “Before restore” first."
 msgstr "Det aktuella tillståndet sparas först som \"Innan återställning\"."
+
+#: src/features/branding/domains-screen.tsx
+msgid "The domain's certificate setup was changed and can't be used. Remove the domain and add it again."
+msgstr ""
 
 #: src/features/ats-checker/checker.tsx
 msgid "The editor opens on Check, which checks the imported resume again."
@@ -10559,6 +11428,10 @@ msgstr "Ordningen texten lagras i skiljer sig kraftigt från ordningen den läse
 msgid "The original stays in correction history. Stories using it will need review."
 msgstr "Originalet finns kvar i korrigeringshistoriken. Berättelser som använder det kommer att behöva granskas."
 
+#: src/features/branding/domains-screen.tsx
+msgid "The ownership TXT record is gone. Add it back, or remove the domain."
+msgstr ""
+
 #: src/features/ats-checker/messages.ts
 msgid "The pages are pictures, with no text behind them."
 msgstr "Sidorna är bilder, utan text bakom dem."
@@ -10566,6 +11439,10 @@ msgstr "Sidorna är bilder, utan text bakom dem."
 #: src/features/check/parser.tsx
 msgid "The PDF is checked on the server and not stored. Send this preview to see what software reads."
 msgstr "PDF kontrolleras på servern och lagras inte. Skicka den här förhandsvisningen för att se vad programvaran läser."
+
+#: src/features/branding/branding-screen.tsx
+msgid "The platform default shows again."
+msgstr ""
 
 #: src/features/ai/provider-editor.tsx
 #: src/features/ai/provider-list.tsx
@@ -10588,6 +11465,16 @@ msgstr "Resten av filen finns inte i den här rapporten."
 msgid "The resume as it is"
 msgstr "CV som det är"
 
+#. placeholder {0}: source.name
+#: src/features/discovery/searches.tsx
+msgid "The run of \"{0}\" failed."
+msgstr ""
+
+#. placeholder {0}: source.name
+#: src/features/discovery/searches.tsx
+msgid "The run of \"{0}\" finished: {found} new."
+msgstr ""
+
 #: src/features/ats-checker/messages.ts
 msgid "The same line repeats on every page."
 msgstr "Samma rad upprepas på varje sida."
@@ -10607,6 +11494,10 @@ msgstr "Poängen räknar hur tillförlitligt programvaran läser ditt CV. Det f�
 #: src/features/ats-checker/checker.tsx
 msgid "The score reflects how reliably text is extracted, not your chances."
 msgstr "Poängen återspeglar hur tillförlitligt text extraheras, inte dina chanser."
+
+#: src/features/discovery/searches.tsx
+msgid "The search and its run history are deleted. Jobs it already found stay in your queue."
+msgstr ""
 
 #: src/features/documents/library.tsx
 msgid "The selected documents will be deleted for good and can't be restored."
@@ -10639,6 +11530,10 @@ msgstr "Tjänstens kvot är förbrukad. Kontrollera din plan hos tjänsten."
 #: src/features/ai/web-access.tsx
 msgid "The service rejected the credentials. Check the API key."
 msgstr "Tjänsten avvisade inloggningsuppgifterna. Kontrollera API-nyckeln."
+
+#: src/features/email-templates/write-email-sheet.tsx
+msgid "The templates couldn't be loaded."
+msgstr ""
 
 #: src/features/ai/error.ts
 msgid "The test didn't run. Try again."
@@ -10673,6 +11568,10 @@ msgstr "Det finns ingen länk till en profil, portfölj eller kodförvar."
 msgid "There is no summary paragraph."
 msgstr "Det finns inget sammanfattande stycke."
 
+#: src/features/branding/branding-screen.tsx
+msgid "There is nothing to remove."
+msgstr ""
+
 #: src/features/workspace/tabs/apply.tsx
 msgid "These are saved draft answers."
 msgstr ""
@@ -10701,6 +11600,15 @@ msgstr "Tänkande…"
 msgid "Third-party software notices. Tap a dependency to read its license."
 msgstr "Meddelanden om programvara från tredje part. Tryck på ett beroende för att läsa dess licens."
 
+#. placeholder {0}: hostOf(server)
+#: src/auth/session-gate.tsx
+msgid "This account isn't part of {0}"
+msgstr ""
+
+#: src/features/branding/domains-screen.tsx
+msgid "This address always works, whatever happens to your own domains."
+msgstr ""
+
 #: src/features/workspace/answer-library.tsx
 msgid "This application"
 msgstr ""
@@ -10714,6 +11622,10 @@ msgstr "Det gick inte att öppna ansökan."
 msgid "This application has no posting yet. Add one in Applications."
 msgstr "Denna jobbansökan har ingen platsannons ännu. Lägg till en i jobbansökningar."
 
+#: src/features/discovery/search-form.tsx
+msgid "This board isn't supported yet"
+msgstr ""
+
 #: src/features/applications/error.ts
 msgid "This changed elsewhere. Reload and try again."
 msgstr "Det här har ändrats någon annanstans. Läs in igen och försök på nytt."
@@ -10721,6 +11633,10 @@ msgstr "Det här har ändrats någon annanstans. Läs in igen och försök på n
 #: src/features/workspace/parts.tsx
 msgid "This changed somewhere else, so it wasn't saved. Your text is kept here; Retry saves it over the other copy."
 msgstr "Detta ändrades någon annanstans, så det sparades inte. Din text sparas här; Försöka igen sparar den över den andra kopian."
+
+#: src/features/branding/branding-screen.tsx
+msgid "This colour may be hard to see on a white background."
+msgstr ""
 
 #: src/features/ai/error.ts
 msgid "This connection is managed by your server."
@@ -10763,6 +11679,14 @@ msgstr "Detta dokument är låst. Du kan fortfarande ladda ner och namnge versio
 msgid "This document is no longer available. Refresh and try again."
 msgstr "Detta dokument är inte längre tillgängligt. Uppdatera och försök igen."
 
+#: src/features/branding/domains-screen.tsx
+msgid "This domain no longer serves your organization and is being deleted."
+msgstr ""
+
+#: src/features/email-templates/write-email-sheet.tsx
+msgid "This email is too long to open in your mail app, so it was copied instead."
+msgstr ""
+
 #: src/features/workspace/answer-library.tsx
 msgid "This employer"
 msgstr ""
@@ -10778,6 +11702,10 @@ msgstr "Denna post"
 #: src/features/write/entry-screen.tsx
 msgid "This entry was deleted."
 msgstr "Denna post raderades."
+
+#: src/features/organization/entitlement-message.ts
+msgid "This feature is not part of your organization's plan."
+msgstr ""
 
 #: src/features/ats-checker/messages.ts
 msgid "This file contains form fields."
@@ -10888,6 +11816,19 @@ msgstr "Detta mäter hur troget programvara kan extrahera denna fils text. Den f
 msgid "This month"
 msgstr "Denna månad"
 
+#: src/features/organization/entitlement-message.ts
+msgid "This organization has no free seats. Remove a member or an invitation, or ask the owner to add seats."
+msgstr ""
+
+#: src/features/organization/plan-screen.tsx
+msgid "This organization is suspended. You can view and export your data."
+msgstr ""
+
+#: src/features/organization/entitlement-message.ts
+#: src/features/organization/entitlements.tsx
+msgid "This organization is suspended. You can view and export your data. Contact your administrator."
+msgstr ""
+
 #: src/features/assistant/messages.tsx
 msgid "This page is clipped or incomplete. Check the original before using it."
 msgstr "Den här sidan är klippt eller ofullständig. Kontrollera originalet innan du använder det."
@@ -10911,6 +11852,10 @@ msgstr "Denna PDF har inget textlager, så en parser läser ingenting från det.
 #: src/features/ats-checker/check.ts
 msgid "This PDF is password protected. Save an unprotected copy and try again."
 msgstr "Denna PDF är lösenordsskyddad. Spara en oskyddad kopia och försök igen."
+
+#: src/features/organization/plan-screen.tsx
+msgid "This plan has no pooled AI credits."
+msgstr ""
 
 #: src/features/assistant/messages.tsx
 msgid "This question couldn't be asked. Send a new message to continue."
@@ -10983,6 +11928,10 @@ msgstr "Inloggningsförsöket har upphört att gälla eller har redan använts. 
 #: src/features/workspace/tabs/practise.tsx
 msgid "This story is unavailable or uses facts that are switched off."
 msgstr "Den här berättelsen är inte tillgänglig eller använder fakta som är avstängda."
+
+#: src/features/email-templates/write-email-sheet.tsx
+msgid "This template couldn't be filled in. Try again."
+msgstr ""
 
 #: src/features/application-detail/interview-sheet.tsx
 msgid "This time does not exist in the selected timezone. Choose another time."
@@ -11071,6 +12020,10 @@ msgstr "För att kontrollera"
 msgid "To get a reminder, allow notifications in your device settings."
 msgstr "Tillåt aviseringar i enhetens inställningar för att få en påminnelse."
 
+#: src/features/email-templates/write-email-sheet.tsx
+msgid "To: {to}"
+msgstr ""
+
 #: app/(tabs)/career/_layout.tsx
 #: src/features/applications-board/calendar-screen.tsx
 #: src/features/share/link.tsx
@@ -11153,6 +12106,10 @@ msgstr "Papperskorgen är tom"
 msgid "Trash was already empty"
 msgstr ""
 
+#: src/features/organization/plan-screen.tsx
+msgid "Trial"
+msgstr ""
+
 #: src/features/workspace/parts.tsx
 msgid "Trimming words"
 msgstr "Kortar ner texten"
@@ -11169,8 +12126,14 @@ msgstr "Prova {suggestion}"
 #: src/features/ai/provider-list.tsx
 #: src/features/ai/web-access.tsx
 #: src/features/application-detail/detail-screen.tsx
+#: src/features/branding/branding-screen.tsx
+#: src/features/branding/domains-screen.tsx
+#: src/features/email-templates/templates-screen.tsx
+#: src/features/email-templates/write-email-sheet.tsx
 #: src/features/letters/write.tsx
+#: src/features/organization/plan-screen.tsx
 #: src/features/settings/api-keys.tsx
+#: src/features/settings/clipper-sign-ins.tsx
 #: src/features/workspace/parts.tsx
 #: src/features/workspace/preparation.tsx
 #: src/features/workspace/shell.tsx
@@ -11390,6 +12353,10 @@ msgstr "Uppdaterad {completed} av {0}. Låsta dokument och följebrev för offen
 msgid "Updating preview…"
 msgstr "Uppdaterar förhandsvisning..."
 
+#: src/features/branding/branding-screen.tsx
+msgid "Upload"
+msgstr ""
+
 #: src/features/ats-checker/checker.tsx
 msgid "Upload a PDF and see the text an applicant tracking system extracts: what's missing, what's out of order, and how to fix it. Free, no account needed."
 msgstr "Ladda upp en PDF och se texten som ett sökandes spårningssystem extraherar: vad som saknas, vad som är ur funktion och hur man åtgärdar det. Gratis, inget konto behövs."
@@ -11406,6 +12373,10 @@ msgstr "Laddar upp foto..."
 #: src/features/write/picture-screen.tsx
 msgid "URL"
 msgstr "URL"
+
+#: src/features/branding/branding-screen.tsx
+msgid "Use {APP_NAME_MAX} characters or fewer."
+msgstr ""
 
 #: src/features/check/issues.ts
 msgid "Use {minimum}"
@@ -11431,9 +12402,21 @@ msgstr "Använd 3 till 64 gemener, siffror, punkter, bindestreck och understreck
 msgid "Use 6–64 characters."
 msgstr "Använd 6–64 tecken."
 
+#: src/features/branding/branding-screen.tsx
+msgid "Use 80 characters or fewer."
+msgstr ""
+
+#: src/features/branding/branding-screen.tsx
+msgid "Use a colour like #1a56db."
+msgstr ""
+
 #: src/features/design/style-groups.tsx
 msgid "Use a darker shade"
 msgstr "Använd en mörkare nyans"
+
+#: src/features/branding/branding-screen.tsx
+msgid "Use a full https:// address."
+msgstr ""
 
 #: src/features/design/advanced.tsx
 msgid "Use a hex value like #3E6B4F or rgba(62, 107, 79, 1)."
@@ -11442,6 +12425,10 @@ msgstr "Använd ett hexadecimalt värde som #3E6B4F eller rgba(62, 107, 79, 1)."
 #: src/features/ats-checker/messages.ts
 msgid "Use a plain international form, such as +1 555 010 1234."
 msgstr "Använd ett enkelt internationellt format, som +1 555 010 1234."
+
+#: src/features/branding/branding-screen.tsx
+msgid "Use a plain name without line breaks or angle brackets."
+msgstr ""
 
 #: src/features/ats-checker/messages.ts
 msgid "Use a recognized form such as \"Jan 2020 - Mar 2022\" or \"2020 - 2022\"."
@@ -11475,6 +12462,10 @@ msgstr "Använd en http- eller https-länk."
 #: src/features/ats-checker/messages.ts
 msgid "Use at least 9pt."
 msgstr "Använd minst 9pt."
+
+#: src/features/discovery/messages.ts
+msgid "Use at most {MAX_NAME_LENGTH} characters."
+msgstr ""
 
 #: src/features/document-menu/index.tsx
 #: src/features/documents/queries.ts
@@ -11510,6 +12501,10 @@ msgstr "Använd små bokstäver, siffror och enstaka bindestreck."
 #: src/features/career/search-regions-field.tsx
 msgid "Use my timezone"
 msgstr "Använd min tidszon"
+
+#: src/features/branding/branding-screen.tsx
+msgid "Use one address like help@example.com, without a name."
+msgstr ""
 
 #: src/features/check/issues.ts
 msgid "Use one column"
@@ -11581,6 +12576,10 @@ msgstr "Använd den här tiden"
 msgid "Use your editor's normal bullet list, so stray glyphs do not land mid-sentence."
 msgstr "Använd din redigerares vanliga punktlista, så att lösa tecken inte hamnar mitt i en mening."
 
+#: src/features/organization/plan-screen.tsx
+msgid "Used"
+msgstr "Använt"
+
 #: src/features/workspace/tabs/saved.tsx
 msgid "used {used}"
 msgstr "använt {used}"
@@ -11592,6 +12591,10 @@ msgstr "Används för att kontrollera roller och erbjudanden. Var och en är ett
 #: src/features/ai/web-access.tsx
 msgid "Used when {connected} can't read a page. No account needed."
 msgstr "Används när {connected} inte kan läsa en sida. Inget konto behövs."
+
+#: src/features/ai/provider-list.tsx
+msgid "Used when you haven't added a provider of your own. Counts toward your organization's AI allowance."
+msgstr ""
 
 #: src/features/settings/profile.tsx
 #: src/features/write/fields.ts
@@ -11625,6 +12628,11 @@ msgstr "Uzbekiska"
 #: src/features/share/custom-domain.tsx
 msgid "Value"
 msgstr "Värde"
+
+#. placeholder {0}: record.value
+#: src/features/branding/domains-screen.tsx
+msgid "Value: {0}"
+msgstr ""
 
 #: src/features/ats-checker/messages.ts
 msgid "Vary the openings so the section does not read as boilerplate."
@@ -11745,6 +12753,10 @@ msgstr "Volontärarbete"
 msgid "Wait for your account timezone to load, retry if it failed, or clear the deadline."
 msgstr "Vänta tills kontots tidszon har lästs in, försök igen om inläsningen misslyckades, eller rensa sista svarsdatumet."
 
+#: src/features/branding/domains-screen.tsx
+msgid "Waiting for DNS"
+msgstr ""
+
 #: src/features/workspace/tabs/messages.tsx
 msgid "Waiting for you"
 msgstr "Väntar på dig"
@@ -11752,6 +12764,10 @@ msgstr "Väntar på dig"
 #: src/features/applications/next-step.ts
 msgid "Waiting to hear back"
 msgstr "Väntar på att höra tillbaka"
+
+#: src/features/branding/domains-screen.tsx
+msgid "We didn't find the ownership record in time. Check that the TXT record exists exactly as shown."
+msgstr ""
 
 #: app/(tabs)/settings/ai-web-access.tsx
 #: app/(tabs)/settings/ai.tsx
@@ -11790,6 +12806,10 @@ msgstr "Webbsökningar söker jobb i dessa länder. Välj upp till tre länder."
 #: src/features/write/basics-screen.tsx
 msgid "Website"
 msgstr "Webbplats"
+
+#: src/features/discovery/messages.ts
+msgid "Weekly"
+msgstr ""
 
 #: src/features/workspace/parts.tsx
 msgid "Weighing each requirement"
@@ -12021,6 +13041,12 @@ msgstr "Skriv ner vad de frågade medan det är färskt. Coachen jämför dina s
 msgid "Write each role as a clear title and company line, with the dates alongside."
 msgstr "Skriv varje roll som en tydlig titel- och företagsrad, med datumen bredvid."
 
+#: src/features/application-detail/detail-screen.tsx
+#: src/features/email-templates/write-email-sheet.tsx
+#: src/features/workspace/shell.tsx
+msgid "Write email"
+msgstr ""
+
 #: src/features/ats-checker/messages.ts
 msgid "Write it as one uninterrupted piece, with no special spacing."
 msgstr "Skriv det som ett sammanhängande stycke, utan speciell avståndsformatering."
@@ -12092,6 +13118,10 @@ msgstr "Du använder redan detta för \"{takenBy}\"."
 msgid "You answered: {answer}"
 msgstr "Du svarade: {answer}"
 
+#: src/features/discovery/search-form.tsx
+msgid "You can have at most {limit} searches. Delete one to add another."
+msgstr ""
+
 #: src/shell/builder-chrome.tsx
 msgid "You can keep editing. Changes sync when you're back online. PDF sharing works with cached fonts and images."
 msgstr "Du kan fortsätta redigera. Ändringar synkroniseras när du är online igen. PDF-delning fungerar med cachade teckensnitt och bilder."
@@ -12099,6 +13129,10 @@ msgstr "Du kan fortsätta redigera. Ändringar synkroniseras när du är online 
 #: src/features/workspace/tabs/apply.tsx
 msgid "You can keep up to 30 application questions."
 msgstr "Du kan ha upp till 30 ansökningsfrågor."
+
+#: src/features/discovery/searches.tsx
+msgid "You can run a search by hand once every 10 minutes."
+msgstr ""
 
 #: app/(auth)/sign-in.tsx
 msgid "You can sign in with an account you already have."
@@ -12113,6 +13147,10 @@ msgstr "Du avbröt inloggningen innan den var klar."
 msgid "You forgot this before, so it wasn't saved again."
 msgstr "Du har glömt det här tidigare, så det sparades inte igen."
 
+#: src/features/email-templates/templates-screen.tsx
+msgid "You have no templates of your own yet. You can also save one from Write email."
+msgstr ""
+
 #: src/ui/overlays.tsx
 msgid "You have unsaved changes."
 msgstr "Du har osparade ändringar."
@@ -12120,6 +13158,10 @@ msgstr "Du har osparade ändringar."
 #: src/features/workspace/tabs/messages.tsx
 msgid "You send it from your own email."
 msgstr "Du skickar det från din egen mejl."
+
+#: src/features/email-templates/write-email-sheet.tsx
+msgid "You send it from your own email. Nothing is sent from here."
+msgstr ""
 
 #: src/features/settings/sign-out.tsx
 msgid "You will be signed out of {server}. Any edits not yet synced from this device will be lost."
@@ -12171,6 +13213,14 @@ msgstr "Du är offline. Försök igen när du återansluter."
 msgid "You're up to date"
 msgstr "Du är ikapp"
 
+#: src/features/branding/domains-screen.tsx
+msgid "Your address"
+msgstr ""
+
+#: src/features/branding/domains-screen.tsx
+msgid "Your address above keeps working. Ask your administrator to upgrade the plan to add your own domain."
+msgstr ""
+
 #: src/features/workspace/tabs/debrief.tsx
 #: src/features/workspace/tabs/practise.tsx
 msgid "your AI connection"
@@ -12192,6 +13242,10 @@ msgstr "Ditt svar"
 msgid "Your answer · {mode}"
 msgstr "Ditt svar · {mode}"
 
+#: src/features/branding/branding-screen.tsx
+msgid "Your app"
+msgstr ""
+
 #: src/features/workspace/tabs/practise.tsx
 msgid "Your attempts"
 msgstr "Dina försök"
@@ -12207,6 +13261,10 @@ msgstr "Dina punkter är ritade med ovanliga tecken."
 #: src/draft/conflict-sheet.tsx
 msgid "Your changes on this device will be replaced by the saved version."
 msgstr "Dina ändringar på den här enheten kommer att ersättas av den sparade versionen."
+
+#: src/features/settings/profile.tsx
+msgid "Your cohort"
+msgstr ""
 
 #: src/features/ats-checker/messages.ts
 msgid "Your contact details are not on the first page."
@@ -12258,8 +13316,8 @@ msgid "your Knowledge"
 msgstr "din Kunskap"
 
 #: app/(tabs)/settings/preferences.tsx
-msgid "Your language is saved. Restart Reactive Resume to apply the new left-to-right or right-to-left layout."
-msgstr "Ditt språk är sparat. Starta om Reactive Resume för att tillämpa den nya layouten från vänster till höger eller höger till vänster."
+msgid "Your language is saved. Restart the app to apply the new left-to-right or right-to-left layout."
+msgstr ""
 
 #: src/features/ats-checker/messages.ts
 msgid "Your lines are packed very tightly."
@@ -12277,10 +13335,6 @@ msgstr "ditt meddelande"
 msgid "Your name"
 msgstr "Ditt namn"
 
-#: src/features/share/custom-domain.tsx
-msgid "Your name as your address, from OlaCV, the .cv registry. Code {CODE} takes 50% off the first year."
-msgstr "Ditt namn som din adress, från OlaCV, registret för .cv. Med koden {CODE} får du 50 % rabatt första året."
-
 #: src/features/check/issues.ts
 msgid "Your name is missing"
 msgstr "Ditt namn saknas"
@@ -12297,9 +13351,37 @@ msgstr "Din inledning"
 msgid "Your opening, the stories to bring and questions to ask. It becomes your checklist 10 minutes before the call."
 msgstr "Din inledning, berättelserna att ta med och frågorna att ställa. Den blir din checklista 10 minuter före samtalet."
 
+#: src/api/ai-quota.ts
+msgid "Your organization has used 80% of this month's AI allowance."
+msgstr ""
+
+#: src/features/ai/error.ts
+msgid "Your organization has used all of this month's AI allowance. Add your own AI provider in Settings to keep going, or ask an admin about the plan."
+msgstr ""
+
+#: src/features/branding/domains-screen.tsx
+msgid "Your organization is served on this domain."
+msgstr ""
+
+#: src/features/organization/plan-screen.tsx
+msgid "Your organization's owner manages the plan and payments on the web."
+msgstr ""
+
+#: src/features/email-templates/templates-screen.tsx
+msgid "Your own templates for writing to employers. They appear under Write email on every application."
+msgstr ""
+
 #: src/features/ats-checker/messages.ts
 msgid "Your phone number is written in an unusual shape."
 msgstr "Ditt telefonnummer är skrivet i ett ovanligt format."
+
+#: src/features/discovery/messages.ts
+msgid "Your plan allows fewer jobs per run."
+msgstr ""
+
+#: src/features/discovery/searches.tsx
+msgid "Your plan doesn't include job discovery. Ask your administrator about upgrading."
+msgstr ""
 
 #: src/features/assistant/coach-screen.tsx
 msgid "your preferences"
@@ -12389,6 +13471,14 @@ msgstr "dina berättelser"
 #: src/features/workspace/tabs/practise.tsx
 msgid "Your story couldn't be loaded."
 msgstr "Det gick inte att ladda din berättelse."
+
+#: src/features/email-templates/templates-screen.tsx
+msgid "Your templates"
+msgstr ""
+
+#: src/features/email-templates/templates-screen.tsx
+msgid "Your templates couldn't be loaded."
+msgstr ""
 
 #: src/features/workspace/tabs/prepare.tsx
 msgid "Your two-minute introduction"

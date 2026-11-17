@@ -3,6 +3,8 @@ import { protectedProcedure } from "../../context";
 import { applicationDto } from "../../dto/application";
 import { resumeMutationRateLimit } from "../../middleware/rate-limit";
 import { paginate, paginationShape } from "../../pagination";
+// CAREEROS (P5-T03)
+import { prepareClippedCreate } from "../clipper/clip";
 import { applicationService } from "./service";
 
 export const crudRouter = {
@@ -107,7 +109,14 @@ export const crudRouter = {
 		.input(applicationDto.create.input)
 		.use(resumeMutationRateLimit)
 		.output(applicationDto.create.output)
-		.handler(({ input, context }) => applicationService.create({ userId: context.user.id, ...input })),
+		// CAREEROS (P5-T03): a clip (a Job Clipper token, or the clipper marker) is cleaned to plain text, capped and stored
+		// with the marker before it is saved; a request that carries a clipper token is rebuilt from the clip's own fields.
+		.handler(({ input, context }) =>
+			applicationService.create({
+				userId: context.user.id,
+				...prepareClippedCreate(input, context.authentication?.method),
+			}),
+		),
 
 	import: protectedProcedure
 		.route({

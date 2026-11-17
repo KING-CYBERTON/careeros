@@ -18,14 +18,14 @@ it("lists each indexed resume at its canonical address: the primary at /<usernam
 	]);
 });
 
-it("publishes Context7 Ask after the llms title and summary", async () => {
+it("publishes a neutral llms.txt with the platform name and no upstream links", async () => {
 	const text = await handleLlms().text();
-	expect(text).toMatch(
-		/^# Reactive Resume\n\n> [^\n]+\n\n## Search\n\nThis site has a search endpoint: https:\/\/context7.com\/api\/v2\/ask\?siteKey=ask_b3fd9335a63f1b21b1a814ac&query=<URL-encoded question>\./,
-	);
-	expect(text).toContain(
-		"It returns documentation that answers the question, with a source link for each part. No API key is needed. If nothing matches, it says so.\n\n## Product",
-	);
+	// The test deployment itself lives at an upstream-looking address; only the copy is checked.
+	const copy = text.replaceAll("https://rxresu.me", "");
+	expect(text).toMatch(/^# CareerOS\n\n> CareerOS is a career workspace/);
+	expect(text).toContain("/licenses");
+	expect(copy).not.toMatch(/reactive resume|rxresu|context7|opencollective|discord|crowdin|amruth/i);
+	expect((await handleLlms("Acme Careers").text()).startsWith("# Acme Careers\n")).toBe(true);
 });
 
 describe("localized sitemap", () => {
@@ -42,9 +42,15 @@ describe("localized sitemap", () => {
 		const locations = entries.map((entry) => entry.loc);
 
 		expect(response.headers.get("Content-Type")).toBe("application/xml; charset=UTF-8");
-		expect(entries).toHaveLength(162); // Three public pages, 54 real locales; x-default shares English's URL.
+		// Two localized public pages, 54 real locales (x-default shares English's URL), and the two marketing pages.
+		expect(entries).toHaveLength(110);
+		for (const path of ["/", "/organisations"]) {
+			const entry = entries.filter((candidate) => candidate.loc === `https://rxresu.me${path}`);
+			expect(entry).toHaveLength(1);
+			expect(entry[0]?.alternates).toEqual([]);
+		}
 		expect(new Set(locations).size).toBe(entries.length);
-		for (const path of ["/", "/ats-checker", "/resume-templates"]) {
+		for (const path of ["/ats-checker", "/resume-templates"]) {
 			const base = `https://rxresu.me${path}`;
 			expect(locations).toContain(base);
 			expect(locations).toContain(`${base}?locale=de-DE`);

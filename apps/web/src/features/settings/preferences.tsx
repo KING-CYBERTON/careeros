@@ -47,16 +47,9 @@ export function PreferencesSettings() {
 					</label>
 					<LocaleCombobox id={languageId} />
 				</div>
+				{/* CAREEROS: the upstream "Help translate" link was removed. */}
 				<p className="text-xs text-ink-3">
-					<Trans>Interface only. Each resume sets its own language in Design.</Trans>{" "}
-					<a
-						href="https://crowdin.com/project/reactive-resume"
-						target="_blank"
-						rel="noopener noreferrer"
-						className="underline underline-offset-2"
-					>
-						<Trans>Help translate</Trans>
-					</a>
+					<Trans>Interface only. Each resume sets its own language in Design.</Trans>
 				</p>
 			</SettingsSection>
 

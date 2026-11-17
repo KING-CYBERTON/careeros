@@ -6,6 +6,7 @@ import z from "zod";
 import { toast } from "@reactive-resume/ui/components/toast";
 import { LetterShell } from "./-components/letter-shell";
 import { useLetterEditorStore } from "@/features/letters/store";
+import { getBrand } from "@/libs/brand";
 import { orpc } from "@/libs/orpc/client";
 import { createNoindexFollowMeta } from "@/libs/seo";
 
@@ -46,7 +47,7 @@ export const Route = createFileRoute("/builder/letter/$coverLetterId")({
 	},
 	head: ({ loaderData }) => ({
 		meta: loaderData
-			? [{ title: `${loaderData.name} - Reactive Resume` }, createNoindexFollowMeta()]
+			? [{ title: `${loaderData.name} - ${getBrand().appName}` }, createNoindexFollowMeta()]
 			: [createNoindexFollowMeta()],
 	}),
 });
@@ -60,7 +61,7 @@ function RouteComponent() {
 		state.letter?.id === coverLetterId ? (state.savedName ?? letter.name) : letter.name,
 	);
 	useEffect(() => {
-		document.title = `${name} - Reactive Resume`;
+		document.title = `${name} - ${getBrand().appName}`;
 	}, [name]);
 
 	useBlocker({

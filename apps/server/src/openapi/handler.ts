@@ -1,3 +1,5 @@
+// CAREEROS: the request's resolved host reaches protectedProcedure through the oRPC context (P2-T03)
+import type { HostContext } from "@careeros/tenancy";
 import { SmartCoercionPlugin } from "@orpc/json-schema";
 import { OpenAPIHandler } from "@orpc/openapi/fetch";
 import { onError, ORPCError } from "@orpc/server";
@@ -34,7 +36,7 @@ export async function handleOpenApiDocument() {
 	});
 }
 
-export async function handleOpenApi(request: Request, trustedClient: string) {
+export async function handleOpenApi(request: Request, trustedClient: string, host?: HostContext) {
 	const pathname = new URL(request.url).pathname;
 	if (request.method === "GET" && ["/api/openapi/spec.json", "/api/openapi/spec"].includes(pathname)) {
 		return Response.json(await generateOpenApiSpec({ appUrl: env.APP_URL, version: appVersion }));
@@ -43,7 +45,14 @@ export async function handleOpenApi(request: Request, trustedClient: string) {
 	const resHeaders = new Headers();
 	const { response } = await openAPIHandler.handle(request, {
 		prefix: "/api/openapi",
-		context: { locale: getRequestLocale(request), reqHeaders: request.headers, resHeaders, trustedClient },
+		context: {
+			locale: getRequestLocale(request),
+			reqHeaders: request.headers,
+			resHeaders,
+			trustedClient,
+			// CAREEROS (P2-T03)
+			...(host ? { host } : {}),
+		},
 	});
 
 	resHeaders.set("Cache-Control", "no-store");

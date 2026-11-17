@@ -33,6 +33,11 @@ msgstr "« {0} » déplacé vers la corbeille"
 msgid "“{0}” stops being your primary resume."
 msgstr "« {0} » ne sera plus votre CV principal."
 
+#. placeholder {0}: selected?.label ?? ""
+#: src/features/settings/clipper-sign-ins.tsx
+msgid "“{0}” stops working. You can sign in again from the extension."
+msgstr ""
+
 #. placeholder {0}: purge?.documents[0]?.name
 #: src/features/documents/library.tsx
 msgid "“{0}” will be deleted for good and can't be restored."
@@ -331,7 +336,9 @@ msgid "{0} (copy)"
 msgstr "{0} (copie)"
 
 #. placeholder {0}: document.name
+#. placeholder {0}: selected.name
 #: src/draft/adapters.ts
+#: src/features/email-templates/write-email-sheet.tsx
 msgid "{0} (mine)"
 msgstr "{0} (le mien)"
 
@@ -382,6 +389,12 @@ msgstr "{0} de moins"
 msgid "{0} more"
 msgstr "{0} de plus"
 
+#. placeholder {0}: plan.seatsUsed
+#. placeholder {1}: plan.seatLimit
+#: src/features/organization/plan-screen.tsx
+msgid "{0} of {1}"
+msgstr ""
+
 #. placeholder {0}: shown.length
 #. placeholder {1}: TEMPLATES.length
 #: src/features/design/template-group.tsx
@@ -412,11 +425,6 @@ msgstr "{0} offre d’emploi"
 msgid "{0} returned “{1}”. Your message is kept."
 msgstr "{0} a renvoyé « {1} ». Votre message est conservé."
 
-#. placeholder {0}: done.length
-#: src/features/career/today.tsx
-msgid "{0} roles updated."
-msgstr ""
-
 #. placeholder {0}: selectedIds.length
 #. placeholder {0}: selection.length
 #: src/features/applications/list-screen.tsx
@@ -428,6 +436,11 @@ msgstr "{0} sélectionné"
 #. placeholder {1}: failed.length
 #: src/features/career/today.tsx
 msgid "{0} updated; {1} failed. Failed roles remain selected. Refresh or retry."
+msgstr ""
+
+#. placeholder {0}: plan.seatsUsed
+#: src/features/organization/plan-screen.tsx
+msgid "{0} used"
 msgstr ""
 
 #. placeholder {0}: answer.split(/\s+/).filter(Boolean).length
@@ -498,14 +511,6 @@ msgstr "{company} · {tabName}"
 msgid "{completed, plural, one {# document updated} other {# documents updated}}"
 msgstr "{completed, plural, one {# document mis à jour} other {# documents mis à jour}}"
 
-#: src/features/share/custom-domain.tsx
-msgid "{cost} a year"
-msgstr "{cost} par an"
-
-#: src/features/share/custom-domain.tsx
-msgid "{cost} the first year"
-msgstr "{cost} la première année"
-
 #: src/features/write/section-sheet.tsx
 msgid "{count, plural, one {# column} other {# columns}}"
 msgstr "{count, plural, one {# colonne} other {# colonnes}}"
@@ -513,6 +518,10 @@ msgstr "{count, plural, one {# colonne} other {# colonnes}}"
 #: src/features/workspace/tabs/messages.tsx
 msgid "{count, plural, one {Apply # change} other {Apply # changes}}"
 msgstr "{count, plural, one {Appliquer # modification} other {Appliquer # modifications}}"
+
+#: src/features/branding/domains-screen.tsx
+msgid "{count} of {limit} domains used."
+msgstr ""
 
 #: src/features/workspace/tabs/debrief.tsx
 msgid "{day} · {length}m"
@@ -708,6 +717,10 @@ msgstr "{toCheck, plural, one {Le champ # nécessite un examen.} other {Les cham
 msgid "{toCheck, plural, one {# to check} other {# to check}}"
 msgstr "{toCheck, plural, one {# à vérifier} other {# à vérifier}}"
 
+#: src/features/organization/plan-screen.tsx
+msgid "{trialDays} days left"
+msgstr ""
+
 #: src/features/letters/write.tsx
 #: src/features/workspace/tabs/apply.tsx
 msgid "{words, plural, one {# word} other {# words}}"
@@ -755,8 +768,12 @@ msgid "24 hours before"
 msgstr "24 heures avant"
 
 #: src/features/letters/share.tsx
-msgid "A backup of this letter. Imports back into Reactive Resume as a letter."
-msgstr "Une sauvegarde de cette lettre. Réimporte dans Reactive Resume sous forme de lettre."
+msgid "A backup of this letter. Imports back into {appName} as a letter."
+msgstr ""
+
+#: src/features/discovery/messages.ts
+msgid "A board name has only letters, digits, hyphens and underscores."
+msgstr ""
 
 #: src/features/check/issues.ts
 msgid "A city and country let roles be matched to where you are."
@@ -822,9 +839,21 @@ msgstr "Une date numérique se lit différemment selon les pays."
 msgid "A page is rotated."
 msgstr "Une page est pivotée."
 
+#: src/features/organization/plan-screen.tsx
+msgid "A payment is overdue. Please contact your organization's owner."
+msgstr ""
+
+#: src/features/organization/plan-screen.tsx
+msgid "A payment is overdue. Please contact your organization's owner. Service pauses after {graceEnd}."
+msgstr ""
+
 #: src/features/applications/prior-no-response.tsx
 msgid "A previous application to this company was closed with No response. You can still apply."
 msgstr "Une candidature précédente auprès de cette entreprise a été fermée avec le résultat Aucune réponse. Vous pouvez tout de même postuler."
+
+#: src/features/email-templates/built-in-text.ts
+msgid "A question about working at {company}"
+msgstr ""
 
 #: src/features/application-detail/sheets.tsx
 msgid "A reminder to check in, shown as the next step until you do."
@@ -833,6 +862,10 @@ msgstr "Un rappel pour vous enregistrer, affiché comme étape suivante jusqu'à
 #: src/features/check/issues.ts
 msgid "A role has no description"
 msgstr "Un rôle n'a pas de description"
+
+#: src/features/discovery/searches.tsx
+msgid "A search looks at the job boards you choose, on a schedule, and adds postings that match to the queue below."
+msgstr ""
 
 #: src/features/check/writing.tsx
 msgid "A second opinion on your wording"
@@ -914,6 +947,8 @@ msgid "Actions for {0} at {1}"
 msgstr "Actions pour {0} chez {1}"
 
 #: src/features/ai/web-access.tsx
+#: src/features/branding/domains-screen.tsx
+#: src/features/organization/plan-screen.tsx
 msgid "Active"
 msgstr "Actif"
 
@@ -922,6 +957,10 @@ msgstr "Actif"
 msgid "Add"
 msgstr "Ajouter"
 
+#: src/features/discovery/search-form.tsx
+msgid "Add a board"
+msgstr ""
+
 #: src/features/applications/lane-settings.tsx
 msgid "Add a compatible replacement lane first."
 msgstr "Ajoutez d'abord une étape de remplacement compatible."
@@ -929,6 +968,10 @@ msgstr "Ajoutez d'abord une étape de remplacement compatible."
 #: src/features/career/search-regions-field.tsx
 msgid "Add a country"
 msgstr "Ajouter un pays"
+
+#: src/features/branding/domains-screen.tsx
+msgid "Add a domain"
+msgstr ""
 
 #: src/features/career/facts.tsx
 msgid "Add a fact"
@@ -1034,6 +1077,14 @@ msgstr "Ajoutez d’abord un entretien à venir dans Candidatures."
 msgid "Add application"
 msgstr "Ajouter une candidature"
 
+#: src/features/discovery/messages.ts
+msgid "Add at most {MAX_TERMS} entries."
+msgstr ""
+
+#: src/features/discovery/messages.ts
+msgid "Add at most 100 boards."
+msgstr ""
+
 #: src/features/settings/application-profile.tsx
 msgid "Add authorization country"
 msgstr ""
@@ -1057,6 +1108,10 @@ msgstr "Ajouter une lettre de motivation"
 #: src/features/check/issues.ts
 msgid "Add dates"
 msgstr "Ajouter des dates"
+
+#: src/features/branding/domains-screen.tsx
+msgid "Add domain"
+msgstr ""
 
 #: src/features/write/fields.ts
 msgid "Add education"
@@ -1111,6 +1166,10 @@ msgstr "Ajouter une offre d’emploi"
 msgid "Add offer terms manually, or use optional AI extraction in Messages."
 msgstr "Ajoutez les conditions d’une offre d’emploi manuellement ou utilisez l’extraction facultative par IA dans Messages."
 
+#: src/features/discovery/search-form.tsx
+msgid "Add one at a time or separate them with commas."
+msgstr ""
+
 #: src/features/ats-checker/messages.ts
 msgid "Add one link that shows your work."
 msgstr "Ajoutez un lien qui montre votre travail."
@@ -1118,6 +1177,10 @@ msgstr "Ajoutez un lien qui montre votre travail."
 #: src/features/ats-checker/messages.ts
 msgid "Add one with its country code; some application forms require it before you can submit."
 msgstr "Ajoutez-en un avec son indicatif pays ; certains formulaires de candidature l'exigent avant de pouvoir être soumis."
+
+#: src/features/discovery/searches.tsx
+msgid "Add one with the job titles, skills and places you want, plus the company job boards to watch. It runs on its own, and the best matches show up in the queue."
+msgstr ""
 
 #: src/features/design/layout-screen.tsx
 msgid "Add page"
@@ -1358,6 +1421,10 @@ msgstr "Les fournisseurs d'IA n'ont pas pu être chargés. Rechargez pour réess
 msgid "AI providers couldn't be loaded. Retry or fill the details manually."
 msgstr "Les fournisseurs d’IA n’ont pas pu être chargés. Réessayez ou renseignez les détails manuellement."
 
+#: src/features/organization/plan-screen.tsx
+msgid "AI quota"
+msgstr ""
+
 #: src/features/applications/add-sheet.tsx
 msgid "AI reads pasted text only when you ask. Links can use the page’s own job data without AI."
 msgstr "L’IA lit le texte collé uniquement à votre demande. Les liens peuvent utiliser les données d’offre de la page sans IA."
@@ -1437,6 +1504,10 @@ msgstr "Déjà couvert · choisissez-en un pour le trouver sur la page"
 msgid "Already covered:"
 msgstr "Déjà couvert :"
 
+#: src/features/email-templates/templates-screen.tsx
+msgid "Also available to you"
+msgstr ""
+
 #: src/features/check/screen.tsx
 msgid "Also check the exported PDF"
 msgstr "Vérifiez également le PDF exporté"
@@ -1482,6 +1553,10 @@ msgstr "une erreur"
 #: src/features/application-detail/sections.tsx
 msgid "and {0} more"
 msgstr "et {0} plus"
+
+#: src/features/branding/domains-screen.tsx
+msgid "Another account claimed this domain first."
+msgstr ""
 
 #: src/features/share/link.tsx
 msgid "Another of your resumes uses this address."
@@ -1529,12 +1604,17 @@ msgid "Answers copied"
 msgstr "Réponses copiées"
 
 #: src/features/career/preferences.tsx
+#: src/features/discovery/messages.ts
 msgid "Any"
 msgstr "Peu importe"
 
 #: src/features/design/style-groups.tsx
 msgid "Any font, in Advanced"
 msgstr "N’importe quelle police, en avancé"
+
+#: src/features/email-templates/template-editor.tsx
+msgid "Any stage"
+msgstr ""
 
 #: src/features/share/web-page.tsx
 msgid "Anyone with the link will be able to view your resume."
@@ -1561,6 +1641,10 @@ msgstr "Clé API révoquée. Les applications qui l'utilisent cessent de fonctio
 #: src/features/settings/api-keys.tsx
 msgid "API keys"
 msgstr "Clés API"
+
+#: src/features/branding/branding-screen.tsx
+msgid "App name"
+msgstr ""
 
 #: app/(tabs)/settings/preferences.tsx
 msgid "Appearance"
@@ -1728,6 +1812,19 @@ msgstr "Les applications utilisant « {0} » cesseront de fonctionner. Cette act
 msgid "Arabic"
 msgstr "Arabe"
 
+#: src/features/email-templates/templates-screen.tsx
+msgid "Archive"
+msgstr ""
+
+#. placeholder {0}: archiving?.name ?? ""
+#: src/features/email-templates/templates-screen.tsx
+msgid "Archive {0}?"
+msgstr ""
+
+#: src/features/email-templates/template-editor.tsx
+msgid "Archive template"
+msgstr ""
+
 #: src/features/write/fields.ts
 msgid "Area of study"
 msgstr "Domaine d'études"
@@ -1781,9 +1878,13 @@ msgstr "Demandez à l'assistant de le travailler"
 msgid "Ask the coach"
 msgstr "Demander au coach"
 
-#: src/features/share/download.tsx
-msgid "Ask the community. Remove personal details before posting."
-msgstr "Demandez à la communauté. Retirez vos informations personnelles avant de publier."
+#: src/auth/session-gate.tsx
+msgid "Ask the organization's administrator for an invitation, or sign out and use a different account."
+msgstr ""
+
+#: src/features/branding/domains-screen.tsx
+msgid "Ask the platform administrator to set up custom domains. Your address above keeps working."
+msgstr ""
 
 #: src/features/ai/error.ts
 msgid "Ask your server administrator to enable credential encryption or configure a shared connection."
@@ -1869,10 +1970,6 @@ msgstr "Automatiquement"
 #: src/features/history/history.tsx
 msgid "Autosaves are grouped by session and kept for 90 days. Named versions are kept until you delete them. Restoring saves the current state first."
 msgstr "Les sauvegardes automatiques sont regroupées par session et conservées pendant 90 jours. Les versions nommées sont conservées jusqu'à ce que vous les supprimiez. La restauration enregistre d'abord l'état actuel."
-
-#: src/features/share/custom-domain.tsx
-msgid "Available"
-msgstr "Disponible"
 
 #: src/features/ats-checker/messages.ts
 msgid "Avoid heavy letter-spacing effects, then re-export."
@@ -2010,6 +2107,16 @@ msgstr ""
 msgid "Board"
 msgstr "Tableau"
 
+#. placeholder {0}: index + 1
+#: src/features/discovery/search-form.tsx
+msgid "Board {0} name or link"
+msgstr ""
+
+#. placeholder {0}: index + 1
+#: src/features/discovery/search-form.tsx
+msgid "Board {0} source"
+msgstr ""
+
 #: src/features/design/advanced.tsx
 msgctxt "Body Text (paragraphs, lists, etc.)"
 msgid "Body"
@@ -2050,6 +2157,15 @@ msgstr "Coins arrondis"
 msgid "Border width"
 msgstr "Largeur de la bordure"
 
+#: app/(tabs)/settings/index.tsx
+#: src/features/branding/branding-screen.tsx
+msgid "Branding"
+msgstr ""
+
+#: src/features/branding/branding-screen.tsx
+msgid "Branding saved. Open tabs on your organization's address update within about a minute."
+msgstr ""
+
 #: src/features/ats-checker/messages.ts
 msgid "Break the resume into the usual sections so it can be segmented."
 msgstr "Divisez le CV selon les sections habituelles pour qu'il puisse être segmenté."
@@ -2075,6 +2191,14 @@ msgstr "L'actualisation du briefing est activée · {next}"
 msgid "Briefing refresh paused"
 msgstr "Actualisation du briefing en pause"
 
+#: src/features/settings/clipper-sign-ins.tsx
+msgid "Browsers where you signed in to the Job Clipper extension. You sign in from the extension on a computer."
+msgstr ""
+
+#: src/features/email-templates/labels.ts
+msgid "Built-in"
+msgstr ""
+
 #: src/features/ai/web-access.tsx
 msgid "Built-in reader"
 msgstr "Lecteur intégré"
@@ -2098,9 +2222,9 @@ msgstr "Liste à puces"
 msgid "Burgundy"
 msgstr "Bordeaux"
 
-#: app/(tabs)/settings/index.tsx
-msgid "by <0>Amruth Pillai</0>"
-msgstr "par <0>Amruth Pillai</0>"
+#: src/auth/auth-header.tsx
+msgid "By creating an account you agree to the Terms and the Privacy policy."
+msgstr ""
 
 #: src/features/applications-board/views.tsx
 msgid "Calendar"
@@ -2121,6 +2245,8 @@ msgstr "Un logiciel peut-il lire votre CV ?"
 #: src/features/ats-checker/checker.tsx
 #: src/features/check/parser.tsx
 #: src/features/check/writing.tsx
+#: src/features/discovery/search-form.tsx
+#: src/features/email-templates/template-editor.tsx
 #: src/features/search/search-screen.tsx
 #: src/features/workspace/preparation.tsx
 #: src/features/workspace/tabs/fit.tsx
@@ -2159,6 +2285,11 @@ msgstr "Catalan"
 #: src/features/applications/lane-settings.tsx
 msgid "Category"
 msgstr "Catégorie"
+
+#. placeholder {0}: domain.cfSslStatus
+#: src/features/branding/domains-screen.tsx
+msgid "Certificate: {0}"
+msgstr ""
 
 #: src/features/write/fields.ts
 msgid "Certifications"
@@ -2242,6 +2373,10 @@ msgstr "Vérifier un exemple de fichier"
 msgid "Check again"
 msgstr "Vérifier à nouveau"
 
+#: src/features/branding/domains-screen.tsx
+msgid "Check again in {wait}s"
+msgstr ""
+
 #: src/features/ats-checker/checker.tsx
 msgid "Check another file"
 msgstr "Vérifier un autre fichier"
@@ -2267,6 +2402,10 @@ msgstr "Vérifier l'adéquation"
 msgid "Check it's accurate."
 msgstr "Vérifiez que c'est exact."
 
+#: src/features/branding/domains-screen.tsx
+msgid "Check now"
+msgstr ""
+
 #: src/features/workspace/tabs/prepare.tsx
 msgid "Check the details"
 msgstr "Vérifiez les détails"
@@ -2286,6 +2425,10 @@ msgstr "Vérifiez les champs et réessayez. Pour les liens illisibles, collez pl
 #: src/features/documents/queries.ts
 msgid "Check the file or fields and try again."
 msgstr "Vérifiez le fichier ou les champs et réessayez."
+
+#: src/features/discovery/messages.ts
+msgid "Check this field."
+msgstr ""
 
 #: src/features/workspace/tabs/fit.tsx
 msgid "Check this role against your evidence"
@@ -2377,6 +2520,14 @@ msgstr "Choisissez un PDF de moins de 10 Mo. Le fichier sélectionné n’a pas
 msgid "Choose a photo smaller than 10 MB."
 msgstr "Choisissez une photo inférieure à 10 Mo."
 
+#: src/features/branding/branding-screen.tsx
+msgid "Choose a PNG image."
+msgstr ""
+
+#: src/features/branding/branding-screen.tsx
+msgid "Choose a PNG or WebP image."
+msgstr ""
+
 #: src/features/applications/lane-settings.tsx
 msgid "Choose a replacement"
 msgstr "Choisissez un remplacement"
@@ -2421,6 +2572,14 @@ msgstr "Choisissez une candidature et corrigez les champs mis en évidence avant
 msgid "Choose an audio file"
 msgstr "Choisissez un fichier audio"
 
+#: src/features/branding/branding-screen.tsx
+msgid "Choose an image of 128 KB or less."
+msgstr ""
+
+#: src/features/branding/branding-screen.tsx
+msgid "Choose an image of 512 KB or less."
+msgstr ""
+
 #: src/features/documents/new-document.tsx
 msgid "Choose another file"
 msgstr "Choisissez un autre fichier"
@@ -2432,6 +2591,10 @@ msgstr "Choisir une date"
 #: src/features/settings/profile.tsx
 msgid "Choose from library"
 msgstr "Choisissez dans la bibliothèque"
+
+#: src/features/branding/branding-screen.tsx
+msgid "Choose one of the listed fonts."
+msgstr ""
 
 #: src/features/applications-board/board-screen.tsx
 msgid "Choose outcome"
@@ -2567,10 +2730,6 @@ msgstr "Clôturées : {closed}"
 msgid "Coach"
 msgstr "Coach"
 
-#: src/features/share/custom-domain.tsx
-msgid "Code copied"
-msgstr "Code copié"
-
 #: src/features/design/design-pane.tsx
 #: src/features/letters/design.tsx
 msgid "Color"
@@ -2583,6 +2742,10 @@ msgstr "Couleur (#RRGGBB)"
 #: src/features/design/advanced.tsx
 msgid "Colors and level"
 msgstr "Couleurs et niveau"
+
+#: src/features/branding/branding-screen.tsx
+msgid "Colours and font"
+msgstr ""
 
 #: src/features/write/section-sheet.tsx
 msgid "Columns"
@@ -2641,8 +2804,8 @@ msgid "Complete {0} before saving."
 msgstr "Complétez {0} avant d’enregistrer."
 
 #: src/features/share/download.tsx
-msgid "Complete data backup. Imports back into Reactive Resume or JSON Resume tools."
-msgstr "Sauvegarde complète des données. Réimporte dans les outils Reactive Resume ou JSON Resume."
+msgid "Complete data backup. Imports back into {appName} or JSON Resume tools."
+msgstr ""
 
 #: src/features/ats-checker/messages.ts
 msgid "Compress or remove large images to keep uploads quick."
@@ -2677,10 +2840,6 @@ msgstr "Se connecter"
 #: src/features/share/custom-domain.tsx
 msgid "Connect {0}"
 msgstr "Connecter {0}"
-
-#: src/features/share/custom-domain.tsx
-msgid "Connect {domain}"
-msgstr "Connecter {domain}"
 
 #: src/features/ai/web-access.tsx
 msgid "Connect a service"
@@ -2825,14 +2984,24 @@ msgstr "Copié"
 msgid "Copied to clipboard"
 msgstr "Copié dans le presse-papiers"
 
+#: src/features/branding/domains-screen.tsx
+msgid "Copied."
+msgstr ""
+
 #: src/features/share/custom-domain.tsx
 msgid "Copies it"
 msgstr "Copie ce texte"
 
+#: src/features/email-templates/write-email-sheet.tsx
 #: src/features/share/link.tsx
 #: src/features/workspace/answer-library.tsx
 msgid "Copy"
 msgstr "Copier"
+
+#. placeholder {0}: record.type
+#: src/features/branding/domains-screen.tsx
+msgid "Copy {0} value"
+msgstr ""
 
 #: src/features/workspace/preparation.tsx
 msgid "Copy a base resume for this job"
@@ -2842,13 +3011,13 @@ msgstr ""
 msgid "Copy a resume for a job"
 msgstr "Copier un curriculum vitae pour un emploi"
 
+#: src/features/branding/domains-screen.tsx
+msgid "Copy address"
+msgstr ""
+
 #: src/features/workspace/tabs/apply.tsx
 msgid "Copy answers"
 msgstr "Copier les réponses"
-
-#: src/features/share/custom-domain.tsx
-msgid "Copy code"
-msgstr "Copier le code"
 
 #: src/features/document-menu/index.tsx
 msgid "Copy created"
@@ -2886,6 +3055,14 @@ msgstr "Corriger le fait"
 msgid "Correct the year, or write \"Present\" for ongoing work."
 msgstr "Corrigez l'année, ou écrivez « Présent » pour un poste en cours."
 
+#: src/features/branding/domains-screen.tsx
+msgid "Couldn't add the domain. Check the name and try again."
+msgstr ""
+
+#: src/features/email-templates/templates-screen.tsx
+msgid "Couldn't archive the template. Try again."
+msgstr ""
+
 #: src/features/assistant/chat-view.tsx
 msgid "Couldn't attach the file. Try again."
 msgstr "Impossible de joindre le fichier. Réessayez."
@@ -2894,6 +3071,7 @@ msgstr "Impossible de joindre le fichier. Réessayez."
 msgid "Couldn't change the language. Try again."
 msgstr "Impossible de changer la langue. Réessayez."
 
+#: src/features/discovery/searches.tsx
 #: src/features/workspace/tabs/prepare.tsx
 msgid "Couldn't change the schedule. Try again."
 msgstr "Impossible de modifier la planification. Réessayez."
@@ -2909,6 +3087,10 @@ msgstr "Impossible de vérifier ou d'enregistrer cette adresse. Réessayez."
 #: src/features/applications/prior-no-response.tsx
 msgid "Couldn't check prior applications. You can still save this application."
 msgstr "Impossible de vérifier les candidatures précédentes. Vous pouvez tout de même enregistrer cette candidature."
+
+#: src/features/branding/domains-screen.tsx
+msgid "Couldn't check the domain. Try again."
+msgstr ""
 
 #: src/features/letters/write.tsx
 msgid "Couldn't check your AI providers."
@@ -2943,6 +3125,14 @@ msgstr "Impossible de confirmer l’enregistrement. Vérifiez la candidature ava
 msgid "Couldn't copy the transcript. Try again."
 msgstr "Impossible de copier la transcription. Réessayez."
 
+#: src/features/email-templates/write-email-sheet.tsx
+msgid "Couldn't copy. Select the text and copy it yourself."
+msgstr ""
+
+#: src/features/branding/domains-screen.tsx
+msgid "Couldn't copy. Select the text instead."
+msgstr ""
+
 #: src/features/application-detail/sections.tsx
 #: src/features/workspace/preparation.tsx
 msgid "Couldn't create the letter. Try again."
@@ -2960,10 +3150,18 @@ msgstr "Impossible de supprimer la conversation. Réessayez."
 msgid "Couldn't delete the interview. Try again."
 msgstr "Impossible de supprimer l'entretien. Réessayez."
 
+#: src/features/discovery/searches.tsx
+msgid "Couldn't delete this search. Try again."
+msgstr ""
+
 #: src/features/settings/export.tsx
 #: src/features/share/download.tsx
 msgid "Couldn't export. Try again."
 msgstr "Impossible d'exporter. Essayer à nouveau."
+
+#: src/features/discovery/search-form.tsx
+msgid "Couldn't find the board name in this link."
+msgstr ""
 
 #: src/features/application-detail/sections.tsx
 #: src/features/workspace/preparation.tsx
@@ -3008,6 +3206,10 @@ msgstr "Impossible de charger les clés API."
 msgid "Couldn't load applications."
 msgstr "Impossible de charger les candidatures."
 
+#: src/features/branding/domains-screen.tsx
+msgid "Couldn't load domains."
+msgstr ""
+
 #: src/features/documents/thumbnail.tsx
 msgid "Couldn't load letter"
 msgstr "Impossible de charger la lettre de motivation"
@@ -3024,6 +3226,10 @@ msgstr "Impossible de charger les CV."
 msgid "Couldn't load statistics."
 msgstr "Impossible de charger les statistiques."
 
+#: src/features/branding/branding-screen.tsx
+msgid "Couldn't load the branding."
+msgstr ""
+
 #: src/features/assistant/assistant-screen.tsx
 #: src/features/letters/share.tsx
 #: src/features/letters/write.tsx
@@ -3033,6 +3239,10 @@ msgstr "Impossible de charger la lettre de motivation."
 #: src/features/check/job-match.tsx
 msgid "Couldn't load the linked posting."
 msgstr "Impossible de charger l'offre d'emploi liée."
+
+#: src/features/organization/plan-screen.tsx
+msgid "Couldn't load the plan."
+msgstr ""
 
 #: app/builder/[id]/page.tsx
 #: app/builder/[id]/write.tsx
@@ -3062,6 +3272,10 @@ msgstr "Impossible de charger ceci. Vérifiez votre connexion et réessayez."
 msgid "Couldn't load versions."
 msgstr "Impossible de charger les versions."
 
+#: src/features/settings/clipper-sign-ins.tsx
+msgid "Couldn't load your Job Clipper sign-ins."
+msgstr ""
+
 #: app/(tabs)/settings/account.tsx
 msgid "Couldn't load your profile."
 msgstr "Impossible de charger votre profil."
@@ -3073,6 +3287,10 @@ msgstr "Impossible de charger votre adresse publique."
 #: src/features/letters/write.tsx
 msgid "Couldn't load your resumes."
 msgstr "Impossible de charger vos CVs."
+
+#: src/features/discovery/searches.tsx
+msgid "Couldn't load your searches. Check your connection and try again."
+msgstr ""
 
 #: app/(tabs)/settings/preferences.tsx
 msgid "Couldn't load your timezone."
@@ -3090,11 +3308,11 @@ msgstr "Impossible de la marquer comme envoyée. Réessayez."
 #: app/(tabs)/settings/index.tsx
 #: src/auth/auth-header.tsx
 #: src/features/settings/api-keys.tsx
-#: src/features/share/download.tsx
 msgid "Couldn't open the browser. Try again."
 msgstr "Impossible d'ouvrir le navigateur. Réessayez."
 
 #: src/features/career/today.tsx
+#: src/features/discovery/review-queue.tsx
 msgid "Couldn't open the posting. Try again."
 msgstr "Impossible d'ouvrir l'offre d'emploi. Réessayez."
 
@@ -3141,6 +3359,14 @@ msgstr "Impossible d'actualiser vos documents."
 msgid "Couldn't remember that. Try again."
 msgstr "Impossible de mémoriser cela. Réessayez."
 
+#: src/features/branding/branding-screen.tsx
+msgid "Couldn't remove it. Try again."
+msgstr ""
+
+#: src/features/branding/domains-screen.tsx
+msgid "Couldn't remove the domain. Try again."
+msgstr ""
+
 #: src/features/application-detail/sections.tsx
 msgid "Couldn't remove the file. Try again."
 msgstr "Impossible de supprimer le fichier. Réessayez."
@@ -3162,6 +3388,10 @@ msgstr "Impossible de rendre ce CV."
 msgid "Couldn't revoke the key. Try again."
 msgstr "Impossible de révoquer la clé. Réessayez."
 
+#: src/features/settings/clipper-sign-ins.tsx
+msgid "Couldn't revoke the sign-in. Try again."
+msgstr ""
+
 #: src/features/career/facts.tsx
 #: src/features/career/hooks.ts
 #: src/features/workspace/hooks.ts
@@ -3180,6 +3410,10 @@ msgstr "Impossible d'enregistrer cette modification. Essayer à nouveau."
 #: src/features/workspace/tabs/fit.tsx
 msgid "Couldn't save that to Knowledge. Try again."
 msgstr "Impossible d'enregistrer cela dans Connaissances. Réessayez."
+
+#: src/features/branding/branding-screen.tsx
+msgid "Couldn't save the branding. Check the highlighted fields and try again."
+msgstr ""
 
 #: src/features/application-detail/sheets.tsx
 msgid "Couldn't save the contacts. Try again."
@@ -3201,6 +3435,11 @@ msgstr "Impossible d'enregistrer les notes. Votre texte est toujours là."
 msgid "Couldn't save the tags. Try again."
 msgstr "Impossible d'enregistrer les mots-clés. Réessayez."
 
+#: src/features/email-templates/templates-screen.tsx
+#: src/features/email-templates/write-email-sheet.tsx
+msgid "Couldn't save the template. Try again."
+msgstr ""
+
 #: app/(tabs)/settings/preferences.tsx
 msgid "Couldn't save the theme. Try again."
 msgstr "Impossible d'enregistrer le thème. Réessayez."
@@ -3208,6 +3447,10 @@ msgstr "Impossible d'enregistrer le thème. Réessayez."
 #: app/(tabs)/settings/preferences.tsx
 msgid "Couldn't save the timezone. Try again."
 msgstr "Impossible d'enregistrer le fuseau horaire. Réessayez."
+
+#: src/features/discovery/search-form.tsx
+msgid "Couldn't save this search. Check your connection and try again."
+msgstr ""
 
 #: src/features/letters/write.tsx
 msgid "Couldn't save your changes, so drafting didn't start. Nothing on the page changed."
@@ -3280,6 +3523,10 @@ msgstr "Impossible de démarrer l'enregistrement. Réessayez ou saisissez votre 
 msgid "Couldn't start the conversation. Try again."
 msgstr "Impossible de démarrer la conversation. Essayer à nouveau."
 
+#: src/features/discovery/searches.tsx
+msgid "Couldn't start the run. Try again."
+msgstr ""
+
 #: src/features/career/role-suggestions.tsx
 msgid "Couldn't suggest roles. Try again or enter roles manually."
 msgstr ""
@@ -3327,6 +3574,10 @@ msgstr "Impossible de mettre à jour la chronologie. Essayer à nouveau."
 #: src/features/application-detail/sections.tsx
 msgid "Couldn't upload the file. Try again."
 msgstr "Impossible d’envoyer le fichier. Réessayez."
+
+#: src/features/branding/branding-screen.tsx
+msgid "Couldn't upload the image. Try again."
+msgstr ""
 
 #: src/features/settings/profile.tsx
 msgid "Couldn't upload the photo."
@@ -3425,6 +3676,14 @@ msgstr "Créer une copie"
 msgid "Create or import a resume first, then return to copy it for this job."
 msgstr "Créez ou importez d’abord un CV, puis revenez le copier pour ce poste."
 
+#: src/features/discovery/search-form.tsx
+msgid "Create search"
+msgstr ""
+
+#: src/features/branding/domains-screen.tsx
+msgid "Create the two records below at your DNS provider. We check every few minutes."
+msgstr ""
+
 #: src/features/document-menu/index.tsx
 #: src/features/history/history.tsx
 #: src/features/letters/share.tsx
@@ -3458,6 +3717,7 @@ msgstr ""
 
 #: src/features/design/advanced.tsx
 #: src/features/design/style-groups.tsx
+#: src/features/email-templates/labels.ts
 #: src/features/letters/design.tsx
 #: src/features/write/pickers.tsx
 msgid "Custom"
@@ -3469,6 +3729,14 @@ msgstr "Couleur personnalisée (hexadécimale)"
 
 #: src/features/write/date-field.tsx
 msgid "Custom date text"
+msgstr ""
+
+#: src/features/branding/domains-screen.tsx
+msgid "Custom domains are available on Pro"
+msgstr ""
+
+#: src/features/branding/domains-screen.tsx
+msgid "Custom domains aren't available on this server"
 msgstr ""
 
 #: src/features/write/basics-screen.tsx
@@ -3491,6 +3759,10 @@ msgstr "Les styles personnalisés ne sont pas appliqués. Corrigez ces erreurs p
 #: src/features/settings/locale-names.ts
 msgid "Czech"
 msgstr "Tchèque"
+
+#: src/features/discovery/messages.ts
+msgid "Daily"
+msgstr ""
 
 #. placeholder {0}: summary.peak
 #: src/features/share/link.tsx
@@ -3591,6 +3863,7 @@ msgstr "Par défaut"
 msgid "Degree"
 msgstr "Diplôme"
 
+#: src/features/discovery/searches.tsx
 #: src/features/history/history.tsx
 #: src/features/letters/share.tsx
 #: src/features/workspace/answer-library.tsx
@@ -3603,6 +3876,11 @@ msgstr "Supprimer"
 #: src/features/documents/library.tsx
 msgid "Delete “{0}” forever?"
 msgstr "Supprimer définitivement « {0} » ?"
+
+#. placeholder {0}: source.name
+#: src/features/discovery/searches.tsx
+msgid "Delete \"{0}\"?"
+msgstr ""
 
 #. placeholder {0}: menu ? versionTitle(menu) : ""
 #: src/features/history/history.tsx
@@ -3809,6 +4087,7 @@ msgstr "Différentes devises ou périodes de paie. Aucune différence monétaire
 msgid "Direction"
 msgstr "Direction"
 
+#: src/features/branding/branding-screen.tsx
 #: src/features/letters/write.tsx
 msgid "Discard"
 msgstr "Abandonner"
@@ -3831,6 +4110,7 @@ msgstr "Supprimez vos modifications hors ligne et chargez la version enregistré
 msgid "Discard your offline edits?"
 msgstr "Supprimer vos modifications hors connexion ?"
 
+#: src/features/discovery/review-queue.tsx
 #: src/features/letters/write.tsx
 #: src/ui/layout.tsx
 msgid "Dismiss"
@@ -3838,6 +4118,10 @@ msgstr "Rejeter"
 
 #: src/features/career/today.tsx
 msgid "Dismiss selected"
+msgstr ""
+
+#: src/features/discovery/review-queue.tsx
+msgid "Dismissed"
 msgstr ""
 
 #: src/features/career/role-suggestions.tsx
@@ -3879,9 +4163,22 @@ msgstr "Documents pour ce travail"
 msgid "Documents you move here stay for 30 days."
 msgstr "Les documents que vous déplacez ici sont conservés 30 jours."
 
+#: src/features/branding/domains-screen.tsx
+msgid "Domain"
+msgstr ""
+
+#: src/features/branding/domains-screen.tsx
+msgid "Domain added. Create the DNS records shown below."
+msgstr ""
+
 #: src/features/share/custom-domain.tsx
 msgid "Domain connected"
 msgstr "Domaine connecté"
+
+#: app/(tabs)/settings/index.tsx
+#: src/features/branding/domains-screen.tsx
+msgid "Domains"
+msgstr ""
 
 #. placeholder {0}: document.name
 #: src/features/assistant/assistant-screen.tsx
@@ -3896,10 +4193,6 @@ msgstr "Ne pas envoyer l’offre de {0}"
 #: src/api/ai-consent.ts
 msgid "Don't share"
 msgstr "Ne pas partager"
-
-#: app/(tabs)/settings/index.tsx
-msgid "Donate on Open Collective"
-msgstr "Faire un don sur Open Collective"
 
 #: app/(tabs)/settings/preferences.tsx
 #: src/features/applications/list-screen.tsx
@@ -4084,6 +4377,10 @@ msgstr "Néerlandais"
 msgid "Each answer you get feedback on is kept here, newest first."
 msgstr "Chaque réponse sur laquelle vous recevez un retour est conservée ici, de la plus récente à la plus ancienne."
 
+#: src/features/discovery/messages.ts
+msgid "Each entry can have at most {MAX_TERM_LENGTH} characters."
+msgstr ""
+
 #: src/features/workspace/tabs/fit.tsx
 msgid "Each requirement in the posting is checked against the facts and stories in your Knowledge. Gaps show as missing evidence, never missing ability."
 msgstr "Chaque exigence de l'annonce est comparée aux faits et récits de vos Connaissances. Les manques apparaissent comme des preuves manquantes, jamais comme des compétences manquantes."
@@ -4100,6 +4397,7 @@ msgstr "les messages précédents de cette conversation"
 #: src/features/application-detail/sections.tsx
 #: src/features/career/stories.tsx
 #: src/features/career/today.tsx
+#: src/features/discovery/searches.tsx
 #: src/features/write/basics-screen.tsx
 msgid "Edit"
 msgstr "Modifier"
@@ -4161,9 +4459,17 @@ msgstr ""
 msgid "Edit schedule"
 msgstr "Modifier la planification"
 
+#: src/features/discovery/search-form.tsx
+msgid "Edit search"
+msgstr ""
+
 #: src/features/career/stories.tsx
 msgid "Edit STARR story"
 msgstr "Modifier l'histoire STARR"
+
+#: src/features/email-templates/templates-screen.tsx
+msgid "Edit template"
+msgstr ""
 
 #: src/features/check/issues.ts
 msgid "Edit the email"
@@ -4203,6 +4509,19 @@ msgstr "Email (facultatif)"
 #: src/features/check/issues.ts
 msgid "Email address won't be recognized"
 msgstr "L'adresse e-mail ne sera pas reconnue"
+
+#: src/features/email-templates/write-email-sheet.tsx
+msgid "Email copied"
+msgstr ""
+
+#: src/features/branding/branding-screen.tsx
+msgid "Email sender name"
+msgstr ""
+
+#: app/(tabs)/settings/index.tsx
+#: src/features/email-templates/templates-screen.tsx
+msgid "Email templates"
+msgstr ""
 
 #: src/features/application-detail/sheets.tsx
 msgid "Email the recruiter"
@@ -4286,6 +4605,10 @@ msgstr "Entrez une valeur."
 msgid "Enter a web address, like example.com"
 msgstr "Entrez une adresse Web, comme l'exemple .com"
 
+#: src/features/discovery/messages.ts
+msgid "Enter a whole number from 0 to {MAX_AI_TOP_N}."
+msgstr ""
+
 #: src/features/career/preferences.tsx
 msgid "Enter a whole number from 0 to 52, or leave blank."
 msgstr "Entrez un nombre entier de 0 à 52 ou laissez ce champ vide."
@@ -4303,8 +4626,12 @@ msgid "Enter terms yourself. No AI request is made. Leave unknown amounts blank.
 msgstr "Saisissez les conditions vous-même. Aucune requête n’est envoyée à l’IA. Laissez les montants inconnus vides."
 
 #: app/(auth)/server.tsx
-msgid "Enter the address you open Reactive Resume at in a browser. The app checks it's a Reactive Resume server that allows app sign-in before you continue."
-msgstr "Saisissez l'adresse à laquelle vous ouvrez Reactive Resume dans un navigateur. L'application vérifie qu'il s'agit d'un serveur Reactive Resume qui autorise la connexion à l'application avant de continuer."
+msgid "Enter the address you open {appName} at in a browser. The app checks it's a {appName} server that allows app sign-in before you continue."
+msgstr ""
+
+#: src/features/discovery/messages.ts
+msgid "Enter the board name or paste its link."
+msgstr ""
 
 #: src/features/letters/write.tsx
 msgid "Enter your details below. Choosing a resume replaces them and links its design."
@@ -4429,11 +4756,21 @@ msgid "Facts"
 msgstr "Faits"
 
 #: src/features/ai/provider-list.tsx
+#: src/features/branding/domains-screen.tsx
+#: src/features/discovery/searches.tsx
 msgid "Failed"
 msgstr "Échoué"
 
 #: src/features/settings/application-profile.tsx
 msgid "Family name"
+msgstr ""
+
+#: src/features/branding/branding-screen.tsx
+msgid "Favicon"
+msgstr ""
+
+#: src/features/branding/branding-screen.tsx
+msgid "Favicon uploaded."
 msgstr ""
 
 #: app/(tabs)/settings/preferences.tsx
@@ -4486,6 +4823,10 @@ msgstr "Remplissez les détails manuellement"
 msgid "Fill empty fields with AI"
 msgstr "Remplissez les champs vides avec l'IA"
 
+#: src/features/email-templates/write-email-sheet.tsx
+msgid "Fill in the [bracketed] parts before you send it."
+msgstr ""
+
 #: src/features/letters/write.tsx
 msgid "Filled from the application. The greeting follows the name."
 msgstr "Rempli à partir de la demande d'emploi. La salutation suit le nom."
@@ -4505,6 +4846,14 @@ msgstr "Recherche de ce qui fonctionne"
 #: app/(auth)/sign-in.tsx
 msgid "Finish signing in in the browser"
 msgstr "Terminez la connexion dans le navigateur"
+
+#: src/features/discovery/searches.tsx
+msgid "Finished"
+msgstr ""
+
+#: src/features/discovery/searches.tsx
+msgid "Finished with errors"
+msgstr ""
 
 #: src/features/settings/locale-names.ts
 msgid "Finnish"
@@ -4565,12 +4914,17 @@ msgstr "Priorités, expérience, pourquoi ce poste"
 msgid "Follow up"
 msgstr "Relancer"
 
+#: src/features/email-templates/built-in-text.ts
+msgid "Follow up after applying"
+msgstr ""
+
 #: src/features/workspace/tabs/messages.tsx
 msgid "Follow up on {at}"
 msgstr "Relance le {at}"
 
 #: src/features/application-detail/sheets.tsx
 #: src/features/applications-board/calendar-screen.tsx
+#: src/features/email-templates/labels.ts
 msgid "Follow-up"
 msgstr "Relance"
 
@@ -4585,6 +4939,14 @@ msgstr "Note de relance"
 #: src/features/career/schedule-sheet.tsx
 msgid "Follow-up reminder"
 msgstr "Rappel de relance"
+
+#: src/features/email-templates/built-in-text.ts
+msgid "Following up on my {role} application"
+msgstr ""
+
+#: src/features/branding/branding-screen.tsx
+msgid "Font"
+msgstr ""
 
 #: src/features/design/advanced.tsx
 msgid "Font family"
@@ -4681,12 +5043,12 @@ msgstr ""
 
 #: src/api/ai-consent.ts
 #: src/features/career/schedule-sheet.tsx
-msgid "Found posting links are read by Reactive Resume and the sites being read."
+msgid "Found posting links are read by {appName} and the sites being read."
 msgstr ""
 
 #: src/api/ai-consent.ts
 #: src/features/career/schedule-sheet.tsx
-msgid "Found posting links are read by Reactive Resume and, when needed, {reader} and the sites being read. The reader may charge."
+msgid "Found posting links are read by {appName} and, when needed, {reader} and the sites being read. The reader may charge."
 msgstr ""
 
 #: src/features/design/style-groups.tsx
@@ -4709,6 +5071,10 @@ msgstr "Depuis Ajustement"
 #: src/features/assistant/assistant-screen.tsx
 msgid "From your experience entries"
 msgstr "À partir de vos entrées d’expérience"
+
+#: src/features/email-templates/templates-screen.tsx
+msgid "From your organization and the built-in set. You can't change these here."
+msgstr ""
 
 #: src/features/career/search-regions-field.tsx
 msgid "From your timezone"
@@ -4754,10 +5120,6 @@ msgstr "« Obtenir un retour » envoie la question, votre réponse, cette anno
 msgid "Get new roles here every morning"
 msgstr "Recevez ici de nouveaux postes chaque matin"
 
-#: src/features/share/download.tsx
-msgid "Get resume feedback on Discord"
-msgstr "Obtenir des avis sur votre CV sur Discord"
-
 #: src/features/letters/write.tsx
 msgid "Getting long. Try “Shorter”, or cut the least specific paragraph."
 msgstr "Devenir long. Essayez « Plus court » ou coupez le paragraphe le moins spécifique."
@@ -4773,6 +5135,10 @@ msgstr "Donnez une plage de dates à chaque poste et à chaque qualification."
 #: src/features/career/stories.tsx
 msgid "Give the story a title before you can save."
 msgstr "Donnez un titre au récit pour pouvoir enregistrer."
+
+#: src/features/discovery/messages.ts
+msgid "Give this search a name."
+msgstr ""
 
 #: src/features/settings/application-profile.tsx
 msgid "Given name"
@@ -4861,6 +5227,53 @@ msgstr "entendu en retour"
 msgid "Hebrew"
 msgstr "Hébreu"
 
+#: src/features/email-templates/built-in-text.ts
+msgid "Hello {contactName},\n"
+"\n"
+"I applied for the {role} position at {company} and wanted to ask where my application stands. I am still very interested in the role, and I would be glad to send anything that would help your review.\n"
+"\n"
+"Thank you for your time.\n"
+"\n"
+"{fullName}\n"
+"{myEmail}"
+msgstr ""
+
+#: src/features/email-templates/built-in-text.ts
+msgid "Hello {contactName},\n"
+"\n"
+"My name is {fullName}, and I am looking at {role} opportunities at {company}. I admire what your team is building, and I would value ten minutes of your time to hear how you got started there and what the team looks for.\n"
+"\n"
+"I know your days are full, so please say no if the timing is wrong. Any pointer you can share would help.\n"
+"\n"
+"Kind regards,\n"
+"{firstName}\n"
+"{myEmail}"
+msgstr ""
+
+#: src/features/email-templates/built-in-text.ts
+msgid "Hello {contactName},\n"
+"\n"
+"Thank you for offering me the {role} position at {company}. I am glad to be considered and I am excited about joining the team. Before I accept, I would like to talk through the pay and the start date. Given the scope of the role and my experience, I would like to discuss [the terms you have in mind].\n"
+"\n"
+"Could we find a time this week to go through it together?\n"
+"\n"
+"With thanks,\n"
+"{fullName}\n"
+"{myEmail}"
+msgstr ""
+
+#: src/features/email-templates/built-in-text.ts
+msgid "Hello {contactName},\n"
+"\n"
+"Thank you for taking the time to meet with me on {interviewDate} about the {role} role at {company}. Our conversation left me more excited about the work, and I would welcome the chance to take the next step.\n"
+"\n"
+"If there is anything I can send to help with your decision, just let me know.\n"
+"\n"
+"Best regards,\n"
+"{fullName}\n"
+"{myEmail}"
+msgstr ""
+
 #: app/(tabs)/settings/index.tsx
 msgid "Help & docs"
 msgstr "Aide et documentation"
@@ -4935,6 +5348,10 @@ msgstr "Cacher la photo"
 #: src/features/workspace/preparation.tsx
 msgid "Hides all steps"
 msgstr ""
+
+#: src/features/branding/branding-screen.tsx
+msgid "Highlight"
+msgstr "Surligner"
 
 #: src/features/settings/locale-names.ts
 msgid "Hindi"
@@ -5011,6 +5428,10 @@ msgstr "Dans quelle mesure est-ce que je correspond bien à ce rôle ?"
 msgid "Hungarian"
 msgstr "Hongrois"
 
+#: src/features/discovery/messages.ts
+msgid "Hybrid"
+msgstr ""
+
 #: src/features/design/advanced.tsx
 msgid "Hyphenation"
 msgstr "Césure"
@@ -5066,6 +5487,10 @@ msgstr "Icône…"
 #: src/features/design/style-groups.tsx
 msgid "Icons in contact line"
 msgstr "Icônes dans la ligne de contact"
+
+#: src/features/branding/branding-screen.tsx
+msgid "Identity"
+msgstr ""
 
 #: src/features/ats-checker/messages.ts
 msgid "If it came from a scan, that is expected. Otherwise remove it; recruiters read it as keyword stuffing."
@@ -5148,6 +5573,10 @@ msgstr "Améliorer la ligne sélectionnée"
 #: src/features/write/improve.tsx
 msgid "Improving…"
 msgstr "Améliorer…"
+
+#: src/features/ai/provider-list.tsx
+msgid "Included with your plan"
+msgstr ""
 
 #: src/features/applications/list-screen.tsx
 msgid "Including closed"
@@ -5266,9 +5695,25 @@ msgstr "Émetteur"
 msgid "Issues"
 msgstr "Problèmes"
 
+#: src/features/branding/domains-screen.tsx
+msgid "Issuing certificate"
+msgstr ""
+
 #: src/features/check/issues.ts
 msgid "It has entries but isn't placed on a page."
 msgstr "Il contient des entrées mais n'est pas placé sur une page."
+
+#: src/features/email-templates/write-email-sheet.tsx
+msgid "It is saved as it reads now. To reuse it for other applications, put the variables back where the details are."
+msgstr ""
+
+#: src/features/email-templates/templates-screen.tsx
+msgid "It leaves your list. Emails you already sent are not affected."
+msgstr ""
+
+#: src/features/branding/domains-screen.tsx
+msgid "It stops serving your organization right away (other servers within about a minute). Members can still use your address."
+msgstr ""
 
 #: src/features/application-detail/sections.tsx
 msgid "It's removed from the timeline for good."
@@ -5307,6 +5752,14 @@ msgstr "JavaScript"
 msgid "Job"
 msgstr "Emploi"
 
+#: src/features/discovery/search-form.tsx
+msgid "Job boards"
+msgstr ""
+
+#: src/features/settings/clipper-sign-ins.tsx
+msgid "Job Clipper sign-ins"
+msgstr ""
+
 #: src/features/application-detail/sheets.tsx
 #: src/features/workspace/preparation.tsx
 msgid "Job description"
@@ -5340,13 +5793,22 @@ msgstr "La recherche d'emploi n'est pas configurée sur ce serveur. Collez plut�
 msgid "Job search pipeline"
 msgstr "Pipeline de recherche d'emploi"
 
+#: src/features/discovery/search-form.tsx
+msgid "Job titles"
+msgstr ""
+
+#: app/(tabs)/career/_layout.tsx
 #: src/features/search/search-screen.tsx
 msgid "Jobs"
 msgstr "Emplois"
 
-#: app/(tabs)/settings/index.tsx
-msgid "Join the Discord"
-msgstr "Rejoindre le Discord"
+#: src/features/discovery/review-queue.tsx
+msgid "Jobs found for you"
+msgstr ""
+
+#: src/features/discovery/search-form.tsx
+msgid "Jobs to score with AI per run"
+msgstr ""
 
 #: src/features/letters/share.tsx
 #: src/features/share/download.tsx
@@ -5446,6 +5908,7 @@ msgstr "Disposition des mots-clés"
 msgid "Keyword overlap: {0}"
 msgstr ""
 
+#: src/features/discovery/search-form.tsx
 #: src/features/write/fields.ts
 msgid "Keywords"
 msgstr "Mots-clés"
@@ -5453,6 +5916,10 @@ msgstr "Mots-clés"
 #: src/features/settings/locale-names.ts
 msgid "Khmer"
 msgstr "Cambodgien/Khmer"
+
+#: src/features/email-templates/template-editor.tsx
+msgid "Kind"
+msgstr ""
 
 #: src/features/share/letter.ts
 msgid "Kind regards,"
@@ -5531,6 +5998,15 @@ msgstr ""
 msgid "Last reviewed: {0}"
 msgstr ""
 
+#. placeholder {0}: date(latest.finishedAt ?? latest.startedAt)
+#: src/features/discovery/searches.tsx
+msgid "Last run: {0}"
+msgstr ""
+
+#: src/features/discovery/searches.tsx
+msgid "Last run: not run yet"
+msgstr ""
+
 #. placeholder {0}: time.when(row.lastSeenAt)
 #: src/features/career/today.tsx
 msgid "Last seen in search: {0}"
@@ -5589,18 +6065,27 @@ msgstr "Laisser vide pour conserver la clé enregistrée"
 msgid "Leave empty to reset the title to the original."
 msgstr "Laissez le champ vide pour rétablir le titre d'origine."
 
+#: src/features/branding/branding-screen.tsx
+msgid "Leave empty to use the platform default."
+msgstr ""
+
 #: src/features/write/basics-screen.tsx
 #: src/features/write/rich-text-field.tsx
 msgid "Leave it empty to remove the link."
 msgstr "Laissez-le vide pour supprimer le lien."
 
 #: src/features/design/template-group.tsx
+#: src/features/organization/plan-screen.tsx
 msgid "Left"
 msgstr "Gauche"
 
 #: app/(tabs)/settings/index.tsx
 msgid "Legal"
 msgstr "Mentions légales"
+
+#: src/features/branding/branding-screen.tsx
+msgid "Legal links"
+msgstr ""
 
 #: src/features/letters/write.tsx
 msgid "Length"
@@ -5890,6 +6375,10 @@ msgstr ""
 msgid "Loading saved version…"
 msgstr "Chargement de la version enregistrée…"
 
+#: src/features/settings/clipper-sign-ins.tsx
+msgid "Loading sign-ins…"
+msgstr ""
+
 #: src/features/ai/web-access.tsx
 msgid "Loading web access…"
 msgstr "Chargement de l'accès Web…"
@@ -5924,6 +6413,10 @@ msgstr "Lieu"
 msgid "Location match is unknown."
 msgstr "La correspondance de localisation est inconnue."
 
+#: src/features/discovery/search-form.tsx
+msgid "Locations"
+msgstr "Lieux"
+
 #: src/features/documents/library.tsx
 msgid "Lock"
 msgstr "Verrouiller"
@@ -5946,6 +6439,14 @@ msgstr "Les documents verrouillés ont été ignorés. Débloquez-les d'abord."
 #: src/features/write/outline.tsx
 msgid "Locked. Unlock to edit."
 msgstr "Fermé. Déverrouillez pour modifier."
+
+#: src/features/branding/branding-screen.tsx
+msgid "Logo"
+msgstr ""
+
+#: src/features/branding/branding-screen.tsx
+msgid "Logo uploaded."
+msgstr ""
 
 #: src/features/documents/library.tsx
 msgid "Long press to select"
@@ -6099,6 +6600,16 @@ msgstr "Marqué comme lu"
 msgid "Match “{resumeName}”"
 msgstr "Harmoniser avec « {resumeName} »"
 
+#. placeholder {0}: scoreOf(job)
+#: src/features/discovery/review-queue.tsx
+msgid "Match {0}"
+msgstr ""
+
+#. placeholder {0}: scoreOf(job)
+#: src/features/discovery/review-queue.tsx
+msgid "Match {0} (quick)"
+msgstr ""
+
 #: src/features/search/search-screen.tsx
 msgid "Match system theme"
 msgstr "Thème du système de correspondance"
@@ -6123,10 +6634,6 @@ msgstr "Correspondant au CV"
 msgid "Matching your facts"
 msgstr "Rapprochement de vos faits"
 
-#: src/features/share/custom-domain.tsx
-msgid "May be available"
-msgstr "Peut-être disponible"
-
 #: src/features/search/search-screen.tsx
 msgid "MCP"
 msgstr "MCP"
@@ -6145,6 +6652,8 @@ msgid "Meets your minimum base salary."
 msgstr "Correspond à votre salaire de base minimum."
 
 #: src/features/career/facts.tsx
+#: src/features/email-templates/template-editor.tsx
+#: src/features/email-templates/write-email-sheet.tsx
 msgid "Message"
 msgstr "Message"
 
@@ -6157,6 +6666,10 @@ msgstr "Envoyez un message à l'assistant"
 msgid "Messages"
 msgstr "Messages"
 
+#: src/features/email-templates/labels.ts
+msgid "Mine"
+msgstr ""
+
 #: src/features/career/preferences.tsx
 msgid "Minimum base salary"
 msgstr "Salaire de base minimum"
@@ -6164,10 +6677,6 @@ msgstr "Salaire de base minimum"
 #: src/features/career/offers.tsx
 msgid "Minimum salary cannot be compared in these terms."
 msgstr "Le salaire minimum ne peut pas être comparé en ces termes."
-
-#: app/(tabs)/settings/index.tsx
-msgid "MIT License"
-msgstr "Licence MIT"
 
 #: src/features/workspace/tabs/debrief.tsx
 msgid "Mixed"
@@ -6368,10 +6877,12 @@ msgstr "Passer à « Candidature envoyée » vous demande de préciser ce que 
 
 #: src/features/ai/provider-editor.tsx
 #: src/features/application-detail/sheets.tsx
+#: src/features/discovery/search-form.tsx
 #: src/features/document-menu/index.tsx
 #: src/features/documents/document-sheets.tsx
 #: src/features/documents/library.tsx
 #: src/features/documents/new-document.tsx
+#: src/features/email-templates/template-editor.tsx
 #: src/features/history/history.tsx
 #: src/features/letters/share.tsx
 #: src/features/settings/profile.tsx
@@ -6401,6 +6912,11 @@ msgstr "Nommez cette version"
 #: src/features/check/issues.ts
 msgid "Name, email, phone and location are found, and links are full addresses."
 msgstr "Le nom, l'e-mail, le téléphone et l'emplacement sont trouvés, et les liens sont des adresses complètes."
+
+#. placeholder {0}: record.name
+#: src/features/branding/domains-screen.tsx
+msgid "Name: {0}"
+msgstr ""
 
 #: src/features/history/history.tsx
 #: src/features/letters/share.tsx
@@ -6438,6 +6954,10 @@ msgstr ""
 msgid "Needs you"
 msgstr "Requiert votre attention"
 
+#: src/features/email-templates/labels.ts
+msgid "Negotiation"
+msgstr ""
+
 #: src/features/settings/locale-names.ts
 msgid "Nepali"
 msgstr "Népalais"
@@ -6446,13 +6966,19 @@ msgstr "Népalais"
 msgid "Network"
 msgstr "Réseau"
 
+#: src/features/email-templates/labels.ts
+msgid "Networking"
+msgstr ""
+
 #: src/features/career/preferences.tsx
 #: src/features/settings/api-keys.tsx
+#: src/features/settings/clipper-sign-ins.tsx
 msgid "Never"
 msgstr "Jamais"
 
 #: app/_layout.tsx
 #: app/(tabs)/_layout.tsx
+#: src/features/discovery/review-queue.tsx
 #: src/features/documents/library.tsx
 #: src/shell/app-tabs.tsx
 msgid "New"
@@ -6487,11 +7013,20 @@ msgstr "Nouvelle lettre de motivation à la place"
 msgid "New document"
 msgstr "Nouveau document"
 
+#. placeholder {0}: latest.new
+#: src/features/discovery/searches.tsx
+msgid "New jobs in the last run: {0}"
+msgstr ""
+
 #: src/features/design/layout-screen.tsx
 #: src/features/write/entry-sheet.tsx
 #: src/features/write/section-sheet.tsx
 msgid "New page"
 msgstr "Nouvelle page"
+
+#: src/features/discovery/review-queue.tsx
+msgid "New postings show up here after an automation runs."
+msgstr ""
 
 #: src/features/career/today.tsx
 msgid "New roles from your search"
@@ -6505,6 +7040,11 @@ msgstr "Les nouveaux postes, les rappels et les briefings terminés apparaissent
 msgid "New schedule"
 msgstr "Nouvelle planification"
 
+#: src/features/discovery/search-form.tsx
+#: src/features/discovery/searches.tsx
+msgid "New search"
+msgstr ""
+
 #: src/features/write/entry-sheet.tsx
 msgid "New section"
 msgstr "Nouvelle rubrique"
@@ -6512,6 +7052,10 @@ msgstr "Nouvelle rubrique"
 #: src/features/career/stories.tsx
 msgid "New STARR story"
 msgstr "Nouvelle histoire STARR"
+
+#: src/features/email-templates/templates-screen.tsx
+msgid "New template"
+msgstr ""
 
 #: src/features/documents/library.tsx
 msgid "Next"
@@ -6533,6 +7077,15 @@ msgstr "Page suivante"
 msgid "Next question"
 msgstr "Question suivante"
 
+#. placeholder {0}: date(source.nextRunAt)
+#: src/features/discovery/searches.tsx
+msgid "Next run: {0}"
+msgstr ""
+
+#: src/features/discovery/searches.tsx
+msgid "Next run: paused"
+msgstr ""
+
 #: src/features/application-detail/sections.tsx
 #: src/features/applications/list-screen.tsx
 msgid "Next step"
@@ -6545,6 +7098,10 @@ msgstr "Étape suivante : {note}"
 #: src/features/workspace/tabs/messages.tsx
 msgid "Next step: {note}. Adds a reminder to Today."
 msgstr "Étape suivante : {note}. Ajoute un rappel à Aujourd'hui."
+
+#: src/features/email-templates/built-in-text.ts
+msgid "Next steps on the {role} offer"
+msgstr ""
 
 #: src/features/documents/library.tsx
 msgid "Next unsynced drafts"
@@ -6612,6 +7169,10 @@ msgstr "Sans date"
 msgid "No dates were found."
 msgstr "Aucune date n'a été trouvée."
 
+#: src/features/discovery/review-queue.tsx
+msgid "No dismissed jobs"
+msgstr ""
+
 #: src/features/workspace/tabs/apply.tsx
 msgid "no documents"
 msgstr ""
@@ -6628,6 +7189,10 @@ msgstr "Aucune section formation n'a été trouvée."
 msgid "No email address"
 msgstr "Aucune adresse e-mail"
 
+#: src/features/email-templates/write-email-sheet.tsx
+msgid "No email address for this contact yet. Add it in your mail app."
+msgstr ""
+
 #: src/features/ats-checker/messages.ts
 msgid "No email address was found."
 msgstr "Aucune adresse email n'a été trouvée."
@@ -6643,6 +7208,10 @@ msgstr "Aucun fait ne correspond"
 #: src/features/write/pickers.tsx
 msgid "No icons match."
 msgstr "Aucune icône ne correspond."
+
+#: src/features/settings/clipper-sign-ins.tsx
+msgid "No Job Clipper sign-ins yet."
+msgstr ""
 
 #: src/features/documents/new-document.tsx
 msgid "No job yet"
@@ -6667,6 +7236,10 @@ msgstr "Aucune candidature liée"
 #: src/features/check/issues.ts
 msgid "No location"
 msgstr "Aucun emplacement"
+
+#: src/features/email-templates/write-email-sheet.tsx
+msgid "No mail app could open it, so the email was copied instead."
+msgstr ""
 
 #: src/features/documents/library.tsx
 #: src/ui/fields.tsx
@@ -6711,10 +7284,6 @@ msgstr "Aucune photo. La plupart des ATS ignorent les photos ; certaines région
 msgid "No postings found. Try different keywords."
 msgstr "Aucune offre d'emploi trouvée. Essayez différents mots-clés."
 
-#: src/auth/messages.ts
-msgid "No Reactive Resume server answered at this address. Check the spelling, or ask your administrator whether the server allows app sign-in."
-msgstr "Aucun serveur Reactive Resume n'a répondu à cette adresse. Vérifiez l'orthographe ou demandez à votre administrateur si le serveur autorise la connexion à l'application."
-
 #: src/features/check/job-match.tsx
 msgid "No recognizable terms in this posting."
 msgstr "Aucun terme reconnaissable dans cette offre d'emploi."
@@ -6738,6 +7307,18 @@ msgstr "Aucun résultat"
 #: src/features/letters/write.tsx
 msgid "No resume"
 msgstr "Pas de CV"
+
+#: src/features/discovery/review-queue.tsx
+msgid "No saved jobs yet"
+msgstr ""
+
+#: src/features/discovery/searches.tsx
+msgid "No searches yet"
+msgstr ""
+
+#: src/auth/messages.ts
+msgid "No server answered at this address. Check the spelling, or ask your administrator whether the server allows app sign-in."
+msgstr ""
 
 #: src/features/ats-checker/messages.ts
 msgid "No skills section was found."
@@ -6819,6 +7400,10 @@ msgstr "Normale"
 #: src/features/settings/locale-names.ts
 msgid "Norwegian"
 msgstr "Norvégien"
+
+#: src/auth/session-gate.tsx
+msgid "Not a member"
+msgstr ""
 
 #: src/features/workspace/tabs/messages.tsx
 msgid "Not applied"
@@ -6936,6 +7521,10 @@ msgstr "Rien à réparer"
 msgid "Nothing to fix. The remaining pages were simply not covered by this report."
 msgstr "Rien à corriger. Les pages restantes ne sont simplement pas couvertes par ce rapport."
 
+#: src/features/discovery/review-queue.tsx
+msgid "Nothing to review"
+msgstr ""
+
 #: src/features/career/preferences.tsx
 msgid "Notice period (weeks)"
 msgstr "Délai de préavis (semaines)"
@@ -7025,6 +7614,10 @@ msgstr "Hors ligne. Les modifications sont enregistrées sur cet appareil et syn
 msgid "On"
 msgstr "Activé"
 
+#: src/features/discovery/messages.ts
+msgid "On-site"
+msgstr ""
+
 #: src/features/share/link.tsx
 msgid "On. Anyone with the link can see your web page."
 msgstr "Activé. Toute personne disposant du lien peut voir votre page web."
@@ -7066,6 +7659,14 @@ msgstr "Un seul titre de section reconnaissable a été trouvé."
 #: src/features/history/history.tsx
 msgid "Only one version so far. Every editing session adds one automatically."
 msgstr "Une seule version pour l'instant. Chaque session d'édition en ajoute un automatiquement."
+
+#: src/features/branding/branding-screen.tsx
+msgid "Only owners and admins can change the organization's branding."
+msgstr ""
+
+#: src/features/branding/domains-screen.tsx
+msgid "Only owners and admins can manage the organization's domains."
+msgstr ""
 
 #: src/features/ai/provider-editor.tsx
 msgid "Only providers that pass their test can be turned on."
@@ -7130,6 +7731,7 @@ msgstr "Ouvrez les paramètres de l'IA"
 #: src/features/applications-board/board-screen.tsx
 #: src/features/applications/list-screen.tsx
 #: src/features/check/job-match.tsx
+#: src/features/discovery/review-queue.tsx
 msgid "Open application"
 msgstr "Ouvrir la candidature"
 
@@ -7149,6 +7751,10 @@ msgstr "Ouvrir dans {tabName}"
 #: src/features/documents/new-document.tsx
 msgid "Open in editor"
 msgstr "Ouvrez l'éditeur"
+
+#: src/features/email-templates/write-email-sheet.tsx
+msgid "Open in mail app"
+msgstr ""
 
 #: src/features/workspace/tabs/saved.tsx
 msgid "Open in Offers"
@@ -7267,6 +7873,8 @@ msgstr "Options pour {title}"
 msgid "Or in your own words…"
 msgstr "Ou avec vos propres mots…"
 
+#: app/(tabs)/settings/index.tsx
+#: src/features/email-templates/labels.ts
 #: src/features/write/fields.ts
 msgid "Organization"
 msgstr "Organisation"
@@ -7305,6 +7913,14 @@ msgstr "Périmé : le texte a changé depuis."
 #: src/features/application-detail/detail-screen.tsx
 msgid "Outcome"
 msgstr "Résultat"
+
+#: src/features/email-templates/templates-screen.tsx
+msgid "Owners and admins edit the organization's templates in the web app, under Settings."
+msgstr ""
+
+#: src/features/branding/domains-screen.tsx
+msgid "Ownership is proven. The certificate is being issued; this usually takes a few minutes."
+msgstr ""
 
 #: app/builder/[id]/_layout.tsx
 #: app/builder/[id]/page.tsx
@@ -7402,6 +8018,10 @@ msgstr "Les mots de passe ne correspondent pas."
 msgid "Past conversations"
 msgstr "Conversations passées"
 
+#: src/features/organization/plan-screen.tsx
+msgid "Past due"
+msgstr ""
+
 #: src/features/applications/add-sheet.tsx
 msgid "Paste a job link or posting, then check the role and company. Nothing is saved until you choose Save job."
 msgstr "Collez un lien ou une offre d’emploi, puis vérifiez le poste et l’entreprise. Rien n’est enregistré avant de choisir « Enregistrer l’offre »."
@@ -7436,7 +8056,12 @@ msgstr "Collez votre clé"
 msgid "Pasted description"
 msgstr "Description collée"
 
+#: src/features/discovery/searches.tsx
+msgid "Pause"
+msgstr ""
+
 #: src/features/career/today.tsx
+#: src/features/discovery/messages.ts
 msgid "Paused"
 msgstr "En pause"
 
@@ -7460,20 +8085,20 @@ msgid "PDF check canceled. Retry when ready."
 msgstr "Vérification PDF annulée. Réessayez quand vous êtes prêt."
 
 #: src/features/application-detail/sections.tsx
-msgid "PDF only · up to 10 MB each. Linking a Reactive Resume enables AI match scoring and tailoring."
-msgstr "PDF uniquement · 10 Mo maximum par fichier. Lier un document Reactive Resume permet l’évaluation de la correspondance et l’adaptation par IA."
+msgid "PDF only · up to 10 MB each. Linking a resume enables AI match scoring and tailoring."
+msgstr ""
 
 #: src/features/design/advanced.tsx
 msgid "PDF styles support a subset of CSS. Rotation, dashed and dotted borders, and some layout properties are ignored."
 msgstr "Les styles PDF prennent en charge un sous-ensemble de CSS. La rotation, les bordures en pointillés et en pointillés et certaines propriétés de mise en page sont ignorées."
 
 #: src/features/documents/new-document.tsx
-msgid "PDF uses your AI provider when one is ready. Turn off the AI switch to read its text layer on your server. Word (.docx) needs an AI provider. Current and v4 Reactive Resume JSON, cover letters, JSON Resume and LinkedIn exports (.zip) are supported. Up to 10 MB."
-msgstr "Le PDF utilise votre fournisseur d’IA s’il est prêt. Désactivez l’IA pour lire la couche de texte sur votre serveur. Word (.docx) nécessite un fournisseur d’IA. Formats pris en charge : JSON Reactive Resume actuel et v4, lettres de motivation, JSON Resume et exports LinkedIn (.zip). 10 Mo maximum."
+msgid "PDF uses your AI provider when one is ready. Turn off the AI switch to read its text layer on your server. Word (.docx) needs an AI provider. Current and v4 JSON, cover letters, JSON Resume and LinkedIn exports (.zip) are supported. Up to 10 MB."
+msgstr ""
 
 #: src/features/documents/new-document.tsx
-msgid "PDF, Word, Reactive Resume, JSON Resume or LinkedIn export."
-msgstr "Exportation PDF, Word, Reactive Resume, JSON Resume ou LinkedIn."
+msgid "PDF, Word, JSON, JSON Resume or LinkedIn export."
+msgstr ""
 
 #: src/features/career/offer-entry.tsx
 #: src/features/career/offers.tsx
@@ -7492,6 +8117,10 @@ msgstr "Par mois"
 #: src/features/career/preferences.tsx
 msgid "Per year"
 msgstr "Par an"
+
+#: src/features/organization/plan-screen.tsx
+msgid "Period ends"
+msgstr ""
 
 #: app/(tabs)/settings/account.tsx
 msgid "Permanently removes everything. Opens your browser account settings."
@@ -7547,6 +8176,10 @@ msgstr "Choisissez une heure future."
 msgid "Pick one format and use it everywhere."
 msgstr "Choisissez un format et utilisez-le partout."
 
+#: src/features/discovery/search-form.tsx
+msgid "Pick the board and enter the company's board name, or paste the link to its job page. The name is the part after the host, for example jobs.lever.co/acme or boards.greenhouse.io/acme (acme)."
+msgstr ""
+
 #: src/features/workspace/tabs/prepare.tsx
 msgid "Pick two examples"
 msgstr "Choisissez deux exemples"
@@ -7568,6 +8201,11 @@ msgstr "Texte brut (.txt)"
 msgid "Plain text with headings. Paste into application forms and notes."
 msgstr "Texte brut avec titres. Collez-le dans les formulaires de candidature et les notes."
 
+#: app/(tabs)/settings/index.tsx
+#: src/features/organization/plan-screen.tsx
+msgid "Plan"
+msgstr ""
+
 #: src/features/workspace/tabs/prepare.tsx
 msgid "Plan again"
 msgstr "Replanifier"
@@ -7584,6 +8222,10 @@ msgstr "Préparer mes questions"
 msgid "Planning your week"
 msgstr "Planification de votre semaine"
 
+#: src/features/branding/branding-screen.tsx
+msgid "Platform default"
+msgstr ""
+
 #: src/features/workspace/tabs/practise.tsx
 msgid "Play recording"
 msgstr "Lire l'enregistrement"
@@ -7592,6 +8234,14 @@ msgstr "Lire l'enregistrement"
 #: src/features/letters/design-presets.ts
 msgid "Plum"
 msgstr "Violet prune"
+
+#: src/features/branding/branding-screen.tsx
+msgid "PNG or WebP, up to 512 KB. Upload a PNG or WebP so the logo also shows in the mobile app and in emails; they don't show an SVG. To use an SVG, upload it from the web app."
+msgstr ""
+
+#: src/features/branding/branding-screen.tsx
+msgid "PNG, up to 128 KB. To use an ICO, upload it from the web app."
+msgstr ""
 
 #: src/features/settings/locale-names.ts
 msgid "Polish"
@@ -7634,6 +8284,10 @@ msgstr "Offre d’emploi"
 
 #: src/features/career/today.tsx
 msgid "Postings can change or close. Publication date unknown; search coverage is incomplete."
+msgstr ""
+
+#: src/features/discovery/review-queue.tsx
+msgid "Postings your automations found, best match first. Save one to your applications, or dismiss it and it never comes back."
 msgstr ""
 
 #: src/features/workspace/parts.tsx
@@ -7751,6 +8405,10 @@ msgstr "Appuyez et maintenez pour le prévisualiser sur la page."
 msgid "Press and hold, then drag to another column or page."
 msgstr "Appuyez et maintenez, puis faites glisser vers une autre colonne ou page."
 
+#: src/features/branding/branding-screen.tsx
+msgid "Preview of your branding"
+msgstr ""
+
 #: src/features/share/web-page.tsx
 msgid "Preview web page"
 msgstr "Prévisualiser la page web"
@@ -7788,9 +8446,17 @@ msgstr ""
 msgid "Previous workspace tabs"
 msgstr "Onglets de l'espace de travail précédents"
 
+#: src/features/branding/branding-screen.tsx
+msgid "Primary button"
+msgstr ""
+
 #: src/features/design/advanced.tsx
 msgid "Primary color"
 msgstr "Couleur principale"
+
+#: src/features/branding/branding-screen.tsx
+msgid "Primary colour"
+msgstr ""
 
 #: src/features/share/web-page.tsx
 msgid "Primary resume"
@@ -7811,6 +8477,7 @@ msgstr "Confidentialité"
 
 #: app/(tabs)/settings/index.tsx
 #: src/auth/auth-header.tsx
+#: src/features/branding/branding-screen.tsx
 msgid "Privacy policy"
 msgstr "Politique de confidentialité"
 
@@ -7822,6 +8489,10 @@ msgstr ""
 #: src/features/document-menu/index.tsx
 msgid "Private. Only you can see it."
 msgstr "Privé. Vous seul pouvez le voir."
+
+#: app/(tabs)/settings/licences.tsx
+msgid "Product"
+msgstr ""
 
 #: src/features/design/style-groups.tsx
 #: src/features/letters/design-presets.ts
@@ -7928,6 +8599,10 @@ msgstr "Éditeur"
 msgid "Put a plain email address near the top of the first page. It is what most systems file you under."
 msgstr "Placez une adresse email simple près du haut de la première page. C'est ce sous quoi la plupart des systèmes vous classent."
 
+#: src/features/email-templates/template-editor.tsx
+msgid "Put variables such as {examples} where the details go."
+msgstr ""
+
 #: src/features/share/link.tsx
 msgid "QR code"
 msgstr "Code QR"
@@ -7988,9 +8663,9 @@ msgstr "Réexportez avec les polices intégrées, et vérifiez que le texte se c
 msgid "Re-export with fonts embedded, then open the file and check that the text copies out cleanly."
 msgstr "Réexportez avec les polices intégrées, puis ouvrez le fichier et vérifiez que le texte se copie proprement."
 
-#: src/auth/auth-header.tsx
-msgid "Reactive Resume"
-msgstr "Reactive Resume"
+#: src/features/email-templates/built-in-text.ts
+msgid "Reach out to someone at the company"
+msgstr ""
 
 #: src/features/workspace/tabs/prepare.tsx
 msgid "Read briefing"
@@ -8006,6 +8681,7 @@ msgstr "Lire la licence"
 
 #: src/features/applications/add-sheet.tsx
 #: src/features/career/today.tsx
+#: src/features/discovery/review-queue.tsx
 msgid "Read posting"
 msgstr "Lire l'offre d'emploi"
 
@@ -8212,10 +8888,6 @@ msgstr "Actualiser le briefing 24 heures avant"
 msgid "Refresh the briefing on the morning of"
 msgstr "Actualiser le briefing le matin même"
 
-#: src/features/share/custom-domain.tsx
-msgid "Register at OlaCV"
-msgstr "Enregistrer chez OlaCV"
-
 #: src/features/workspace/tabs/prepare.tsx
 msgid "Rehearse aloud"
 msgstr "Répéter à voix haute"
@@ -8290,9 +8962,16 @@ msgstr "Les rappels apparaissent ici. Les copies par e-mail sont facultatives et
 
 #: src/features/career/offers.tsx
 #: src/features/career/preferences.tsx
+#: src/features/discovery/messages.ts
 msgid "Remote"
 msgstr "Télétravail"
 
+#: src/features/discovery/search-form.tsx
+msgid "Remote preference"
+msgstr ""
+
+#: src/features/branding/branding-screen.tsx
+#: src/features/branding/domains-screen.tsx
 #: src/features/share/custom-domain.tsx
 #: src/ui/fields.tsx
 msgid "Remove"
@@ -8305,9 +8984,19 @@ msgstr "Retirer"
 msgid "Remove {0}"
 msgstr "Supprimer {0}"
 
+#. placeholder {0}: domain.hostname
+#: src/features/branding/domains-screen.tsx
+msgid "Remove {0}?"
+msgstr ""
+
 #: src/features/assistant/messages.tsx
 msgid "Remove {name}"
 msgstr "Supprimer {name}"
+
+#. placeholder {0}: index + 1
+#: src/features/discovery/search-form.tsx
+msgid "Remove board {0}"
+msgstr ""
 
 #: src/features/ai/web-access.tsx
 msgid "Remove connection"
@@ -8316,6 +9005,10 @@ msgstr "Supprimer la connexion"
 #: src/features/ai/web-access.tsx
 msgid "Remove connection?"
 msgstr "Supprimer la connexion ?"
+
+#: src/features/branding/domains-screen.tsx
+msgid "Remove domain"
+msgstr ""
 
 #: src/features/write/basics-screen.tsx
 msgid "Remove field"
@@ -8357,6 +9050,18 @@ msgstr ""
 msgid "Remove role"
 msgstr "Supprimer le rôle"
 
+#: src/features/branding/domains-screen.tsx
+msgid "Remove the domain and add it again once the cause is fixed."
+msgstr ""
+
+#: src/features/branding/branding-screen.tsx
+msgid "Remove the favicon?"
+msgstr ""
+
+#: src/features/branding/branding-screen.tsx
+msgid "Remove the logo?"
+msgstr ""
+
 #: src/features/share/web-page.tsx
 msgid "Remove the password?"
 msgstr "Supprimer le mot de passe ?"
@@ -8371,6 +9076,15 @@ msgstr ""
 
 #: src/features/workspace/answer-library.tsx
 msgid "Remove unavailable story reference"
+msgstr ""
+
+#. placeholder {0}: domain.hostname
+#: src/features/branding/domains-screen.tsx
+msgid "Removed {0}"
+msgstr ""
+
+#: src/features/branding/domains-screen.tsx
+msgid "Removing"
 msgstr ""
 
 #: src/features/document-menu/index.tsx
@@ -8423,6 +9137,7 @@ msgstr "Récommander {title}"
 msgid "Repeats at this local time in the displayed timezone across clock changes. A skipped clock time moves forward. Missed runs combine into one search. Results and failures appear in Today; delivery depends on the server runner."
 msgstr ""
 
+#: src/features/branding/branding-screen.tsx
 #: src/features/write/improve.tsx
 msgid "Replace"
 msgstr "Remplacer"
@@ -8459,6 +9174,10 @@ msgstr "Réponse"
 msgid "Reply copied"
 msgstr "Réponse copiée"
 
+#: src/features/branding/branding-screen.tsx
+msgid "Reply-to address"
+msgstr ""
+
 #: src/features/ats-checker/checker.tsx
 msgid "Report"
 msgstr "Rapport"
@@ -8468,10 +9187,6 @@ msgstr "Rapport"
 #: src/features/ai/report-content.tsx
 msgid "Report AI content"
 msgstr "Signaler le contenu de l'IA"
-
-#: app/(tabs)/settings/index.tsx
-msgid "Report an issue"
-msgstr "Signaler un problème"
 
 #: src/features/ai/report-content.tsx
 msgid "Report received by your server operator. Thank you."
@@ -8509,6 +9224,10 @@ msgstr "Réinitialiser les paramètres de conception par défaut"
 #: src/features/career/offers.tsx
 msgid "Respond by"
 msgstr "Date limite de réponse"
+
+#: src/features/email-templates/built-in-text.ts
+msgid "Respond to an offer"
+msgstr ""
 
 #: src/features/career/offers.tsx
 msgid "Response deadline has passed."
@@ -8559,6 +9278,7 @@ msgstr "Résultat"
 #: app/builder/[id]/_layout.tsx
 #: src/features/applications/add-sheet.tsx
 #: src/features/career/facts.tsx
+#: src/features/discovery/searches.tsx
 #: src/features/documents/library.tsx
 #: src/features/letters/write.tsx
 #: src/features/workspace/preparation.tsx
@@ -8572,10 +9292,6 @@ msgstr "curriculum vitae + lettre"
 #: src/features/document-menu/index.tsx
 msgid "Resume details"
 msgstr "détails du curriculum vitae"
-
-#: app/(tabs)/settings/index.tsx
-msgid "Resume feedback, product help, and community ideas."
-msgstr "Avis sur votre CV, aide sur le produit et idées de la communauté."
 
 #: src/features/application-detail/sections.tsx
 #: src/features/workspace/tabs/apply.tsx
@@ -8643,6 +9359,7 @@ msgstr "Récupéré {0} en utilisant {1}. Le temps de récupération n’établi
 #: src/features/check/screen.tsx
 #: src/features/check/writing.tsx
 #: src/features/design/design-pane.tsx
+#: src/features/discovery/searches.tsx
 #: src/features/documents/document-sheets.tsx
 #: src/features/documents/library.tsx
 #: src/features/documents/new-document.tsx
@@ -8802,6 +9519,7 @@ msgid "Reviewing needs an AI connection. What you write here stays on this devic
 msgstr "La révision nécessite une connexion IA. Ce que vous écrivez ici reste sur cet appareil jusque-là."
 
 #: src/features/settings/api-keys.tsx
+#: src/features/settings/clipper-sign-ins.tsx
 msgid "Revoke"
 msgstr "Révoquer"
 
@@ -8809,13 +9527,25 @@ msgstr "Révoquer"
 msgid "Revoke API key?"
 msgstr "Révoquer la clé API ?"
 
+#: src/features/settings/clipper-sign-ins.tsx
+msgid "Revoke Job Clipper sign-in?"
+msgstr ""
+
 #: src/features/settings/api-keys.tsx
 msgid "Revoke key"
 msgstr "Révoquer la clé"
 
+#: src/features/settings/clipper-sign-ins.tsx
+msgid "Revoke sign-in"
+msgstr ""
+
 #: src/features/settings/api-keys.tsx
 msgid "Revoke this API key"
 msgstr "Révoquer cette clé API"
+
+#: src/features/settings/clipper-sign-ins.tsx
+msgid "Revoke this Job Clipper sign-in"
+msgstr ""
 
 #: src/features/check/writing.tsx
 msgid "Rewrite accepted"
@@ -8884,6 +9614,14 @@ msgstr "Filet"
 #: src/features/check/writing.tsx
 msgid "Run again"
 msgstr "Relancer"
+
+#: src/features/discovery/searches.tsx
+msgid "Run now"
+msgstr ""
+
+#: src/features/discovery/searches.tsx
+msgid "Running"
+msgstr ""
 
 #. placeholder {0}: new Intl.DateTimeFormat(locale, { timeZone: timezone, dateStyle: "medium", timeStyle: "short" }).format(runAt)
 #: src/features/career/schedule-sheet.tsx
@@ -8957,7 +9695,13 @@ msgstr "Enregistrer et tester"
 msgid "Save another offer to compare"
 msgstr "Enregistrez une autre offre pour comparer"
 
+#: src/features/email-templates/write-email-sheet.tsx
+msgid "Save as my template"
+msgstr ""
+
 #: src/features/application-detail/sheets.tsx
+#: src/features/branding/branding-screen.tsx
+#: src/features/discovery/search-form.tsx
 msgid "Save changes"
 msgstr "Enregistrer les modifications"
 
@@ -9014,6 +9758,10 @@ msgstr "Enregistrer la planification"
 msgid "Save story"
 msgstr "Enregistrer le récit"
 
+#: src/features/email-templates/template-editor.tsx
+msgid "Save template"
+msgstr ""
+
 #: src/features/share/download.tsx
 msgid "Save the cover letter before exporting it."
 msgstr "Enregistrez la lettre de motivation avant de l'exporter."
@@ -9038,6 +9786,10 @@ msgstr "Enregistrer ces conditions d'offre pour comparer"
 msgid "Save this story to Knowledge?"
 msgstr "Enregistrer cette histoire dans Connaissances ?"
 
+#: src/features/discovery/review-queue.tsx
+msgid "Save to applications"
+msgstr ""
+
 #: src/features/workspace/tabs/fit.tsx
 msgid "Save to Knowledge"
 msgstr "Enregistrer dans Connaissances"
@@ -9052,6 +9804,7 @@ msgstr "Enregistrer votre version dans un nouveau document et conserver la leur 
 
 #: src/features/applications/stages.ts
 #: src/features/career/preferences.tsx
+#: src/features/discovery/review-queue.tsx
 #: src/shell/builder-chrome.tsx
 msgid "Saved"
 msgstr "Enregistré"
@@ -9102,6 +9855,14 @@ msgstr "Enregistré dans Connaissances, réservé à cette candidature."
 msgid "Saved to Saved · Practice"
 msgstr "Enregistré dans Enregistré · Entraînement"
 
+#: src/features/discovery/review-queue.tsx
+msgid "Saved to your applications"
+msgstr ""
+
+#: src/features/email-templates/write-email-sheet.tsx
+msgid "Saved to your templates"
+msgstr ""
+
 #: src/features/applications/add-sheet.tsx
 msgid "Saving the job. Wait for confirmation before making another change."
 msgstr "Sauvegarder le travail. Attendez la confirmation avant d'effectuer une autre modification."
@@ -9112,6 +9873,10 @@ msgstr "Sauvegarder le travail. Attendez la confirmation avant d'effectuer une a
 #: src/shell/builder-chrome.tsx
 msgid "Saving…"
 msgstr "Sauvegarde…"
+
+#: src/features/discovery/search-form.tsx
+msgid "Schedule"
+msgstr ""
 
 #: src/features/application-detail/interview-sheet.tsx
 #: src/features/application-detail/sections.tsx
@@ -9178,6 +9943,14 @@ msgstr "Commandes de recherche"
 msgid "Search covers documents, applications, assistant conversations and actions."
 msgstr "La recherche couvre les documents, les candidatures, les conversations et les actions de l'assistant."
 
+#: src/features/discovery/search-form.tsx
+msgid "Search created"
+msgstr ""
+
+#: src/features/discovery/searches.tsx
+msgid "Search deleted"
+msgstr ""
+
 #: src/features/documents/library.tsx
 msgid "Search documents"
 msgstr "Rechercher des documents"
@@ -9218,6 +9991,10 @@ msgstr "Rechercher une langue"
 msgid "Search or run…"
 msgstr "Recherchez ou exécutez…"
 
+#: src/features/discovery/search-form.tsx
+msgid "Search saved"
+msgstr ""
+
 #: src/features/workspace/answer-library.tsx
 msgid "Search saved answers"
 msgstr ""
@@ -9255,13 +10032,29 @@ msgstr "Rechercher…"
 msgid "Searched the web"
 msgstr "J'ai cherché sur le Web"
 
+#: src/features/discovery/searches.tsx
+msgid "Searches"
+msgstr ""
+
 #: src/features/assistant/messages.tsx
 msgid "Searching the web…"
 msgstr "Recherche sur le Web…"
 
+#: src/features/organization/plan-screen.tsx
+msgid "Seats"
+msgstr ""
+
 #: src/features/career/offers.tsx
 msgid "Second offer"
 msgstr "Deuxième offre"
+
+#: src/features/branding/branding-screen.tsx
+msgid "Secondary"
+msgstr ""
+
+#: src/features/branding/branding-screen.tsx
+msgid "Secondary colour"
+msgstr ""
 
 #: src/features/check/issues.ts
 msgid "Section headings"
@@ -9453,10 +10246,6 @@ msgstr "Configurez la recherche web dans Paramètres pour trouver des postes."
 msgid "Settings"
 msgstr "Paramètres"
 
-#: app/(tabs)/settings/ai-mcp.tsx
-msgid "Setup guide"
-msgstr "Guide de configuration"
-
 #: src/features/ai/report-content.tsx
 msgid "Sexual content"
 msgstr "Contenu sexuel"
@@ -9537,8 +10326,8 @@ msgid "Shorter"
 msgstr "Plus court"
 
 #: src/features/share/web-page.tsx
-msgid "Show “Made with Reactive Resume”"
-msgstr "Afficher « Réalisé avec Reactive Resume »"
+msgid "Show “Made with {appName}”"
+msgstr ""
 
 #. placeholder {0}: Math.min(remaining, COLUMN_PAGE_SIZE)
 #: src/features/applications-board/board-screen.tsx
@@ -9589,6 +10378,10 @@ msgstr "Afficher les icônes"
 msgid "Show in search engines"
 msgstr "Afficher dans les moteurs de recherche"
 
+#: src/features/discovery/review-queue.tsx
+msgid "Show jobs"
+msgstr ""
+
 #: src/features/ai/provider-editor.tsx
 msgid "Show key"
 msgstr "Afficher la clé"
@@ -9600,6 +10393,7 @@ msgstr "Afficher le lien dans le titre"
 #: app/(tabs)/settings/preferences.tsx
 #: src/features/application-detail/interview-sheet.tsx
 #: src/features/career/today.tsx
+#: src/features/discovery/review-queue.tsx
 msgid "Show more"
 msgstr "Afficher plus"
 
@@ -9620,6 +10414,10 @@ msgstr "Afficher les éléments lus"
 #: src/features/design/advanced.tsx
 msgid "Show section icons"
 msgstr "Afficher les icônes de section"
+
+#: src/features/email-templates/write-email-sheet.tsx
+msgid "Show templates for every stage"
+msgstr ""
 
 #: src/features/application-detail/detail-screen.tsx
 msgid "Showing saved details. They couldn't be refreshed."
@@ -9748,9 +10546,19 @@ msgstr "Connexion et sécurité"
 msgid "Sign-in didn't complete"
 msgstr "La connexion n'a pas abouti"
 
+#: src/features/settings/clipper-sign-ins.tsx
+msgid "Sign-in revoked. The extension stops working on its next request."
+msgstr ""
+
 #: src/features/letters/write.tsx
 msgid "Sign-off"
 msgstr "Formule de politesse"
+
+#. placeholder {0}: date(token.createdAt)
+#. placeholder {1}: date(token.lastUsedAt)
+#: src/features/settings/clipper-sign-ins.tsx
+msgid "Signed in {0} · Last used {1}"
+msgstr ""
 
 #. placeholder {0}: hostOf(server)
 #: src/auth/session-gate.tsx
@@ -9790,6 +10598,7 @@ msgstr "Taille"
 msgid "Skill"
 msgstr "Compétence"
 
+#: src/features/discovery/search-form.tsx
 #: src/features/write/fields.ts
 msgid "Skills"
 msgstr "Compétences"
@@ -9878,6 +10687,10 @@ msgstr "Une partie du texte tombe hors de la page."
 msgid "Some text is rotated."
 msgstr "Une partie du texte est pivotée."
 
+#: src/features/branding/domains-screen.tsx
+msgid "Something went wrong while checking this domain. Remove it and add it again."
+msgstr ""
+
 #: src/features/documents/library.tsx
 msgid "Sort"
 msgstr "Trier"
@@ -9902,10 +10715,6 @@ msgstr "Origine"
 #: src/features/career/facts.tsx
 msgid "Source and correction history"
 msgstr "Historique des sources et des corrections"
-
-#: app/(tabs)/settings/index.tsx
-msgid "Source code on GitHub"
-msgstr "Code source sur GitHub"
 
 #: src/features/workspace/answer-library.tsx
 msgid "Source employer"
@@ -10037,6 +10846,10 @@ msgstr "Commence maintenant"
 msgid "State or region"
 msgstr ""
 
+#: src/features/organization/plan-screen.tsx
+msgid "Status"
+msgstr "Statut"
+
 #: src/features/documents/new-document.tsx
 msgid "Stay in Documents"
 msgstr "Rester dans Documents"
@@ -10097,6 +10910,11 @@ msgstr "Barré"
 msgid "Stronger verb"
 msgstr "Verbe plus fort"
 
+#: src/features/email-templates/template-editor.tsx
+#: src/features/email-templates/write-email-sheet.tsx
+msgid "Subject"
+msgstr ""
+
 #: src/features/application-detail/sections.tsx
 msgid "Submission recorded {date}. The sent versions never change; current drafts stay editable. This record does not confirm employer receipt."
 msgstr ""
@@ -10135,6 +10953,10 @@ msgstr "Succès à 90 jours · prochaine étape"
 msgid "Suggest target roles (optional AI)"
 msgstr ""
 
+#: src/features/email-templates/template-editor.tsx
+msgid "Suggested for"
+msgstr ""
+
 #: src/features/workspace/tabs/messages.tsx
 msgid "Suggested reply · edit before sending"
 msgstr "Réponse suggérée · modifiez-la avant de l'envoyer"
@@ -10153,6 +10975,7 @@ msgid "Summary"
 msgstr "Résumé"
 
 #: app/(tabs)/settings/index.tsx
+#: src/features/branding/branding-screen.tsx
 msgid "Support"
 msgstr "Soutien"
 
@@ -10163,6 +10986,10 @@ msgstr "Étayé"
 
 #: src/features/workspace/answer-library.tsx
 msgid "Supporting Knowledge facts and stories"
+msgstr ""
+
+#: src/features/organization/plan-screen.tsx
+msgid "Suspended"
 msgstr ""
 
 #: src/features/career/offers.tsx
@@ -10311,24 +11138,38 @@ msgstr "Télugu"
 
 #: src/features/design/design-pane.tsx
 #: src/features/document-menu/index.tsx
+#: src/features/email-templates/write-email-sheet.tsx
 #: src/features/letters/design.tsx
 msgid "Template"
 msgstr "Modèle"
+
+#: src/features/email-templates/templates-screen.tsx
+msgid "Template archived"
+msgstr ""
 
 #. placeholder {0}: templateName(template)
 #: src/features/design/draft.ts
 msgid "Template changed to {0}"
 msgstr "Modèle modifié en {0}"
 
+#: src/features/email-templates/templates-screen.tsx
+msgid "Template saved"
+msgstr ""
+
 #: src/features/letters/design.tsx
 msgid "Template, type and colors follow the resume, so the pair always matches."
 msgstr "Le modèle, le type et les couleurs suivent le CV, de sorte que la paire corresponde toujours."
+
+#: src/auth/auth-header.tsx
+msgid "Terms"
+msgstr ""
 
 #: src/features/ats-checker/checker.tsx
 msgid "Terms from the posting"
 msgstr "Conditions de l'offre d'emploi"
 
 #: app/(tabs)/settings/index.tsx
+#: src/features/branding/branding-screen.tsx
 msgid "Terms of service"
 msgstr "Conditions d'utilisation"
 
@@ -10402,6 +11243,22 @@ msgstr "Le texte sous {minimum} pt peut être mal lu lorsqu'un système le resti
 msgid "Thai"
 msgstr "Thaïlandais"
 
+#: src/features/email-templates/built-in-text.ts
+msgid "Thank you after an interview"
+msgstr ""
+
+#: src/features/email-templates/built-in-text.ts
+msgid "Thank you for meeting with me on {interviewDate}"
+msgstr ""
+
+#: src/features/email-templates/labels.ts
+msgid "Thank-you"
+msgstr ""
+
+#: src/features/branding/domains-screen.tsx
+msgid "That domain isn't available, or you have reached the limit."
+msgstr ""
+
 #: src/features/ats-checker/check.ts
 msgid "That file couldn't be read as a PDF."
 msgstr "Ce fichier n'a pas pu être lu en tant que PDF."
@@ -10462,9 +11319,17 @@ msgstr "L'assistant utilise la recherche Web de votre fournisseur d'IA lorsqu'el
 msgid "The assistant uses your own key. Nothing is sent anywhere until you connect one."
 msgstr "L'assistant utilise votre propre clé. Rien n'est envoyé nulle part jusqu'à ce que vous en connectiez un."
 
+#: src/features/discovery/search-form.tsx
+msgid "The best matches of each run get an AI score and a short reason. Each scored job uses AI credits. Your plan may allow fewer. Enter 0 to skip AI."
+msgstr ""
+
 #: src/features/ai/web-access.tsx
 msgid "The built-in reader remains active."
 msgstr "Le lecteur intégré reste actif."
+
+#: src/features/branding/domains-screen.tsx
+msgid "The certificate provider rejected this domain. Check that the CNAME record points where shown."
+msgstr ""
 
 #: src/features/check/writing.tsx
 msgid "The checks are mechanical. This asks a language model how a reader might react to your bullets and suggests rewrites. It isn't part of the score."
@@ -10498,6 +11363,10 @@ msgstr "La connexion n'a pas pu être chargée ou enregistrée. Réessayez."
 #: src/features/letters/share.tsx
 msgid "The current state will be saved as “Before restore” first."
 msgstr "L'état actuel sera d'abord enregistré sous « Avant la restauration »."
+
+#: src/features/branding/domains-screen.tsx
+msgid "The domain's certificate setup was changed and can't be used. Remove the domain and add it again."
+msgstr ""
 
 #: src/features/ats-checker/checker.tsx
 msgid "The editor opens on Check, which checks the imported resume again."
@@ -10559,6 +11428,10 @@ msgstr "L'ordre dans lequel le texte est stocké diffère nettement de l'ordre d
 msgid "The original stays in correction history. Stories using it will need review."
 msgstr "L'original reste dans l'historique des corrections. Les histoires qui l’utilisent devront être révisées."
 
+#: src/features/branding/domains-screen.tsx
+msgid "The ownership TXT record is gone. Add it back, or remove the domain."
+msgstr ""
+
 #: src/features/ats-checker/messages.ts
 msgid "The pages are pictures, with no text behind them."
 msgstr "Les pages sont des images, sans texte derrière elles."
@@ -10566,6 +11439,10 @@ msgstr "Les pages sont des images, sans texte derrière elles."
 #: src/features/check/parser.tsx
 msgid "The PDF is checked on the server and not stored. Send this preview to see what software reads."
 msgstr "Le PDF est vérifié sur le serveur et non stocké. Envoyez cet aperçu pour voir ce que lit le logiciel."
+
+#: src/features/branding/branding-screen.tsx
+msgid "The platform default shows again."
+msgstr ""
 
 #: src/features/ai/provider-editor.tsx
 #: src/features/ai/provider-list.tsx
@@ -10588,6 +11465,16 @@ msgstr "Le reste du fichier ne figure pas dans ce rapport."
 msgid "The resume as it is"
 msgstr "Le CV tel qu'il est"
 
+#. placeholder {0}: source.name
+#: src/features/discovery/searches.tsx
+msgid "The run of \"{0}\" failed."
+msgstr ""
+
+#. placeholder {0}: source.name
+#: src/features/discovery/searches.tsx
+msgid "The run of \"{0}\" finished: {found} new."
+msgstr ""
+
 #: src/features/ats-checker/messages.ts
 msgid "The same line repeats on every page."
 msgstr "La même ligne se répète sur chaque page."
@@ -10607,6 +11494,10 @@ msgstr "Le score compte la fiabilité avec laquelle le logiciel lit votre CV. Ce
 #: src/features/ats-checker/checker.tsx
 msgid "The score reflects how reliably text is extracted, not your chances."
 msgstr "Le score reflète la fiabilité de l'extraction du texte, et non vos chances."
+
+#: src/features/discovery/searches.tsx
+msgid "The search and its run history are deleted. Jobs it already found stay in your queue."
+msgstr ""
 
 #: src/features/documents/library.tsx
 msgid "The selected documents will be deleted for good and can't be restored."
@@ -10639,6 +11530,10 @@ msgstr "Le quota du service est épuisé. Vérifiez votre forfait auprès du ser
 #: src/features/ai/web-access.tsx
 msgid "The service rejected the credentials. Check the API key."
 msgstr "Le service a rejeté les informations d'identification. Vérifiez la clé API."
+
+#: src/features/email-templates/write-email-sheet.tsx
+msgid "The templates couldn't be loaded."
+msgstr ""
 
 #: src/features/ai/error.ts
 msgid "The test didn't run. Try again."
@@ -10673,6 +11568,10 @@ msgstr "Il n'y a aucun lien vers un profil, un portfolio ou un dépôt."
 msgid "There is no summary paragraph."
 msgstr "Il n'y a pas de paragraphe de résumé."
 
+#: src/features/branding/branding-screen.tsx
+msgid "There is nothing to remove."
+msgstr ""
+
 #: src/features/workspace/tabs/apply.tsx
 msgid "These are saved draft answers."
 msgstr ""
@@ -10701,6 +11600,15 @@ msgstr "Pensée…"
 msgid "Third-party software notices. Tap a dependency to read its license."
 msgstr "Mentions relatives aux logiciels tiers. Touchez une dépendance pour lire sa licence."
 
+#. placeholder {0}: hostOf(server)
+#: src/auth/session-gate.tsx
+msgid "This account isn't part of {0}"
+msgstr ""
+
+#: src/features/branding/domains-screen.tsx
+msgid "This address always works, whatever happens to your own domains."
+msgstr ""
+
 #: src/features/workspace/answer-library.tsx
 msgid "This application"
 msgstr ""
@@ -10714,6 +11622,10 @@ msgstr "Impossible d'ouvrir cette candidature."
 msgid "This application has no posting yet. Add one in Applications."
 msgstr "Cette candidature n’a pas encore d’offre. Ajoutez-en une dans Candidatures."
 
+#: src/features/discovery/search-form.tsx
+msgid "This board isn't supported yet"
+msgstr ""
+
 #: src/features/applications/error.ts
 msgid "This changed elsewhere. Reload and try again."
 msgstr "Cet élément a été modifié ailleurs. Rechargez et réessayez."
@@ -10721,6 +11633,10 @@ msgstr "Cet élément a été modifié ailleurs. Rechargez et réessayez."
 #: src/features/workspace/parts.tsx
 msgid "This changed somewhere else, so it wasn't saved. Your text is kept here; Retry saves it over the other copy."
 msgstr "Cela a changé ailleurs, donc il n'a pas été enregistré. Votre texte est conservé ici ; Réessayer l'enregistre sur l'autre copie."
+
+#: src/features/branding/branding-screen.tsx
+msgid "This colour may be hard to see on a white background."
+msgstr ""
 
 #: src/features/ai/error.ts
 msgid "This connection is managed by your server."
@@ -10763,6 +11679,14 @@ msgstr "Ce document est verrouillé. Vous pouvez toujours télécharger et nomme
 msgid "This document is no longer available. Refresh and try again."
 msgstr "Ce document n'est plus disponible. Actualisez et réessayez."
 
+#: src/features/branding/domains-screen.tsx
+msgid "This domain no longer serves your organization and is being deleted."
+msgstr ""
+
+#: src/features/email-templates/write-email-sheet.tsx
+msgid "This email is too long to open in your mail app, so it was copied instead."
+msgstr ""
+
 #: src/features/workspace/answer-library.tsx
 msgid "This employer"
 msgstr ""
@@ -10778,6 +11702,10 @@ msgstr "Cette entrée"
 #: src/features/write/entry-screen.tsx
 msgid "This entry was deleted."
 msgstr "Cette entrée a été supprimée."
+
+#: src/features/organization/entitlement-message.ts
+msgid "This feature is not part of your organization's plan."
+msgstr ""
 
 #: src/features/ats-checker/messages.ts
 msgid "This file contains form fields."
@@ -10888,6 +11816,19 @@ msgstr "Cela mesure la fidélité avec laquelle le logiciel peut extraire le tex
 msgid "This month"
 msgstr "Ce mois-ci"
 
+#: src/features/organization/entitlement-message.ts
+msgid "This organization has no free seats. Remove a member or an invitation, or ask the owner to add seats."
+msgstr ""
+
+#: src/features/organization/plan-screen.tsx
+msgid "This organization is suspended. You can view and export your data."
+msgstr ""
+
+#: src/features/organization/entitlement-message.ts
+#: src/features/organization/entitlements.tsx
+msgid "This organization is suspended. You can view and export your data. Contact your administrator."
+msgstr ""
+
 #: src/features/assistant/messages.tsx
 msgid "This page is clipped or incomplete. Check the original before using it."
 msgstr "Cette page est tronquée ou incomplète. Vérifiez l'original avant de l'utiliser."
@@ -10911,6 +11852,10 @@ msgstr "Ce PDF n'a pas de couche de texte, donc un analyseur n'en lit rien."
 #: src/features/ats-checker/check.ts
 msgid "This PDF is password protected. Save an unprotected copy and try again."
 msgstr "Ce PDF est protégé par mot de passe. Enregistrez une copie non protégée et réessayez."
+
+#: src/features/organization/plan-screen.tsx
+msgid "This plan has no pooled AI credits."
+msgstr ""
 
 #: src/features/assistant/messages.tsx
 msgid "This question couldn't be asked. Send a new message to continue."
@@ -10983,6 +11928,10 @@ msgstr "Cette tentative de connexion a expiré ou a déjà été utilisée. Reco
 #: src/features/workspace/tabs/practise.tsx
 msgid "This story is unavailable or uses facts that are switched off."
 msgstr "Ce récit est indisponible ou utilise des faits désactivés."
+
+#: src/features/email-templates/write-email-sheet.tsx
+msgid "This template couldn't be filled in. Try again."
+msgstr ""
 
 #: src/features/application-detail/interview-sheet.tsx
 msgid "This time does not exist in the selected timezone. Choose another time."
@@ -11071,6 +12020,10 @@ msgstr "Pour vérifier"
 msgid "To get a reminder, allow notifications in your device settings."
 msgstr "Pour recevoir un rappel, autorisez les notifications dans les paramètres de votre appareil."
 
+#: src/features/email-templates/write-email-sheet.tsx
+msgid "To: {to}"
+msgstr ""
+
 #: app/(tabs)/career/_layout.tsx
 #: src/features/applications-board/calendar-screen.tsx
 #: src/features/share/link.tsx
@@ -11153,6 +12106,10 @@ msgstr "La corbeille est vide"
 msgid "Trash was already empty"
 msgstr ""
 
+#: src/features/organization/plan-screen.tsx
+msgid "Trial"
+msgstr ""
+
 #: src/features/workspace/parts.tsx
 msgid "Trimming words"
 msgstr "Élagage des mots"
@@ -11169,8 +12126,14 @@ msgstr "Essayez {suggestion}"
 #: src/features/ai/provider-list.tsx
 #: src/features/ai/web-access.tsx
 #: src/features/application-detail/detail-screen.tsx
+#: src/features/branding/branding-screen.tsx
+#: src/features/branding/domains-screen.tsx
+#: src/features/email-templates/templates-screen.tsx
+#: src/features/email-templates/write-email-sheet.tsx
 #: src/features/letters/write.tsx
+#: src/features/organization/plan-screen.tsx
 #: src/features/settings/api-keys.tsx
+#: src/features/settings/clipper-sign-ins.tsx
 #: src/features/workspace/parts.tsx
 #: src/features/workspace/preparation.tsx
 #: src/features/workspace/shell.tsx
@@ -11390,6 +12353,10 @@ msgstr "{completed} documents sur {0} mis à jour. Les documents verrouillés et
 msgid "Updating preview…"
 msgstr "Mise à jour de l'aperçu…"
 
+#: src/features/branding/branding-screen.tsx
+msgid "Upload"
+msgstr ""
+
 #: src/features/ats-checker/checker.tsx
 msgid "Upload a PDF and see the text an applicant tracking system extracts: what's missing, what's out of order, and how to fix it. Free, no account needed."
 msgstr "Téléchargez un PDF et consultez le texte extrait par un système de suivi des candidats : ce qui manque, ce qui est en panne et comment y remédier. Gratuit, aucun compte requis."
@@ -11406,6 +12373,10 @@ msgstr "Envoi de la photo…"
 #: src/features/write/picture-screen.tsx
 msgid "URL"
 msgstr "URL"
+
+#: src/features/branding/branding-screen.tsx
+msgid "Use {APP_NAME_MAX} characters or fewer."
+msgstr ""
 
 #: src/features/check/issues.ts
 msgid "Use {minimum}"
@@ -11431,9 +12402,21 @@ msgstr "Utilisez 3 à 64 lettres minuscules, chiffres, points, traits d’union 
 msgid "Use 6–64 characters."
 msgstr "Utilisez 6 à 64 caractères."
 
+#: src/features/branding/branding-screen.tsx
+msgid "Use 80 characters or fewer."
+msgstr ""
+
+#: src/features/branding/branding-screen.tsx
+msgid "Use a colour like #1a56db."
+msgstr ""
+
 #: src/features/design/style-groups.tsx
 msgid "Use a darker shade"
 msgstr "Utilisez une teinte plus foncée"
+
+#: src/features/branding/branding-screen.tsx
+msgid "Use a full https:// address."
+msgstr ""
 
 #: src/features/design/advanced.tsx
 msgid "Use a hex value like #3E6B4F or rgba(62, 107, 79, 1)."
@@ -11442,6 +12425,10 @@ msgstr "Utilisez une valeur hexadécimale comme #3E6B4F ou rgba(62, 107, 79, 1).
 #: src/features/ats-checker/messages.ts
 msgid "Use a plain international form, such as +1 555 010 1234."
 msgstr "Utilisez un format international simple, comme +1 555 010 1234."
+
+#: src/features/branding/branding-screen.tsx
+msgid "Use a plain name without line breaks or angle brackets."
+msgstr ""
 
 #: src/features/ats-checker/messages.ts
 msgid "Use a recognized form such as \"Jan 2020 - Mar 2022\" or \"2020 - 2022\"."
@@ -11475,6 +12462,10 @@ msgstr "Utilisez un lien http ou https."
 #: src/features/ats-checker/messages.ts
 msgid "Use at least 9pt."
 msgstr "Utilisez au moins 9pt."
+
+#: src/features/discovery/messages.ts
+msgid "Use at most {MAX_NAME_LENGTH} characters."
+msgstr ""
 
 #: src/features/document-menu/index.tsx
 #: src/features/documents/queries.ts
@@ -11510,6 +12501,10 @@ msgstr "Utilisez des lettres minuscules, des chiffres et des tirets simples."
 #: src/features/career/search-regions-field.tsx
 msgid "Use my timezone"
 msgstr "Utiliser mon fuseau horaire"
+
+#: src/features/branding/branding-screen.tsx
+msgid "Use one address like help@example.com, without a name."
+msgstr ""
 
 #: src/features/check/issues.ts
 msgid "Use one column"
@@ -11581,6 +12576,10 @@ msgstr "Utilisez ce temps"
 msgid "Use your editor's normal bullet list, so stray glyphs do not land mid-sentence."
 msgstr "Utilisez la liste à puces normale de votre éditeur, pour que des glyphes parasites n'atterrissent pas au milieu d'une phrase."
 
+#: src/features/organization/plan-screen.tsx
+msgid "Used"
+msgstr "Utilisé"
+
 #: src/features/workspace/tabs/saved.tsx
 msgid "used {used}"
 msgstr "utilisé : {used}"
@@ -11592,6 +12591,10 @@ msgstr "Servent à évaluer les postes et les offres. Chacun est un nombre, pour
 #: src/features/ai/web-access.tsx
 msgid "Used when {connected} can't read a page. No account needed."
 msgstr "Utilisé lorsque {connected} ne peut pas lire une page. Aucun compte requis."
+
+#: src/features/ai/provider-list.tsx
+msgid "Used when you haven't added a provider of your own. Counts toward your organization's AI allowance."
+msgstr ""
 
 #: src/features/settings/profile.tsx
 #: src/features/write/fields.ts
@@ -11625,6 +12628,11 @@ msgstr "Ouzbékistanais"
 #: src/features/share/custom-domain.tsx
 msgid "Value"
 msgstr "Valeur"
+
+#. placeholder {0}: record.value
+#: src/features/branding/domains-screen.tsx
+msgid "Value: {0}"
+msgstr ""
 
 #: src/features/ats-checker/messages.ts
 msgid "Vary the openings so the section does not read as boilerplate."
@@ -11745,6 +12753,10 @@ msgstr "Bénévolat"
 msgid "Wait for your account timezone to load, retry if it failed, or clear the deadline."
 msgstr "Attendez le chargement du fuseau horaire de votre compte, réessayez si le chargement a échoué ou videz le champ de la date limite."
 
+#: src/features/branding/domains-screen.tsx
+msgid "Waiting for DNS"
+msgstr ""
+
 #: src/features/workspace/tabs/messages.tsx
 msgid "Waiting for you"
 msgstr "En attente de votre décision"
@@ -11752,6 +12764,10 @@ msgstr "En attente de votre décision"
 #: src/features/applications/next-step.ts
 msgid "Waiting to hear back"
 msgstr "En attendant d'avoir une réponse"
+
+#: src/features/branding/domains-screen.tsx
+msgid "We didn't find the ownership record in time. Check that the TXT record exists exactly as shown."
+msgstr ""
 
 #: app/(tabs)/settings/ai-web-access.tsx
 #: app/(tabs)/settings/ai.tsx
@@ -11790,6 +12806,10 @@ msgstr "Les recherches sur le Web recherchent des emplois dans ces pays. Choisis
 #: src/features/write/basics-screen.tsx
 msgid "Website"
 msgstr "Site web"
+
+#: src/features/discovery/messages.ts
+msgid "Weekly"
+msgstr ""
 
 #: src/features/workspace/parts.tsx
 msgid "Weighing each requirement"
@@ -12021,6 +13041,12 @@ msgstr "Notez ce qu'ils vous ont demandé tant que c'est frais. Le coach compare
 msgid "Write each role as a clear title and company line, with the dates alongside."
 msgstr "Écrivez chaque poste sous forme d'une ligne claire titre et entreprise, avec les dates à côté."
 
+#: src/features/application-detail/detail-screen.tsx
+#: src/features/email-templates/write-email-sheet.tsx
+#: src/features/workspace/shell.tsx
+msgid "Write email"
+msgstr ""
+
 #: src/features/ats-checker/messages.ts
 msgid "Write it as one uninterrupted piece, with no special spacing."
 msgstr "Écrivez-le comme un bloc ininterrompu, sans espacement particulier."
@@ -12092,6 +13118,10 @@ msgstr "Vous l'utilisez déjà pour « {takenBy} »."
 msgid "You answered: {answer}"
 msgstr "Vous avez répondu : {answer}"
 
+#: src/features/discovery/search-form.tsx
+msgid "You can have at most {limit} searches. Delete one to add another."
+msgstr ""
+
 #: src/shell/builder-chrome.tsx
 msgid "You can keep editing. Changes sync when you're back online. PDF sharing works with cached fonts and images."
 msgstr "Vous pouvez continuer à éditer. Les modifications sont synchronisées lorsque vous êtes de nouveau en ligne. Le partage de PDF fonctionne avec les polices et les images mises en cache."
@@ -12099,6 +13129,10 @@ msgstr "Vous pouvez continuer à éditer. Les modifications sont synchronisées 
 #: src/features/workspace/tabs/apply.tsx
 msgid "You can keep up to 30 application questions."
 msgstr "Vous pouvez conserver jusqu'à 30 questions de candidature."
+
+#: src/features/discovery/searches.tsx
+msgid "You can run a search by hand once every 10 minutes."
+msgstr ""
 
 #: app/(auth)/sign-in.tsx
 msgid "You can sign in with an account you already have."
@@ -12113,6 +13147,10 @@ msgstr "Vous avez annulé la connexion avant qu'elle n'aboutisse."
 msgid "You forgot this before, so it wasn't saved again."
 msgstr "Vous l'aviez déjà oublié, il n'a donc pas été enregistré à nouveau."
 
+#: src/features/email-templates/templates-screen.tsx
+msgid "You have no templates of your own yet. You can also save one from Write email."
+msgstr ""
+
 #: src/ui/overlays.tsx
 msgid "You have unsaved changes."
 msgstr "Vous avez des modifications non enregistrées."
@@ -12120,6 +13158,10 @@ msgstr "Vous avez des modifications non enregistrées."
 #: src/features/workspace/tabs/messages.tsx
 msgid "You send it from your own email."
 msgstr "Vous l'envoyez depuis votre propre messagerie."
+
+#: src/features/email-templates/write-email-sheet.tsx
+msgid "You send it from your own email. Nothing is sent from here."
+msgstr ""
 
 #: src/features/settings/sign-out.tsx
 msgid "You will be signed out of {server}. Any edits not yet synced from this device will be lost."
@@ -12171,6 +13213,14 @@ msgstr "Vous êtes hors ligne. Réessayez lorsque vous vous reconnecterez."
 msgid "You're up to date"
 msgstr "Vous êtes à jour"
 
+#: src/features/branding/domains-screen.tsx
+msgid "Your address"
+msgstr ""
+
+#: src/features/branding/domains-screen.tsx
+msgid "Your address above keeps working. Ask your administrator to upgrade the plan to add your own domain."
+msgstr ""
+
 #: src/features/workspace/tabs/debrief.tsx
 #: src/features/workspace/tabs/practise.tsx
 msgid "your AI connection"
@@ -12192,6 +13242,10 @@ msgstr "Votre réponse"
 msgid "Your answer · {mode}"
 msgstr "Votre réponse · {mode}"
 
+#: src/features/branding/branding-screen.tsx
+msgid "Your app"
+msgstr ""
+
 #: src/features/workspace/tabs/practise.tsx
 msgid "Your attempts"
 msgstr "Vos tentatives"
@@ -12207,6 +13261,10 @@ msgstr "Vos puces sont dessinées avec des caractères inhabituels."
 #: src/draft/conflict-sheet.tsx
 msgid "Your changes on this device will be replaced by the saved version."
 msgstr "Vos modifications sur cet appareil seront remplacées par la version enregistrée."
+
+#: src/features/settings/profile.tsx
+msgid "Your cohort"
+msgstr ""
 
 #: src/features/ats-checker/messages.ts
 msgid "Your contact details are not on the first page."
@@ -12258,8 +13316,8 @@ msgid "your Knowledge"
 msgstr "vos Connaissances"
 
 #: app/(tabs)/settings/preferences.tsx
-msgid "Your language is saved. Restart Reactive Resume to apply the new left-to-right or right-to-left layout."
-msgstr "Votre langue est enregistrée. Redémarrez Reactive Resume pour appliquer la nouvelle disposition de gauche à droite ou de droite à gauche."
+msgid "Your language is saved. Restart the app to apply the new left-to-right or right-to-left layout."
+msgstr ""
 
 #: src/features/ats-checker/messages.ts
 msgid "Your lines are packed very tightly."
@@ -12277,10 +13335,6 @@ msgstr "votre message"
 msgid "Your name"
 msgstr "Votre nom"
 
-#: src/features/share/custom-domain.tsx
-msgid "Your name as your address, from OlaCV, the .cv registry. Code {CODE} takes 50% off the first year."
-msgstr "Votre nom comme adresse, chez OlaCV, le registre des domaines .cv. Le code {CODE} donne 50 % de réduction sur la première année."
-
 #: src/features/check/issues.ts
 msgid "Your name is missing"
 msgstr "Votre nom manque"
@@ -12297,9 +13351,37 @@ msgstr "Votre accroche"
 msgid "Your opening, the stories to bring and questions to ask. It becomes your checklist 10 minutes before the call."
 msgstr "Votre accroche, les récits à apporter et les questions à poser. Il devient votre liste de vérification 10 minutes avant l'appel."
 
+#: src/api/ai-quota.ts
+msgid "Your organization has used 80% of this month's AI allowance."
+msgstr ""
+
+#: src/features/ai/error.ts
+msgid "Your organization has used all of this month's AI allowance. Add your own AI provider in Settings to keep going, or ask an admin about the plan."
+msgstr ""
+
+#: src/features/branding/domains-screen.tsx
+msgid "Your organization is served on this domain."
+msgstr ""
+
+#: src/features/organization/plan-screen.tsx
+msgid "Your organization's owner manages the plan and payments on the web."
+msgstr ""
+
+#: src/features/email-templates/templates-screen.tsx
+msgid "Your own templates for writing to employers. They appear under Write email on every application."
+msgstr ""
+
 #: src/features/ats-checker/messages.ts
 msgid "Your phone number is written in an unusual shape."
 msgstr "Votre numéro de téléphone est écrit dans un format inhabituel."
+
+#: src/features/discovery/messages.ts
+msgid "Your plan allows fewer jobs per run."
+msgstr ""
+
+#: src/features/discovery/searches.tsx
+msgid "Your plan doesn't include job discovery. Ask your administrator about upgrading."
+msgstr ""
 
 #: src/features/assistant/coach-screen.tsx
 msgid "your preferences"
@@ -12389,6 +13471,14 @@ msgstr "vos récits"
 #: src/features/workspace/tabs/practise.tsx
 msgid "Your story couldn't be loaded."
 msgstr "Impossible de charger votre récit."
+
+#: src/features/email-templates/templates-screen.tsx
+msgid "Your templates"
+msgstr ""
+
+#: src/features/email-templates/templates-screen.tsx
+msgid "Your templates couldn't be loaded."
+msgstr ""
 
 #: src/features/workspace/tabs/prepare.tsx
 msgid "Your two-minute introduction"

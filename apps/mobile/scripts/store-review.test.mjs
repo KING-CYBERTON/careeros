@@ -31,6 +31,9 @@ const sessions = {
 };
 const modules = {
 	"@/auth/session": sessions,
+	// CAREEROS (P3-T02): the API client reports entitlement errors as a toast; these tests are about AI consent.
+	"@/features/organization/entitlement-message": { entitlementErrorMessage: () => null },
+	"@/ui/overlays": { showToast: () => {} },
 	"@lingui/core/macro": { t: (parts, ...values) => String.raw({ raw: parts }, ...values) },
 	"react-native": {
 		Alert: {
@@ -65,6 +68,16 @@ function load(path) {
 	return module.exports;
 }
 modules["./ai-consent"] = load("src/api/ai-consent.ts");
+// CAREEROS (P3-T03): client.ts shows the AI allowance notices through this module, which needs the toast UI; the
+// store-review checks are about consent, so the notices are faked here.
+modules["./ai-quota"] = {
+	noticeAiQuotaWarning: () => {},
+	noticeAiQuotaExceeded: () => {},
+	showAiQuotaWarning: () => {},
+	createAiQuotaWatcher: () => ({ afterCall: () => {} }),
+};
+// P2-T03: client.ts reports an organization-host block through this module, so it is loaded for real.
+modules["@/auth/org-host-block"] = load("src/auth/org-host-block.ts");
 const { client, streamClient, rest } = load("src/api/client.ts");
 async function waitForDialog() {
 	for (let step = 0; step < 100 && !dialog; step++) await new Promise((resolve) => setImmediate(resolve));
@@ -164,7 +177,7 @@ assert.equal(
 );
 assert.match(dialog.message, /Only the search query/);
 assert.match(dialog.message, /tavily/);
-assert.match(dialog.message, /Found posting links are read by Reactive Resume/);
+assert.match(dialog.message, /Found posting links are read by CareerOS/);
 assert.match(dialog.message, /links.*tavily[\s\S]*reader may charge/);
 assert.deepEqual(sent(), []);
 dialog.buttons[1].onPress();

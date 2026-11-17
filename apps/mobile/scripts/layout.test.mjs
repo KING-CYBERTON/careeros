@@ -38,6 +38,14 @@ const routes = {
 	settings: (page) => `/settings/${page}`,
 };
 const mocks = {
+	"@reactive-resume/utils/brand": {
+		getBrand: () => ({ appName: "CareerOS" }),
+		brandSlug: () => "careeros",
+		PLATFORM_DEFAULT_APP_NAME: "CareerOS",
+	},
+	// CAREEROS (P2-T02): the sidebar reads the live brand and draws an organization logo.
+	"@/branding/store": { useBrand: () => ({ appName: "CareerOS" }) },
+	"expo-image": { Image: "Image" },
 	react,
 	"react-native": native,
 	"react-native-safe-area-context": safe,
@@ -526,6 +534,10 @@ const { DocumentsLibrary } = load("features/documents/library.tsx", {
 	"./pending": { usePendingDocuments: () => pendingDocuments },
 	"./queries": { useDocumentOperations: () => ({ busy: false }) },
 	"./thumbnail": { Thumbnail: "Thumbnail" },
+	// CAREEROS (P3-T02): the suspended banner is drawn by its own module; this test is about the list.
+	"@/features/organization/entitlements": { SuspendedBanner: () => null },
+	// CAREEROS (P3-T07): the announcement banners are drawn by their own module; this test is about the list.
+	"@/features/organization/announcements": { AnnouncementBanners: () => null },
 	"@/api/client": {
 		client: {},
 		orpc: {

@@ -7,26 +7,16 @@ import { Button } from "@reactive-resume/ui/components/button";
 import { Icon } from "@reactive-resume/ui/components/icon";
 import { Input } from "@reactive-resume/ui/components/input";
 import { toast } from "@reactive-resume/ui/components/toast";
-import { CvDomainCard } from "./cv-domain-card";
 import { DnsRecordsDialog } from "./dns-records-dialog";
 import { toastError } from "@/libs/error-message";
 import { orpc } from "@/libs/orpc/client";
 
-type CustomDomainFieldProps = {
-	/** Suggest a `.cv` domain from OlaCV while none is connected (`FLAG_OLACV_SUGGESTION`). */
-	suggest: boolean;
-};
-
 /** Connects the account's own domain: the domain, the DNS records to add in a dialog, a check, and the result. */
-export function CustomDomainField({ suggest }: CustomDomainFieldProps) {
+// CAREEROS: the upstream OlaCV `.cv` suggestion and promo code were removed (P2-T08).
+export function CustomDomainField() {
 	const id = useId();
 	const queryClient = useQueryClient();
 	const { data: domain, isPending: loading } = useQuery(orpc.customDomain.get.queryOptions());
-	const { data: suggestion } = useQuery({
-		...orpc.customDomain.suggestion.queryOptions(),
-		enabled: suggest && !loading && !domain,
-		staleTime: 15 * 60_000,
-	});
 	const [hostname, setHostname] = useState("");
 	const [recordsOpen, setRecordsOpen] = useState(false);
 	const refresh = (next: RouterOutput["customDomain"]["get"]) =>
@@ -92,13 +82,6 @@ export function CustomDomainField({ suggest }: CustomDomainFieldProps) {
 						</Button>
 					</div>
 				</form>
-				{suggest && suggestion && (
-					<CvDomainCard
-						suggestion={suggestion}
-						connecting={set.isPending}
-						onConnect={() => set.mutate({ hostname: suggestion.domain }, { onError })}
-					/>
-				)}
 			</>
 		);
 

@@ -4,10 +4,12 @@ import type { RouterOutput } from "@/api/client";
 import type { DiscoveryDocument } from "expo-auth-session";
 import * as SecureStore from "expo-secure-store";
 import { Platform } from "react-native";
+import { getBrand } from "@reactive-resume/utils/brand";
 
 export const scopes = ["openid", "profile", "email", "offline_access", "api:read", "api:write", "api:delete"];
 
 /** The host the app is associated with (Universal Links, App Links). The OAuth callback lands there for every server. */
+// CAREEROS: careeros-branding-allow: native app host, release blocker until the native identity is set (Q80)
 const appHost = "rxresu.me";
 
 /**
@@ -74,7 +76,7 @@ const discoveries = new Map<string, Discovery>();
 const requestTimeout = 10_000;
 
 /**
- * Why a server cannot be used: `unreachable` (no Reactive Resume answered), `outdated` (no app sign-in yet) or
+ * Why a server cannot be used: `unreachable` (no compatible server answered), `outdated` (no app sign-in yet) or
  * `mismatch` (its metadata names another origin as issuer or endpoint).
  */
 export class ServerError extends Error {
@@ -102,11 +104,13 @@ export async function discover(origin: string): Promise<Discovery> {
 	if (cached) return cached;
 
 	const metadata = (await getJson(`${origin}/.well-known/oauth-authorization-server`).catch(async () => {
-		// A Reactive Resume server that predates app sign-in still answers its flags.
+		// A server that predates app sign-in still answers its flags.
+		// CAREEROS: careeros-branding-allow: local variable name, not shown to users
 		const isReactiveResume = await getJson(`${origin}/api/openapi/flags`).then(
 			() => true,
 			() => false,
 		);
+		// CAREEROS: careeros-branding-allow: local variable name, not shown to users
 		throw new ServerError(isReactiveResume ? "outdated" : "unreachable");
 	})) as Metadata | null;
 
@@ -213,7 +217,7 @@ export async function registerClient(origin: string, discovery: Discovery): Prom
 		headers: { "content-type": "application/json", accept: "application/json" },
 		signal: AbortSignal.timeout(requestTimeout),
 		body: JSON.stringify({
-			client_name: Platform.OS === "ios" ? "Reactive Resume for iOS" : "Reactive Resume for Android",
+			client_name: `${getBrand().appName} for ${Platform.OS === "ios" ? "iOS" : "Android"}`,
 			redirect_uris: [redirectUri(origin)],
 			token_endpoint_auth_method: "none",
 			grant_types: ["authorization_code", "refresh_token"],

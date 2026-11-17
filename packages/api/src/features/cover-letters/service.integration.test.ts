@@ -26,6 +26,9 @@ function getPool(): Pool {
 	return fixture.pool;
 }
 
+// CAREEROS (P1-Q09): stays on a schema of the shared database on purpose. It runs only table DDL (CREATE TABLE, ALTER TABLE,
+// CREATE INDEX) with the schema first on the search_path, never function DDL, so it cannot rewrite the `public` definer
+// functions or their grants, and its mocked db never reaches a global worker.
 // Opt-in real PostgreSQL tests. Use a disposable database; all tables live in an isolated schema.
 describe.skipIf(!process.env.COVER_LETTER_TEST_DATABASE_URL)("cover-letter owned persistence", () => {
 	let service: typeof import("./service").coverLetterService;
@@ -73,9 +76,15 @@ describe.skipIf(!process.env.COVER_LETTER_TEST_DATABASE_URL)("cover-letter owned
 				}
 			}
 		}
+		// CAREEROS (P1-T05): the tenant column both letter tables have since 20261101072723_cover_letters_rls (the tables
+		// are empty here, and this schema has no organization table, so no foreign key). The shared test setup puts every
+		// service call in the organization "org_test".
+		await fixture.pool.query(
+			`ALTER TABLE cover_letter ADD COLUMN organization_id text NOT NULL; ALTER TABLE cover_letter_version ADD COLUMN organization_id text NOT NULL;`,
+		);
 		await fixture.pool
-			.query(`CREATE TABLE agent_threads (id text PRIMARY KEY, user_id text, working_resume_id text, cover_letter_id text, edits_accepted integer DEFAULT 0, updated_at timestamptz DEFAULT now());
-		CREATE TABLE agent_messages (id text PRIMARY KEY, user_id text, thread_id text, role text DEFAULT 'assistant', status text DEFAULT 'streaming', sequence integer DEFAULT 0, error text, ui_message jsonb, created_at timestamptz DEFAULT now(), updated_at timestamptz DEFAULT now());`);
+			.query(`CREATE TABLE agent_threads (id text PRIMARY KEY, user_id text, organization_id text, working_resume_id text, cover_letter_id text, edits_accepted integer DEFAULT 0, updated_at timestamptz DEFAULT now());
+		CREATE TABLE agent_messages (id text PRIMARY KEY, user_id text, organization_id text, thread_id text, role text DEFAULT 'assistant', status text DEFAULT 'streaming', sequence integer DEFAULT 0, error text, ui_message jsonb, created_at timestamptz DEFAULT now(), updated_at timestamptz DEFAULT now());`);
 		service = (await import("./service")).coverLetterService;
 	});
 	afterAll(async () => {
@@ -204,7 +213,11 @@ describe.skipIf(!process.env.COVER_LETTER_TEST_DATABASE_URL)("cover-letter owned
 			});
 		let blocked = false;
 		try {
-			for (let attempt = 0; attempt < 100 && !committed && !blocked; attempt++) {
+			// CAREEROS (P1-Q09): a deadline, not a fixed number of polls. A hundred back-to-back polls take a few milliseconds,
+			// which a slow runner can spend before the save has even reached the contended row; the assertion below still
+			// demands that the save was seen waiting, and a save that commits without waiting still ends the loop.
+			for (const deadline = Date.now() + 15_000; Date.now() < deadline && !committed && !blocked;) {
+				await new Promise((resolve) => setTimeout(resolve, 5));
 				const result = await getPool().query(
 					"SELECT EXISTS (SELECT 1 FROM pg_stat_activity WHERE datname = current_database() AND cardinality(pg_blocking_pids(pid)) > 0) AS blocked",
 				);
@@ -593,8 +606,8 @@ describe.skipIf(!process.env.COVER_LETTER_TEST_DATABASE_URL)("cover-letter owned
 		const named = await service.createVersion({ userId: "alice", id: letter.id, name: "Keep forever" });
 		const sent = await service.recordSent({ userId: "alice", id: letter.id, company: "Lumen" });
 		await getPool().query(
-			`INSERT INTO cover_letter_version (id, cover_letter_id, user_id, data, kind, created_at)
-			SELECT 'auto-' || n, $1, 'alice', '{}'::jsonb, 'auto', now() + n * interval '1 second' FROM generate_series(1,120) n`,
+			`INSERT INTO cover_letter_version (id, cover_letter_id, user_id, data, kind, created_at, organization_id)
+			SELECT 'auto-' || n, $1, 'alice', '{}'::jsonb, 'auto', now() + n * interval '1 second', 'org_test' FROM generate_series(1,120) n`,
 			[letter.id],
 		);
 		const { listLetterVersions } = await import("./versions");

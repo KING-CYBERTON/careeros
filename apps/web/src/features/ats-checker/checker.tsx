@@ -19,6 +19,7 @@ import { getPdfCategoryDescription, getPdfCategoryLabel, getPdfFindingMessage } 
 import { savePendingImport, takePendingImport } from "./pending-import";
 import { runAtsCheck } from "./run-ats-check";
 import { RollingNumber } from "@/components/ui/rolling-number";
+import { getBrand } from "@/libs/brand";
 import { getOrpcErrorMessage } from "@/libs/error-message";
 import { ENTER_CLASS, POP_CLASS, stagger } from "@/libs/motion";
 import { client } from "@/libs/orpc/client";
@@ -379,6 +380,7 @@ function issueRows(report: PdfAtsReport): Row[] {
 type ResultProps = { result: AtsCheckResult; file: File; onFix: () => void; onReset: () => void };
 
 function Result({ result, file, onFix, onReset }: ResultProps) {
+	const { appName } = getBrand();
 	const { report } = result;
 	const rows = issueRows(report);
 	const [open, setOpen] = useState<string | null>(rows[0]?.key ?? null);
@@ -483,7 +485,7 @@ function Result({ result, file, onFix, onReset }: ResultProps) {
 						<Trans>Fix these in a few minutes</Trans>
 					</b>
 					<span className="text-[13px] leading-[19px] text-ink-2 max-lg:hidden">
-						<Trans>Import this file into a free Reactive Resume. Every issue is waiting for you in Check.</Trans>
+						<Trans>Import this file into a free {appName} account. Every issue is waiting for you in Check.</Trans>
 					</span>
 					<Button className="h-10" onClick={onFix}>
 						<Trans>Fix these in the editor</Trans>

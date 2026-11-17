@@ -25,17 +25,17 @@ for (const kind of ["resume", "letter"] as const) {
 		const result = await created.json();
 		const id: string = kind === "resume" ? result : result.id;
 		await page.goto(kind === "resume" ? `/builder/${id}` : `/builder/letter/${id}`);
-		await expect(page).toHaveTitle("Original document - Reactive Resume");
+		await expect(page).toHaveTitle("Original document - CareerOS");
 
 		if (kind === "resume") {
 			await page.getByRole("textbox", { name: "Headline", exact: true }).fill("Automatic headline");
-			await expect(page).toHaveTitle("Automatic headline - Reactive Resume");
+			await expect(page).toHaveTitle("Automatic headline - CareerOS");
 		}
 
 		await rename(page, kind, "Renamed document");
-		await expect(page).toHaveTitle("Renamed document - Reactive Resume");
+		await expect(page).toHaveTitle("Renamed document - CareerOS");
 		await page.getByRole("tab", { name: "Design", exact: true }).click();
-		await expect(page).toHaveTitle("Renamed document - Reactive Resume");
+		await expect(page).toHaveTitle("Renamed document - CareerOS");
 		await page.getByRole("tab", { name: "Write", exact: true }).click();
 
 		const updateUrl = `**/api/rpc/${kind === "resume" ? "resume" : "coverLetters"}/update`;
@@ -44,7 +44,7 @@ for (const kind of ["resume", "letter"] as const) {
 		await rename(page, kind, "Rejected document");
 		await failed;
 		if (kind === "letter") await expect(page.getByRole("status").filter({ hasText: "Not saved" })).toBeVisible();
-		expect(await page.title()).toBe("Renamed document - Reactive Resume");
+		expect(await page.title()).toBe("Renamed document - CareerOS");
 		await page.unroute(updateUrl);
 		if (kind === "resume") {
 			const dialog = page.getByRole("dialog", { name: "Update resume", exact: true });
@@ -54,13 +54,13 @@ for (const kind of ["resume", "letter"] as const) {
 			await page.getByRole("button", { name: "Retry saving", exact: true }).click();
 		}
 		const savedName = kind === "resume" ? "Renamed again" : "Rejected document";
-		await expect(page).toHaveTitle(`${savedName} - Reactive Resume`);
+		await expect(page).toHaveTitle(`${savedName} - CareerOS`);
 
 		if (kind === "resume") {
 			const saved = page.waitForResponse((response) => response.url().endsWith("/resume/update") && response.ok());
 			await page.getByRole("textbox", { name: "Headline", exact: true }).fill("Later headline");
 			await saved;
-			await expect(page).toHaveTitle(`${savedName} - Reactive Resume`);
+			await expect(page).toHaveTitle(`${savedName} - CareerOS`);
 		}
 
 		const second = await page.request.post(`/api/openapi/${endpoint}`, {
@@ -69,11 +69,11 @@ for (const kind of ["resume", "letter"] as const) {
 		await expect(second).toBeOK();
 		await page.getByRole("link", { name: "Back to documents", exact: true }).click();
 		await page.getByRole("link", { name: "Second document", exact: true }).click();
-		await expect(page).toHaveTitle("Second document - Reactive Resume");
+		await expect(page).toHaveTitle("Second document - CareerOS");
 		await page.getByRole("link", { name: "Back to documents", exact: true }).click();
 		await page.getByRole("link", { name: savedName, exact: true }).click();
-		await expect(page).toHaveTitle(`${savedName} - Reactive Resume`);
+		await expect(page).toHaveTitle(`${savedName} - CareerOS`);
 		await page.reload();
-		await expect(page).toHaveTitle(`${savedName} - Reactive Resume`);
+		await expect(page).toHaveTitle(`${savedName} - CareerOS`);
 	});
 }

@@ -35,7 +35,8 @@ const resumeSchema = createSelectSchema(schema.resume, {
 })
 	// Trash and automatic naming stay internal to the documents API. getById exposes the application link
 	// explicitly because the editor uses it to select the application a tailored copy belongs to.
-	.omit({ applicationId: true, trashedAt: true, autoName: true });
+	// CAREEROS (P1-T04): the tenant column is internal; it never appears in the API shape.
+	.omit({ applicationId: true, trashedAt: true, autoName: true, organizationId: true });
 
 const versionSchema = z.object({
 	id: z.string().describe("The ID of the version."),

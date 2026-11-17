@@ -10,7 +10,10 @@ import { Icon } from "@reactive-resume/ui/components/icon";
 import { getInitials } from "@reactive-resume/utils/string";
 import { SignOutButton } from "./account/page";
 import { PageHeader } from "@/components/layout/page-header";
+// CAREEROS: Members & invites row for owners and admins (P1-T03)
+import { useCanManageMembers } from "@/features/organization/queries";
 import { useTheme } from "@/features/theme/provider";
+import { getBrand } from "@/libs/brand";
 import { orpc } from "@/libs/orpc/client";
 import { themeMap } from "@/libs/theme";
 
@@ -43,6 +46,9 @@ export function SettingsRoot() {
 	const { theme } = useTheme();
 	const { data: providers } = useQuery(orpc.aiProviders.list.queryOptions());
 	const provider = providers?.find((entry) => entry.enabled && entry.testStatus === "success");
+	// CAREEROS (P1-T03)
+	const canManageMembers = useCanManageMembers();
+	const { supportUrl } = getBrand();
 
 	return (
 		<div className="grid gap-4">
@@ -77,16 +83,31 @@ export function SettingsRoot() {
 						value={provider?.label ?? <Trans>Not set up</Trans>}
 					/>
 				</Link>
+				{/* CAREEROS: owners and admins manage members (P1-T03) */}
+				{canManageMembers && (
+					<Link to="/dashboard/settings/members" viewTransition={pushTransition} className={rowClass}>
+						<Row icon="user-plus" label={<Trans>Members & invites</Trans>} />
+					</Link>
+				)}
 			</nav>
 
-			<a
-				href="https://docs.rxresu.me"
-				target="_blank"
-				rel="noopener noreferrer"
+			{/* CAREEROS: the upstream docs link is replaced by the brand's support link, when it has one. */}
+			{supportUrl ? (
+				<a
+					href={supportUrl}
+					target="_blank"
+					rel="noopener noreferrer"
+					className="flex h-12 items-center rounded-lg border border-line bg-surface px-3.5 font-medium transition-colors duration-quick ease-enter active:bg-press"
+				>
+					<Trans>Help & docs</Trans>
+				</a>
+			) : null}
+			<Link
+				to="/licenses"
 				className="flex h-12 items-center rounded-lg border border-line bg-surface px-3.5 font-medium transition-colors duration-quick ease-enter active:bg-press"
 			>
-				<Trans>Help & docs</Trans>
-			</a>
+				<Trans>Open-source licenses</Trans>
+			</Link>
 			<SignOutButton />
 		</div>
 	);

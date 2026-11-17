@@ -1,3 +1,4 @@
+import { currentHost } from "@careeros/tenancy";
 import { ORPCError } from "@orpc/server";
 import { APIError } from "better-auth";
 import { createSelectSchema } from "drizzle-zod";
@@ -9,7 +10,8 @@ import { applicationPipelineSchema } from "@reactive-resume/schema/applications/
 import { careerProfileDataSchema, careerWorkspaceSchema, discoverySourceSchema } from "@reactive-resume/schema/career";
 import { coverLetterSchema } from "@reactive-resume/schema/cover-letter/data";
 import { timezoneSchema } from "@reactive-resume/utils/timezone";
-import { protectedProcedure, publicProcedure } from "../../context";
+// CAREEROS: account-level procedures work without an active organization (P1-T02)
+import { protectedProcedure, protectedProcedureWithoutOrg, publicProcedure } from "../../context";
 import { applicationDto } from "../../dto/application";
 import {
 	savedItemSchema,
@@ -21,9 +23,13 @@ import {
 } from "../../dto/career";
 import { resumeDto } from "../../dto/resume";
 import { accountRateLimit } from "../../middleware/rate-limit";
+// CAREEROS (P4-T02)
+import { discoveryExportSchema } from "../discovery/schemas";
+// CAREEROS: API keys carry the creator's active organization (P1-T03)
+import { organizationForNewApiKey, setApiKeyOrganization } from "./api-key-org";
 import { authService } from "./service";
 
-const accountProcedure = protectedProcedure.use(accountRateLimit).use(async ({ next }) => {
+const accountProcedure = protectedProcedureWithoutOrg.use(accountRateLimit).use(async ({ next }) => {
 	try {
 		return await next();
 	} catch (error) {
@@ -163,7 +169,7 @@ export const authRouter = {
 				operationId: "listAuthProviders",
 				summary: "List authentication providers",
 				description:
-					"Returns a list of all authentication providers enabled on this Reactive Resume instance, along with their display names. Possible providers include password-based credentials, Apple, Google, GitHub, LinkedIn, and custom OAuth. No authentication required.",
+					"Returns a list of all authentication providers enabled on this instance, along with their display names. Possible providers include password-based credentials, Apple, Google, GitHub, LinkedIn, and custom OAuth. No authentication required.",
 				successDescription: "A map of enabled authentication provider identifiers to their display names.",
 			})
 			.input(z.object({}).optional())
@@ -176,7 +182,7 @@ export const authRouter = {
 			.handler(() => authService.providers.list()),
 	},
 
-	createApiKey: protectedProcedure
+	createApiKey: protectedProcedureWithoutOrg
 		.route({
 			method: "POST",
 			path: "/auth/api-keys",
@@ -198,6 +204,9 @@ export const authRouter = {
 			if (context.authentication?.method !== "session")
 				throw new ORPCError("FORBIDDEN", { message: "Create API keys from Settings in a web browser." });
 			await assertRecentSignIn(context.reqHeaders);
+			// CAREEROS: membership-checked active organization, null without one (P1-T03)
+			// CAREEROS (P2-T03): the host's organization on an organization host
+			const organizationId = await organizationForNewApiKey(context.authentication, context.host ?? currentHost());
 			const result = await auth.api.createApiKey({
 				body: {
 					userId: context.user.id,
@@ -206,6 +215,8 @@ export const authRouter = {
 					permissions: { api: input.access === "read" ? ["read"] : ["read", "write", "delete"] },
 				},
 			});
+			// CAREEROS: store the organization on the new key (P1-T03)
+			if (organizationId) await setApiKeyOrganization(result.id, context.user.id, organizationId);
 			return { key: result.key };
 		}),
 
@@ -241,7 +252,10 @@ export const authRouter = {
 				coverLetters: z.array(coverLetterSchema),
 				applications: z.array(applicationDto.getById.output),
 				applicationPipeline: applicationPipelineSchema,
-				aiContentReports: z.array(createSelectSchema(schema.aiContentReport)),
+				// CAREEROS (P1-T08): the tenant column is not part of the export
+				aiContentReports: z.array(createSelectSchema(schema.aiContentReport).omit({ organizationId: true })),
+				// CAREEROS (P4-T02): job discovery automations, runs and found jobs; the tenant column and owner are omitted
+				discovery: discoveryExportSchema,
 				career: z.object({
 					profile: careerProfileDataSchema,
 					reviewedAnswers: z.array(reviewedAnswerSchema),
@@ -250,26 +264,31 @@ export const authRouter = {
 					artifacts: z.array(savedItemSchema),
 					schedules: z.array(careerScheduleSchema),
 					notifications: z.array(careerNotificationSchema),
-					threads: z.array(createSelectSchema(schema.agentThread)),
+					threads: z.array(createSelectSchema(schema.agentThread).omit({ organizationId: true })),
 					messages: z.array(
 						createSelectSchema(schema.agentMessage, {
 							// Preserve historical SDK/tool message fields in their original export form.
 							uiMessage: z.record(z.string(), z.unknown()),
+						}).omit({ organizationId: true }),
+					),
+					attachments: z.array(createSelectSchema(schema.agentAttachment).omit({ organizationId: true })),
+					// CAREEROS (P1-T07): the tenant column is not part of the export
+					opportunities: z.array(
+						createSelectSchema(schema.careerOpportunity, { discoverySource: discoverySourceSchema.nullable() }).omit({
+							organizationId: true,
 						}),
 					),
-					attachments: z.array(createSelectSchema(schema.agentAttachment)),
-					opportunities: z.array(
-						createSelectSchema(schema.careerOpportunity, { discoverySource: discoverySourceSchema.nullable() }),
+					jobs: z.array(createSelectSchema(schema.careerJob).omit({ organizationId: true })),
+					transcripts: z.array(createSelectSchema(schema.careerTranscript).omit({ organizationId: true })),
+					workspaces: z.array(
+						createSelectSchema(schema.careerWorkspace, { data: careerWorkspaceSchema }).omit({ organizationId: true }),
 					),
-					jobs: z.array(createSelectSchema(schema.careerJob)),
-					transcripts: z.array(createSelectSchema(schema.careerTranscript)),
-					workspaces: z.array(createSelectSchema(schema.careerWorkspace, { data: careerWorkspaceSchema })),
 				}),
 			}),
 		)
 		.handler(({ context }) => authService.exportData({ userId: context.user.id })),
 
-	deleteAccount: protectedProcedure
+	deleteAccount: protectedProcedureWithoutOrg
 		.route({
 			spec: (operation) => ({ ...operation, security: [{ cookieAuth: [] }] }),
 			method: "DELETE",

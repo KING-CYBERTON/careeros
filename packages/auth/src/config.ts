@@ -12,6 +12,9 @@ import { drizzleAdapter } from "@better-auth/drizzle-adapter/relations-v2";
 import { dash } from "@better-auth/infra";
 import { oauthProvider } from "@better-auth/oauth-provider";
 import { passkey } from "@better-auth/passkey";
+// CAREEROS: the session operations of the sign-in handoff (P2-T05)
+import { DISABLED_ADMIN_AUTH_PATHS, isAuthPathRefusedWhileImpersonating } from "@careeros/platform-admin/policy";
+import { hostTrustedOrigins } from "@careeros/tenancy";
 import { compare, hash } from "bcryptjs";
 import { APIError, betterAuth } from "better-auth";
 import {
@@ -22,24 +25,44 @@ import {
 	isAPIError,
 } from "better-auth/api";
 import { deleteSessionCookie, parseSetCookieHeader, setSessionCookie } from "better-auth/cookies";
-import { admin, anonymous, jwt, openAPI } from "better-auth/plugins";
+import { admin, anonymous, jwt, openAPI, organization } from "better-auth/plugins";
 import { genericOAuth } from "better-auth/plugins/generic-oauth";
 import { twoFactor } from "better-auth/plugins/two-factor";
 import { username } from "better-auth/plugins/username";
-import { and, eq, gt, inArray, ne, sql } from "drizzle-orm";
+import { and, asc, eq, gt, ne, sql } from "drizzle-orm";
 import { createLocalJWKSet, jwtVerify } from "jose";
 import { createElement } from "react";
-import { createDefaultOwnedApplicationLanes, MAX_APPLICATION_LANES } from "@reactive-resume/db/application-lanes";
 import { db } from "@reactive-resume/db/client";
 import * as schema from "@reactive-resume/db/schema";
+import { resetPasswordSubject, verifyEmailChangeSubject, verifyEmailSubject } from "@reactive-resume/email/subjects";
 import { ResetPasswordEmail, VerifyEmail, VerifyEmailChange } from "@reactive-resume/email/templates/auth";
 import { sendEmail } from "@reactive-resume/email/transport";
 import { env } from "@reactive-resume/env/server";
+import { PLATFORM_DEFAULT_APP_NAME } from "@reactive-resume/utils/brand";
 import { rateLimitConfig } from "@reactive-resume/utils/rate-limit";
 import { generateId, toUsername } from "@reactive-resume/utils/string";
 import { timezoneSchema } from "@reactive-resume/utils/timezone";
 import { isAllowedOAuthRedirectUri } from "@reactive-resume/utils/url-security.node";
+// CAREEROS: Job Clipper sign-in, device flow and host-bound tokens (P5-T02)
+import { clipperDeviceAuthorization, clipperTokens } from "./clipper";
+// CAREEROS: branded emails (P2-T04)
+import { buildEmailContext, withLinkOrigin } from "./email-brand";
+import { handoffSession } from "./handoff-session";
+// CAREEROS (P3-T07): support-session guard and the server-only session endpoint of the impersonation redeem
+import { impersonationSession } from "./impersonation-session";
 import { createGithubProfileMapper, createProfileMapper, isUsernameReserved } from "./oauth-profile";
+// CAREEROS: invite-only organization hosts (P2-T03)
+import { guardOrgHostSignUp } from "./org-host";
+// CAREEROS: organization plugin options (P1-T01)
+import { organizationOptions } from "./organization";
+import { withSeatLimitErrorsFactory } from "./organization-enforcement";
+// CAREEROS: personal organization at signup, default active organization, owner-only role changes (P1-T03)
+import { organizationRules } from "./organization-rules";
+import {
+	createPersonalOrganization,
+	deleteSoleMemberOrganizations,
+	withDefaultActiveOrganization,
+} from "./personal-org";
 import { authRateLimitStorage } from "./rate-limit";
 import { getTrustedOrigins } from "./trusted-origins";
 
@@ -194,157 +217,98 @@ export async function linkAnonymousAccount({
 			if (!owner) throw new APIError("NOT_FOUND", { message: "The account is unavailable." });
 		}
 
-		const profiles = await tx
-			.select()
-			.from(schema.applicationProfile)
-			.where(inArray(schema.applicationProfile.userId, [fromUserId, toUserId]));
-		const sourceProfile = profiles.find((profile) => profile.userId === fromUserId);
-		if (sourceProfile && profiles.some((profile) => profile.userId === toUserId))
-			throw new APIError("CONFLICT", {
-				message:
-					"Both accounts have a private application profile. Export and delete one profile in Settings → Account before linking, so neither is silently overwritten.",
-			});
-		if (sourceProfile)
-			await tx
-				.update(schema.applicationProfile)
-				.set({ userId: toUserId, revision: generateId() })
-				.where(eq(schema.applicationProfile.userId, fromUserId));
-		const sourceLanes = await tx
-			.select()
-			.from(schema.applicationLane)
-			.where(eq(schema.applicationLane.userId, fromUserId));
-		const targetLanes = await tx
-			.select()
-			.from(schema.applicationLane)
-			.where(eq(schema.applicationLane.userId, toUserId));
-		const defaultLanes = createDefaultOwnedApplicationLanes(toUserId);
-		const targetActiveCount = targetLanes.length
-			? targetLanes.filter((lane) => !lane.retiredAt).length
-			: defaultLanes.length;
-		if (
-			targetActiveCount + sourceLanes.filter((lane) => !lane.systemKey && !lane.retiredAt).length >
-			MAX_APPLICATION_LANES
-		)
-			throw new APIError("CONFLICT", {
-				message:
-					"Retire unused application lanes before combining these accounts; the combined pipeline exceeds 40 active lanes.",
-			});
-		await tx.insert(schema.applicationPipeline).values({ userId: toUserId }).onConflictDoNothing();
-		await tx.insert(schema.applicationLane).values(defaultLanes).onConflictDoNothing();
-		const laneIds = new Map<string, string>();
-		let position = Math.max(5, ...targetLanes.map((lane) => lane.position)) + 1;
-		for (const lane of sourceLanes) {
-			const id = lane.systemKey
-				? (targetLanes.find((target) => target.systemKey === lane.systemKey)?.id ??
-					`application-lane:${toUserId}:${lane.systemKey}`)
-				: generateId();
-			laneIds.set(lane.id, id);
-			if (!lane.systemKey)
-				await tx.insert(schema.applicationLane).values({ ...lane, id, userId: toUserId, position: position++ });
-		}
-		await tx
-			.update(schema.applicationPipeline)
-			.set({ revision: sql`${schema.applicationPipeline.revision} + 1` })
-			.where(eq(schema.applicationPipeline.userId, toUserId));
+		// CAREEROS (P1-T04): resumes, their versions, slug redirects and statistics now belong to an organization, and
+		// row-level security hides the guest's organization from this request. A narrow security definer function
+		// moves them to the account's oldest organization (see migration 20261101004553_resumes_rls). It refuses a
+		// source that is not a guest and a target organization the account is not a member of. The slug suffix,
+		// the upload-path rewrite and the redirect de-duplication are the same as before, done inside the function.
+		// Called without a schema so that tests with their own schema can install a local copy.
+		const [targetMembership] = await tx
+			.select({ organizationId: schema.member.organizationId })
+			.from(schema.member)
+			.where(eq(schema.member.userId, toUserId))
+			.orderBy(asc(schema.member.createdAt), asc(schema.member.id))
+			.limit(1);
+		await tx.execute(
+			sql`select careeros_move_guest_resumes(${fromUserId}, ${toUserId}, ${targetMembership?.organizationId ?? null})`,
+		);
 
-		const rewriteUploadsJson = (column: unknown) =>
-			sql`cast(replace(cast(${column} as text), 'uploads/' || ${fromUserId} || '/', 'uploads/' || ${toUserId} || '/') as jsonb)`;
+		// CAREEROS (P1-T05): cover letters and their versions belong to an organization too; the same narrow definer
+		// function pattern moves them to the account's oldest organization (it refuses a non-guest source and a
+		// target organization the account is not a member of). The upload-path rewrite happens inside the function.
+		await tx.execute(
+			sql`select careeros_move_guest_cover_letters(${fromUserId}, ${toUserId}, ${targetMembership?.organizationId ?? null})`,
+		);
 
-		const rewriteUploadsUrl = (column: unknown) =>
-			sql`case when ${column} is not null then replace(${column}, 'uploads/' || ${fromUserId} || '/', 'uploads/' || ${toUserId} || '/') else null end`;
-
-		// An existing account may already use a slug; suffix the guest's copy to keep (user, slug) unique.
-		await tx
-			.update(schema.resume)
-			.set({
-				userId: toUserId,
-				slug: sql`case when exists (select 1 from resume r where r.user_id = ${toUserId} and r.slug = resume.slug) then resume.slug || '-' || right(resume.id, 6) else resume.slug end`,
-				data: rewriteUploadsJson(schema.resume.data),
-			})
-			.where(eq(schema.resume.userId, fromUserId));
-
-		await tx
-			.update(schema.resumeVersion)
-			.set({
-				userId: toUserId,
-				data: rewriteUploadsJson(schema.resumeVersion.data),
-			})
-			.where(eq(schema.resumeVersion.userId, fromUserId));
-
-		await tx
-			.update(schema.coverLetter)
-			.set({
-				userId: toUserId,
-				style: rewriteUploadsJson(schema.coverLetter.style),
-			})
-			.where(eq(schema.coverLetter.userId, fromUserId));
-
-		await tx
-			.update(schema.coverLetterVersion)
-			.set({
-				userId: toUserId,
-				data: rewriteUploadsJson(schema.coverLetterVersion.data),
-			})
-			.where(eq(schema.coverLetterVersion.userId, fromUserId));
-
-		const applications = await tx
-			.select()
-			.from(schema.application)
-			.where(eq(schema.application.userId, fromUserId))
-			.for("update");
-		for (const application of applications) {
-			await tx
-				.update(schema.application)
-				.set({
-					userId: toUserId,
-					laneId: application.laneId
-						? (laneIds.get(application.laneId) ?? `application-lane:${toUserId}:${application.status}`)
-						: `application-lane:${toUserId}:${application.status}`,
-					activity: application.activity.map((entry) =>
-						entry.type === "stage" && entry.laneId && laneIds.has(entry.laneId)
-							? { ...entry, laneId: laneIds.get(entry.laneId) ?? entry.laneId }
-							: entry,
-					),
-					resumeFileUrl: rewriteUploadsUrl(schema.application.resumeFileUrl),
-					coverLetterUrl: rewriteUploadsUrl(schema.application.coverLetterUrl),
-				})
-				.where(and(eq(schema.application.id, application.id), eq(schema.application.userId, fromUserId)));
-		}
-
-		const sourceAnswers = await tx.select().from(schema.careerAnswer).where(eq(schema.careerAnswer.userId, fromUserId));
-		const targetAnswers = await tx.select().from(schema.careerAnswer).where(eq(schema.careerAnswer.userId, toUserId));
-		if (sourceAnswers.some((answer) => targetAnswers.some((target) => target.duplicateKey === answer.duplicateKey)))
-			throw new APIError("CONFLICT", {
-				message:
-					"Both accounts have duplicate saved application answers. Export and delete one copy before linking, so neither is silently overwritten.",
-			});
-		// Preserve wording. Knowledge currently stays with the guest, so missing references require review after linking.
-		await tx
-			.update(schema.careerAnswer)
-			.set({ userId: toUserId, updatedAt: schema.careerAnswer.updatedAt })
-			.where(eq(schema.careerAnswer.userId, fromUserId));
-
-		await tx
-			.delete(schema.resumeSlugRedirect)
-			.where(
-				and(
-					eq(schema.resumeSlugRedirect.userId, fromUserId),
-					sql`exists (select 1 from resume_slug_redirect rsr where rsr.user_id = ${toUserId} and rsr.slug = resume_slug_redirect.slug)`,
-				),
+		// CAREEROS (P1-T06): the application profile, pipeline, lanes and applications belong to an organization too, and
+		// are per (organization, user) (D11). The same narrow definer function pattern moves them into the account's
+		// oldest organization: a profile on both sides, or a merged pipeline over 40 active lanes, is a conflict (the
+		// function raises SQLSTATE CR001 and CR002); system lanes map to the target's, custom lanes are copied, and
+		// stage history lane references and upload paths follow. The function is called as one statement.
+		try {
+			await tx.execute(
+				sql`select careeros_move_guest_applications(${fromUserId}, ${toUserId}, ${targetMembership?.organizationId ?? null})`,
 			);
+		} catch (error) {
+			const code = ((error as { code?: string; cause?: { code?: string } }).cause ?? (error as { code?: string })).code;
+			if (code === "CR001")
+				throw new APIError("CONFLICT", {
+					message:
+						"Both accounts have a private application profile. Export and delete one profile in Settings → Account before linking, so neither is silently overwritten.",
+				});
+			if (code === "CR002")
+				throw new APIError("CONFLICT", {
+					message:
+						"Retire unused application lanes before combining these accounts; the combined pipeline exceeds 40 active lanes.",
+				});
+			throw error;
+		}
 
-		await tx
-			.update(schema.resumeSlugRedirect)
-			.set({ userId: toUserId })
-			.where(eq(schema.resumeSlugRedirect.userId, fromUserId));
+		// CAREEROS (P1-T07): saved application answers, and the career rows that belong to the guest's applications (facts,
+		// stories, saved items, transcripts, schedules and their jobs, notifications, workspaces, tracked roles), belong
+		// to an organization too. The same narrow definer function pattern moves them into the account's oldest
+		// organization, after the applications they follow. The same saved answer on both sides is a conflict (SQLSTATE
+		// CR004) so neither is silently overwritten. Knowledge not tied to an application stays with the guest, as before.
+		try {
+			await tx.execute(
+				sql`select careeros_move_guest_career(${fromUserId}, ${toUserId}, ${targetMembership?.organizationId ?? null})`,
+			);
+		} catch (error) {
+			const code = ((error as { code?: string; cause?: { code?: string } }).cause ?? (error as { code?: string })).code;
+			if (code === "CR004")
+				throw new APIError("CONFLICT", {
+					message:
+						"Both accounts have duplicate saved application answers. Export and delete one copy before linking, so neither is silently overwritten.",
+				});
+			throw error;
+		}
+
+		// CAREEROS (P4-T02, Q226): job discovery automations, their runs and the jobs they found belong to an
+		// organization too. The same narrow definer function pattern moves them into the account's oldest organization,
+		// after the applications the accepted jobs point at. At most 20 automations fit per user and organization; a job
+		// the target already has keeps the target's row (and its dismissed or accepted status).
+		await tx.execute(
+			sql`select careeros_move_guest_discovery(${fromUserId}, ${toUserId}, ${targetMembership?.organizationId ?? null})`,
+		);
+
+		// CAREEROS (P1-T08): saved AI connections, assistant conversations (with their messages, attachments and actions) and
+		// content reports belong to an organization too. The same narrow definer function pattern moves them into the
+		// account's oldest organization, after the documents and applications they point at. The guest's default
+		// connection yields to the target's, and the server-managed connection is re-pointed to the target's own.
+		await tx.execute(
+			sql`select careeros_move_guest_agent(${fromUserId}, ${toUserId}, ${targetMembership?.organizationId ?? null})`,
+		);
 
 		// Ownership updates lock document rows, so guest saves cannot add uncopied references during copying.
 		const hook = accountLinkHook;
 		if (!hook) return;
-		const erasures = await tx
-			.select({ storageKey: schema.storageCleanupJob.storageKey })
-			.from(schema.storageCleanupJob)
-			.where(eq(schema.storageCleanupJob.ownerId, fromUserId));
+		// CAREEROS (P1-T09): the guest's erasure work sits in the guest's organizations, which row-level security hides
+		// from this request. A definer function returns the storage keys of an anonymous user's jobs. A guest's custom
+		// domain and web connection are deliberately not moved (see docs/plans/P1-T09-remaining-rls.md): they are
+		// proven by DNS or hold the guest's own key, and they go away with the guest account as before.
+		const { rows: erasures } = await tx.execute<{ storageKey: string }>(
+			sql`select careeros_guest_cleanup_prefixes(${fromUserId}) as "storageKey"`,
+		);
 		return hook({ fromUserId, toUserId, excludedStoragePrefixes: erasures.map(({ storageKey }) => storageKey) });
 	});
 
@@ -499,17 +463,21 @@ const getAuthConfig = () => {
 	}
 
 	return betterAuth({
-		appName: "Reactive Resume",
+		appName: PLATFORM_DEFAULT_APP_NAME, // CAREEROS: P2-T08
 		baseURL: authBaseUrl,
 		secret: env.AUTH_SECRET,
 
-		database: drizzleAdapter(db, { schema, provider: "pg" }),
+		// CAREEROS (P3-T02): the seat-limit trigger's refusal becomes SEAT_LIMIT_REACHED, not a 500.
+		database: withSeatLimitErrorsFactory(drizzleAdapter(db, { schema, provider: "pg" })),
 
 		telemetry: { enabled: false },
-		trustedOrigins: [
+		// CAREEROS (P2-T03, D5): Better Auth 1.7 accepts a function here, called with the request. The platform origins
+		// stay; the request host's own origin is added only when it resolves to an organization host.
+		trustedOrigins: async (request) => [
 			...TRUSTED_ORIGINS,
 			// Apple's form_post callback includes this origin; keep CSRF checks enabled.
 			...(env.APPLE_CLIENT_ID && env.APPLE_CLIENT_SECRET ? ["https://appleid.apple.com"] : []),
+			...(await hostTrustedOrigins(request)),
 		],
 		rateLimit: {
 			...rateLimitConfig.betterAuth.global,
@@ -521,6 +489,8 @@ const getAuthConfig = () => {
 			user: {
 				create: {
 					before: async (user, context) => {
+						// CAREEROS (P2-T03, D6): an invite-only organization host refuses new accounts without an invitation
+						await guardOrgHostSignUp(user, context);
 						// New accounts inherit the device timezone from the auth request, so interview times,
 						// reminders and schedules are right from the first use. Social callbacks don't carry the
 						// header; the sign-in hook stores the validated zone in the signed OAuth state.
@@ -536,12 +506,30 @@ const getAuthConfig = () => {
 						const username = `guest-${generateId().slice(-12)}`;
 						return { data: { ...data, username, displayUsername: username } };
 					},
+					// CAREEROS: every user gets a personal organization unless signing up through an invitation (P1-T03, D6)
+					after: async (user, context) => {
+						await createPersonalOrganization(user, context);
+					},
+				},
+				// CAREEROS: a deleted user (a linked guest) takes the organizations only they belonged to with them (P1-T03)
+				delete: {
+					before: async (user) => {
+						await deleteSoleMemberOrganizations(user.id);
+					},
+				},
+			},
+			session: {
+				create: {
+					// CAREEROS: a session without an active organization gets the user's oldest membership (P1-T03)
+					before: (session) => withDefaultActiveOrganization(session),
 				},
 			},
 		},
 
 		// Unused endpoints: guest deletion skips the app's storage cleanup; the session JWT has no consumer.
-		disabledPaths: ["/delete-anonymous-user", "/token"],
+		// CAREEROS (P5-T02): /device/token would issue a full session; the clipper redeems at /device/clipper/token instead.
+		// CAREEROS (P3-T07): every Better Auth admin-plugin endpoint is off over HTTP; the console uses audited definer functions.
+		disabledPaths: ["/delete-anonymous-user", "/token", "/device/token", ...DISABLED_ADMIN_AUTH_PATHS],
 
 		hooks: {
 			before: createAuthMiddleware(async (ctx) => {
@@ -628,6 +616,17 @@ const getAuthConfig = () => {
 					return;
 				}
 				if (ctx.path === "/oauth2/delete-consent") {
+					// CAREEROS (Q424): this hook runs before the support-session plugin guard and revokes tokens, so refuse first.
+					if (isAuthPathRefusedWhileImpersonating(ctx.path)) {
+						const supportSession = await auth.api
+							.getSession({ headers: ctx.headers ?? new Headers(), query: { disableCookieCache: true } })
+							.catch(() => null);
+						if ((supportSession?.session as { impersonatedBy?: string | null } | undefined)?.impersonatedBy)
+							throw new APIError("FORBIDDEN", {
+								code: "IMPERSONATION_NOT_ALLOWED",
+								message: "This is not available during a support session.",
+							});
+					}
 					const origin = ctx.headers?.get("origin");
 					if ((origin && !TRUSTED_ORIGINS.includes(origin)) || ctx.headers?.get("sec-fetch-site") === "cross-site") {
 						throw new APIError("FORBIDDEN", { message: "Cross-origin consent changes are not allowed." });
@@ -707,11 +706,15 @@ const getAuthConfig = () => {
 			maxPasswordLength: 64,
 			requireEmailVerification: false,
 			disableSignUp: env.FLAG_DISABLE_SIGNUPS || env.FLAG_DISABLE_EMAIL_AUTH,
-			sendResetPassword: async ({ user, url }) => {
+			// CAREEROS (P2-T04): branded by the request's host organization, and linked to that host (email-brand.ts).
+			sendResetPassword: async ({ user, url }, request) => {
+				const mail = await buildEmailContext({ source: "request", request });
 				await sendEmail({
 					to: user.email,
-					subject: "Reset your password",
-					react: createElement(ResetPasswordEmail, { url }),
+					subject: resetPasswordSubject(mail.brand),
+					react: createElement(ResetPasswordEmail, { url: withLinkOrigin(url, mail.linkOrigin), brand: mail.brand }),
+					fromName: mail.fromName,
+					replyTo: mail.replyTo,
 				});
 			},
 			revokeSessionsOnPasswordReset: true,
@@ -723,6 +726,8 @@ const getAuthConfig = () => {
 					await tx.delete(schema.oauthAccessToken).where(eq(schema.oauthAccessToken.userId, user.id));
 					await tx.delete(schema.oauthRefreshToken).where(eq(schema.oauthRefreshToken.userId, user.id));
 					await tx.delete(schema.oauthConsent).where(eq(schema.oauthConsent.userId, user.id));
+					// CAREEROS (P5-T02): clipper sign-ins are credentials too.
+					await tx.delete(schema.clipperToken).where(eq(schema.clipperToken.userId, user.id));
 					// Historical passkeys may predate mailbox verification; recovery revokes all of them.
 					await tx.delete(schema.passkey).where(eq(schema.passkey.userId, user.id));
 					// Nobody had proved this address before: whoever signed up with it may have added other ways in.
@@ -747,11 +752,15 @@ const getAuthConfig = () => {
 		emailVerification: {
 			sendOnSignUp: true,
 			autoSignInAfterVerification: true,
-			sendVerificationEmail: async ({ user, url }) => {
+			// CAREEROS (P2-T04): see sendResetPassword.
+			sendVerificationEmail: async ({ user, url }, request) => {
+				const mail = await buildEmailContext({ source: "request", request });
 				await sendEmail({
 					to: user.email,
-					subject: "Verify your email",
-					react: createElement(VerifyEmail, { url }),
+					subject: verifyEmailSubject(mail.brand),
+					react: createElement(VerifyEmail, { url: withLinkOrigin(url, mail.linkOrigin), brand: mail.brand }),
+					fromName: mail.fromName,
+					replyTo: mail.replyTo,
 				});
 			},
 		},
@@ -762,11 +771,20 @@ const getAuthConfig = () => {
 				// Better Auth's two-step change: the current address approves first, then the new address gets its own
 				// verification link. Sending this step to the new address would let anyone holding a session move the
 				// account to an address they control without the owner's approval.
-				sendChangeEmailConfirmation: async ({ user, newEmail, url }) => {
+				// CAREEROS (P2-T04): see sendResetPassword.
+				sendChangeEmailConfirmation: async ({ user, newEmail, url }, request) => {
+					const mail = await buildEmailContext({ source: "request", request });
 					await sendEmail({
 						to: user.email,
-						subject: "Approve your email change",
-						react: createElement(VerifyEmailChange, { url, previousEmail: user.email, newEmail }),
+						subject: verifyEmailChangeSubject(mail.brand),
+						react: createElement(VerifyEmailChange, {
+							url: withLinkOrigin(url, mail.linkOrigin),
+							previousEmail: user.email,
+							newEmail,
+							brand: mail.brand,
+						}),
+						fromName: mail.fromName,
+						replyTo: mail.replyTo,
 					});
 				},
 			},
@@ -846,9 +864,20 @@ const getAuthConfig = () => {
 			openAPI({ disableDefaultReference: true }),
 			jwt({ disableSettingJwtHeader: true }),
 			admin(),
+			// CAREEROS: organizations, members, invitations and the session's active organization (P1-T01)
+			organization(organizationOptions),
+			// CAREEROS: owner-only role changes (P1-T03)
+			organizationRules,
+			// CAREEROS (P2-T05): server-only session endpoints for the social and OIDC handoff to an organization host
+			handoffSession,
+			// CAREEROS (P3-T07): refuses account-security endpoints in a support session; creates its session
+			impersonationSession,
+			// CAREEROS (P5-T02): Job Clipper device flow and tokens (packages/auth/src/clipper.ts)
+			clipperDeviceAuthorization,
+			clipperTokens,
 			passkey(),
 			genericOAuth({ config: authConfigs }),
-			twoFactor({ issuer: "Reactive Resume" }),
+			twoFactor({ issuer: PLATFORM_DEFAULT_APP_NAME }),
 			apiKey({
 				enableSessionForAPIKeys: false,
 				rateLimit: {

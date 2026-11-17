@@ -1,3 +1,6 @@
+import { brandSlug } from "@reactive-resume/utils/brand";
+import { getBrand } from "@/libs/brand";
+
 type CalendarEvent = {
 	uid: string;
 	title: string;
@@ -32,14 +35,17 @@ function fold(line: string) {
 /** One or more events as an .ics file's text, in UTC, for "Add to calendar". */
 export function buildIcs(event: CalendarEvent | CalendarEvent[], now = new Date()): string {
 	const events = Array.isArray(event) ? event : [event];
+	// CAREEROS: product name from getBrand() (P2-T08).
+	const { appName } = getBrand();
+	const uidDomain = brandSlug(appName);
 	const lines = [
 		"BEGIN:VCALENDAR",
 		"VERSION:2.0",
-		"PRODID:-//Reactive Resume//Applications//EN",
+		`PRODID:-//${appName}//Applications//EN`,
 		"CALSCALE:GREGORIAN",
 		...events.flatMap((item) => [
 			"BEGIN:VEVENT",
-			`UID:${item.uid}@reactive-resume`,
+			`UID:${item.uid}@${uidDomain}`,
 			`DTSTAMP:${utcStamp(now)}`,
 			`DTSTART:${utcStamp(item.start)}`,
 			`DTEND:${utcStamp(item.end)}`,

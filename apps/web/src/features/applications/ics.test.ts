@@ -18,10 +18,10 @@ describe("buildIcs", () => {
 		expect(ics.split("\r\n")).toEqual([
 			"BEGIN:VCALENDAR",
 			"VERSION:2.0",
-			"PRODID:-//Reactive Resume//Applications//EN",
+			"PRODID:-//CareerOS//Applications//EN",
 			"CALSCALE:GREGORIAN",
 			"BEGIN:VEVENT",
-			"UID:i1@reactive-resume",
+			"UID:i1@careeros",
 			"DTSTAMP:20260928T083000Z",
 			"DTSTART:20261002T120000Z",
 			"DTEND:20261002T130000Z",

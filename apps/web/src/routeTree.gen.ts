@@ -10,12 +10,23 @@
 
 import { Route as rootRouteImport } from "./routes/__root";
 import { Route as HomeRouteRouteImport } from "./routes/_home/route";
+import { Route as AdminRouteRouteImport } from "./routes/admin/route";
 import { Route as AgentRouteRouteImport } from "./routes/agent/route";
 import { Route as AuthRouteRouteImport } from "./routes/auth/route";
 import { Route as DashboardRouteRouteImport } from "./routes/dashboard/route";
+import { Route as DeviceRouteRouteImport } from "./routes/device/route";
 import { Route as HomeIndexRouteImport } from "./routes/_home/index";
 import { Route as HomeAtsCheckerRouteImport } from "./routes/_home/ats-checker";
+import { Route as HomeDpaRouteImport } from "./routes/_home/dpa";
+import { Route as HomeLicensesRouteImport } from "./routes/_home/licenses";
+import { Route as HomePrivacyRouteImport } from "./routes/_home/privacy";
 import { Route as HomeResumeTemplatesRouteImport } from "./routes/_home/resume-templates";
+import { Route as HomeTermsRouteImport } from "./routes/_home/terms";
+import { Route as AdminIndexRouteImport } from "./routes/admin/index";
+import { Route as AdminAnnouncementsRouteImport } from "./routes/admin/announcements";
+import { Route as AdminAuditRouteImport } from "./routes/admin/audit";
+import { Route as AdminEmailRouteImport } from "./routes/admin/email";
+import { Route as AdminMetricsRouteImport } from "./routes/admin/metrics";
 import { Route as AgentIndexRouteImport } from "./routes/agent/index";
 import { Route as AgentThreadIdRouteImport } from "./routes/agent/$threadId";
 import { Route as AgentNewRouteImport } from "./routes/agent/new";
@@ -23,8 +34,10 @@ import { Route as AuthIndexRouteImport } from "./routes/auth/index";
 import { Route as AuthConsentRouteImport } from "./routes/auth/consent";
 import { Route as AuthErrorRouteImport } from "./routes/auth/error";
 import { Route as AuthForgotPasswordRouteImport } from "./routes/auth/forgot-password";
+import { Route as AuthImpersonateRouteImport } from "./routes/auth/impersonate";
 import { Route as AuthLoginRouteImport } from "./routes/auth/login";
 import { Route as AuthNativeCallbackRouteImport } from "./routes/auth/native-callback";
+import { Route as AuthOrganizationAccessRouteImport } from "./routes/auth/organization-access";
 import { Route as AuthRegisterRouteImport } from "./routes/auth/register";
 import { Route as AuthResetPasswordRouteImport } from "./routes/auth/reset-password";
 import { Route as AuthVerify2faRouteImport } from "./routes/auth/verify-2fa";
@@ -35,30 +48,54 @@ import { Route as DashboardCareerRouteRouteImport } from "./routes/dashboard/car
 import { Route as DashboardCoverLettersRouteImport } from "./routes/dashboard/cover-letters";
 import { Route as DashboardSettingsRouteRouteImport } from "./routes/dashboard/settings/route";
 import { Route as DashboardTrashRouteImport } from "./routes/dashboard/trash";
+import { Route as DeviceIndexRouteImport } from "./routes/device/index";
+import { Route as AdminOrganizationsIndexRouteImport } from "./routes/admin/organizations.index";
+import { Route as AdminOrganizationsOrganizationIdRouteImport } from "./routes/admin/organizations.$organizationId";
+import { Route as AuthAcceptInvitationInvitationIdRouteImport } from "./routes/auth/accept-invitation.$invitationId";
+import { Route as AuthHandoffIndexRouteImport } from "./routes/auth/handoff.index";
+import { Route as AuthHandoffRedeemRouteImport } from "./routes/auth/handoff.redeem";
 import { Route as BuilderResumeIdIndexRouteImport } from "./routes/builder/$resumeId/index";
 import { Route as BuilderLetterCoverLetterIdRouteImport } from "./routes/builder/letter/$coverLetterId";
 import { Route as DashboardApplicationsIndexRouteImport } from "./routes/dashboard/applications/index";
 import { Route as DashboardCareerIndexRouteImport } from "./routes/dashboard/career/index";
+import { Route as DashboardCareerJobsRouteImport } from "./routes/dashboard/career/jobs";
 import { Route as DashboardCareerKnowledgeRouteRouteImport } from "./routes/dashboard/career/knowledge/route";
 import { Route as DashboardCareerOffersRouteImport } from "./routes/dashboard/career/offers";
 import { Route as DashboardResumesIndexRouteImport } from "./routes/dashboard/resumes/index";
 import { Route as DashboardSettingsIndexRouteImport } from "./routes/dashboard/settings/index";
 import { Route as DashboardSettingsAccountRouteImport } from "./routes/dashboard/settings/account";
 import { Route as DashboardSettingsAiRouteImport } from "./routes/dashboard/settings/ai";
+import { Route as DashboardSettingsAiUsageRouteImport } from "./routes/dashboard/settings/ai-usage";
+import { Route as DashboardSettingsAnalyticsRouteImport } from "./routes/dashboard/settings/analytics";
 import { Route as DashboardSettingsApiKeysRouteImport } from "./routes/dashboard/settings/api-keys";
+import { Route as DashboardSettingsAuditRouteImport } from "./routes/dashboard/settings/audit";
+import { Route as DashboardSettingsBrandingRouteImport } from "./routes/dashboard/settings/branding";
+import { Route as DashboardSettingsCohortsRouteImport } from "./routes/dashboard/settings/cohorts";
+import { Route as DashboardSettingsDomainsRouteImport } from "./routes/dashboard/settings/domains";
+import { Route as DashboardSettingsEmailTemplatesRouteImport } from "./routes/dashboard/settings/email-templates";
 import { Route as DashboardSettingsIntegrationsRouteRouteImport } from "./routes/dashboard/settings/integrations/route";
 import { Route as DashboardSettingsJobSearchRouteImport } from "./routes/dashboard/settings/job-search";
+import { Route as DashboardSettingsMembersRouteImport } from "./routes/dashboard/settings/members";
+import { Route as DashboardSettingsOrgEmailTemplatesRouteImport } from "./routes/dashboard/settings/org-email-templates";
 import { Route as DashboardSettingsPreferencesRouteImport } from "./routes/dashboard/settings/preferences";
 import { Route as DashboardSettingsProfileRouteImport } from "./routes/dashboard/settings/profile";
 import { Route as DashboardApplicationsApplicationIdChar123TabChar125RouteImport } from "./routes/dashboard/applications/$applicationId.{-$tab}";
 import { Route as DashboardCareerCoachChar123ConversationIdChar125RouteImport } from "./routes/dashboard/career/coach.{-$conversationId}";
 import { Route as DashboardCareerKnowledgeFactsRouteImport } from "./routes/dashboard/career/knowledge/facts";
 import { Route as DashboardCareerKnowledgePreferencesRouteImport } from "./routes/dashboard/career/knowledge/preferences";
+import { Route as DashboardOrganizationBillingIndexRouteImport } from "./routes/dashboard/organization/billing/index";
+import { Route as DashboardOrganizationBillingReturnRouteImport } from "./routes/dashboard/organization/billing/return";
 import { Route as DashboardSettingsAuthenticationIndexRouteImport } from "./routes/dashboard/settings/authentication/index";
 import { Route as DashboardCareerKnowledgeStoriesChar123StoryIdChar125RouteImport } from "./routes/dashboard/career/knowledge/stories.{-$storyId}";
+import { Route as DashboardOrganizationBillingReceiptInvoiceIdRouteImport } from "./routes/dashboard/organization/billing/receipt/$invoiceId";
 
 const HomeRouteRoute = HomeRouteRouteImport.update({
   id: "/_home",
+  getParentRoute: () => rootRouteImport,
+} as any);
+const AdminRouteRoute = AdminRouteRouteImport.update({
+  id: "/admin",
+  path: "/admin",
   getParentRoute: () => rootRouteImport,
 } as any);
 const AgentRouteRoute = AgentRouteRouteImport.update({
@@ -76,6 +113,11 @@ const DashboardRouteRoute = DashboardRouteRouteImport.update({
   path: "/dashboard",
   getParentRoute: () => rootRouteImport,
 } as any);
+const DeviceRouteRoute = DeviceRouteRouteImport.update({
+  id: "/device",
+  path: "/device",
+  getParentRoute: () => rootRouteImport,
+} as any);
 const HomeIndexRoute = HomeIndexRouteImport.update({
   id: "/",
   path: "/",
@@ -86,10 +128,55 @@ const HomeAtsCheckerRoute = HomeAtsCheckerRouteImport.update({
   path: "/ats-checker",
   getParentRoute: () => HomeRouteRoute,
 } as any);
+const HomeDpaRoute = HomeDpaRouteImport.update({
+  id: "/dpa",
+  path: "/dpa",
+  getParentRoute: () => HomeRouteRoute,
+} as any);
+const HomeLicensesRoute = HomeLicensesRouteImport.update({
+  id: "/licenses",
+  path: "/licenses",
+  getParentRoute: () => HomeRouteRoute,
+} as any);
+const HomePrivacyRoute = HomePrivacyRouteImport.update({
+  id: "/privacy",
+  path: "/privacy",
+  getParentRoute: () => HomeRouteRoute,
+} as any);
 const HomeResumeTemplatesRoute = HomeResumeTemplatesRouteImport.update({
   id: "/resume-templates",
   path: "/resume-templates",
   getParentRoute: () => HomeRouteRoute,
+} as any);
+const HomeTermsRoute = HomeTermsRouteImport.update({
+  id: "/terms",
+  path: "/terms",
+  getParentRoute: () => HomeRouteRoute,
+} as any);
+const AdminIndexRoute = AdminIndexRouteImport.update({
+  id: "/",
+  path: "/",
+  getParentRoute: () => AdminRouteRoute,
+} as any);
+const AdminAnnouncementsRoute = AdminAnnouncementsRouteImport.update({
+  id: "/announcements",
+  path: "/announcements",
+  getParentRoute: () => AdminRouteRoute,
+} as any);
+const AdminAuditRoute = AdminAuditRouteImport.update({
+  id: "/audit",
+  path: "/audit",
+  getParentRoute: () => AdminRouteRoute,
+} as any);
+const AdminEmailRoute = AdminEmailRouteImport.update({
+  id: "/email",
+  path: "/email",
+  getParentRoute: () => AdminRouteRoute,
+} as any);
+const AdminMetricsRoute = AdminMetricsRouteImport.update({
+  id: "/metrics",
+  path: "/metrics",
+  getParentRoute: () => AdminRouteRoute,
 } as any);
 const AgentIndexRoute = AgentIndexRouteImport.update({
   id: "/",
@@ -126,6 +213,11 @@ const AuthForgotPasswordRoute = AuthForgotPasswordRouteImport.update({
   path: "/forgot-password",
   getParentRoute: () => AuthRouteRoute,
 } as any);
+const AuthImpersonateRoute = AuthImpersonateRouteImport.update({
+  id: "/impersonate",
+  path: "/impersonate",
+  getParentRoute: () => AuthRouteRoute,
+} as any);
 const AuthLoginRoute = AuthLoginRouteImport.update({
   id: "/login",
   path: "/login",
@@ -134,6 +226,11 @@ const AuthLoginRoute = AuthLoginRouteImport.update({
 const AuthNativeCallbackRoute = AuthNativeCallbackRouteImport.update({
   id: "/native-callback",
   path: "/native-callback",
+  getParentRoute: () => AuthRouteRoute,
+} as any);
+const AuthOrganizationAccessRoute = AuthOrganizationAccessRouteImport.update({
+  id: "/organization-access",
+  path: "/organization-access",
   getParentRoute: () => AuthRouteRoute,
 } as any);
 const AuthRegisterRoute = AuthRegisterRouteImport.update({
@@ -186,6 +283,38 @@ const DashboardTrashRoute = DashboardTrashRouteImport.update({
   path: "/trash",
   getParentRoute: () => DashboardRouteRoute,
 } as any);
+const DeviceIndexRoute = DeviceIndexRouteImport.update({
+  id: "/",
+  path: "/",
+  getParentRoute: () => DeviceRouteRoute,
+} as any);
+const AdminOrganizationsIndexRoute = AdminOrganizationsIndexRouteImport.update({
+  id: "/organizations/",
+  path: "/organizations/",
+  getParentRoute: () => AdminRouteRoute,
+} as any);
+const AdminOrganizationsOrganizationIdRoute =
+  AdminOrganizationsOrganizationIdRouteImport.update({
+    id: "/organizations/$organizationId",
+    path: "/organizations/$organizationId",
+    getParentRoute: () => AdminRouteRoute,
+  } as any);
+const AuthAcceptInvitationInvitationIdRoute =
+  AuthAcceptInvitationInvitationIdRouteImport.update({
+    id: "/accept-invitation/$invitationId",
+    path: "/accept-invitation/$invitationId",
+    getParentRoute: () => AuthRouteRoute,
+  } as any);
+const AuthHandoffIndexRoute = AuthHandoffIndexRouteImport.update({
+  id: "/handoff/",
+  path: "/handoff/",
+  getParentRoute: () => AuthRouteRoute,
+} as any);
+const AuthHandoffRedeemRoute = AuthHandoffRedeemRouteImport.update({
+  id: "/handoff/redeem",
+  path: "/handoff/redeem",
+  getParentRoute: () => AuthRouteRoute,
+} as any);
 const BuilderResumeIdIndexRoute = BuilderResumeIdIndexRouteImport.update({
   id: "/",
   path: "/",
@@ -206,6 +335,11 @@ const DashboardApplicationsIndexRoute =
 const DashboardCareerIndexRoute = DashboardCareerIndexRouteImport.update({
   id: "/",
   path: "/",
+  getParentRoute: () => DashboardCareerRouteRoute,
+} as any);
+const DashboardCareerJobsRoute = DashboardCareerJobsRouteImport.update({
+  id: "/jobs",
+  path: "/jobs",
   getParentRoute: () => DashboardCareerRouteRoute,
 } as any);
 const DashboardCareerKnowledgeRouteRoute =
@@ -240,10 +374,51 @@ const DashboardSettingsAiRoute = DashboardSettingsAiRouteImport.update({
   path: "/ai",
   getParentRoute: () => DashboardSettingsRouteRoute,
 } as any);
+const DashboardSettingsAiUsageRoute =
+  DashboardSettingsAiUsageRouteImport.update({
+    id: "/ai-usage",
+    path: "/ai-usage",
+    getParentRoute: () => DashboardSettingsRouteRoute,
+  } as any);
+const DashboardSettingsAnalyticsRoute =
+  DashboardSettingsAnalyticsRouteImport.update({
+    id: "/analytics",
+    path: "/analytics",
+    getParentRoute: () => DashboardSettingsRouteRoute,
+  } as any);
 const DashboardSettingsApiKeysRoute =
   DashboardSettingsApiKeysRouteImport.update({
     id: "/api-keys",
     path: "/api-keys",
+    getParentRoute: () => DashboardSettingsRouteRoute,
+  } as any);
+const DashboardSettingsAuditRoute = DashboardSettingsAuditRouteImport.update({
+  id: "/audit",
+  path: "/audit",
+  getParentRoute: () => DashboardSettingsRouteRoute,
+} as any);
+const DashboardSettingsBrandingRoute =
+  DashboardSettingsBrandingRouteImport.update({
+    id: "/branding",
+    path: "/branding",
+    getParentRoute: () => DashboardSettingsRouteRoute,
+  } as any);
+const DashboardSettingsCohortsRoute =
+  DashboardSettingsCohortsRouteImport.update({
+    id: "/cohorts",
+    path: "/cohorts",
+    getParentRoute: () => DashboardSettingsRouteRoute,
+  } as any);
+const DashboardSettingsDomainsRoute =
+  DashboardSettingsDomainsRouteImport.update({
+    id: "/domains",
+    path: "/domains",
+    getParentRoute: () => DashboardSettingsRouteRoute,
+  } as any);
+const DashboardSettingsEmailTemplatesRoute =
+  DashboardSettingsEmailTemplatesRouteImport.update({
+    id: "/email-templates",
+    path: "/email-templates",
     getParentRoute: () => DashboardSettingsRouteRoute,
   } as any);
 const DashboardSettingsIntegrationsRouteRoute =
@@ -256,6 +431,18 @@ const DashboardSettingsJobSearchRoute =
   DashboardSettingsJobSearchRouteImport.update({
     id: "/job-search",
     path: "/job-search",
+    getParentRoute: () => DashboardSettingsRouteRoute,
+  } as any);
+const DashboardSettingsMembersRoute =
+  DashboardSettingsMembersRouteImport.update({
+    id: "/members",
+    path: "/members",
+    getParentRoute: () => DashboardSettingsRouteRoute,
+  } as any);
+const DashboardSettingsOrgEmailTemplatesRoute =
+  DashboardSettingsOrgEmailTemplatesRouteImport.update({
+    id: "/org-email-templates",
+    path: "/org-email-templates",
     getParentRoute: () => DashboardSettingsRouteRoute,
   } as any);
 const DashboardSettingsPreferencesRoute =
@@ -294,6 +481,18 @@ const DashboardCareerKnowledgePreferencesRoute =
     path: "/preferences",
     getParentRoute: () => DashboardCareerKnowledgeRouteRoute,
   } as any);
+const DashboardOrganizationBillingIndexRoute =
+  DashboardOrganizationBillingIndexRouteImport.update({
+    id: "/organization/billing/",
+    path: "/organization/billing/",
+    getParentRoute: () => DashboardRouteRoute,
+  } as any);
+const DashboardOrganizationBillingReturnRoute =
+  DashboardOrganizationBillingReturnRouteImport.update({
+    id: "/organization/billing/return",
+    path: "/organization/billing/return",
+    getParentRoute: () => DashboardRouteRoute,
+  } as any);
 const DashboardSettingsAuthenticationIndexRoute =
   DashboardSettingsAuthenticationIndexRouteImport.update({
     id: "/authentication/",
@@ -306,43 +505,78 @@ const DashboardCareerKnowledgeStoriesChar123StoryIdChar125Route =
     path: "/stories/{-$storyId}",
     getParentRoute: () => DashboardCareerKnowledgeRouteRoute,
   } as any);
+const DashboardOrganizationBillingReceiptInvoiceIdRoute =
+  DashboardOrganizationBillingReceiptInvoiceIdRouteImport.update({
+    id: "/organization/billing/receipt/$invoiceId",
+    path: "/organization/billing/receipt/$invoiceId",
+    getParentRoute: () => DashboardRouteRoute,
+  } as any);
 
 export interface FileRoutesByFullPath {
   "/": typeof HomeIndexRoute;
+  "/admin": typeof AdminRouteRouteWithChildren;
   "/agent": typeof AgentRouteRouteWithChildren;
   "/auth": typeof AuthRouteRouteWithChildren;
   "/dashboard": typeof DashboardRouteRouteWithChildren;
+  "/device": typeof DeviceRouteRouteWithChildren;
   "/builder/$resumeId": typeof BuilderResumeIdRouteRouteWithChildren;
   "/dashboard/career": typeof DashboardCareerRouteRouteWithChildren;
   "/dashboard/settings": typeof DashboardSettingsRouteRouteWithChildren;
   "/ats-checker": typeof HomeAtsCheckerRoute;
+  "/dpa": typeof HomeDpaRoute;
+  "/licenses": typeof HomeLicensesRoute;
+  "/privacy": typeof HomePrivacyRoute;
   "/resume-templates": typeof HomeResumeTemplatesRoute;
+  "/terms": typeof HomeTermsRoute;
+  "/admin/announcements": typeof AdminAnnouncementsRoute;
+  "/admin/audit": typeof AdminAuditRoute;
+  "/admin/email": typeof AdminEmailRoute;
+  "/admin/metrics": typeof AdminMetricsRoute;
   "/agent/$threadId": typeof AgentThreadIdRoute;
   "/agent/new": typeof AgentNewRoute;
   "/auth/consent": typeof AuthConsentRoute;
   "/auth/error": typeof AuthErrorRoute;
   "/auth/forgot-password": typeof AuthForgotPasswordRoute;
+  "/auth/impersonate": typeof AuthImpersonateRoute;
   "/auth/login": typeof AuthLoginRoute;
   "/auth/native-callback": typeof AuthNativeCallbackRoute;
+  "/auth/organization-access": typeof AuthOrganizationAccessRoute;
   "/auth/register": typeof AuthRegisterRoute;
   "/auth/reset-password": typeof AuthResetPasswordRoute;
   "/auth/verify-2fa": typeof AuthVerify2faRoute;
   "/auth/verify-2fa-backup": typeof AuthVerify2faBackupRoute;
   "/dashboard/cover-letters": typeof DashboardCoverLettersRoute;
   "/dashboard/trash": typeof DashboardTrashRoute;
+  "/admin/": typeof AdminIndexRoute;
   "/agent/": typeof AgentIndexRoute;
   "/auth/": typeof AuthIndexRoute;
   "/dashboard/": typeof DashboardIndexRoute;
+  "/device/": typeof DeviceIndexRoute;
   "/dashboard/career/knowledge": typeof DashboardCareerKnowledgeRouteRouteWithChildren;
   "/dashboard/settings/integrations": typeof DashboardSettingsIntegrationsRouteRoute;
+  "/admin/organizations/$organizationId": typeof AdminOrganizationsOrganizationIdRoute;
+  "/auth/accept-invitation/$invitationId": typeof AuthAcceptInvitationInvitationIdRoute;
+  "/auth/handoff/redeem": typeof AuthHandoffRedeemRoute;
   "/builder/letter/$coverLetterId": typeof BuilderLetterCoverLetterIdRoute;
+  "/dashboard/career/jobs": typeof DashboardCareerJobsRoute;
   "/dashboard/career/offers": typeof DashboardCareerOffersRoute;
   "/dashboard/settings/account": typeof DashboardSettingsAccountRoute;
   "/dashboard/settings/ai": typeof DashboardSettingsAiRoute;
+  "/dashboard/settings/ai-usage": typeof DashboardSettingsAiUsageRoute;
+  "/dashboard/settings/analytics": typeof DashboardSettingsAnalyticsRoute;
   "/dashboard/settings/api-keys": typeof DashboardSettingsApiKeysRoute;
+  "/dashboard/settings/audit": typeof DashboardSettingsAuditRoute;
+  "/dashboard/settings/branding": typeof DashboardSettingsBrandingRoute;
+  "/dashboard/settings/cohorts": typeof DashboardSettingsCohortsRoute;
+  "/dashboard/settings/domains": typeof DashboardSettingsDomainsRoute;
+  "/dashboard/settings/email-templates": typeof DashboardSettingsEmailTemplatesRoute;
   "/dashboard/settings/job-search": typeof DashboardSettingsJobSearchRoute;
+  "/dashboard/settings/members": typeof DashboardSettingsMembersRoute;
+  "/dashboard/settings/org-email-templates": typeof DashboardSettingsOrgEmailTemplatesRoute;
   "/dashboard/settings/preferences": typeof DashboardSettingsPreferencesRoute;
   "/dashboard/settings/profile": typeof DashboardSettingsProfileRoute;
+  "/admin/organizations/": typeof AdminOrganizationsIndexRoute;
+  "/auth/handoff/": typeof AuthHandoffIndexRoute;
   "/builder/$resumeId/": typeof BuilderResumeIdIndexRoute;
   "/dashboard/applications/": typeof DashboardApplicationsIndexRoute;
   "/dashboard/career/": typeof DashboardCareerIndexRoute;
@@ -352,19 +586,32 @@ export interface FileRoutesByFullPath {
   "/dashboard/career/coach/{-$conversationId}": typeof DashboardCareerCoachChar123ConversationIdChar125Route;
   "/dashboard/career/knowledge/facts": typeof DashboardCareerKnowledgeFactsRoute;
   "/dashboard/career/knowledge/preferences": typeof DashboardCareerKnowledgePreferencesRoute;
+  "/dashboard/organization/billing/return": typeof DashboardOrganizationBillingReturnRoute;
+  "/dashboard/organization/billing/": typeof DashboardOrganizationBillingIndexRoute;
   "/dashboard/settings/authentication/": typeof DashboardSettingsAuthenticationIndexRoute;
   "/dashboard/career/knowledge/stories/{-$storyId}": typeof DashboardCareerKnowledgeStoriesChar123StoryIdChar125Route;
+  "/dashboard/organization/billing/receipt/$invoiceId": typeof DashboardOrganizationBillingReceiptInvoiceIdRoute;
 }
 export interface FileRoutesByTo {
   "/ats-checker": typeof HomeAtsCheckerRoute;
+  "/dpa": typeof HomeDpaRoute;
+  "/licenses": typeof HomeLicensesRoute;
+  "/privacy": typeof HomePrivacyRoute;
   "/resume-templates": typeof HomeResumeTemplatesRoute;
+  "/terms": typeof HomeTermsRoute;
+  "/admin/announcements": typeof AdminAnnouncementsRoute;
+  "/admin/audit": typeof AdminAuditRoute;
+  "/admin/email": typeof AdminEmailRoute;
+  "/admin/metrics": typeof AdminMetricsRoute;
   "/agent/$threadId": typeof AgentThreadIdRoute;
   "/agent/new": typeof AgentNewRoute;
   "/auth/consent": typeof AuthConsentRoute;
   "/auth/error": typeof AuthErrorRoute;
   "/auth/forgot-password": typeof AuthForgotPasswordRoute;
+  "/auth/impersonate": typeof AuthImpersonateRoute;
   "/auth/login": typeof AuthLoginRoute;
   "/auth/native-callback": typeof AuthNativeCallbackRoute;
+  "/auth/organization-access": typeof AuthOrganizationAccessRoute;
   "/auth/register": typeof AuthRegisterRoute;
   "/auth/reset-password": typeof AuthResetPasswordRoute;
   "/auth/verify-2fa": typeof AuthVerify2faRoute;
@@ -372,19 +619,36 @@ export interface FileRoutesByTo {
   "/dashboard/cover-letters": typeof DashboardCoverLettersRoute;
   "/dashboard/trash": typeof DashboardTrashRoute;
   "/": typeof HomeIndexRoute;
+  "/admin": typeof AdminIndexRoute;
   "/agent": typeof AgentIndexRoute;
   "/auth": typeof AuthIndexRoute;
   "/dashboard": typeof DashboardIndexRoute;
+  "/device": typeof DeviceIndexRoute;
   "/dashboard/career/knowledge": typeof DashboardCareerKnowledgeRouteRouteWithChildren;
   "/dashboard/settings/integrations": typeof DashboardSettingsIntegrationsRouteRoute;
+  "/admin/organizations/$organizationId": typeof AdminOrganizationsOrganizationIdRoute;
+  "/auth/accept-invitation/$invitationId": typeof AuthAcceptInvitationInvitationIdRoute;
+  "/auth/handoff/redeem": typeof AuthHandoffRedeemRoute;
   "/builder/letter/$coverLetterId": typeof BuilderLetterCoverLetterIdRoute;
+  "/dashboard/career/jobs": typeof DashboardCareerJobsRoute;
   "/dashboard/career/offers": typeof DashboardCareerOffersRoute;
   "/dashboard/settings/account": typeof DashboardSettingsAccountRoute;
   "/dashboard/settings/ai": typeof DashboardSettingsAiRoute;
+  "/dashboard/settings/ai-usage": typeof DashboardSettingsAiUsageRoute;
+  "/dashboard/settings/analytics": typeof DashboardSettingsAnalyticsRoute;
   "/dashboard/settings/api-keys": typeof DashboardSettingsApiKeysRoute;
+  "/dashboard/settings/audit": typeof DashboardSettingsAuditRoute;
+  "/dashboard/settings/branding": typeof DashboardSettingsBrandingRoute;
+  "/dashboard/settings/cohorts": typeof DashboardSettingsCohortsRoute;
+  "/dashboard/settings/domains": typeof DashboardSettingsDomainsRoute;
+  "/dashboard/settings/email-templates": typeof DashboardSettingsEmailTemplatesRoute;
   "/dashboard/settings/job-search": typeof DashboardSettingsJobSearchRoute;
+  "/dashboard/settings/members": typeof DashboardSettingsMembersRoute;
+  "/dashboard/settings/org-email-templates": typeof DashboardSettingsOrgEmailTemplatesRoute;
   "/dashboard/settings/preferences": typeof DashboardSettingsPreferencesRoute;
   "/dashboard/settings/profile": typeof DashboardSettingsProfileRoute;
+  "/admin/organizations": typeof AdminOrganizationsIndexRoute;
+  "/auth/handoff": typeof AuthHandoffIndexRoute;
   "/builder/$resumeId": typeof BuilderResumeIdIndexRoute;
   "/dashboard/applications": typeof DashboardApplicationsIndexRoute;
   "/dashboard/career": typeof DashboardCareerIndexRoute;
@@ -394,27 +658,42 @@ export interface FileRoutesByTo {
   "/dashboard/career/coach/{-$conversationId}": typeof DashboardCareerCoachChar123ConversationIdChar125Route;
   "/dashboard/career/knowledge/facts": typeof DashboardCareerKnowledgeFactsRoute;
   "/dashboard/career/knowledge/preferences": typeof DashboardCareerKnowledgePreferencesRoute;
+  "/dashboard/organization/billing/return": typeof DashboardOrganizationBillingReturnRoute;
+  "/dashboard/organization/billing": typeof DashboardOrganizationBillingIndexRoute;
   "/dashboard/settings/authentication": typeof DashboardSettingsAuthenticationIndexRoute;
   "/dashboard/career/knowledge/stories/{-$storyId}": typeof DashboardCareerKnowledgeStoriesChar123StoryIdChar125Route;
+  "/dashboard/organization/billing/receipt/$invoiceId": typeof DashboardOrganizationBillingReceiptInvoiceIdRoute;
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport;
   "/_home": typeof HomeRouteRouteWithChildren;
+  "/admin": typeof AdminRouteRouteWithChildren;
   "/agent": typeof AgentRouteRouteWithChildren;
   "/auth": typeof AuthRouteRouteWithChildren;
   "/dashboard": typeof DashboardRouteRouteWithChildren;
+  "/device": typeof DeviceRouteRouteWithChildren;
   "/builder/$resumeId": typeof BuilderResumeIdRouteRouteWithChildren;
   "/dashboard/career": typeof DashboardCareerRouteRouteWithChildren;
   "/dashboard/settings": typeof DashboardSettingsRouteRouteWithChildren;
   "/_home/ats-checker": typeof HomeAtsCheckerRoute;
+  "/_home/dpa": typeof HomeDpaRoute;
+  "/_home/licenses": typeof HomeLicensesRoute;
+  "/_home/privacy": typeof HomePrivacyRoute;
   "/_home/resume-templates": typeof HomeResumeTemplatesRoute;
+  "/_home/terms": typeof HomeTermsRoute;
+  "/admin/announcements": typeof AdminAnnouncementsRoute;
+  "/admin/audit": typeof AdminAuditRoute;
+  "/admin/email": typeof AdminEmailRoute;
+  "/admin/metrics": typeof AdminMetricsRoute;
   "/agent/$threadId": typeof AgentThreadIdRoute;
   "/agent/new": typeof AgentNewRoute;
   "/auth/consent": typeof AuthConsentRoute;
   "/auth/error": typeof AuthErrorRoute;
   "/auth/forgot-password": typeof AuthForgotPasswordRoute;
+  "/auth/impersonate": typeof AuthImpersonateRoute;
   "/auth/login": typeof AuthLoginRoute;
   "/auth/native-callback": typeof AuthNativeCallbackRoute;
+  "/auth/organization-access": typeof AuthOrganizationAccessRoute;
   "/auth/register": typeof AuthRegisterRoute;
   "/auth/reset-password": typeof AuthResetPasswordRoute;
   "/auth/verify-2fa": typeof AuthVerify2faRoute;
@@ -422,19 +701,36 @@ export interface FileRoutesById {
   "/dashboard/cover-letters": typeof DashboardCoverLettersRoute;
   "/dashboard/trash": typeof DashboardTrashRoute;
   "/_home/": typeof HomeIndexRoute;
+  "/admin/": typeof AdminIndexRoute;
   "/agent/": typeof AgentIndexRoute;
   "/auth/": typeof AuthIndexRoute;
   "/dashboard/": typeof DashboardIndexRoute;
+  "/device/": typeof DeviceIndexRoute;
   "/dashboard/career/knowledge": typeof DashboardCareerKnowledgeRouteRouteWithChildren;
   "/dashboard/settings/integrations": typeof DashboardSettingsIntegrationsRouteRoute;
+  "/admin/organizations/$organizationId": typeof AdminOrganizationsOrganizationIdRoute;
+  "/auth/accept-invitation/$invitationId": typeof AuthAcceptInvitationInvitationIdRoute;
+  "/auth/handoff/redeem": typeof AuthHandoffRedeemRoute;
   "/builder/letter/$coverLetterId": typeof BuilderLetterCoverLetterIdRoute;
+  "/dashboard/career/jobs": typeof DashboardCareerJobsRoute;
   "/dashboard/career/offers": typeof DashboardCareerOffersRoute;
   "/dashboard/settings/account": typeof DashboardSettingsAccountRoute;
   "/dashboard/settings/ai": typeof DashboardSettingsAiRoute;
+  "/dashboard/settings/ai-usage": typeof DashboardSettingsAiUsageRoute;
+  "/dashboard/settings/analytics": typeof DashboardSettingsAnalyticsRoute;
   "/dashboard/settings/api-keys": typeof DashboardSettingsApiKeysRoute;
+  "/dashboard/settings/audit": typeof DashboardSettingsAuditRoute;
+  "/dashboard/settings/branding": typeof DashboardSettingsBrandingRoute;
+  "/dashboard/settings/cohorts": typeof DashboardSettingsCohortsRoute;
+  "/dashboard/settings/domains": typeof DashboardSettingsDomainsRoute;
+  "/dashboard/settings/email-templates": typeof DashboardSettingsEmailTemplatesRoute;
   "/dashboard/settings/job-search": typeof DashboardSettingsJobSearchRoute;
+  "/dashboard/settings/members": typeof DashboardSettingsMembersRoute;
+  "/dashboard/settings/org-email-templates": typeof DashboardSettingsOrgEmailTemplatesRoute;
   "/dashboard/settings/preferences": typeof DashboardSettingsPreferencesRoute;
   "/dashboard/settings/profile": typeof DashboardSettingsProfileRoute;
+  "/admin/organizations/": typeof AdminOrganizationsIndexRoute;
+  "/auth/handoff/": typeof AuthHandoffIndexRoute;
   "/builder/$resumeId/": typeof BuilderResumeIdIndexRoute;
   "/dashboard/applications/": typeof DashboardApplicationsIndexRoute;
   "/dashboard/career/": typeof DashboardCareerIndexRoute;
@@ -444,47 +740,79 @@ export interface FileRoutesById {
   "/dashboard/career/coach/{-$conversationId}": typeof DashboardCareerCoachChar123ConversationIdChar125Route;
   "/dashboard/career/knowledge/facts": typeof DashboardCareerKnowledgeFactsRoute;
   "/dashboard/career/knowledge/preferences": typeof DashboardCareerKnowledgePreferencesRoute;
+  "/dashboard/organization/billing/return": typeof DashboardOrganizationBillingReturnRoute;
+  "/dashboard/organization/billing/": typeof DashboardOrganizationBillingIndexRoute;
   "/dashboard/settings/authentication/": typeof DashboardSettingsAuthenticationIndexRoute;
   "/dashboard/career/knowledge/stories/{-$storyId}": typeof DashboardCareerKnowledgeStoriesChar123StoryIdChar125Route;
+  "/dashboard/organization/billing/receipt/$invoiceId": typeof DashboardOrganizationBillingReceiptInvoiceIdRoute;
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath;
   fullPaths:
     | "/"
+    | "/admin"
     | "/agent"
     | "/auth"
     | "/dashboard"
+    | "/device"
     | "/builder/$resumeId"
     | "/dashboard/career"
     | "/dashboard/settings"
     | "/ats-checker"
+    | "/dpa"
+    | "/licenses"
+    | "/privacy"
     | "/resume-templates"
+    | "/terms"
+    | "/admin/announcements"
+    | "/admin/audit"
+    | "/admin/email"
+    | "/admin/metrics"
     | "/agent/$threadId"
     | "/agent/new"
     | "/auth/consent"
     | "/auth/error"
     | "/auth/forgot-password"
+    | "/auth/impersonate"
     | "/auth/login"
     | "/auth/native-callback"
+    | "/auth/organization-access"
     | "/auth/register"
     | "/auth/reset-password"
     | "/auth/verify-2fa"
     | "/auth/verify-2fa-backup"
     | "/dashboard/cover-letters"
     | "/dashboard/trash"
+    | "/admin/"
     | "/agent/"
     | "/auth/"
     | "/dashboard/"
+    | "/device/"
     | "/dashboard/career/knowledge"
     | "/dashboard/settings/integrations"
+    | "/admin/organizations/$organizationId"
+    | "/auth/accept-invitation/$invitationId"
+    | "/auth/handoff/redeem"
     | "/builder/letter/$coverLetterId"
+    | "/dashboard/career/jobs"
     | "/dashboard/career/offers"
     | "/dashboard/settings/account"
     | "/dashboard/settings/ai"
+    | "/dashboard/settings/ai-usage"
+    | "/dashboard/settings/analytics"
     | "/dashboard/settings/api-keys"
+    | "/dashboard/settings/audit"
+    | "/dashboard/settings/branding"
+    | "/dashboard/settings/cohorts"
+    | "/dashboard/settings/domains"
+    | "/dashboard/settings/email-templates"
     | "/dashboard/settings/job-search"
+    | "/dashboard/settings/members"
+    | "/dashboard/settings/org-email-templates"
     | "/dashboard/settings/preferences"
     | "/dashboard/settings/profile"
+    | "/admin/organizations/"
+    | "/auth/handoff/"
     | "/builder/$resumeId/"
     | "/dashboard/applications/"
     | "/dashboard/career/"
@@ -494,19 +822,32 @@ export interface FileRouteTypes {
     | "/dashboard/career/coach/{-$conversationId}"
     | "/dashboard/career/knowledge/facts"
     | "/dashboard/career/knowledge/preferences"
+    | "/dashboard/organization/billing/return"
+    | "/dashboard/organization/billing/"
     | "/dashboard/settings/authentication/"
-    | "/dashboard/career/knowledge/stories/{-$storyId}";
+    | "/dashboard/career/knowledge/stories/{-$storyId}"
+    | "/dashboard/organization/billing/receipt/$invoiceId";
   fileRoutesByTo: FileRoutesByTo;
   to:
     | "/ats-checker"
+    | "/dpa"
+    | "/licenses"
+    | "/privacy"
     | "/resume-templates"
+    | "/terms"
+    | "/admin/announcements"
+    | "/admin/audit"
+    | "/admin/email"
+    | "/admin/metrics"
     | "/agent/$threadId"
     | "/agent/new"
     | "/auth/consent"
     | "/auth/error"
     | "/auth/forgot-password"
+    | "/auth/impersonate"
     | "/auth/login"
     | "/auth/native-callback"
+    | "/auth/organization-access"
     | "/auth/register"
     | "/auth/reset-password"
     | "/auth/verify-2fa"
@@ -514,19 +855,36 @@ export interface FileRouteTypes {
     | "/dashboard/cover-letters"
     | "/dashboard/trash"
     | "/"
+    | "/admin"
     | "/agent"
     | "/auth"
     | "/dashboard"
+    | "/device"
     | "/dashboard/career/knowledge"
     | "/dashboard/settings/integrations"
+    | "/admin/organizations/$organizationId"
+    | "/auth/accept-invitation/$invitationId"
+    | "/auth/handoff/redeem"
     | "/builder/letter/$coverLetterId"
+    | "/dashboard/career/jobs"
     | "/dashboard/career/offers"
     | "/dashboard/settings/account"
     | "/dashboard/settings/ai"
+    | "/dashboard/settings/ai-usage"
+    | "/dashboard/settings/analytics"
     | "/dashboard/settings/api-keys"
+    | "/dashboard/settings/audit"
+    | "/dashboard/settings/branding"
+    | "/dashboard/settings/cohorts"
+    | "/dashboard/settings/domains"
+    | "/dashboard/settings/email-templates"
     | "/dashboard/settings/job-search"
+    | "/dashboard/settings/members"
+    | "/dashboard/settings/org-email-templates"
     | "/dashboard/settings/preferences"
     | "/dashboard/settings/profile"
+    | "/admin/organizations"
+    | "/auth/handoff"
     | "/builder/$resumeId"
     | "/dashboard/applications"
     | "/dashboard/career"
@@ -536,26 +894,41 @@ export interface FileRouteTypes {
     | "/dashboard/career/coach/{-$conversationId}"
     | "/dashboard/career/knowledge/facts"
     | "/dashboard/career/knowledge/preferences"
+    | "/dashboard/organization/billing/return"
+    | "/dashboard/organization/billing"
     | "/dashboard/settings/authentication"
-    | "/dashboard/career/knowledge/stories/{-$storyId}";
+    | "/dashboard/career/knowledge/stories/{-$storyId}"
+    | "/dashboard/organization/billing/receipt/$invoiceId";
   id:
     | "__root__"
     | "/_home"
+    | "/admin"
     | "/agent"
     | "/auth"
     | "/dashboard"
+    | "/device"
     | "/builder/$resumeId"
     | "/dashboard/career"
     | "/dashboard/settings"
     | "/_home/ats-checker"
+    | "/_home/dpa"
+    | "/_home/licenses"
+    | "/_home/privacy"
     | "/_home/resume-templates"
+    | "/_home/terms"
+    | "/admin/announcements"
+    | "/admin/audit"
+    | "/admin/email"
+    | "/admin/metrics"
     | "/agent/$threadId"
     | "/agent/new"
     | "/auth/consent"
     | "/auth/error"
     | "/auth/forgot-password"
+    | "/auth/impersonate"
     | "/auth/login"
     | "/auth/native-callback"
+    | "/auth/organization-access"
     | "/auth/register"
     | "/auth/reset-password"
     | "/auth/verify-2fa"
@@ -563,19 +936,36 @@ export interface FileRouteTypes {
     | "/dashboard/cover-letters"
     | "/dashboard/trash"
     | "/_home/"
+    | "/admin/"
     | "/agent/"
     | "/auth/"
     | "/dashboard/"
+    | "/device/"
     | "/dashboard/career/knowledge"
     | "/dashboard/settings/integrations"
+    | "/admin/organizations/$organizationId"
+    | "/auth/accept-invitation/$invitationId"
+    | "/auth/handoff/redeem"
     | "/builder/letter/$coverLetterId"
+    | "/dashboard/career/jobs"
     | "/dashboard/career/offers"
     | "/dashboard/settings/account"
     | "/dashboard/settings/ai"
+    | "/dashboard/settings/ai-usage"
+    | "/dashboard/settings/analytics"
     | "/dashboard/settings/api-keys"
+    | "/dashboard/settings/audit"
+    | "/dashboard/settings/branding"
+    | "/dashboard/settings/cohorts"
+    | "/dashboard/settings/domains"
+    | "/dashboard/settings/email-templates"
     | "/dashboard/settings/job-search"
+    | "/dashboard/settings/members"
+    | "/dashboard/settings/org-email-templates"
     | "/dashboard/settings/preferences"
     | "/dashboard/settings/profile"
+    | "/admin/organizations/"
+    | "/auth/handoff/"
     | "/builder/$resumeId/"
     | "/dashboard/applications/"
     | "/dashboard/career/"
@@ -585,15 +975,20 @@ export interface FileRouteTypes {
     | "/dashboard/career/coach/{-$conversationId}"
     | "/dashboard/career/knowledge/facts"
     | "/dashboard/career/knowledge/preferences"
+    | "/dashboard/organization/billing/return"
+    | "/dashboard/organization/billing/"
     | "/dashboard/settings/authentication/"
-    | "/dashboard/career/knowledge/stories/{-$storyId}";
+    | "/dashboard/career/knowledge/stories/{-$storyId}"
+    | "/dashboard/organization/billing/receipt/$invoiceId";
   fileRoutesById: FileRoutesById;
 }
 export interface RootRouteChildren {
   HomeRouteRoute: typeof HomeRouteRouteWithChildren;
+  AdminRouteRoute: typeof AdminRouteRouteWithChildren;
   AgentRouteRoute: typeof AgentRouteRouteWithChildren;
   AuthRouteRoute: typeof AuthRouteRouteWithChildren;
   DashboardRouteRoute: typeof DashboardRouteRouteWithChildren;
+  DeviceRouteRoute: typeof DeviceRouteRouteWithChildren;
   BuilderResumeIdRouteRoute: typeof BuilderResumeIdRouteRouteWithChildren;
   BuilderLetterCoverLetterIdRoute: typeof BuilderLetterCoverLetterIdRoute;
 }
@@ -605,6 +1000,13 @@ declare module "@tanstack/react-router" {
       path: "";
       fullPath: "/";
       preLoaderRoute: typeof HomeRouteRouteImport;
+      parentRoute: typeof rootRouteImport;
+    };
+    "/admin": {
+      id: "/admin";
+      path: "/admin";
+      fullPath: "/admin";
+      preLoaderRoute: typeof AdminRouteRouteImport;
       parentRoute: typeof rootRouteImport;
     };
     "/agent": {
@@ -628,6 +1030,13 @@ declare module "@tanstack/react-router" {
       preLoaderRoute: typeof DashboardRouteRouteImport;
       parentRoute: typeof rootRouteImport;
     };
+    "/device": {
+      id: "/device";
+      path: "/device";
+      fullPath: "/device";
+      preLoaderRoute: typeof DeviceRouteRouteImport;
+      parentRoute: typeof rootRouteImport;
+    };
     "/_home/": {
       id: "/_home/";
       path: "/";
@@ -642,12 +1051,75 @@ declare module "@tanstack/react-router" {
       preLoaderRoute: typeof HomeAtsCheckerRouteImport;
       parentRoute: typeof HomeRouteRoute;
     };
+    "/_home/dpa": {
+      id: "/_home/dpa";
+      path: "/dpa";
+      fullPath: "/dpa";
+      preLoaderRoute: typeof HomeDpaRouteImport;
+      parentRoute: typeof HomeRouteRoute;
+    };
+    "/_home/licenses": {
+      id: "/_home/licenses";
+      path: "/licenses";
+      fullPath: "/licenses";
+      preLoaderRoute: typeof HomeLicensesRouteImport;
+      parentRoute: typeof HomeRouteRoute;
+    };
+    "/_home/privacy": {
+      id: "/_home/privacy";
+      path: "/privacy";
+      fullPath: "/privacy";
+      preLoaderRoute: typeof HomePrivacyRouteImport;
+      parentRoute: typeof HomeRouteRoute;
+    };
     "/_home/resume-templates": {
       id: "/_home/resume-templates";
       path: "/resume-templates";
       fullPath: "/resume-templates";
       preLoaderRoute: typeof HomeResumeTemplatesRouteImport;
       parentRoute: typeof HomeRouteRoute;
+    };
+    "/_home/terms": {
+      id: "/_home/terms";
+      path: "/terms";
+      fullPath: "/terms";
+      preLoaderRoute: typeof HomeTermsRouteImport;
+      parentRoute: typeof HomeRouteRoute;
+    };
+    "/admin/": {
+      id: "/admin/";
+      path: "/";
+      fullPath: "/admin/";
+      preLoaderRoute: typeof AdminIndexRouteImport;
+      parentRoute: typeof AdminRouteRoute;
+    };
+    "/admin/announcements": {
+      id: "/admin/announcements";
+      path: "/announcements";
+      fullPath: "/admin/announcements";
+      preLoaderRoute: typeof AdminAnnouncementsRouteImport;
+      parentRoute: typeof AdminRouteRoute;
+    };
+    "/admin/audit": {
+      id: "/admin/audit";
+      path: "/audit";
+      fullPath: "/admin/audit";
+      preLoaderRoute: typeof AdminAuditRouteImport;
+      parentRoute: typeof AdminRouteRoute;
+    };
+    "/admin/email": {
+      id: "/admin/email";
+      path: "/email";
+      fullPath: "/admin/email";
+      preLoaderRoute: typeof AdminEmailRouteImport;
+      parentRoute: typeof AdminRouteRoute;
+    };
+    "/admin/metrics": {
+      id: "/admin/metrics";
+      path: "/metrics";
+      fullPath: "/admin/metrics";
+      preLoaderRoute: typeof AdminMetricsRouteImport;
+      parentRoute: typeof AdminRouteRoute;
     };
     "/agent/": {
       id: "/agent/";
@@ -698,6 +1170,13 @@ declare module "@tanstack/react-router" {
       preLoaderRoute: typeof AuthForgotPasswordRouteImport;
       parentRoute: typeof AuthRouteRoute;
     };
+    "/auth/impersonate": {
+      id: "/auth/impersonate";
+      path: "/impersonate";
+      fullPath: "/auth/impersonate";
+      preLoaderRoute: typeof AuthImpersonateRouteImport;
+      parentRoute: typeof AuthRouteRoute;
+    };
     "/auth/login": {
       id: "/auth/login";
       path: "/login";
@@ -710,6 +1189,13 @@ declare module "@tanstack/react-router" {
       path: "/native-callback";
       fullPath: "/auth/native-callback";
       preLoaderRoute: typeof AuthNativeCallbackRouteImport;
+      parentRoute: typeof AuthRouteRoute;
+    };
+    "/auth/organization-access": {
+      id: "/auth/organization-access";
+      path: "/organization-access";
+      fullPath: "/auth/organization-access";
+      preLoaderRoute: typeof AuthOrganizationAccessRouteImport;
       parentRoute: typeof AuthRouteRoute;
     };
     "/auth/register": {
@@ -782,6 +1268,48 @@ declare module "@tanstack/react-router" {
       preLoaderRoute: typeof DashboardTrashRouteImport;
       parentRoute: typeof DashboardRouteRoute;
     };
+    "/device/": {
+      id: "/device/";
+      path: "/";
+      fullPath: "/device/";
+      preLoaderRoute: typeof DeviceIndexRouteImport;
+      parentRoute: typeof DeviceRouteRoute;
+    };
+    "/admin/organizations/": {
+      id: "/admin/organizations/";
+      path: "/organizations";
+      fullPath: "/admin/organizations/";
+      preLoaderRoute: typeof AdminOrganizationsIndexRouteImport;
+      parentRoute: typeof AdminRouteRoute;
+    };
+    "/admin/organizations/$organizationId": {
+      id: "/admin/organizations/$organizationId";
+      path: "/organizations/$organizationId";
+      fullPath: "/admin/organizations/$organizationId";
+      preLoaderRoute: typeof AdminOrganizationsOrganizationIdRouteImport;
+      parentRoute: typeof AdminRouteRoute;
+    };
+    "/auth/accept-invitation/$invitationId": {
+      id: "/auth/accept-invitation/$invitationId";
+      path: "/accept-invitation/$invitationId";
+      fullPath: "/auth/accept-invitation/$invitationId";
+      preLoaderRoute: typeof AuthAcceptInvitationInvitationIdRouteImport;
+      parentRoute: typeof AuthRouteRoute;
+    };
+    "/auth/handoff/": {
+      id: "/auth/handoff/";
+      path: "/handoff";
+      fullPath: "/auth/handoff/";
+      preLoaderRoute: typeof AuthHandoffIndexRouteImport;
+      parentRoute: typeof AuthRouteRoute;
+    };
+    "/auth/handoff/redeem": {
+      id: "/auth/handoff/redeem";
+      path: "/handoff/redeem";
+      fullPath: "/auth/handoff/redeem";
+      preLoaderRoute: typeof AuthHandoffRedeemRouteImport;
+      parentRoute: typeof AuthRouteRoute;
+    };
     "/builder/$resumeId/": {
       id: "/builder/$resumeId/";
       path: "/";
@@ -808,6 +1336,13 @@ declare module "@tanstack/react-router" {
       path: "/";
       fullPath: "/dashboard/career/";
       preLoaderRoute: typeof DashboardCareerIndexRouteImport;
+      parentRoute: typeof DashboardCareerRouteRoute;
+    };
+    "/dashboard/career/jobs": {
+      id: "/dashboard/career/jobs";
+      path: "/jobs";
+      fullPath: "/dashboard/career/jobs";
+      preLoaderRoute: typeof DashboardCareerJobsRouteImport;
       parentRoute: typeof DashboardCareerRouteRoute;
     };
     "/dashboard/career/knowledge": {
@@ -852,11 +1387,60 @@ declare module "@tanstack/react-router" {
       preLoaderRoute: typeof DashboardSettingsAiRouteImport;
       parentRoute: typeof DashboardSettingsRouteRoute;
     };
+    "/dashboard/settings/ai-usage": {
+      id: "/dashboard/settings/ai-usage";
+      path: "/ai-usage";
+      fullPath: "/dashboard/settings/ai-usage";
+      preLoaderRoute: typeof DashboardSettingsAiUsageRouteImport;
+      parentRoute: typeof DashboardSettingsRouteRoute;
+    };
+    "/dashboard/settings/analytics": {
+      id: "/dashboard/settings/analytics";
+      path: "/analytics";
+      fullPath: "/dashboard/settings/analytics";
+      preLoaderRoute: typeof DashboardSettingsAnalyticsRouteImport;
+      parentRoute: typeof DashboardSettingsRouteRoute;
+    };
     "/dashboard/settings/api-keys": {
       id: "/dashboard/settings/api-keys";
       path: "/api-keys";
       fullPath: "/dashboard/settings/api-keys";
       preLoaderRoute: typeof DashboardSettingsApiKeysRouteImport;
+      parentRoute: typeof DashboardSettingsRouteRoute;
+    };
+    "/dashboard/settings/audit": {
+      id: "/dashboard/settings/audit";
+      path: "/audit";
+      fullPath: "/dashboard/settings/audit";
+      preLoaderRoute: typeof DashboardSettingsAuditRouteImport;
+      parentRoute: typeof DashboardSettingsRouteRoute;
+    };
+    "/dashboard/settings/branding": {
+      id: "/dashboard/settings/branding";
+      path: "/branding";
+      fullPath: "/dashboard/settings/branding";
+      preLoaderRoute: typeof DashboardSettingsBrandingRouteImport;
+      parentRoute: typeof DashboardSettingsRouteRoute;
+    };
+    "/dashboard/settings/cohorts": {
+      id: "/dashboard/settings/cohorts";
+      path: "/cohorts";
+      fullPath: "/dashboard/settings/cohorts";
+      preLoaderRoute: typeof DashboardSettingsCohortsRouteImport;
+      parentRoute: typeof DashboardSettingsRouteRoute;
+    };
+    "/dashboard/settings/domains": {
+      id: "/dashboard/settings/domains";
+      path: "/domains";
+      fullPath: "/dashboard/settings/domains";
+      preLoaderRoute: typeof DashboardSettingsDomainsRouteImport;
+      parentRoute: typeof DashboardSettingsRouteRoute;
+    };
+    "/dashboard/settings/email-templates": {
+      id: "/dashboard/settings/email-templates";
+      path: "/email-templates";
+      fullPath: "/dashboard/settings/email-templates";
+      preLoaderRoute: typeof DashboardSettingsEmailTemplatesRouteImport;
       parentRoute: typeof DashboardSettingsRouteRoute;
     };
     "/dashboard/settings/integrations": {
@@ -871,6 +1455,20 @@ declare module "@tanstack/react-router" {
       path: "/job-search";
       fullPath: "/dashboard/settings/job-search";
       preLoaderRoute: typeof DashboardSettingsJobSearchRouteImport;
+      parentRoute: typeof DashboardSettingsRouteRoute;
+    };
+    "/dashboard/settings/members": {
+      id: "/dashboard/settings/members";
+      path: "/members";
+      fullPath: "/dashboard/settings/members";
+      preLoaderRoute: typeof DashboardSettingsMembersRouteImport;
+      parentRoute: typeof DashboardSettingsRouteRoute;
+    };
+    "/dashboard/settings/org-email-templates": {
+      id: "/dashboard/settings/org-email-templates";
+      path: "/org-email-templates";
+      fullPath: "/dashboard/settings/org-email-templates";
+      preLoaderRoute: typeof DashboardSettingsOrgEmailTemplatesRouteImport;
       parentRoute: typeof DashboardSettingsRouteRoute;
     };
     "/dashboard/settings/preferences": {
@@ -915,6 +1513,20 @@ declare module "@tanstack/react-router" {
       preLoaderRoute: typeof DashboardCareerKnowledgePreferencesRouteImport;
       parentRoute: typeof DashboardCareerKnowledgeRouteRoute;
     };
+    "/dashboard/organization/billing/": {
+      id: "/dashboard/organization/billing/";
+      path: "/organization/billing";
+      fullPath: "/dashboard/organization/billing/";
+      preLoaderRoute: typeof DashboardOrganizationBillingIndexRouteImport;
+      parentRoute: typeof DashboardRouteRoute;
+    };
+    "/dashboard/organization/billing/return": {
+      id: "/dashboard/organization/billing/return";
+      path: "/organization/billing/return";
+      fullPath: "/dashboard/organization/billing/return";
+      preLoaderRoute: typeof DashboardOrganizationBillingReturnRouteImport;
+      parentRoute: typeof DashboardRouteRoute;
+    };
     "/dashboard/settings/authentication/": {
       id: "/dashboard/settings/authentication/";
       path: "/authentication";
@@ -929,23 +1541,62 @@ declare module "@tanstack/react-router" {
       preLoaderRoute: typeof DashboardCareerKnowledgeStoriesChar123StoryIdChar125RouteImport;
       parentRoute: typeof DashboardCareerKnowledgeRouteRoute;
     };
+    "/dashboard/organization/billing/receipt/$invoiceId": {
+      id: "/dashboard/organization/billing/receipt/$invoiceId";
+      path: "/organization/billing/receipt/$invoiceId";
+      fullPath: "/dashboard/organization/billing/receipt/$invoiceId";
+      preLoaderRoute: typeof DashboardOrganizationBillingReceiptInvoiceIdRouteImport;
+      parentRoute: typeof DashboardRouteRoute;
+    };
   }
 }
 
 interface HomeRouteRouteChildren {
   HomeAtsCheckerRoute: typeof HomeAtsCheckerRoute;
+  HomeDpaRoute: typeof HomeDpaRoute;
+  HomeLicensesRoute: typeof HomeLicensesRoute;
+  HomePrivacyRoute: typeof HomePrivacyRoute;
   HomeResumeTemplatesRoute: typeof HomeResumeTemplatesRoute;
+  HomeTermsRoute: typeof HomeTermsRoute;
   HomeIndexRoute: typeof HomeIndexRoute;
 }
 
 const HomeRouteRouteChildren: HomeRouteRouteChildren = {
   HomeAtsCheckerRoute: HomeAtsCheckerRoute,
+  HomeDpaRoute: HomeDpaRoute,
+  HomeLicensesRoute: HomeLicensesRoute,
+  HomePrivacyRoute: HomePrivacyRoute,
   HomeResumeTemplatesRoute: HomeResumeTemplatesRoute,
+  HomeTermsRoute: HomeTermsRoute,
   HomeIndexRoute: HomeIndexRoute,
 };
 
 const HomeRouteRouteWithChildren = HomeRouteRoute._addFileChildren(
   HomeRouteRouteChildren,
+);
+
+interface AdminRouteRouteChildren {
+  AdminAnnouncementsRoute: typeof AdminAnnouncementsRoute;
+  AdminAuditRoute: typeof AdminAuditRoute;
+  AdminEmailRoute: typeof AdminEmailRoute;
+  AdminMetricsRoute: typeof AdminMetricsRoute;
+  AdminIndexRoute: typeof AdminIndexRoute;
+  AdminOrganizationsOrganizationIdRoute: typeof AdminOrganizationsOrganizationIdRoute;
+  AdminOrganizationsIndexRoute: typeof AdminOrganizationsIndexRoute;
+}
+
+const AdminRouteRouteChildren: AdminRouteRouteChildren = {
+  AdminAnnouncementsRoute: AdminAnnouncementsRoute,
+  AdminAuditRoute: AdminAuditRoute,
+  AdminEmailRoute: AdminEmailRoute,
+  AdminMetricsRoute: AdminMetricsRoute,
+  AdminIndexRoute: AdminIndexRoute,
+  AdminOrganizationsOrganizationIdRoute: AdminOrganizationsOrganizationIdRoute,
+  AdminOrganizationsIndexRoute: AdminOrganizationsIndexRoute,
+};
+
+const AdminRouteRouteWithChildren = AdminRouteRoute._addFileChildren(
+  AdminRouteRouteChildren,
 );
 
 interface AgentRouteRouteChildren {
@@ -968,26 +1619,36 @@ interface AuthRouteRouteChildren {
   AuthConsentRoute: typeof AuthConsentRoute;
   AuthErrorRoute: typeof AuthErrorRoute;
   AuthForgotPasswordRoute: typeof AuthForgotPasswordRoute;
+  AuthImpersonateRoute: typeof AuthImpersonateRoute;
   AuthLoginRoute: typeof AuthLoginRoute;
   AuthNativeCallbackRoute: typeof AuthNativeCallbackRoute;
+  AuthOrganizationAccessRoute: typeof AuthOrganizationAccessRoute;
   AuthRegisterRoute: typeof AuthRegisterRoute;
   AuthResetPasswordRoute: typeof AuthResetPasswordRoute;
   AuthVerify2faRoute: typeof AuthVerify2faRoute;
   AuthVerify2faBackupRoute: typeof AuthVerify2faBackupRoute;
   AuthIndexRoute: typeof AuthIndexRoute;
+  AuthAcceptInvitationInvitationIdRoute: typeof AuthAcceptInvitationInvitationIdRoute;
+  AuthHandoffRedeemRoute: typeof AuthHandoffRedeemRoute;
+  AuthHandoffIndexRoute: typeof AuthHandoffIndexRoute;
 }
 
 const AuthRouteRouteChildren: AuthRouteRouteChildren = {
   AuthConsentRoute: AuthConsentRoute,
   AuthErrorRoute: AuthErrorRoute,
   AuthForgotPasswordRoute: AuthForgotPasswordRoute,
+  AuthImpersonateRoute: AuthImpersonateRoute,
   AuthLoginRoute: AuthLoginRoute,
   AuthNativeCallbackRoute: AuthNativeCallbackRoute,
+  AuthOrganizationAccessRoute: AuthOrganizationAccessRoute,
   AuthRegisterRoute: AuthRegisterRoute,
   AuthResetPasswordRoute: AuthResetPasswordRoute,
   AuthVerify2faRoute: AuthVerify2faRoute,
   AuthVerify2faBackupRoute: AuthVerify2faBackupRoute,
   AuthIndexRoute: AuthIndexRoute,
+  AuthAcceptInvitationInvitationIdRoute: AuthAcceptInvitationInvitationIdRoute,
+  AuthHandoffRedeemRoute: AuthHandoffRedeemRoute,
+  AuthHandoffIndexRoute: AuthHandoffIndexRoute,
 };
 
 const AuthRouteRouteWithChildren = AuthRouteRoute._addFileChildren(
@@ -1016,6 +1677,7 @@ const DashboardCareerKnowledgeRouteRouteWithChildren =
 
 interface DashboardCareerRouteRouteChildren {
   DashboardCareerKnowledgeRouteRoute: typeof DashboardCareerKnowledgeRouteRouteWithChildren;
+  DashboardCareerJobsRoute: typeof DashboardCareerJobsRoute;
   DashboardCareerOffersRoute: typeof DashboardCareerOffersRoute;
   DashboardCareerIndexRoute: typeof DashboardCareerIndexRoute;
   DashboardCareerCoachChar123ConversationIdChar125Route: typeof DashboardCareerCoachChar123ConversationIdChar125Route;
@@ -1024,6 +1686,7 @@ interface DashboardCareerRouteRouteChildren {
 const DashboardCareerRouteRouteChildren: DashboardCareerRouteRouteChildren = {
   DashboardCareerKnowledgeRouteRoute:
     DashboardCareerKnowledgeRouteRouteWithChildren,
+  DashboardCareerJobsRoute: DashboardCareerJobsRoute,
   DashboardCareerOffersRoute: DashboardCareerOffersRoute,
   DashboardCareerIndexRoute: DashboardCareerIndexRoute,
   DashboardCareerCoachChar123ConversationIdChar125Route:
@@ -1037,8 +1700,17 @@ interface DashboardSettingsRouteRouteChildren {
   DashboardSettingsIntegrationsRouteRoute: typeof DashboardSettingsIntegrationsRouteRoute;
   DashboardSettingsAccountRoute: typeof DashboardSettingsAccountRoute;
   DashboardSettingsAiRoute: typeof DashboardSettingsAiRoute;
+  DashboardSettingsAiUsageRoute: typeof DashboardSettingsAiUsageRoute;
+  DashboardSettingsAnalyticsRoute: typeof DashboardSettingsAnalyticsRoute;
   DashboardSettingsApiKeysRoute: typeof DashboardSettingsApiKeysRoute;
+  DashboardSettingsAuditRoute: typeof DashboardSettingsAuditRoute;
+  DashboardSettingsBrandingRoute: typeof DashboardSettingsBrandingRoute;
+  DashboardSettingsCohortsRoute: typeof DashboardSettingsCohortsRoute;
+  DashboardSettingsDomainsRoute: typeof DashboardSettingsDomainsRoute;
+  DashboardSettingsEmailTemplatesRoute: typeof DashboardSettingsEmailTemplatesRoute;
   DashboardSettingsJobSearchRoute: typeof DashboardSettingsJobSearchRoute;
+  DashboardSettingsMembersRoute: typeof DashboardSettingsMembersRoute;
+  DashboardSettingsOrgEmailTemplatesRoute: typeof DashboardSettingsOrgEmailTemplatesRoute;
   DashboardSettingsPreferencesRoute: typeof DashboardSettingsPreferencesRoute;
   DashboardSettingsProfileRoute: typeof DashboardSettingsProfileRoute;
   DashboardSettingsIndexRoute: typeof DashboardSettingsIndexRoute;
@@ -1051,8 +1723,18 @@ const DashboardSettingsRouteRouteChildren: DashboardSettingsRouteRouteChildren =
       DashboardSettingsIntegrationsRouteRoute,
     DashboardSettingsAccountRoute: DashboardSettingsAccountRoute,
     DashboardSettingsAiRoute: DashboardSettingsAiRoute,
+    DashboardSettingsAiUsageRoute: DashboardSettingsAiUsageRoute,
+    DashboardSettingsAnalyticsRoute: DashboardSettingsAnalyticsRoute,
     DashboardSettingsApiKeysRoute: DashboardSettingsApiKeysRoute,
+    DashboardSettingsAuditRoute: DashboardSettingsAuditRoute,
+    DashboardSettingsBrandingRoute: DashboardSettingsBrandingRoute,
+    DashboardSettingsCohortsRoute: DashboardSettingsCohortsRoute,
+    DashboardSettingsDomainsRoute: DashboardSettingsDomainsRoute,
+    DashboardSettingsEmailTemplatesRoute: DashboardSettingsEmailTemplatesRoute,
     DashboardSettingsJobSearchRoute: DashboardSettingsJobSearchRoute,
+    DashboardSettingsMembersRoute: DashboardSettingsMembersRoute,
+    DashboardSettingsOrgEmailTemplatesRoute:
+      DashboardSettingsOrgEmailTemplatesRoute,
     DashboardSettingsPreferencesRoute: DashboardSettingsPreferencesRoute,
     DashboardSettingsProfileRoute: DashboardSettingsProfileRoute,
     DashboardSettingsIndexRoute: DashboardSettingsIndexRoute,
@@ -1074,6 +1756,9 @@ interface DashboardRouteRouteChildren {
   DashboardApplicationsIndexRoute: typeof DashboardApplicationsIndexRoute;
   DashboardResumesIndexRoute: typeof DashboardResumesIndexRoute;
   DashboardApplicationsApplicationIdChar123TabChar125Route: typeof DashboardApplicationsApplicationIdChar123TabChar125Route;
+  DashboardOrganizationBillingReturnRoute: typeof DashboardOrganizationBillingReturnRoute;
+  DashboardOrganizationBillingIndexRoute: typeof DashboardOrganizationBillingIndexRoute;
+  DashboardOrganizationBillingReceiptInvoiceIdRoute: typeof DashboardOrganizationBillingReceiptInvoiceIdRoute;
 }
 
 const DashboardRouteRouteChildren: DashboardRouteRouteChildren = {
@@ -1086,10 +1771,28 @@ const DashboardRouteRouteChildren: DashboardRouteRouteChildren = {
   DashboardResumesIndexRoute: DashboardResumesIndexRoute,
   DashboardApplicationsApplicationIdChar123TabChar125Route:
     DashboardApplicationsApplicationIdChar123TabChar125Route,
+  DashboardOrganizationBillingReturnRoute:
+    DashboardOrganizationBillingReturnRoute,
+  DashboardOrganizationBillingIndexRoute:
+    DashboardOrganizationBillingIndexRoute,
+  DashboardOrganizationBillingReceiptInvoiceIdRoute:
+    DashboardOrganizationBillingReceiptInvoiceIdRoute,
 };
 
 const DashboardRouteRouteWithChildren = DashboardRouteRoute._addFileChildren(
   DashboardRouteRouteChildren,
+);
+
+interface DeviceRouteRouteChildren {
+  DeviceIndexRoute: typeof DeviceIndexRoute;
+}
+
+const DeviceRouteRouteChildren: DeviceRouteRouteChildren = {
+  DeviceIndexRoute: DeviceIndexRoute,
+};
+
+const DeviceRouteRouteWithChildren = DeviceRouteRoute._addFileChildren(
+  DeviceRouteRouteChildren,
 );
 
 interface BuilderResumeIdRouteRouteChildren {
@@ -1105,9 +1808,11 @@ const BuilderResumeIdRouteRouteWithChildren =
 
 const rootRouteChildren: RootRouteChildren = {
   HomeRouteRoute: HomeRouteRouteWithChildren,
+  AdminRouteRoute: AdminRouteRouteWithChildren,
   AgentRouteRoute: AgentRouteRouteWithChildren,
   AuthRouteRoute: AuthRouteRouteWithChildren,
   DashboardRouteRoute: DashboardRouteRouteWithChildren,
+  DeviceRouteRoute: DeviceRouteRouteWithChildren,
   BuilderResumeIdRouteRoute: BuilderResumeIdRouteRouteWithChildren,
   BuilderLetterCoverLetterIdRoute: BuilderLetterCoverLetterIdRoute,
 };

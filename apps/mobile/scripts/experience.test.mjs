@@ -59,6 +59,11 @@ ui.listItemMotion = () => ({});
 ui.listLayout = {};
 ui.useFirstAppearance = () => false;
 const mocks = {
+	"@reactive-resume/utils/brand": {
+		getBrand: () => ({ appName: "CareerOS" }),
+		brandSlug: () => "careeros",
+		PLATFORM_DEFAULT_APP_NAME: "CareerOS",
+	},
 	react,
 	"react-native": { View: "View", Pressable: "Pressable", ScrollView: "ScrollView" },
 	"expo-router": { useRouter: () => router, Stack: { Screen: "StackScreen" } },
@@ -220,7 +225,7 @@ assert.equal(control(tree, "Download & history").value, "history", "Explicit ver
 reset();
 tree = render(DownloadTab, { resume, offline: false });
 assert.equal(control(tree, "File name").value, "Alex Example-Resume");
-const communityInvite = (view) => nodes(view).find((node) => node.props.title === "Get resume feedback on Discord");
+const communityInvite = (view) => nodes(view).find((node) => node.props.leading === "discord-logo");
 assert.equal(communityInvite(tree), undefined, "No community invitation before an export");
 holdExport = true;
 control(tree, "Share PDF").onPress();
@@ -238,14 +243,12 @@ holdExport = false;
 assert.equal(calls.filter((call) => call?.shared === "pdf").length, 1);
 assert.equal(calls.find((call) => call?.export).export.name, "Alex Example-Resume");
 tree = render(DownloadTab, { resume, offline: false });
-assert.ok(communityInvite(tree), "A prepared export offers optional peer feedback");
+assert.equal(communityInvite(tree), undefined, "A prepared export offers no community invitation");
 assert.equal(
 	calls.some((call) => call?.browser),
 	false,
-	"Export never opens Discord automatically",
+	"Export never opens a browser automatically",
 );
-await communityInvite(tree).props.onPress();
-assert.equal(calls.at(-1).browser, "https://discord.gg/9kAqrGcwn5");
 control(tree, "Print").onPress();
 await settle();
 assert.equal(

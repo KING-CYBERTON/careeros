@@ -33,6 +33,11 @@ msgstr "\"{0}\" ट्रैश में ले जाया गया"
 msgid "“{0}” stops being your primary resume."
 msgstr "“{0}” अब आपका प्राथमिक रेज़्यूमे नहीं रहेगा।"
 
+#. placeholder {0}: selected?.label ?? ""
+#: src/features/settings/clipper-sign-ins.tsx
+msgid "“{0}” stops working. You can sign in again from the extension."
+msgstr ""
+
 #. placeholder {0}: purge?.documents[0]?.name
 #: src/features/documents/library.tsx
 msgid "“{0}” will be deleted for good and can't be restored."
@@ -331,7 +336,9 @@ msgid "{0} (copy)"
 msgstr "{0} (कॉपी)"
 
 #. placeholder {0}: document.name
+#. placeholder {0}: selected.name
 #: src/draft/adapters.ts
+#: src/features/email-templates/write-email-sheet.tsx
 msgid "{0} (mine)"
 msgstr "{0} (मेरा)"
 
@@ -382,6 +389,12 @@ msgstr "{0} कम"
 msgid "{0} more"
 msgstr "{0} ज़्यादा"
 
+#. placeholder {0}: plan.seatsUsed
+#. placeholder {1}: plan.seatLimit
+#: src/features/organization/plan-screen.tsx
+msgid "{0} of {1}"
+msgstr ""
+
 #. placeholder {0}: shown.length
 #. placeholder {1}: TEMPLATES.length
 #: src/features/design/template-group.tsx
@@ -412,11 +425,6 @@ msgstr "{0} नौकरी पोस्टिंग"
 msgid "{0} returned “{1}”. Your message is kept."
 msgstr "{0} ने \"{1}\" लौटाया। आपका संदेश रखा गया है."
 
-#. placeholder {0}: done.length
-#: src/features/career/today.tsx
-msgid "{0} roles updated."
-msgstr ""
-
 #. placeholder {0}: selectedIds.length
 #. placeholder {0}: selection.length
 #: src/features/applications/list-screen.tsx
@@ -428,6 +436,11 @@ msgstr "{0} चयनित"
 #. placeholder {1}: failed.length
 #: src/features/career/today.tsx
 msgid "{0} updated; {1} failed. Failed roles remain selected. Refresh or retry."
+msgstr ""
+
+#. placeholder {0}: plan.seatsUsed
+#: src/features/organization/plan-screen.tsx
+msgid "{0} used"
 msgstr ""
 
 #. placeholder {0}: answer.split(/\s+/).filter(Boolean).length
@@ -498,14 +511,6 @@ msgstr "{company} · {tabName}"
 msgid "{completed, plural, one {# document updated} other {# documents updated}}"
 msgstr "{completed, plural, one {# दस्तावेज़ अपडेट किया गया} other {# दस्तावेज़ अपडेट किए गए}}"
 
-#: src/features/share/custom-domain.tsx
-msgid "{cost} a year"
-msgstr "{cost} प्रति वर्ष"
-
-#: src/features/share/custom-domain.tsx
-msgid "{cost} the first year"
-msgstr "पहले साल {cost}"
-
 #: src/features/write/section-sheet.tsx
 msgid "{count, plural, one {# column} other {# columns}}"
 msgstr "{count, plural, one {# कॉलम} other {# कॉलम}}"
@@ -513,6 +518,10 @@ msgstr "{count, plural, one {# कॉलम} other {# कॉलम}}"
 #: src/features/workspace/tabs/messages.tsx
 msgid "{count, plural, one {Apply # change} other {Apply # changes}}"
 msgstr "{count, plural, one {# बदलाव लागू करें} other {# बदलाव लागू करें}}"
+
+#: src/features/branding/domains-screen.tsx
+msgid "{count} of {limit} domains used."
+msgstr ""
 
 #: src/features/workspace/tabs/debrief.tsx
 msgid "{day} · {length}m"
@@ -708,6 +717,10 @@ msgstr "{toCheck, plural, one {# फ़ील्ड पर एक नज़र �
 msgid "{toCheck, plural, one {# to check} other {# to check}}"
 msgstr "{toCheck, plural, one {जाँच करने के लिए #} other {जाँच करने के लिए #}}"
 
+#: src/features/organization/plan-screen.tsx
+msgid "{trialDays} days left"
+msgstr ""
+
 #: src/features/letters/write.tsx
 #: src/features/workspace/tabs/apply.tsx
 msgid "{words, plural, one {# word} other {# words}}"
@@ -755,8 +768,12 @@ msgid "24 hours before"
 msgstr "24 घंटे पहले"
 
 #: src/features/letters/share.tsx
-msgid "A backup of this letter. Imports back into Reactive Resume as a letter."
-msgstr "इस पत्र का बैकअप. एक पत्र के रूप में Reactive Resume में वापस आयात करता है।"
+msgid "A backup of this letter. Imports back into {appName} as a letter."
+msgstr ""
+
+#: src/features/discovery/messages.ts
+msgid "A board name has only letters, digits, hyphens and underscores."
+msgstr ""
 
 #: src/features/check/issues.ts
 msgid "A city and country let roles be matched to where you are."
@@ -822,9 +839,21 @@ msgstr "एक अंकीय तारीख अलग-अलग देशो�
 msgid "A page is rotated."
 msgstr "एक पेज घुमाया हुआ है।"
 
+#: src/features/organization/plan-screen.tsx
+msgid "A payment is overdue. Please contact your organization's owner."
+msgstr ""
+
+#: src/features/organization/plan-screen.tsx
+msgid "A payment is overdue. Please contact your organization's owner. Service pauses after {graceEnd}."
+msgstr ""
+
 #: src/features/applications/prior-no-response.tsx
 msgid "A previous application to this company was closed with No response. You can still apply."
 msgstr "इस कंपनी में पिछला आवेदन कोई जवाब नहीं परिणाम के साथ बंद किया गया था। आप फिर भी आवेदन कर सकते हैं।"
+
+#: src/features/email-templates/built-in-text.ts
+msgid "A question about working at {company}"
+msgstr ""
 
 #: src/features/application-detail/sheets.tsx
 msgid "A reminder to check in, shown as the next step until you do."
@@ -833,6 +862,10 @@ msgstr "चेक इन करने के लिए एक अनुस्म
 #: src/features/check/issues.ts
 msgid "A role has no description"
 msgstr "किसी भूमिका का कोई विवरण नहीं होता"
+
+#: src/features/discovery/searches.tsx
+msgid "A search looks at the job boards you choose, on a schedule, and adds postings that match to the queue below."
+msgstr ""
 
 #: src/features/check/writing.tsx
 msgid "A second opinion on your wording"
@@ -914,6 +947,8 @@ msgid "Actions for {0} at {1}"
 msgstr "{1} पर {0} के लिए कार्रवाइयां"
 
 #: src/features/ai/web-access.tsx
+#: src/features/branding/domains-screen.tsx
+#: src/features/organization/plan-screen.tsx
 msgid "Active"
 msgstr "सक्रिय"
 
@@ -922,6 +957,10 @@ msgstr "सक्रिय"
 msgid "Add"
 msgstr "जोड़ें"
 
+#: src/features/discovery/search-form.tsx
+msgid "Add a board"
+msgstr ""
+
 #: src/features/applications/lane-settings.tsx
 msgid "Add a compatible replacement lane first."
 msgstr "पहले एक उपयुक्त वैकल्पिक चरण जोड़ें।"
@@ -929,6 +968,10 @@ msgstr "पहले एक उपयुक्त वैकल्पिक च�
 #: src/features/career/search-regions-field.tsx
 msgid "Add a country"
 msgstr "एक देश जोड़ें"
+
+#: src/features/branding/domains-screen.tsx
+msgid "Add a domain"
+msgstr ""
 
 #: src/features/career/facts.tsx
 msgid "Add a fact"
@@ -1034,6 +1077,14 @@ msgstr "पहले आवेदन में एक आगामी साक�
 msgid "Add application"
 msgstr "आवेदन जोड़ें"
 
+#: src/features/discovery/messages.ts
+msgid "Add at most {MAX_TERMS} entries."
+msgstr ""
+
+#: src/features/discovery/messages.ts
+msgid "Add at most 100 boards."
+msgstr ""
+
 #: src/features/settings/application-profile.tsx
 msgid "Add authorization country"
 msgstr ""
@@ -1057,6 +1108,10 @@ msgstr "कवर लेटर जोड़ें"
 #: src/features/check/issues.ts
 msgid "Add dates"
 msgstr "दिनांक जोड़ें"
+
+#: src/features/branding/domains-screen.tsx
+msgid "Add domain"
+msgstr ""
 
 #: src/features/write/fields.ts
 msgid "Add education"
@@ -1111,6 +1166,10 @@ msgstr "नौकरी का ऑफ़र जोड़ें"
 msgid "Add offer terms manually, or use optional AI extraction in Messages."
 msgstr "नौकरी के ऑफ़र की शर्तें स्वयं जोड़ें, या संदेशों में वैकल्पिक एआई निष्कर्षण का उपयोग करें।"
 
+#: src/features/discovery/search-form.tsx
+msgid "Add one at a time or separate them with commas."
+msgstr ""
+
 #: src/features/ats-checker/messages.ts
 msgid "Add one link that shows your work."
 msgstr "अपना काम दिखाने वाला एक लिंक जोड़ें।"
@@ -1118,6 +1177,10 @@ msgstr "अपना काम दिखाने वाला एक लिं�
 #: src/features/ats-checker/messages.ts
 msgid "Add one with its country code; some application forms require it before you can submit."
 msgstr "देश कोड सहित एक नंबर जोड़ें; कुछ आवेदन फ़ॉर्म सबमिट करने से पहले इसकी मांग करते हैं।"
+
+#: src/features/discovery/searches.tsx
+msgid "Add one with the job titles, skills and places you want, plus the company job boards to watch. It runs on its own, and the best matches show up in the queue."
+msgstr ""
 
 #: src/features/design/layout-screen.tsx
 msgid "Add page"
@@ -1358,6 +1421,10 @@ msgstr "AI प्रदाताओं को लोड नहीं किय�
 msgid "AI providers couldn't be loaded. Retry or fill the details manually."
 msgstr "AI प्रदाताओं को लोड नहीं किया जा सका। पुनः प्रयास करें या विवरण मैन्युअल रूप से भरें।"
 
+#: src/features/organization/plan-screen.tsx
+msgid "AI quota"
+msgstr ""
+
 #: src/features/applications/add-sheet.tsx
 msgid "AI reads pasted text only when you ask. Links can use the page’s own job data without AI."
 msgstr "AI चिपकाए गए टेक्स्ट को केवल तभी पढ़ता है जब आप पूछते हैं। लिंक AI के बिना पृष्ठ के स्वयं के कार्य डेटा का उपयोग कर सकते हैं।"
@@ -1437,6 +1504,10 @@ msgstr "पहले ही कवर किया जा चुका है ·
 msgid "Already covered:"
 msgstr "पहले से ही शामिल:"
 
+#: src/features/email-templates/templates-screen.tsx
+msgid "Also available to you"
+msgstr ""
+
 #: src/features/check/screen.tsx
 msgid "Also check the exported PDF"
 msgstr "निर्यातित PDF की भी जाँच करें"
@@ -1482,6 +1553,10 @@ msgstr "एक गलती"
 #: src/features/application-detail/sections.tsx
 msgid "and {0} more"
 msgstr "और {0} अधिक"
+
+#: src/features/branding/domains-screen.tsx
+msgid "Another account claimed this domain first."
+msgstr ""
 
 #: src/features/share/link.tsx
 msgid "Another of your resumes uses this address."
@@ -1529,12 +1604,17 @@ msgid "Answers copied"
 msgstr "जवाब कॉपी किए गए"
 
 #: src/features/career/preferences.tsx
+#: src/features/discovery/messages.ts
 msgid "Any"
 msgstr "कोई भी"
 
 #: src/features/design/style-groups.tsx
 msgid "Any font, in Advanced"
 msgstr "कोई भी फ़ॉन्ट, उन्नत में"
+
+#: src/features/email-templates/template-editor.tsx
+msgid "Any stage"
+msgstr ""
 
 #: src/features/share/web-page.tsx
 msgid "Anyone with the link will be able to view your resume."
@@ -1561,6 +1641,10 @@ msgstr "API कुंजी निरस्त कर दी गई. इसक�
 #: src/features/settings/api-keys.tsx
 msgid "API keys"
 msgstr "API कुंजियाँ"
+
+#: src/features/branding/branding-screen.tsx
+msgid "App name"
+msgstr ""
 
 #: app/(tabs)/settings/preferences.tsx
 msgid "Appearance"
@@ -1728,6 +1812,19 @@ msgstr "“{0}” का उपयोग करने वाले ऐप्स 
 msgid "Arabic"
 msgstr "अरबी"
 
+#: src/features/email-templates/templates-screen.tsx
+msgid "Archive"
+msgstr ""
+
+#. placeholder {0}: archiving?.name ?? ""
+#: src/features/email-templates/templates-screen.tsx
+msgid "Archive {0}?"
+msgstr ""
+
+#: src/features/email-templates/template-editor.tsx
+msgid "Archive template"
+msgstr ""
+
 #: src/features/write/fields.ts
 msgid "Area of study"
 msgstr "अध्ययन का क्षेत्र"
@@ -1781,9 +1878,13 @@ msgstr "सहायक से इस पर काम करने के ल�
 msgid "Ask the coach"
 msgstr "कोच से पूछें"
 
-#: src/features/share/download.tsx
-msgid "Ask the community. Remove personal details before posting."
-msgstr "समुदाय से पूछें। पोस्ट करने से पहले निजी जानकारी हटा दें।"
+#: src/auth/session-gate.tsx
+msgid "Ask the organization's administrator for an invitation, or sign out and use a different account."
+msgstr ""
+
+#: src/features/branding/domains-screen.tsx
+msgid "Ask the platform administrator to set up custom domains. Your address above keeps working."
+msgstr ""
 
 #: src/features/ai/error.ts
 msgid "Ask your server administrator to enable credential encryption or configure a shared connection."
@@ -1869,10 +1970,6 @@ msgstr "अपने-आप"
 #: src/features/history/history.tsx
 msgid "Autosaves are grouped by session and kept for 90 days. Named versions are kept until you delete them. Restoring saves the current state first."
 msgstr "ऑटोसेव को सत्र के अनुसार समूहीकृत किया जाता है और 90 दिनों तक रखा जाता है। नामित संस्करण तब तक रखे जाते हैं जब तक आप उन्हें हटा नहीं देते। पुनर्स्थापित करने से पहले वर्तमान स्थिति सहेजी जाती है."
-
-#: src/features/share/custom-domain.tsx
-msgid "Available"
-msgstr "उपलब्ध"
 
 #: src/features/ats-checker/messages.ts
 msgid "Avoid heavy letter-spacing effects, then re-export."
@@ -2010,6 +2107,16 @@ msgstr ""
 msgid "Board"
 msgstr "बोर्ड"
 
+#. placeholder {0}: index + 1
+#: src/features/discovery/search-form.tsx
+msgid "Board {0} name or link"
+msgstr ""
+
+#. placeholder {0}: index + 1
+#: src/features/discovery/search-form.tsx
+msgid "Board {0} source"
+msgstr ""
+
 #: src/features/design/advanced.tsx
 msgctxt "Body Text (paragraphs, lists, etc.)"
 msgid "Body"
@@ -2050,6 +2157,15 @@ msgstr "सीमा त्रिज्या"
 msgid "Border width"
 msgstr "बॉर्डर चौड़ाई"
 
+#: app/(tabs)/settings/index.tsx
+#: src/features/branding/branding-screen.tsx
+msgid "Branding"
+msgstr ""
+
+#: src/features/branding/branding-screen.tsx
+msgid "Branding saved. Open tabs on your organization's address update within about a minute."
+msgstr ""
+
 #: src/features/ats-checker/messages.ts
 msgid "Break the resume into the usual sections so it can be segmented."
 msgstr "बायोडाटा को सामान्य सेक्शन में बांटें ताकि इसे विभाजित किया जा सके।"
@@ -2075,6 +2191,14 @@ msgstr "ब्रीफिंग रिफ्रेश चालू है · {n
 msgid "Briefing refresh paused"
 msgstr "ब्रीफ़िंग रीफ़्रेश रुका हुआ है"
 
+#: src/features/settings/clipper-sign-ins.tsx
+msgid "Browsers where you signed in to the Job Clipper extension. You sign in from the extension on a computer."
+msgstr ""
+
+#: src/features/email-templates/labels.ts
+msgid "Built-in"
+msgstr ""
+
 #: src/features/ai/web-access.tsx
 msgid "Built-in reader"
 msgstr "अंतर्निर्मित पाठक"
@@ -2098,9 +2222,9 @@ msgstr "बुलेटेड सूची"
 msgid "Burgundy"
 msgstr "बरगंडी"
 
-#: app/(tabs)/settings/index.tsx
-msgid "by <0>Amruth Pillai</0>"
-msgstr "<0>Amruth Pillai</0> द्वारा"
+#: src/auth/auth-header.tsx
+msgid "By creating an account you agree to the Terms and the Privacy policy."
+msgstr ""
 
 #: src/features/applications-board/views.tsx
 msgid "Calendar"
@@ -2121,6 +2245,8 @@ msgstr "क्या सॉफ़्टवेयर आपका बायोड
 #: src/features/ats-checker/checker.tsx
 #: src/features/check/parser.tsx
 #: src/features/check/writing.tsx
+#: src/features/discovery/search-form.tsx
+#: src/features/email-templates/template-editor.tsx
 #: src/features/search/search-screen.tsx
 #: src/features/workspace/preparation.tsx
 #: src/features/workspace/tabs/fit.tsx
@@ -2159,6 +2285,11 @@ msgstr "कातालान"
 #: src/features/applications/lane-settings.tsx
 msgid "Category"
 msgstr "श्रेणी"
+
+#. placeholder {0}: domain.cfSslStatus
+#: src/features/branding/domains-screen.tsx
+msgid "Certificate: {0}"
+msgstr ""
 
 #: src/features/write/fields.ts
 msgid "Certifications"
@@ -2242,6 +2373,10 @@ msgstr "एक नमूना फ़ाइल की जाँच करें"
 msgid "Check again"
 msgstr "फिर से जाँचें"
 
+#: src/features/branding/domains-screen.tsx
+msgid "Check again in {wait}s"
+msgstr ""
+
 #: src/features/ats-checker/checker.tsx
 msgid "Check another file"
 msgstr "किसी अन्य फ़ाइल की जाँच करें"
@@ -2267,6 +2402,10 @@ msgstr "उपयुक्तता जाँचें"
 msgid "Check it's accurate."
 msgstr "जांचें कि यह सटीक है."
 
+#: src/features/branding/domains-screen.tsx
+msgid "Check now"
+msgstr ""
+
 #: src/features/workspace/tabs/prepare.tsx
 msgid "Check the details"
 msgstr "विवरण जाँचें"
@@ -2286,6 +2425,10 @@ msgstr "फ़ील्ड सत्यापित करें और पु�
 #: src/features/documents/queries.ts
 msgid "Check the file or fields and try again."
 msgstr "फ़ाइल या फ़ील्ड सत्यापित करें और पुनः प्रयास करें।"
+
+#: src/features/discovery/messages.ts
+msgid "Check this field."
+msgstr ""
 
 #: src/features/workspace/tabs/fit.tsx
 msgid "Check this role against your evidence"
@@ -2377,6 +2520,14 @@ msgstr "10 एमबी से छोटा PDF चुनें। चयनि�
 msgid "Choose a photo smaller than 10 MB."
 msgstr "10 एमबी से छोटी फोटो चुनें।"
 
+#: src/features/branding/branding-screen.tsx
+msgid "Choose a PNG image."
+msgstr ""
+
+#: src/features/branding/branding-screen.tsx
+msgid "Choose a PNG or WebP image."
+msgstr ""
+
 #: src/features/applications/lane-settings.tsx
 msgid "Choose a replacement"
 msgstr "एक विकल्प चुनें"
@@ -2421,6 +2572,14 @@ msgstr "नौकरी के लिए आवेदन चुनें और 
 msgid "Choose an audio file"
 msgstr "एक ऑडियो फ़ाइल चुनें"
 
+#: src/features/branding/branding-screen.tsx
+msgid "Choose an image of 128 KB or less."
+msgstr ""
+
+#: src/features/branding/branding-screen.tsx
+msgid "Choose an image of 512 KB or less."
+msgstr ""
+
 #: src/features/documents/new-document.tsx
 msgid "Choose another file"
 msgstr "कोई अन्य फ़ाइल चुनें"
@@ -2432,6 +2591,10 @@ msgstr "तारीख चुनें"
 #: src/features/settings/profile.tsx
 msgid "Choose from library"
 msgstr "लाइब्रेरी से चुनें"
+
+#: src/features/branding/branding-screen.tsx
+msgid "Choose one of the listed fonts."
+msgstr ""
 
 #: src/features/applications-board/board-screen.tsx
 msgid "Choose outcome"
@@ -2567,10 +2730,6 @@ msgstr "बंद: {closed}"
 msgid "Coach"
 msgstr "कोच"
 
-#: src/features/share/custom-domain.tsx
-msgid "Code copied"
-msgstr "कोड कॉपी किया गया"
-
 #: src/features/design/design-pane.tsx
 #: src/features/letters/design.tsx
 msgid "Color"
@@ -2583,6 +2742,10 @@ msgstr "रंग (#RRGGBB)"
 #: src/features/design/advanced.tsx
 msgid "Colors and level"
 msgstr "रंग और स्तर"
+
+#: src/features/branding/branding-screen.tsx
+msgid "Colours and font"
+msgstr ""
 
 #: src/features/write/section-sheet.tsx
 msgid "Columns"
@@ -2641,8 +2804,8 @@ msgid "Complete {0} before saving."
 msgstr "सहेजने से पहले {0} पूरा करें।"
 
 #: src/features/share/download.tsx
-msgid "Complete data backup. Imports back into Reactive Resume or JSON Resume tools."
-msgstr "पूरा डेटा बैकअप. Reactive Resume या JSON Resume टूल में वापस आयात करता है।"
+msgid "Complete data backup. Imports back into {appName} or JSON Resume tools."
+msgstr ""
 
 #: src/features/ats-checker/messages.ts
 msgid "Compress or remove large images to keep uploads quick."
@@ -2677,10 +2840,6 @@ msgstr "कनेक्ट करें"
 #: src/features/share/custom-domain.tsx
 msgid "Connect {0}"
 msgstr "{0} कनेक्ट करें"
-
-#: src/features/share/custom-domain.tsx
-msgid "Connect {domain}"
-msgstr "{domain} कनेक्ट करें"
 
 #: src/features/ai/web-access.tsx
 msgid "Connect a service"
@@ -2825,14 +2984,24 @@ msgstr "कॉपी किया गया"
 msgid "Copied to clipboard"
 msgstr "क्लिपबोर्ड पर कॉपी किया गया"
 
+#: src/features/branding/domains-screen.tsx
+msgid "Copied."
+msgstr ""
+
 #: src/features/share/custom-domain.tsx
 msgid "Copies it"
 msgstr "इसे कॉपी करता है"
 
+#: src/features/email-templates/write-email-sheet.tsx
 #: src/features/share/link.tsx
 #: src/features/workspace/answer-library.tsx
 msgid "Copy"
 msgstr "कॉपी करें"
+
+#. placeholder {0}: record.type
+#: src/features/branding/domains-screen.tsx
+msgid "Copy {0} value"
+msgstr ""
 
 #: src/features/workspace/preparation.tsx
 msgid "Copy a base resume for this job"
@@ -2842,13 +3011,13 @@ msgstr ""
 msgid "Copy a resume for a job"
 msgstr "नौकरी के लिए बायोडाटा कॉपी करें"
 
+#: src/features/branding/domains-screen.tsx
+msgid "Copy address"
+msgstr ""
+
 #: src/features/workspace/tabs/apply.tsx
 msgid "Copy answers"
 msgstr "जवाब कॉपी करें"
-
-#: src/features/share/custom-domain.tsx
-msgid "Copy code"
-msgstr "कोड कॉपी करें"
 
 #: src/features/document-menu/index.tsx
 msgid "Copy created"
@@ -2886,6 +3055,14 @@ msgstr "इस तथ्य को सुधारें"
 msgid "Correct the year, or write \"Present\" for ongoing work."
 msgstr "वर्ष ठीक करें, या चल रहे काम के लिए \"Present\" लिखें।"
 
+#: src/features/branding/domains-screen.tsx
+msgid "Couldn't add the domain. Check the name and try again."
+msgstr ""
+
+#: src/features/email-templates/templates-screen.tsx
+msgid "Couldn't archive the template. Try again."
+msgstr ""
+
 #: src/features/assistant/chat-view.tsx
 msgid "Couldn't attach the file. Try again."
 msgstr "फ़ाइल संलग्न नहीं की जा सकी। पुनः प्रयास करें।"
@@ -2894,6 +3071,7 @@ msgstr "फ़ाइल संलग्न नहीं की जा सकी�
 msgid "Couldn't change the language. Try again."
 msgstr "भाषा नहीं बदली जा सकी. पुनः प्रयास करें।"
 
+#: src/features/discovery/searches.tsx
 #: src/features/workspace/tabs/prepare.tsx
 msgid "Couldn't change the schedule. Try again."
 msgstr "शेड्यूल बदला नहीं जा सका। पुनः प्रयास करें।"
@@ -2909,6 +3087,10 @@ msgstr "इस पते की जाँच या सहेजा नहीं
 #: src/features/applications/prior-no-response.tsx
 msgid "Couldn't check prior applications. You can still save this application."
 msgstr "पिछले आवेदन जाँचे नहीं जा सके। आप फिर भी यह आवेदन सहेज सकते हैं।"
+
+#: src/features/branding/domains-screen.tsx
+msgid "Couldn't check the domain. Try again."
+msgstr ""
 
 #: src/features/letters/write.tsx
 msgid "Couldn't check your AI providers."
@@ -2943,6 +3125,14 @@ msgstr "सहेजे जाने की पुष्टि नहीं क�
 msgid "Couldn't copy the transcript. Try again."
 msgstr "प्रतिलेख कॉपी नहीं किया जा सका। पुनः प्रयास करें।"
 
+#: src/features/email-templates/write-email-sheet.tsx
+msgid "Couldn't copy. Select the text and copy it yourself."
+msgstr ""
+
+#: src/features/branding/domains-screen.tsx
+msgid "Couldn't copy. Select the text instead."
+msgstr ""
+
 #: src/features/application-detail/sections.tsx
 #: src/features/workspace/preparation.tsx
 msgid "Couldn't create the letter. Try again."
@@ -2960,10 +3150,18 @@ msgstr "बातचीत हटाई नहीं जा सकी। पु�
 msgid "Couldn't delete the interview. Try again."
 msgstr "साक्षात्कार हटाया नहीं जा सका। पुनः प्रयास करें।"
 
+#: src/features/discovery/searches.tsx
+msgid "Couldn't delete this search. Try again."
+msgstr ""
+
 #: src/features/settings/export.tsx
 #: src/features/share/download.tsx
 msgid "Couldn't export. Try again."
 msgstr "निर्यात नहीं किया जा सका. पुनः प्रयास करें।"
+
+#: src/features/discovery/search-form.tsx
+msgid "Couldn't find the board name in this link."
+msgstr ""
 
 #: src/features/application-detail/sections.tsx
 #: src/features/workspace/preparation.tsx
@@ -3008,6 +3206,10 @@ msgstr "API कुंजियाँ लोड नहीं हो सकीं.
 msgid "Couldn't load applications."
 msgstr "आवेदन लोड नहीं किया जा सका."
 
+#: src/features/branding/domains-screen.tsx
+msgid "Couldn't load domains."
+msgstr ""
+
 #: src/features/documents/thumbnail.tsx
 msgid "Couldn't load letter"
 msgstr "पत्र लोड नहीं किया जा सका"
@@ -3024,6 +3226,10 @@ msgstr "रेज़्यूमे लोड नहीं किया जा �
 msgid "Couldn't load statistics."
 msgstr "आँकड़े लोड नहीं किये जा सके."
 
+#: src/features/branding/branding-screen.tsx
+msgid "Couldn't load the branding."
+msgstr ""
+
 #: src/features/assistant/assistant-screen.tsx
 #: src/features/letters/share.tsx
 #: src/features/letters/write.tsx
@@ -3033,6 +3239,10 @@ msgstr "कवर लेटर लोड नहीं हो सका।"
 #: src/features/check/job-match.tsx
 msgid "Couldn't load the linked posting."
 msgstr "लिंक किया गया नौकरी विज्ञापन लोड नहीं किया जा सका."
+
+#: src/features/organization/plan-screen.tsx
+msgid "Couldn't load the plan."
+msgstr ""
 
 #: app/builder/[id]/page.tsx
 #: app/builder/[id]/write.tsx
@@ -3062,6 +3272,10 @@ msgstr "इसे लोड नहीं किया जा सका. अप�
 msgid "Couldn't load versions."
 msgstr "संस्करण लोड नहीं किये जा सके."
 
+#: src/features/settings/clipper-sign-ins.tsx
+msgid "Couldn't load your Job Clipper sign-ins."
+msgstr ""
+
 #: app/(tabs)/settings/account.tsx
 msgid "Couldn't load your profile."
 msgstr "आपकी प्रोफ़ाइल लोड नहीं की जा सकी."
@@ -3073,6 +3287,10 @@ msgstr "आपका सार्वजनिक पता लोड नही�
 #: src/features/letters/write.tsx
 msgid "Couldn't load your resumes."
 msgstr "आपके रेज़्यूमे लोड नहीं हो सके।"
+
+#: src/features/discovery/searches.tsx
+msgid "Couldn't load your searches. Check your connection and try again."
+msgstr ""
 
 #: app/(tabs)/settings/preferences.tsx
 msgid "Couldn't load your timezone."
@@ -3090,11 +3308,11 @@ msgstr "इसे आवेदन किया हुआ चिह्नित �
 #: app/(tabs)/settings/index.tsx
 #: src/auth/auth-header.tsx
 #: src/features/settings/api-keys.tsx
-#: src/features/share/download.tsx
 msgid "Couldn't open the browser. Try again."
 msgstr "ब्राउज़र नहीं खुल सका. पुनः प्रयास करें।"
 
 #: src/features/career/today.tsx
+#: src/features/discovery/review-queue.tsx
 msgid "Couldn't open the posting. Try again."
 msgstr "नौकरी पोस्टिंग नहीं खुल सकी। पुनः प्रयास करें।"
 
@@ -3141,6 +3359,14 @@ msgstr "आपके दस्तावेज़ ताज़ा नहीं �
 msgid "Couldn't remember that. Try again."
 msgstr "इसे याद नहीं रखा जा सका। फिर से प्रयास करें।"
 
+#: src/features/branding/branding-screen.tsx
+msgid "Couldn't remove it. Try again."
+msgstr ""
+
+#: src/features/branding/domains-screen.tsx
+msgid "Couldn't remove the domain. Try again."
+msgstr ""
+
 #: src/features/application-detail/sections.tsx
 msgid "Couldn't remove the file. Try again."
 msgstr "फ़ाइल हटाई नहीं जा सकी। पुनः प्रयास करें।"
@@ -3162,6 +3388,10 @@ msgstr "इस रेज़्यूमे को प्रस्तुत न�
 msgid "Couldn't revoke the key. Try again."
 msgstr "कुंजी को रद्द नहीं किया जा सका. पुनः प्रयास करें।"
 
+#: src/features/settings/clipper-sign-ins.tsx
+msgid "Couldn't revoke the sign-in. Try again."
+msgstr ""
+
 #: src/features/career/facts.tsx
 #: src/features/career/hooks.ts
 #: src/features/workspace/hooks.ts
@@ -3180,6 +3410,10 @@ msgstr "वह परिवर्तन सहेजा नहीं जा स�
 #: src/features/workspace/tabs/fit.tsx
 msgid "Couldn't save that to Knowledge. Try again."
 msgstr "इसे ज्ञानकोश में सहेजा नहीं जा सका। फिर से प्रयास करें।"
+
+#: src/features/branding/branding-screen.tsx
+msgid "Couldn't save the branding. Check the highlighted fields and try again."
+msgstr ""
 
 #: src/features/application-detail/sheets.tsx
 msgid "Couldn't save the contacts. Try again."
@@ -3201,6 +3435,11 @@ msgstr "नोट सहेजे नहीं जा सके. आपका �
 msgid "Couldn't save the tags. Try again."
 msgstr "टैग सहेजे नहीं जा सके। पुनः प्रयास करें।"
 
+#: src/features/email-templates/templates-screen.tsx
+#: src/features/email-templates/write-email-sheet.tsx
+msgid "Couldn't save the template. Try again."
+msgstr ""
+
 #: app/(tabs)/settings/preferences.tsx
 msgid "Couldn't save the theme. Try again."
 msgstr "थीम सहेजा नहीं जा सका. पुनः प्रयास करें।"
@@ -3208,6 +3447,10 @@ msgstr "थीम सहेजा नहीं जा सका. पुनः �
 #: app/(tabs)/settings/preferences.tsx
 msgid "Couldn't save the timezone. Try again."
 msgstr "समय क्षेत्र सहेजा नहीं जा सका। पुनः प्रयास करें।"
+
+#: src/features/discovery/search-form.tsx
+msgid "Couldn't save this search. Check your connection and try again."
+msgstr ""
 
 #: src/features/letters/write.tsx
 msgid "Couldn't save your changes, so drafting didn't start. Nothing on the page changed."
@@ -3280,6 +3523,10 @@ msgstr "रिकॉर्डिंग प्रारंभ नहीं हो
 msgid "Couldn't start the conversation. Try again."
 msgstr "बातचीत शुरू नहीं हो सकी. पुनः प्रयास करें।"
 
+#: src/features/discovery/searches.tsx
+msgid "Couldn't start the run. Try again."
+msgstr ""
+
 #: src/features/career/role-suggestions.tsx
 msgid "Couldn't suggest roles. Try again or enter roles manually."
 msgstr ""
@@ -3327,6 +3574,10 @@ msgstr "समयरेखा अपडेट नहीं की जा सक�
 #: src/features/application-detail/sections.tsx
 msgid "Couldn't upload the file. Try again."
 msgstr "फ़ाइल अपलोड नहीं हो सकी. पुनः प्रयास करें।"
+
+#: src/features/branding/branding-screen.tsx
+msgid "Couldn't upload the image. Try again."
+msgstr ""
 
 #: src/features/settings/profile.tsx
 msgid "Couldn't upload the photo."
@@ -3425,6 +3676,14 @@ msgstr "प्रति बनाएँ"
 msgid "Create or import a resume first, then return to copy it for this job."
 msgstr "पहले एक रेज़्यूमे बनाएं या आयात करें, फिर इस कार्य के लिए इसे कॉपी करने के लिए वापस लौटें।"
 
+#: src/features/discovery/search-form.tsx
+msgid "Create search"
+msgstr ""
+
+#: src/features/branding/domains-screen.tsx
+msgid "Create the two records below at your DNS provider. We check every few minutes."
+msgstr ""
+
 #: src/features/document-menu/index.tsx
 #: src/features/history/history.tsx
 #: src/features/letters/share.tsx
@@ -3458,6 +3717,7 @@ msgstr ""
 
 #: src/features/design/advanced.tsx
 #: src/features/design/style-groups.tsx
+#: src/features/email-templates/labels.ts
 #: src/features/letters/design.tsx
 #: src/features/write/pickers.tsx
 msgid "Custom"
@@ -3469,6 +3729,14 @@ msgstr "कस्टम रंग (हेक्स)"
 
 #: src/features/write/date-field.tsx
 msgid "Custom date text"
+msgstr ""
+
+#: src/features/branding/domains-screen.tsx
+msgid "Custom domains are available on Pro"
+msgstr ""
+
+#: src/features/branding/domains-screen.tsx
+msgid "Custom domains aren't available on this server"
 msgstr ""
 
 #: src/features/write/basics-screen.tsx
@@ -3491,6 +3759,10 @@ msgstr "कस्टम शैलियाँ लागू नहीं की �
 #: src/features/settings/locale-names.ts
 msgid "Czech"
 msgstr "चेक"
+
+#: src/features/discovery/messages.ts
+msgid "Daily"
+msgstr ""
 
 #. placeholder {0}: summary.peak
 #: src/features/share/link.tsx
@@ -3591,6 +3863,7 @@ msgstr "डिफ़ॉल्ट"
 msgid "Degree"
 msgstr "डिग्री"
 
+#: src/features/discovery/searches.tsx
 #: src/features/history/history.tsx
 #: src/features/letters/share.tsx
 #: src/features/workspace/answer-library.tsx
@@ -3603,6 +3876,11 @@ msgstr "हटाएँ"
 #: src/features/documents/library.tsx
 msgid "Delete “{0}” forever?"
 msgstr "“{0}” हमेशा के लिए हटाएँ?"
+
+#. placeholder {0}: source.name
+#: src/features/discovery/searches.tsx
+msgid "Delete \"{0}\"?"
+msgstr ""
 
 #. placeholder {0}: menu ? versionTitle(menu) : ""
 #: src/features/history/history.tsx
@@ -3809,6 +4087,7 @@ msgstr "विभिन्न मुद्राएँ या भुगतान
 msgid "Direction"
 msgstr "दिशा"
 
+#: src/features/branding/branding-screen.tsx
 #: src/features/letters/write.tsx
 msgid "Discard"
 msgstr "फेंको"
@@ -3831,6 +4110,7 @@ msgstr "अपने ऑफ़लाइन संपादन त्यागे
 msgid "Discard your offline edits?"
 msgstr "क्या आप अपने ऑफ़लाइन संपादन त्यागें?"
 
+#: src/features/discovery/review-queue.tsx
 #: src/features/letters/write.tsx
 #: src/ui/layout.tsx
 msgid "Dismiss"
@@ -3838,6 +4118,10 @@ msgstr "नकार देना"
 
 #: src/features/career/today.tsx
 msgid "Dismiss selected"
+msgstr ""
+
+#: src/features/discovery/review-queue.tsx
+msgid "Dismissed"
 msgstr ""
 
 #: src/features/career/role-suggestions.tsx
@@ -3879,9 +4163,22 @@ msgstr "इस नौकरी के लिए दस्तावेज़"
 msgid "Documents you move here stay for 30 days."
 msgstr "आप यहाँ जो दस्तावेज़ भेजते हैं, वे 30 दिनों तक रहते हैं।"
 
+#: src/features/branding/domains-screen.tsx
+msgid "Domain"
+msgstr ""
+
+#: src/features/branding/domains-screen.tsx
+msgid "Domain added. Create the DNS records shown below."
+msgstr ""
+
 #: src/features/share/custom-domain.tsx
 msgid "Domain connected"
 msgstr "डोमेन जुड़ गया"
+
+#: app/(tabs)/settings/index.tsx
+#: src/features/branding/domains-screen.tsx
+msgid "Domains"
+msgstr ""
 
 #. placeholder {0}: document.name
 #: src/features/assistant/assistant-screen.tsx
@@ -3896,10 +4193,6 @@ msgstr "{0} नौकरी का विज्ञापन न भेजें"
 #: src/api/ai-consent.ts
 msgid "Don't share"
 msgstr "साझा न करें"
-
-#: app/(tabs)/settings/index.tsx
-msgid "Donate on Open Collective"
-msgstr "Open Collective पर दान करें"
 
 #: app/(tabs)/settings/preferences.tsx
 #: src/features/applications/list-screen.tsx
@@ -4084,6 +4377,10 @@ msgstr "डच"
 msgid "Each answer you get feedback on is kept here, newest first."
 msgstr "जिस भी जवाब पर आपको फ़ीडबैक मिलता है, वह यहाँ रखा जाता है, सबसे नया पहले।"
 
+#: src/features/discovery/messages.ts
+msgid "Each entry can have at most {MAX_TERM_LENGTH} characters."
+msgstr ""
+
 #: src/features/workspace/tabs/fit.tsx
 msgid "Each requirement in the posting is checked against the facts and stories in your Knowledge. Gaps show as missing evidence, never missing ability."
 msgstr "पोस्टिंग की हर आवश्यकता को आपके ज्ञानकोश के तथ्यों और कहानियों से मिलाकर जाँचा जाता है। कमियाँ अनुपलब्ध प्रमाण के रूप में दिखती हैं, कभी भी क्षमता की कमी के रूप में नहीं।"
@@ -4100,6 +4397,7 @@ msgstr "इस चैट के पिछले संदेश"
 #: src/features/application-detail/sections.tsx
 #: src/features/career/stories.tsx
 #: src/features/career/today.tsx
+#: src/features/discovery/searches.tsx
 #: src/features/write/basics-screen.tsx
 msgid "Edit"
 msgstr "संपादन करना"
@@ -4161,9 +4459,17 @@ msgstr ""
 msgid "Edit schedule"
 msgstr "शेड्यूल संपादित करें"
 
+#: src/features/discovery/search-form.tsx
+msgid "Edit search"
+msgstr ""
+
 #: src/features/career/stories.tsx
 msgid "Edit STARR story"
 msgstr "STARR कहानी संपादित करें"
+
+#: src/features/email-templates/templates-screen.tsx
+msgid "Edit template"
+msgstr ""
 
 #: src/features/check/issues.ts
 msgid "Edit the email"
@@ -4203,6 +4509,19 @@ msgstr "ईमेल (वैकल्पिक)"
 #: src/features/check/issues.ts
 msgid "Email address won't be recognized"
 msgstr "ईमेल पता पहचाना नहीं जाएगा"
+
+#: src/features/email-templates/write-email-sheet.tsx
+msgid "Email copied"
+msgstr ""
+
+#: src/features/branding/branding-screen.tsx
+msgid "Email sender name"
+msgstr ""
+
+#: app/(tabs)/settings/index.tsx
+#: src/features/email-templates/templates-screen.tsx
+msgid "Email templates"
+msgstr ""
 
 #: src/features/application-detail/sheets.tsx
 msgid "Email the recruiter"
@@ -4286,6 +4605,10 @@ msgstr "एक मान दर्ज करें."
 msgid "Enter a web address, like example.com"
 msgstr "एक वेब पता दर्ज करें, जैसे example.com"
 
+#: src/features/discovery/messages.ts
+msgid "Enter a whole number from 0 to {MAX_AI_TOP_N}."
+msgstr ""
+
 #: src/features/career/preferences.tsx
 msgid "Enter a whole number from 0 to 52, or leave blank."
 msgstr "0 से 52 तक पूर्ण संख्या दर्ज करें, या खाली छोड़ दें।"
@@ -4303,8 +4626,12 @@ msgid "Enter terms yourself. No AI request is made. Leave unknown amounts blank.
 msgstr "शर्तें स्वयं दर्ज करें। एआई को कोई अनुरोध नहीं भेजा जाएगा। अज्ञात राशियाँ खाली छोड़ें।"
 
 #: app/(auth)/server.tsx
-msgid "Enter the address you open Reactive Resume at in a browser. The app checks it's a Reactive Resume server that allows app sign-in before you continue."
-msgstr "वह पता दर्ज करें जिसे आपने ब्राउज़र में Reactive Resume खोला है। ऐप जाँचता है कि यह एक Reactive Resume सर्वर है जो आपके जारी रखने से पहले ऐप साइन-इन की अनुमति देता है।"
+msgid "Enter the address you open {appName} at in a browser. The app checks it's a {appName} server that allows app sign-in before you continue."
+msgstr ""
+
+#: src/features/discovery/messages.ts
+msgid "Enter the board name or paste its link."
+msgstr ""
 
 #: src/features/letters/write.tsx
 msgid "Enter your details below. Choosing a resume replaces them and links its design."
@@ -4429,11 +4756,21 @@ msgid "Facts"
 msgstr "तथ्य"
 
 #: src/features/ai/provider-list.tsx
+#: src/features/branding/domains-screen.tsx
+#: src/features/discovery/searches.tsx
 msgid "Failed"
 msgstr "असफल"
 
 #: src/features/settings/application-profile.tsx
 msgid "Family name"
+msgstr ""
+
+#: src/features/branding/branding-screen.tsx
+msgid "Favicon"
+msgstr ""
+
+#: src/features/branding/branding-screen.tsx
+msgid "Favicon uploaded."
 msgstr ""
 
 #: app/(tabs)/settings/preferences.tsx
@@ -4486,6 +4823,10 @@ msgstr "विवरण मैन्युअल रूप से भरें"
 msgid "Fill empty fields with AI"
 msgstr "खाली फ़ील्ड को AI से भरें"
 
+#: src/features/email-templates/write-email-sheet.tsx
+msgid "Fill in the [bracketed] parts before you send it."
+msgstr ""
+
 #: src/features/letters/write.tsx
 msgid "Filled from the application. The greeting follows the name."
 msgstr "नौकरी हेतु आवेदन पत्र से भरा गया. अभिवादन नाम के अनुसार होता है।"
@@ -4505,6 +4846,14 @@ msgstr "देख रहा है कि क्या काम करता �
 #: app/(auth)/sign-in.tsx
 msgid "Finish signing in in the browser"
 msgstr "ब्राउज़र में साइन इन करना समाप्त करें"
+
+#: src/features/discovery/searches.tsx
+msgid "Finished"
+msgstr ""
+
+#: src/features/discovery/searches.tsx
+msgid "Finished with errors"
+msgstr ""
 
 #: src/features/settings/locale-names.ts
 msgid "Finnish"
@@ -4565,12 +4914,17 @@ msgstr "फ़ोकस, अनुभव, यह पद क्यों"
 msgid "Follow up"
 msgstr "फिर से संपर्क करें"
 
+#: src/features/email-templates/built-in-text.ts
+msgid "Follow up after applying"
+msgstr ""
+
 #: src/features/workspace/tabs/messages.tsx
 msgid "Follow up on {at}"
 msgstr "{at} पर फ़ॉलो अप करें"
 
 #: src/features/application-detail/sheets.tsx
 #: src/features/applications-board/calendar-screen.tsx
+#: src/features/email-templates/labels.ts
 msgid "Follow-up"
 msgstr "फ़ॉलो-अप"
 
@@ -4585,6 +4939,14 @@ msgstr "फ़ॉलो-अप नोट"
 #: src/features/career/schedule-sheet.tsx
 msgid "Follow-up reminder"
 msgstr "फ़ॉलो-अप रिमाइंडर"
+
+#: src/features/email-templates/built-in-text.ts
+msgid "Following up on my {role} application"
+msgstr ""
+
+#: src/features/branding/branding-screen.tsx
+msgid "Font"
+msgstr ""
 
 #: src/features/design/advanced.tsx
 msgid "Font family"
@@ -4681,12 +5043,12 @@ msgstr ""
 
 #: src/api/ai-consent.ts
 #: src/features/career/schedule-sheet.tsx
-msgid "Found posting links are read by Reactive Resume and the sites being read."
+msgid "Found posting links are read by {appName} and the sites being read."
 msgstr ""
 
 #: src/api/ai-consent.ts
 #: src/features/career/schedule-sheet.tsx
-msgid "Found posting links are read by Reactive Resume and, when needed, {reader} and the sites being read. The reader may charge."
+msgid "Found posting links are read by {appName} and, when needed, {reader} and the sites being read. The reader may charge."
 msgstr ""
 
 #: src/features/design/style-groups.tsx
@@ -4709,6 +5071,10 @@ msgstr "उपयुक्तता से"
 #: src/features/assistant/assistant-screen.tsx
 msgid "From your experience entries"
 msgstr "आपके अनुभव प्रविष्टियों से"
+
+#: src/features/email-templates/templates-screen.tsx
+msgid "From your organization and the built-in set. You can't change these here."
+msgstr ""
 
 #: src/features/career/search-regions-field.tsx
 msgid "From your timezone"
@@ -4754,10 +5120,6 @@ msgstr "\"फ़ीडबैक पाएँ\" सवाल, आपका जव
 msgid "Get new roles here every morning"
 msgstr "हर सुबह यहाँ नए पद पाएँ"
 
-#: src/features/share/download.tsx
-msgid "Get resume feedback on Discord"
-msgstr "Discord पर रिज़्यूमे फ़ीडबैक पाएँ"
-
 #: src/features/letters/write.tsx
 msgid "Getting long. Try “Shorter”, or cut the least specific paragraph."
 msgstr "लम्बा हो रहा है. \"छोटा\" आज़माएं, या कम से कम विशिष्ट पैराग्राफ़ काटें।"
@@ -4773,6 +5135,10 @@ msgstr "हर भूमिका और योग्यता को एक त
 #: src/features/career/stories.tsx
 msgid "Give the story a title before you can save."
 msgstr "सहेजने से पहले कहानी को एक शीर्षक दें।"
+
+#: src/features/discovery/messages.ts
+msgid "Give this search a name."
+msgstr ""
 
 #: src/features/settings/application-profile.tsx
 msgid "Given name"
@@ -4861,6 +5227,53 @@ msgstr "वापस सुना"
 msgid "Hebrew"
 msgstr "हीब्रू"
 
+#: src/features/email-templates/built-in-text.ts
+msgid "Hello {contactName},\n"
+"\n"
+"I applied for the {role} position at {company} and wanted to ask where my application stands. I am still very interested in the role, and I would be glad to send anything that would help your review.\n"
+"\n"
+"Thank you for your time.\n"
+"\n"
+"{fullName}\n"
+"{myEmail}"
+msgstr ""
+
+#: src/features/email-templates/built-in-text.ts
+msgid "Hello {contactName},\n"
+"\n"
+"My name is {fullName}, and I am looking at {role} opportunities at {company}. I admire what your team is building, and I would value ten minutes of your time to hear how you got started there and what the team looks for.\n"
+"\n"
+"I know your days are full, so please say no if the timing is wrong. Any pointer you can share would help.\n"
+"\n"
+"Kind regards,\n"
+"{firstName}\n"
+"{myEmail}"
+msgstr ""
+
+#: src/features/email-templates/built-in-text.ts
+msgid "Hello {contactName},\n"
+"\n"
+"Thank you for offering me the {role} position at {company}. I am glad to be considered and I am excited about joining the team. Before I accept, I would like to talk through the pay and the start date. Given the scope of the role and my experience, I would like to discuss [the terms you have in mind].\n"
+"\n"
+"Could we find a time this week to go through it together?\n"
+"\n"
+"With thanks,\n"
+"{fullName}\n"
+"{myEmail}"
+msgstr ""
+
+#: src/features/email-templates/built-in-text.ts
+msgid "Hello {contactName},\n"
+"\n"
+"Thank you for taking the time to meet with me on {interviewDate} about the {role} role at {company}. Our conversation left me more excited about the work, and I would welcome the chance to take the next step.\n"
+"\n"
+"If there is anything I can send to help with your decision, just let me know.\n"
+"\n"
+"Best regards,\n"
+"{fullName}\n"
+"{myEmail}"
+msgstr ""
+
 #: app/(tabs)/settings/index.tsx
 msgid "Help & docs"
 msgstr "सहायता एवं दस्तावेज़"
@@ -4935,6 +5348,10 @@ msgstr "फ़ोटो छिपाएँ"
 #: src/features/workspace/preparation.tsx
 msgid "Hides all steps"
 msgstr ""
+
+#: src/features/branding/branding-screen.tsx
+msgid "Highlight"
+msgstr "हाइलाइट"
 
 #: src/features/settings/locale-names.ts
 msgid "Hindi"
@@ -5011,6 +5428,10 @@ msgstr "मैं इस भूमिका में कितना फिट 
 msgid "Hungarian"
 msgstr "हंगेरियन"
 
+#: src/features/discovery/messages.ts
+msgid "Hybrid"
+msgstr ""
+
 #: src/features/design/advanced.tsx
 msgid "Hyphenation"
 msgstr "हाइफ़नकरण"
@@ -5066,6 +5487,10 @@ msgstr "चिह्न..."
 #: src/features/design/style-groups.tsx
 msgid "Icons in contact line"
 msgstr "संपर्क पंक्ति में चिह्न"
+
+#: src/features/branding/branding-screen.tsx
+msgid "Identity"
+msgstr ""
 
 #: src/features/ats-checker/messages.ts
 msgid "If it came from a scan, that is expected. Otherwise remove it; recruiters read it as keyword stuffing."
@@ -5148,6 +5573,10 @@ msgstr "चयनित पंक्ति में सुधार करे�
 #: src/features/write/improve.tsx
 msgid "Improving…"
 msgstr "सुधार हो रहा है..."
+
+#: src/features/ai/provider-list.tsx
+msgid "Included with your plan"
+msgstr ""
 
 #: src/features/applications/list-screen.tsx
 msgid "Including closed"
@@ -5266,9 +5695,25 @@ msgstr "ज़ारीकर्ता"
 msgid "Issues"
 msgstr "समस्याएँ"
 
+#: src/features/branding/domains-screen.tsx
+msgid "Issuing certificate"
+msgstr ""
+
 #: src/features/check/issues.ts
 msgid "It has entries but isn't placed on a page."
 msgstr "इसमें प्रविष्टियाँ हैं लेकिन किसी पृष्ठ पर नहीं रखी गई हैं।"
+
+#: src/features/email-templates/write-email-sheet.tsx
+msgid "It is saved as it reads now. To reuse it for other applications, put the variables back where the details are."
+msgstr ""
+
+#: src/features/email-templates/templates-screen.tsx
+msgid "It leaves your list. Emails you already sent are not affected."
+msgstr ""
+
+#: src/features/branding/domains-screen.tsx
+msgid "It stops serving your organization right away (other servers within about a minute). Members can still use your address."
+msgstr ""
 
 #: src/features/application-detail/sections.tsx
 msgid "It's removed from the timeline for good."
@@ -5307,6 +5752,14 @@ msgstr "JavaScript"
 msgid "Job"
 msgstr "काम"
 
+#: src/features/discovery/search-form.tsx
+msgid "Job boards"
+msgstr ""
+
+#: src/features/settings/clipper-sign-ins.tsx
+msgid "Job Clipper sign-ins"
+msgstr ""
+
 #: src/features/application-detail/sheets.tsx
 #: src/features/workspace/preparation.tsx
 msgid "Job description"
@@ -5340,13 +5793,22 @@ msgstr "इस सर्वर पर नौकरी खोज कॉन्फ�
 msgid "Job search pipeline"
 msgstr "नौकरी खोज पाइपलाइन"
 
+#: src/features/discovery/search-form.tsx
+msgid "Job titles"
+msgstr ""
+
+#: app/(tabs)/career/_layout.tsx
 #: src/features/search/search-screen.tsx
 msgid "Jobs"
 msgstr "नौकरियाँ"
 
-#: app/(tabs)/settings/index.tsx
-msgid "Join the Discord"
-msgstr "Discord से जुड़ें"
+#: src/features/discovery/review-queue.tsx
+msgid "Jobs found for you"
+msgstr ""
+
+#: src/features/discovery/search-form.tsx
+msgid "Jobs to score with AI per run"
+msgstr ""
 
 #: src/features/letters/share.tsx
 #: src/features/share/download.tsx
@@ -5446,6 +5908,7 @@ msgstr "कीवर्ड लेआउट"
 msgid "Keyword overlap: {0}"
 msgstr ""
 
+#: src/features/discovery/search-form.tsx
 #: src/features/write/fields.ts
 msgid "Keywords"
 msgstr "खोजशब्द"
@@ -5453,6 +5916,10 @@ msgstr "खोजशब्द"
 #: src/features/settings/locale-names.ts
 msgid "Khmer"
 msgstr "खमेर"
+
+#: src/features/email-templates/template-editor.tsx
+msgid "Kind"
+msgstr ""
 
 #: src/features/share/letter.ts
 msgid "Kind regards,"
@@ -5531,6 +5998,15 @@ msgstr ""
 msgid "Last reviewed: {0}"
 msgstr ""
 
+#. placeholder {0}: date(latest.finishedAt ?? latest.startedAt)
+#: src/features/discovery/searches.tsx
+msgid "Last run: {0}"
+msgstr ""
+
+#: src/features/discovery/searches.tsx
+msgid "Last run: not run yet"
+msgstr ""
+
 #. placeholder {0}: time.when(row.lastSeenAt)
 #: src/features/career/today.tsx
 msgid "Last seen in search: {0}"
@@ -5589,18 +6065,27 @@ msgstr "सहेजी गई कुंजी को रखने के लि
 msgid "Leave empty to reset the title to the original."
 msgstr "शीर्षक को मूल पर रीसेट करने के लिए खाली छोड़ दें।"
 
+#: src/features/branding/branding-screen.tsx
+msgid "Leave empty to use the platform default."
+msgstr ""
+
 #: src/features/write/basics-screen.tsx
 #: src/features/write/rich-text-field.tsx
 msgid "Leave it empty to remove the link."
 msgstr "लिंक हटाने के लिए इसे खाली छोड़ दें."
 
 #: src/features/design/template-group.tsx
+#: src/features/organization/plan-screen.tsx
 msgid "Left"
 msgstr "बाएं"
 
 #: app/(tabs)/settings/index.tsx
 msgid "Legal"
 msgstr "कानूनी"
+
+#: src/features/branding/branding-screen.tsx
+msgid "Legal links"
+msgstr ""
 
 #: src/features/letters/write.tsx
 msgid "Length"
@@ -5890,6 +6375,10 @@ msgstr ""
 msgid "Loading saved version…"
 msgstr "सहेजा गया संस्करण लोड हो रहा है…"
 
+#: src/features/settings/clipper-sign-ins.tsx
+msgid "Loading sign-ins…"
+msgstr ""
+
 #: src/features/ai/web-access.tsx
 msgid "Loading web access…"
 msgstr "वेब एक्सेस लोड हो रहा है..."
@@ -5924,6 +6413,10 @@ msgstr "स्थान"
 msgid "Location match is unknown."
 msgstr "स्थान मिलान अज्ञात है."
 
+#: src/features/discovery/search-form.tsx
+msgid "Locations"
+msgstr "स्थान"
+
 #: src/features/documents/library.tsx
 msgid "Lock"
 msgstr "लॉक करें"
@@ -5946,6 +6439,14 @@ msgstr "लॉक किए गए दस्तावेज़ छोड़ द�
 #: src/features/write/outline.tsx
 msgid "Locked. Unlock to edit."
 msgstr "ताला लगा दिया। संपादित करने के लिए अनलॉक करें."
+
+#: src/features/branding/branding-screen.tsx
+msgid "Logo"
+msgstr ""
+
+#: src/features/branding/branding-screen.tsx
+msgid "Logo uploaded."
+msgstr ""
 
 #: src/features/documents/library.tsx
 msgid "Long press to select"
@@ -6099,6 +6600,16 @@ msgstr "पढ़ा हुआ चिह्नित किया गया"
 msgid "Match “{resumeName}”"
 msgstr "“{resumeName}” से मिलाएँ"
 
+#. placeholder {0}: scoreOf(job)
+#: src/features/discovery/review-queue.tsx
+msgid "Match {0}"
+msgstr ""
+
+#. placeholder {0}: scoreOf(job)
+#: src/features/discovery/review-queue.tsx
+msgid "Match {0} (quick)"
+msgstr ""
+
 #: src/features/search/search-screen.tsx
 msgid "Match system theme"
 msgstr "सिस्टम थीम का मिलान करें"
@@ -6123,10 +6634,6 @@ msgstr "बायोडाटा का मिलान"
 msgid "Matching your facts"
 msgstr "आपके तथ्यों का मिलान कर रहा है"
 
-#: src/features/share/custom-domain.tsx
-msgid "May be available"
-msgstr "शायद उपलब्ध हो"
-
 #: src/features/search/search-screen.tsx
 msgid "MCP"
 msgstr "MCP"
@@ -6145,6 +6652,8 @@ msgid "Meets your minimum base salary."
 msgstr "आपके न्यूनतम आधार वेतन को पूरा करता है।"
 
 #: src/features/career/facts.tsx
+#: src/features/email-templates/template-editor.tsx
+#: src/features/email-templates/write-email-sheet.tsx
 msgid "Message"
 msgstr "संदेश"
 
@@ -6157,6 +6666,10 @@ msgstr "सहायक को संदेश भेजें"
 msgid "Messages"
 msgstr "संदेश"
 
+#: src/features/email-templates/labels.ts
+msgid "Mine"
+msgstr ""
+
 #: src/features/career/preferences.tsx
 msgid "Minimum base salary"
 msgstr "न्यूनतम मूल वेतन"
@@ -6164,10 +6677,6 @@ msgstr "न्यूनतम मूल वेतन"
 #: src/features/career/offers.tsx
 msgid "Minimum salary cannot be compared in these terms."
 msgstr "इन शर्तों में न्यूनतम वेतन की तुलना नहीं की जा सकती."
-
-#: app/(tabs)/settings/index.tsx
-msgid "MIT License"
-msgstr "एमआईटी लाइसेंस"
 
 #: src/features/workspace/tabs/debrief.tsx
 msgid "Mixed"
@@ -6368,10 +6877,12 @@ msgstr "आवेदन किया गया चरण में ले जा
 
 #: src/features/ai/provider-editor.tsx
 #: src/features/application-detail/sheets.tsx
+#: src/features/discovery/search-form.tsx
 #: src/features/document-menu/index.tsx
 #: src/features/documents/document-sheets.tsx
 #: src/features/documents/library.tsx
 #: src/features/documents/new-document.tsx
+#: src/features/email-templates/template-editor.tsx
 #: src/features/history/history.tsx
 #: src/features/letters/share.tsx
 #: src/features/settings/profile.tsx
@@ -6401,6 +6912,11 @@ msgstr "इस संस्करण को नाम दें"
 #: src/features/check/issues.ts
 msgid "Name, email, phone and location are found, and links are full addresses."
 msgstr "नाम, ईमेल, फ़ोन और स्थान पाए जाते हैं, और लिंक पूरे पते होते हैं।"
+
+#. placeholder {0}: record.name
+#: src/features/branding/domains-screen.tsx
+msgid "Name: {0}"
+msgstr ""
 
 #: src/features/history/history.tsx
 #: src/features/letters/share.tsx
@@ -6438,6 +6954,10 @@ msgstr ""
 msgid "Needs you"
 msgstr "आपकी ज़रूरत है"
 
+#: src/features/email-templates/labels.ts
+msgid "Negotiation"
+msgstr ""
+
 #: src/features/settings/locale-names.ts
 msgid "Nepali"
 msgstr "नेपाली"
@@ -6446,13 +6966,19 @@ msgstr "नेपाली"
 msgid "Network"
 msgstr "नेटवर्क"
 
+#: src/features/email-templates/labels.ts
+msgid "Networking"
+msgstr ""
+
 #: src/features/career/preferences.tsx
 #: src/features/settings/api-keys.tsx
+#: src/features/settings/clipper-sign-ins.tsx
 msgid "Never"
 msgstr "कभी नहीं"
 
 #: app/_layout.tsx
 #: app/(tabs)/_layout.tsx
+#: src/features/discovery/review-queue.tsx
 #: src/features/documents/library.tsx
 #: src/shell/app-tabs.tsx
 msgid "New"
@@ -6487,11 +7013,20 @@ msgstr "इसके स्थान पर नया कवर लेटर"
 msgid "New document"
 msgstr "नया दस्तावेज़"
 
+#. placeholder {0}: latest.new
+#: src/features/discovery/searches.tsx
+msgid "New jobs in the last run: {0}"
+msgstr ""
+
 #: src/features/design/layout-screen.tsx
 #: src/features/write/entry-sheet.tsx
 #: src/features/write/section-sheet.tsx
 msgid "New page"
 msgstr "नया पेज"
+
+#: src/features/discovery/review-queue.tsx
+msgid "New postings show up here after an automation runs."
+msgstr ""
 
 #: src/features/career/today.tsx
 msgid "New roles from your search"
@@ -6505,6 +7040,11 @@ msgstr "नए पद, रिमाइंडर और पूरी हुई �
 msgid "New schedule"
 msgstr "नया शेड्यूल"
 
+#: src/features/discovery/search-form.tsx
+#: src/features/discovery/searches.tsx
+msgid "New search"
+msgstr ""
+
 #: src/features/write/entry-sheet.tsx
 msgid "New section"
 msgstr "नया अनुभाग"
@@ -6512,6 +7052,10 @@ msgstr "नया अनुभाग"
 #: src/features/career/stories.tsx
 msgid "New STARR story"
 msgstr "नई STARR कहानी"
+
+#: src/features/email-templates/templates-screen.tsx
+msgid "New template"
+msgstr ""
 
 #: src/features/documents/library.tsx
 msgid "Next"
@@ -6533,6 +7077,15 @@ msgstr "अगला पृष्ठ"
 msgid "Next question"
 msgstr "अगला सवाल"
 
+#. placeholder {0}: date(source.nextRunAt)
+#: src/features/discovery/searches.tsx
+msgid "Next run: {0}"
+msgstr ""
+
+#: src/features/discovery/searches.tsx
+msgid "Next run: paused"
+msgstr ""
+
 #: src/features/application-detail/sections.tsx
 #: src/features/applications/list-screen.tsx
 msgid "Next step"
@@ -6545,6 +7098,10 @@ msgstr "अगला चरण: {note}"
 #: src/features/workspace/tabs/messages.tsx
 msgid "Next step: {note}. Adds a reminder to Today."
 msgstr "अगला चरण: {note}. आज के लिए एक अनुस्मारक जोड़ता है."
+
+#: src/features/email-templates/built-in-text.ts
+msgid "Next steps on the {role} offer"
+msgstr ""
 
 #: src/features/documents/library.tsx
 msgid "Next unsynced drafts"
@@ -6612,6 +7169,10 @@ msgstr "कोई तारीख नहीं"
 msgid "No dates were found."
 msgstr "कोई तारीख नहीं मिली।"
 
+#: src/features/discovery/review-queue.tsx
+msgid "No dismissed jobs"
+msgstr ""
+
 #: src/features/workspace/tabs/apply.tsx
 msgid "no documents"
 msgstr ""
@@ -6628,6 +7189,10 @@ msgstr "कोई शिक्षा सेक्शन नहीं मिल�
 msgid "No email address"
 msgstr "कोई ईमेल पता नहीं"
 
+#: src/features/email-templates/write-email-sheet.tsx
+msgid "No email address for this contact yet. Add it in your mail app."
+msgstr ""
+
 #: src/features/ats-checker/messages.ts
 msgid "No email address was found."
 msgstr "कोई ईमेल पता नहीं मिला।"
@@ -6643,6 +7208,10 @@ msgstr "कोई तथ्य मेल नहीं खाता"
 #: src/features/write/pickers.tsx
 msgid "No icons match."
 msgstr "कोई चिह्न मेल नहीं खाता."
+
+#: src/features/settings/clipper-sign-ins.tsx
+msgid "No Job Clipper sign-ins yet."
+msgstr ""
 
 #: src/features/documents/new-document.tsx
 msgid "No job yet"
@@ -6667,6 +7236,10 @@ msgstr "कोई लिंक नहीं किया गया आवेद�
 #: src/features/check/issues.ts
 msgid "No location"
 msgstr "कोई स्थान नहीं"
+
+#: src/features/email-templates/write-email-sheet.tsx
+msgid "No mail app could open it, so the email was copied instead."
+msgstr ""
 
 #: src/features/documents/library.tsx
 #: src/ui/fields.tsx
@@ -6711,10 +7284,6 @@ msgstr "कोई फोटो नहीं। अधिकांश ATS फ़�
 msgid "No postings found. Try different keywords."
 msgstr "कोई नौकरी पोस्टिंग नहीं मिली. अलग-अलग कीवर्ड आज़माएं."
 
-#: src/auth/messages.ts
-msgid "No Reactive Resume server answered at this address. Check the spelling, or ask your administrator whether the server allows app sign-in."
-msgstr "इस पते पर किसी भी Reactive Resume सर्वर ने उत्तर नहीं दिया. वर्तनी सत्यापित करें, या अपने व्यवस्थापक से पूछें कि क्या सर्वर ऐप साइन-इन की अनुमति देता है।"
-
 #: src/features/check/job-match.tsx
 msgid "No recognizable terms in this posting."
 msgstr "इस नौकरी पोस्टिंग में कोई पहचानने योग्य शब्द नहीं है।"
@@ -6738,6 +7307,18 @@ msgstr "कोई परिणाम नहीं"
 #: src/features/letters/write.tsx
 msgid "No resume"
 msgstr "कोई बायोडाटा नहीं"
+
+#: src/features/discovery/review-queue.tsx
+msgid "No saved jobs yet"
+msgstr ""
+
+#: src/features/discovery/searches.tsx
+msgid "No searches yet"
+msgstr ""
+
+#: src/auth/messages.ts
+msgid "No server answered at this address. Check the spelling, or ask your administrator whether the server allows app sign-in."
+msgstr ""
 
 #: src/features/ats-checker/messages.ts
 msgid "No skills section was found."
@@ -6819,6 +7400,10 @@ msgstr "सामान्य"
 #: src/features/settings/locale-names.ts
 msgid "Norwegian"
 msgstr "नॉर्वेजियन"
+
+#: src/auth/session-gate.tsx
+msgid "Not a member"
+msgstr ""
 
 #: src/features/workspace/tabs/messages.tsx
 msgid "Not applied"
@@ -6936,6 +7521,10 @@ msgstr "ठीक करने के लिए कुछ भी नहीं"
 msgid "Nothing to fix. The remaining pages were simply not covered by this report."
 msgstr "ठीक करने के लिए कुछ नहीं। बचे हुए पेज बस इस रिपोर्ट में शामिल नहीं थे।"
 
+#: src/features/discovery/review-queue.tsx
+msgid "Nothing to review"
+msgstr ""
+
 #: src/features/career/preferences.tsx
 msgid "Notice period (weeks)"
 msgstr "नोटिस अवधि (सप्ताह)"
@@ -7025,6 +7614,10 @@ msgstr "ऑफ़लाइन. संपादन इस डिवाइस प�
 msgid "On"
 msgstr "पर"
 
+#: src/features/discovery/messages.ts
+msgid "On-site"
+msgstr ""
+
 #: src/features/share/link.tsx
 msgid "On. Anyone with the link can see your web page."
 msgstr "चालू। लिंक वाला कोई भी व्यक्ति आपका वेब पेज देख सकता है।"
@@ -7066,6 +7659,14 @@ msgstr "केवल एक पहचानने योग्य अनुभ�
 #: src/features/history/history.tsx
 msgid "Only one version so far. Every editing session adds one automatically."
 msgstr "अभी तक केवल एक ही संस्करण। प्रत्येक संपादन सत्र स्वचालित रूप से एक जोड़ता है।"
+
+#: src/features/branding/branding-screen.tsx
+msgid "Only owners and admins can change the organization's branding."
+msgstr ""
+
+#: src/features/branding/domains-screen.tsx
+msgid "Only owners and admins can manage the organization's domains."
+msgstr ""
 
 #: src/features/ai/provider-editor.tsx
 msgid "Only providers that pass their test can be turned on."
@@ -7130,6 +7731,7 @@ msgstr "एआई सेटिंग्स खोलें"
 #: src/features/applications-board/board-screen.tsx
 #: src/features/applications/list-screen.tsx
 #: src/features/check/job-match.tsx
+#: src/features/discovery/review-queue.tsx
 msgid "Open application"
 msgstr "आवेदन खोलें"
 
@@ -7149,6 +7751,10 @@ msgstr "{tabName} में खोलें"
 #: src/features/documents/new-document.tsx
 msgid "Open in editor"
 msgstr "इन संपादक खोलें"
+
+#: src/features/email-templates/write-email-sheet.tsx
+msgid "Open in mail app"
+msgstr ""
 
 #: src/features/workspace/tabs/saved.tsx
 msgid "Open in Offers"
@@ -7267,6 +7873,8 @@ msgstr "{title} के लिए विकल्प"
 msgid "Or in your own words…"
 msgstr "या आपके अपने शब्दों में..."
 
+#: app/(tabs)/settings/index.tsx
+#: src/features/email-templates/labels.ts
 #: src/features/write/fields.ts
 msgid "Organization"
 msgstr "संगठन"
@@ -7305,6 +7913,14 @@ msgstr "पुराना: तब से पाठ बदल गया है�
 #: src/features/application-detail/detail-screen.tsx
 msgid "Outcome"
 msgstr "नतीजा"
+
+#: src/features/email-templates/templates-screen.tsx
+msgid "Owners and admins edit the organization's templates in the web app, under Settings."
+msgstr ""
+
+#: src/features/branding/domains-screen.tsx
+msgid "Ownership is proven. The certificate is being issued; this usually takes a few minutes."
+msgstr ""
 
 #: app/builder/[id]/_layout.tsx
 #: app/builder/[id]/page.tsx
@@ -7402,6 +8018,10 @@ msgstr "पासवर्ड मेल नहीं खाते।"
 msgid "Past conversations"
 msgstr "पिछली बातचीत"
 
+#: src/features/organization/plan-screen.tsx
+msgid "Past due"
+msgstr ""
+
 #: src/features/applications/add-sheet.tsx
 msgid "Paste a job link or posting, then check the role and company. Nothing is saved until you choose Save job."
 msgstr "नौकरी का लिंक या नौकरी का विज्ञापन चिपकाएँ, फिर भूमिका और कंपनी की जाँच करें। जब तक आप नौकरी सहेजें नहीं चुनते तब तक कुछ भी नहीं बचाया जाता है।"
@@ -7436,7 +8056,12 @@ msgstr "अपनी कुंजी चिपकाएँ"
 msgid "Pasted description"
 msgstr "विवरण चिपकाया गया"
 
+#: src/features/discovery/searches.tsx
+msgid "Pause"
+msgstr ""
+
 #: src/features/career/today.tsx
+#: src/features/discovery/messages.ts
 msgid "Paused"
 msgstr "रुका हुआ"
 
@@ -7460,20 +8085,20 @@ msgid "PDF check canceled. Retry when ready."
 msgstr "PDF जाँच रद्द कर दी गई। तैयार होने पर पुनः प्रयास करें।"
 
 #: src/features/application-detail/sections.tsx
-msgid "PDF only · up to 10 MB each. Linking a Reactive Resume enables AI match scoring and tailoring."
-msgstr "केवल PDF · हर फ़ाइल अधिकतम 10 MB। Reactive Resume लिंक करने पर AI से मिलान स्कोर और नौकरी के अनुसार बदलाव उपलब्ध होते हैं।"
+msgid "PDF only · up to 10 MB each. Linking a resume enables AI match scoring and tailoring."
+msgstr ""
 
 #: src/features/design/advanced.tsx
 msgid "PDF styles support a subset of CSS. Rotation, dashed and dotted borders, and some layout properties are ignored."
 msgstr "PDF शैलियाँ CSS के सबसेट का समर्थन करती हैं। रोटेशन, धराशायी और बिंदीदार बॉर्डर और कुछ लेआउट गुणों को नजरअंदाज कर दिया जाता है।"
 
 #: src/features/documents/new-document.tsx
-msgid "PDF uses your AI provider when one is ready. Turn off the AI switch to read its text layer on your server. Word (.docx) needs an AI provider. Current and v4 Reactive Resume JSON, cover letters, JSON Resume and LinkedIn exports (.zip) are supported. Up to 10 MB."
-msgstr "जब कोई तैयार हो तो PDF आपके AI प्रदाता का उपयोग करता है। अपने सर्वर पर इसकी टेक्स्ट परत को पढ़ने के लिए AI स्विच को बंद करें। Word (.docx) को एक AI प्रदाता की आवश्यकता है। वर्तमान और v4 Reactive Resume JSON, कवर लेटर, JSON Resume और LinkedIn निर्यात (.zip) समर्थित हैं। 10 एमबी तक."
+msgid "PDF uses your AI provider when one is ready. Turn off the AI switch to read its text layer on your server. Word (.docx) needs an AI provider. Current and v4 JSON, cover letters, JSON Resume and LinkedIn exports (.zip) are supported. Up to 10 MB."
+msgstr ""
 
 #: src/features/documents/new-document.tsx
-msgid "PDF, Word, Reactive Resume, JSON Resume or LinkedIn export."
-msgstr "PDF, Word, Reactive Resume, JSON Resume या LinkedIn निर्यात करें।"
+msgid "PDF, Word, JSON, JSON Resume or LinkedIn export."
+msgstr ""
 
 #: src/features/career/offer-entry.tsx
 #: src/features/career/offers.tsx
@@ -7492,6 +8117,10 @@ msgstr "प्रति महीने"
 #: src/features/career/preferences.tsx
 msgid "Per year"
 msgstr "प्रति वर्ष"
+
+#: src/features/organization/plan-screen.tsx
+msgid "Period ends"
+msgstr ""
 
 #: app/(tabs)/settings/account.tsx
 msgid "Permanently removes everything. Opens your browser account settings."
@@ -7547,6 +8176,10 @@ msgstr "अभी के बाद का समय चुनें।"
 msgid "Pick one format and use it everywhere."
 msgstr "एक फ़ॉर्मेट चुनें और उसे हर जगह इस्तेमाल करें।"
 
+#: src/features/discovery/search-form.tsx
+msgid "Pick the board and enter the company's board name, or paste the link to its job page. The name is the part after the host, for example jobs.lever.co/acme or boards.greenhouse.io/acme (acme)."
+msgstr ""
+
 #: src/features/workspace/tabs/prepare.tsx
 msgid "Pick two examples"
 msgstr "दो उदाहरण चुनें"
@@ -7568,6 +8201,11 @@ msgstr "सादा टेक्स्ट (.txt)"
 msgid "Plain text with headings. Paste into application forms and notes."
 msgstr "शीर्षकों के साथ सादा पाठ. नौकरी के आवेदन पत्र और नोट्स में चिपकाएँ।"
 
+#: app/(tabs)/settings/index.tsx
+#: src/features/organization/plan-screen.tsx
+msgid "Plan"
+msgstr ""
+
 #: src/features/workspace/tabs/prepare.tsx
 msgid "Plan again"
 msgstr "फिर से योजना बनाएँ"
@@ -7584,6 +8222,10 @@ msgstr "तय करें कि क्या पूछना है"
 msgid "Planning your week"
 msgstr "आपके सप्ताह की योजना बना रहा है"
 
+#: src/features/branding/branding-screen.tsx
+msgid "Platform default"
+msgstr ""
+
 #: src/features/workspace/tabs/practise.tsx
 msgid "Play recording"
 msgstr "रिकॉर्डिंग चलायें"
@@ -7592,6 +8234,14 @@ msgstr "रिकॉर्डिंग चलायें"
 #: src/features/letters/design-presets.ts
 msgid "Plum"
 msgstr "आलूबुखारा"
+
+#: src/features/branding/branding-screen.tsx
+msgid "PNG or WebP, up to 512 KB. Upload a PNG or WebP so the logo also shows in the mobile app and in emails; they don't show an SVG. To use an SVG, upload it from the web app."
+msgstr ""
+
+#: src/features/branding/branding-screen.tsx
+msgid "PNG, up to 128 KB. To use an ICO, upload it from the web app."
+msgstr ""
 
 #: src/features/settings/locale-names.ts
 msgid "Polish"
@@ -7634,6 +8284,10 @@ msgstr "नौकरी पोस्टिंग"
 
 #: src/features/career/today.tsx
 msgid "Postings can change or close. Publication date unknown; search coverage is incomplete."
+msgstr ""
+
+#: src/features/discovery/review-queue.tsx
+msgid "Postings your automations found, best match first. Save one to your applications, or dismiss it and it never comes back."
 msgstr ""
 
 #: src/features/workspace/parts.tsx
@@ -7751,6 +8405,10 @@ msgstr "पृष्ठ पर इसका पूर्वावलोकन �
 msgid "Press and hold, then drag to another column or page."
 msgstr "दबाकर रखें, फिर दूसरे कॉलम या पेज पर खींचें।"
 
+#: src/features/branding/branding-screen.tsx
+msgid "Preview of your branding"
+msgstr ""
+
 #: src/features/share/web-page.tsx
 msgid "Preview web page"
 msgstr "वेब पेज का पूर्वावलोकन करें"
@@ -7788,9 +8446,17 @@ msgstr ""
 msgid "Previous workspace tabs"
 msgstr "पिछला कार्यस्थान टैब"
 
+#: src/features/branding/branding-screen.tsx
+msgid "Primary button"
+msgstr ""
+
 #: src/features/design/advanced.tsx
 msgid "Primary color"
 msgstr "प्राथमिक रंग"
+
+#: src/features/branding/branding-screen.tsx
+msgid "Primary colour"
+msgstr ""
 
 #: src/features/share/web-page.tsx
 msgid "Primary resume"
@@ -7811,6 +8477,7 @@ msgstr "गोपनीयता"
 
 #: app/(tabs)/settings/index.tsx
 #: src/auth/auth-header.tsx
+#: src/features/branding/branding-screen.tsx
 msgid "Privacy policy"
 msgstr "गोपनीयता नीति"
 
@@ -7822,6 +8489,10 @@ msgstr ""
 #: src/features/document-menu/index.tsx
 msgid "Private. Only you can see it."
 msgstr "निजी। इसे केवल आप ही देख सकते हैं."
+
+#: app/(tabs)/settings/licences.tsx
+msgid "Product"
+msgstr ""
 
 #: src/features/design/style-groups.tsx
 #: src/features/letters/design-presets.ts
@@ -7928,6 +8599,10 @@ msgstr "प्रकाशक"
 msgid "Put a plain email address near the top of the first page. It is what most systems file you under."
 msgstr "पहले पेज के ऊपरी हिस्से के पास एक सादा ईमेल पता रखें। अधिकतर सिस्टम इसी के अंतर्गत आपको दर्ज करते हैं।"
 
+#: src/features/email-templates/template-editor.tsx
+msgid "Put variables such as {examples} where the details go."
+msgstr ""
+
 #: src/features/share/link.tsx
 msgid "QR code"
 msgstr "क्यू आर संहिता"
@@ -7988,9 +8663,9 @@ msgstr "फ़ॉन्ट एम्बेड करके दोबारा �
 msgid "Re-export with fonts embedded, then open the file and check that the text copies out cleanly."
 msgstr "फ़ॉन्ट एम्बेड करके दोबारा एक्सपोर्ट करें, फिर फ़ाइल खोलें और जांचें कि टेक्स्ट सही तरह से कॉपी होता है।"
 
-#: src/auth/auth-header.tsx
-msgid "Reactive Resume"
-msgstr "Reactive Resume"
+#: src/features/email-templates/built-in-text.ts
+msgid "Reach out to someone at the company"
+msgstr ""
 
 #: src/features/workspace/tabs/prepare.tsx
 msgid "Read briefing"
@@ -8006,6 +8681,7 @@ msgstr "लाइसेंस पढ़ें"
 
 #: src/features/applications/add-sheet.tsx
 #: src/features/career/today.tsx
+#: src/features/discovery/review-queue.tsx
 msgid "Read posting"
 msgstr "नौकरी पोस्टिंग पढ़ें"
 
@@ -8212,10 +8888,6 @@ msgstr "ब्रीफ़िंग 24 घंटे पहले रीफ़्
 msgid "Refresh the briefing on the morning of"
 msgstr "ब्रीफ़िंग उसी दिन सुबह रीफ़्रेश करें"
 
-#: src/features/share/custom-domain.tsx
-msgid "Register at OlaCV"
-msgstr "OlaCV पर रजिस्टर करें"
-
 #: src/features/workspace/tabs/prepare.tsx
 msgid "Rehearse aloud"
 msgstr "ज़ोर से रिहर्सल करें"
@@ -8290,9 +8962,16 @@ msgstr "रिमाइंडर यहाँ दिखाई देते ह�
 
 #: src/features/career/offers.tsx
 #: src/features/career/preferences.tsx
+#: src/features/discovery/messages.ts
 msgid "Remote"
 msgstr "रिमोट"
 
+#: src/features/discovery/search-form.tsx
+msgid "Remote preference"
+msgstr ""
+
+#: src/features/branding/branding-screen.tsx
+#: src/features/branding/domains-screen.tsx
 #: src/features/share/custom-domain.tsx
 #: src/ui/fields.tsx
 msgid "Remove"
@@ -8305,9 +8984,19 @@ msgstr "निकालना"
 msgid "Remove {0}"
 msgstr "{0} निकालें"
 
+#. placeholder {0}: domain.hostname
+#: src/features/branding/domains-screen.tsx
+msgid "Remove {0}?"
+msgstr ""
+
 #: src/features/assistant/messages.tsx
 msgid "Remove {name}"
 msgstr "{name} हटाएं"
+
+#. placeholder {0}: index + 1
+#: src/features/discovery/search-form.tsx
+msgid "Remove board {0}"
+msgstr ""
 
 #: src/features/ai/web-access.tsx
 msgid "Remove connection"
@@ -8316,6 +9005,10 @@ msgstr "कनेक्शन हटाएँ"
 #: src/features/ai/web-access.tsx
 msgid "Remove connection?"
 msgstr "कनेक्शन हटाएँ?"
+
+#: src/features/branding/domains-screen.tsx
+msgid "Remove domain"
+msgstr ""
 
 #: src/features/write/basics-screen.tsx
 msgid "Remove field"
@@ -8357,6 +9050,18 @@ msgstr ""
 msgid "Remove role"
 msgstr "भूमिका हटाएँ"
 
+#: src/features/branding/domains-screen.tsx
+msgid "Remove the domain and add it again once the cause is fixed."
+msgstr ""
+
+#: src/features/branding/branding-screen.tsx
+msgid "Remove the favicon?"
+msgstr ""
+
+#: src/features/branding/branding-screen.tsx
+msgid "Remove the logo?"
+msgstr ""
+
 #: src/features/share/web-page.tsx
 msgid "Remove the password?"
 msgstr "पासवर्ड हटाएँ?"
@@ -8371,6 +9076,15 @@ msgstr ""
 
 #: src/features/workspace/answer-library.tsx
 msgid "Remove unavailable story reference"
+msgstr ""
+
+#. placeholder {0}: domain.hostname
+#: src/features/branding/domains-screen.tsx
+msgid "Removed {0}"
+msgstr ""
+
+#: src/features/branding/domains-screen.tsx
+msgid "Removing"
 msgstr ""
 
 #: src/features/document-menu/index.tsx
@@ -8423,6 +9137,7 @@ msgstr "{title} को पुनः व्यवस्थित करें"
 msgid "Repeats at this local time in the displayed timezone across clock changes. A skipped clock time moves forward. Missed runs combine into one search. Results and failures appear in Today; delivery depends on the server runner."
 msgstr ""
 
+#: src/features/branding/branding-screen.tsx
 #: src/features/write/improve.tsx
 msgid "Replace"
 msgstr "प्रतिस्थापित करें"
@@ -8459,6 +9174,10 @@ msgstr "उत्तर"
 msgid "Reply copied"
 msgstr "उत्तर कॉपी किया गया"
 
+#: src/features/branding/branding-screen.tsx
+msgid "Reply-to address"
+msgstr ""
+
 #: src/features/ats-checker/checker.tsx
 msgid "Report"
 msgstr "प्रतिवेदन"
@@ -8468,10 +9187,6 @@ msgstr "प्रतिवेदन"
 #: src/features/ai/report-content.tsx
 msgid "Report AI content"
 msgstr "AI सामग्री की रिपोर्ट करें"
-
-#: app/(tabs)/settings/index.tsx
-msgid "Report an issue"
-msgstr "समस्या रिपोर्ट करें"
 
 #: src/features/ai/report-content.tsx
 msgid "Report received by your server operator. Thank you."
@@ -8509,6 +9224,10 @@ msgstr "डिज़ाइन डिफ़ॉल्ट रीसेट करे
 #: src/features/career/offers.tsx
 msgid "Respond by"
 msgstr "जवाब देने की अंतिम तिथि"
+
+#: src/features/email-templates/built-in-text.ts
+msgid "Respond to an offer"
+msgstr ""
 
 #: src/features/career/offers.tsx
 msgid "Response deadline has passed."
@@ -8559,6 +9278,7 @@ msgstr "परिणाम"
 #: app/builder/[id]/_layout.tsx
 #: src/features/applications/add-sheet.tsx
 #: src/features/career/facts.tsx
+#: src/features/discovery/searches.tsx
 #: src/features/documents/library.tsx
 #: src/features/letters/write.tsx
 #: src/features/workspace/preparation.tsx
@@ -8572,10 +9292,6 @@ msgstr "बायोडाटा + पत्र"
 #: src/features/document-menu/index.tsx
 msgid "Resume details"
 msgstr "बायोडाटा विवरण"
-
-#: app/(tabs)/settings/index.tsx
-msgid "Resume feedback, product help, and community ideas."
-msgstr "रिज़्यूमे फ़ीडबैक, प्रोडक्ट सहायता और समुदाय के विचार।"
 
 #: src/features/application-detail/sections.tsx
 #: src/features/workspace/tabs/apply.tsx
@@ -8643,6 +9359,7 @@ msgstr "{1} का उपयोग करके {0} को पुनः प्�
 #: src/features/check/screen.tsx
 #: src/features/check/writing.tsx
 #: src/features/design/design-pane.tsx
+#: src/features/discovery/searches.tsx
 #: src/features/documents/document-sheets.tsx
 #: src/features/documents/library.tsx
 #: src/features/documents/new-document.tsx
@@ -8802,6 +9519,7 @@ msgid "Reviewing needs an AI connection. What you write here stays on this devic
 msgstr "समीक्षा के लिए AI कनेक्शन की आवश्यकता है. आप यहां जो भी लिखते हैं वह तब तक इस डिवाइस पर रहता है।"
 
 #: src/features/settings/api-keys.tsx
+#: src/features/settings/clipper-sign-ins.tsx
 msgid "Revoke"
 msgstr "रद्द करना"
 
@@ -8809,13 +9527,25 @@ msgstr "रद्द करना"
 msgid "Revoke API key?"
 msgstr "API कुंजी निरस्त करें?"
 
+#: src/features/settings/clipper-sign-ins.tsx
+msgid "Revoke Job Clipper sign-in?"
+msgstr ""
+
 #: src/features/settings/api-keys.tsx
 msgid "Revoke key"
 msgstr "कुंजी रद्द करें"
 
+#: src/features/settings/clipper-sign-ins.tsx
+msgid "Revoke sign-in"
+msgstr ""
+
 #: src/features/settings/api-keys.tsx
 msgid "Revoke this API key"
 msgstr "इस API कुंजी को निरस्त करें"
+
+#: src/features/settings/clipper-sign-ins.tsx
+msgid "Revoke this Job Clipper sign-in"
+msgstr ""
 
 #: src/features/check/writing.tsx
 msgid "Rewrite accepted"
@@ -8884,6 +9614,14 @@ msgstr "रेखा"
 #: src/features/check/writing.tsx
 msgid "Run again"
 msgstr "फिर से चलाएँ"
+
+#: src/features/discovery/searches.tsx
+msgid "Run now"
+msgstr ""
+
+#: src/features/discovery/searches.tsx
+msgid "Running"
+msgstr ""
 
 #. placeholder {0}: new Intl.DateTimeFormat(locale, { timeZone: timezone, dateStyle: "medium", timeStyle: "short" }).format(runAt)
 #: src/features/career/schedule-sheet.tsx
@@ -8957,7 +9695,13 @@ msgstr "सहेजें और परीक्षण करें"
 msgid "Save another offer to compare"
 msgstr "तुलना के लिए एक और ऑफ़र सहेजें"
 
+#: src/features/email-templates/write-email-sheet.tsx
+msgid "Save as my template"
+msgstr ""
+
 #: src/features/application-detail/sheets.tsx
+#: src/features/branding/branding-screen.tsx
+#: src/features/discovery/search-form.tsx
 msgid "Save changes"
 msgstr "बदलाव सहेजें"
 
@@ -9014,6 +9758,10 @@ msgstr "शेड्यूल सहेजें"
 msgid "Save story"
 msgstr "कहानी सहेजें"
 
+#: src/features/email-templates/template-editor.tsx
+msgid "Save template"
+msgstr ""
+
 #: src/features/share/download.tsx
 msgid "Save the cover letter before exporting it."
 msgstr "कवर लेटर को निर्यात करने से पहले उसे सहेज लें।"
@@ -9038,6 +9786,10 @@ msgstr "तुलना के लिए ये ऑफ़र शर्तें 
 msgid "Save this story to Knowledge?"
 msgstr "यह कहानी ज्ञानकोश में सहेजें?"
 
+#: src/features/discovery/review-queue.tsx
+msgid "Save to applications"
+msgstr ""
+
 #: src/features/workspace/tabs/fit.tsx
 msgid "Save to Knowledge"
 msgstr "ज्ञानकोश में सहेजें"
@@ -9052,6 +9804,7 @@ msgstr "अपना एक नए दस्तावेज़ के रूप 
 
 #: src/features/applications/stages.ts
 #: src/features/career/preferences.tsx
+#: src/features/discovery/review-queue.tsx
 #: src/shell/builder-chrome.tsx
 msgid "Saved"
 msgstr "सहेजा गया"
@@ -9102,6 +9855,14 @@ msgstr "ज्ञानकोश में सहेजा गया, सिर�
 msgid "Saved to Saved · Practice"
 msgstr "\"सहेजे गए\" में सहेजा गया · अभ्यास"
 
+#: src/features/discovery/review-queue.tsx
+msgid "Saved to your applications"
+msgstr ""
+
+#: src/features/email-templates/write-email-sheet.tsx
+msgid "Saved to your templates"
+msgstr ""
+
 #: src/features/applications/add-sheet.tsx
 msgid "Saving the job. Wait for confirmation before making another change."
 msgstr "नौकरी बचा रहा हूँ. कोई अन्य परिवर्तन करने से पहले पुष्टि की प्रतीक्षा करें."
@@ -9112,6 +9873,10 @@ msgstr "नौकरी बचा रहा हूँ. कोई अन्य �
 #: src/shell/builder-chrome.tsx
 msgid "Saving…"
 msgstr "बचत…"
+
+#: src/features/discovery/search-form.tsx
+msgid "Schedule"
+msgstr ""
 
 #: src/features/application-detail/interview-sheet.tsx
 #: src/features/application-detail/sections.tsx
@@ -9178,6 +9943,14 @@ msgstr "खोज कमांड्स"
 msgid "Search covers documents, applications, assistant conversations and actions."
 msgstr "खोज में दस्तावेज़, आवेदन, सहायक की बातचीत और कार्रवाइयाँ शामिल हैं।"
 
+#: src/features/discovery/search-form.tsx
+msgid "Search created"
+msgstr ""
+
+#: src/features/discovery/searches.tsx
+msgid "Search deleted"
+msgstr ""
+
 #: src/features/documents/library.tsx
 msgid "Search documents"
 msgstr "दस्तावेज़ खोजें"
@@ -9218,6 +9991,10 @@ msgstr "भाषाएँ खोजें"
 msgid "Search or run…"
 msgstr "खोजें या चलाएँ..."
 
+#: src/features/discovery/search-form.tsx
+msgid "Search saved"
+msgstr ""
+
 #: src/features/workspace/answer-library.tsx
 msgid "Search saved answers"
 msgstr ""
@@ -9255,13 +10032,29 @@ msgstr "खोजें…"
 msgid "Searched the web"
 msgstr "वेब पर खोजा"
 
+#: src/features/discovery/searches.tsx
+msgid "Searches"
+msgstr ""
+
 #: src/features/assistant/messages.tsx
 msgid "Searching the web…"
 msgstr "वेब पर खोज रहा हूँ..."
 
+#: src/features/organization/plan-screen.tsx
+msgid "Seats"
+msgstr ""
+
 #: src/features/career/offers.tsx
 msgid "Second offer"
 msgstr "दूसरा ऑफ़र"
+
+#: src/features/branding/branding-screen.tsx
+msgid "Secondary"
+msgstr ""
+
+#: src/features/branding/branding-screen.tsx
+msgid "Secondary colour"
+msgstr ""
 
 #: src/features/check/issues.ts
 msgid "Section headings"
@@ -9453,10 +10246,6 @@ msgstr "नौकरियाँ खोजने के लिए समाय�
 msgid "Settings"
 msgstr "समायोजन"
 
-#: app/(tabs)/settings/ai-mcp.tsx
-msgid "Setup guide"
-msgstr "सेटअप गाइड"
-
 #: src/features/ai/report-content.tsx
 msgid "Sexual content"
 msgstr "यौन सामग्री"
@@ -9537,8 +10326,8 @@ msgid "Shorter"
 msgstr "छोटा"
 
 #: src/features/share/web-page.tsx
-msgid "Show “Made with Reactive Resume”"
-msgstr "“Reactive Resume से बनाया गया” दिखाएँ"
+msgid "Show “Made with {appName}”"
+msgstr ""
 
 #. placeholder {0}: Math.min(remaining, COLUMN_PAGE_SIZE)
 #: src/features/applications-board/board-screen.tsx
@@ -9589,6 +10378,10 @@ msgstr "आइकन दिखाएँ"
 msgid "Show in search engines"
 msgstr "सर्च इंजन में दिखाएँ"
 
+#: src/features/discovery/review-queue.tsx
+msgid "Show jobs"
+msgstr ""
+
 #: src/features/ai/provider-editor.tsx
 msgid "Show key"
 msgstr "कुंजी दिखाएँ"
@@ -9600,6 +10393,7 @@ msgstr "शीर्षक में लिंक दिखाएं"
 #: app/(tabs)/settings/preferences.tsx
 #: src/features/application-detail/interview-sheet.tsx
 #: src/features/career/today.tsx
+#: src/features/discovery/review-queue.tsx
 msgid "Show more"
 msgstr "और दिखाएँ"
 
@@ -9620,6 +10414,10 @@ msgstr "पढ़ी गई वस्तुएँ दिखाएँ"
 #: src/features/design/advanced.tsx
 msgid "Show section icons"
 msgstr "अनुभाग आइकन दिखाएँ"
+
+#: src/features/email-templates/write-email-sheet.tsx
+msgid "Show templates for every stage"
+msgstr ""
 
 #: src/features/application-detail/detail-screen.tsx
 msgid "Showing saved details. They couldn't be refreshed."
@@ -9748,9 +10546,19 @@ msgstr "साइन-इन और सुरक्षा"
 msgid "Sign-in didn't complete"
 msgstr "साइन इन पूरा नहीं हुआ"
 
+#: src/features/settings/clipper-sign-ins.tsx
+msgid "Sign-in revoked. The extension stops working on its next request."
+msgstr ""
+
 #: src/features/letters/write.tsx
 msgid "Sign-off"
 msgstr "समापन"
+
+#. placeholder {0}: date(token.createdAt)
+#. placeholder {1}: date(token.lastUsedAt)
+#: src/features/settings/clipper-sign-ins.tsx
+msgid "Signed in {0} · Last used {1}"
+msgstr ""
 
 #. placeholder {0}: hostOf(server)
 #: src/auth/session-gate.tsx
@@ -9790,6 +10598,7 @@ msgstr "आकार"
 msgid "Skill"
 msgstr "कौशल"
 
+#: src/features/discovery/search-form.tsx
 #: src/features/write/fields.ts
 msgid "Skills"
 msgstr "कौशल"
@@ -9878,6 +10687,10 @@ msgstr "कुछ टेक्स्ट पेज के बाहर चला 
 msgid "Some text is rotated."
 msgstr "कुछ टेक्स्ट घुमाया हुआ है।"
 
+#: src/features/branding/domains-screen.tsx
+msgid "Something went wrong while checking this domain. Remove it and add it again."
+msgstr ""
+
 #: src/features/documents/library.tsx
 msgid "Sort"
 msgstr "क्रम से लगाना"
@@ -9902,10 +10715,6 @@ msgstr "स्रोत"
 #: src/features/career/facts.tsx
 msgid "Source and correction history"
 msgstr "स्रोत और सुधार इतिहास"
-
-#: app/(tabs)/settings/index.tsx
-msgid "Source code on GitHub"
-msgstr "GitHub पर स्रोत कोड"
 
 #: src/features/workspace/answer-library.tsx
 msgid "Source employer"
@@ -10037,6 +10846,10 @@ msgstr "अभी शुरू"
 msgid "State or region"
 msgstr ""
 
+#: src/features/organization/plan-screen.tsx
+msgid "Status"
+msgstr "स्टेटस"
+
 #: src/features/documents/new-document.tsx
 msgid "Stay in Documents"
 msgstr "दस्तावेज़ में रहें"
@@ -10097,6 +10910,11 @@ msgstr "स्ट्राइकथ्रू"
 msgid "Stronger verb"
 msgstr "अधिक सशक्त क्रिया"
 
+#: src/features/email-templates/template-editor.tsx
+#: src/features/email-templates/write-email-sheet.tsx
+msgid "Subject"
+msgstr ""
+
 #: src/features/application-detail/sections.tsx
 msgid "Submission recorded {date}. The sent versions never change; current drafts stay editable. This record does not confirm employer receipt."
 msgstr ""
@@ -10135,6 +10953,10 @@ msgstr "90 दिनों में सफलता · अगला कदम"
 msgid "Suggest target roles (optional AI)"
 msgstr ""
 
+#: src/features/email-templates/template-editor.tsx
+msgid "Suggested for"
+msgstr ""
+
 #: src/features/workspace/tabs/messages.tsx
 msgid "Suggested reply · edit before sending"
 msgstr "सुझाया गया उत्तर · भेजने से पहले संपादित करें"
@@ -10153,6 +10975,7 @@ msgid "Summary"
 msgstr "सारांश"
 
 #: app/(tabs)/settings/index.tsx
+#: src/features/branding/branding-screen.tsx
 msgid "Support"
 msgstr "सहायता"
 
@@ -10163,6 +10986,10 @@ msgstr "समर्थित"
 
 #: src/features/workspace/answer-library.tsx
 msgid "Supporting Knowledge facts and stories"
+msgstr ""
+
+#: src/features/organization/plan-screen.tsx
+msgid "Suspended"
 msgstr ""
 
 #: src/features/career/offers.tsx
@@ -10311,24 +11138,38 @@ msgstr "तेलुगु"
 
 #: src/features/design/design-pane.tsx
 #: src/features/document-menu/index.tsx
+#: src/features/email-templates/write-email-sheet.tsx
 #: src/features/letters/design.tsx
 msgid "Template"
 msgstr "खाका"
+
+#: src/features/email-templates/templates-screen.tsx
+msgid "Template archived"
+msgstr ""
 
 #. placeholder {0}: templateName(template)
 #: src/features/design/draft.ts
 msgid "Template changed to {0}"
 msgstr "टेम्प्लेट को {0} में बदल दिया गया"
 
+#: src/features/email-templates/templates-screen.tsx
+msgid "Template saved"
+msgstr ""
+
 #: src/features/letters/design.tsx
 msgid "Template, type and colors follow the resume, so the pair always matches."
 msgstr "टेम्प्लेट, प्रकार और रंग बायोडाटा का अनुसरण करते हैं, इसलिए जोड़ी हमेशा मेल खाती है।"
+
+#: src/auth/auth-header.tsx
+msgid "Terms"
+msgstr ""
 
 #: src/features/ats-checker/checker.tsx
 msgid "Terms from the posting"
 msgstr "नौकरी पोस्टिंग की शर्तें"
 
 #: app/(tabs)/settings/index.tsx
+#: src/features/branding/branding-screen.tsx
 msgid "Terms of service"
 msgstr "सेवा की शर्तें"
 
@@ -10402,6 +11243,22 @@ msgstr "जब कोई सिस्टम इसे दोबारा प्�
 msgid "Thai"
 msgstr "थाई"
 
+#: src/features/email-templates/built-in-text.ts
+msgid "Thank you after an interview"
+msgstr ""
+
+#: src/features/email-templates/built-in-text.ts
+msgid "Thank you for meeting with me on {interviewDate}"
+msgstr ""
+
+#: src/features/email-templates/labels.ts
+msgid "Thank-you"
+msgstr ""
+
+#: src/features/branding/domains-screen.tsx
+msgid "That domain isn't available, or you have reached the limit."
+msgstr ""
+
 #: src/features/ats-checker/check.ts
 msgid "That file couldn't be read as a PDF."
 msgstr "उस फ़ाइल को PDF के रूप में नहीं पढ़ा जा सका."
@@ -10462,9 +11319,17 @@ msgstr "सहायक आपके AI प्रदाता की अपन�
 msgid "The assistant uses your own key. Nothing is sent anywhere until you connect one."
 msgstr "सहायक आपकी अपनी कुंजी का उपयोग करता है. जब तक आप किसी को कनेक्ट नहीं करते, तब तक कुछ भी कहीं नहीं भेजा जाता।"
 
+#: src/features/discovery/search-form.tsx
+msgid "The best matches of each run get an AI score and a short reason. Each scored job uses AI credits. Your plan may allow fewer. Enter 0 to skip AI."
+msgstr ""
+
 #: src/features/ai/web-access.tsx
 msgid "The built-in reader remains active."
 msgstr "अंतर्निहित रीडर सक्रिय रहता है."
+
+#: src/features/branding/domains-screen.tsx
+msgid "The certificate provider rejected this domain. Check that the CNAME record points where shown."
+msgstr ""
 
 #: src/features/check/writing.tsx
 msgid "The checks are mechanical. This asks a language model how a reader might react to your bullets and suggests rewrites. It isn't part of the score."
@@ -10498,6 +11363,10 @@ msgstr "कनेक्शन लोड या सहेजा नहीं ज�
 #: src/features/letters/share.tsx
 msgid "The current state will be saved as “Before restore” first."
 msgstr "वर्तमान स्थिति को पहले “पुनर्स्थापन करने से पहले” के रूप में सहेजा जाएगा।"
+
+#: src/features/branding/domains-screen.tsx
+msgid "The domain's certificate setup was changed and can't be used. Remove the domain and add it again."
+msgstr ""
 
 #: src/features/ats-checker/checker.tsx
 msgid "The editor opens on Check, which checks the imported resume again."
@@ -10559,6 +11428,10 @@ msgstr "जिस क्रम में टेक्स्ट संग्र�
 msgid "The original stays in correction history. Stories using it will need review."
 msgstr "मूल सुधार इतिहास में रहता है। इसका उपयोग करने वाली कहानियों की समीक्षा की आवश्यकता होगी।"
 
+#: src/features/branding/domains-screen.tsx
+msgid "The ownership TXT record is gone. Add it back, or remove the domain."
+msgstr ""
+
 #: src/features/ats-checker/messages.ts
 msgid "The pages are pictures, with no text behind them."
 msgstr "पेज तस्वीरें हैं, जिनके पीछे कोई टेक्स्ट नहीं है।"
@@ -10566,6 +11439,10 @@ msgstr "पेज तस्वीरें हैं, जिनके पीछ�
 #: src/features/check/parser.tsx
 msgid "The PDF is checked on the server and not stored. Send this preview to see what software reads."
 msgstr "PDF को सर्वर पर चेक किया गया है और संग्रहीत नहीं किया गया है। सॉफ़्टवेयर क्या पढ़ता है यह देखने के लिए यह पूर्वावलोकन भेजें।"
+
+#: src/features/branding/branding-screen.tsx
+msgid "The platform default shows again."
+msgstr ""
 
 #: src/features/ai/provider-editor.tsx
 #: src/features/ai/provider-list.tsx
@@ -10588,6 +11465,16 @@ msgstr "बाकी फ़ाइल इस रिपोर्ट में न�
 msgid "The resume as it is"
 msgstr "बायोडाटा ज्यों का त्यों है"
 
+#. placeholder {0}: source.name
+#: src/features/discovery/searches.tsx
+msgid "The run of \"{0}\" failed."
+msgstr ""
+
+#. placeholder {0}: source.name
+#: src/features/discovery/searches.tsx
+msgid "The run of \"{0}\" finished: {found} new."
+msgstr ""
+
 #: src/features/ats-checker/messages.ts
 msgid "The same line repeats on every page."
 msgstr "वही पंक्ति हर पेज पर दोहराई जाती है।"
@@ -10607,6 +11494,10 @@ msgstr "स्कोर यह मायने रखता है कि सॉ
 #: src/features/ats-checker/checker.tsx
 msgid "The score reflects how reliably text is extracted, not your chances."
 msgstr "स्कोर दर्शाता है कि टेक्स्ट कितनी विश्वसनीय तरीके से निकाला गया है, न कि आपकी संभावनाएँ।"
+
+#: src/features/discovery/searches.tsx
+msgid "The search and its run history are deleted. Jobs it already found stay in your queue."
+msgstr ""
 
 #: src/features/documents/library.tsx
 msgid "The selected documents will be deleted for good and can't be restored."
@@ -10639,6 +11530,10 @@ msgstr "सेवा का कोटा समाप्त हो गया ह
 #: src/features/ai/web-access.tsx
 msgid "The service rejected the credentials. Check the API key."
 msgstr "सेवा ने क्रेडेंशियल्स को अस्वीकार कर दिया। API कुंजी जाँचें।"
+
+#: src/features/email-templates/write-email-sheet.tsx
+msgid "The templates couldn't be loaded."
+msgstr ""
 
 #: src/features/ai/error.ts
 msgid "The test didn't run. Try again."
@@ -10673,6 +11568,10 @@ msgstr "किसी प्रोफ़ाइल, पोर्टफ़ोलि
 msgid "There is no summary paragraph."
 msgstr "कोई सारांश पैराग्राफ नहीं है।"
 
+#: src/features/branding/branding-screen.tsx
+msgid "There is nothing to remove."
+msgstr ""
+
 #: src/features/workspace/tabs/apply.tsx
 msgid "These are saved draft answers."
 msgstr ""
@@ -10701,6 +11600,15 @@ msgstr "सोच…"
 msgid "Third-party software notices. Tap a dependency to read its license."
 msgstr "तृतीय-पक्ष सॉफ़्टवेयर की सूचनाएँ। लाइसेंस पढ़ने के लिए किसी निर्भरता पर टैप करें।"
 
+#. placeholder {0}: hostOf(server)
+#: src/auth/session-gate.tsx
+msgid "This account isn't part of {0}"
+msgstr ""
+
+#: src/features/branding/domains-screen.tsx
+msgid "This address always works, whatever happens to your own domains."
+msgstr ""
+
 #: src/features/workspace/answer-library.tsx
 msgid "This application"
 msgstr ""
@@ -10714,6 +11622,10 @@ msgstr "यह आवेदन खोला नहीं जा सका।"
 msgid "This application has no posting yet. Add one in Applications."
 msgstr "इस आवेदन में अभी विज्ञापन नहीं है। आवेदन में एक जोड़ें।"
 
+#: src/features/discovery/search-form.tsx
+msgid "This board isn't supported yet"
+msgstr ""
+
 #: src/features/applications/error.ts
 msgid "This changed elsewhere. Reload and try again."
 msgstr "यह कहीं और बदल गया है। फिर से लोड करके कोशिश करें।"
@@ -10721,6 +11633,10 @@ msgstr "यह कहीं और बदल गया है। फिर स�
 #: src/features/workspace/parts.tsx
 msgid "This changed somewhere else, so it wasn't saved. Your text is kept here; Retry saves it over the other copy."
 msgstr "यह कहीं और बदल गया, इसलिए इसे सहेजा नहीं गया। आपका पाठ यहाँ रखा गया है; पुनः प्रयास इसे दूसरी प्रति पर सहेजता है।"
+
+#: src/features/branding/branding-screen.tsx
+msgid "This colour may be hard to see on a white background."
+msgstr ""
 
 #: src/features/ai/error.ts
 msgid "This connection is managed by your server."
@@ -10763,6 +11679,14 @@ msgstr "यह दस्तावेज़ लॉक है. आप अभी �
 msgid "This document is no longer available. Refresh and try again."
 msgstr "यह दस्तावेज़ अब उपलब्ध नहीं है. ताज़ा करें और पुनः प्रयास करें."
 
+#: src/features/branding/domains-screen.tsx
+msgid "This domain no longer serves your organization and is being deleted."
+msgstr ""
+
+#: src/features/email-templates/write-email-sheet.tsx
+msgid "This email is too long to open in your mail app, so it was copied instead."
+msgstr ""
+
 #: src/features/workspace/answer-library.tsx
 msgid "This employer"
 msgstr ""
@@ -10778,6 +11702,10 @@ msgstr "यह प्रविष्टि"
 #: src/features/write/entry-screen.tsx
 msgid "This entry was deleted."
 msgstr "यह प्रविष्टि हटा दी गई."
+
+#: src/features/organization/entitlement-message.ts
+msgid "This feature is not part of your organization's plan."
+msgstr ""
 
 #: src/features/ats-checker/messages.ts
 msgid "This file contains form fields."
@@ -10888,6 +11816,19 @@ msgstr "यह मापता है कि सॉफ्टवेयर कि�
 msgid "This month"
 msgstr "इस महीने"
 
+#: src/features/organization/entitlement-message.ts
+msgid "This organization has no free seats. Remove a member or an invitation, or ask the owner to add seats."
+msgstr ""
+
+#: src/features/organization/plan-screen.tsx
+msgid "This organization is suspended. You can view and export your data."
+msgstr ""
+
+#: src/features/organization/entitlement-message.ts
+#: src/features/organization/entitlements.tsx
+msgid "This organization is suspended. You can view and export your data. Contact your administrator."
+msgstr ""
+
 #: src/features/assistant/messages.tsx
 msgid "This page is clipped or incomplete. Check the original before using it."
 msgstr "यह पृष्ठ काट दिया गया है या अधूरा है. उपयोग करने से पहले मूल की जांच कर लें।"
@@ -10911,6 +11852,10 @@ msgstr "इस PDF में कोई टेक्स्ट परत नही
 #: src/features/ats-checker/check.ts
 msgid "This PDF is password protected. Save an unprotected copy and try again."
 msgstr "यह PDF पासवर्ड से सुरक्षित है। एक असुरक्षित प्रति सहेजें और फिर कोशिश करें।"
+
+#: src/features/organization/plan-screen.tsx
+msgid "This plan has no pooled AI credits."
+msgstr ""
 
 #: src/features/assistant/messages.tsx
 msgid "This question couldn't be asked. Send a new message to continue."
@@ -10983,6 +11928,10 @@ msgstr "यह साइन-इन प्रयास समाप्त हो 
 #: src/features/workspace/tabs/practise.tsx
 msgid "This story is unavailable or uses facts that are switched off."
 msgstr "यह कहानी उपलब्ध नहीं है या बंद किए गए तथ्यों का उपयोग करती है।"
+
+#: src/features/email-templates/write-email-sheet.tsx
+msgid "This template couldn't be filled in. Try again."
+msgstr ""
 
 #: src/features/application-detail/interview-sheet.tsx
 msgid "This time does not exist in the selected timezone. Choose another time."
@@ -11071,6 +12020,10 @@ msgstr "जाँच करने के लिए"
 msgid "To get a reminder, allow notifications in your device settings."
 msgstr "अनुस्मारक प्राप्त करने के लिए, अपनी डिवाइस सेटिंग में सूचनाओं की अनुमति दें।"
 
+#: src/features/email-templates/write-email-sheet.tsx
+msgid "To: {to}"
+msgstr ""
+
 #: app/(tabs)/career/_layout.tsx
 #: src/features/applications-board/calendar-screen.tsx
 #: src/features/share/link.tsx
@@ -11153,6 +12106,10 @@ msgstr "कचरा खाली है"
 msgid "Trash was already empty"
 msgstr ""
 
+#: src/features/organization/plan-screen.tsx
+msgid "Trial"
+msgstr ""
+
 #: src/features/workspace/parts.tsx
 msgid "Trimming words"
 msgstr "शब्द कम कर रहा है"
@@ -11169,8 +12126,14 @@ msgstr "{suggestion} आज़माएं"
 #: src/features/ai/provider-list.tsx
 #: src/features/ai/web-access.tsx
 #: src/features/application-detail/detail-screen.tsx
+#: src/features/branding/branding-screen.tsx
+#: src/features/branding/domains-screen.tsx
+#: src/features/email-templates/templates-screen.tsx
+#: src/features/email-templates/write-email-sheet.tsx
 #: src/features/letters/write.tsx
+#: src/features/organization/plan-screen.tsx
 #: src/features/settings/api-keys.tsx
+#: src/features/settings/clipper-sign-ins.tsx
 #: src/features/workspace/parts.tsx
 #: src/features/workspace/preparation.tsx
 #: src/features/workspace/shell.tsx
@@ -11390,6 +12353,10 @@ msgstr "{0} में से {completed} अपडेट हुए। लॉक 
 msgid "Updating preview…"
 msgstr "पूर्वावलोकन अपडेट किया जा रहा है..."
 
+#: src/features/branding/branding-screen.tsx
+msgid "Upload"
+msgstr ""
+
 #: src/features/ats-checker/checker.tsx
 msgid "Upload a PDF and see the text an applicant tracking system extracts: what's missing, what's out of order, and how to fix it. Free, no account needed."
 msgstr "एक PDF अपलोड करें और आवेदक ट्रैकिंग सिस्टम द्वारा निकाले गए टेक्स्ट को देखें: क्या गायब है, क्या ख़राब है, और इसे कैसे ठीक किया जाए। मुफ़्त, किसी खाते की आवश्यकता नहीं."
@@ -11406,6 +12373,10 @@ msgstr "फोटो अपलोड हो रहा है..."
 #: src/features/write/picture-screen.tsx
 msgid "URL"
 msgstr "यूआरएल"
+
+#: src/features/branding/branding-screen.tsx
+msgid "Use {APP_NAME_MAX} characters or fewer."
+msgstr ""
 
 #: src/features/check/issues.ts
 msgid "Use {minimum}"
@@ -11431,9 +12402,21 @@ msgstr "3 से 64 छोटे अक्षरों, संख्याओं
 msgid "Use 6–64 characters."
 msgstr "6-64 वर्णों का प्रयोग करें।"
 
+#: src/features/branding/branding-screen.tsx
+msgid "Use 80 characters or fewer."
+msgstr ""
+
+#: src/features/branding/branding-screen.tsx
+msgid "Use a colour like #1a56db."
+msgstr ""
+
 #: src/features/design/style-groups.tsx
 msgid "Use a darker shade"
 msgstr "गहरे शेड का प्रयोग करें"
+
+#: src/features/branding/branding-screen.tsx
+msgid "Use a full https:// address."
+msgstr ""
 
 #: src/features/design/advanced.tsx
 msgid "Use a hex value like #3E6B4F or rgba(62, 107, 79, 1)."
@@ -11442,6 +12425,10 @@ msgstr "#3E6B4F या rgba(62, 107, 79, 1) जैसे हेक्स मा�
 #: src/features/ats-checker/messages.ts
 msgid "Use a plain international form, such as +1 555 010 1234."
 msgstr "एक सादा अंतरराष्ट्रीय रूप इस्तेमाल करें, जैसे +1 555 010 1234।"
+
+#: src/features/branding/branding-screen.tsx
+msgid "Use a plain name without line breaks or angle brackets."
+msgstr ""
 
 #: src/features/ats-checker/messages.ts
 msgid "Use a recognized form such as \"Jan 2020 - Mar 2022\" or \"2020 - 2022\"."
@@ -11475,6 +12462,10 @@ msgstr "http या https लिंक का उपयोग करें."
 #: src/features/ats-checker/messages.ts
 msgid "Use at least 9pt."
 msgstr "कम से कम 9pt इस्तेमाल करें।"
+
+#: src/features/discovery/messages.ts
+msgid "Use at most {MAX_NAME_LENGTH} characters."
+msgstr ""
 
 #: src/features/document-menu/index.tsx
 #: src/features/documents/queries.ts
@@ -11510,6 +12501,10 @@ msgstr "छोटे अक्षरों, संख्याओं और ए�
 #: src/features/career/search-regions-field.tsx
 msgid "Use my timezone"
 msgstr "मेरे समय क्षेत्र का उपयोग करें"
+
+#: src/features/branding/branding-screen.tsx
+msgid "Use one address like help@example.com, without a name."
+msgstr ""
 
 #: src/features/check/issues.ts
 msgid "Use one column"
@@ -11581,6 +12576,10 @@ msgstr "इस समय का उपयोग करें"
 msgid "Use your editor's normal bullet list, so stray glyphs do not land mid-sentence."
 msgstr "अपने एडिटर की सामान्य बुलेट सूची इस्तेमाल करें, ताकि आवारा ग्लिफ़ बीच वाक्य में न आएँ।"
 
+#: src/features/organization/plan-screen.tsx
+msgid "Used"
+msgstr "उपयोग किया गया"
+
 #: src/features/workspace/tabs/saved.tsx
 msgid "used {used}"
 msgstr "उपयोग किया: {used}"
@@ -11592,6 +12591,10 @@ msgstr "पदों और ऑफ़र को जाँचने के लि
 #: src/features/ai/web-access.tsx
 msgid "Used when {connected} can't read a page. No account needed."
 msgstr "इसका उपयोग तब किया जाता है जब {connected} कोई पृष्ठ नहीं पढ़ पाता है। किसी खाते की आवश्यकता नहीं."
+
+#: src/features/ai/provider-list.tsx
+msgid "Used when you haven't added a provider of your own. Counts toward your organization's AI allowance."
+msgstr ""
 
 #: src/features/settings/profile.tsx
 #: src/features/write/fields.ts
@@ -11625,6 +12628,11 @@ msgstr "उज़्बेक"
 #: src/features/share/custom-domain.tsx
 msgid "Value"
 msgstr "मान"
+
+#. placeholder {0}: record.value
+#: src/features/branding/domains-screen.tsx
+msgid "Value: {0}"
+msgstr ""
 
 #: src/features/ats-checker/messages.ts
 msgid "Vary the openings so the section does not read as boilerplate."
@@ -11745,6 +12753,10 @@ msgstr "स्वयंसेवा"
 msgid "Wait for your account timezone to load, retry if it failed, or clear the deadline."
 msgstr "अपने खाते का समय क्षेत्र लोड होने तक प्रतीक्षा करें, लोड न होने पर फिर से कोशिश करें, या समय सीमा हटा दें।"
 
+#: src/features/branding/domains-screen.tsx
+msgid "Waiting for DNS"
+msgstr ""
+
 #: src/features/workspace/tabs/messages.tsx
 msgid "Waiting for you"
 msgstr "आपका इंतज़ार है"
@@ -11752,6 +12764,10 @@ msgstr "आपका इंतज़ार है"
 #: src/features/applications/next-step.ts
 msgid "Waiting to hear back"
 msgstr "वापस सुनने का इंतज़ार कर रहा हूँ"
+
+#: src/features/branding/domains-screen.tsx
+msgid "We didn't find the ownership record in time. Check that the TXT record exists exactly as shown."
+msgstr ""
 
 #: app/(tabs)/settings/ai-web-access.tsx
 #: app/(tabs)/settings/ai.tsx
@@ -11790,6 +12806,10 @@ msgstr "वेब खोज इन देशों में नौकरिय�
 #: src/features/write/basics-screen.tsx
 msgid "Website"
 msgstr "वेबसाइट"
+
+#: src/features/discovery/messages.ts
+msgid "Weekly"
+msgstr ""
 
 #: src/features/workspace/parts.tsx
 msgid "Weighing each requirement"
@@ -12021,6 +13041,12 @@ msgstr "जब तक याद ताज़ा है, लिख लें क�
 msgid "Write each role as a clear title and company line, with the dates alongside."
 msgstr "हर भूमिका को एक स्पष्ट शीर्षक और कंपनी की पंक्ति के रूप में लिखें, साथ में तारीखें भी दें।"
 
+#: src/features/application-detail/detail-screen.tsx
+#: src/features/email-templates/write-email-sheet.tsx
+#: src/features/workspace/shell.tsx
+msgid "Write email"
+msgstr ""
+
 #: src/features/ats-checker/messages.ts
 msgid "Write it as one uninterrupted piece, with no special spacing."
 msgstr "इसे बिना किसी विशेष स्पेसिंग के एक निरंतर हिस्से के रूप में लिखें।"
@@ -12092,6 +13118,10 @@ msgstr "आप पहले से ही इसका उपयोग “{taken
 msgid "You answered: {answer}"
 msgstr "आपने उत्तर दिया: {answer}"
 
+#: src/features/discovery/search-form.tsx
+msgid "You can have at most {limit} searches. Delete one to add another."
+msgstr ""
+
 #: src/shell/builder-chrome.tsx
 msgid "You can keep editing. Changes sync when you're back online. PDF sharing works with cached fonts and images."
 msgstr "आप संपादन जारी रख सकते हैं. जब आप वापस ऑनलाइन होते हैं तो सिंक बदल जाता है। पीडीएफ साझाकरण कैश्ड फ़ॉन्ट और छवियों के साथ काम करता है।"
@@ -12099,6 +13129,10 @@ msgstr "आप संपादन जारी रख सकते हैं. �
 #: src/features/workspace/tabs/apply.tsx
 msgid "You can keep up to 30 application questions."
 msgstr "आप 30 तक आवेदन सवाल रख सकते हैं।"
+
+#: src/features/discovery/searches.tsx
+msgid "You can run a search by hand once every 10 minutes."
+msgstr ""
 
 #: app/(auth)/sign-in.tsx
 msgid "You can sign in with an account you already have."
@@ -12113,6 +13147,10 @@ msgstr "आपने साइन इन पूरा होने से पह
 msgid "You forgot this before, so it wasn't saved again."
 msgstr "आपने इसे पहले भुला दिया था, इसलिए इसे दोबारा सहेजा नहीं गया।"
 
+#: src/features/email-templates/templates-screen.tsx
+msgid "You have no templates of your own yet. You can also save one from Write email."
+msgstr ""
+
 #: src/ui/overlays.tsx
 msgid "You have unsaved changes."
 msgstr "आपके पास सहेजे नहीं गए परिवर्तन हैं."
@@ -12120,6 +13158,10 @@ msgstr "आपके पास सहेजे नहीं गए परिव�
 #: src/features/workspace/tabs/messages.tsx
 msgid "You send it from your own email."
 msgstr "आप इसे अपने ईमेल से भेजते हैं।"
+
+#: src/features/email-templates/write-email-sheet.tsx
+msgid "You send it from your own email. Nothing is sent from here."
+msgstr ""
 
 #: src/features/settings/sign-out.tsx
 msgid "You will be signed out of {server}. Any edits not yet synced from this device will be lost."
@@ -12171,6 +13213,14 @@ msgstr "आप ऑफ़लाइन हैं. पुनः कनेक्ट 
 msgid "You're up to date"
 msgstr "सब कुछ अप-टू-डेट है"
 
+#: src/features/branding/domains-screen.tsx
+msgid "Your address"
+msgstr ""
+
+#: src/features/branding/domains-screen.tsx
+msgid "Your address above keeps working. Ask your administrator to upgrade the plan to add your own domain."
+msgstr ""
+
 #: src/features/workspace/tabs/debrief.tsx
 #: src/features/workspace/tabs/practise.tsx
 msgid "your AI connection"
@@ -12192,6 +13242,10 @@ msgstr "आपका जवाब"
 msgid "Your answer · {mode}"
 msgstr "आपका उत्तर · {mode}"
 
+#: src/features/branding/branding-screen.tsx
+msgid "Your app"
+msgstr ""
+
 #: src/features/workspace/tabs/practise.tsx
 msgid "Your attempts"
 msgstr "आपके प्रयास"
@@ -12207,6 +13261,10 @@ msgstr "आपके बुलेट असामान्य अक्षरो
 #: src/draft/conflict-sheet.tsx
 msgid "Your changes on this device will be replaced by the saved version."
 msgstr "इस डिवाइस पर आपके परिवर्तन सहेजे गए संस्करण से बदल दिए जाएंगे।"
+
+#: src/features/settings/profile.tsx
+msgid "Your cohort"
+msgstr ""
 
 #: src/features/ats-checker/messages.ts
 msgid "Your contact details are not on the first page."
@@ -12258,8 +13316,8 @@ msgid "your Knowledge"
 msgstr "आपका ज्ञानकोश"
 
 #: app/(tabs)/settings/preferences.tsx
-msgid "Your language is saved. Restart Reactive Resume to apply the new left-to-right or right-to-left layout."
-msgstr "आपकी भाषा सुरक्षित है. नया बाएँ-से-दाएँ या दाएँ-से-बाएँ लेआउट लागू करने के लिए Reactive Resume को पुनरारंभ करें।"
+msgid "Your language is saved. Restart the app to apply the new left-to-right or right-to-left layout."
+msgstr ""
 
 #: src/features/ats-checker/messages.ts
 msgid "Your lines are packed very tightly."
@@ -12277,10 +13335,6 @@ msgstr "आपका संदेश"
 msgid "Your name"
 msgstr "आपका नाम"
 
-#: src/features/share/custom-domain.tsx
-msgid "Your name as your address, from OlaCV, the .cv registry. Code {CODE} takes 50% off the first year."
-msgstr "आपका नाम ही आपका पता, OlaCV से, जो .cv रजिस्ट्री है। कोड {CODE} से पहले साल पर 50% की छूट मिलती है।"
-
 #: src/features/check/issues.ts
 msgid "Your name is missing"
 msgstr "आपका नाम गायब है"
@@ -12297,9 +13351,37 @@ msgstr "आपकी शुरुआत"
 msgid "Your opening, the stories to bring and questions to ask. It becomes your checklist 10 minutes before the call."
 msgstr "आपकी शुरुआत, साथ लाने वाली कहानियाँ और पूछने के लिए सवाल। कॉल से 10 मिनट पहले यह आपकी चेकलिस्ट बन जाती है।"
 
+#: src/api/ai-quota.ts
+msgid "Your organization has used 80% of this month's AI allowance."
+msgstr ""
+
+#: src/features/ai/error.ts
+msgid "Your organization has used all of this month's AI allowance. Add your own AI provider in Settings to keep going, or ask an admin about the plan."
+msgstr ""
+
+#: src/features/branding/domains-screen.tsx
+msgid "Your organization is served on this domain."
+msgstr ""
+
+#: src/features/organization/plan-screen.tsx
+msgid "Your organization's owner manages the plan and payments on the web."
+msgstr ""
+
+#: src/features/email-templates/templates-screen.tsx
+msgid "Your own templates for writing to employers. They appear under Write email on every application."
+msgstr ""
+
 #: src/features/ats-checker/messages.ts
 msgid "Your phone number is written in an unusual shape."
 msgstr "आपका फ़ोन नंबर असामान्य रूप में लिखा गया है।"
+
+#: src/features/discovery/messages.ts
+msgid "Your plan allows fewer jobs per run."
+msgstr ""
+
+#: src/features/discovery/searches.tsx
+msgid "Your plan doesn't include job discovery. Ask your administrator about upgrading."
+msgstr ""
 
 #: src/features/assistant/coach-screen.tsx
 msgid "your preferences"
@@ -12389,6 +13471,14 @@ msgstr "आपकी कहानियाँ"
 #: src/features/workspace/tabs/practise.tsx
 msgid "Your story couldn't be loaded."
 msgstr "आपकी कहानी लोड नहीं हो सकी।"
+
+#: src/features/email-templates/templates-screen.tsx
+msgid "Your templates"
+msgstr ""
+
+#: src/features/email-templates/templates-screen.tsx
+msgid "Your templates couldn't be loaded."
+msgstr ""
 
 #: src/features/workspace/tabs/prepare.tsx
 msgid "Your two-minute introduction"

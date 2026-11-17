@@ -1,5 +1,14 @@
 import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { randomUUID } from "node:crypto";
+// CAREEROS: MCP requests run inside an organization context (P1-T02)
+import {
+	ORG_CONTEXT_REQUIRED,
+	resolveHost,
+	resolveOrgForAuthentication,
+	TenancyError,
+	withOrgContext,
+	type HostContext,
+} from "@careeros/tenancy";
 import { WebStandardStreamableHTTPServerTransport } from "@modelcontextprotocol/sdk/server/webStandardStreamableHttp.js";
 import { ORPCError } from "@orpc/server";
 import { consumeMcpRequestLimit, consumeMcpUserLimit } from "@reactive-resume/api/features/mcp/transport";
@@ -21,12 +30,14 @@ function errorResponse(status: number, message: string, headers?: Record<string,
 	);
 }
 
-export async function handleMcp(request: Request, trustedClient = "unknown") {
+export async function handleMcp(request: Request, trustedClient = "unknown", hostContext?: HostContext) {
 	let server: McpServer | undefined;
 	let transport: WebStandardStreamableHTTPServerTransport | undefined;
 	try {
 		const origin = request.headers.get("origin");
-		if (origin !== null && !TRUSTED_ORIGINS.includes(origin)) {
+		// CAREEROS (P2-T03): the host decides the organization; an organization host also trusts its own origin.
+		const host = hostContext ?? (await resolveHost(request));
+		if (origin !== null && !TRUSTED_ORIGINS.includes(origin) && !(host.kind === "org" && origin === host.origin)) {
 			return errorResponse(403, "Origin is not allowed. Use the configured application origin or a native MCP client.");
 		}
 		if (request.method !== "POST") {
@@ -35,19 +46,34 @@ export async function handleMcp(request: Request, trustedClient = "unknown") {
 		await consumeMcpRequestLimit(trustedClient);
 		const authentication = await authenticateRequest(request);
 		await consumeMcpUserLimit(authentication.user.id);
+		// CAREEROS: no organization (none on the key or session, or not a member) means no access (P1-T02)
+		const organizationId = await resolveOrgForAuthentication(authentication, host);
+		// Enforcement is on since P1-T04 (see ORG_CONTEXT_REQUIRED).
+		if (!organizationId && ORG_CONTEXT_REQUIRED) return errorResponse(403, "No active organization");
 		const resHeaders = new Headers(responseHeaders);
-		server = createMcpServer(request, authentication, trustedClient, resHeaders);
+		server = createMcpServer(request, authentication, trustedClient, resHeaders, host);
 		transport = new WebStandardStreamableHTTPServerTransport({
 			enableJsonResponse: true,
 			// Larger files use authenticated upload references rather than base64 in JSON-RPC.
 			maxRequestBodySize: 4 * 1024 * 1024,
 		});
-		await server.connect(transport);
-		const response = await transport.handleRequest(request);
+		const connectedServer = server;
+		const connectedTransport = transport;
+		const handle = async () => {
+			await connectedServer.connect(connectedTransport);
+			return connectedTransport.handleRequest(request);
+		};
+		const response = organizationId ? await withOrgContext(organizationId, handle) : await handle();
 		const headers = new Headers(response.headers);
 		for (const [key, value] of resHeaders) headers.set(key, value);
 		return new Response(response.body, { status: response.status, statusText: response.statusText, headers });
 	} catch (error) {
+		// CAREEROS (P2-T03): the host names an organization the caller may not act in, or none at all.
+		if (error instanceof TenancyError) {
+			if (error.code === "unknown_org_host") return errorResponse(404, "No organization answers on this address.");
+			if (error.code === "not_member_of_host_org" || error.code === "key_org_mismatch")
+				return errorResponse(403, "This credential cannot act in the organization of this address.");
+		}
 		if (error instanceof AuthError) {
 			return errorResponse(401, "Unauthorized", {
 				"WWW-Authenticate": `Bearer resource_metadata="${env.APP_URL}/.well-known/oauth-protected-resource"`,

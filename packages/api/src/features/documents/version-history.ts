@@ -47,6 +47,8 @@ export function createVersionHistory<TKind extends string, TData>(config: {
 	/** Every write stores data through this (validation, normalisation). */
 	toStored: (data: TData) => unknown;
 	label: string;
+	/** CAREEROS (P1-T04): extra columns every inserted version carries, such as the tenant column of a tenant table. */
+	insertValues?: () => Record<string, unknown>;
 }) {
 	const v = config.versions;
 	const summary = { id: v.id, kind: v.kind, name: v.name, createdAt: v.createdAt };
@@ -95,6 +97,7 @@ export function createVersionHistory<TKind extends string, TData>(config: {
 		const [version] = await client
 			.insert(v.table)
 			.values({
+				...config.insertValues?.(),
 				[v.documentKey]: input.documentId,
 				userId: input.userId,
 				data: config.toStored(input.data),

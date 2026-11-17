@@ -3,6 +3,9 @@ import { readFile } from "node:fs/promises";
 import { afterAll, beforeAll, describe, expect, it } from "vite-plus/test";
 import { Pool } from "pg";
 
+// CAREEROS (P1-Q09): stays on a schema of the shared database on purpose. The two migrations it replays declare their
+// functions and triggers unqualified (no `public.`), so with the schema first on the search_path they land in the schema
+// and cannot rewrite the `public` definer functions or grants.
 describe.skipIf(!process.env.COVER_LETTER_TEST_DATABASE_URL)("serialized username claims", () => {
 	const namespace = `username_test_${randomUUID().replaceAll("-", "")}`;
 	let admin: Pool;

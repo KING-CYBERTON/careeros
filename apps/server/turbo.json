@@ -1,19 +1,21 @@
 {
 	"extends": ["//"],
 	"tags": ["app:server", "runtime:server", "role:adapter"],
+	// CAREEROS: P2-C03. CAREEROS_TEST_* is passed through; without it Turborepo strict env mode hid it and the handoff
+	// integration suite skipped in CI.
 	"tasks": {
 		"build": {
 			"inputs": ["$TURBO_EXTENDS$", "$TURBO_ROOT$/plugins/reactive-resume/skills/**"]
 		},
 		"test": {
-			"env": ["$TURBO_EXTENDS$", "OAUTH_TEST_DATABASE_URL"]
+			"env": ["$TURBO_EXTENDS$", "OAUTH_TEST_DATABASE_URL", "CAREEROS_TEST_*"]
 		},
 		"test:coverage": {
-			"env": ["$TURBO_EXTENDS$", "OAUTH_TEST_DATABASE_URL"]
+			"env": ["$TURBO_EXTENDS$", "OAUTH_TEST_DATABASE_URL", "CAREEROS_TEST_*"]
 		},
 		"test:ci": {
 			"cache": false,
-			"env": ["$TURBO_EXTENDS$", "OAUTH_TEST_DATABASE_URL"]
+			"env": ["$TURBO_EXTENDS$", "OAUTH_TEST_DATABASE_URL", "CAREEROS_TEST_*"]
 		}
 	}
 }

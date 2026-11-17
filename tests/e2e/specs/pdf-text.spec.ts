@@ -6,10 +6,24 @@ test("browser PDF downloads preserve shaped scripts and name unsupported text wi
 }, testInfo) => {
 	test.setTimeout(180_000);
 	// Chromium's direct CDN connections can fail on CI; still fetch and render the real font bytes.
+	// CAREEROS: teardown-safe handler. A fetch still in flight when the test ends rejects with "Request context
+	// disposed"; that is ignored. Real failures are recorded and asserted from the test body, never in the handler.
+	const fontRouteFailures: string[] = [];
 	await page.route(/^https:\/\/fonts\.gstatic\.(?:com|cn)\//, async (route) => {
-		const fontResponse = await route.fetch();
-		expect(fontResponse.ok()).toBe(true);
-		await route.fulfill({ response: fontResponse });
+		try {
+			const fontResponse = await route.fetch();
+			if (!fontResponse.ok()) {
+				fontRouteFailures.push(`${route.request().url()} responded ${fontResponse.status()}`);
+				await route.abort();
+				return;
+			}
+			await route.fulfill({ response: fontResponse });
+		} catch (error) {
+			const message = error instanceof Error ? error.message : String(error);
+			if (/disposed|closed/i.test(message)) return;
+			fontRouteFailures.push(`${route.request().url()} failed: ${message}`);
+			await route.abort().catch(() => undefined);
+		}
 	});
 	const created = await page.request.post("/api/openapi/resumes", {
 		data: { name: `PDF ${testInfo.testId}`, tags: [] },
@@ -57,4 +71,7 @@ test("browser PDF downloads preserve shaped scripts and name unsupported text wi
 	const exported = await page.request.get(`/api/openapi/resumes/${id}/pdf`);
 	expect(exported.status()).toBe(200);
 	expect(exported.headers()["content-type"]).toContain("application/pdf");
+	// CAREEROS: stop in-flight font handlers so they cannot fail after the test body, then check what they recorded.
+	await page.unrouteAll({ behavior: "ignoreErrors" });
+	expect(fontRouteFailures).toEqual([]);
 });

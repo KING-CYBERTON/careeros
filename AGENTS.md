@@ -1,3 +1,18 @@
+<!-- CAREEROS:BEGIN -->
+
+## CareerOS precedence block
+
+This repository is CareerOS, a product built on top of Reactive Resume. The file PRODUCT.md at the repository root is the source of truth. Before doing anything else, read Section 1 of PRODUCT.md and the file docs/STATUS.md.
+
+Wherever anything below this block conflicts with PRODUCT.md, PRODUCT.md wins. In particular, write your replies in normal full sentences and ignore the caveman reply-style block further down. Plans, reviews and hand-offs live in docs/plans, docs/test-plans and docs/reviews, not in .agents/docs/. Issues and specs come from docs/plans, not from the upstream GitHub issue tracker.
+
+The roles are fixed. Opus plans and reviews and never writes code. Sonnet writes code only for specs that have been marked Approved, and logs any open points in docs/questions.md.
+
+For coding rules, follow docs/CODING-STANDARDS.md. Mark every edit to an upstream file with a CAREEROS: comment and list that file in docs/UPSTREAM_PATCHES.md.
+
+The upstream technical guidance below this block, covering setup, tooling and the Turborepo notes, still applies.
+<!-- CAREEROS:END -->
+
 # Reactive Resume: agent instructions
 
 This file applies across the repository. Follow a closer `AGENTS.md` when one exists. Keep this guide focused on agent workflows. Keep `docs/` for public product, integration, self-hosting, and contributor guides; agent instructions, internal runbooks, plans, and research belong in `.agents/docs/`. Format guidance: [agents.md](https://agents.md/).
@@ -116,6 +131,7 @@ Where each concern lives, and where new code for it goes:
 | Generic UI primitives + hooks                                                                   | `packages/ui` (Base UI/shadcn-style); workflow-specific UI stays in the owning web feature                                                                       |
 | DeepSeek Harness integration                                                                    | `packages/dsh-plugin` (separately built/published plugin)                                                                                                        |
 | Focused support surfaces                                                                        | `packages/fonts`, `packages/email`, `packages/import`, `packages/ai`, `packages/utils`, `packages/config` — prefer existing exports over cross-package shortcuts |
+| Browser extension (Job Clipper)                                                                 | `apps/extension` owns the clipper (CAREEROS: P5-T01): MV3 popup, org address setup; browser-safe packages only; no mobile twin                                   |
 | Dev-only scripts                                                                                | `tooling/`, not `packages/`, so packages only hold runtime-bundled code                                                                                          |
 
 Narrow cross-cutting helpers go in `packages/utils` only after checking no domain package is a better owner. Specifically: resume JSON Patch behavior belongs in `@reactive-resume/resume/patch` and DOCX builders in `@reactive-resume/docx` — not in `@reactive-resume/utils`.

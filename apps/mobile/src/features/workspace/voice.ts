@@ -43,7 +43,8 @@ const readStored = (server: string): StoredVoice => {
 export function useVoiceSettings() {
 	const session = useSession();
 	const providerState = useHasAIProvider();
-	const usable = providerState.usableProviders;
+	// CAREEROS (P3-T03): voice needs the member's own connection; "Included with your plan" never counts.
+	const usable = providerState.usableProviders.filter((provider) => !provider.platform);
 	const [stored, setStored] = useState(() => ({ server: session.server, value: readStored(session.server) }));
 	if (stored.server !== session.server) setStored({ server: session.server, value: readStored(session.server) });
 	const update = (patch: StoredVoice) => {

@@ -1,5 +1,7 @@
 import type { DbOrTx } from "@reactive-resume/db/client";
 import type { UIMessage } from "ai";
+// CAREEROS: every message row carries the active organization (P1-T08)
+import { requireOrgId } from "@careeros/tenancy";
 import { and, asc, eq, max, sql } from "drizzle-orm";
 import { db } from "@reactive-resume/db/client";
 import * as schema from "@reactive-resume/db/schema";
@@ -231,6 +233,8 @@ export async function insertDraftAssistantMessage(
 	const [row] = await database
 		.insert(schema.agentMessage)
 		.values({
+			// CAREEROS (P1-T08): tenant column
+			organizationId: requireOrgId(),
 			userId: input.userId,
 			threadId: input.threadId,
 			role: "assistant",
@@ -320,6 +324,8 @@ export function upsertAssistantUiMessage(
 		const [inserted] = await database
 			.insert(schema.agentMessage)
 			.values({
+				// CAREEROS (P1-T08): tenant column
+				organizationId: requireOrgId(),
 				userId: input.userId,
 				threadId: input.threadId,
 				role: message.role,

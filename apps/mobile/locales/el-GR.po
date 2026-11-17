@@ -33,6 +33,11 @@ msgstr "Το \"{0}\" μετακινήθηκε στον Κάδο απορριμμ
 msgid "“{0}” stops being your primary resume."
 msgstr "Το «{0}» δεν θα είναι πλέον το κύριο βιογραφικό σας."
 
+#. placeholder {0}: selected?.label ?? ""
+#: src/features/settings/clipper-sign-ins.tsx
+msgid "“{0}” stops working. You can sign in again from the extension."
+msgstr ""
+
 #. placeholder {0}: purge?.documents[0]?.name
 #: src/features/documents/library.tsx
 msgid "“{0}” will be deleted for good and can't be restored."
@@ -331,7 +336,9 @@ msgid "{0} (copy)"
 msgstr "{0} (αντίγραφο)"
 
 #. placeholder {0}: document.name
+#. placeholder {0}: selected.name
 #: src/draft/adapters.ts
+#: src/features/email-templates/write-email-sheet.tsx
 msgid "{0} (mine)"
 msgstr "{0} (δικό μου)"
 
@@ -382,6 +389,12 @@ msgstr "{0} λιγότερο"
 msgid "{0} more"
 msgstr "{0} περισσότερα"
 
+#. placeholder {0}: plan.seatsUsed
+#. placeholder {1}: plan.seatLimit
+#: src/features/organization/plan-screen.tsx
+msgid "{0} of {1}"
+msgstr ""
+
 #. placeholder {0}: shown.length
 #. placeholder {1}: TEMPLATES.length
 #: src/features/design/template-group.tsx
@@ -412,11 +425,6 @@ msgstr "Ανάρτηση εργασίας {0}"
 msgid "{0} returned “{1}”. Your message is kept."
 msgstr "Το {0} επέστρεψε το \"{1}\". Το μήνυμά σας διατηρείται."
 
-#. placeholder {0}: done.length
-#: src/features/career/today.tsx
-msgid "{0} roles updated."
-msgstr ""
-
 #. placeholder {0}: selectedIds.length
 #. placeholder {0}: selection.length
 #: src/features/applications/list-screen.tsx
@@ -428,6 +436,11 @@ msgstr "Επιλεγμένα: {0}"
 #. placeholder {1}: failed.length
 #: src/features/career/today.tsx
 msgid "{0} updated; {1} failed. Failed roles remain selected. Refresh or retry."
+msgstr ""
+
+#. placeholder {0}: plan.seatsUsed
+#: src/features/organization/plan-screen.tsx
+msgid "{0} used"
 msgstr ""
 
 #. placeholder {0}: answer.split(/\s+/).filter(Boolean).length
@@ -498,14 +511,6 @@ msgstr "{company} · {tabName}"
 msgid "{completed, plural, one {# document updated} other {# documents updated}}"
 msgstr "{completed, plural, one {Ενημερώθηκε # έγγραφο} other {Ενημερώθηκαν # έγγραφα}}"
 
-#: src/features/share/custom-domain.tsx
-msgid "{cost} a year"
-msgstr "{cost} τον χρόνο"
-
-#: src/features/share/custom-domain.tsx
-msgid "{cost} the first year"
-msgstr "{cost} τον πρώτο χρόνο"
-
 #: src/features/write/section-sheet.tsx
 msgid "{count, plural, one {# column} other {# columns}}"
 msgstr "{count, plural, one {# στήλη} other {# στήλες}}"
@@ -513,6 +518,10 @@ msgstr "{count, plural, one {# στήλη} other {# στήλες}}"
 #: src/features/workspace/tabs/messages.tsx
 msgid "{count, plural, one {Apply # change} other {Apply # changes}}"
 msgstr "{count, plural, one {Εφαρμογή # αλλαγής} other {Εφαρμογή # αλλαγών}}"
+
+#: src/features/branding/domains-screen.tsx
+msgid "{count} of {limit} domains used."
+msgstr ""
 
 #: src/features/workspace/tabs/debrief.tsx
 msgid "{day} · {length}m"
@@ -708,6 +717,10 @@ msgstr "{toCheck, plural, one {Το πεδίο # χρειάζεται μια μ�
 msgid "{toCheck, plural, one {# to check} other {# to check}}"
 msgstr "{toCheck, plural, one {# για έλεγχο} other {# για έλεγχο}}"
 
+#: src/features/organization/plan-screen.tsx
+msgid "{trialDays} days left"
+msgstr ""
+
 #: src/features/letters/write.tsx
 #: src/features/workspace/tabs/apply.tsx
 msgid "{words, plural, one {# word} other {# words}}"
@@ -755,8 +768,12 @@ msgid "24 hours before"
 msgstr "24 ώρες πριν"
 
 #: src/features/letters/share.tsx
-msgid "A backup of this letter. Imports back into Reactive Resume as a letter."
-msgstr "Ένα αντίγραφο ασφαλείας αυτής της επιστολής. Εισάγει ξανά στο Reactive Resume ως γράμμα."
+msgid "A backup of this letter. Imports back into {appName} as a letter."
+msgstr ""
+
+#: src/features/discovery/messages.ts
+msgid "A board name has only letters, digits, hyphens and underscores."
+msgstr ""
 
 #: src/features/check/issues.ts
 msgid "A city and country let roles be matched to where you are."
@@ -822,9 +839,21 @@ msgstr "Μια αριθμητική ημερομηνία διαβάζεται δ
 msgid "A page is rotated."
 msgstr "Μια σελίδα είναι περιστραμμένη."
 
+#: src/features/organization/plan-screen.tsx
+msgid "A payment is overdue. Please contact your organization's owner."
+msgstr ""
+
+#: src/features/organization/plan-screen.tsx
+msgid "A payment is overdue. Please contact your organization's owner. Service pauses after {graceEnd}."
+msgstr ""
+
 #: src/features/applications/prior-no-response.tsx
 msgid "A previous application to this company was closed with No response. You can still apply."
 msgstr "Μια προηγούμενη αίτηση σε αυτή την εταιρεία έκλεισε με αποτέλεσμα Καμία απάντηση. Μπορείτε και πάλι να υποβάλετε αίτηση."
+
+#: src/features/email-templates/built-in-text.ts
+msgid "A question about working at {company}"
+msgstr ""
 
 #: src/features/application-detail/sheets.tsx
 msgid "A reminder to check in, shown as the next step until you do."
@@ -833,6 +862,10 @@ msgstr "Μια υπενθύμιση για check in, που εμφανίζετα
 #: src/features/check/issues.ts
 msgid "A role has no description"
 msgstr "Ένας ρόλος δεν έχει περιγραφή"
+
+#: src/features/discovery/searches.tsx
+msgid "A search looks at the job boards you choose, on a schedule, and adds postings that match to the queue below."
+msgstr ""
 
 #: src/features/check/writing.tsx
 msgid "A second opinion on your wording"
@@ -914,6 +947,8 @@ msgid "Actions for {0} at {1}"
 msgstr "Ενέργειες για {0} στο {1}"
 
 #: src/features/ai/web-access.tsx
+#: src/features/branding/domains-screen.tsx
+#: src/features/organization/plan-screen.tsx
 msgid "Active"
 msgstr "Ενεργός"
 
@@ -922,6 +957,10 @@ msgstr "Ενεργός"
 msgid "Add"
 msgstr "Προσθήκη"
 
+#: src/features/discovery/search-form.tsx
+msgid "Add a board"
+msgstr ""
+
 #: src/features/applications/lane-settings.tsx
 msgid "Add a compatible replacement lane first."
 msgstr "Προσθέστε πρώτα ένα συμβατό στάδιο αντικατάστασης."
@@ -929,6 +968,10 @@ msgstr "Προσθέστε πρώτα ένα συμβατό στάδιο αντ�
 #: src/features/career/search-regions-field.tsx
 msgid "Add a country"
 msgstr "Προσθέστε μια χώρα"
+
+#: src/features/branding/domains-screen.tsx
+msgid "Add a domain"
+msgstr ""
 
 #: src/features/career/facts.tsx
 msgid "Add a fact"
@@ -1034,6 +1077,14 @@ msgstr "Προσθέστε πρώτα μια επερχόμενη συνέντε
 msgid "Add application"
 msgstr "Προσθήκη αίτησης"
 
+#: src/features/discovery/messages.ts
+msgid "Add at most {MAX_TERMS} entries."
+msgstr ""
+
+#: src/features/discovery/messages.ts
+msgid "Add at most 100 boards."
+msgstr ""
+
 #: src/features/settings/application-profile.tsx
 msgid "Add authorization country"
 msgstr ""
@@ -1057,6 +1108,10 @@ msgstr "Προσθήκη συνοδευτικής επιστολής"
 #: src/features/check/issues.ts
 msgid "Add dates"
 msgstr "Προσθέστε ημερομηνίες"
+
+#: src/features/branding/domains-screen.tsx
+msgid "Add domain"
+msgstr ""
 
 #: src/features/write/fields.ts
 msgid "Add education"
@@ -1111,6 +1166,10 @@ msgstr "Προσθήκη προσφοράς"
 msgid "Add offer terms manually, or use optional AI extraction in Messages."
 msgstr "Προσθέστε χειροκίνητα τους όρους της προσφοράς εργασίας ή χρησιμοποιήστε την προαιρετική εξαγωγή με τεχνητή νοημοσύνη στα Μηνύματα."
 
+#: src/features/discovery/search-form.tsx
+msgid "Add one at a time or separate them with commas."
+msgstr ""
+
 #: src/features/ats-checker/messages.ts
 msgid "Add one link that shows your work."
 msgstr "Προσθέστε έναν σύνδεσμο που δείχνει τη δουλειά σας."
@@ -1118,6 +1177,10 @@ msgstr "Προσθέστε έναν σύνδεσμο που δείχνει τη 
 #: src/features/ats-checker/messages.ts
 msgid "Add one with its country code; some application forms require it before you can submit."
 msgstr "Προσθέστε έναν με τον κωδικό χώρας του· ορισμένες φόρμες αιτήσεων τον απαιτούν πριν την υποβολή."
+
+#: src/features/discovery/searches.tsx
+msgid "Add one with the job titles, skills and places you want, plus the company job boards to watch. It runs on its own, and the best matches show up in the queue."
+msgstr ""
 
 #: src/features/design/layout-screen.tsx
 msgid "Add page"
@@ -1358,6 +1421,10 @@ msgstr "Δεν ήταν δυνατή η φόρτωση των παρόχων τ�
 msgid "AI providers couldn't be loaded. Retry or fill the details manually."
 msgstr "Δεν ήταν δυνατή η φόρτωση των παρόχων τεχνητής νοημοσύνης. Δοκιμάστε ξανά ή συμπληρώστε τα στοιχεία χειροκίνητα."
 
+#: src/features/organization/plan-screen.tsx
+msgid "AI quota"
+msgstr ""
+
 #: src/features/applications/add-sheet.tsx
 msgid "AI reads pasted text only when you ask. Links can use the page’s own job data without AI."
 msgstr "Το AI διαβάζει επικολλημένο κείμενο μόνο όταν το ζητάτε. Οι σύνδεσμοι μπορούν να χρησιμοποιούν τα δεδομένα εργασίας της σελίδας χωρίς το AI."
@@ -1437,6 +1504,10 @@ msgstr "Καλυμμένο ήδη · επιλέξτε ένα για να το β
 msgid "Already covered:"
 msgstr "Καλύπτεται ήδη:"
 
+#: src/features/email-templates/templates-screen.tsx
+msgid "Also available to you"
+msgstr ""
+
 #: src/features/check/screen.tsx
 msgid "Also check the exported PDF"
 msgstr "Ελέγξτε επίσης το εξαγόμενο PDF"
@@ -1482,6 +1553,10 @@ msgstr "ένα λάθος"
 #: src/features/application-detail/sections.tsx
 msgid "and {0} more"
 msgstr "και {0} περισσότερα"
+
+#: src/features/branding/domains-screen.tsx
+msgid "Another account claimed this domain first."
+msgstr ""
 
 #: src/features/share/link.tsx
 msgid "Another of your resumes uses this address."
@@ -1529,12 +1604,17 @@ msgid "Answers copied"
 msgstr "Οι απαντήσεις αντιγράφηκαν"
 
 #: src/features/career/preferences.tsx
+#: src/features/discovery/messages.ts
 msgid "Any"
 msgstr "Χωρίς όριο"
 
 #: src/features/design/style-groups.tsx
 msgid "Any font, in Advanced"
 msgstr "Οποιαδήποτε γραμματοσειρά, σε Advanced"
+
+#: src/features/email-templates/template-editor.tsx
+msgid "Any stage"
+msgstr ""
 
 #: src/features/share/web-page.tsx
 msgid "Anyone with the link will be able to view your resume."
@@ -1561,6 +1641,10 @@ msgstr "Το κλειδί API ανακλήθηκε. Οι εφαρμογές πο
 #: src/features/settings/api-keys.tsx
 msgid "API keys"
 msgstr "Πλήκτρα API"
+
+#: src/features/branding/branding-screen.tsx
+msgid "App name"
+msgstr ""
 
 #: app/(tabs)/settings/preferences.tsx
 msgid "Appearance"
@@ -1728,6 +1812,19 @@ msgstr "Οι εφαρμογές που χρησιμοποιούν το «{0}» �
 msgid "Arabic"
 msgstr "Αραβικά"
 
+#: src/features/email-templates/templates-screen.tsx
+msgid "Archive"
+msgstr ""
+
+#. placeholder {0}: archiving?.name ?? ""
+#: src/features/email-templates/templates-screen.tsx
+msgid "Archive {0}?"
+msgstr ""
+
+#: src/features/email-templates/template-editor.tsx
+msgid "Archive template"
+msgstr ""
+
 #: src/features/write/fields.ts
 msgid "Area of study"
 msgstr "Τομέας μελέτης"
@@ -1781,9 +1878,13 @@ msgstr "Ζητήστε από τον βοηθό να το δουλέψει"
 msgid "Ask the coach"
 msgstr "Ρωτήστε τον σύμβουλο"
 
-#: src/features/share/download.tsx
-msgid "Ask the community. Remove personal details before posting."
-msgstr "Ρωτήστε την κοινότητα. Αφαιρέστε τα προσωπικά στοιχεία πριν από τη δημοσίευση."
+#: src/auth/session-gate.tsx
+msgid "Ask the organization's administrator for an invitation, or sign out and use a different account."
+msgstr ""
+
+#: src/features/branding/domains-screen.tsx
+msgid "Ask the platform administrator to set up custom domains. Your address above keeps working."
+msgstr ""
 
 #: src/features/ai/error.ts
 msgid "Ask your server administrator to enable credential encryption or configure a shared connection."
@@ -1869,10 +1970,6 @@ msgstr "Αυτόματα"
 #: src/features/history/history.tsx
 msgid "Autosaves are grouped by session and kept for 90 days. Named versions are kept until you delete them. Restoring saves the current state first."
 msgstr "Οι αυτόματες αποθηκεύσεις ομαδοποιούνται ανά περίοδο λειτουργίας και διατηρούνται για 90 ημέρες. Οι επώνυμες εκδόσεις διατηρούνται μέχρι να τις διαγράψετε. Η επαναφορά αποθηκεύει πρώτα την τρέχουσα κατάσταση."
-
-#: src/features/share/custom-domain.tsx
-msgid "Available"
-msgstr "Διαθέσιμο"
 
 #: src/features/ats-checker/messages.ts
 msgid "Avoid heavy letter-spacing effects, then re-export."
@@ -2010,6 +2107,16 @@ msgstr ""
 msgid "Board"
 msgstr "Πίνακας"
 
+#. placeholder {0}: index + 1
+#: src/features/discovery/search-form.tsx
+msgid "Board {0} name or link"
+msgstr ""
+
+#. placeholder {0}: index + 1
+#: src/features/discovery/search-form.tsx
+msgid "Board {0} source"
+msgstr ""
+
 #: src/features/design/advanced.tsx
 msgctxt "Body Text (paragraphs, lists, etc.)"
 msgid "Body"
@@ -2050,6 +2157,15 @@ msgstr "Ακτίνα περιγράμματος"
 msgid "Border width"
 msgstr "Πλάτος περιγράμματος"
 
+#: app/(tabs)/settings/index.tsx
+#: src/features/branding/branding-screen.tsx
+msgid "Branding"
+msgstr ""
+
+#: src/features/branding/branding-screen.tsx
+msgid "Branding saved. Open tabs on your organization's address update within about a minute."
+msgstr ""
+
 #: src/features/ats-checker/messages.ts
 msgid "Break the resume into the usual sections so it can be segmented."
 msgstr "Χωρίστε το βιογραφικό στις συνήθεις ενότητες ώστε να μπορεί να τμηματοποιηθεί."
@@ -2075,6 +2191,14 @@ msgstr "Η ανανέωση της ενημέρωσης είναι ενεργο�
 msgid "Briefing refresh paused"
 msgstr "Η ανανέωση του ενημερωτικού έχει τεθεί σε παύση"
 
+#: src/features/settings/clipper-sign-ins.tsx
+msgid "Browsers where you signed in to the Job Clipper extension. You sign in from the extension on a computer."
+msgstr ""
+
+#: src/features/email-templates/labels.ts
+msgid "Built-in"
+msgstr ""
+
 #: src/features/ai/web-access.tsx
 msgid "Built-in reader"
 msgstr "Ενσωματωμένος αναγνώστης"
@@ -2098,9 +2222,9 @@ msgstr "Λίστα με κουκκίδες"
 msgid "Burgundy"
 msgstr "Μπορντό"
 
-#: app/(tabs)/settings/index.tsx
-msgid "by <0>Amruth Pillai</0>"
-msgstr "από τον <0>Amruth Pillai</0>"
+#: src/auth/auth-header.tsx
+msgid "By creating an account you agree to the Terms and the Privacy policy."
+msgstr ""
 
 #: src/features/applications-board/views.tsx
 msgid "Calendar"
@@ -2121,6 +2245,8 @@ msgstr "Μπορεί το λογισμικό να διαβάσει το βιογ
 #: src/features/ats-checker/checker.tsx
 #: src/features/check/parser.tsx
 #: src/features/check/writing.tsx
+#: src/features/discovery/search-form.tsx
+#: src/features/email-templates/template-editor.tsx
 #: src/features/search/search-screen.tsx
 #: src/features/workspace/preparation.tsx
 #: src/features/workspace/tabs/fit.tsx
@@ -2159,6 +2285,11 @@ msgstr "Καταλανικά"
 #: src/features/applications/lane-settings.tsx
 msgid "Category"
 msgstr "Κατηγορία"
+
+#. placeholder {0}: domain.cfSslStatus
+#: src/features/branding/domains-screen.tsx
+msgid "Certificate: {0}"
+msgstr ""
 
 #: src/features/write/fields.ts
 msgid "Certifications"
@@ -2242,6 +2373,10 @@ msgstr "Ελέγξτε ένα δείγμα αρχείου"
 msgid "Check again"
 msgstr "Νέος έλεγχος"
 
+#: src/features/branding/domains-screen.tsx
+msgid "Check again in {wait}s"
+msgstr ""
+
 #: src/features/ats-checker/checker.tsx
 msgid "Check another file"
 msgstr "Ελέγξτε ένα άλλο αρχείο"
@@ -2267,6 +2402,10 @@ msgstr "Έλεγχος καταλληλότητας"
 msgid "Check it's accurate."
 msgstr "Ελέγξτε ότι είναι ακριβές."
 
+#: src/features/branding/domains-screen.tsx
+msgid "Check now"
+msgstr ""
+
 #: src/features/workspace/tabs/prepare.tsx
 msgid "Check the details"
 msgstr "Ελέγξτε τις λεπτομέρειες"
@@ -2286,6 +2425,10 @@ msgstr "Ελέγξτε τα πεδία και δοκιμάστε ξανά. Γι�
 #: src/features/documents/queries.ts
 msgid "Check the file or fields and try again."
 msgstr "Ελέγξτε το αρχείο ή τα πεδία και δοκιμάστε ξανά."
+
+#: src/features/discovery/messages.ts
+msgid "Check this field."
+msgstr ""
 
 #: src/features/workspace/tabs/fit.tsx
 msgid "Check this role against your evidence"
@@ -2377,6 +2520,14 @@ msgstr "Επιλέξτε PDF μικρότερο από 10 MB. Το επιλεγ�
 msgid "Choose a photo smaller than 10 MB."
 msgstr "Επιλέξτε μια φωτογραφία μικρότερη από 10 MB."
 
+#: src/features/branding/branding-screen.tsx
+msgid "Choose a PNG image."
+msgstr ""
+
+#: src/features/branding/branding-screen.tsx
+msgid "Choose a PNG or WebP image."
+msgstr ""
+
 #: src/features/applications/lane-settings.tsx
 msgid "Choose a replacement"
 msgstr "Επιλέξτε αντικατάσταση"
@@ -2421,6 +2572,14 @@ msgstr "Επιλέξτε αίτηση και διορθώστε τα επιση�
 msgid "Choose an audio file"
 msgstr "Επιλέξτε ένα αρχείο ήχου"
 
+#: src/features/branding/branding-screen.tsx
+msgid "Choose an image of 128 KB or less."
+msgstr ""
+
+#: src/features/branding/branding-screen.tsx
+msgid "Choose an image of 512 KB or less."
+msgstr ""
+
 #: src/features/documents/new-document.tsx
 msgid "Choose another file"
 msgstr "Επιλέξτε άλλο αρχείο"
@@ -2432,6 +2591,10 @@ msgstr "Επιλέξτε ημερομηνία"
 #: src/features/settings/profile.tsx
 msgid "Choose from library"
 msgstr "Επιλέξτε από τη βιβλιοθήκη"
+
+#: src/features/branding/branding-screen.tsx
+msgid "Choose one of the listed fonts."
+msgstr ""
 
 #: src/features/applications-board/board-screen.tsx
 msgid "Choose outcome"
@@ -2567,10 +2730,6 @@ msgstr "Κλειστές: {closed}"
 msgid "Coach"
 msgstr "Σύμβουλος"
 
-#: src/features/share/custom-domain.tsx
-msgid "Code copied"
-msgstr "Ο κωδικός αντιγράφηκε"
-
 #: src/features/design/design-pane.tsx
 #: src/features/letters/design.tsx
 msgid "Color"
@@ -2583,6 +2742,10 @@ msgstr "Χρώμα (#RRGGBB)"
 #: src/features/design/advanced.tsx
 msgid "Colors and level"
 msgstr "Χρώματα και επίπεδο"
+
+#: src/features/branding/branding-screen.tsx
+msgid "Colours and font"
+msgstr ""
 
 #: src/features/write/section-sheet.tsx
 msgid "Columns"
@@ -2641,8 +2804,8 @@ msgid "Complete {0} before saving."
 msgstr "Συμπληρώστε το πεδίο {0} πριν από την αποθήκευση."
 
 #: src/features/share/download.tsx
-msgid "Complete data backup. Imports back into Reactive Resume or JSON Resume tools."
-msgstr "Πλήρης δημιουργία αντιγράφων ασφαλείας δεδομένων. Εισάγει ξανά στα εργαλεία Reactive Resume ή JSON Resume."
+msgid "Complete data backup. Imports back into {appName} or JSON Resume tools."
+msgstr ""
 
 #: src/features/ats-checker/messages.ts
 msgid "Compress or remove large images to keep uploads quick."
@@ -2677,10 +2840,6 @@ msgstr "Σύνδεση"
 #: src/features/share/custom-domain.tsx
 msgid "Connect {0}"
 msgstr "Σύνδεση του {0}"
-
-#: src/features/share/custom-domain.tsx
-msgid "Connect {domain}"
-msgstr "Σύνδεση του {domain}"
 
 #: src/features/ai/web-access.tsx
 msgid "Connect a service"
@@ -2825,14 +2984,24 @@ msgstr "Αντιγράφηκε"
 msgid "Copied to clipboard"
 msgstr "Αντιγράφηκε στο πρόχειρο"
 
+#: src/features/branding/domains-screen.tsx
+msgid "Copied."
+msgstr ""
+
 #: src/features/share/custom-domain.tsx
 msgid "Copies it"
 msgstr "Αντιγράφει το κείμενο"
 
+#: src/features/email-templates/write-email-sheet.tsx
 #: src/features/share/link.tsx
 #: src/features/workspace/answer-library.tsx
 msgid "Copy"
 msgstr "Αντιγραφή"
+
+#. placeholder {0}: record.type
+#: src/features/branding/domains-screen.tsx
+msgid "Copy {0} value"
+msgstr ""
 
 #: src/features/workspace/preparation.tsx
 msgid "Copy a base resume for this job"
@@ -2842,13 +3011,13 @@ msgstr ""
 msgid "Copy a resume for a job"
 msgstr "Αντιγράψτε ένα βιογραφικό για μια θέση εργασίας"
 
+#: src/features/branding/domains-screen.tsx
+msgid "Copy address"
+msgstr ""
+
 #: src/features/workspace/tabs/apply.tsx
 msgid "Copy answers"
 msgstr "Αντιγραφή απαντήσεων"
-
-#: src/features/share/custom-domain.tsx
-msgid "Copy code"
-msgstr "Αντιγραφή κωδικού"
 
 #: src/features/document-menu/index.tsx
 msgid "Copy created"
@@ -2886,6 +3055,14 @@ msgstr "Διόρθωση γεγονότος"
 msgid "Correct the year, or write \"Present\" for ongoing work."
 msgstr "Διορθώστε το έτος ή γράψτε «Present» για συνεχιζόμενη εργασία."
 
+#: src/features/branding/domains-screen.tsx
+msgid "Couldn't add the domain. Check the name and try again."
+msgstr ""
+
+#: src/features/email-templates/templates-screen.tsx
+msgid "Couldn't archive the template. Try again."
+msgstr ""
+
 #: src/features/assistant/chat-view.tsx
 msgid "Couldn't attach the file. Try again."
 msgstr "Δεν ήταν δυνατή η επισύναψη του αρχείου. Προσπαθήστε ξανά."
@@ -2894,6 +3071,7 @@ msgstr "Δεν ήταν δυνατή η επισύναψη του αρχείου
 msgid "Couldn't change the language. Try again."
 msgstr "Δεν ήταν δυνατή η αλλαγή της γλώσσας. Προσπαθήστε ξανά."
 
+#: src/features/discovery/searches.tsx
 #: src/features/workspace/tabs/prepare.tsx
 msgid "Couldn't change the schedule. Try again."
 msgstr "Δεν ήταν δυνατή η αλλαγή του προγράμματος. Προσπαθήστε ξανά."
@@ -2909,6 +3087,10 @@ msgstr "Δεν ήταν δυνατός ο έλεγχος ή η αποθήκευ�
 #: src/features/applications/prior-no-response.tsx
 msgid "Couldn't check prior applications. You can still save this application."
 msgstr "Δεν ήταν δυνατός ο έλεγχος προηγούμενων αιτήσεων. Μπορείτε και πάλι να αποθηκεύσετε αυτή την αίτηση."
+
+#: src/features/branding/domains-screen.tsx
+msgid "Couldn't check the domain. Try again."
+msgstr ""
 
 #: src/features/letters/write.tsx
 msgid "Couldn't check your AI providers."
@@ -2943,6 +3125,14 @@ msgstr "Δεν ήταν δυνατή η επιβεβαίωση της αποθή
 msgid "Couldn't copy the transcript. Try again."
 msgstr "Δεν ήταν δυνατή η αντιγραφή της μεταγραφής. Προσπαθήστε ξανά."
 
+#: src/features/email-templates/write-email-sheet.tsx
+msgid "Couldn't copy. Select the text and copy it yourself."
+msgstr ""
+
+#: src/features/branding/domains-screen.tsx
+msgid "Couldn't copy. Select the text instead."
+msgstr ""
+
 #: src/features/application-detail/sections.tsx
 #: src/features/workspace/preparation.tsx
 msgid "Couldn't create the letter. Try again."
@@ -2960,10 +3150,18 @@ msgstr "Δεν ήταν δυνατή η διαγραφή της συνομιλί
 msgid "Couldn't delete the interview. Try again."
 msgstr "Δεν ήταν δυνατή η διαγραφή της συνέντευξης. Προσπαθήστε ξανά."
 
+#: src/features/discovery/searches.tsx
+msgid "Couldn't delete this search. Try again."
+msgstr ""
+
 #: src/features/settings/export.tsx
 #: src/features/share/download.tsx
 msgid "Couldn't export. Try again."
 msgstr "Δεν ήταν δυνατή η εξαγωγή. Προσπαθήστε ξανά."
+
+#: src/features/discovery/search-form.tsx
+msgid "Couldn't find the board name in this link."
+msgstr ""
 
 #: src/features/application-detail/sections.tsx
 #: src/features/workspace/preparation.tsx
@@ -3008,6 +3206,10 @@ msgstr "Δεν ήταν δυνατή η φόρτωση των κλειδιών A
 msgid "Couldn't load applications."
 msgstr "Δεν ήταν δυνατή η φόρτωση των αιτήσεων εργασίας."
 
+#: src/features/branding/domains-screen.tsx
+msgid "Couldn't load domains."
+msgstr ""
+
 #: src/features/documents/thumbnail.tsx
 msgid "Couldn't load letter"
 msgstr "Δεν ήταν δυνατή η φόρτωση της συνοδευτικής επιστολής"
@@ -3024,6 +3226,10 @@ msgstr "Δεν ήταν δυνατή η φόρτωση βιογραφικών."
 msgid "Couldn't load statistics."
 msgstr "Δεν ήταν δυνατή η φόρτωση στατιστικών στοιχείων."
 
+#: src/features/branding/branding-screen.tsx
+msgid "Couldn't load the branding."
+msgstr ""
+
 #: src/features/assistant/assistant-screen.tsx
 #: src/features/letters/share.tsx
 #: src/features/letters/write.tsx
@@ -3033,6 +3239,10 @@ msgstr "Δεν ήταν δυνατή η φόρτωση της συνοδευτι
 #: src/features/check/job-match.tsx
 msgid "Couldn't load the linked posting."
 msgstr "Δεν ήταν δυνατή η φόρτωση της συνδεδεμένης αγγελίας εργασίας."
+
+#: src/features/organization/plan-screen.tsx
+msgid "Couldn't load the plan."
+msgstr ""
 
 #: app/builder/[id]/page.tsx
 #: app/builder/[id]/write.tsx
@@ -3062,6 +3272,10 @@ msgstr "Δεν ήταν δυνατή η φόρτωση αυτού. Ελέγξτ�
 msgid "Couldn't load versions."
 msgstr "Δεν ήταν δυνατή η φόρτωση των εκδόσεων."
 
+#: src/features/settings/clipper-sign-ins.tsx
+msgid "Couldn't load your Job Clipper sign-ins."
+msgstr ""
+
 #: app/(tabs)/settings/account.tsx
 msgid "Couldn't load your profile."
 msgstr "Δεν ήταν δυνατή η φόρτωση του προφίλ σας."
@@ -3073,6 +3287,10 @@ msgstr "Δεν ήταν δυνατή η φόρτωση της δημόσιας �
 #: src/features/letters/write.tsx
 msgid "Couldn't load your resumes."
 msgstr "Δεν ήταν δυνατή η φόρτωση των βιογραφικών σας."
+
+#: src/features/discovery/searches.tsx
+msgid "Couldn't load your searches. Check your connection and try again."
+msgstr ""
 
 #: app/(tabs)/settings/preferences.tsx
 msgid "Couldn't load your timezone."
@@ -3090,11 +3308,11 @@ msgstr "Δεν ήταν δυνατή η σήμανση ως υποβληθείσ
 #: app/(tabs)/settings/index.tsx
 #: src/auth/auth-header.tsx
 #: src/features/settings/api-keys.tsx
-#: src/features/share/download.tsx
 msgid "Couldn't open the browser. Try again."
 msgstr "Δεν ήταν δυνατό το άνοιγμα του προγράμματος περιήγησης. Προσπαθήστε ξανά."
 
 #: src/features/career/today.tsx
+#: src/features/discovery/review-queue.tsx
 msgid "Couldn't open the posting. Try again."
 msgstr "Δεν ήταν δυνατό το άνοιγμα της αγγελίας εργασίας. Προσπαθήστε ξανά."
 
@@ -3141,6 +3359,14 @@ msgstr "Δεν ήταν δυνατή η ανανέωση των εγγράφων
 msgid "Couldn't remember that. Try again."
 msgstr "Δεν ήταν δυνατή η απομνημόνευση. Δοκιμάστε ξανά."
 
+#: src/features/branding/branding-screen.tsx
+msgid "Couldn't remove it. Try again."
+msgstr ""
+
+#: src/features/branding/domains-screen.tsx
+msgid "Couldn't remove the domain. Try again."
+msgstr ""
+
 #: src/features/application-detail/sections.tsx
 msgid "Couldn't remove the file. Try again."
 msgstr "Δεν ήταν δυνατή η αφαίρεση του αρχείου. Προσπαθήστε ξανά."
@@ -3162,6 +3388,10 @@ msgstr "Δεν ήταν δυνατή η απόδοση αυτού του βιο�
 msgid "Couldn't revoke the key. Try again."
 msgstr "Δεν ήταν δυνατή η ανάκληση του κλειδιού. Προσπαθήστε ξανά."
 
+#: src/features/settings/clipper-sign-ins.tsx
+msgid "Couldn't revoke the sign-in. Try again."
+msgstr ""
+
 #: src/features/career/facts.tsx
 #: src/features/career/hooks.ts
 #: src/features/workspace/hooks.ts
@@ -3180,6 +3410,10 @@ msgstr "Δεν ήταν δυνατή η αποθήκευση αυτής της �
 #: src/features/workspace/tabs/fit.tsx
 msgid "Couldn't save that to Knowledge. Try again."
 msgstr "Δεν ήταν δυνατή η αποθήκευση στη Γνώση. Δοκιμάστε ξανά."
+
+#: src/features/branding/branding-screen.tsx
+msgid "Couldn't save the branding. Check the highlighted fields and try again."
+msgstr ""
 
 #: src/features/application-detail/sheets.tsx
 msgid "Couldn't save the contacts. Try again."
@@ -3201,6 +3435,11 @@ msgstr "Δεν ήταν δυνατή η αποθήκευση των σημειώ
 msgid "Couldn't save the tags. Try again."
 msgstr "Δεν ήταν δυνατή η αποθήκευση των ετικετών. Προσπαθήστε ξανά."
 
+#: src/features/email-templates/templates-screen.tsx
+#: src/features/email-templates/write-email-sheet.tsx
+msgid "Couldn't save the template. Try again."
+msgstr ""
+
 #: app/(tabs)/settings/preferences.tsx
 msgid "Couldn't save the theme. Try again."
 msgstr "Δεν ήταν δυνατή η αποθήκευση του θέματος. Προσπαθήστε ξανά."
@@ -3208,6 +3447,10 @@ msgstr "Δεν ήταν δυνατή η αποθήκευση του θέματο
 #: app/(tabs)/settings/preferences.tsx
 msgid "Couldn't save the timezone. Try again."
 msgstr "Δεν ήταν δυνατή η αποθήκευση της ζώνης ώρας. Προσπαθήστε ξανά."
+
+#: src/features/discovery/search-form.tsx
+msgid "Couldn't save this search. Check your connection and try again."
+msgstr ""
 
 #: src/features/letters/write.tsx
 msgid "Couldn't save your changes, so drafting didn't start. Nothing on the page changed."
@@ -3280,6 +3523,10 @@ msgstr "Δεν ήταν δυνατή η έναρξη της εγγραφής. Δ
 msgid "Couldn't start the conversation. Try again."
 msgstr "Δεν ήταν δυνατή η έναρξη της συνομιλίας. Προσπαθήστε ξανά."
 
+#: src/features/discovery/searches.tsx
+msgid "Couldn't start the run. Try again."
+msgstr ""
+
 #: src/features/career/role-suggestions.tsx
 msgid "Couldn't suggest roles. Try again or enter roles manually."
 msgstr ""
@@ -3327,6 +3574,10 @@ msgstr "Δεν ήταν δυνατή η ενημέρωση του χρονολο
 #: src/features/application-detail/sections.tsx
 msgid "Couldn't upload the file. Try again."
 msgstr "Δεν ήταν δυνατή η μεταφόρτωση του αρχείου. Προσπαθήστε ξανά."
+
+#: src/features/branding/branding-screen.tsx
+msgid "Couldn't upload the image. Try again."
+msgstr ""
 
 #: src/features/settings/profile.tsx
 msgid "Couldn't upload the photo."
@@ -3425,6 +3676,14 @@ msgstr "Δημιουργία αντιγράφου"
 msgid "Create or import a resume first, then return to copy it for this job."
 msgstr "Δημιουργήστε ή εισαγάγετε πρώτα βιογραφικό και επιστρέψτε για να το αντιγράψετε για αυτήν τη θέση."
 
+#: src/features/discovery/search-form.tsx
+msgid "Create search"
+msgstr ""
+
+#: src/features/branding/domains-screen.tsx
+msgid "Create the two records below at your DNS provider. We check every few minutes."
+msgstr ""
+
 #: src/features/document-menu/index.tsx
 #: src/features/history/history.tsx
 #: src/features/letters/share.tsx
@@ -3458,6 +3717,7 @@ msgstr ""
 
 #: src/features/design/advanced.tsx
 #: src/features/design/style-groups.tsx
+#: src/features/email-templates/labels.ts
 #: src/features/letters/design.tsx
 #: src/features/write/pickers.tsx
 msgid "Custom"
@@ -3469,6 +3729,14 @@ msgstr "Προσαρμοσμένο χρώμα (hex)"
 
 #: src/features/write/date-field.tsx
 msgid "Custom date text"
+msgstr ""
+
+#: src/features/branding/domains-screen.tsx
+msgid "Custom domains are available on Pro"
+msgstr ""
+
+#: src/features/branding/domains-screen.tsx
+msgid "Custom domains aren't available on this server"
 msgstr ""
 
 #: src/features/write/basics-screen.tsx
@@ -3491,6 +3759,10 @@ msgstr "Δεν εφαρμόζονται προσαρμοσμένα στυλ. Δ�
 #: src/features/settings/locale-names.ts
 msgid "Czech"
 msgstr "Τσεχικά"
+
+#: src/features/discovery/messages.ts
+msgid "Daily"
+msgstr ""
 
 #. placeholder {0}: summary.peak
 #: src/features/share/link.tsx
@@ -3591,6 +3863,7 @@ msgstr "Προεπιλογή"
 msgid "Degree"
 msgstr "Πτυχίο"
 
+#: src/features/discovery/searches.tsx
 #: src/features/history/history.tsx
 #: src/features/letters/share.tsx
 #: src/features/workspace/answer-library.tsx
@@ -3603,6 +3876,11 @@ msgstr "Διαγραφή"
 #: src/features/documents/library.tsx
 msgid "Delete “{0}” forever?"
 msgstr "Οριστική διαγραφή του «{0}»;"
+
+#. placeholder {0}: source.name
+#: src/features/discovery/searches.tsx
+msgid "Delete \"{0}\"?"
+msgstr ""
 
 #. placeholder {0}: menu ? versionTitle(menu) : ""
 #: src/features/history/history.tsx
@@ -3809,6 +4087,7 @@ msgstr "Διαφορετικά νομίσματα ή περίοδοι πληρω
 msgid "Direction"
 msgstr "Κατεύθυνση"
 
+#: src/features/branding/branding-screen.tsx
 #: src/features/letters/write.tsx
 msgid "Discard"
 msgstr "Απορρίψτε"
@@ -3831,6 +4110,7 @@ msgstr "Απορρίψτε τις επεξεργασίες εκτός σύνδε
 msgid "Discard your offline edits?"
 msgstr "Να απορριφθούν οι επεξεργασίες εκτός σύνδεσης;"
 
+#: src/features/discovery/review-queue.tsx
 #: src/features/letters/write.tsx
 #: src/ui/layout.tsx
 msgid "Dismiss"
@@ -3838,6 +4118,10 @@ msgstr "Απολύω"
 
 #: src/features/career/today.tsx
 msgid "Dismiss selected"
+msgstr ""
+
+#: src/features/discovery/review-queue.tsx
+msgid "Dismissed"
 msgstr ""
 
 #: src/features/career/role-suggestions.tsx
@@ -3879,9 +4163,22 @@ msgstr "Έγγραφα για αυτή τη δουλειά"
 msgid "Documents you move here stay for 30 days."
 msgstr "Τα έγγραφα που μετακινείτε εδώ παραμένουν για 30 ημέρες."
 
+#: src/features/branding/domains-screen.tsx
+msgid "Domain"
+msgstr ""
+
+#: src/features/branding/domains-screen.tsx
+msgid "Domain added. Create the DNS records shown below."
+msgstr ""
+
 #: src/features/share/custom-domain.tsx
 msgid "Domain connected"
 msgstr "Ο τομέας συνδέθηκε"
+
+#: app/(tabs)/settings/index.tsx
+#: src/features/branding/domains-screen.tsx
+msgid "Domains"
+msgstr ""
 
 #. placeholder {0}: document.name
 #: src/features/assistant/assistant-screen.tsx
@@ -3896,10 +4193,6 @@ msgstr "Μην στέλνετε αγγελία εργασίας {0}"
 #: src/api/ai-consent.ts
 msgid "Don't share"
 msgstr "Μην μοιράζεσαι"
-
-#: app/(tabs)/settings/index.tsx
-msgid "Donate on Open Collective"
-msgstr "Κάντε δωρεά στο Open Collective"
 
 #: app/(tabs)/settings/preferences.tsx
 #: src/features/applications/list-screen.tsx
@@ -4084,6 +4377,10 @@ msgstr "Ολλανδικά"
 msgid "Each answer you get feedback on is kept here, newest first."
 msgstr "Κάθε απάντηση για την οποία λαμβάνετε ανατροφοδότηση φυλάσσεται εδώ, με τη νεότερη πρώτη."
 
+#: src/features/discovery/messages.ts
+msgid "Each entry can have at most {MAX_TERM_LENGTH} characters."
+msgstr ""
+
 #: src/features/workspace/tabs/fit.tsx
 msgid "Each requirement in the posting is checked against the facts and stories in your Knowledge. Gaps show as missing evidence, never missing ability."
 msgstr "Κάθε απαίτηση της αγγελίας ελέγχεται με βάση τα γεγονότα και τις ιστορίες στη Γνώση σας. Τα κενά εμφανίζονται ως ελλιπή τεκμήρια, ποτέ ως έλλειψη ικανότητας."
@@ -4100,6 +4397,7 @@ msgstr "προηγούμενα μηνύματα σε αυτή τη συνομι�
 #: src/features/application-detail/sections.tsx
 #: src/features/career/stories.tsx
 #: src/features/career/today.tsx
+#: src/features/discovery/searches.tsx
 #: src/features/write/basics-screen.tsx
 msgid "Edit"
 msgstr "Εκδίδω"
@@ -4161,9 +4459,17 @@ msgstr ""
 msgid "Edit schedule"
 msgstr "Επεξεργασία προγράμματος"
 
+#: src/features/discovery/search-form.tsx
+msgid "Edit search"
+msgstr ""
+
 #: src/features/career/stories.tsx
 msgid "Edit STARR story"
 msgstr "Επεξεργασία ιστορίας STARR"
+
+#: src/features/email-templates/templates-screen.tsx
+msgid "Edit template"
+msgstr ""
 
 #: src/features/check/issues.ts
 msgid "Edit the email"
@@ -4203,6 +4509,19 @@ msgstr "Email (προαιρετικό)"
 #: src/features/check/issues.ts
 msgid "Email address won't be recognized"
 msgstr "Η διεύθυνση email δεν θα αναγνωριστεί"
+
+#: src/features/email-templates/write-email-sheet.tsx
+msgid "Email copied"
+msgstr ""
+
+#: src/features/branding/branding-screen.tsx
+msgid "Email sender name"
+msgstr ""
+
+#: app/(tabs)/settings/index.tsx
+#: src/features/email-templates/templates-screen.tsx
+msgid "Email templates"
+msgstr ""
 
 #: src/features/application-detail/sheets.tsx
 msgid "Email the recruiter"
@@ -4286,6 +4605,10 @@ msgstr "Εισαγάγετε μια τιμή."
 msgid "Enter a web address, like example.com"
 msgstr "Εισαγάγετε μια διεύθυνση ιστού, όπως το παράδειγμα.com"
 
+#: src/features/discovery/messages.ts
+msgid "Enter a whole number from 0 to {MAX_AI_TOP_N}."
+msgstr ""
+
 #: src/features/career/preferences.tsx
 msgid "Enter a whole number from 0 to 52, or leave blank."
 msgstr "Εισαγάγετε έναν ακέραιο αριθμό από το 0 έως το 52 ή αφήστε το κενό."
@@ -4303,8 +4626,12 @@ msgid "Enter terms yourself. No AI request is made. Leave unknown amounts blank.
 msgstr "Εισαγάγετε τους όρους εσείς. Δεν αποστέλλεται αίτημα σε τεχνητή νοημοσύνη. Αφήστε κενά τα άγνωστα ποσά."
 
 #: app/(auth)/server.tsx
-msgid "Enter the address you open Reactive Resume at in a browser. The app checks it's a Reactive Resume server that allows app sign-in before you continue."
-msgstr "Εισαγάγετε τη διεύθυνση στην οποία ανοίγετε το Reactive Resume σε ένα πρόγραμμα περιήγησης. Η εφαρμογή ελέγχει ότι είναι διακομιστής Reactive Resume που επιτρέπει τη σύνδεση στην εφαρμογή προτού συνεχίσετε."
+msgid "Enter the address you open {appName} at in a browser. The app checks it's a {appName} server that allows app sign-in before you continue."
+msgstr ""
+
+#: src/features/discovery/messages.ts
+msgid "Enter the board name or paste its link."
+msgstr ""
 
 #: src/features/letters/write.tsx
 msgid "Enter your details below. Choosing a resume replaces them and links its design."
@@ -4429,11 +4756,21 @@ msgid "Facts"
 msgstr "Γεγονότα"
 
 #: src/features/ai/provider-list.tsx
+#: src/features/branding/domains-screen.tsx
+#: src/features/discovery/searches.tsx
 msgid "Failed"
 msgstr "Αποτυχημένος"
 
 #: src/features/settings/application-profile.tsx
 msgid "Family name"
+msgstr ""
+
+#: src/features/branding/branding-screen.tsx
+msgid "Favicon"
+msgstr ""
+
+#: src/features/branding/branding-screen.tsx
+msgid "Favicon uploaded."
 msgstr ""
 
 #: app/(tabs)/settings/preferences.tsx
@@ -4486,6 +4823,10 @@ msgstr "Συμπληρώστε τα στοιχεία χειροκίνητα"
 msgid "Fill empty fields with AI"
 msgstr "Συμπληρώστε τα κενά πεδία με AI"
 
+#: src/features/email-templates/write-email-sheet.tsx
+msgid "Fill in the [bracketed] parts before you send it."
+msgstr ""
+
 #: src/features/letters/write.tsx
 msgid "Filled from the application. The greeting follows the name."
 msgstr "Συμπληρώθηκε από την αίτηση εργασίας. Ο χαιρετισμός ακολουθεί το όνομα."
@@ -4505,6 +4846,14 @@ msgstr "Αναζήτηση του τι λειτουργεί"
 #: app/(auth)/sign-in.tsx
 msgid "Finish signing in in the browser"
 msgstr "Ολοκληρώστε τη σύνδεση στο πρόγραμμα περιήγησης"
+
+#: src/features/discovery/searches.tsx
+msgid "Finished"
+msgstr ""
+
+#: src/features/discovery/searches.tsx
+msgid "Finished with errors"
+msgstr ""
 
 #: src/features/settings/locale-names.ts
 msgid "Finnish"
@@ -4565,12 +4914,17 @@ msgstr "Εστίαση, εμπειρία, γιατί αυτή η θέση"
 msgid "Follow up"
 msgstr "Επικοινωνήστε ξανά"
 
+#: src/features/email-templates/built-in-text.ts
+msgid "Follow up after applying"
+msgstr ""
+
 #: src/features/workspace/tabs/messages.tsx
 msgid "Follow up on {at}"
 msgstr "Επανεπικοινωνία στις {at}"
 
 #: src/features/application-detail/sheets.tsx
 #: src/features/applications-board/calendar-screen.tsx
+#: src/features/email-templates/labels.ts
 msgid "Follow-up"
 msgstr "Παρακολούθηση"
 
@@ -4585,6 +4939,14 @@ msgstr "Σημείωση παρακολούθησης"
 #: src/features/career/schedule-sheet.tsx
 msgid "Follow-up reminder"
 msgstr "Υπενθύμιση επανεπικοινωνίας"
+
+#: src/features/email-templates/built-in-text.ts
+msgid "Following up on my {role} application"
+msgstr ""
+
+#: src/features/branding/branding-screen.tsx
+msgid "Font"
+msgstr ""
 
 #: src/features/design/advanced.tsx
 msgid "Font family"
@@ -4681,12 +5043,12 @@ msgstr ""
 
 #: src/api/ai-consent.ts
 #: src/features/career/schedule-sheet.tsx
-msgid "Found posting links are read by Reactive Resume and the sites being read."
+msgid "Found posting links are read by {appName} and the sites being read."
 msgstr ""
 
 #: src/api/ai-consent.ts
 #: src/features/career/schedule-sheet.tsx
-msgid "Found posting links are read by Reactive Resume and, when needed, {reader} and the sites being read. The reader may charge."
+msgid "Found posting links are read by {appName} and, when needed, {reader} and the sites being read. The reader may charge."
 msgstr ""
 
 #: src/features/design/style-groups.tsx
@@ -4709,6 +5071,10 @@ msgstr "Από την καρτέλα \"Καταλληλότητα\""
 #: src/features/assistant/assistant-screen.tsx
 msgid "From your experience entries"
 msgstr "Από τις καταχωρίσεις της εμπειρίας σας"
+
+#: src/features/email-templates/templates-screen.tsx
+msgid "From your organization and the built-in set. You can't change these here."
+msgstr ""
 
 #: src/features/career/search-regions-field.tsx
 msgid "From your timezone"
@@ -4754,10 +5120,6 @@ msgstr "Η \"Λήψη ανατροφοδότησης\" στέλνει την ε�
 msgid "Get new roles here every morning"
 msgstr "Λαμβάνετε νέες θέσεις εδώ κάθε πρωί"
 
-#: src/features/share/download.tsx
-msgid "Get resume feedback on Discord"
-msgstr "Λάβετε σχόλια για το βιογραφικό σας στο Discord"
-
 #: src/features/letters/write.tsx
 msgid "Getting long. Try “Shorter”, or cut the least specific paragraph."
 msgstr "Αργότερα. Δοκιμάστε το \"Sorter\" ή κόψτε τη λιγότερο συγκεκριμένη παράγραφο."
@@ -4773,6 +5135,10 @@ msgstr "Δώστε σε κάθε ρόλο και προσόν ένα εύρος 
 #: src/features/career/stories.tsx
 msgid "Give the story a title before you can save."
 msgstr "Δώστε τίτλο στην ιστορία για να μπορέσετε να αποθηκεύσετε."
+
+#: src/features/discovery/messages.ts
+msgid "Give this search a name."
+msgstr ""
 
 #: src/features/settings/application-profile.tsx
 msgid "Given name"
@@ -4861,6 +5227,53 @@ msgstr "ακούστηκε πίσω"
 msgid "Hebrew"
 msgstr "Εβραϊκά"
 
+#: src/features/email-templates/built-in-text.ts
+msgid "Hello {contactName},\n"
+"\n"
+"I applied for the {role} position at {company} and wanted to ask where my application stands. I am still very interested in the role, and I would be glad to send anything that would help your review.\n"
+"\n"
+"Thank you for your time.\n"
+"\n"
+"{fullName}\n"
+"{myEmail}"
+msgstr ""
+
+#: src/features/email-templates/built-in-text.ts
+msgid "Hello {contactName},\n"
+"\n"
+"My name is {fullName}, and I am looking at {role} opportunities at {company}. I admire what your team is building, and I would value ten minutes of your time to hear how you got started there and what the team looks for.\n"
+"\n"
+"I know your days are full, so please say no if the timing is wrong. Any pointer you can share would help.\n"
+"\n"
+"Kind regards,\n"
+"{firstName}\n"
+"{myEmail}"
+msgstr ""
+
+#: src/features/email-templates/built-in-text.ts
+msgid "Hello {contactName},\n"
+"\n"
+"Thank you for offering me the {role} position at {company}. I am glad to be considered and I am excited about joining the team. Before I accept, I would like to talk through the pay and the start date. Given the scope of the role and my experience, I would like to discuss [the terms you have in mind].\n"
+"\n"
+"Could we find a time this week to go through it together?\n"
+"\n"
+"With thanks,\n"
+"{fullName}\n"
+"{myEmail}"
+msgstr ""
+
+#: src/features/email-templates/built-in-text.ts
+msgid "Hello {contactName},\n"
+"\n"
+"Thank you for taking the time to meet with me on {interviewDate} about the {role} role at {company}. Our conversation left me more excited about the work, and I would welcome the chance to take the next step.\n"
+"\n"
+"If there is anything I can send to help with your decision, just let me know.\n"
+"\n"
+"Best regards,\n"
+"{fullName}\n"
+"{myEmail}"
+msgstr ""
+
 #: app/(tabs)/settings/index.tsx
 msgid "Help & docs"
 msgstr "Βοήθεια και έγγραφα"
@@ -4935,6 +5348,10 @@ msgstr "Απόκρυψη της φωτογραφίας"
 #: src/features/workspace/preparation.tsx
 msgid "Hides all steps"
 msgstr ""
+
+#: src/features/branding/branding-screen.tsx
+msgid "Highlight"
+msgstr "Επισήμανση"
 
 #: src/features/settings/locale-names.ts
 msgid "Hindi"
@@ -5011,6 +5428,10 @@ msgstr "Πόσο ταιριάζω σε αυτόν τον ρόλο;"
 msgid "Hungarian"
 msgstr "Ουγγρικά"
 
+#: src/features/discovery/messages.ts
+msgid "Hybrid"
+msgstr ""
+
 #: src/features/design/advanced.tsx
 msgid "Hyphenation"
 msgstr "Διαχωρισμός λέξεων με παύλα"
@@ -5066,6 +5487,10 @@ msgstr "Εικόνισμα…"
 #: src/features/design/style-groups.tsx
 msgid "Icons in contact line"
 msgstr "Εικονίδια στη γραμμή επαφής"
+
+#: src/features/branding/branding-screen.tsx
+msgid "Identity"
+msgstr ""
 
 #: src/features/ats-checker/messages.ts
 msgid "If it came from a scan, that is expected. Otherwise remove it; recruiters read it as keyword stuffing."
@@ -5148,6 +5573,10 @@ msgstr "Βελτιώστε την επιλεγμένη γραμμή"
 #: src/features/write/improve.tsx
 msgid "Improving…"
 msgstr "Βελτίωση…"
+
+#: src/features/ai/provider-list.tsx
+msgid "Included with your plan"
+msgstr ""
 
 #: src/features/applications/list-screen.tsx
 msgid "Including closed"
@@ -5266,9 +5695,25 @@ msgstr "Φορέας πιστοποίησης"
 msgid "Issues"
 msgstr "Θέματα"
 
+#: src/features/branding/domains-screen.tsx
+msgid "Issuing certificate"
+msgstr ""
+
 #: src/features/check/issues.ts
 msgid "It has entries but isn't placed on a page."
 msgstr "Έχει καταχωρήσεις αλλά δεν τοποθετείται σε σελίδα."
+
+#: src/features/email-templates/write-email-sheet.tsx
+msgid "It is saved as it reads now. To reuse it for other applications, put the variables back where the details are."
+msgstr ""
+
+#: src/features/email-templates/templates-screen.tsx
+msgid "It leaves your list. Emails you already sent are not affected."
+msgstr ""
+
+#: src/features/branding/domains-screen.tsx
+msgid "It stops serving your organization right away (other servers within about a minute). Members can still use your address."
+msgstr ""
 
 #: src/features/application-detail/sections.tsx
 msgid "It's removed from the timeline for good."
@@ -5307,6 +5752,14 @@ msgstr "JavaScript"
 msgid "Job"
 msgstr "Δουλειά"
 
+#: src/features/discovery/search-form.tsx
+msgid "Job boards"
+msgstr ""
+
+#: src/features/settings/clipper-sign-ins.tsx
+msgid "Job Clipper sign-ins"
+msgstr ""
+
 #: src/features/application-detail/sheets.tsx
 #: src/features/workspace/preparation.tsx
 msgid "Job description"
@@ -5340,13 +5793,22 @@ msgstr "Η αναζήτηση εργασίας δεν έχει ρυθμιστε�
 msgid "Job search pipeline"
 msgstr "Ροή αναζήτησης εργασίας"
 
+#: src/features/discovery/search-form.tsx
+msgid "Job titles"
+msgstr ""
+
+#: app/(tabs)/career/_layout.tsx
 #: src/features/search/search-screen.tsx
 msgid "Jobs"
 msgstr "Θέσεις εργασίας"
 
-#: app/(tabs)/settings/index.tsx
-msgid "Join the Discord"
-msgstr "Γίνετε μέλος του Discord"
+#: src/features/discovery/review-queue.tsx
+msgid "Jobs found for you"
+msgstr ""
+
+#: src/features/discovery/search-form.tsx
+msgid "Jobs to score with AI per run"
+msgstr ""
 
 #: src/features/letters/share.tsx
 #: src/features/share/download.tsx
@@ -5446,6 +5908,7 @@ msgstr "Διάταξη λέξης-κλειδιού"
 msgid "Keyword overlap: {0}"
 msgstr ""
 
+#: src/features/discovery/search-form.tsx
 #: src/features/write/fields.ts
 msgid "Keywords"
 msgstr "Λέξεις-κλειδιά"
@@ -5453,6 +5916,10 @@ msgstr "Λέξεις-κλειδιά"
 #: src/features/settings/locale-names.ts
 msgid "Khmer"
 msgstr "Χμερ"
+
+#: src/features/email-templates/template-editor.tsx
+msgid "Kind"
+msgstr ""
 
 #: src/features/share/letter.ts
 msgid "Kind regards,"
@@ -5531,6 +5998,15 @@ msgstr ""
 msgid "Last reviewed: {0}"
 msgstr ""
 
+#. placeholder {0}: date(latest.finishedAt ?? latest.startedAt)
+#: src/features/discovery/searches.tsx
+msgid "Last run: {0}"
+msgstr ""
+
+#: src/features/discovery/searches.tsx
+msgid "Last run: not run yet"
+msgstr ""
+
 #. placeholder {0}: time.when(row.lastSeenAt)
 #: src/features/career/today.tsx
 msgid "Last seen in search: {0}"
@@ -5589,18 +6065,27 @@ msgstr "Αφήστε κενό για να διατηρήσετε το αποθη
 msgid "Leave empty to reset the title to the original."
 msgstr "Αφήστε το κενό για να επαναφέρετε τον τίτλο στο αρχικό."
 
+#: src/features/branding/branding-screen.tsx
+msgid "Leave empty to use the platform default."
+msgstr ""
+
 #: src/features/write/basics-screen.tsx
 #: src/features/write/rich-text-field.tsx
 msgid "Leave it empty to remove the link."
 msgstr "Αφήστε το κενό για να αφαιρέσετε τον σύνδεσμο."
 
 #: src/features/design/template-group.tsx
+#: src/features/organization/plan-screen.tsx
 msgid "Left"
 msgstr "Αριστερά"
 
 #: app/(tabs)/settings/index.tsx
 msgid "Legal"
 msgstr "Νομικά"
+
+#: src/features/branding/branding-screen.tsx
+msgid "Legal links"
+msgstr ""
 
 #: src/features/letters/write.tsx
 msgid "Length"
@@ -5890,6 +6375,10 @@ msgstr ""
 msgid "Loading saved version…"
 msgstr "Φόρτωση αποθηκευμένης έκδοσης…"
 
+#: src/features/settings/clipper-sign-ins.tsx
+msgid "Loading sign-ins…"
+msgstr ""
+
 #: src/features/ai/web-access.tsx
 msgid "Loading web access…"
 msgstr "Φόρτωση πρόσβασης στο web…"
@@ -5924,6 +6413,10 @@ msgstr "Τοποθεσία"
 msgid "Location match is unknown."
 msgstr "Η αντιστοίχιση τοποθεσίας είναι άγνωστη."
 
+#: src/features/discovery/search-form.tsx
+msgid "Locations"
+msgstr "Τοποθεσίες"
+
 #: src/features/documents/library.tsx
 msgid "Lock"
 msgstr "Κλείδωμα"
@@ -5946,6 +6439,14 @@ msgstr "Παραβλέφθηκαν τα κλειδωμένα έγγραφα. Ξ�
 #: src/features/write/outline.tsx
 msgid "Locked. Unlock to edit."
 msgstr "Κλειδωμένο. Ξεκλείδωμα για επεξεργασία."
+
+#: src/features/branding/branding-screen.tsx
+msgid "Logo"
+msgstr ""
+
+#: src/features/branding/branding-screen.tsx
+msgid "Logo uploaded."
+msgstr ""
 
 #: src/features/documents/library.tsx
 msgid "Long press to select"
@@ -6099,6 +6600,16 @@ msgstr "Σημειώθηκε ως αναγνωσμένο"
 msgid "Match “{resumeName}”"
 msgstr "Αντιστοίχιση με το «{resumeName}»"
 
+#. placeholder {0}: scoreOf(job)
+#: src/features/discovery/review-queue.tsx
+msgid "Match {0}"
+msgstr ""
+
+#. placeholder {0}: scoreOf(job)
+#: src/features/discovery/review-queue.tsx
+msgid "Match {0} (quick)"
+msgstr ""
+
 #: src/features/search/search-screen.tsx
 msgid "Match system theme"
 msgstr "Αντιστοίχιση θέματος συστήματος"
@@ -6123,10 +6634,6 @@ msgstr "Ταίριασμα με το βιογραφικό"
 msgid "Matching your facts"
 msgstr "Αντιστοίχιση των γεγονότων σας"
 
-#: src/features/share/custom-domain.tsx
-msgid "May be available"
-msgstr "Ίσως διαθέσιμο"
-
 #: src/features/search/search-screen.tsx
 msgid "MCP"
 msgstr "MCP"
@@ -6145,6 +6652,8 @@ msgid "Meets your minimum base salary."
 msgstr "Πληροί τον ελάχιστο βασικό μισθό σας."
 
 #: src/features/career/facts.tsx
+#: src/features/email-templates/template-editor.tsx
+#: src/features/email-templates/write-email-sheet.tsx
 msgid "Message"
 msgstr "Μήνυμα"
 
@@ -6157,6 +6666,10 @@ msgstr "Στείλτε μήνυμα στον βοηθό"
 msgid "Messages"
 msgstr "Μηνύματα"
 
+#: src/features/email-templates/labels.ts
+msgid "Mine"
+msgstr ""
+
 #: src/features/career/preferences.tsx
 msgid "Minimum base salary"
 msgstr "Ελάχιστος βασικός μισθός"
@@ -6164,10 +6677,6 @@ msgstr "Ελάχιστος βασικός μισθός"
 #: src/features/career/offers.tsx
 msgid "Minimum salary cannot be compared in these terms."
 msgstr "Ο κατώτατος μισθός δεν μπορεί να συγκριθεί με αυτούς τους όρους."
-
-#: app/(tabs)/settings/index.tsx
-msgid "MIT License"
-msgstr "Άδεια MIT"
 
 #: src/features/workspace/tabs/debrief.tsx
 msgid "Mixed"
@@ -6368,10 +6877,12 @@ msgstr "Η μετακίνηση στο «Υποβλήθηκε» ζητά να δ
 
 #: src/features/ai/provider-editor.tsx
 #: src/features/application-detail/sheets.tsx
+#: src/features/discovery/search-form.tsx
 #: src/features/document-menu/index.tsx
 #: src/features/documents/document-sheets.tsx
 #: src/features/documents/library.tsx
 #: src/features/documents/new-document.tsx
+#: src/features/email-templates/template-editor.tsx
 #: src/features/history/history.tsx
 #: src/features/letters/share.tsx
 #: src/features/settings/profile.tsx
@@ -6401,6 +6912,11 @@ msgstr "Ονομάστε αυτήν την έκδοση"
 #: src/features/check/issues.ts
 msgid "Name, email, phone and location are found, and links are full addresses."
 msgstr "Βρίσκονται το όνομα, το email, το τηλέφωνο και η τοποθεσία και οι σύνδεσμοι είναι πλήρεις διευθύνσεις."
+
+#. placeholder {0}: record.name
+#: src/features/branding/domains-screen.tsx
+msgid "Name: {0}"
+msgstr ""
 
 #: src/features/history/history.tsx
 #: src/features/letters/share.tsx
@@ -6438,6 +6954,10 @@ msgstr ""
 msgid "Needs you"
 msgstr "Σας περιμένει"
 
+#: src/features/email-templates/labels.ts
+msgid "Negotiation"
+msgstr ""
+
 #: src/features/settings/locale-names.ts
 msgid "Nepali"
 msgstr "Νεπάλι"
@@ -6446,13 +6966,19 @@ msgstr "Νεπάλι"
 msgid "Network"
 msgstr "Δίκτυο"
 
+#: src/features/email-templates/labels.ts
+msgid "Networking"
+msgstr ""
+
 #: src/features/career/preferences.tsx
 #: src/features/settings/api-keys.tsx
+#: src/features/settings/clipper-sign-ins.tsx
 msgid "Never"
 msgstr "Ποτέ"
 
 #: app/_layout.tsx
 #: app/(tabs)/_layout.tsx
+#: src/features/discovery/review-queue.tsx
 #: src/features/documents/library.tsx
 #: src/shell/app-tabs.tsx
 msgid "New"
@@ -6487,11 +7013,20 @@ msgstr "Αντίθετα, νέα συνοδευτική επιστολή"
 msgid "New document"
 msgstr "Νέο έγγραφο"
 
+#. placeholder {0}: latest.new
+#: src/features/discovery/searches.tsx
+msgid "New jobs in the last run: {0}"
+msgstr ""
+
 #: src/features/design/layout-screen.tsx
 #: src/features/write/entry-sheet.tsx
 #: src/features/write/section-sheet.tsx
 msgid "New page"
 msgstr "Νέα σελίδα"
+
+#: src/features/discovery/review-queue.tsx
+msgid "New postings show up here after an automation runs."
+msgstr ""
 
 #: src/features/career/today.tsx
 msgid "New roles from your search"
@@ -6505,6 +7040,11 @@ msgstr "Νέες θέσεις, υπενθυμίσεις και ολοκληρω�
 msgid "New schedule"
 msgstr "Νέο πρόγραμμα"
 
+#: src/features/discovery/search-form.tsx
+#: src/features/discovery/searches.tsx
+msgid "New search"
+msgstr ""
+
 #: src/features/write/entry-sheet.tsx
 msgid "New section"
 msgstr "Νέα ενότητα"
@@ -6512,6 +7052,10 @@ msgstr "Νέα ενότητα"
 #: src/features/career/stories.tsx
 msgid "New STARR story"
 msgstr "Νέα ιστορία STARR"
+
+#: src/features/email-templates/templates-screen.tsx
+msgid "New template"
+msgstr ""
 
 #: src/features/documents/library.tsx
 msgid "Next"
@@ -6533,6 +7077,15 @@ msgstr "Επόμενη σελίδα"
 msgid "Next question"
 msgstr "Επόμενη ερώτηση"
 
+#. placeholder {0}: date(source.nextRunAt)
+#: src/features/discovery/searches.tsx
+msgid "Next run: {0}"
+msgstr ""
+
+#: src/features/discovery/searches.tsx
+msgid "Next run: paused"
+msgstr ""
+
 #: src/features/application-detail/sections.tsx
 #: src/features/applications/list-screen.tsx
 msgid "Next step"
@@ -6545,6 +7098,10 @@ msgstr "Επόμενο βήμα: {note}"
 #: src/features/workspace/tabs/messages.tsx
 msgid "Next step: {note}. Adds a reminder to Today."
 msgstr "Επόμενο βήμα: {note}. Προσθέτει μια υπενθύμιση στο Σήμερα."
+
+#: src/features/email-templates/built-in-text.ts
+msgid "Next steps on the {role} offer"
+msgstr ""
 
 #: src/features/documents/library.tsx
 msgid "Next unsynced drafts"
@@ -6612,6 +7169,10 @@ msgstr "Χωρίς ημερομηνία"
 msgid "No dates were found."
 msgstr "Δεν βρέθηκαν ημερομηνίες."
 
+#: src/features/discovery/review-queue.tsx
+msgid "No dismissed jobs"
+msgstr ""
+
 #: src/features/workspace/tabs/apply.tsx
 msgid "no documents"
 msgstr ""
@@ -6628,6 +7189,10 @@ msgstr "Δεν βρέθηκε ενότητα εκπαίδευσης."
 msgid "No email address"
 msgstr "Χωρίς διεύθυνση email"
 
+#: src/features/email-templates/write-email-sheet.tsx
+msgid "No email address for this contact yet. Add it in your mail app."
+msgstr ""
+
 #: src/features/ats-checker/messages.ts
 msgid "No email address was found."
 msgstr "Δεν βρέθηκε διεύθυνση email."
@@ -6643,6 +7208,10 @@ msgstr "Δεν ταιριάζουν στοιχεία"
 #: src/features/write/pickers.tsx
 msgid "No icons match."
 msgstr "Δεν ταιριάζουν εικονίδια."
+
+#: src/features/settings/clipper-sign-ins.tsx
+msgid "No Job Clipper sign-ins yet."
+msgstr ""
 
 #: src/features/documents/new-document.tsx
 msgid "No job yet"
@@ -6667,6 +7236,10 @@ msgstr "Καμία συνδεδεμένη αίτηση"
 #: src/features/check/issues.ts
 msgid "No location"
 msgstr "Καμία τοποθεσία"
+
+#: src/features/email-templates/write-email-sheet.tsx
+msgid "No mail app could open it, so the email was copied instead."
+msgstr ""
 
 #: src/features/documents/library.tsx
 #: src/ui/fields.tsx
@@ -6711,10 +7284,6 @@ msgstr "Καμία φωτογραφία. Οι περισσότεροι ATS αγ�
 msgid "No postings found. Try different keywords."
 msgstr "Δεν βρέθηκαν αγγελίες εργασίας. Δοκιμάστε διαφορετικές λέξεις-κλειδιά."
 
-#: src/auth/messages.ts
-msgid "No Reactive Resume server answered at this address. Check the spelling, or ask your administrator whether the server allows app sign-in."
-msgstr "Δεν απαντήθηκε διακομιστής Reactive Resume σε αυτή τη διεύθυνση. Ελέγξτε την ορθογραφία ή ρωτήστε τον διαχειριστή σας εάν ο διακομιστής επιτρέπει τη σύνδεση στην εφαρμογή."
-
 #: src/features/check/job-match.tsx
 msgid "No recognizable terms in this posting."
 msgstr "Δεν υπάρχουν αναγνωρίσιμοι όροι σε αυτήν την αγγελία εργασίας."
@@ -6738,6 +7307,18 @@ msgstr "Κανένα αποτέλεσμα"
 #: src/features/letters/write.tsx
 msgid "No resume"
 msgstr "Χωρίς βιογραφικό"
+
+#: src/features/discovery/review-queue.tsx
+msgid "No saved jobs yet"
+msgstr ""
+
+#: src/features/discovery/searches.tsx
+msgid "No searches yet"
+msgstr ""
+
+#: src/auth/messages.ts
+msgid "No server answered at this address. Check the spelling, or ask your administrator whether the server allows app sign-in."
+msgstr ""
 
 #: src/features/ats-checker/messages.ts
 msgid "No skills section was found."
@@ -6819,6 +7400,10 @@ msgstr "Κανονικός"
 #: src/features/settings/locale-names.ts
 msgid "Norwegian"
 msgstr "Νορβηγικά"
+
+#: src/auth/session-gate.tsx
+msgid "Not a member"
+msgstr ""
 
 #: src/features/workspace/tabs/messages.tsx
 msgid "Not applied"
@@ -6936,6 +7521,10 @@ msgstr "Τίποτα να διορθωθεί"
 msgid "Nothing to fix. The remaining pages were simply not covered by this report."
 msgstr "Τίποτα προς διόρθωση. Οι υπόλοιπες σελίδες απλώς δεν καλύπτονται από αυτή την αναφορά."
 
+#: src/features/discovery/review-queue.tsx
+msgid "Nothing to review"
+msgstr ""
+
 #: src/features/career/preferences.tsx
 msgid "Notice period (weeks)"
 msgstr "Περίοδος προειδοποίησης (εβδομάδες)"
@@ -7025,6 +7614,10 @@ msgstr "Εκτός σύνδεσης. Οι αλλαγές αποθηκεύοντ�
 msgid "On"
 msgstr "Ενεργό"
 
+#: src/features/discovery/messages.ts
+msgid "On-site"
+msgstr ""
+
 #: src/features/share/link.tsx
 msgid "On. Anyone with the link can see your web page."
 msgstr "Ενεργό. Όποιος έχει τον σύνδεσμο μπορεί να δει την ιστοσελίδα σας."
@@ -7066,6 +7659,14 @@ msgstr "Βρέθηκε μόνο μία αναγνωρίσιμη επικεφαλ
 #: src/features/history/history.tsx
 msgid "Only one version so far. Every editing session adds one automatically."
 msgstr "Μόνο μία έκδοση μέχρι στιγμής. Κάθε συνεδρία επεξεργασίας προσθέτει μία αυτόματα."
+
+#: src/features/branding/branding-screen.tsx
+msgid "Only owners and admins can change the organization's branding."
+msgstr ""
+
+#: src/features/branding/domains-screen.tsx
+msgid "Only owners and admins can manage the organization's domains."
+msgstr ""
 
 #: src/features/ai/provider-editor.tsx
 msgid "Only providers that pass their test can be turned on."
@@ -7130,6 +7731,7 @@ msgstr "Ανοίξτε τις ρυθμίσεις AI"
 #: src/features/applications-board/board-screen.tsx
 #: src/features/applications/list-screen.tsx
 #: src/features/check/job-match.tsx
+#: src/features/discovery/review-queue.tsx
 msgid "Open application"
 msgstr "Άνοιγμα αίτησης"
 
@@ -7149,6 +7751,10 @@ msgstr "Άνοιγμα σε {tabName}"
 #: src/features/documents/new-document.tsx
 msgid "Open in editor"
 msgstr "Ανοίξτε το in editor"
+
+#: src/features/email-templates/write-email-sheet.tsx
+msgid "Open in mail app"
+msgstr ""
 
 #: src/features/workspace/tabs/saved.tsx
 msgid "Open in Offers"
@@ -7267,6 +7873,8 @@ msgstr "Επιλογές για {title}"
 msgid "Or in your own words…"
 msgstr "Ή με δικά σας λόγια…"
 
+#: app/(tabs)/settings/index.tsx
+#: src/features/email-templates/labels.ts
 #: src/features/write/fields.ts
 msgid "Organization"
 msgstr "Οργανισμός"
@@ -7305,6 +7913,14 @@ msgstr "Μη ενημερωμένο: το κείμενο έχει αλλάξει
 #: src/features/application-detail/detail-screen.tsx
 msgid "Outcome"
 msgstr "Αποτέλεσμα"
+
+#: src/features/email-templates/templates-screen.tsx
+msgid "Owners and admins edit the organization's templates in the web app, under Settings."
+msgstr ""
+
+#: src/features/branding/domains-screen.tsx
+msgid "Ownership is proven. The certificate is being issued; this usually takes a few minutes."
+msgstr ""
 
 #: app/builder/[id]/_layout.tsx
 #: app/builder/[id]/page.tsx
@@ -7402,6 +8018,10 @@ msgstr "Οι κωδικοί πρόσβασης δεν ταιριάζουν."
 msgid "Past conversations"
 msgstr "Προηγούμενες συνομιλίες"
 
+#: src/features/organization/plan-screen.tsx
+msgid "Past due"
+msgstr ""
+
 #: src/features/applications/add-sheet.tsx
 msgid "Paste a job link or posting, then check the role and company. Nothing is saved until you choose Save job."
 msgstr "Επικολλήστε έναν σύνδεσμο εργασίας ή μια αγγελία εργασίας και, στη συνέχεια, ελέγξτε τον ρόλο και την εταιρεία. Τίποτα δεν αποθηκεύεται μέχρι να επιλέξετε Αποθήκευση εργασίας."
@@ -7436,7 +8056,12 @@ msgstr "Επικολλήστε το κλειδί σας"
 msgid "Pasted description"
 msgstr "Επικολλημένη περιγραφή"
 
+#: src/features/discovery/searches.tsx
+msgid "Pause"
+msgstr ""
+
 #: src/features/career/today.tsx
+#: src/features/discovery/messages.ts
 msgid "Paused"
 msgstr "Παύση"
 
@@ -7460,20 +8085,20 @@ msgid "PDF check canceled. Retry when ready."
 msgstr "Ο έλεγχος PDF ακυρώθηκε. Δοκιμάστε ξανά όταν είστε έτοιμοι."
 
 #: src/features/application-detail/sections.tsx
-msgid "PDF only · up to 10 MB each. Linking a Reactive Resume enables AI match scoring and tailoring."
-msgstr "Μόνο PDF · έως 10 MB το καθένα. Η σύνδεση βιογραφικού Reactive Resume επιτρέπει βαθμολόγηση αντιστοίχισης και προσαρμογή με AI."
+msgid "PDF only · up to 10 MB each. Linking a resume enables AI match scoring and tailoring."
+msgstr ""
 
 #: src/features/design/advanced.tsx
 msgid "PDF styles support a subset of CSS. Rotation, dashed and dotted borders, and some layout properties are ignored."
 msgstr "Τα στυλ PDF υποστηρίζουν ένα υποσύνολο του CSS. Η περιστροφή, τα διακεκομμένα και διακεκομμένα περιγράμματα και ορισμένες ιδιότητες διάταξης αγνοούνται."
 
 #: src/features/documents/new-document.tsx
-msgid "PDF uses your AI provider when one is ready. Turn off the AI switch to read its text layer on your server. Word (.docx) needs an AI provider. Current and v4 Reactive Resume JSON, cover letters, JSON Resume and LinkedIn exports (.zip) are supported. Up to 10 MB."
-msgstr "Τα PDF χρησιμοποιούν τον πάροχο AI όταν είναι διαθέσιμος. Απενεργοποιήστε το AI για ανάγνωση του επιπέδου κειμένου στον διακομιστή. Το Word (.docx) απαιτεί πάροχο AI. Υποστηρίζονται οι τρέχουσες και v4 μορφές Reactive Resume JSON, συνοδευτικές επιστολές, JSON Resume και εξαγωγές LinkedIn (.zip). Έως 10 MB."
+msgid "PDF uses your AI provider when one is ready. Turn off the AI switch to read its text layer on your server. Word (.docx) needs an AI provider. Current and v4 JSON, cover letters, JSON Resume and LinkedIn exports (.zip) are supported. Up to 10 MB."
+msgstr ""
 
 #: src/features/documents/new-document.tsx
-msgid "PDF, Word, Reactive Resume, JSON Resume or LinkedIn export."
-msgstr "Εξαγωγή PDF, Word, Reactive Resume, JSON Resume ή LinkedIn."
+msgid "PDF, Word, JSON, JSON Resume or LinkedIn export."
+msgstr ""
 
 #: src/features/career/offer-entry.tsx
 #: src/features/career/offers.tsx
@@ -7492,6 +8117,10 @@ msgstr "Ανά μήνα"
 #: src/features/career/preferences.tsx
 msgid "Per year"
 msgstr "Ανά έτος"
+
+#: src/features/organization/plan-screen.tsx
+msgid "Period ends"
+msgstr ""
 
 #: app/(tabs)/settings/account.tsx
 msgid "Permanently removes everything. Opens your browser account settings."
@@ -7547,6 +8176,10 @@ msgstr "Επιλέξτε μια μελλοντική ώρα."
 msgid "Pick one format and use it everywhere."
 msgstr "Επιλέξτε μία μορφή και χρησιμοποιήστε την παντού."
 
+#: src/features/discovery/search-form.tsx
+msgid "Pick the board and enter the company's board name, or paste the link to its job page. The name is the part after the host, for example jobs.lever.co/acme or boards.greenhouse.io/acme (acme)."
+msgstr ""
+
 #: src/features/workspace/tabs/prepare.tsx
 msgid "Pick two examples"
 msgstr "Επιλέξτε δύο παραδείγματα"
@@ -7568,6 +8201,11 @@ msgstr "Απλό κείμενο (.txt)"
 msgid "Plain text with headings. Paste into application forms and notes."
 msgstr "Απλό κείμενο με επικεφαλίδες. Επικολλήστε σε φόρμες αίτησης εργασίας και σημειώσεις."
 
+#: app/(tabs)/settings/index.tsx
+#: src/features/organization/plan-screen.tsx
+msgid "Plan"
+msgstr ""
+
 #: src/features/workspace/tabs/prepare.tsx
 msgid "Plan again"
 msgstr "Νέο πλάνο"
@@ -7584,6 +8222,10 @@ msgstr "Σχεδιάστε τι θα ρωτήσετε"
 msgid "Planning your week"
 msgstr "Σχεδιασμός της εβδομάδας σας"
 
+#: src/features/branding/branding-screen.tsx
+msgid "Platform default"
+msgstr ""
+
 #: src/features/workspace/tabs/practise.tsx
 msgid "Play recording"
 msgstr "Αναπαραγωγή εγγραφής"
@@ -7592,6 +8234,14 @@ msgstr "Αναπαραγωγή εγγραφής"
 #: src/features/letters/design-presets.ts
 msgid "Plum"
 msgstr "Δαμάσκηνο"
+
+#: src/features/branding/branding-screen.tsx
+msgid "PNG or WebP, up to 512 KB. Upload a PNG or WebP so the logo also shows in the mobile app and in emails; they don't show an SVG. To use an SVG, upload it from the web app."
+msgstr ""
+
+#: src/features/branding/branding-screen.tsx
+msgid "PNG, up to 128 KB. To use an ICO, upload it from the web app."
+msgstr ""
 
 #: src/features/settings/locale-names.ts
 msgid "Polish"
@@ -7634,6 +8284,10 @@ msgstr "Αγγελία εργασίας"
 
 #: src/features/career/today.tsx
 msgid "Postings can change or close. Publication date unknown; search coverage is incomplete."
+msgstr ""
+
+#: src/features/discovery/review-queue.tsx
+msgid "Postings your automations found, best match first. Save one to your applications, or dismiss it and it never comes back."
 msgstr ""
 
 #: src/features/workspace/parts.tsx
@@ -7751,6 +8405,10 @@ msgstr "Πατήστε παρατεταμένα για προεπισκόπησ�
 msgid "Press and hold, then drag to another column or page."
 msgstr "Πατήστε παρατεταμένα και μετά σύρετε σε άλλη στήλη ή σελίδα."
 
+#: src/features/branding/branding-screen.tsx
+msgid "Preview of your branding"
+msgstr ""
+
 #: src/features/share/web-page.tsx
 msgid "Preview web page"
 msgstr "Προεπισκόπηση ιστοσελίδας"
@@ -7788,9 +8446,17 @@ msgstr ""
 msgid "Previous workspace tabs"
 msgstr "Προηγούμενες καρτέλες χώρου εργασίας"
 
+#: src/features/branding/branding-screen.tsx
+msgid "Primary button"
+msgstr ""
+
 #: src/features/design/advanced.tsx
 msgid "Primary color"
 msgstr "Βασικό χρώμα"
+
+#: src/features/branding/branding-screen.tsx
+msgid "Primary colour"
+msgstr ""
 
 #: src/features/share/web-page.tsx
 msgid "Primary resume"
@@ -7811,6 +8477,7 @@ msgstr "Απόρρητο"
 
 #: app/(tabs)/settings/index.tsx
 #: src/auth/auth-header.tsx
+#: src/features/branding/branding-screen.tsx
 msgid "Privacy policy"
 msgstr "Πολιτική απορρήτου"
 
@@ -7822,6 +8489,10 @@ msgstr ""
 #: src/features/document-menu/index.tsx
 msgid "Private. Only you can see it."
 msgstr "Ιδιωτικός. Μόνο εσύ μπορείς να το δεις."
+
+#: app/(tabs)/settings/licences.tsx
+msgid "Product"
+msgstr ""
 
 #: src/features/design/style-groups.tsx
 #: src/features/letters/design-presets.ts
@@ -7928,6 +8599,10 @@ msgstr "Εκδότης"
 msgid "Put a plain email address near the top of the first page. It is what most systems file you under."
 msgstr "Τοποθετήστε μια απλή διεύθυνση email κοντά στην κορυφή της πρώτης σελίδας. Είναι αυτό με βάση το οποίο σας καταχωρούν τα περισσότερα συστήματα."
 
+#: src/features/email-templates/template-editor.tsx
+msgid "Put variables such as {examples} where the details go."
+msgstr ""
+
 #: src/features/share/link.tsx
 msgid "QR code"
 msgstr "Κωδικός QR"
@@ -7988,9 +8663,9 @@ msgstr "Επανεξαγάγετε με ενσωματωμένες γραμμα�
 msgid "Re-export with fonts embedded, then open the file and check that the text copies out cleanly."
 msgstr "Επανεξαγάγετε με ενσωματωμένες γραμματοσειρές, έπειτα ανοίξτε το αρχείο και ελέγξτε ότι το κείμενο αντιγράφεται καθαρά."
 
-#: src/auth/auth-header.tsx
-msgid "Reactive Resume"
-msgstr "Reactive Resume"
+#: src/features/email-templates/built-in-text.ts
+msgid "Reach out to someone at the company"
+msgstr ""
 
 #: src/features/workspace/tabs/prepare.tsx
 msgid "Read briefing"
@@ -8006,6 +8681,7 @@ msgstr "Ανάγνωση άδειας"
 
 #: src/features/applications/add-sheet.tsx
 #: src/features/career/today.tsx
+#: src/features/discovery/review-queue.tsx
 msgid "Read posting"
 msgstr "Διαβάστε την ανάρτηση εργασίας"
 
@@ -8212,10 +8888,6 @@ msgstr "Ανανέωση του ενημερωτικού 24 ώρες πριν"
 msgid "Refresh the briefing on the morning of"
 msgstr "Ανανέωση του ενημερωτικού το πρωί της ημέρας"
 
-#: src/features/share/custom-domain.tsx
-msgid "Register at OlaCV"
-msgstr "Καταχώριση στο OlaCV"
-
 #: src/features/workspace/tabs/prepare.tsx
 msgid "Rehearse aloud"
 msgstr "Πρόβα φωναχτά"
@@ -8290,9 +8962,16 @@ msgstr "Οι υπενθυμίσεις εμφανίζονται εδώ. Τα αν
 
 #: src/features/career/offers.tsx
 #: src/features/career/preferences.tsx
+#: src/features/discovery/messages.ts
 msgid "Remote"
 msgstr "Εξ αποστάσεως"
 
+#: src/features/discovery/search-form.tsx
+msgid "Remote preference"
+msgstr ""
+
+#: src/features/branding/branding-screen.tsx
+#: src/features/branding/domains-screen.tsx
 #: src/features/share/custom-domain.tsx
 #: src/ui/fields.tsx
 msgid "Remove"
@@ -8305,9 +8984,19 @@ msgstr "Αφαιρώ"
 msgid "Remove {0}"
 msgstr "Αφαιρέστε το {0}"
 
+#. placeholder {0}: domain.hostname
+#: src/features/branding/domains-screen.tsx
+msgid "Remove {0}?"
+msgstr ""
+
 #: src/features/assistant/messages.tsx
 msgid "Remove {name}"
 msgstr "Αφαιρέστε το {name}"
+
+#. placeholder {0}: index + 1
+#: src/features/discovery/search-form.tsx
+msgid "Remove board {0}"
+msgstr ""
 
 #: src/features/ai/web-access.tsx
 msgid "Remove connection"
@@ -8316,6 +9005,10 @@ msgstr "Κατάργηση σύνδεσης"
 #: src/features/ai/web-access.tsx
 msgid "Remove connection?"
 msgstr "Κατάργηση σύνδεσης;"
+
+#: src/features/branding/domains-screen.tsx
+msgid "Remove domain"
+msgstr ""
 
 #: src/features/write/basics-screen.tsx
 msgid "Remove field"
@@ -8357,6 +9050,18 @@ msgstr ""
 msgid "Remove role"
 msgstr "Κατάργηση ρόλου"
 
+#: src/features/branding/domains-screen.tsx
+msgid "Remove the domain and add it again once the cause is fixed."
+msgstr ""
+
+#: src/features/branding/branding-screen.tsx
+msgid "Remove the favicon?"
+msgstr ""
+
+#: src/features/branding/branding-screen.tsx
+msgid "Remove the logo?"
+msgstr ""
+
 #: src/features/share/web-page.tsx
 msgid "Remove the password?"
 msgstr "Κατάργηση του κωδικού πρόσβασης;"
@@ -8371,6 +9076,15 @@ msgstr ""
 
 #: src/features/workspace/answer-library.tsx
 msgid "Remove unavailable story reference"
+msgstr ""
+
+#. placeholder {0}: domain.hostname
+#: src/features/branding/domains-screen.tsx
+msgid "Removed {0}"
+msgstr ""
+
+#: src/features/branding/domains-screen.tsx
+msgid "Removing"
 msgstr ""
 
 #: src/features/document-menu/index.tsx
@@ -8423,6 +9137,7 @@ msgstr "Αναπαραγγελία {title}"
 msgid "Repeats at this local time in the displayed timezone across clock changes. A skipped clock time moves forward. Missed runs combine into one search. Results and failures appear in Today; delivery depends on the server runner."
 msgstr ""
 
+#: src/features/branding/branding-screen.tsx
 #: src/features/write/improve.tsx
 msgid "Replace"
 msgstr "Αντικαθιστώ"
@@ -8459,6 +9174,10 @@ msgstr "Απάντηση"
 msgid "Reply copied"
 msgstr "Η απάντηση αντιγράφηκε"
 
+#: src/features/branding/branding-screen.tsx
+msgid "Reply-to address"
+msgstr ""
+
 #: src/features/ats-checker/checker.tsx
 msgid "Report"
 msgstr "Έκθεση"
@@ -8468,10 +9187,6 @@ msgstr "Έκθεση"
 #: src/features/ai/report-content.tsx
 msgid "Report AI content"
 msgstr "Αναφορά περιεχομένου AI"
-
-#: app/(tabs)/settings/index.tsx
-msgid "Report an issue"
-msgstr "Αναφορά προβλήματος"
 
 #: src/features/ai/report-content.tsx
 msgid "Report received by your server operator. Thank you."
@@ -8509,6 +9224,10 @@ msgstr "Επαναφορά προεπιλογών σχεδίασης"
 #: src/features/career/offers.tsx
 msgid "Respond by"
 msgstr "Απάντηση έως"
+
+#: src/features/email-templates/built-in-text.ts
+msgid "Respond to an offer"
+msgstr ""
 
 #: src/features/career/offers.tsx
 msgid "Response deadline has passed."
@@ -8559,6 +9278,7 @@ msgstr "Αποτέλεσμα"
 #: app/builder/[id]/_layout.tsx
 #: src/features/applications/add-sheet.tsx
 #: src/features/career/facts.tsx
+#: src/features/discovery/searches.tsx
 #: src/features/documents/library.tsx
 #: src/features/letters/write.tsx
 #: src/features/workspace/preparation.tsx
@@ -8572,10 +9292,6 @@ msgstr "βιογραφικό + επιστολή"
 #: src/features/document-menu/index.tsx
 msgid "Resume details"
 msgstr "λεπτομέρειες βιογραφικού"
-
-#: app/(tabs)/settings/index.tsx
-msgid "Resume feedback, product help, and community ideas."
-msgstr "Σχόλια για βιογραφικά, βοήθεια για το προϊόν και ιδέες της κοινότητας."
 
 #: src/features/application-detail/sections.tsx
 #: src/features/workspace/tabs/apply.tsx
@@ -8643,6 +9359,7 @@ msgstr "Ανακτήθηκε το {0} χρησιμοποιώντας το {1}. �
 #: src/features/check/screen.tsx
 #: src/features/check/writing.tsx
 #: src/features/design/design-pane.tsx
+#: src/features/discovery/searches.tsx
 #: src/features/documents/document-sheets.tsx
 #: src/features/documents/library.tsx
 #: src/features/documents/new-document.tsx
@@ -8802,6 +9519,7 @@ msgid "Reviewing needs an AI connection. What you write here stays on this devic
 msgstr "Η αναθεώρηση απαιτεί σύνδεση AI. Αυτά που γράφεις εδώ μένουν σε αυτήν τη συσκευή μέχρι τότε."
 
 #: src/features/settings/api-keys.tsx
+#: src/features/settings/clipper-sign-ins.tsx
 msgid "Revoke"
 msgstr "Ανακαλώ"
 
@@ -8809,13 +9527,25 @@ msgstr "Ανακαλώ"
 msgid "Revoke API key?"
 msgstr "Ανάκληση κλειδιού API;"
 
+#: src/features/settings/clipper-sign-ins.tsx
+msgid "Revoke Job Clipper sign-in?"
+msgstr ""
+
 #: src/features/settings/api-keys.tsx
 msgid "Revoke key"
 msgstr "Ανάκληση κλειδιού"
 
+#: src/features/settings/clipper-sign-ins.tsx
+msgid "Revoke sign-in"
+msgstr ""
+
 #: src/features/settings/api-keys.tsx
 msgid "Revoke this API key"
 msgstr "Ανάκληση αυτού του κλειδιού API"
+
+#: src/features/settings/clipper-sign-ins.tsx
+msgid "Revoke this Job Clipper sign-in"
+msgstr ""
 
 #: src/features/check/writing.tsx
 msgid "Rewrite accepted"
@@ -8884,6 +9614,14 @@ msgstr "Οριζόντια γραμμή"
 #: src/features/check/writing.tsx
 msgid "Run again"
 msgstr "Εκτέλεση ξανά"
+
+#: src/features/discovery/searches.tsx
+msgid "Run now"
+msgstr ""
+
+#: src/features/discovery/searches.tsx
+msgid "Running"
+msgstr ""
 
 #. placeholder {0}: new Intl.DateTimeFormat(locale, { timeZone: timezone, dateStyle: "medium", timeStyle: "short" }).format(runAt)
 #: src/features/career/schedule-sheet.tsx
@@ -8957,7 +9695,13 @@ msgstr "Αποθήκευση και δοκιμή"
 msgid "Save another offer to compare"
 msgstr "Αποθηκεύστε άλλη μία προσφορά για σύγκριση"
 
+#: src/features/email-templates/write-email-sheet.tsx
+msgid "Save as my template"
+msgstr ""
+
 #: src/features/application-detail/sheets.tsx
+#: src/features/branding/branding-screen.tsx
+#: src/features/discovery/search-form.tsx
 msgid "Save changes"
 msgstr "Αποθήκευση αλλαγών"
 
@@ -9014,6 +9758,10 @@ msgstr "Αποθήκευση προγράμματος"
 msgid "Save story"
 msgstr "Αποθήκευση ιστορίας"
 
+#: src/features/email-templates/template-editor.tsx
+msgid "Save template"
+msgstr ""
+
 #: src/features/share/download.tsx
 msgid "Save the cover letter before exporting it."
 msgstr "Αποθηκεύστε τη συνοδευτική επιστολή πριν την εξαγάγετε."
@@ -9038,6 +9786,10 @@ msgstr "Αποθήκευση αυτών των όρων προσφοράς γι�
 msgid "Save this story to Knowledge?"
 msgstr "Να αποθηκευτεί αυτή η ιστορία στη Γνώση;"
 
+#: src/features/discovery/review-queue.tsx
+msgid "Save to applications"
+msgstr ""
+
 #: src/features/workspace/tabs/fit.tsx
 msgid "Save to Knowledge"
 msgstr "Αποθήκευση στη Γνώση"
@@ -9052,6 +9804,7 @@ msgstr "Αποθηκεύστε το δικό σας ως νέο έγγραφο �
 
 #: src/features/applications/stages.ts
 #: src/features/career/preferences.tsx
+#: src/features/discovery/review-queue.tsx
 #: src/shell/builder-chrome.tsx
 msgid "Saved"
 msgstr "Αποθηκεύτηκε"
@@ -9102,6 +9855,14 @@ msgstr "Αποθηκεύτηκε στη Γνώση, ιδιωτικά για αυ
 msgid "Saved to Saved · Practice"
 msgstr "Αποθηκεύτηκε στην καρτέλα \"Αποθηκευμένα\" · Εξάσκηση"
 
+#: src/features/discovery/review-queue.tsx
+msgid "Saved to your applications"
+msgstr ""
+
+#: src/features/email-templates/write-email-sheet.tsx
+msgid "Saved to your templates"
+msgstr ""
+
 #: src/features/applications/add-sheet.tsx
 msgid "Saving the job. Wait for confirmation before making another change."
 msgstr "Σώζοντας τη δουλειά. Περιμένετε για επιβεβαίωση πριν κάνετε άλλη αλλαγή."
@@ -9112,6 +9873,10 @@ msgstr "Σώζοντας τη δουλειά. Περιμένετε για επι
 #: src/shell/builder-chrome.tsx
 msgid "Saving…"
 msgstr "Αποθήκευση…"
+
+#: src/features/discovery/search-form.tsx
+msgid "Schedule"
+msgstr ""
 
 #: src/features/application-detail/interview-sheet.tsx
 #: src/features/application-detail/sections.tsx
@@ -9178,6 +9943,14 @@ msgstr "Εντολές αναζήτησης"
 msgid "Search covers documents, applications, assistant conversations and actions."
 msgstr "Η αναζήτηση καλύπτει έγγραφα, αιτήσεις, συνομιλίες βοηθών και ενέργειες."
 
+#: src/features/discovery/search-form.tsx
+msgid "Search created"
+msgstr ""
+
+#: src/features/discovery/searches.tsx
+msgid "Search deleted"
+msgstr ""
+
 #: src/features/documents/library.tsx
 msgid "Search documents"
 msgstr "Αναζήτηση εγγράφων"
@@ -9218,6 +9991,10 @@ msgstr "Αναζήτηση γλωσσών"
 msgid "Search or run…"
 msgstr "Αναζήτηση ή εκτέλεση…"
 
+#: src/features/discovery/search-form.tsx
+msgid "Search saved"
+msgstr ""
+
 #: src/features/workspace/answer-library.tsx
 msgid "Search saved answers"
 msgstr ""
@@ -9255,13 +10032,29 @@ msgstr "Αναζήτηση…"
 msgid "Searched the web"
 msgstr "Έψαξε στον Ιστό"
 
+#: src/features/discovery/searches.tsx
+msgid "Searches"
+msgstr ""
+
 #: src/features/assistant/messages.tsx
 msgid "Searching the web…"
 msgstr "Αναζήτηση στον Ιστό…"
 
+#: src/features/organization/plan-screen.tsx
+msgid "Seats"
+msgstr ""
+
 #: src/features/career/offers.tsx
 msgid "Second offer"
 msgstr "Δεύτερη προσφορά"
+
+#: src/features/branding/branding-screen.tsx
+msgid "Secondary"
+msgstr ""
+
+#: src/features/branding/branding-screen.tsx
+msgid "Secondary colour"
+msgstr ""
 
 #: src/features/check/issues.ts
 msgid "Section headings"
@@ -9453,10 +10246,6 @@ msgstr "Ρυθμίστε την αναζήτηση ιστού στις Ρυθμ�
 msgid "Settings"
 msgstr "Ρυθμίσεις"
 
-#: app/(tabs)/settings/ai-mcp.tsx
-msgid "Setup guide"
-msgstr "Οδηγός εγκατάστασης"
-
 #: src/features/ai/report-content.tsx
 msgid "Sexual content"
 msgstr "Σεξουαλικό περιεχόμενο"
@@ -9537,8 +10326,8 @@ msgid "Shorter"
 msgstr "Κοντύτερος"
 
 #: src/features/share/web-page.tsx
-msgid "Show “Made with Reactive Resume”"
-msgstr "Εμφάνιση «Δημιουργήθηκε με το Reactive Resume»"
+msgid "Show “Made with {appName}”"
+msgstr ""
 
 #. placeholder {0}: Math.min(remaining, COLUMN_PAGE_SIZE)
 #: src/features/applications-board/board-screen.tsx
@@ -9589,6 +10378,10 @@ msgstr "Εμφάνιση εικονιδίων"
 msgid "Show in search engines"
 msgstr "Εμφάνιση στις μηχανές αναζήτησης"
 
+#: src/features/discovery/review-queue.tsx
+msgid "Show jobs"
+msgstr ""
+
 #: src/features/ai/provider-editor.tsx
 msgid "Show key"
 msgstr "Εμφάνιση κλειδιού"
@@ -9600,6 +10393,7 @@ msgstr "Εμφάνιση συνδέσμου στον τίτλο"
 #: app/(tabs)/settings/preferences.tsx
 #: src/features/application-detail/interview-sheet.tsx
 #: src/features/career/today.tsx
+#: src/features/discovery/review-queue.tsx
 msgid "Show more"
 msgstr "Εμφάνιση περισσότερων"
 
@@ -9620,6 +10414,10 @@ msgstr "Εμφάνιση διαβασμένων"
 #: src/features/design/advanced.tsx
 msgid "Show section icons"
 msgstr "Εμφάνιση εικονιδίων ενότητας"
+
+#: src/features/email-templates/write-email-sheet.tsx
+msgid "Show templates for every stage"
+msgstr ""
 
 #: src/features/application-detail/detail-screen.tsx
 msgid "Showing saved details. They couldn't be refreshed."
@@ -9748,9 +10546,19 @@ msgstr "Είσοδος και ασφάλεια"
 msgid "Sign-in didn't complete"
 msgstr "Η σύνδεση δεν ολοκληρώθηκε"
 
+#: src/features/settings/clipper-sign-ins.tsx
+msgid "Sign-in revoked. The extension stops working on its next request."
+msgstr ""
+
 #: src/features/letters/write.tsx
 msgid "Sign-off"
 msgstr "Αποχαιρετισμός"
+
+#. placeholder {0}: date(token.createdAt)
+#. placeholder {1}: date(token.lastUsedAt)
+#: src/features/settings/clipper-sign-ins.tsx
+msgid "Signed in {0} · Last used {1}"
+msgstr ""
 
 #. placeholder {0}: hostOf(server)
 #: src/auth/session-gate.tsx
@@ -9790,6 +10598,7 @@ msgstr "Μέγεθος"
 msgid "Skill"
 msgstr "Δεξιότητα"
 
+#: src/features/discovery/search-form.tsx
 #: src/features/write/fields.ts
 msgid "Skills"
 msgstr "Δεξιότητες"
@@ -9878,6 +10687,10 @@ msgstr "Ορισμένο κείμενο βρίσκεται εκτός της σ�
 msgid "Some text is rotated."
 msgstr "Ορισμένο κείμενο είναι περιστραμμένο."
 
+#: src/features/branding/domains-screen.tsx
+msgid "Something went wrong while checking this domain. Remove it and add it again."
+msgstr ""
+
 #: src/features/documents/library.tsx
 msgid "Sort"
 msgstr "Είδος"
@@ -9902,10 +10715,6 @@ msgstr "Πηγή"
 #: src/features/career/facts.tsx
 msgid "Source and correction history"
 msgstr "Πηγή και ιστορικό διόρθωσης"
-
-#: app/(tabs)/settings/index.tsx
-msgid "Source code on GitHub"
-msgstr "Πηγαίος κώδικας στο GitHub"
 
 #: src/features/workspace/answer-library.tsx
 msgid "Source employer"
@@ -10037,6 +10846,10 @@ msgstr "Ξεκινά τώρα"
 msgid "State or region"
 msgstr ""
 
+#: src/features/organization/plan-screen.tsx
+msgid "Status"
+msgstr "Τεκμηρίωση"
+
 #: src/features/documents/new-document.tsx
 msgid "Stay in Documents"
 msgstr "Παραμονή στα Έγγραφα"
@@ -10097,6 +10910,11 @@ msgstr "Διακριτή διαγραφή"
 msgid "Stronger verb"
 msgstr "Ισχυρότερο ρήμα"
 
+#: src/features/email-templates/template-editor.tsx
+#: src/features/email-templates/write-email-sheet.tsx
+msgid "Subject"
+msgstr ""
+
 #: src/features/application-detail/sections.tsx
 msgid "Submission recorded {date}. The sent versions never change; current drafts stay editable. This record does not confirm employer receipt."
 msgstr ""
@@ -10135,6 +10953,10 @@ msgstr "Επιτυχία στις 90 ημέρες · επόμενο βήμα"
 msgid "Suggest target roles (optional AI)"
 msgstr ""
 
+#: src/features/email-templates/template-editor.tsx
+msgid "Suggested for"
+msgstr ""
+
 #: src/features/workspace/tabs/messages.tsx
 msgid "Suggested reply · edit before sending"
 msgstr "Προτεινόμενη απάντηση · επεξεργαστείτε πριν από την αποστολή"
@@ -10153,6 +10975,7 @@ msgid "Summary"
 msgstr "Σύνοψη"
 
 #: app/(tabs)/settings/index.tsx
+#: src/features/branding/branding-screen.tsx
 msgid "Support"
 msgstr "Υποστήριξη"
 
@@ -10163,6 +10986,10 @@ msgstr "Τεκμηριωμένο"
 
 #: src/features/workspace/answer-library.tsx
 msgid "Supporting Knowledge facts and stories"
+msgstr ""
+
+#: src/features/organization/plan-screen.tsx
+msgid "Suspended"
 msgstr ""
 
 #: src/features/career/offers.tsx
@@ -10311,24 +11138,38 @@ msgstr "Τελούγκου"
 
 #: src/features/design/design-pane.tsx
 #: src/features/document-menu/index.tsx
+#: src/features/email-templates/write-email-sheet.tsx
 #: src/features/letters/design.tsx
 msgid "Template"
 msgstr "Πρότυπο"
+
+#: src/features/email-templates/templates-screen.tsx
+msgid "Template archived"
+msgstr ""
 
 #. placeholder {0}: templateName(template)
 #: src/features/design/draft.ts
 msgid "Template changed to {0}"
 msgstr "Το πρότυπο άλλαξε σε {0}"
 
+#: src/features/email-templates/templates-screen.tsx
+msgid "Template saved"
+msgstr ""
+
 #: src/features/letters/design.tsx
 msgid "Template, type and colors follow the resume, so the pair always matches."
 msgstr "Το πρότυπο, ο τύπος και τα χρώματα ακολουθούν το βιογραφικό, έτσι ώστε το ζευγάρι να ταιριάζει πάντα."
+
+#: src/auth/auth-header.tsx
+msgid "Terms"
+msgstr ""
 
 #: src/features/ats-checker/checker.tsx
 msgid "Terms from the posting"
 msgstr "Όροι από την ανάρτηση εργασίας"
 
 #: app/(tabs)/settings/index.tsx
+#: src/features/branding/branding-screen.tsx
 msgid "Terms of service"
 msgstr "Όροι χρήσης"
 
@@ -10402,6 +11243,22 @@ msgstr "Το κείμενο κάτω από το {minimum} pt μπορεί να 
 msgid "Thai"
 msgstr "Ταϊλανδικά"
 
+#: src/features/email-templates/built-in-text.ts
+msgid "Thank you after an interview"
+msgstr ""
+
+#: src/features/email-templates/built-in-text.ts
+msgid "Thank you for meeting with me on {interviewDate}"
+msgstr ""
+
+#: src/features/email-templates/labels.ts
+msgid "Thank-you"
+msgstr ""
+
+#: src/features/branding/domains-screen.tsx
+msgid "That domain isn't available, or you have reached the limit."
+msgstr ""
+
 #: src/features/ats-checker/check.ts
 msgid "That file couldn't be read as a PDF."
 msgstr "Δεν ήταν δυνατή η ανάγνωση αυτού του αρχείου ως PDF."
@@ -10462,9 +11319,17 @@ msgstr "Ο βοηθός χρησιμοποιεί την αναζήτηση ισ�
 msgid "The assistant uses your own key. Nothing is sent anywhere until you connect one."
 msgstr "Ο βοηθός χρησιμοποιεί το δικό σας κλειδί. Τίποτα δεν αποστέλλεται πουθενά μέχρι να συνδέσετε ένα."
 
+#: src/features/discovery/search-form.tsx
+msgid "The best matches of each run get an AI score and a short reason. Each scored job uses AI credits. Your plan may allow fewer. Enter 0 to skip AI."
+msgstr ""
+
 #: src/features/ai/web-access.tsx
 msgid "The built-in reader remains active."
 msgstr "Ο ενσωματωμένος αναγνώστης παραμένει ενεργός."
+
+#: src/features/branding/domains-screen.tsx
+msgid "The certificate provider rejected this domain. Check that the CNAME record points where shown."
+msgstr ""
 
 #: src/features/check/writing.tsx
 msgid "The checks are mechanical. This asks a language model how a reader might react to your bullets and suggests rewrites. It isn't part of the score."
@@ -10498,6 +11363,10 @@ msgstr "Δεν ήταν δυνατή η φόρτωση ή η αποθήκευσ�
 #: src/features/letters/share.tsx
 msgid "The current state will be saved as “Before restore” first."
 msgstr "Η τρέχουσα κατάσταση θα αποθηκευτεί πρώτα ως \"Πριν επαναφορά\"."
+
+#: src/features/branding/domains-screen.tsx
+msgid "The domain's certificate setup was changed and can't be used. Remove the domain and add it again."
+msgstr ""
 
 #: src/features/ats-checker/checker.tsx
 msgid "The editor opens on Check, which checks the imported resume again."
@@ -10559,6 +11428,10 @@ msgstr "Η σειρά με την οποία είναι αποθηκευμένο
 msgid "The original stays in correction history. Stories using it will need review."
 msgstr "Το πρωτότυπο παραμένει στο ιστορικό διορθώσεων. Οι ιστορίες που το χρησιμοποιούν θα πρέπει να αναθεωρηθούν."
 
+#: src/features/branding/domains-screen.tsx
+msgid "The ownership TXT record is gone. Add it back, or remove the domain."
+msgstr ""
+
 #: src/features/ats-checker/messages.ts
 msgid "The pages are pictures, with no text behind them."
 msgstr "Οι σελίδες είναι εικόνες, χωρίς κείμενο από πίσω τους."
@@ -10566,6 +11439,10 @@ msgstr "Οι σελίδες είναι εικόνες, χωρίς κείμενο
 #: src/features/check/parser.tsx
 msgid "The PDF is checked on the server and not stored. Send this preview to see what software reads."
 msgstr "Το PDF ελέγχεται στον διακομιστή και δεν αποθηκεύεται. Στείλτε αυτήν την προεπισκόπηση για να δείτε τι διαβάζει το λογισμικό."
+
+#: src/features/branding/branding-screen.tsx
+msgid "The platform default shows again."
+msgstr ""
 
 #: src/features/ai/provider-editor.tsx
 #: src/features/ai/provider-list.tsx
@@ -10588,6 +11465,16 @@ msgstr "Το υπόλοιπο αρχείο δεν περιλαμβάνεται �
 msgid "The resume as it is"
 msgstr "Το βιογραφικό ως έχει"
 
+#. placeholder {0}: source.name
+#: src/features/discovery/searches.tsx
+msgid "The run of \"{0}\" failed."
+msgstr ""
+
+#. placeholder {0}: source.name
+#: src/features/discovery/searches.tsx
+msgid "The run of \"{0}\" finished: {found} new."
+msgstr ""
+
 #: src/features/ats-checker/messages.ts
 msgid "The same line repeats on every page."
 msgstr "Η ίδια γραμμή επαναλαμβάνεται σε κάθε σελίδα."
@@ -10607,6 +11494,10 @@ msgstr "Η βαθμολογία μετράει πόσο αξιόπιστα το 
 #: src/features/ats-checker/checker.tsx
 msgid "The score reflects how reliably text is extracted, not your chances."
 msgstr "Η βαθμολογία αντικατοπτρίζει πόσο αξιόπιστα εξάγεται το κείμενο, όχι τις πιθανότητές σας."
+
+#: src/features/discovery/searches.tsx
+msgid "The search and its run history are deleted. Jobs it already found stay in your queue."
+msgstr ""
 
 #: src/features/documents/library.tsx
 msgid "The selected documents will be deleted for good and can't be restored."
@@ -10639,6 +11530,10 @@ msgstr "Το όριο χρήσης της υπηρεσίας εξαντλήθη�
 #: src/features/ai/web-access.tsx
 msgid "The service rejected the credentials. Check the API key."
 msgstr "Η υπηρεσία απέρριψε τα διαπιστευτήρια. Ελέγξτε το κλειδί API."
+
+#: src/features/email-templates/write-email-sheet.tsx
+msgid "The templates couldn't be loaded."
+msgstr ""
 
 #: src/features/ai/error.ts
 msgid "The test didn't run. Try again."
@@ -10673,6 +11568,10 @@ msgstr "Δεν υπάρχει σύνδεσμος προς προφίλ, portfoli
 msgid "There is no summary paragraph."
 msgstr "Δεν υπάρχει παράγραφος περίληψης."
 
+#: src/features/branding/branding-screen.tsx
+msgid "There is nothing to remove."
+msgstr ""
+
 #: src/features/workspace/tabs/apply.tsx
 msgid "These are saved draft answers."
 msgstr ""
@@ -10701,6 +11600,15 @@ msgstr "Σκέψη…"
 msgid "Third-party software notices. Tap a dependency to read its license."
 msgstr "Σημειώσεις λογισμικού τρίτων. Πατήστε μια εξάρτηση για να διαβάσετε την άδειά της."
 
+#. placeholder {0}: hostOf(server)
+#: src/auth/session-gate.tsx
+msgid "This account isn't part of {0}"
+msgstr ""
+
+#: src/features/branding/domains-screen.tsx
+msgid "This address always works, whatever happens to your own domains."
+msgstr ""
+
 #: src/features/workspace/answer-library.tsx
 msgid "This application"
 msgstr ""
@@ -10714,6 +11622,10 @@ msgstr "Δεν ήταν δυνατό να ανοίξει αυτή η αίτησ�
 msgid "This application has no posting yet. Add one in Applications."
 msgstr "Αυτή η αίτηση δεν έχει ακόμη αγγελία εργασίας. Προσθέστε ένα στις αιτήσεις."
 
+#: src/features/discovery/search-form.tsx
+msgid "This board isn't supported yet"
+msgstr ""
+
 #: src/features/applications/error.ts
 msgid "This changed elsewhere. Reload and try again."
 msgstr "Αυτό άλλαξε αλλού. Φορτώστε ξανά και δοκιμάστε πάλι."
@@ -10721,6 +11633,10 @@ msgstr "Αυτό άλλαξε αλλού. Φορτώστε ξανά και δο�
 #: src/features/workspace/parts.tsx
 msgid "This changed somewhere else, so it wasn't saved. Your text is kept here; Retry saves it over the other copy."
 msgstr "Αυτό άλλαξε αλλού και δεν αποθηκεύτηκε. Το κείμενό σας παραμένει εδώ· η Επανάληψη το αποθηκεύει πάνω από το άλλο αντίγραφο."
+
+#: src/features/branding/branding-screen.tsx
+msgid "This colour may be hard to see on a white background."
+msgstr ""
 
 #: src/features/ai/error.ts
 msgid "This connection is managed by your server."
@@ -10763,6 +11679,14 @@ msgstr "Αυτό το έγγραφο είναι κλειδωμένο. Μπορε
 msgid "This document is no longer available. Refresh and try again."
 msgstr "Αυτό το έγγραφο δεν είναι πλέον διαθέσιμο. Κάντε ανανέωση και δοκιμάστε ξανά."
 
+#: src/features/branding/domains-screen.tsx
+msgid "This domain no longer serves your organization and is being deleted."
+msgstr ""
+
+#: src/features/email-templates/write-email-sheet.tsx
+msgid "This email is too long to open in your mail app, so it was copied instead."
+msgstr ""
+
 #: src/features/workspace/answer-library.tsx
 msgid "This employer"
 msgstr ""
@@ -10778,6 +11702,10 @@ msgstr "Αυτή η καταχώρηση"
 #: src/features/write/entry-screen.tsx
 msgid "This entry was deleted."
 msgstr "Αυτή η καταχώρηση διαγράφηκε."
+
+#: src/features/organization/entitlement-message.ts
+msgid "This feature is not part of your organization's plan."
+msgstr ""
 
 #: src/features/ats-checker/messages.ts
 msgid "This file contains form fields."
@@ -10888,6 +11816,19 @@ msgstr "Αυτό μετρά τον τρόπο με τον οποίο το λογ
 msgid "This month"
 msgstr "Αυτόν τον μήνα"
 
+#: src/features/organization/entitlement-message.ts
+msgid "This organization has no free seats. Remove a member or an invitation, or ask the owner to add seats."
+msgstr ""
+
+#: src/features/organization/plan-screen.tsx
+msgid "This organization is suspended. You can view and export your data."
+msgstr ""
+
+#: src/features/organization/entitlement-message.ts
+#: src/features/organization/entitlements.tsx
+msgid "This organization is suspended. You can view and export your data. Contact your administrator."
+msgstr ""
+
 #: src/features/assistant/messages.tsx
 msgid "This page is clipped or incomplete. Check the original before using it."
 msgstr "Αυτή η σελίδα είναι κομμένη ή ημιτελής. Ελέγξτε το πρωτότυπο πριν το χρησιμοποιήσετε."
@@ -10911,6 +11852,10 @@ msgstr "Αυτό το PDF δεν έχει επίπεδο κειμένου, επ�
 #: src/features/ats-checker/check.ts
 msgid "This PDF is password protected. Save an unprotected copy and try again."
 msgstr "Αυτό το PDF προστατεύεται με κωδικό πρόσβασης. Αποθηκεύστε ένα μη προστατευμένο αντίγραφο και δοκιμάστε ξανά."
+
+#: src/features/organization/plan-screen.tsx
+msgid "This plan has no pooled AI credits."
+msgstr ""
 
 #: src/features/assistant/messages.tsx
 msgid "This question couldn't be asked. Send a new message to continue."
@@ -10983,6 +11928,10 @@ msgstr "Δοκιμάστε ξανά ή επανεκκινήστε την εφα�
 #: src/features/workspace/tabs/practise.tsx
 msgid "This story is unavailable or uses facts that are switched off."
 msgstr "Αυτή η ιστορία δεν είναι διαθέσιμη ή χρησιμοποιεί γεγονότα που είναι απενεργοποιημένα."
+
+#: src/features/email-templates/write-email-sheet.tsx
+msgid "This template couldn't be filled in. Try again."
+msgstr ""
 
 #: src/features/application-detail/interview-sheet.tsx
 msgid "This time does not exist in the selected timezone. Choose another time."
@@ -11071,6 +12020,10 @@ msgstr "Για έλεγχο"
 msgid "To get a reminder, allow notifications in your device settings."
 msgstr "Για να λάβετε υπενθύμιση, επιτρέψτε τις ειδοποιήσεις στις ρυθμίσεις της συσκευής σας."
 
+#: src/features/email-templates/write-email-sheet.tsx
+msgid "To: {to}"
+msgstr ""
+
 #: app/(tabs)/career/_layout.tsx
 #: src/features/applications-board/calendar-screen.tsx
 #: src/features/share/link.tsx
@@ -11153,6 +12106,10 @@ msgstr "Ο κάδος απορριμμάτων είναι άδειος"
 msgid "Trash was already empty"
 msgstr ""
 
+#: src/features/organization/plan-screen.tsx
+msgid "Trial"
+msgstr ""
+
 #: src/features/workspace/parts.tsx
 msgid "Trimming words"
 msgstr "Περικοπή λέξεων"
@@ -11169,8 +12126,14 @@ msgstr "Δοκιμάστε το {suggestion}"
 #: src/features/ai/provider-list.tsx
 #: src/features/ai/web-access.tsx
 #: src/features/application-detail/detail-screen.tsx
+#: src/features/branding/branding-screen.tsx
+#: src/features/branding/domains-screen.tsx
+#: src/features/email-templates/templates-screen.tsx
+#: src/features/email-templates/write-email-sheet.tsx
 #: src/features/letters/write.tsx
+#: src/features/organization/plan-screen.tsx
 #: src/features/settings/api-keys.tsx
+#: src/features/settings/clipper-sign-ins.tsx
 #: src/features/workspace/parts.tsx
 #: src/features/workspace/preparation.tsx
 #: src/features/workspace/shell.tsx
@@ -11390,6 +12353,10 @@ msgstr "Ενημερώθηκαν {completed} από {0}. Παραλείφθηκ�
 msgid "Updating preview…"
 msgstr "Ενημέρωση προεπισκόπησης…"
 
+#: src/features/branding/branding-screen.tsx
+msgid "Upload"
+msgstr ""
+
 #: src/features/ats-checker/checker.tsx
 msgid "Upload a PDF and see the text an applicant tracking system extracts: what's missing, what's out of order, and how to fix it. Free, no account needed."
 msgstr "Ανεβάστε ένα PDF και δείτε το κείμενο που εξάγει ένα σύστημα παρακολούθησης του αιτούντος: τι λείπει, τι είναι εκτός λειτουργίας και πώς να το διορθώσετε. Δωρεάν, δεν απαιτείται λογαριασμός."
@@ -11406,6 +12373,10 @@ msgstr "Μεταφόρτωση φωτογραφίας…"
 #: src/features/write/picture-screen.tsx
 msgid "URL"
 msgstr "URL"
+
+#: src/features/branding/branding-screen.tsx
+msgid "Use {APP_NAME_MAX} characters or fewer."
+msgstr ""
 
 #: src/features/check/issues.ts
 msgid "Use {minimum}"
@@ -11431,9 +12402,21 @@ msgstr "Χρησιμοποιήστε 3 έως 64 πεζά γράμματα, αρ
 msgid "Use 6–64 characters."
 msgstr "Χρησιμοποιήστε 6–64 χαρακτήρες."
 
+#: src/features/branding/branding-screen.tsx
+msgid "Use 80 characters or fewer."
+msgstr ""
+
+#: src/features/branding/branding-screen.tsx
+msgid "Use a colour like #1a56db."
+msgstr ""
+
 #: src/features/design/style-groups.tsx
 msgid "Use a darker shade"
 msgstr "Χρησιμοποιήστε μια πιο σκούρα απόχρωση"
+
+#: src/features/branding/branding-screen.tsx
+msgid "Use a full https:// address."
+msgstr ""
 
 #: src/features/design/advanced.tsx
 msgid "Use a hex value like #3E6B4F or rgba(62, 107, 79, 1)."
@@ -11442,6 +12425,10 @@ msgstr "Χρησιμοποιήστε μια δεκαεξαδική τιμή όπ
 #: src/features/ats-checker/messages.ts
 msgid "Use a plain international form, such as +1 555 010 1234."
 msgstr "Χρησιμοποιήστε μια απλή διεθνή μορφή, όπως +1 555 010 1234."
+
+#: src/features/branding/branding-screen.tsx
+msgid "Use a plain name without line breaks or angle brackets."
+msgstr ""
 
 #: src/features/ats-checker/messages.ts
 msgid "Use a recognized form such as \"Jan 2020 - Mar 2022\" or \"2020 - 2022\"."
@@ -11475,6 +12462,10 @@ msgstr "Χρησιμοποιήστε έναν σύνδεσμο http ή https."
 #: src/features/ats-checker/messages.ts
 msgid "Use at least 9pt."
 msgstr "Χρησιμοποιήστε τουλάχιστον 9pt."
+
+#: src/features/discovery/messages.ts
+msgid "Use at most {MAX_NAME_LENGTH} characters."
+msgstr ""
 
 #: src/features/document-menu/index.tsx
 #: src/features/documents/queries.ts
@@ -11510,6 +12501,10 @@ msgstr "Χρησιμοποιήστε πεζά γράμματα, αριθμούς
 #: src/features/career/search-regions-field.tsx
 msgid "Use my timezone"
 msgstr "Χρήση της ζώνης ώρας μου"
+
+#: src/features/branding/branding-screen.tsx
+msgid "Use one address like help@example.com, without a name."
+msgstr ""
 
 #: src/features/check/issues.ts
 msgid "Use one column"
@@ -11581,6 +12576,10 @@ msgstr "Χρησιμοποιήστε αυτή τη φορά"
 msgid "Use your editor's normal bullet list, so stray glyphs do not land mid-sentence."
 msgstr "Χρησιμοποιήστε την κανονική λίστα κουκκίδων του επεξεργαστή σας, ώστε να μην καταλήγουν τυχαίες γλυφές στη μέση μιας πρότασης."
 
+#: src/features/organization/plan-screen.tsx
+msgid "Used"
+msgstr "Χρησιμοποιήθηκαν"
+
 #: src/features/workspace/tabs/saved.tsx
 msgid "used {used}"
 msgstr "χρησιμοποίησε: {used}"
@@ -11592,6 +12591,10 @@ msgstr "Χρησιμοποιούνται για τον έλεγχο θέσεων
 #: src/features/ai/web-access.tsx
 msgid "Used when {connected} can't read a page. No account needed."
 msgstr "Χρησιμοποιείται όταν το {connected} δεν μπορεί να διαβάσει μια σελίδα. Δεν απαιτείται λογαριασμός."
+
+#: src/features/ai/provider-list.tsx
+msgid "Used when you haven't added a provider of your own. Counts toward your organization's AI allowance."
+msgstr ""
 
 #: src/features/settings/profile.tsx
 #: src/features/write/fields.ts
@@ -11625,6 +12628,11 @@ msgstr "Ουζμπεκικά"
 #: src/features/share/custom-domain.tsx
 msgid "Value"
 msgstr "Τιμή"
+
+#. placeholder {0}: record.value
+#: src/features/branding/domains-screen.tsx
+msgid "Value: {0}"
+msgstr ""
 
 #: src/features/ats-checker/messages.ts
 msgid "Vary the openings so the section does not read as boilerplate."
@@ -11745,6 +12753,10 @@ msgstr "Εθελοντική εργασία"
 msgid "Wait for your account timezone to load, retry if it failed, or clear the deadline."
 msgstr "Περιμένετε να φορτωθεί η ζώνη ώρας του λογαριασμού σας, δοκιμάστε ξανά αν η φόρτωση απέτυχε ή καταργήστε την προθεσμία."
 
+#: src/features/branding/domains-screen.tsx
+msgid "Waiting for DNS"
+msgstr ""
+
 #: src/features/workspace/tabs/messages.tsx
 msgid "Waiting for you"
 msgstr "Σας περιμένει"
@@ -11752,6 +12764,10 @@ msgstr "Σας περιμένει"
 #: src/features/applications/next-step.ts
 msgid "Waiting to hear back"
 msgstr "Περιμένοντας να ακούσω πίσω"
+
+#: src/features/branding/domains-screen.tsx
+msgid "We didn't find the ownership record in time. Check that the TXT record exists exactly as shown."
+msgstr ""
 
 #: app/(tabs)/settings/ai-web-access.tsx
 #: app/(tabs)/settings/ai.tsx
@@ -11790,6 +12806,10 @@ msgstr "Οι αναζητήσεις στον Ιστό αναζητούν θέσ�
 #: src/features/write/basics-screen.tsx
 msgid "Website"
 msgstr "Ιστότοπος"
+
+#: src/features/discovery/messages.ts
+msgid "Weekly"
+msgstr ""
 
 #: src/features/workspace/parts.tsx
 msgid "Weighing each requirement"
@@ -12021,6 +13041,12 @@ msgstr "Σημειώστε τι ρώτησαν όσο είναι φρέσκο. �
 msgid "Write each role as a clear title and company line, with the dates alongside."
 msgstr "Γράψτε κάθε ρόλο ως σαφή γραμμή τίτλου και εταιρείας, με τις ημερομηνίες δίπλα."
 
+#: src/features/application-detail/detail-screen.tsx
+#: src/features/email-templates/write-email-sheet.tsx
+#: src/features/workspace/shell.tsx
+msgid "Write email"
+msgstr ""
+
 #: src/features/ats-checker/messages.ts
 msgid "Write it as one uninterrupted piece, with no special spacing."
 msgstr "Γράψτε το ως ένα αδιάκοπο κομμάτι, χωρίς ειδική απόσταση."
@@ -12092,6 +13118,10 @@ msgstr "Το χρησιμοποιείτε ήδη για το \"{takenBy}\"."
 msgid "You answered: {answer}"
 msgstr "Απάντησες: {answer}"
 
+#: src/features/discovery/search-form.tsx
+msgid "You can have at most {limit} searches. Delete one to add another."
+msgstr ""
+
 #: src/shell/builder-chrome.tsx
 msgid "You can keep editing. Changes sync when you're back online. PDF sharing works with cached fonts and images."
 msgstr "Μπορείτε να συνεχίσετε να επεξεργάζεστε. Αλλάζει τον συγχρονισμό όταν είστε ξανά στο διαδίκτυο. Η κοινή χρήση PDF λειτουργεί με κρυφές γραμματοσειρές και εικόνες."
@@ -12099,6 +13129,10 @@ msgstr "Μπορείτε να συνεχίσετε να επεξεργάζεστ
 #: src/features/workspace/tabs/apply.tsx
 msgid "You can keep up to 30 application questions."
 msgstr "Μπορείτε να κρατήσετε έως 30 ερωτήσεις αίτησης."
+
+#: src/features/discovery/searches.tsx
+msgid "You can run a search by hand once every 10 minutes."
+msgstr ""
 
 #: app/(auth)/sign-in.tsx
 msgid "You can sign in with an account you already have."
@@ -12113,6 +13147,10 @@ msgstr "Ακυρώσατε τη σύνδεση πριν ολοκληρωθεί."
 msgid "You forgot this before, so it wasn't saved again."
 msgstr "Το είχατε ξεχάσει στο παρελθόν, οπότε δεν αποθηκεύτηκε ξανά."
 
+#: src/features/email-templates/templates-screen.tsx
+msgid "You have no templates of your own yet. You can also save one from Write email."
+msgstr ""
+
 #: src/ui/overlays.tsx
 msgid "You have unsaved changes."
 msgstr "Έχετε μη αποθηκευμένες αλλαγές."
@@ -12120,6 +13158,10 @@ msgstr "Έχετε μη αποθηκευμένες αλλαγές."
 #: src/features/workspace/tabs/messages.tsx
 msgid "You send it from your own email."
 msgstr "Τη στέλνετε από το δικό σας email."
+
+#: src/features/email-templates/write-email-sheet.tsx
+msgid "You send it from your own email. Nothing is sent from here."
+msgstr ""
 
 #: src/features/settings/sign-out.tsx
 msgid "You will be signed out of {server}. Any edits not yet synced from this device will be lost."
@@ -12171,6 +13213,14 @@ msgstr "Είστε εκτός σύνδεσης. Δοκιμάστε ξανά ότ
 msgid "You're up to date"
 msgstr "Είστε ενημερωμένοι"
 
+#: src/features/branding/domains-screen.tsx
+msgid "Your address"
+msgstr ""
+
+#: src/features/branding/domains-screen.tsx
+msgid "Your address above keeps working. Ask your administrator to upgrade the plan to add your own domain."
+msgstr ""
+
 #: src/features/workspace/tabs/debrief.tsx
 #: src/features/workspace/tabs/practise.tsx
 msgid "your AI connection"
@@ -12192,6 +13242,10 @@ msgstr "Η απάντησή σας"
 msgid "Your answer · {mode}"
 msgstr "Η απάντησή σας · {mode}"
 
+#: src/features/branding/branding-screen.tsx
+msgid "Your app"
+msgstr ""
+
 #: src/features/workspace/tabs/practise.tsx
 msgid "Your attempts"
 msgstr "Οι προσπάθειές σας"
@@ -12207,6 +13261,10 @@ msgstr "Οι κουκκίδες σας είναι σχεδιασμένες με 
 #: src/draft/conflict-sheet.tsx
 msgid "Your changes on this device will be replaced by the saved version."
 msgstr "Οι αλλαγές σας σε αυτήν τη συσκευή θα αντικατασταθούν από την αποθηκευμένη έκδοση."
+
+#: src/features/settings/profile.tsx
+msgid "Your cohort"
+msgstr ""
 
 #: src/features/ats-checker/messages.ts
 msgid "Your contact details are not on the first page."
@@ -12258,8 +13316,8 @@ msgid "your Knowledge"
 msgstr "τη Γνώση σας"
 
 #: app/(tabs)/settings/preferences.tsx
-msgid "Your language is saved. Restart Reactive Resume to apply the new left-to-right or right-to-left layout."
-msgstr "Η γλώσσα σας έχει αποθηκευτεί. Επανεκκινήστε το Reactive Resume για να εφαρμόσετε τη νέα διάταξη από αριστερά προς τα δεξιά ή από δεξιά προς τα αριστερά."
+msgid "Your language is saved. Restart the app to apply the new left-to-right or right-to-left layout."
+msgstr ""
 
 #: src/features/ats-checker/messages.ts
 msgid "Your lines are packed very tightly."
@@ -12277,10 +13335,6 @@ msgstr "το μήνυμά σας"
 msgid "Your name"
 msgstr "Το όνομά σας"
 
-#: src/features/share/custom-domain.tsx
-msgid "Your name as your address, from OlaCV, the .cv registry. Code {CODE} takes 50% off the first year."
-msgstr "Το όνομά σας ως διεύθυνσή σας, από το OlaCV, το μητρώο του .cv. Ο κωδικός {CODE} δίνει έκπτωση 50% τον πρώτο χρόνο."
-
 #: src/features/check/issues.ts
 msgid "Your name is missing"
 msgstr "Το όνομά σας λείπει"
@@ -12297,9 +13351,37 @@ msgstr "Η εισαγωγή σας"
 msgid "Your opening, the stories to bring and questions to ask. It becomes your checklist 10 minutes before the call."
 msgstr "Η εισαγωγή σας, οι ιστορίες που θα φέρετε και ερωτήσεις που μπορείτε να κάνετε. 10 λεπτά πριν από την κλήση γίνεται η λίστα ελέγχου σας."
 
+#: src/api/ai-quota.ts
+msgid "Your organization has used 80% of this month's AI allowance."
+msgstr ""
+
+#: src/features/ai/error.ts
+msgid "Your organization has used all of this month's AI allowance. Add your own AI provider in Settings to keep going, or ask an admin about the plan."
+msgstr ""
+
+#: src/features/branding/domains-screen.tsx
+msgid "Your organization is served on this domain."
+msgstr ""
+
+#: src/features/organization/plan-screen.tsx
+msgid "Your organization's owner manages the plan and payments on the web."
+msgstr ""
+
+#: src/features/email-templates/templates-screen.tsx
+msgid "Your own templates for writing to employers. They appear under Write email on every application."
+msgstr ""
+
 #: src/features/ats-checker/messages.ts
 msgid "Your phone number is written in an unusual shape."
 msgstr "Ο αριθμός τηλεφώνου σας είναι γραμμένος σε ασυνήθιστη μορφή."
+
+#: src/features/discovery/messages.ts
+msgid "Your plan allows fewer jobs per run."
+msgstr ""
+
+#: src/features/discovery/searches.tsx
+msgid "Your plan doesn't include job discovery. Ask your administrator about upgrading."
+msgstr ""
 
 #: src/features/assistant/coach-screen.tsx
 msgid "your preferences"
@@ -12389,6 +13471,14 @@ msgstr "οι ιστορίες σας"
 #: src/features/workspace/tabs/practise.tsx
 msgid "Your story couldn't be loaded."
 msgstr "Δεν ήταν δυνατή η φόρτωση της ιστορίας σας."
+
+#: src/features/email-templates/templates-screen.tsx
+msgid "Your templates"
+msgstr ""
+
+#: src/features/email-templates/templates-screen.tsx
+msgid "Your templates couldn't be loaded."
+msgstr ""
 
 #: src/features/workspace/tabs/prepare.tsx
 msgid "Your two-minute introduction"

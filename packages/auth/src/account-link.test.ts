@@ -21,13 +21,24 @@ const mocks = vi.hoisted(() => {
 					: table === schema.application
 						? [{ id: "guest-application", status: "saved", laneId: null, activity: [] }]
 						: [];
-			return { where: () => Object.assign(Promise.resolve(rows), { for: () => Promise.resolve(rows) }) };
+			return {
+				where: () =>
+					Object.assign(Promise.resolve(rows), {
+						for: () => Promise.resolve(rows),
+						// CAREEROS (P1-T04): the target account's oldest membership
+						orderBy: () => ({ limit: () => Promise.resolve([{ organizationId: "org-user-456" }]) }),
+					}),
+			};
 		},
 	}));
 	const insert = vi.fn(() => ({ values: () => ({ onConflictDoNothing: () => Promise.resolve() }) }));
-	const tx = { select, insert, update, delete: deleteFn };
+	// CAREEROS (P1-T09): the guest's erasure prefixes come back from a definer function as `rows`
+	const execute = vi.fn((_query?: unknown) =>
+		Promise.resolve({ rows: [] as { storageKey: string }[] } as { rows: { storageKey: string }[] } | undefined),
+	);
+	const tx = { select, insert, update, delete: deleteFn, execute };
 	const transaction = vi.fn(async (cb: (tx: unknown) => Promise<unknown>) => cb(tx));
-	return { update, updateSet, updateWhere, delete: deleteFn, deleteWhere, transaction, tx };
+	return { update, updateSet, updateWhere, delete: deleteFn, deleteWhere, execute, transaction, tx };
 });
 
 vi.mock("better-auth", async (importOriginal) => ({
@@ -46,6 +57,7 @@ const { linkAnonymousAccount, setAccountLinkHook } = await import("./config");
 
 beforeEach(() => {
 	mocks.update.mockClear();
+	mocks.execute.mockClear();
 	mocks.updateSet.mockClear();
 	mocks.updateWhere.mockClear();
 	mocks.delete.mockClear();
@@ -58,7 +70,7 @@ describe("linkAnonymousAccount", () => {
 	it("copies before commit and cleans up only after commit", async () => {
 		const events: string[] = [];
 		setAccountLinkHook(async () => {
-			expect(mocks.updateWhere).toHaveBeenCalled();
+			expect(mocks.execute).toHaveBeenCalled();
 			events.push("copy");
 			return async () => {
 				events.push("cleanup");
@@ -107,62 +119,60 @@ describe("linkAnonymousAccount", () => {
 
 		expect(mocks.transaction).toHaveBeenCalledOnce();
 
-		// Check resume update includes data rewrite
-		const resumeUpdateCall = mocks.update.mock.calls.find((call) => call[0] === schema.resume);
-		expect(resumeUpdateCall).toBeDefined();
-		const resumeSetArg = mocks.updateSet.mock.calls.find(
-			(_, idx) => mocks.update.mock.calls[idx]?.[0] === schema.resume,
-		)?.[0];
-		expect(resumeSetArg).toMatchObject({ userId: "user-456" });
-		expect(resumeSetArg).toHaveProperty("data");
+		// CAREEROS (P1-T04): resumes, their versions, redirects and statistics move through one definer function,
+		// into the target account's organization; there is no direct update of the resume tables any more.
+		// CAREEROS (P1-T05): cover letters and their versions move through a second definer function.
+		// CAREEROS (P1-T06): the application profile, pipeline, lanes and applications move through a third.
+		// CAREEROS (P1-T07): saved answers and application-linked career rows move through a fourth.
+		// CAREEROS (P4-T02): discovery automations, runs and jobs move after the applications.
+		const discoveryMoveQuery = JSON.stringify(mocks.execute.mock.calls[4]?.[0]);
+		expect(discoveryMoveQuery).toContain("careeros_move_guest_discovery");
+		expect(discoveryMoveQuery).toContain("guest-123");
+		expect(discoveryMoveQuery).toContain("user-456");
+		expect(discoveryMoveQuery).toContain("org-user-456");
+		// CAREEROS (P1-T08): saved connections, conversations and reports move through a fifth definer function.
+		// CAREEROS (P1-T09): the guest's pending erasure prefixes are read through a sixth definer call.
+		expect(mocks.execute).toHaveBeenCalledTimes(7);
+		expect(JSON.stringify(mocks.execute.mock.calls.at(-1)?.[0])).toContain("careeros_guest_cleanup_prefixes");
+		const moveQuery = JSON.stringify(mocks.execute.mock.calls[0]?.[0]);
+		const letterMoveQuery = JSON.stringify(mocks.execute.mock.calls[1]?.[0]);
+		expect(letterMoveQuery).toContain("careeros_move_guest_cover_letters");
+		expect(letterMoveQuery).toContain("guest-123");
+		expect(letterMoveQuery).toContain("org-user-456");
+		expect(mocks.update.mock.calls.some((call) => call[0] === schema.coverLetter)).toBe(false);
+		expect(mocks.update.mock.calls.some((call) => call[0] === schema.coverLetterVersion)).toBe(false);
+		expect(moveQuery).toContain("careeros_move_guest_resumes");
+		expect(moveQuery).toContain("guest-123");
+		expect(moveQuery).toContain("user-456");
+		expect(moveQuery).toContain("org-user-456");
+		expect(mocks.update.mock.calls.some((call) => call[0] === schema.resume)).toBe(false);
+		expect(mocks.update.mock.calls.some((call) => call[0] === schema.resumeVersion)).toBe(false);
+		expect(mocks.update.mock.calls.some((call) => call[0] === schema.resumeSlugRedirect)).toBe(false);
 
-		// Check resumeVersion update includes data rewrite
-		const resumeVersionUpdateCall = mocks.update.mock.calls.find((call) => call[0] === schema.resumeVersion);
-		expect(resumeVersionUpdateCall).toBeDefined();
-		const resumeVersionSetArg = mocks.updateSet.mock.calls.find(
-			(_, idx) => mocks.update.mock.calls[idx]?.[0] === schema.resumeVersion,
-		)?.[0];
-		expect(resumeVersionSetArg).toMatchObject({ userId: "user-456" });
-		expect(resumeVersionSetArg).toHaveProperty("data");
-
-		// Check application update includes resumeFileUrl and coverLetterUrl rewrites
-		const appUpdateCall = mocks.update.mock.calls.find((call) => call[0] === schema.application);
-		expect(appUpdateCall).toBeDefined();
-		const appSetArg = mocks.updateSet.mock.calls.find(
-			(_, idx) => mocks.update.mock.calls[idx]?.[0] === schema.application,
-		)?.[0];
-		expect(appSetArg).toMatchObject({ userId: "user-456" });
-		expect(appSetArg).toHaveProperty("resumeFileUrl");
-		expect(appSetArg).toHaveProperty("coverLetterUrl");
-
-		// Check coverLetter update includes style rewrite
-		const coverLetterUpdateCall = mocks.update.mock.calls.find((call) => call[0] === schema.coverLetter);
-		expect(coverLetterUpdateCall).toBeDefined();
-		const coverLetterSetArg = mocks.updateSet.mock.calls.find(
-			(_, idx) => mocks.update.mock.calls[idx]?.[0] === schema.coverLetter,
-		)?.[0];
-		expect(coverLetterSetArg).toMatchObject({ userId: "user-456" });
-		expect(coverLetterSetArg).toHaveProperty("style");
-
-		// Check coverLetterVersion update includes data rewrite
-		const coverLetterVersionUpdateCall = mocks.update.mock.calls.find((call) => call[0] === schema.coverLetterVersion);
-		expect(coverLetterVersionUpdateCall).toBeDefined();
-		const coverLetterVersionSetArg = mocks.updateSet.mock.calls.find(
-			(_, idx) => mocks.update.mock.calls[idx]?.[0] === schema.coverLetterVersion,
-		)?.[0];
-		expect(coverLetterVersionSetArg).toMatchObject({ userId: "user-456" });
-		expect(coverLetterVersionSetArg).toHaveProperty("data");
-
-		// Check resumeSlugRedirect deduplication and update
-		const redirectDeleteCall = mocks.delete.mock.calls.find((call) => call[0] === schema.resumeSlugRedirect);
-		expect(redirectDeleteCall).toBeDefined();
-
-		const redirectUpdateCall = mocks.update.mock.calls.find((call) => call[0] === schema.resumeSlugRedirect);
-		expect(redirectUpdateCall).toBeDefined();
-		const redirectSetArg = mocks.updateSet.mock.calls.find(
-			(_, idx) => mocks.update.mock.calls[idx]?.[0] === schema.resumeSlugRedirect,
-		)?.[0];
-		expect(redirectSetArg).toMatchObject({ userId: "user-456" });
+		const applicationMoveQuery = JSON.stringify(mocks.execute.mock.calls[2]?.[0]);
+		expect(applicationMoveQuery).toContain("careeros_move_guest_applications");
+		expect(applicationMoveQuery).toContain("guest-123");
+		expect(applicationMoveQuery).toContain("user-456");
+		expect(applicationMoveQuery).toContain("org-user-456");
+		const careerMoveQuery = JSON.stringify(mocks.execute.mock.calls[3]?.[0]);
+		expect(careerMoveQuery).toContain("careeros_move_guest_career");
+		expect(careerMoveQuery).toContain("guest-123");
+		expect(careerMoveQuery).toContain("user-456");
+		expect(careerMoveQuery).toContain("org-user-456");
+		// CAREEROS (P1-T08): saved connections, conversations and reports move through their own definer function.
+		const agentMoveQuery = JSON.stringify(mocks.execute.mock.calls[5]?.[0]);
+		expect(agentMoveQuery).toContain("careeros_move_guest_agent");
+		expect(agentMoveQuery).toContain("guest-123");
+		expect(agentMoveQuery).toContain("user-456");
+		expect(agentMoveQuery).toContain("org-user-456");
+		expect(mocks.update.mock.calls.some((call) => call[0] === schema.careerAnswer)).toBe(false);
+		for (const table of [
+			schema.application,
+			schema.applicationLane,
+			schema.applicationPipeline,
+			schema.applicationProfile,
+		])
+			expect(mocks.update.mock.calls.some((call) => call[0] === table)).toBe(false);
 
 		// Check hook execution
 		expect(hook).toHaveBeenCalledWith({
@@ -170,6 +180,26 @@ describe("linkAnonymousAccount", () => {
 			toUserId: "user-456",
 			excludedStoragePrefixes: [],
 		});
+	});
+
+	it("reports the definer function's conflicts as CONFLICT replies", async () => {
+		for (const [code, message] of [
+			["CR001", "private application profile"],
+			["CR002", "exceeds 40 active lanes"],
+		] as const) {
+			mocks.execute.mockResolvedValueOnce(undefined).mockResolvedValueOnce(undefined);
+			mocks.execute.mockRejectedValueOnce(Object.assign(new Error("Failed query"), { cause: { code } }));
+			await expect(linkAnonymousAccount({ fromUserId: "guest-123", toUserId: "user-456" })).rejects.toMatchObject({
+				status: "CONFLICT",
+				body: { message: expect.stringContaining(message) },
+			});
+		}
+		// Anything else is not turned into a conflict.
+		mocks.execute.mockResolvedValueOnce(undefined).mockResolvedValueOnce(undefined);
+		mocks.execute.mockRejectedValueOnce(new Error("Database unavailable"));
+		await expect(linkAnonymousAccount({ fromUserId: "guest-123", toUserId: "user-456" })).rejects.toThrow(
+			"Database unavailable",
+		);
 	});
 
 	it("does nothing when fromUserId equals toUserId", async () => {

@@ -5,4 +5,6 @@ import { createVitestProjectConfig } from "../../vitest.shared.mts";
 export default createVitestProjectConfig({
 	name: "@reactive-resume/api",
 	dirname: fileURLToPath(new URL(".", import.meta.url)),
+	// CAREEROS: gives upstream router tests an active organization (P1-T02)
+	extraSetupFiles: [fileURLToPath(new URL("./vitest.org.setup.ts", import.meta.url))],
 });

@@ -1,3 +1,5 @@
+// CAREEROS (P3-T03)
+import type { AiFeature } from "@careeros/ai-metering";
 import { ORPCError } from "@orpc/client";
 import { APICallError, generateText, RetryError } from "ai";
 import z from "zod";
@@ -30,8 +32,9 @@ const reserved = { tags: ["Applications", "AI"] } as const;
 const MAX_PASTED_JOB_DESCRIPTION_CHARS = 20_000;
 
 // Resolve the user's default (tested + enabled) AI provider into a ready model instance.
-async function resolveModel(userId: string) {
-	const provider = await aiProvidersService.getDefaultRunnable({ userId });
+// CAREEROS (P3-T03): the feature names the call in ai_usage and picks the platform model
+async function resolveModel(userId: string, feature: AiFeature = "applications.ai") {
+	const provider = await aiProvidersService.getDefaultRunnable({ userId, feature });
 	if (!provider) {
 		throw new ORPCError("BAD_REQUEST", {
 			message: "No AI provider is set up. Add one in Settings → AI & developer to use AI features.",
@@ -42,6 +45,7 @@ async function resolveModel(userId: string) {
 		model: provider.model,
 		apiKey: provider.apiKey,
 		...(provider.baseURL ? { baseURL: provider.baseURL } : {}),
+		metering: provider.metering,
 	});
 }
 
@@ -276,7 +280,10 @@ export const aiRouter = {
 
 			const fallback = { ...fromPage, filledBy: page ? ("page" as const) : ("none" as const) };
 			try {
-				const provider = await aiProvidersService.getDefaultRunnable({ userId: context.user.id });
+				const provider = await aiProvidersService.getDefaultRunnable({
+					userId: context.user.id,
+					feature: "applications.extract",
+				});
 				if (!provider) return fallback;
 
 				const model = getModel({
@@ -284,6 +291,7 @@ export const aiRouter = {
 					model: provider.model,
 					apiKey: provider.apiKey,
 					...(provider.baseURL ? { baseURL: provider.baseURL } : {}),
+					metering: provider.metering,
 				});
 				const fields = await generateJson(
 					model,
@@ -323,7 +331,7 @@ export const aiRouter = {
 		.output(autofillOutput)
 		.errors(aiErrors)
 		.handler(async ({ context, input }) => {
-			const model = await resolveModel(context.user.id);
+			const model = await resolveModel(context.user.id, "applications.extract");
 
 			return generateJson(
 				model,

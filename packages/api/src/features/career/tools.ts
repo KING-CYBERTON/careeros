@@ -185,7 +185,12 @@ export function buildCareerTools(input: CareerToolsInput): ToolSet {
 					.from(application)
 					.leftJoin(
 						applicationLane,
-						and(eq(applicationLane.id, application.laneId), eq(applicationLane.userId, input.userId)),
+						// CAREEROS (P1-T06): lane ids repeat across organizations, so the join names the application's own
+						and(
+							eq(applicationLane.organizationId, application.organizationId),
+							eq(applicationLane.id, application.laneId),
+							eq(applicationLane.userId, input.userId),
+						),
 					)
 					.where(eq(application.userId, input.userId))
 					.orderBy(desc(application.updatedAt))

@@ -1,3 +1,5 @@
+// CAREEROS (P3-T03): the call is metered
+import type { Metering } from "@careeros/ai-metering";
 import { z } from "zod";
 import { improveSystemPrompt, improveUserPromptTemplate } from "@reactive-resume/ai/prompts";
 import { inertMarkers } from "./data-block";
@@ -40,6 +42,8 @@ type ImproveServiceInput = ImproveInput & {
 	model: string;
 	apiKey: string;
 	baseURL: string;
+	// CAREEROS (P3-T03)
+	metering?: Metering | undefined;
 };
 
 function buildUserPrompt(input: ImproveInput): string {

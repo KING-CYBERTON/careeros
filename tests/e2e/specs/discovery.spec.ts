@@ -1,6 +1,7 @@
 import { writeFile } from "node:fs/promises";
-import { Pool } from "pg";
 import { startAiStub } from "../fixtures/ai-stub";
+// CAREEROS: career_opportunity gets RLS in P1-T07, so seed it through the owner role (P1-Q07)
+import { createSeedPool } from "../fixtures/seed-db";
 import { expect, test } from "../fixtures/test";
 
 let stub: Awaited<ReturnType<typeof startAiStub>>;
@@ -137,9 +138,7 @@ test("target roles stay drafts until reviewed; manual setup needs no AI", async 
 	await page.reload();
 	await page.getByRole("button", { name: "Set up discovery", exact: true }).click();
 	await expect(page.getByLabel("Look for", { exact: true })).toHaveValue("Platform engineer");
-	await expect(
-		page.getByText(/Found posting links are read by Reactive Resume and, when needed, tavily/),
-	).toBeVisible();
+	await expect(page.getByText(/Found posting links are read by CareerOS and, when needed, tavily/)).toBeVisible();
 	await page.getByRole("button", { name: "Save schedule", exact: true }).click();
 	await expect(page.getByRole("dialog", { name: "New schedule", exact: true })).toBeHidden();
 	const schedules = await page.request.get("/api/openapi/career/schedules");
@@ -156,23 +155,32 @@ test("target roles stay drafts until reviewed; manual setup needs no AI", async 
 test("discovery explains unknowns and bulk partial failures keep only failed roles selected", async ({
 	authPage: page,
 }, testInfo) => {
-	const databaseUrl = process.env.DATABASE_URL;
-	if (!databaseUrl) throw new Error("Disposable E2E DATABASE_URL is required");
 	const profile = await page.request.get("/api/openapi/auth/profile");
 	await expect(profile).toBeOK();
 	const owner = (await profile.json()).id;
-	const pool = new Pool({ connectionString: databaseUrl });
+	const pool = createSeedPool(); // CAREEROS: owner-role pool (P1-Q07)
 	await expect(
 		await page.request.put("/api/openapi/career/profile", {
 			data: { targetRoles: ["Platform engineer"], locations: ["Berlin"] },
 		}),
 	).toBeOK();
 	try {
+		// CAREEROS (P1-T07, Q37): career_opportunity is a tenant table; the rows go to the user's active (oldest) organization.
+		const { rows: orgs } = await pool.query<{ organization_id: string }>(
+			`SELECT organization_id FROM member WHERE user_id = $1 ORDER BY created_at, id LIMIT 1`,
+			[owner],
+		);
+		const organizationId = orgs[0]?.organization_id;
+		if (!organizationId) throw new Error("The test user has no organization.");
 		await pool.query(
-			`INSERT INTO career_opportunity (id,user_id,url,role,company,location,snippet,description,discovery_source) VALUES
-		('rx76-first-' || $1,$1,'https://example.test/jobs/platform','Platform engineer','Canopy Systems','Berlin','Maintain reliable services.','Maintain reliable services for 10,000 users and remote APIs.',$2),
-		('rx76-second-' || $1,$1,'https://example.test/jobs/reliability','Reliability engineer','Brightpath','','Build reliable products.','Build reliable products.',null)`,
-			[owner, JSON.stringify({ query: "Platform engineer Berlin", checkedAt: "2026-10-30T08:00:00.000Z" })],
+			`INSERT INTO career_opportunity (id,organization_id,user_id,url,role,company,location,snippet,description,discovery_source) VALUES
+		('rx76-first-' || $1,$3,$1,'https://example.test/jobs/platform','Platform engineer','Canopy Systems','Berlin','Maintain reliable services.','Maintain reliable services for 10,000 users and remote APIs.',$2),
+		('rx76-second-' || $1,$3,$1,'https://example.test/jobs/reliability','Reliability engineer','Brightpath','','Build reliable products.','Build reliable products.',null)`,
+			[
+				owner,
+				JSON.stringify({ query: "Platform engineer Berlin", checkedAt: "2026-10-30T08:00:00.000Z" }),
+				organizationId,
+			],
 		);
 		await page.setViewportSize({ width: 1440, height: 1150 });
 		await page.goto("/dashboard/career");

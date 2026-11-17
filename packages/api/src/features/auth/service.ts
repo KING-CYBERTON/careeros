@@ -3,6 +3,12 @@ import { ORPCError } from "@orpc/client";
 import { symmetricDecrypt } from "better-auth/crypto";
 import { and, eq } from "drizzle-orm";
 import { auth, isCustomOAuthProviderEnabled } from "@reactive-resume/auth/config";
+// CAREEROS: organization cleanup on account deletion (P1-T03)
+import {
+	assertNoSharedOrganizationOwnership,
+	deleteSoleMemberOrganizations,
+	SharedOrganizationOwnerError,
+} from "@reactive-resume/auth/personal-org";
 import { db } from "@reactive-resume/db/client";
 import * as schema from "@reactive-resume/db/schema";
 import { env } from "@reactive-resume/env/server";
@@ -10,6 +16,8 @@ import { applicationProfileService } from "../application-profile/service";
 import { applicationLaneService } from "../applications/lanes";
 import { careerService } from "../career/service";
 import { coverLetterService } from "../cover-letters/service";
+// CAREEROS (P4-T02): discovery rows are part of the account export
+import { discoveryService } from "../discovery/service";
 import { reportStorageCleanupSummary, runStorageCleanup } from "../storage/cleanup";
 import { revokeAppleAuthorization } from "./apple-revocation";
 
@@ -99,17 +107,31 @@ export const authService = {
 				coverLetters.map(({ id }) => coverLetterService.getById({ id, userId: input.userId })),
 			),
 			applicationPipeline: await applicationLaneService.get(input.userId),
-			applications: applications.map(({ userId: _userId, ...application }) => application),
-			aiContentReports: await db
-				.select()
-				.from(schema.aiContentReport)
-				.where(eq(schema.aiContentReport.userId, input.userId)),
+			// CAREEROS (P1-T06): the tenant column is not part of the export
+			applications: applications.map(
+				({ userId: _userId, organizationId: _organizationId, ...application }) => application,
+			),
+			// CAREEROS (P1-T08): the active organization's reports; the tenant column is not part of the export
+			aiContentReports: (
+				await db.select().from(schema.aiContentReport).where(eq(schema.aiContentReport.userId, input.userId))
+			).map(({ organizationId: _organizationId, ...report }) => report),
 			career: await careerService.exportData(input.userId),
+			// CAREEROS (P4-T02, Q226): job discovery automations, their runs and the jobs they found
+			discovery: await discoveryService.exportData(input.userId),
 			applicationProfile: await applicationProfileService.get(input.userId),
 		};
 	},
 
 	deleteAccount: async (input: { userId: string }): Promise<void> => {
+		// CAREEROS: refuse before any irreversible step while the user owns an organization that has other members (P1-T03)
+		try {
+			await assertNoSharedOrganizationOwnership(input.userId);
+		} catch (error) {
+			if (error instanceof SharedOrganizationOwnerError)
+				throw new ORPCError("PRECONDITION_FAILED", { message: error.message });
+			throw error;
+		}
+
 		const appleAccounts = await db
 			.select({ refreshToken: schema.account.refreshToken, accessToken: schema.account.accessToken })
 			.from(schema.account)
@@ -133,7 +155,11 @@ export const authService = {
 		try {
 			// A database trigger enqueues one account-prefix cleanup row in this same delete transaction, so storage
 			// failures cannot leave files without a durable retry target. The row has no user FK and survives deletion.
-			await db.delete(schema.user).where(eq(schema.user.id, input.userId));
+			// CAREEROS: organizations only this user belongs to go with the account, in the same transaction (P1-T03)
+			await db.transaction(async (tx) => {
+				await deleteSoleMemberOrganizations(input.userId, tx);
+				await tx.delete(schema.user).where(eq(schema.user.id, input.userId));
+			});
 		} catch (err) {
 			console.error("Failed to delete user record:", err);
 

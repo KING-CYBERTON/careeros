@@ -1,5 +1,6 @@
 import type { WebPageMessages } from "./messages";
 import type { ResumeWebPage } from "./web-page";
+import { PLATFORM_DEFAULT_APP_NAME } from "@reactive-resume/utils/brand";
 import { isRTL } from "@reactive-resume/utils/locale";
 import { escapeHtml } from "@reactive-resume/utils/string";
 
@@ -25,6 +26,8 @@ export type WebPageDocumentOptions = {
 	downloadUrl?: string | undefined;
 	/** Where the footer credit links; absent when the owner turned it off. */
 	creditUrl?: string | undefined;
+	/** CAREEROS: the product name in the credit and `og:site_name`; the platform default when absent. */
+	appName?: string | undefined;
 };
 
 /**
@@ -74,10 +77,6 @@ button{font:inherit;font-weight:600;height:44px;border:0;border-radius:8px;backg
  */
 export const WEB_PAGE_SCRIPT = `(()=>{const d=document,t=d.querySelector(".rr-toast");const toast=()=>{if(!t)return;t.setAttribute("data-on","");setTimeout(()=>t.removeAttribute("data-on"),1600)};d.querySelector("[data-share]")?.addEventListener("click",async()=>{const url=location.href;if(navigator.share){try{await navigator.share({title:d.title,url})}catch{}return}try{await navigator.clipboard.writeText(url);toast()}catch{}})})();`;
 
-/** The Reactive Resume mark, drawn in the credit's colour. */
-const LOGO =
-	'<svg viewBox="0 0 256 256" aria-hidden="true" focusable="false"><path fill="currentColor" fill-rule="evenodd" d="M173.611 166.311L132.877 219.804H173.524L193.973 191.813L213.183 219.804H256L215.673 165.707L215.15 165.046L207.461 155.332L195.329 140.004L195.258 139.915L193.813 138.089L193.923 138.001L176.286 112.861H134.061L173.611 166.311ZM199.89 133.554L214.959 112.861H254.619L219.874 158.8L199.89 133.554Z"/><path fill="currentColor" fill-rule="evenodd" d="M0 36.1959V174.314H39.0678V137.614H60.3938L60.4323 137.671C60.8436 137.653 61.2517 137.634 61.6567 137.614C75.0665 136.968 85.1471 135.549 96.385 131.385C96.7596 131.246 97.1355 131.104 97.5128 130.959L97.4591 130.881C105.816 126.86 112.331 121.344 117.006 114.331C122.005 106.702 124.504 97.6915 124.504 87.2997C124.504 76.7764 122.005 67.7 117.006 60.0706C112.007 52.3097 104.904 46.3903 95.6964 42.3125C86.62 38.2347 75.7679 36.1959 63.1399 36.1959H0ZM102.156 137.725L64.8705 144.175L85.4361 174.314H127.266L102.156 137.725ZM39.0678 107.426H60.7721C68.9277 107.426 74.9786 105.65 78.9248 102.098C83.0026 98.5465 85.0415 93.6137 85.0415 87.2997C85.0415 80.8542 83.0026 75.8556 78.9248 72.304C74.9786 68.7523 68.9277 66.9765 60.7721 66.9765H39.0678V107.426Z"/></svg>';
-
 /** OpenGraph and Twitter card tags, for the web pages and the app's own pages. Every value must already be HTML-escaped. */
 export function socialMetaTags(tags: {
 	type: string;
@@ -85,10 +84,12 @@ export function socialMetaTags(tags: {
 	description: string;
 	url: string;
 	image?: string | undefined;
+	/** The product name; the platform default when absent. */
+	siteName?: string | undefined;
 }) {
 	return [
 		`<meta property="og:type" content="${tags.type}">`,
-		`<meta property="og:site_name" content="Reactive Resume">`,
+		`<meta property="og:site_name" content="${escapeHtml(tags.siteName ?? PLATFORM_DEFAULT_APP_NAME)}">`,
 		`<meta property="og:title" content="${tags.title}">`,
 		`<meta property="og:description" content="${tags.description}">`,
 		`<meta property="og:url" content="${tags.url}">`,
@@ -104,7 +105,7 @@ export function socialMetaTags(tags: {
 export const jsonLdScript = (data: unknown) =>
 	`<script type="application/ld+json">${JSON.stringify(data).replaceAll("<", "\\u003c")}</script>`;
 
-const metaTags = (head: WebPageHead | undefined) => {
+const metaTags = (head: WebPageHead | undefined, appName: string) => {
 	if (!head) return "";
 	const title = escapeHtml(head.title);
 	const description = escapeHtml(head.description);
@@ -120,6 +121,7 @@ const metaTags = (head: WebPageHead | undefined) => {
 			description,
 			url,
 			image: head.imageUrl ? escapeHtml(head.imageUrl) : undefined,
+			siteName: appName,
 		}),
 		head.structuredData ? jsonLdScript(head.structuredData) : "",
 	].join("");
@@ -135,6 +137,7 @@ export function renderWebPageDocument({
 	messages,
 	downloadUrl,
 	creditUrl,
+	appName = PLATFORM_DEFAULT_APP_NAME,
 }: WebPageDocumentOptions): string {
 	const download = downloadUrl
 		? `<a class="rr-primary" href="${escapeHtml(downloadUrl)}" download>${escapeHtml(messages.downloadPdf)}</a>`
@@ -142,14 +145,14 @@ export function renderWebPageDocument({
 	const body = [
 		`<main id="main-content" class="rr rr-desk">${page.html}`,
 		creditUrl
-			? `<a class="rr-credit" href="${escapeHtml(creditUrl)}" aria-label="${escapeHtml(messages.credit)}" title="${escapeHtml(messages.credit)}">${LOGO}<span aria-hidden="true">Reactive Resume</span></a>`
+			? `<a class="rr-credit" href="${escapeHtml(creditUrl)}" aria-label="${escapeHtml(messages.credit)}" title="${escapeHtml(messages.credit)}"><span aria-hidden="true">${escapeHtml(appName)}</span></a>`
 			: "",
 		"</main>",
 		`<div class="rr-actions">${download}<button type="button" data-share>${escapeHtml(messages.share)}</button></div>`,
 		`<div class="rr-toast" role="status" aria-live="polite">${escapeHtml(messages.linkCopied)}</div>`,
 		`<script>${WEB_PAGE_SCRIPT}</script>`,
 	].join("");
-	return shell(page.lang, metaTags(head), `${SHELL_CSS}${page.css}`, body);
+	return shell(page.lang, metaTags(head, appName), `${SHELL_CSS}${page.css}`, body);
 }
 
 /** The page a password-protected resume shows until the visitor unlocks it. */

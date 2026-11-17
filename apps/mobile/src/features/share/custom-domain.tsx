@@ -3,33 +3,24 @@ import { useLingui } from "@lingui/react/macro";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import * as Clipboard from "expo-clipboard";
 import { useState } from "react";
-import { Linking, View } from "react-native";
-import { cvDomainRegistrationUrl, formatTimeSince } from "@reactive-resume/resume/sharing";
+import { View } from "react-native";
+import { formatTimeSince } from "@reactive-resume/resume/sharing";
 import { orpc } from "@/api/client";
 import { Banner, Button, Icon, ListGroup, ListRow, Sheet, Text, TextField, haptics, showToast, useTheme } from "@/ui";
 
-const CODE = "RX";
-
 type Domain = NonNullable<RouterOutput["customDomain"]["get"]>;
-type Suggestion = NonNullable<RouterOutput["customDomain"]["suggestion"]>;
 
 type CustomDomainProps = {
 	offline: boolean;
-	/** Suggest a `.cv` domain from OlaCV while none is connected (`FLAG_OLACV_SUGGESTION`). */
-	suggest: boolean;
 };
 
 /** Connects the account's own domain: the domain, the DNS records to add in a sheet, a check, and the result. */
-export function CustomDomain({ offline, suggest }: CustomDomainProps) {
+// CAREEROS: the upstream OlaCV `.cv` suggestion and promo code were removed (P2-T08).
+export function CustomDomain({ offline }: CustomDomainProps) {
 	const { t } = useLingui();
 	const { space } = useTheme();
 	const queryClient = useQueryClient();
 	const domain = useQuery({ ...orpc.customDomain.get.queryOptions(), enabled: !offline });
-	const suggestion = useQuery({
-		...orpc.customDomain.suggestion.queryOptions(),
-		enabled: suggest && !offline && domain.isSuccess && !domain.data,
-		staleTime: 15 * 60_000,
-	});
 	const [hostname, setHostname] = useState("");
 	const [recordsOpen, setRecordsOpen] = useState(false);
 	const store = (next: RouterOutput["customDomain"]["get"]) =>
@@ -78,14 +69,6 @@ export function CustomDomain({ offline, suggest }: CustomDomainProps) {
 						disabled={offline || !hostname.trim()}
 						onPress={() => set.mutate({ hostname })}
 					/>
-					{suggest && suggestion.data && (
-						<CvDomainCard
-							suggestion={suggestion.data}
-							connecting={set.isPending}
-							disabled={offline}
-							onConnect={(hostname) => set.mutate({ hostname })}
-						/>
-					)}
 				</>
 			) : (
 				<>
@@ -136,76 +119,6 @@ const copy = async (value: string, message: string) => {
 	haptics.light();
 	showToast({ message });
 };
-
-type CvDomainCardProps = {
-	suggestion: Suggestion;
-	connecting: boolean;
-	disabled: boolean;
-	onConnect: (domain: string) => void;
-};
-
-/** A quiet suggestion under the domain field: the account's name as a `.cv` domain, OlaCV's price and its code. */
-function CvDomainCard({ suggestion: { domain, checked, price }, connecting, disabled, onConnect }: CvDomainCardProps) {
-	const { t, i18n } = useLingui();
-	const { colors, radius, space } = useTheme();
-	const [visited, setVisited] = useState(false);
-	const money = (amount: number, currency: string) =>
-		i18n.number(amount, { style: "currency", currency, maximumFractionDigits: Number.isInteger(amount) ? 0 : 2 });
-	const cost = price ? money(price.amount, price.currency) : null;
-	const yearly = price?.renewal === price?.amount;
-
-	return (
-		<View style={{ gap: space.s3, padding: space.s4, borderRadius: radius.rLg, backgroundColor: colors.sunken }}>
-			<View style={{ gap: 2 }}>
-				<Text variant="title" numberOfLines={1}>
-					{domain}
-				</Text>
-				<Text variant="caption" color="ink3">
-					{checked ? (
-						<>
-							<Text variant="caption" color="accentText">{t`Available`}</Text>
-							{cost ? ` · ${yearly ? t`${cost} a year` : t`${cost} the first year`}` : ""}
-						</>
-					) : (
-						t`May be available`
-					)}
-				</Text>
-			</View>
-			<Text variant="callout" color="ink2">
-				{t`Your name as your address, from OlaCV, the .cv registry. Code ${CODE} takes 50% off the first year.`}
-			</Text>
-			<View style={{ flexDirection: "row", flexWrap: "wrap", gap: space.s2 }}>
-				<Button
-					variant="secondary"
-					size="sm"
-					icon="arrow-square-out"
-					label={t`Register at OlaCV`}
-					onPress={() => {
-						setVisited(true);
-						void Linking.openURL(cvDomainRegistrationUrl(domain));
-					}}
-				/>
-				<Button
-					variant="ghost"
-					size="sm"
-					icon="copy"
-					label={t`Copy code`}
-					onPress={() => void copy(CODE, t`Code copied`)}
-				/>
-				{visited && (
-					<Button
-						variant="ghost"
-						size="sm"
-						label={t`Connect ${domain}`}
-						loading={connecting}
-						disabled={disabled}
-						onPress={() => onConnect(domain)}
-					/>
-				)}
-			</View>
-		</View>
-	);
-}
 
 type DnsRecordsSheetProps = {
 	domain: Domain;

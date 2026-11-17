@@ -4,6 +4,8 @@ import type { JsonPatchOperation } from "@reactive-resume/resume/patch";
 import type { ProposalApplications } from "@reactive-resume/resume/proposals";
 import type { ResumeData } from "@reactive-resume/schema/resume/data";
 import type { Locale } from "@reactive-resume/utils/locale";
+// CAREEROS: tenant scope for inserts and public reads (P1-T04)
+import { requireOrgId } from "@careeros/tenancy";
 import { ORPCError } from "@orpc/client";
 import { compare, hash } from "bcryptjs";
 import { and, arrayContains, asc, desc, eq, gte, inArray, isNotNull, isNull, lt, ne, sql } from "drizzle-orm";
@@ -29,6 +31,7 @@ import {
 	shouldCountForStatistics,
 } from "./access-policy";
 import { publishResumeUpdated } from "./events";
+import { withPublicResumeScope } from "./public-scope";
 import { parseStoredResumeData, parseWritableResumeData } from "./resume-data-validation";
 import { checkSlug, findFreeSlug, findResume, recordSlugChange } from "./slugs";
 import {
@@ -214,35 +217,47 @@ const tags = {
 };
 
 const statistics = {
-	recordDownload: async (input: {
+	recordDownload: (input: {
 		username: string;
 		slug: string;
 		requestHeaders: Headers;
 		trustedClient?: string;
 		currentUserId?: string;
-	}): Promise<boolean> => {
-		const resume = await findResume(input, {
-			id: schema.resume.id,
-			userId: schema.resume.userId,
-			isPublic: schema.resume.isPublic,
-			passwordHash: schema.resume.password,
-		});
+		/** CAREEROS: the signed-in viewer's own organization, asked only when no public resume matches. */
+		fallbackOrganizationId?: (() => Promise<string | undefined>) | undefined;
+	}): Promise<boolean> =>
+		// CAREEROS: the visitor has no organization; the public resume's own organization scopes the lookup and counters.
+		withPublicResumeScope(
+			input,
+			async () => {
+				const resume = await findResume(input, {
+					id: schema.resume.id,
+					userId: schema.resume.userId,
+					isPublic: schema.resume.isPublic,
+					passwordHash: schema.resume.password,
+				});
 
-		if (!resume) throw new ORPCError("NOT_FOUND");
-		const viewer = input.currentUserId ? { id: input.currentUserId } : null;
-		assertCanView(resume, viewer);
-		if (requiresPassword(resume, viewer) && !hasResumeAccess(input.requestHeaders, resume.id, resume.passwordHash)) {
-			throw new ORPCError("NEED_PASSWORD", {
-				status: 401,
-				data: { username: input.username, slug: input.slug },
-			});
-		}
+				if (!resume) throw new ORPCError("NOT_FOUND");
+				const viewer = input.currentUserId ? { id: input.currentUserId } : null;
+				assertCanView(resume, viewer);
+				if (
+					requiresPassword(resume, viewer) &&
+					!hasResumeAccess(input.requestHeaders, resume.id, resume.passwordHash)
+				) {
+					throw new ORPCError("NEED_PASSWORD", {
+						status: 401,
+						data: { username: input.username, slug: input.slug },
+					});
+				}
 
-		// Like views, a visitor's downloads count once an hour, so repeated calls can't inflate the number.
-		if (shouldCountForStatistics(resume, viewer))
-			await countVisit({ kind: "download", resumeId: resume.id, trustedClient: input.trustedClient });
-		return true;
-	},
+				// Like views, a visitor's downloads count once an hour, so repeated calls can't inflate the number.
+				if (shouldCountForStatistics(resume, viewer))
+					await countVisit({ kind: "download", resumeId: resume.id, trustedClient: input.trustedClient });
+				return true;
+			},
+			// CAREEROS: an owner reaches their own unpublished resume through their own organization.
+			{ fallbackOrganizationId: input.fallbackOrganizationId },
+		),
 
 	getById: async (input: { id: string; userId: string }) => {
 		const [statistics] = await db
@@ -279,6 +294,8 @@ const statistics = {
 			await tx
 				.insert(schema.resumeStatistics)
 				.values({
+					// CAREEROS: the scope is the resume's organization (see withPublicResumeScope).
+					organizationId: requireOrgId(),
 					resumeId: input.id,
 					views,
 					downloads,
@@ -297,7 +314,7 @@ const statistics = {
 
 			await tx
 				.insert(schema.resumeStatisticsDaily)
-				.values({ resumeId: input.id, date: today, views, downloads })
+				.values({ organizationId: requireOrgId(), resumeId: input.id, date: today, views, downloads })
 				.onConflictDoUpdate({
 					target: [schema.resumeStatisticsDaily.resumeId, schema.resumeStatisticsDaily.date],
 					set: {
@@ -519,7 +536,7 @@ export const resumeService = {
 		return { ...resume, data: parseStoredResumeData(resume.data) };
 	},
 
-	getBySlug: async (input: {
+	getBySlug: (input: {
 		username: string;
 		slug: string;
 		requestHeaders: Headers;
@@ -527,45 +544,57 @@ export const resumeService = {
 		currentUserId?: string;
 		requirePublic?: boolean;
 		expectedResumeId?: string;
-	}) => {
-		const resume = await findResume(input, {
-			id: schema.resume.id,
-			userId: schema.resume.userId,
-			name: schema.resume.name,
-			slug: schema.resume.slug,
-			tags: schema.resume.tags,
-			data: schema.resume.data,
-			isPublic: schema.resume.isPublic,
-			isLocked: schema.resume.isLocked,
-			showDownloadButtons: schema.resume.showDownloadButtons,
-			...shareColumns,
-			passwordHash: schema.resume.password,
-			hasPassword: sql<boolean>`${schema.resume.password} IS NOT NULL`,
-		});
+		/** CAREEROS: the signed-in viewer's own organization, asked only when no public resume matches. */
+		fallbackOrganizationId?: (() => Promise<string | undefined>) | undefined;
+	}) =>
+		// CAREEROS: the visitor has no organization; the public resume's own organization scopes everything below.
+		withPublicResumeScope(
+			input,
+			async () => {
+				const resume = await findResume(input, {
+					id: schema.resume.id,
+					userId: schema.resume.userId,
+					name: schema.resume.name,
+					slug: schema.resume.slug,
+					tags: schema.resume.tags,
+					data: schema.resume.data,
+					isPublic: schema.resume.isPublic,
+					isLocked: schema.resume.isLocked,
+					showDownloadButtons: schema.resume.showDownloadButtons,
+					...shareColumns,
+					passwordHash: schema.resume.password,
+					hasPassword: sql<boolean>`${schema.resume.password} IS NOT NULL`,
+				});
 
-		if (
-			!resume ||
-			(input.requirePublic && !resume.isPublic) ||
-			(input.expectedResumeId && resume.id !== input.expectedResumeId)
-		)
-			throw new ORPCError("NOT_FOUND");
+				if (
+					!resume ||
+					(input.requirePublic && !resume.isPublic) ||
+					(input.expectedResumeId && resume.id !== input.expectedResumeId)
+				)
+					throw new ORPCError("NOT_FOUND");
 
-		const viewer = input.currentUserId ? { id: input.currentUserId } : null;
-		assertCanView(resume, viewer);
+				const viewer = input.currentUserId ? { id: input.currentUserId } : null;
+				assertCanView(resume, viewer);
 
-		if (requiresPassword(resume, viewer) && !hasResumeAccess(input.requestHeaders, resume.id, resume.passwordHash)) {
-			throw new ORPCError("NEED_PASSWORD", {
-				status: 401,
-				data: { username: input.username, slug: input.slug },
-			});
-		}
+				if (
+					requiresPassword(resume, viewer) &&
+					!hasResumeAccess(input.requestHeaders, resume.id, resume.passwordHash)
+				) {
+					throw new ORPCError("NEED_PASSWORD", {
+						status: 401,
+						data: { username: input.username, slug: input.slug },
+					});
+				}
 
-		if (shouldCountForStatistics(resume, viewer))
-			await countVisit({ kind: "view", resumeId: resume.id, trustedClient: input.trustedClient });
+				if (shouldCountForStatistics(resume, viewer))
+					await countVisit({ kind: "view", resumeId: resume.id, trustedClient: input.trustedClient });
 
-		const current = { ...resume, data: parseStoredResumeData(resume.data) };
-		return toSharedResumeResponse(redactResumeForViewer(current, isOwner(current, viewer)), resume.hasPassword);
-	},
+				const current = { ...resume, data: parseStoredResumeData(resume.data) };
+				return toSharedResumeResponse(redactResumeForViewer(current, isOwner(current, viewer)), resume.hasPassword);
+			},
+			// CAREEROS: an owner reaches their own unpublished resume through their own organization.
+			{ fallbackOrganizationId: input.fallbackOrganizationId },
+		),
 
 	create: async (input: {
 		id?: string;
@@ -596,6 +625,8 @@ export const resumeService = {
 				const stored = structuredClone(data);
 				detachEmbeddedLetters(stored);
 				await tx.insert(schema.resume).values({
+					// CAREEROS: tenant column (P1-T04).
+					organizationId: requireOrgId(),
 					id,
 					name: input.name,
 					autoName: input.autoName ?? false,
@@ -818,33 +849,37 @@ export const resumeService = {
 	setPassword: async (input: { id: string; userId: string; password: string }) =>
 		updateResumePassword({ ...input, password: await hash(input.password, 10) }),
 
-	verifyPassword: async (input: {
+	verifyPassword: (input: {
 		slug: string;
 		username: string;
 		password: string;
 		responseHeaders?: Headers;
 		trustedClient?: string | undefined;
-	}) => {
-		const resume = await findResume(
-			input,
-			{ id: schema.resume.id, password: schema.resume.password },
-			isNotNull(schema.resume.password),
-			eq(schema.resume.isPublic, true),
-		);
+	}) =>
+		// CAREEROS: the visitor has no organization; the public resume's own organization scopes the lookup.
+		withPublicResumeScope(input, async () => {
+			const resume = await findResume(
+				input,
+				{ id: schema.resume.id, password: schema.resume.password },
+				isNotNull(schema.resume.password),
+				eq(schema.resume.isPublic, true),
+			);
 
-		if (!(await consumeResumePasswordLimit({ resumeId: resume?.id ?? "missing", trustedClient: input.trustedClient })))
-			throw new ORPCError("TOO_MANY_REQUESTS");
-		// A miss costs the same bcrypt work as a wrong password, so timing doesn't reveal which addresses exist.
-		const passwordHash = resume?.password ?? (await unusedPasswordHash());
-		const isValid = await compare(input.password, passwordHash);
-		if (!resume) throw new ORPCError("INVALID_PASSWORD", { status: 401 });
+			if (
+				!(await consumeResumePasswordLimit({ resumeId: resume?.id ?? "missing", trustedClient: input.trustedClient }))
+			)
+				throw new ORPCError("TOO_MANY_REQUESTS");
+			// A miss costs the same bcrypt work as a wrong password, so timing doesn't reveal which addresses exist.
+			const passwordHash = resume?.password ?? (await unusedPasswordHash());
+			const isValid = await compare(input.password, passwordHash);
+			if (!resume) throw new ORPCError("INVALID_PASSWORD", { status: 401 });
 
-		if (!isValid) throw new ORPCError("INVALID_PASSWORD", { status: 401 });
+			if (!isValid) throw new ORPCError("INVALID_PASSWORD", { status: 401 });
 
-		if (input.responseHeaders) grantResumeAccess(input.responseHeaders, resume.id, passwordHash);
+			if (input.responseHeaders) grantResumeAccess(input.responseHeaders, resume.id, passwordHash);
 
-		return true;
-	},
+			return true;
+		}),
 
 	removePassword: (input: { id: string; userId: string }) => updateResumePassword({ ...input, password: null }),
 

@@ -824,8 +824,11 @@ type VoiceChoice = { providerId: string; label: string; model: string; models: r
 function useVoiceSettings() {
 	const providerState = useHasUsableAiProvider();
 	const { usableProviders } = providerState;
+	// CAREEROS (P3-T03): voice needs the member's own connection; "Included with your plan" never counts.
 	const capable = (kind: VoiceKind) =>
-		usableProviders.filter((provider) => (AI_VOICE_MODELS[provider.provider]?.[kind].length ?? 0) > 0);
+		usableProviders.filter(
+			(provider) => !provider.platform && (AI_VOICE_MODELS[provider.provider]?.[kind].length ?? 0) > 0,
+		);
 	const transcribers = capable("transcription");
 	const readers = capable("speech");
 	const [stored, setStored] = useState<StoredVoice>(() => {

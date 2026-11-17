@@ -10,11 +10,17 @@ import type { CoordinationService } from "@reactive-resume/db/coordination";
 import { AsyncLocalStorage } from "node:async_hooks";
 import { on } from "node:events";
 import { isIP } from "node:net";
+import { expireDueImpersonations } from "@careeros/platform-admin";
 import wasm from "@formepdf/core/pkg-web/forme_bg.wasm";
 import { init } from "@formepdf/core/worker";
 import { Pool } from "pg";
 import { configureAgentStreamLifetime } from "@reactive-resume/api/features/agent/streams";
+// CAREEROS (P2-T05): expired sign-in handoffs go in the same scheduled pass
+import { purgeExpiredHandoffs } from "@reactive-resume/api/features/auth-handoff";
 import { runCareerJobs } from "@reactive-resume/api/features/career/jobs";
+// CAREEROS (P4-T02)
+import { runDiscoveryJobs } from "@reactive-resume/api/features/discovery/scheduler";
+import { runOrgDomainJobs } from "@reactive-resume/api/features/org-domain";
 import { configureStorageService, getStorageService, isPublicUploadOwner } from "@reactive-resume/api/features/storage";
 import { reportStorageCleanupSummary, runStorageCleanup } from "@reactive-resume/api/features/storage/cleanup";
 import { initializeAuth } from "@reactive-resume/auth/config";
@@ -223,9 +229,24 @@ export default {
 		const { pool, store, run } = createInvocation(bindings, ctx);
 		ctx.waitUntil(
 			run(async () => {
-				const [career, cleanup] = await Promise.allSettled([runCareerJobs(), runStorageCleanup({ limit: 100 })]);
+				const [career, cleanup, handoffs, orgDomains, impersonations, discovery] = await Promise.allSettled([
+					runCareerJobs(),
+					runStorageCleanup({ limit: 100 }),
+					// CAREEROS (P2-T05)
+					purgeExpiredHandoffs(),
+					// CAREEROS (P2-T06)
+					runOrgDomainJobs(),
+					// CAREEROS (P3-T07)
+					expireDueImpersonations(),
+					// CAREEROS (P4-T02): bounded, because a scheduled invocation has a time limit
+					runDiscoveryJobs({ maxSources: 3, budgetMs: 150_000 }),
+				]);
 				if (cleanup.status === "fulfilled") reportStorageCleanupSummary(cleanup.value);
 				else console.error("[storage-cleanup] Scheduled work failed. Pending jobs will retry on a later tick.");
+				if (handoffs.status === "rejected") console.error("[handoff] Purging expired handoffs failed.");
+				if (impersonations.status === "rejected") console.error("[impersonation] Expiry sweep failed.");
+				if (orgDomains.status === "rejected") console.error("[org-domain] Scheduled work failed.");
+				if (discovery.status === "rejected") console.error("[discovery] Scheduled work failed.");
 				if (career.status === "rejected")
 					console.error("[career] Scheduled work failed. Eligible jobs will retry on a later tick.");
 			}).finally(() => closePool(pool, store)),

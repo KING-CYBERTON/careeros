@@ -1,4 +1,6 @@
 import { createHmac } from "node:crypto";
+// CAREEROS: the token carries the organization of the signed-in request that created it (P1-T04)
+import { currentOrgId } from "@careeros/tenancy";
 import { env } from "@reactive-resume/env/server";
 import { safeEquals } from "./access";
 
@@ -9,6 +11,8 @@ type PdfDownloadTokenPayload = {
 	v: 1;
 	resumeId: string;
 	userId: string;
+	/** CAREEROS: the organization the link was made in; the download opens its own scope for it. */
+	organizationId?: string;
 	expiresAt: number;
 	issuedAt: number;
 };
@@ -30,6 +34,8 @@ type VerifyResumePdfDownloadTokenResult =
 			ok: true;
 			resumeId: string;
 			userId: string;
+			/** CAREEROS: absent on a link made before organizations; such a link is refused. */
+			organizationId?: string | undefined;
 			expiresAt: string;
 	  }
 	| {
@@ -59,6 +65,7 @@ function parsePayload(value: unknown): PdfDownloadTokenPayload | null {
 	if (payload.v !== 1) return null;
 	if (typeof payload.resumeId !== "string" || payload.resumeId.length === 0) return null;
 	if (typeof payload.userId !== "string" || payload.userId.length === 0) return null;
+	if (payload.organizationId !== undefined && typeof payload.organizationId !== "string") return null;
 	if (typeof payload.expiresAt !== "number" || !Number.isFinite(payload.expiresAt)) return null;
 	if (typeof payload.issuedAt !== "number" || !Number.isFinite(payload.issuedAt)) return null;
 
@@ -68,10 +75,12 @@ function parsePayload(value: unknown): PdfDownloadTokenPayload | null {
 export function createResumePdfDownloadUrl({ resumeId, userId, now = new Date() }: CreateResumePdfDownloadUrlInput) {
 	const expiresInSeconds = TTL_SECONDS;
 	const expiresAt = new Date(now.getTime() + expiresInSeconds * 1000);
+	const organizationId = currentOrgId();
 	const payload = encodeJson({
 		v: 1,
 		resumeId,
 		userId,
+		...(organizationId ? { organizationId } : {}),
 		expiresAt: expiresAt.getTime(),
 		issuedAt: now.getTime(),
 	} satisfies PdfDownloadTokenPayload);
@@ -105,6 +114,7 @@ export function verifyResumePdfDownloadToken({
 			ok: true,
 			resumeId: parsed.resumeId,
 			userId: parsed.userId,
+			organizationId: parsed.organizationId,
 			expiresAt: new Date(parsed.expiresAt).toISOString(),
 		};
 	} catch {

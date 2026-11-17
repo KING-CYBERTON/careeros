@@ -5,6 +5,7 @@ import z from "zod";
 import { EditorShell } from "./-components/editor-shell";
 import { useBuilderResumeUpdateSubscription, useResumeCleanup, useResumeStore } from "@/features/resume/builder/draft";
 import { EDITOR_MODES } from "@/features/resume/editor/store";
+import { getBrand } from "@/libs/brand";
 import { orpc } from "@/libs/orpc/client";
 import { createNoindexFollowMeta } from "@/libs/seo";
 
@@ -44,7 +45,7 @@ export const Route = createFileRoute("/builder/$resumeId")({
 	},
 	head: ({ loaderData }) => ({
 		meta: loaderData
-			? [{ title: `${loaderData.name} - Reactive Resume` }, createNoindexFollowMeta()]
+			? [{ title: `${loaderData.name} - ${getBrand().appName}` }, createNoindexFollowMeta()]
 			: [createNoindexFollowMeta()],
 	}),
 });
@@ -65,7 +66,7 @@ function RouteComponent() {
 	useBuilderResumeUpdateSubscription();
 
 	useEffect(() => {
-		document.title = `${name} - Reactive Resume`;
+		document.title = `${name} - ${getBrand().appName}`;
 	}, [name]);
 
 	useEffect(() => {

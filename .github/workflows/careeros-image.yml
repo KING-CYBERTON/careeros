@@ -1,0 +1,125 @@
+# CAREEROS: P0-C02 — build and publish the image to GHCR. Upstream docker-publish.yml is not used (see docs/UPSTREAM_PATCHES.md).
+name: careeros-image
+
+on:
+  workflow_run:
+    workflows: [careeros-ci]
+    types: [completed]
+    branches: [develop]
+  push:
+    tags: ["v*"]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  packages: write
+  id-token: write
+  attestations: write
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.workflow_run.head_sha || github.sha }}
+  cancel-in-progress: false
+
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
+jobs:
+  image:
+    name: build and publish image
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    # Only after a successful push-triggered careeros-ci run on develop; never for PR runs or failed CI.
+    if: >-
+      github.event_name != 'workflow_run' ||
+      (github.event.workflow_run.conclusion == 'success' &&
+      github.event.workflow_run.event == 'push' &&
+      github.event.workflow_run.head_branch == 'develop')
+
+    steps:
+      - name: Resolve source commit, version and tags
+        id: plan
+        env:
+          EVENT_NAME: ${{ github.event_name }}
+          REF_TYPE: ${{ github.ref_type }}
+          REF_NAME: ${{ github.ref_name }}
+          RUN_SHA: ${{ github.event.workflow_run.head_sha }}
+          EVENT_SHA: ${{ github.sha }}
+          REPOSITORY: ${{ github.repository }}
+        run: |
+          set -euo pipefail
+          image="ghcr.io/${REPOSITORY,,}"
+          if [[ "$EVENT_NAME" == "workflow_run" ]]; then
+            sha="$RUN_SHA"
+            channel="develop"
+          elif [[ "$REF_TYPE" == "tag" ]]; then
+            sha="$EVENT_SHA"
+            channel="tag"
+          elif [[ "$REF_NAME" == "develop" ]]; then
+            sha="$EVENT_SHA"
+            channel="develop"
+          else
+            echo "::error::Image publishing is only allowed from develop or v* tags (got $REF_TYPE $REF_NAME)."
+            exit 1
+          fi
+
+          if [[ "$channel" == "tag" ]]; then
+            version="${REF_NAME#v}"
+            if [[ ! "$version" =~ ^[0-9]+\.[0-9]+\.[0-9]+(-rc\.[0-9]+|-[0-9A-Za-z.-]+)?$ ]]; then
+              echo "::error::Tag $REF_NAME is not vX.Y.Z[-prerelease]."
+              exit 1
+            fi
+            tags="$image:$version"$'\n'"$image:sha-$sha"
+          else
+            version="develop"
+            tags="$image:develop"$'\n'"$image:sha-$sha"
+          fi
+
+          {
+            echo "sha=$sha"
+            echo "image=$image"
+            echo "version=$version"
+            echo "tags<<EOF"
+            echo "$tags"
+            echo "EOF"
+          } >> "$GITHUB_OUTPUT"
+
+      - name: Check out source
+        uses: actions/checkout@v7
+        with:
+          ref: ${{ steps.plan.outputs.sha }}
+          persist-credentials: false
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v4
+
+      - name: Log in to GitHub Container Registry
+        uses: docker/login-action@v4
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build and push image
+        id: build
+        uses: docker/build-push-action@v7
+        with:
+          context: .
+          platforms: linux/amd64
+          push: true
+          tags: ${{ steps.plan.outputs.tags }}
+          labels: |
+            org.opencontainers.image.source=${{ github.server_url }}/${{ github.repository }}
+            org.opencontainers.image.revision=${{ steps.plan.outputs.sha }}
+            org.opencontainers.image.version=${{ steps.plan.outputs.version }}
+            org.opencontainers.image.licenses=MIT
+          build-args: |
+            APP_REVISION=${{ steps.plan.outputs.sha }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+      - name: Generate build provenance attestation
+        uses: actions/attest-build-provenance@v3
+        with:
+          subject-name: ${{ steps.plan.outputs.image }}
+          subject-digest: ${{ steps.build.outputs.digest }}
+          push-to-registry: true

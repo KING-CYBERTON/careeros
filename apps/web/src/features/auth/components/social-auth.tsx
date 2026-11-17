@@ -3,12 +3,14 @@ import { t } from "@lingui/core/macro";
 import { Trans } from "@lingui/react/macro";
 import { AppleLogoIcon, GithubLogoIcon, GoogleLogoIcon, LinkedinLogoIcon } from "@phosphor-icons/react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { useRouter, useSearch } from "@tanstack/react-router";
+import { useRouteContext, useRouter, useSearch } from "@tanstack/react-router";
 import { Button } from "@reactive-resume/ui/components/button";
 import { Icon } from "@reactive-resume/ui/components/icon";
 import { Skeleton } from "@reactive-resume/ui/components/skeleton";
 import { toast } from "@reactive-resume/ui/components/toast";
 import { cn } from "@reactive-resume/utils/style";
+// CAREEROS (P2-T05): on an organization host the provider buttons go through the sign-in handoff
+import { beginOrganizationHandoff, isOrganizationHost } from "../handoff";
 import { getAuthRedirectOptions, getOAuthPasskeyOptions, getOAuthSignInOptions, isOAuthRedirect } from "../redirect";
 import { authClient } from "@/libs/auth/client";
 import { ENTER_CLASS } from "@/libs/motion";
@@ -54,6 +56,7 @@ function SocialAuthButtons({ providers }: SocialAuthButtonsProps) {
 	const router = useRouter();
 	const queryClient = useQueryClient();
 	const { callbackURL } = useSearch({ from: "/auth" });
+	const { flags } = useRouteContext({ strict: false });
 
 	const runSignIn = async (
 		fn: () => Promise<{ data?: unknown; error: { message?: string | undefined } | null }>,
@@ -81,16 +84,30 @@ function SocialAuthButtons({ providers }: SocialAuthButtonsProps) {
 		if (isPasskey) void router.navigate(getAuthRedirectOptions(callbackURL));
 	};
 
+	// CAREEROS (P2-T05): the provider's one registered callback is on the platform host, so on an organization host the
+	// sign-in starts there through the server-side handoff, and `direct` (Better Auth's own social sign-in) is for the
+	// platform host. A 404 from `begin` means this address is not an organization host after all.
+	const viaHandoff = async (provider: string, direct: () => ReturnType<typeof authClient.signIn.social>) => {
+		if (!isOrganizationHost(flags)) return direct();
+		const started = await beginOrganizationHandoff(provider, callbackURL);
+		if (started.kind === "unavailable") return direct();
+		if (started.kind === "error") return { data: null, error: { message: undefined } };
+		window.location.assign(started.url);
+		return { data: { redirect: true, url: started.url }, error: null };
+	};
+
 	return (
 		<div className={cn(ENTER_CLASS, "grid grid-cols-2 gap-4")}>
 			<Button
 				onClick={() =>
 					runSignIn(() =>
-						authClient.signIn.social({
-							provider: "apple",
-							callbackURL: callbackURL ?? "/dashboard",
-							...getOAuthSignInOptions(callbackURL),
-						}),
+						viaHandoff("apple", () =>
+							authClient.signIn.social({
+								provider: "apple",
+								callbackURL: callbackURL ?? "/dashboard",
+								...getOAuthSignInOptions(callbackURL),
+							}),
+						),
 					)
 				}
 				className={cn("hidden flex-1 bg-black text-white hover:bg-black/80", "apple" in providers && "inline-flex")}
@@ -103,11 +120,13 @@ function SocialAuthButtons({ providers }: SocialAuthButtonsProps) {
 				variant="secondary"
 				onClick={() =>
 					runSignIn(() =>
-						authClient.signIn.social({
-							provider: "custom",
-							callbackURL: callbackURL ?? "/dashboard",
-							...getOAuthSignInOptions(callbackURL),
-						}),
+						viaHandoff("custom", () =>
+							authClient.signIn.social({
+								provider: "custom",
+								callbackURL: callbackURL ?? "/dashboard",
+								...getOAuthSignInOptions(callbackURL),
+							}),
+						),
 					)
 				}
 				className={cn("hidden", "custom" in providers && "inline-flex")}
@@ -130,11 +149,13 @@ function SocialAuthButtons({ providers }: SocialAuthButtonsProps) {
 			<Button
 				onClick={() =>
 					runSignIn(() =>
-						authClient.signIn.social({
-							provider: "google",
-							callbackURL: callbackURL ?? "/dashboard",
-							...getOAuthSignInOptions(callbackURL),
-						}),
+						viaHandoff("google", () =>
+							authClient.signIn.social({
+								provider: "google",
+								callbackURL: callbackURL ?? "/dashboard",
+								...getOAuthSignInOptions(callbackURL),
+							}),
+						),
 					)
 				}
 				className={cn(
@@ -149,11 +170,13 @@ function SocialAuthButtons({ providers }: SocialAuthButtonsProps) {
 			<Button
 				onClick={() =>
 					runSignIn(() =>
-						authClient.signIn.social({
-							provider: "github",
-							callbackURL: callbackURL ?? "/dashboard",
-							...getOAuthSignInOptions(callbackURL),
-						}),
+						viaHandoff("github", () =>
+							authClient.signIn.social({
+								provider: "github",
+								callbackURL: callbackURL ?? "/dashboard",
+								...getOAuthSignInOptions(callbackURL),
+							}),
+						),
 					)
 				}
 				className={cn(
@@ -168,11 +191,13 @@ function SocialAuthButtons({ providers }: SocialAuthButtonsProps) {
 			<Button
 				onClick={() =>
 					runSignIn(() =>
-						authClient.signIn.social({
-							provider: "linkedin",
-							callbackURL: callbackURL ?? "/dashboard",
-							...getOAuthSignInOptions(callbackURL),
-						}),
+						viaHandoff("linkedin", () =>
+							authClient.signIn.social({
+								provider: "linkedin",
+								callbackURL: callbackURL ?? "/dashboard",
+								...getOAuthSignInOptions(callbackURL),
+							}),
+						),
 					)
 				}
 				className={cn(

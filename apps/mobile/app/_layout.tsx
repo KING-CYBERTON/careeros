@@ -14,6 +14,8 @@ import { KeyboardProvider } from "react-native-keyboard-controller";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import { restoreSession } from "@/auth/session";
 import { SessionGate } from "@/auth/session-gate";
+// CAREEROS (P2-T02): applies the organization's branding after sign-in
+import { useBrandingSync } from "@/branding/sync";
 import { useOpenReminder } from "@/features/reminders/open";
 import { useReviewPrompt } from "@/features/reviews/use-review-prompt";
 import { i18n, initI18n } from "@/i18n";
@@ -72,6 +74,7 @@ function RootStack() {
 	const reduced = useReducedMotion();
 	useOpenReminder();
 	useReviewPrompt();
+	useBrandingSync();
 
 	return (
 		<ThemeProvider value={navigationTheme}>

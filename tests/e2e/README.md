@@ -1,6 +1,6 @@
 # E2E Tests
 
-Reactive Resume uses Playwright for PR-gated browser coverage of deterministic core flows.
+This project uses Playwright for PR-gated browser coverage of deterministic core flows.
 
 ## Local setup
 
@@ -43,6 +43,23 @@ and production build. The runner still uses zero retries, so parallelism cannot 
   a password-protected link.
 - OAuth consent for MCP clients: deny, allow with PKCE, and the access token's audience at `/mcp`.
 - The assistant, against a scripted OpenAI-compatible provider (`fixtures/ai-stub.ts`). It needs `FLAG_ALLOW_UNSAFE_AI_BASE_URL=true` so the server may call the stub on 127.0.0.1, and skips without it.
+- CareerOS billing (`careeros-billing.spec.ts`), against the fake payment provider. It needs `BILLING_PROVIDER=fake`, a `BILLING_FAKE_SECRET` of 16+ characters and `FLAG_ALLOW_FAKE_BILLING=true` (the built server runs with `NODE_ENV=production`, which refuses the fake provider without the flag). Never set the flag on a public deployment. It skips without `BILLING_PROVIDER=fake`.
 
 Visual regression, PDF/DOCX rasterization parity, thumbnail resolution, and import-fixture reproduction are
 intentionally outside the PR gate to keep it fast.
+
+<!-- CAREEROS: P1-Q07 -->
+
+## Raw database seeding
+
+Specs that insert or poll tenant rows directly (cover letters, career opportunities, AI reports) use `tests/e2e/fixtures/seed-db.ts`. It connects as the owner role, because the application role is subject to row level security. The URL is `E2E_SEED_DATABASE_URL`, else `DATABASE_MIGRATION_URL`, else `DATABASE_URL` (fine for single-role local setups). Test-only; never use it in application code.
+
+<!-- CAREEROS: P2-Q01, P2-Q02 -->
+
+## Organization hosts
+
+`careeros-auth-handoff`, `careeros-host-isolation` and `careeros-branding` (and the org-host pass of `cross-org-id-fuzz`) reach the app on organization hosts. The server needs `ORG_HOST_PATTERN={slug}.orgs.test` (the CI e2e job sets it); no e2e host on localhost matches it, so every other spec is unaffected. API checks send a `Host` header; browser checks launch Chromium with `--host-resolver-rules=MAP *.orgs.test 127.0.0.1`. The shared helpers are in `tests/e2e/fixtures/org-hosts.ts`, and the branding PNGs in `tests/e2e/fixtures/branding/`.
+
+- `careeros-host-isolation`: a session from A's host cannot read or change B on B's host, an API key bound to A is refused on B, an unknown organization host answers 404 with noindex, a pending custom domain does not resolve.
+- `careeros-branding`: each of two organizations shows its own name, logo, accent colour, title, favicon, public resume page and password-reset email subject, and nothing of the other organization.
+- Emails: the e2e server has no SMTP, so `playwright.config.ts` copies the server's output to `E2E_SERVER_LOG` (default `<tmpdir>/careeros-e2e-server.log`) and `fixtures/server-log.ts` reads the logged recipient and subject. A server that Playwright did not start itself (`reuseExistingServer`) does not write that file.

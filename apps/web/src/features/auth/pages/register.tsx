@@ -13,8 +13,11 @@ import { Input } from "@reactive-resume/ui/components/input";
 import { toast } from "@reactive-resume/ui/components/toast";
 import { cn } from "@reactive-resume/utils/style";
 import { SocialAuth } from "../components/social-auth";
+import { invitationIdFromCallback } from "../invitation";
 import { getAuthRedirectOptions, getOAuthSignInOptions, isOAuthRedirect } from "../redirect";
 import { PasswordInput } from "@/components/input/password-input";
+// CAREEROS (P6-T01): terms and privacy notice under the sign-up form
+import { SignupLegalNotice } from "@/features/legal/signup-notice";
 import { authClient } from "@/libs/auth/client";
 import { ENTER_CLASS } from "@/libs/motion";
 import { sessionQueryKey } from "@/libs/root-context";
@@ -59,7 +62,10 @@ export function RegisterPage({ disableEmailAuth }: Props) {
 
 			const oauthOptions = getOAuthSignInOptions(callbackURL);
 			const createPrompt = new URLSearchParams(oauthOptions.oauth_query).get("prompt")?.split(" ").includes("create");
+			// CAREEROS: signing up from an invitation link joins that organization instead of creating a personal one (P1-T03)
+			const invitationId = invitationIdFromCallback(callbackURL);
 			const { data, error } = await authClient.signUp.email({
+				...(invitationId ? { invitationId } : {}),
 				name: value.name.trim(),
 				email: value.email,
 				password: value.password,
@@ -255,6 +261,9 @@ export function RegisterPage({ disableEmailAuth }: Props) {
 			)}
 
 			<SocialAuth />
+
+			{/* CAREEROS (P6-T01): sign-up consent notice with links to the terms and privacy policy. */}
+			<SignupLegalNotice />
 		</>
 	);
 }

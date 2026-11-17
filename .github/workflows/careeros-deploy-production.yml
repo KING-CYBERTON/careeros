@@ -1,0 +1,198 @@
+# CAREEROS: P6-C01 — deploy a release tag to production on the production self-hosted runner, verify, auto-rollback.
+# First slice: manual runs only (Actions -> careeros-deploy-production -> Run workflow). The deploy on a new v* tag
+# (workflow_run of careeros-image), the smoke account and the production Cloudflare for SaaS setup follow in a later PR.
+# Host names live in the GitHub `production` environment variables and the server .env, never in this file.
+name: careeros-deploy-production
+
+on:
+  workflow_dispatch:
+    inputs:
+      action:
+        description: "deploy a release tag, or roll back to the previous verified tag"
+        required: true
+        default: deploy
+        type: choice
+        options:
+          - deploy
+          - rollback
+      tag:
+        description: "Release tag to deploy (vX.Y.Z or vX.Y.Z-rc.N, on main). Ignored for rollback."
+        required: false
+        type: string
+
+permissions:
+  contents: read
+  packages: read
+
+# One production deploy at a time; never cancel one that is running.
+concurrency:
+  group: production
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    name: ${{ inputs.action }} production
+    # The production server's own runner; never the staging runner.
+    runs-on: [self-hosted, production]
+    environment: production
+    timeout-minutes: 60
+    env:
+      PRODUCTION_URL: ${{ vars.PRODUCTION_URL }}
+      PRODUCTION_HOST: ${{ vars.PRODUCTION_HOST }}
+      PRODUCTION_DIR: /opt/careeros/production
+      ACTION: ${{ inputs.action }}
+
+    steps:
+      - name: Check inputs
+        id: plan
+        env:
+          INPUT_TAG: ${{ inputs.tag }}
+          REPOSITORY: ${{ github.repository }}
+        run: |
+          set -euo pipefail
+          if [[ -z "${PRODUCTION_URL:-}" || -z "${PRODUCTION_HOST:-}" ]]; then
+            echo "::error::Set the PRODUCTION_URL and PRODUCTION_HOST variables on the GitHub 'production' environment."
+            exit 1
+          fi
+          if [[ ! -f "$PRODUCTION_DIR/.env" ]]; then
+            echo "::error::$PRODUCTION_DIR/.env is missing on the server (see infra/production/README.md)."
+            exit 1
+          fi
+          echo "image=ghcr.io/${REPOSITORY,,}" >> "$GITHUB_OUTPUT"
+          if [[ "$ACTION" == "rollback" ]]; then
+            echo "Rolling back production to the previous verified tag" >> "$GITHUB_STEP_SUMMARY"
+            exit 0
+          fi
+          tag="${INPUT_TAG// /}"
+          if [[ ! "$tag" =~ ^v[0-9]+\.[0-9]+\.[0-9]+(-[0-9A-Za-z.-]+)?$ ]]; then
+            echo "::error::Give a release tag like v1.0.0 or v1.0.0-rc.1 (got '${tag}')."
+            exit 1
+          fi
+          {
+            echo "tag=$tag"
+            echo "version=${tag#v}"
+          } >> "$GITHUB_OUTPUT"
+          echo "Deploying $tag to https://$PRODUCTION_HOST" >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Check out the release tag
+        if: inputs.action == 'deploy'
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: refs/tags/${{ steps.plan.outputs.tag }}
+          # Full history, so the tag can be checked against main below.
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Refuse a tag that is not on main
+        id: source
+        if: inputs.action == 'deploy'
+        env:
+          TAG: ${{ steps.plan.outputs.tag }}
+        run: |
+          set -euo pipefail
+          sha="$(git rev-parse "refs/tags/$TAG^{commit}")"
+          if ! git merge-base --is-ancestor "$sha" refs/remotes/origin/main; then
+            echo "::error::$TAG ($sha) is not on main. Production deploys only release tags set on main."
+            exit 1
+          fi
+          echo "sha=$sha" >> "$GITHUB_OUTPUT"
+          echo "Commit: \`$sha\`" >> "$GITHUB_STEP_SUMMARY"
+
+      # Copies the scripts and compose file only. The server .env is never written by this workflow.
+      - name: Sync infra files to the server
+        if: inputs.action == 'deploy'
+        run: |
+          set -euo pipefail
+          install -m 0644 infra/production/compose.production.yml "$PRODUCTION_DIR/compose.production.yml"
+          install -m 0644 infra/db/bootstrap-roles.sql "$PRODUCTION_DIR/bootstrap-roles.sql"
+          install -m 0644 infra/production/.env.production.example "$PRODUCTION_DIR/.env.production.example"
+          install -m 0755 infra/production/preflight.sh "$PRODUCTION_DIR/preflight.sh"
+          install -m 0755 infra/production/deploy.sh "$PRODUCTION_DIR/deploy.sh"
+          install -m 0755 infra/production/rollback.sh "$PRODUCTION_DIR/rollback.sh"
+          install -m 0755 infra/production/mark-good.sh "$PRODUCTION_DIR/mark-good.sh"
+
+      # Runs before anything changes, so a refused .env leaves the running release alone (no rollback needed).
+      - name: Preflight
+        run: |
+          set -euo pipefail
+          "$PRODUCTION_DIR/preflight.sh" "$PRODUCTION_DIR/.env"
+
+      - name: Deploy
+        id: deploy
+        if: inputs.action == 'deploy'
+        env:
+          IMAGE_REPOSITORY: ${{ steps.plan.outputs.image }}
+          GHCR_USER: ${{ github.actor }}
+          GHCR_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          IMAGE_TAG: ${{ steps.plan.outputs.version }}
+        run: |
+          set -euo pipefail
+          printf '%s' "$GHCR_TOKEN" | "$PRODUCTION_DIR/deploy.sh" "$IMAGE_TAG"
+
+      - name: Health check
+        if: inputs.action == 'deploy'
+        env:
+          EXPECTED: ${{ steps.source.outputs.sha }}
+        run: |
+          set -euo pipefail
+          body="$(curl --fail --silent --show-error --retry 10 --retry-delay 6 --retry-all-errors --max-time 20 "$PRODUCTION_URL/api/health")"
+          echo "$body"
+          if ! grep -q "\"revision\":\"$EXPECTED\"" <<<"$body"; then
+            echo "::error::$PRODUCTION_URL/api/health does not report revision $EXPECTED."
+            exit 1
+          fi
+
+      # Optional: an organization host reaches the same build through the tunnel.
+      - name: Organization host check
+        if: inputs.action == 'deploy'
+        env:
+          EXPECTED: ${{ steps.source.outputs.sha }}
+          ORG_SMOKE_HOST: ${{ vars.PRODUCTION_ORG_SMOKE_HOST }}
+        run: |
+          set -euo pipefail
+          if [[ -z "${ORG_SMOKE_HOST:-}" ]]; then
+            echo "::notice::PRODUCTION_ORG_SMOKE_HOST is not set; skipping the organization host check."
+            exit 0
+          fi
+          body="$(curl --fail --silent --show-error --retry 10 --retry-delay 6 --retry-all-errors --max-time 20 "https://$ORG_SMOKE_HOST/api/health")"
+          echo "$body"
+          if ! grep -q "\"revision\":\"$EXPECTED\"" <<<"$body"; then
+            echo "::error::https://$ORG_SMOKE_HOST/api/health does not report revision $EXPECTED."
+            exit 1
+          fi
+
+      # Read-only page check. The full smoke test (tooling/deployment/smoke.mjs) signs up a new account on every run, so
+      # it waits for the dedicated production smoke account in the follow-up PR.
+      - name: Page check
+        if: inputs.action == 'deploy'
+        run: |
+          set -euo pipefail
+          for path in / /auth/login /robots.txt /sitemap.xml; do
+            curl --fail --silent --show-error --output /dev/null --retry 5 --retry-delay 5 --retry-all-errors --max-time 30 "$PRODUCTION_URL$path"
+            echo "ok $path"
+          done
+
+      - name: Mark verified
+        if: inputs.action == 'deploy'
+        env:
+          IMAGE_TAG: ${{ steps.plan.outputs.version }}
+        run: |
+          set -euo pipefail
+          "$PRODUCTION_DIR/mark-good.sh" "$IMAGE_TAG"
+          echo "Verified and recorded $IMAGE_TAG" >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Roll back to the previous verified tag
+        if: inputs.action == 'rollback'
+        run: |
+          set -euo pipefail
+          "$PRODUCTION_DIR/rollback.sh"
+          body="$(curl --fail --silent --show-error --retry 10 --retry-delay 6 --retry-all-errors --max-time 20 "$PRODUCTION_URL/api/health")"
+          echo "$body"
+          echo "Rolled back to $(cat "$PRODUCTION_DIR/.current_tag")" >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Roll back to the last verified tag after a failed deploy
+        if: failure() && inputs.action == 'deploy' && steps.deploy.outcome != 'skipped'
+        run: |
+          set -euo pipefail
+          echo "::warning::Deploy failed; redeploying the last verified tag."
+          "$PRODUCTION_DIR/rollback.sh" --last-good

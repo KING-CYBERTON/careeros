@@ -19,6 +19,8 @@ vi.mock("../resume/service", () => ({ resumeService: {} }));
 vi.mock("../cover-letters/service", () => ({ coverLetterService: {} }));
 vi.mock("../applications/service", () => ({ applicationService: {} }));
 
+// CAREEROS (P1-Q09): stays on a schema of the shared database on purpose. Its tables are hand-built in its own schema and no
+// migration or function DDL runs, so it cannot rewrite the `public` definer functions or grants.
 // Disposable database only; the test owns and drops its isolated schema.
 describe.skipIf(!process.env.COVER_LETTER_TEST_DATABASE_URL)("document SQL pages on a large account", () => {
 	const schemaName = `documents_test_${randomUUID().replaceAll("-", "")}`;
@@ -27,6 +29,7 @@ describe.skipIf(!process.env.COVER_LETTER_TEST_DATABASE_URL)("document SQL pages
 	let api: RouterClient<typeof import("./router").documentsRouter>;
 	let headers: Headers;
 
+	// CAREEROS: 120s timeouts; 4-vCPU GitHub runners are slower than upstream 32-vCPU Blacksmith runners (P0-C01b).
 	beforeAll(async () => {
 		admin = new Pool({ connectionString: process.env.COVER_LETTER_TEST_DATABASE_URL });
 		await admin.query(`CREATE SCHEMA ${schemaName}`);
@@ -58,7 +61,7 @@ describe.skipIf(!process.env.COVER_LETTER_TEST_DATABASE_URL)("document SQL pages
 		const { documentsRouter } = await import("./router");
 		headers = new Headers();
 		api = createRouterClient(documentsRouter, { context: { user: { id: "owner" }, resHeaders: headers } as never });
-	}, 30_000);
+	}, 120_000);
 	afterAll(async () => {
 		await pool?.end();
 		await admin?.query(`DROP SCHEMA ${schemaName} CASCADE`);
@@ -164,5 +167,5 @@ describe.skipIf(!process.env.COVER_LETTER_TEST_DATABASE_URL)("document SQL pages
 			const tag = trashed ? "tag-29999" : "tag-9999";
 			expect((await large.page({ trashed, q: tag })).tags).toContain(tag);
 		}
-	}, 30_000);
+	}, 120_000);
 });

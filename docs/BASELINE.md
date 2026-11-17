@@ -1,0 +1,184 @@
+# CI baseline
+
+Numbers later phases compare against, taken from one green `careeros-ci` run. Nothing was re-run locally (spec P0-T03, revision 2).
+
+|                |                                                                                                                               |
+| -------------- | ----------------------------------------------------------------------------------------------------------------------------- |
+| Run            | [careeros-ci #18, run 41216741664](https://github.com/KING-CYBERTON/careeros/actions/runs/41216741664)                        |
+| Event / branch | push / `develop`                                                                                                              |
+| Commit         | `492283e2a17d04c77302d96d417a436b33eba3ed` (`docs: update status and add phase 0 reviews (#5)`)                               |
+| Date           | 2026-10-31 (15:50 to 16:02 UTC)                                                                                               |
+| Result         | success: `static`, `unit`, `e2e` all green                                                                                    |
+| Runner         | `ubuntu-latest`: Ubuntu 24.04, image `ubuntu-24.04` version `20261025.353.1`, 4 vCPU (per spec; vCPU count is not in the log) |
+| Node           | v24.22.1 (npm 11.19.1), from `.nvmrc` (24)                                                                                    |
+| pnpm           | v12.16.1                                                                                                                      |
+| turbo          | 2.11.10                                                                                                                       |
+| Playwright     | @playwright/test 1.64.1                                                                                                       |
+| Chromium       | Chrome for Testing 156.0.8078.4 (playwright chromium v1248)                                                                   |
+| Postgres       | 16.15 (Debian 16.15-1.pgdg13+2), service container `postgres:16`                                                              |
+| Workspace      | 25 workspace projects; typecheck covers 22 packages (mobile excluded)                                                         |
+
+Commit `492283e` only adds docs on top of `7cac561` (P0-C01b); it is the latest green push run on `develop` at or after `7cac561` at the time of writing. It predates P0-T02 isolation package (#9), so `@careeros/isolation-testing` is not in these numbers.
+
+## Jobs and commands
+
+| Job    | Command                                                               | Result  | Counts                                        | Duration | Notes                                                                  |
+| ------ | --------------------------------------------------------------------- | ------- | --------------------------------------------- | -------- | ---------------------------------------------------------------------- |
+| static | `pnpm install --frozen-lockfile`                                      | success | 1673 packages added                           | 9s       | "Done in 8.8s"                                                         |
+| static | `pnpm lint` (`vp lint --deny-warnings`)                               | success | 0 warnings, 0 errors; 1726 files              | 3s       | tool time 2.2s, 174 rules                                              |
+| static | `pnpm format:check` (`vp fmt --check`)                                | success | 2162 files correctly formatted                | 7s       | tool time 6.5s                                                         |
+| static | `pnpm exec turbo boundaries`                                          | success | 1686 files in 24 packages, no issues          | 1s       |                                                                        |
+| static | `pnpm exec turbo run typecheck --filter=!mobile`                      | success | 22 of 22 tasks successful, 0 cached           | 22s      | turbo time 22.578s; `tsrs --noEmit`                                    |
+| static | job total                                                             | success |                                               | 1m 18s   | 15:50:20 to 15:51:38                                                   |
+| unit   | `pnpm install --frozen-lockfile`                                      | success |                                               | 8s       |                                                                        |
+| unit   | migrate test database, create and migrate OAuth test DB, create roles | success |                                               | 7s       | steps 9 to 11; exact commands not in log excerpt                       |
+| unit   | `pnpm exec turbo run test:ci --concurrency=1 --filter=!mobile`        | success | 21 of 21 tasks successful, 0 cached; 0 failed | 8m 41s   | turbo time 8m41.148s. Counts for 12 packages below (2499 tests passed) |
+| unit   | job total                                                             | success |                                               | 10m 4s   | 15:50:20 to 16:00:24                                                   |
+| e2e    | `pnpm install --frozen-lockfile`                                      | success |                                               | 9s       |                                                                        |
+| e2e    | `pnpm exec playwright install --with-deps chromium`                   | success | Chromium 156.0.8078.4                         | 34s      | step "Install Chromium and browser dependencies"                       |
+| e2e    | `pnpm db:migrate`                                                     | success | 1 of 1 tasks successful                       | 4s       | turbo time 3.099s                                                      |
+| e2e    | `pnpm build`                                                          | success | 3 of 3 tasks successful                       | 1m 10s   | turbo time 1m2.403s                                                    |
+| e2e    | `pnpm exec playwright test --workers=1`                               | success | 60 passed, 0 failed, 0 skipped, 0 flaky       | 6m 36s   | Playwright reports 6.6m; 1 worker, project `chromium`                  |
+| e2e    | job total                                                             | success |                                               | 9m 50s   | 15:51:41 to 16:01:31                                                   |
+
+Step durations come from job step timestamps. "Tool time" is the figure printed by the tool itself.
+
+## Unit tests per package
+
+Command: `vp test run ... --passWithNoTests` through `test:ci`, one package at a time (`--concurrency=1`). Skipped tests: none reported in any listed package.
+
+| Package                      | Test files | Tests passed | Failed     | Skipped    | Duration (vitest) |
+| ---------------------------- | ---------- | ------------ | ---------- | ---------- | ----------------- |
+| `@reactive-resume/pdf`       | 70         | 457          | 0          | 0          | 102.00s           |
+| `@reactive-resume/odt`       | 1          | 22           | 0          | 0          | 758ms             |
+| `@reactive-resume/env`       | 2          | 52           | 0          | 0          | 884ms             |
+| `@reactive-resume/tooling`   | 10         | 83           | 0          | 0          | 13.00s            |
+| `@reactive-resume/db`        | 3          | 4            | 0          | 0          | 3.23s             |
+| `@reactive-resume/email`     | 1          | 3            | 0          | 0          | 697ms             |
+| `@reactive-resume/auth`      | 9          | 56           | 0          | 0          | 12.91s            |
+| `@reactive-resume/api`       | 89         | 1056         | 0          | 0          | 127.33s           |
+| `web`                        | 102        | 531          | 0          | 0          | 158.71s           |
+| `@reactive-resume/mcp`       | 5          | 24           | 0          | 0          | 15.72s            |
+| `dsh-plugin-reactive-resume` | 3          | 6            | 0          | 0          | 1.07s             |
+| `server`                     | 27         | 205          | 0          | 0          | 28.40s            |
+| **Subtotal (12 packages)**   | **322**    | **2499**     | **0**      | **0**      |                   |
+| `@careeros/testing`          | not in log | not in log   | not in log | not in log | not in log        |
+| `@reactive-resume/ai`        | not in log | not in log   | not in log | not in log | not in log        |
+| `@reactive-resume/docx`      | not in log | not in log   | not in log | not in log | not in log        |
+| `@reactive-resume/fonts`     | not in log | not in log   | not in log | not in log | not in log        |
+| `@reactive-resume/import`    | not in log | not in log   | not in log | not in log | not in log        |
+| `@reactive-resume/resume`    | not in log | not in log   | not in log | not in log | not in log        |
+| `@reactive-resume/schema`    | not in log | not in log   | not in log | not in log | not in log        |
+| `@reactive-resume/ui`        | not in log | not in log   | not in log | not in log | not in log        |
+| `@reactive-resume/utils`     | not in log | not in log   | not in log | not in log | not in log        |
+
+The GitHub job-log API returns only the last 5,426 lines of the `unit` job (about 689,000 characters); the output of the first nine `test:ci` tasks falls before that window, and the log archive download is not reachable from the agent sandbox. Turbo reports all 21 tasks successful, so those nine packages passed, but their counts are not recorded here. There is no run-wide test total in the log. The 12-package subtotal is the sum of the rows above (the nine packages are named by elimination: the 21 packages with a `test:ci` script minus the 12 listed).
+
+## Known environment notes
+
+a. **P0-C01b timeout patch.** Standard 4-vCPU runners exceed the 30s default on the large-account listing test, so P0-C01b (`7cac561`) raises the explicit timeouts for that test. This run includes the patch.
+
+b. **Runner size.** Upstream CI runs on 32-vCPU Blacksmith runners (four packages concurrently, two Vitest workers each). CareerOS CI uses `ubuntu-latest` (4 vCPU) with `--concurrency=1`. Durations here are not comparable to upstream figures.
+
+c. **Watch-list entry.** `tests/e2e/specs/library-pagination.spec.ts:201` ("bounds tag filters from chips and URLs and clears a first-load filter failure") is on the STATUS.md watch list as timing-sensitive. It passed in this run in 16.4s (test 46 of 60).
+
+Other observations: the e2e log contains `[WebServer]` stack traces and a `WebAccessError ... (unsafe-url)` message while the tests that exercise those failure paths ran; all 60 tests still passed. The `unit` and `e2e` jobs also print `No locally installed turbo found` warnings (global turbo 2.11.10 is used for `test:ci`).
+
+## Phase 1 exit refresh (P1-C02)
+
+These numbers come from one green push run on `develop`. Nothing was re-run locally.
+
+- **Run:** [careeros-ci run 41320943973](https://github.com/KING-CYBERTON/careeros/actions/runs/41320943973), commit `0794338` (P1-Q09, #39), 2026-11-01.
+- **Layout:** since P1-C05, unit tests run in three shards (`pdf`, `api`, `rest`) behind a `unit` gate job.
+- **Source of the counts:** the JUnit artifacts can't be downloaded from this environment, so the counts below are read from each package's Vitest summary in the job logs.
+
+| Job                                          | Duration                              | Result                                                          |
+| -------------------------------------------- | ------------------------------------- | --------------------------------------------------------------- |
+| changes                                      | 31s                                   | success                                                         |
+| static (lint, format, boundaries, typecheck) | 1m 24s                                | success                                                         |
+| unit (pdf)                                   | 2m 9s                                 | success                                                         |
+| unit (api)                                   | 3m 33s                                | success                                                         |
+| unit (rest)                                  | 5m 23s                                | success                                                         |
+| e2e (`playwright test --workers=1`)          | 7m 52s                                | success: 63 passed, 0 failed, 0 flaky (Playwright reports 5.2m) |
+| **Wall clock**                               | **9m 18s** (15:23:02 to 15:32:20 UTC) | down from about 12 min at P0-T03                                |
+
+The e2e count includes the cross-org fuzz. It covers 157 id-taking operations and 106 MCP tools, with 64 skips that each have a reason.
+
+### Unit tests per package
+
+23 packages, 426 test files, **3426 tests passed** (P0-T03 baseline: 2499 tests across 12 listed packages). Skipped tests: none reported.
+
+| Package                       | Test files | Tests passed | Failed | Skipped | Duration (vitest) |
+| ----------------------------- | ---------- | ------------ | ------ | ------- | ----------------- |
+| `@reactive-resume/utils`      | 8          | 132          | 0      | 0       | 2.24s             |
+| `@careeros/testing`           | 2          | 16           | 0      | 0       | 2.02s             |
+| `@reactive-resume/ui`         | 8          | 14           | 0      | 0       | 14.92s            |
+| `@reactive-resume/schema`     | 16         | 145          | 0      | 0       | 5.04s             |
+| `@reactive-resume/fonts`      | 1          | 9            | 0      | 0       | 631ms             |
+| `@careeros/isolation-testing` | 2          | 57           | 0      | 0       | 955ms             |
+| `@reactive-resume/resume`     | 24         | 230          | 0      | 0       | 8.81s             |
+| `@reactive-resume/import`     | 7          | 76           | 0      | 0       | 4.65s             |
+| `@reactive-resume/ai`         | 2          | 8            | 0      | 0       | 937ms             |
+| `@reactive-resume/docx`       | 7          | 21           | 0      | 0       | 3.75s             |
+| `@reactive-resume/odt`        | 1          | 22           | 0      | 0       | 785ms             |
+| `@reactive-resume/tooling`    | 12         | 116          | 0      | 0       | 11.22s            |
+| `@reactive-resume/env`        | 2          | 52           | 0      | 0       | 916ms             |
+| `@reactive-resume/db`         | 9          | 10           | 0      | 0       | 12.68s            |
+| `@reactive-resume/email`      | 1          | 3            | 0      | 0       | 717ms             |
+| `@careeros/tenancy`           | 2          | 45           | 0      | 0       | 3.67s             |
+| `@reactive-resume/auth`       | 12         | 76           | 0      | 0       | 17.05s            |
+| `@reactive-resume/mcp`        | 5          | 24           | 0      | 0       | 11.68s            |
+| `web`                         | 103        | 534          | 0      | 0       | 117.25s           |
+| `server`                      | 30         | 219          | 0      | 0       | 24.77s            |
+| `dsh-plugin-reactive-resume`  | 3          | 6            | 0      | 0       | 802ms             |
+| `@reactive-resume/pdf`        | 70         | 457          | 0      | 0       | 79.13s            |
+| `@reactive-resume/api`        | 99         | 1154         | 0      | 0       | 109.41s           |
+
+## Phase 2 exit refresh
+
+These numbers come from one green push run on `develop`. Nothing was re-run locally.
+
+- **Run:** [careeros-ci run 41404157247](https://github.com/KING-CYBERTON/careeros/actions/runs/41404157247), commit `423c27f` (P2-T07, #56), 2026-11-02.
+- **Source of the counts:** each package's Vitest summary and the Playwright summary in the job logs.
+
+| Job                                                                     | Duration                              | Result                                                 |
+| ----------------------------------------------------------------------- | ------------------------------------- | ------------------------------------------------------ |
+| changes                                                                 | 24s                                   | success                                                |
+| static (lint, format, boundaries, typecheck, branding gate, node tests) | 1m 2s                                 | success                                                |
+| unit (pdf)                                                              | 2m 10s                                | success                                                |
+| unit (api)                                                              | 3m 21s                                | success                                                |
+| unit (rest)                                                             | 3m 34s                                | success                                                |
+| e2e (`playwright test --workers=1`)                                     | 6m 7s                                 | success: 89 passed, 0 failed (Playwright reports 4.1m) |
+| **Wall clock**                                                          | **7m 14s** (07:06:39 to 07:13:53 UTC) | down from 9m 18s at the Phase 1 exit                   |
+
+The e2e count includes both fuzz specs. The cross-org fuzz covers 159 id-taking operations and 106 MCP tools, with 79 skips that each have a reason, plus the org-host pass: 334 requests, all refused by the host gate. The auth fuzz covers 22 organization endpoints.
+
+### Unit tests per package
+
+23 packages, 457 test files, **3863 tests passed** (Phase 1 exit: 3426). **43 tests skipped**, in three database suites: `auth` `org-host.integration.test.ts` (13) and `email-links.integration.test.ts` (6), and `server` `handoff.integration.test.ts` (24). Turborepo strict env mode hides the test database variables from these two packages. This is exit review finding M1, fixed by P2-C03.
+
+| Package                       | Test files     | Tests passed | Failed | Skipped | Duration (vitest) |
+| ----------------------------- | -------------- | ------------ | ------ | ------- | ----------------- |
+| `@reactive-resume/utils`      | 12             | 164          | 0      | 0       | 1.27s             |
+| `@reactive-resume/ui`         | 9              | 16           | 0      | 0       | 4.29s             |
+| `@careeros/testing`           | 2              | 16           | 0      | 0       | 1.49s             |
+| `@reactive-resume/schema`     | 16             | 145          | 0      | 0       | 2.00s             |
+| `@reactive-resume/fonts`      | 1              | 9            | 0      | 0       | 332ms             |
+| `@careeros/isolation-testing` | 2              | 61           | 0      | 0       | 1.82s             |
+| `@reactive-resume/resume`     | 24             | 230          | 0      | 0       | 3.47s             |
+| `@reactive-resume/ai`         | 2              | 8            | 0      | 0       | 412ms             |
+| `@reactive-resume/import`     | 7              | 76           | 0      | 0       | 1.83s             |
+| `@reactive-resume/odt`        | 1              | 22           | 0      | 0       | 419ms             |
+| `@reactive-resume/docx`       | 7              | 21           | 0      | 0       | 1.56s             |
+| `@reactive-resume/env`        | 2              | 66           | 0      | 0       | 467ms             |
+| `@reactive-resume/tooling`    | 13             | 116          | 0      | 0       | 7.73s             |
+| `@reactive-resume/db`         | 9              | 10           | 0      | 0       | 6.77s             |
+| `@reactive-resume/email`      | 2              | 36           | 0      | 0       | 811ms             |
+| `@careeros/tenancy`           | 5              | 103          | 0      | 0       | 3.22s             |
+| `@reactive-resume/auth`       | 16 (2 skipped) | 100          | 0      | **19**  | 11.21s            |
+| `web`                         | 108            | 562          | 0      | 0       | 56.77s            |
+| `@reactive-resume/mcp`        | 5              | 24           | 0      | 0       | 6.61s             |
+| `dsh-plugin-reactive-resume`  | 3              | 6            | 0      | 0       | 480ms             |
+| `server`                      | 35 (1 skipped) | 270          | 0      | **24**  | 17.49s            |
+| `@reactive-resume/api`        | 108            | 1342         | 0      | 0       | 126.98s           |
+| `@reactive-resume/pdf`        | 71             | 460          | 0      | 0       | 62.47s            |

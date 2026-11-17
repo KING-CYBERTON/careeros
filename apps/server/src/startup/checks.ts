@@ -7,6 +7,7 @@ import { migrate } from "drizzle-orm/node-postgres/migrator";
 import { Pool } from "pg";
 import { env } from "@reactive-resume/env/server";
 import { getLocalDataDirectory } from "@reactive-resume/utils/monorepo.node";
+import { assertRuntimeRoleEnforcesRls } from "./role-check";
 import { verifyMigratedSchema } from "./schema-check";
 
 function resolveFromCurrentModule(relativePath: string) {
@@ -71,6 +72,16 @@ export async function runDatabaseMigrations() {
 	}
 }
 
+// CAREEROS: P1-T04 review 1 (H1). Checks the runtime DATABASE_URL role, not the migration one.
+async function verifyRuntimeDatabaseRole() {
+	const pool = new Pool({ connectionString: env.DATABASE_URL, max: 1, connectionTimeoutMillis: 10_000 });
+	try {
+		await assertRuntimeRoleEnforcesRls(pool, process.env.NODE_ENV);
+	} finally {
+		await pool.end();
+	}
+}
+
 async function validateLocalStoragePath() {
 	if (env.STORAGE_BACKEND !== "local") return;
 
@@ -103,6 +114,7 @@ async function reapStaleAgentRuns() {
 
 export async function runStartupChecks() {
 	await runDatabaseMigrations();
+	await verifyRuntimeDatabaseRole();
 	await validateLocalStoragePath();
 	await reapStaleAgentRuns();
 }

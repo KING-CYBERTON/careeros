@@ -1,5 +1,7 @@
 import type { DbOrTx } from "@reactive-resume/db/client";
 import type { ResumeData } from "@reactive-resume/schema/resume/data";
+// CAREEROS: tenant column for letter inserts (P1-T05)
+import { requireOrgId } from "@careeros/tenancy";
 import { ORPCError } from "@orpc/client";
 import { and, eq, inArray, sql } from "drizzle-orm";
 import * as schema from "@reactive-resume/db/schema";
@@ -68,6 +70,8 @@ export async function adoptEmbeddedLetters(
 		const [row] = await client
 			.insert(schema.coverLetter)
 			.values({
+				// CAREEROS: tenant column (P1-T05). `input.resumeId` is the resume being saved in this scope, so it is in the organization.
+				organizationId: requireOrgId(),
 				userId: input.userId,
 				name,
 				recipient: sanitizeCoverLetterHtml(letter.recipient),

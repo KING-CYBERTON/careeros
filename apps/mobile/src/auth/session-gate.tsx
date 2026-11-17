@@ -4,6 +4,8 @@ import { useRootNavigationState, useRouter, useSegments } from "expo-router";
 import { useEffect, useRef, useState } from "react";
 import { View } from "react-native";
 import { hostOf } from "./auth-header";
+// CAREEROS: join or switch for an organization address the account does not belong to (P2-T03)
+import { clearOrgHostBlock, useOrgHostBlocked } from "./org-host-block";
 import { getSession, signOut, subscribeIdentity, subscribeSession, useSession } from "./session";
 import { useSignIn } from "./use-sign-in";
 import { routes } from "@/routes";
@@ -31,6 +33,7 @@ export function SessionGate() {
 	const atCallback = path === "(auth)/auth/native-callback";
 	const where = useRef({ inAuth });
 	const queryClient = useQueryClient();
+	const orgHostBlocked = useOrgHostBlocked();
 
 	// Server data belongs to one account: drop it (and stop its requests) the moment the account changes.
 	useEffect(
@@ -38,6 +41,7 @@ export function SessionGate() {
 			subscribeIdentity(() => {
 				void queryClient.cancelQueries();
 				queryClient.clear();
+				clearOrgHostBlock();
 			}),
 		[queryClient],
 	);
@@ -68,7 +72,40 @@ export function SessionGate() {
 		else if (status === "signed-in" && inAuth) router.replace(routes.documents());
 	}, [navigationReady, status, inAuth, atCallback, router]);
 
-	return status === "expired" ? <SessionExpiredSheet /> : null;
+	if (status === "expired") return <SessionExpiredSheet />;
+	return status === "signed-in" && orgHostBlocked ? <OrgHostBlockedSheet /> : null;
+}
+
+/** CAREEROS (P2-T03): the same message and sign-out action as the web page for an organization the account is not in. */
+function OrgHostBlockedSheet() {
+	const { t } = useLingui();
+	const { space } = useTheme();
+	const { server } = useSession();
+	// The sheet cannot be dismissed: swiping it away presents it again.
+	const [presentation, setPresentation] = useState(0);
+
+	return (
+		<Sheet key={presentation} open title={t`Not a member`} onClose={() => setPresentation((count) => count + 1)}>
+			<View style={{ gap: space.s3, paddingHorizontal: space.s4 }}>
+				<Banner
+					tone="warn"
+					icon="lock"
+					title={t`This account isn't part of ${hostOf(server)}`}
+					message={t`Ask the organization's administrator for an invitation, or sign out and use a different account.`}
+				/>
+				<Button
+					label={t`Sign out`}
+					size="lg"
+					fullWidth
+					onPress={() =>
+						void signOut().catch(() =>
+							showToast({ message: t`Signed out, but some data on this device couldn't be removed.` }),
+						)
+					}
+				/>
+			</View>
+		</Sheet>
+	);
 }
 
 function SessionExpiredSheet() {

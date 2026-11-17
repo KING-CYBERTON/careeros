@@ -5,6 +5,7 @@ import { useEffect, useEffectEvent, useRef, useState } from "react";
 import { ActivityIndicator, View, useWindowDimensions } from "react-native";
 import { KeyboardAwareScrollView, KeyboardStickyView } from "react-native-keyboard-controller";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { getBrand } from "@reactive-resume/utils/brand";
 import { hostOf } from "@/auth/auth-header";
 import { serverErrorMessage } from "@/auth/messages";
 import { discover, isAllowedServer, ServerError, toOrigin } from "@/auth/oauth";
@@ -26,6 +27,7 @@ const checkDelay = 600;
 export default function CustomServer() {
 	const router = useRouter();
 	const { t, i18n } = useLingui();
+	const { appName } = getBrand();
 	const { colors, size, space } = useTheme();
 	const insets = useSafeAreaInsets();
 	const stacked = useWindowDimensions().fontScale > 1.3;
@@ -104,7 +106,7 @@ export default function CustomServer() {
 					</Text>
 				) : null}
 				<Text variant="callout" color="ink3">
-					{t`Enter the address you open Reactive Resume at in a browser. The app checks it's a Reactive Resume server that allows app sign-in before you continue.`}
+					{t`Enter the address you open ${appName} at in a browser. The app checks it's a ${appName} server that allows app sign-in before you continue.`}
 				</Text>
 			</KeyboardAwareScrollView>
 			<KeyboardStickyView offset={{ opened: insets.bottom }} style={{ backgroundColor: colors.bg }}>

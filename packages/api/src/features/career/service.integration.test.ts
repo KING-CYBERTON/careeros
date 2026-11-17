@@ -1,8 +1,7 @@
 import type { CareerSource } from "@reactive-resume/schema/career";
 import { randomUUID } from "node:crypto";
-import { existsSync } from "node:fs";
-import { readdir, readFile } from "node:fs/promises";
 import { afterAll, beforeAll, beforeEach, describe, expect, it, vi } from "vite-plus/test";
+import { createIsolatedTestDatabase, type IsolatedTestDatabase } from "@careeros/testing";
 import { eq } from "drizzle-orm";
 import { drizzle } from "drizzle-orm/node-postgres";
 import { Pool } from "pg";
@@ -11,6 +10,7 @@ import { copyCoverLetterStyle } from "@reactive-resume/resume/cover-letter";
 import { reviewedAnswerEvidence, reviewedAnswerInputSchema } from "@reactive-resume/schema/application-answers";
 import { careerOfferInputSchema, careerProfileDataSchema, savedItemDataSchema } from "@reactive-resume/schema/career";
 import { defaultResumeData } from "@reactive-resume/schema/resume/default";
+import { ensureTestOrganization, prepareGuestLink, TEST_ORGANIZATION_ID } from "../../test-organization";
 import { reviewedAnswers } from "./answers";
 
 const fixture = vi.hoisted(() => ({
@@ -43,7 +43,7 @@ function getDb() {
 	return fixture.db;
 }
 
-const databaseUrl = process.env.INTEGRATIONS_TEST_DATABASE_URL ?? process.env.COVER_LETTER_TEST_DATABASE_URL;
+const configured = Boolean(process.env.CAREEROS_TEST_DATABASE_URL && process.env.CAREEROS_TEST_APP_DATABASE_URL);
 const round = {
 	id: "alice-round",
 	type: "interview" as const,
@@ -76,44 +76,30 @@ describe("mergeCareerProfile", () => {
 	}, 30_000);
 });
 
-// Real PostgreSQL, opt-in only. Every table and FK comes from shipped migrations in a unique schema.
-describe.skipIf(!databaseUrl)("career knowledge, context and data lifecycle", () => {
+// Real PostgreSQL, opt-in only. Every table and FK comes from the shipped migrations in a database of its own.
+describe.skipIf(!configured)("career knowledge, context and data lifecycle", () => {
 	let service: typeof import("./service").careerService;
 	let applications: typeof import("../applications/service").applicationService;
 	let admin: Pool;
 	let pool: Pool;
-	const schemaName = `career_test_${randomUUID().replaceAll("-", "")}`;
+	// CAREEROS (P1-Q08): its own database, migrated like production. It used to replay the migrations into a schema of
+	// the shared database, which rewrote `public` functions other files were using.
+	let database: IsolatedTestDatabase;
 
 	beforeAll(async () => {
-		admin = new Pool({ connectionString: databaseUrl });
-		await admin.query(`CREATE SCHEMA ${schemaName}`);
+		database = await createIsolatedTestDatabase("career_svc");
+		admin = new Pool({ connectionString: database.ownerUrl });
 		// Match deployments with a single request connection; nested global queries must not deadlock.
-		pool = new Pool({
-			connectionString: databaseUrl,
-			max: 1,
-			connectionTimeoutMillis: 2000,
-			options: `-c search_path=${schemaName}`,
-		});
+		pool = new Pool({ connectionString: database.ownerUrl, max: 1, connectionTimeoutMillis: 2000 });
 		fixture.db = drizzle({ client: pool });
-		const migrations = new URL("../../../../../migrations/", import.meta.url);
-		const directories = (await readdir(migrations, { withFileTypes: true }))
-			.filter((entry) => entry.isDirectory() && /^\d+_/.test(entry.name))
-			.map((entry) => entry.name)
-			.sort();
-		for (const directory of directories) {
-			const file = new URL(`${directory}/migration.sql`, migrations);
-			if (!existsSync(file)) continue;
-			const migration = await readFile(file, "utf8");
-			await pool.query(migration.replaceAll('"public".', ""));
-		}
 		service = (await import("./service")).careerService;
 		applications = (await import("../applications/service")).applicationService;
-	}, 30_000);
+	}, 60_000);
 
 	afterAll(async () => {
 		await pool?.end();
-		await admin?.query(`DROP SCHEMA IF EXISTS ${schemaName} CASCADE`);
 		await admin?.end();
+		await database?.drop();
 	});
 
 	async function thread(id: string, userId: string, applicationId: string | null) {
@@ -121,6 +107,7 @@ describe.skipIf(!databaseUrl)("career knowledge, context and data lifecycle", ()
 			.insert(tables.agentThread)
 			.values({
 				id,
+				organizationId: TEST_ORGANIZATION_ID,
 				userId,
 				applicationId,
 				scope: applicationId ? "application" : "career",
@@ -175,6 +162,7 @@ describe.skipIf(!databaseUrl)("career knowledge, context and data lifecycle", ()
 		fixture.provider.mockClear();
 		fixture.storageDelete.mockReset().mockResolvedValue(undefined);
 		await pool.query('TRUNCATE "user", "released_username" CASCADE');
+		await ensureTestOrganization(pool);
 		await getDb()
 			.insert(tables.user)
 			.values(
@@ -190,18 +178,27 @@ describe.skipIf(!databaseUrl)("career knowledge, context and data lifecycle", ()
 			.insert(tables.resume)
 			.values([
 				{
+					organizationId: TEST_ORGANIZATION_ID,
 					id: "shared-resume",
 					userId: "alice",
 					name: "Current",
 					slug: "current",
 					data: resumeData("LIVE UNSUBMITTED DRAFT"),
 				},
-				{ id: "bob-resume", userId: "bob", name: "Bob", slug: "bob", data: resumeData("Bob private history") },
+				{
+					organizationId: TEST_ORGANIZATION_ID,
+					id: "bob-resume",
+					userId: "bob",
+					name: "Bob",
+					slug: "bob",
+					data: resumeData("Bob private history"),
+				},
 			]);
 		await getDb()
 			.insert(tables.resumeVersion)
 			.values([
 				{
+					organizationId: TEST_ORGANIZATION_ID,
 					id: "sent-acme",
 					resumeId: "shared-resume",
 					userId: "alice",
@@ -209,6 +206,7 @@ describe.skipIf(!databaseUrl)("career knowledge, context and data lifecycle", ()
 					data: resumeData("ACME submitted reliability lead"),
 				},
 				{
+					organizationId: TEST_ORGANIZATION_ID,
 					id: "sent-nova",
 					resumeId: "shared-resume",
 					userId: "alice",
@@ -216,6 +214,7 @@ describe.skipIf(!databaseUrl)("career knowledge, context and data lifecycle", ()
 					data: resumeData("NOVA submitted mentor"),
 				},
 				{
+					organizationId: TEST_ORGANIZATION_ID,
 					id: "sent-bob",
 					resumeId: "bob-resume",
 					userId: "bob",
@@ -228,6 +227,7 @@ describe.skipIf(!databaseUrl)("career knowledge, context and data lifecycle", ()
 			.values([
 				{
 					id: "alice-app",
+					organizationId: TEST_ORGANIZATION_ID,
 					userId: "alice",
 					company: "ACME",
 					role: "Reliability engineer",
@@ -238,6 +238,7 @@ describe.skipIf(!databaseUrl)("career knowledge, context and data lifecycle", ()
 				},
 				{
 					id: "alice-other",
+					organizationId: TEST_ORGANIZATION_ID,
 					userId: "alice",
 					company: "NOVA",
 					role: "Engineering mentor",
@@ -245,7 +246,14 @@ describe.skipIf(!databaseUrl)("career knowledge, context and data lifecycle", ()
 					sentResumeVersionId: "sent-nova",
 					activity: [{ ...round, id: "nova-round", notes: "Mentorship discussion" }],
 				},
-				{ id: "bob-app", userId: "bob", company: "Other", role: "Designer", resumeId: "bob-resume" },
+				{
+					id: "bob-app",
+					organizationId: TEST_ORGANIZATION_ID,
+					userId: "bob",
+					company: "Other",
+					role: "Designer",
+					resumeId: "bob-resume",
+				},
 			]);
 		await thread("alice-shared", "alice", null);
 		await thread("alice-private", "alice", "alice-app");
@@ -255,6 +263,7 @@ describe.skipIf(!databaseUrl)("career knowledge, context and data lifecycle", ()
 			.values([
 				{
 					id: "alice-message",
+					organizationId: TEST_ORGANIZATION_ID,
 					userId: "alice",
 					threadId: "alice-shared",
 					role: "user",
@@ -266,6 +275,7 @@ describe.skipIf(!databaseUrl)("career knowledge, context and data lifecycle", ()
 				},
 				{
 					id: "private-message",
+					organizationId: TEST_ORGANIZATION_ID,
 					userId: "alice",
 					threadId: "alice-private",
 					role: "user",
@@ -274,6 +284,7 @@ describe.skipIf(!databaseUrl)("career knowledge, context and data lifecycle", ()
 				},
 				{
 					id: "bob-message",
+					organizationId: TEST_ORGANIZATION_ID,
 					userId: "bob",
 					threadId: "bob-private",
 					role: "user",
@@ -316,6 +327,7 @@ describe.skipIf(!databaseUrl)("career knowledge, context and data lifecycle", ()
 			expectedEvidence: reviewedAnswerEvidence([evidence], [], [evidence.id], []),
 		});
 		const row = await reviewedAnswers.save("alice", input);
+		await prepareGuestLink(pool, "alice", "bob");
 		const { linkAnonymousAccount, setAccountLinkHook } = await import("@reactive-resume/auth/config");
 		await expect(linkAnonymousAccount({ fromUserId: "alice", toUserId: "bob" })).rejects.toMatchObject({
 			status: "CONFLICT",
@@ -626,6 +638,7 @@ describe.skipIf(!databaseUrl)("career knowledge, context and data lifecycle", ()
 		const style = copyCoverLetterStyle(defaultResumeData);
 		await getDb().insert(tables.coverLetter).values({
 			id: "alice-letter",
+			organizationId: TEST_ORGANIZATION_ID,
 			userId: "alice",
 			name: "Current letter",
 			content: "<p>UNSENT LETTER EDIT</p>",
@@ -635,6 +648,7 @@ describe.skipIf(!databaseUrl)("career knowledge, context and data lifecycle", ()
 			.insert(tables.coverLetterVersion)
 			.values({
 				id: "sent-letter",
+				organizationId: TEST_ORGANIZATION_ID,
 				userId: "alice",
 				coverLetterId: "alice-letter",
 				kind: "sent",
@@ -981,6 +995,7 @@ describe.skipIf(!databaseUrl)("career knowledge, context and data lifecycle", ()
 		await service.saveWorkspace("alice", "alice-app", { message: "Thanks for applying." }, { message: "" });
 		await getDb().insert(tables.aiProvider).values({
 			id: "alice-provider",
+			organizationId: TEST_ORGANIZATION_ID,
 			userId: "alice",
 			label: "Fixture",
 			provider: "openai",
@@ -993,6 +1008,7 @@ describe.skipIf(!databaseUrl)("career knowledge, context and data lifecycle", ()
 		await getDb()
 			.insert(tables.careerSchedule)
 			.values({
+				organizationId: TEST_ORGANIZATION_ID,
 				id: "alice-schedule",
 				userId: "alice",
 				kind: "discovery",
@@ -1002,6 +1018,7 @@ describe.skipIf(!databaseUrl)("career knowledge, context and data lifecycle", ()
 		await getDb()
 			.insert(tables.careerJob)
 			.values({
+				organizationId: TEST_ORGANIZATION_ID,
 				id: "alice-job",
 				userId: "alice",
 				scheduleId: "alice-schedule",
@@ -1009,20 +1026,28 @@ describe.skipIf(!databaseUrl)("career knowledge, context and data lifecycle", ()
 			});
 		await getDb()
 			.insert(tables.careerNotification)
-			.values({ userId: "alice", key: "fixture-notification", notice: { type: "briefing-paused" } });
+			.values({
+				organizationId: TEST_ORGANIZATION_ID,
+				userId: "alice",
+				key: "fixture-notification",
+				notice: { type: "briefing-paused" },
+			});
 		await getDb().insert(tables.careerOpportunity).values({
+			organizationId: TEST_ORGANIZATION_ID,
 			userId: "alice",
 			role: "Mentor",
 			url: "https://example.test/jobs/mentor",
 			snippet: "Synthetic posting",
 		});
 		await getDb().insert(tables.careerTranscript).values({
+			organizationId: TEST_ORGANIZATION_ID,
 			userId: "alice",
 			original: "I mentored a colleague",
 			edited: "I mentored two colleagues",
 			model: "fixture-transcription",
 		});
 		await getDb().insert(tables.agentAttachment).values({
+			organizationId: TEST_ORGANIZATION_ID,
 			userId: "alice",
 			threadId: "alice-shared",
 			messageId: "alice-message",
@@ -1070,6 +1095,7 @@ describe.skipIf(!databaseUrl)("career knowledge, context and data lifecycle", ()
 	});
 	it("tracks a role once even when two tabs track it with one database connection", async () => {
 		await getDb().insert(tables.careerOpportunity).values({
+			organizationId: TEST_ORGANIZATION_ID,
 			id: "track-me",
 			userId: "alice",
 			url: "https://example.test/jobs/track",
@@ -1215,6 +1241,7 @@ describe.skipIf(!databaseUrl)("career knowledge, context and data lifecycle", ()
 			.insert(tables.coverLetter)
 			.values({
 				id: "submit-letter",
+				organizationId: TEST_ORGANIZATION_ID,
 				userId: "alice",
 				name: "For ACME",
 				content: "<p>Final letter</p>",
@@ -1253,6 +1280,7 @@ describe.skipIf(!databaseUrl)("career knowledge, context and data lifecycle", ()
 		await getDb()
 			.insert(tables.careerArtifact)
 			.values({
+				organizationId: TEST_ORGANIZATION_ID,
 				userId: "alice",
 				applicationId: "alice-app",
 				title: "Later generated draft",
@@ -1424,6 +1452,7 @@ describe.skipIf(!databaseUrl)("career knowledge, context and data lifecycle", ()
 		await getDb()
 			.insert(tables.careerSchedule)
 			.values({
+				organizationId: TEST_ORGANIZATION_ID,
 				id: "pause-me",
 				userId: "alice",
 				applicationId: "alice-app",
@@ -1462,6 +1491,7 @@ describe.skipIf(!databaseUrl)("career knowledge, context and data lifecycle", ()
 			.insert(tables.careerFact)
 			.values(
 				Array.from({ length: 205 }, (_, index) => ({
+					organizationId: TEST_ORGANIZATION_ID,
 					userId: "alice",
 					text: `Fact ${index}: ${"evidence ".repeat(180)}`,
 					category: "accomplishment",
@@ -1475,7 +1505,13 @@ describe.skipIf(!databaseUrl)("career knowledge, context and data lifecycle", ()
 		if (!supporting) throw new Error("Expected facts.");
 		await getDb()
 			.insert(tables.careerStory)
-			.values(Array.from({ length: 105 }, () => ({ userId: "alice", data: story([supporting.id]) })));
+			.values(
+				Array.from({ length: 105 }, () => ({
+					organizationId: TEST_ORGANIZATION_ID,
+					userId: "alice",
+					data: story([supporting.id]),
+				})),
+			);
 		expect(await service.stories({ userId: "alice" })).toHaveLength(105);
 		const { buildCareerTools } = await import("./tools");
 		const tools = buildCareerTools({
@@ -1514,6 +1550,7 @@ describe.skipIf(!databaseUrl)("career knowledge, context and data lifecycle", ()
 			.values(
 				supportingIds.map((id) => ({
 					id,
+					organizationId: TEST_ORGANIZATION_ID,
 					userId: "alice",
 					text: `Proof ${id}: ${"\n".repeat(1400)}`,
 					category: "accomplishment",
@@ -1538,6 +1575,7 @@ describe.skipIf(!databaseUrl)("career knowledge, context and data lifecycle", ()
 			.insert(tables.careerStory)
 			.values(
 				Array.from({ length: 50 }, (_, index) => ({
+					organizationId: TEST_ORGANIZATION_ID,
 					userId: "alice",
 					data: { ...story(supportingIds), title: `Recent optional story ${index}` },
 				})),
@@ -1643,6 +1681,7 @@ describe.skipIf(!databaseUrl)("career knowledge, context and data lifecycle", ()
 				.insert(tables.coverLetter)
 				.values({
 					id: "contended-letter",
+					organizationId: TEST_ORGANIZATION_ID,
 					userId: "alice",
 					name: "Contended",
 					style: copyCoverLetterStyle(defaultResumeData),
@@ -1656,7 +1695,7 @@ describe.skipIf(!databaseUrl)("career knowledge, context and data lifecycle", ()
 				.update(tables.resume)
 				.set({ applicationId: "alice-app" })
 				.where(eq(tables.resume.id, "shared-resume"));
-			const editorPool = new Pool({ connectionString: databaseUrl, max: 1, options: `-c search_path=${schemaName}` });
+			const editorPool = new Pool({ connectionString: database.ownerUrl, max: 1 });
 			const editor = await editorPool.connect();
 			let completion: Promise<{ error: unknown }> | undefined;
 			try {
@@ -1716,6 +1755,7 @@ describe.skipIf(!databaseUrl)("career knowledge, context and data lifecycle", ()
 			await getDb()
 				.insert(tables.careerSchedule)
 				.values({
+					organizationId: TEST_ORGANIZATION_ID,
 					id: "contended-schedule",
 					userId: "alice",
 					applicationId: "alice-app",
@@ -1728,6 +1768,7 @@ describe.skipIf(!databaseUrl)("career knowledge, context and data lifecycle", ()
 			await getDb()
 				.insert(tables.careerJob)
 				.values({
+					organizationId: TEST_ORGANIZATION_ID,
 					id: "contended-job",
 					userId: "alice",
 					scheduleId: "contended-schedule",
@@ -1736,7 +1777,7 @@ describe.skipIf(!databaseUrl)("career knowledge, context and data lifecycle", ()
 					lease: "editor",
 					leaseUntil: new Date("2030-10-09T08:00:00Z"),
 				});
-			const editorPool = new Pool({ connectionString: databaseUrl, max: 1, options: `-c search_path=${schemaName}` });
+			const editorPool = new Pool({ connectionString: database.ownerUrl, max: 1 });
 			const editor = await editorPool.connect();
 			let completion: Promise<{ error: unknown }> | undefined;
 			try {
@@ -1772,8 +1813,15 @@ describe.skipIf(!databaseUrl)("career knowledge, context and data lifecycle", ()
 				);
 				if (operation === "submission")
 					await editor.query(
-						"INSERT INTO resume_version (id, resume_id, user_id, kind, data) VALUES ($1, $2, $3, $4, $5)",
-						["concurrent-sent", "shared-resume", "alice", "sent", JSON.stringify(resumeData("Concurrent version"))],
+						"INSERT INTO resume_version (id, resume_id, user_id, kind, data, organization_id) VALUES ($1, $2, $3, $4, $5, $6)",
+						[
+							"concurrent-sent",
+							"shared-resume",
+							"alice",
+							"sent",
+							JSON.stringify(resumeData("Concurrent version")),
+							TEST_ORGANIZATION_ID,
+						],
 					);
 				else await editor.query("UPDATE career_job SET error = 'Concurrent job write' WHERE id = 'contended-job'");
 				await editor.query("COMMIT");
@@ -1855,9 +1903,14 @@ describe.skipIf(!databaseUrl)("career knowledge, context and data lifecycle", ()
 			expectedRevision: null,
 		});
 		// This fixture application already has a sent document; use a fresh Saved application for a real submission.
-		await getDb()
-			.insert(tables.application)
-			.values({ id: "profile-submit", userId: "alice", company: "Fiction", role: "Engineer", status: "saved" });
+		await getDb().insert(tables.application).values({
+			id: "profile-submit",
+			organizationId: TEST_ORGANIZATION_ID,
+			userId: "alice",
+			company: "Fiction",
+			role: "Engineer",
+			status: "saved",
+		});
 		const answers = [{ id: "phone", question: "Phone", answer: "PHONE SENT EXPLICITLY", factIds: [] }];
 		await service.submitApplication("alice", "profile-submit", answers, []);
 		const sent = (await service.savedItems({ userId: "alice", applicationId: "profile-submit" })).filter(

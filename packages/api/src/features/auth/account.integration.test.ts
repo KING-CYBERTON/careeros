@@ -8,8 +8,13 @@ import { auth, linkAnonymousAccount, setAccountLinkHook } from "@reactive-resume
 import { db, withDatabasePool } from "@reactive-resume/db/client";
 import * as schema from "@reactive-resume/db/schema";
 import { env } from "@reactive-resume/env/server";
+import { ensureTestOrganization, installSchemaLocalGuestMove, TEST_ORGANIZATION_ID } from "../../test-organization";
 import { authRouter } from "./router";
 
+// CAREEROS (P1-Q09): stays on a schema of the OAuth test database (not the shared `postgres` one) on purpose. Its tables
+// are copies of the public ones (`CREATE TABLE ... LIKE`), and the only functions it installs are schema-local copies
+// (`installSchemaLocalGuestMove` rewrites every `public.` to the schema), so it cannot rewrite any `public` definer
+// function or grant.
 // Like the OAuth CI checks, this uses a disposable, migrated database, with isolated fixture tables.
 describe.skipIf(!process.env.OAUTH_TEST_DATABASE_URL)("account wrapper ownership", () => {
 	const schemaName = `account_test_${randomUUID().replaceAll("-", "")}`;
@@ -31,18 +36,45 @@ describe.skipIf(!process.env.OAUTH_TEST_DATABASE_URL)("account wrapper ownership
 			"jwks",
 			"resume",
 			"resume_version",
+			// CAREEROS (P1-T04): the guest-link function moves these with the resume
+			"resume_statistics",
+			"resume_statistics_daily",
 			"cover_letter",
 			"cover_letter_version",
 			"application",
 			"application_lane",
 			"application_pipeline",
 			"application_profile",
+			// CAREEROS (P1-T07): the career tables; the scheduler functions installed below read them
 			"career_answer",
+			"career_artifact",
 			"career_fact",
+			"career_job",
+			"career_notification",
+			"career_opportunity",
+			"career_profile",
+			"career_schedule",
 			"career_story",
+			"career_transcript",
+			"career_workspace",
+			// CAREEROS (P1-T08): the assistant and AI tables; the guest move reads them
+			"ai_providers",
+			"agent_threads",
+			"agent_messages",
+			"agent_attachments",
+			"agent_actions",
+			"ai_content_report",
+			// CAREEROS (P4-T02): discovery automations, runs and jobs; the guest move reads them
+			"job_source",
+			"discovery_run",
+			"discovered_job",
 			"resume_slug_redirect",
 			"released_username",
 			"storage_cleanup_job",
+			// CAREEROS: sign-up and session hooks read and write the organization tables (P1-T03)
+			"organization",
+			"member",
+			"invitation",
 		]) {
 			await admin.query(`CREATE TABLE ${schemaName}."${table}" (LIKE public."${table}" INCLUDING ALL)`);
 		}
@@ -50,12 +82,20 @@ describe.skipIf(!process.env.OAUTH_TEST_DATABASE_URL)("account wrapper ownership
 			connectionString: process.env.OAUTH_TEST_DATABASE_URL,
 			options: `-c search_path=${schemaName}`,
 		});
+		// CAREEROS (P1-T04): resumes belong to an organization and guest work moves through a definer function.
+		await installSchemaLocalGuestMove(pool, schemaName);
 		for (const id of ["link-guest", "link-owner", "failed-guest", "race-guest"]) {
 			await pool.query(
-				`INSERT INTO "user" (id,name,email,username,display_username) VALUES ($1,$1,$1 || '@example.test',$1,$1)`,
-				[id],
+				`INSERT INTO "user" (id,name,email,username,display_username,is_anonymous) VALUES ($1,$1,$1 || '@example.test',$1,$1,$2)`,
+				[id, id !== "link-owner"],
 			);
 		}
+		await pool.query(
+			`INSERT INTO organization (id,name,slug) VALUES ('org-owner','Owner','org-owner'),('org-guest','Guest','org-guest')`,
+		);
+		await pool.query(
+			`INSERT INTO member (id,organization_id,user_id,role) VALUES ('member-owner','org-owner','link-owner','owner')`,
+		);
 	});
 
 	afterAll(async () => {
@@ -68,36 +108,50 @@ describe.skipIf(!process.env.OAUTH_TEST_DATABASE_URL)("account wrapper ownership
 		const oldUrl = "https://resume.example/api/uploads/link-guest/pictures/photo.png";
 		const newUrl = "https://resume.example/api/uploads/link-owner/pictures/photo.png";
 		await pool.query(
-			`INSERT INTO resume (id, name, slug, data, user_id) VALUES
-			('guest-resume', 'Guest', 'shared', $1, 'link-guest'),
-			('owner-resume', 'Owner', 'shared', $2, 'link-owner')`,
+			`INSERT INTO resume (id, name, slug, data, user_id, organization_id) VALUES
+			('guest-resume', 'Guest', 'shared', $1, 'link-guest', 'org-guest'),
+			('owner-resume', 'Owner', 'shared', $2, 'link-owner', 'org-owner')`,
 			[JSON.stringify({ picture: oldUrl, nested: [oldUrl] }), JSON.stringify({ picture: "existing" })],
 		);
 		await pool.query(
-			`INSERT INTO resume_version (id, resume_id, user_id, data) VALUES ('guest-version', 'guest-resume', 'link-guest', $1)`,
+			`INSERT INTO resume_version (id, resume_id, user_id, data, organization_id) VALUES ('guest-version', 'guest-resume', 'link-guest', $1, 'org-guest')`,
 			[JSON.stringify({ picture: oldUrl })],
 		);
 		await pool.query(
-			`INSERT INTO cover_letter (id, name, user_id, style) VALUES ('guest-letter', 'Guest', 'link-guest', $1)`,
+			`INSERT INTO cover_letter (id, name, user_id, style, organization_id) VALUES ('guest-letter', 'Guest', 'link-guest', $1, 'org-guest')`,
 			[JSON.stringify({ picture: oldUrl })],
 		);
 		await pool.query(
-			`INSERT INTO cover_letter_version (id, cover_letter_id, user_id, data) VALUES ('guest-letter-version', 'guest-letter', 'link-guest', $1)`,
+			`INSERT INTO cover_letter_version (id, cover_letter_id, user_id, data, organization_id) VALUES ('guest-letter-version', 'guest-letter', 'link-guest', $1, 'org-guest')`,
 			[JSON.stringify({ style: { picture: oldUrl } })],
 		);
 		await pool.query(
-			`INSERT INTO application (id, user_id, company, role, resume_file_url, cover_letter_url) VALUES ('guest-application', 'link-guest', 'Example', 'Engineer', $1, NULL)`,
+			`INSERT INTO application (id, organization_id, user_id, company, role, resume_file_url, cover_letter_url) VALUES ('guest-application', 'org-guest', 'link-guest', 'Example', 'Engineer', $1, NULL)`,
 			[oldUrl],
 		);
-		await pool.query(`INSERT INTO resume_slug_redirect (id, user_id, resume_id, slug, expires_at) VALUES
-			('guest-redirect', 'link-guest', 'guest-resume', 'old', now() + interval '1 day'),
-			('guest-conflict', 'link-guest', 'guest-resume', 'conflict', now() + interval '1 day'),
-			('owner-redirect', 'link-owner', 'owner-resume', 'conflict', now() + interval '1 day')`);
+		await pool.query(`INSERT INTO resume_slug_redirect (id, user_id, resume_id, slug, expires_at, organization_id) VALUES
+			('guest-redirect', 'link-guest', 'guest-resume', 'old', now() + interval '1 day', 'org-guest'),
+			('guest-conflict', 'link-guest', 'guest-resume', 'conflict', now() + interval '1 day', 'org-guest'),
+			('owner-redirect', 'link-owner', 'owner-resume', 'conflict', now() + interval '1 day', 'org-owner')`);
 
 		await withDatabasePool(pool, () => linkAnonymousAccount({ fromUserId: "link-guest", toUserId: "link-owner" }));
 
-		expect((await pool.query("SELECT user_id, slug, data FROM resume WHERE id = 'guest-resume'")).rows).toEqual([
-			{ user_id: "link-owner", slug: "shared-resume", data: { picture: newUrl, nested: [newUrl] } },
+		expect(
+			(await pool.query("SELECT user_id, slug, data, organization_id FROM resume WHERE id = 'guest-resume'")).rows,
+		).toEqual([
+			{
+				user_id: "link-owner",
+				slug: "shared-resume",
+				data: { picture: newUrl, nested: [newUrl] },
+				organization_id: "org-owner",
+			},
+		]);
+		// The guest's versions and redirects move to the account's organization with the resume.
+		expect((await pool.query("SELECT DISTINCT organization_id FROM resume_version")).rows).toEqual([
+			{ organization_id: "org-owner" },
+		]);
+		expect((await pool.query("SELECT DISTINCT organization_id FROM resume_slug_redirect")).rows).toEqual([
+			{ organization_id: "org-owner" },
 		]);
 		expect((await pool.query("SELECT data FROM resume WHERE id = 'owner-resume'")).rows[0]?.data).toEqual({
 			picture: "existing",
@@ -110,6 +164,11 @@ describe.skipIf(!process.env.OAUTH_TEST_DATABASE_URL)("account wrapper ownership
 			expect((await pool.query(`SELECT user_id, ${column} AS value FROM ${table}`)).rows).toEqual([
 				{ user_id: "link-owner", value },
 			]);
+			// CAREEROS (P1-T05): letters and their versions move to the account's organization too.
+			if (table.startsWith("cover_letter"))
+				expect((await pool.query(`SELECT organization_id FROM ${table}`)).rows).toEqual([
+					{ organization_id: "org-owner" },
+				]);
 		}
 		expect((await pool.query("SELECT user_id, resume_file_url, cover_letter_url FROM application")).rows).toEqual([
 			{ user_id: "link-owner", resume_file_url: newUrl, cover_letter_url: null },
@@ -123,7 +182,7 @@ describe.skipIf(!process.env.OAUTH_TEST_DATABASE_URL)("account wrapper ownership
 	it("transfers a guest profile intact and refuses to overwrite a destination profile", async () => {
 		const data = { email: "guest-private@example.test" };
 		await pool.query(
-			`INSERT INTO application_profile (user_id,data,reviewed_at,revision) VALUES ('link-guest',$1,'2030-01-01T00:00:00Z','guest-revision')`,
+			`INSERT INTO application_profile (organization_id,user_id,data,reviewed_at,revision) VALUES ('org-guest','link-guest',$1,'2030-01-01T00:00:00Z','guest-revision')`,
 			[JSON.stringify(data)],
 		);
 		await withDatabasePool(pool, () => linkAnonymousAccount({ fromUserId: "link-guest", toUserId: "link-owner" }));
@@ -133,7 +192,7 @@ describe.skipIf(!process.env.OAUTH_TEST_DATABASE_URL)("account wrapper ownership
 		expect(transferred).toMatchObject({ user_id: "link-owner", data, reviewed_at: new Date("2030-01-01T00:00:00Z") });
 		expect(transferred.revision).not.toBe("guest-revision");
 		await pool.query(
-			`INSERT INTO application_profile (user_id,data,reviewed_at,revision) VALUES ('link-guest','{}',now(),'second-profile')`,
+			`INSERT INTO application_profile (organization_id,user_id,data,reviewed_at,revision) VALUES ('org-guest','link-guest','{}',now(),'second-profile')`,
 		);
 		await expect(
 			withDatabasePool(pool, () => linkAnonymousAccount({ fromUserId: "link-guest", toUserId: "link-owner" })),
@@ -151,7 +210,7 @@ describe.skipIf(!process.env.OAUTH_TEST_DATABASE_URL)("account wrapper ownership
 	it("rolls back ownership and URLs when upload copying fails", async () => {
 		const data = { picture: "https://resume.example/api/uploads/failed-guest/pictures/a.png" };
 		await pool.query(
-			`INSERT INTO resume (id, name, slug, data, user_id) VALUES ('failed-resume', 'Guest', 'failed', $1, 'failed-guest')`,
+			`INSERT INTO resume (id, name, slug, data, user_id, organization_id) VALUES ('failed-resume', 'Guest', 'failed', $1, 'failed-guest', 'org-guest')`,
 			[JSON.stringify(data)],
 		);
 		setAccountLinkHook(async () => {
@@ -172,7 +231,7 @@ describe.skipIf(!process.env.OAUTH_TEST_DATABASE_URL)("account wrapper ownership
 	it("blocks guest saves while copying and rejects stale ownership after commit", async () => {
 		const data = { picture: "https://resume.example/api/uploads/race-guest/pictures/a.png" };
 		await pool.query(
-			`INSERT INTO resume (id, name, slug, data, user_id) VALUES ('race-resume', 'Guest', 'race', $1, 'race-guest')`,
+			`INSERT INTO resume (id, name, slug, data, user_id, organization_id) VALUES ('race-resume', 'Guest', 'race', $1, 'race-guest', 'org-guest')`,
 			[JSON.stringify(data)],
 		);
 		const copying = Promise.withResolvers<void>();
@@ -258,10 +317,10 @@ describe.skipIf(!process.env.OAUTH_TEST_DATABASE_URL)("account wrapper ownership
 		);
 		const session = await authContext.internalAdapter.createSession(guest.id);
 		const signature = createHmac("sha256", env.AUTH_SECRET).update(session.token).digest("base64");
-		await pool.query(`INSERT INTO resume (id, name, slug, data, user_id) VALUES ($1, 'Guest', $1, '{}', $2)`, [
-			id,
-			guest.id,
-		]);
+		await pool.query(
+			`INSERT INTO resume (id, name, slug, data, user_id, organization_id) VALUES ($1, 'Guest', $1, '{}', $2, 'org-guest')`,
+			[id, guest.id],
+		);
 		const sessionCookie = authContext.authCookies.sessionToken.name;
 		const jar: Jar = new Map([[sessionCookie, encodeURIComponent(`${session.token}.${signature}`)]]);
 		const challenge = await send("sign-in/email", credentials, jar);
@@ -328,59 +387,64 @@ describe.skipIf(!process.env.OAUTH_TEST_DATABASE_URL)("account wrapper ownership
 					`guest-link:${owner.id}:${challengeId}`,
 				]);
 
-			// The deadline passes after the endpoint accepts the challenge, while its session row is being written.
-			await pool.query(
-				"CREATE FUNCTION delay_session() RETURNS trigger LANGUAGE plpgsql AS $$ BEGIN PERFORM pg_sleep(0.6); RETURN NEW; END $$",
-			);
-			await pool.query(
-				"CREATE TRIGGER delay_session BEFORE INSERT ON session FOR EACH ROW EXECUTE FUNCTION delay_session()",
-			);
+			// CAREEROS: session cleanup runs even when an assertion fails, so the next test sees a clean table.
 			try {
-				for (const id of ["deadline-1", "deadline-2", "deadline-3"]) {
-					const pending = await startGuest(id, owner.credentials);
-					const code = await totp(owner.id);
-					await expire(pending.challengeId, "now() + interval '300 milliseconds'");
-					const verified = await send("two-factor/verify-totp", { code }, pending.jar);
-					expect(verified.status, await verified.clone().text()).toBe(200);
-					expect(await resumeOwner(id)).toBe(owner.id);
-					expect(await userExists(pending.guest.id)).toBe(false);
+				// The deadline passes after the endpoint accepts the challenge, while its session row is being written.
+				// CAREEROS: margins widened (2 s deadline, 3 s write delay) so a loaded runner cannot pass the deadline before the check; two iterations keep the test well under its 30 s timeout.
+				await pool.query(
+					"CREATE FUNCTION delay_session() RETURNS trigger LANGUAGE plpgsql AS $$ BEGIN PERFORM pg_sleep(3); RETURN NEW; END $$",
+				);
+				await pool.query(
+					"CREATE TRIGGER delay_session BEFORE INSERT ON session FOR EACH ROW EXECUTE FUNCTION delay_session()",
+				);
+				try {
+					for (const id of ["deadline-1", "deadline-2"]) {
+						const pending = await startGuest(id, owner.credentials);
+						const code = await totp(owner.id);
+						await expire(pending.challengeId, "now() + interval '2 seconds'");
+						const verified = await send("two-factor/verify-totp", { code }, pending.jar);
+						expect(verified.status, await verified.clone().text()).toBe(200);
+						expect(await resumeOwner(id)).toBe(owner.id);
+						expect(await userExists(pending.guest.id)).toBe(false);
+					}
+				} finally {
+					await pool.query("DROP TRIGGER delay_session ON session");
+					await pool.query("DROP FUNCTION delay_session()");
 				}
+
+				const expired = await startGuest("expired-guest", owner.credentials);
+				await expire(expired.challengeId, "now() - interval '1 second'");
+				expect((await send("two-factor/verify-totp", { code: await totp(owner.id) }, expired.jar)).status).toBe(401);
+				expect(await resumeOwner("expired-guest")).toBe(expired.guest.id);
+
+				// Another account's successful verification, carrying this challenge's cookie, takes nothing.
+				const pending = await startGuest("foreign-guest", owner.credentials);
+				const other = await signUp("deadline-other");
+				expect((await send("two-factor/enable", { password: other.credentials.password }, other.jar)).status).toBe(200);
+				const mixed = new Map([...pending.jar, ...other.jar]);
+				expect((await send("two-factor/verify-totp", { code: await totp(other.id) }, mixed)).status).toBe(200);
+				expect(await resumeOwner("foreign-guest")).toBe(pending.guest.id);
+
+				// Concurrent verifications of one challenge: one succeeds and moves the work once.
+				const moves: string[] = [];
+				setAccountLinkHook(async ({ fromUserId }) => {
+					moves.push(fromUserId);
+				});
+				try {
+					const code = await totp(owner.id);
+					const responses = await Promise.all([
+						send("two-factor/verify-totp", { code }, new Map(pending.jar)),
+						send("two-factor/verify-totp", { code }, new Map(pending.jar)),
+					]);
+					expect(responses.map((response) => response.status).sort()).toEqual([200, 401]);
+				} finally {
+					setAccountLinkHook();
+				}
+				expect(moves).toEqual([pending.guest.id]);
+				expect(await resumeOwner("foreign-guest")).toBe(owner.id);
 			} finally {
-				await pool.query("DROP TRIGGER delay_session ON session");
-				await pool.query("DROP FUNCTION delay_session()");
+				await pool.query("DELETE FROM session");
 			}
-
-			const expired = await startGuest("expired-guest", owner.credentials);
-			await expire(expired.challengeId, "now() - interval '1 second'");
-			expect((await send("two-factor/verify-totp", { code: await totp(owner.id) }, expired.jar)).status).toBe(401);
-			expect(await resumeOwner("expired-guest")).toBe(expired.guest.id);
-
-			// Another account's successful verification, carrying this challenge's cookie, takes nothing.
-			const pending = await startGuest("foreign-guest", owner.credentials);
-			const other = await signUp("deadline-other");
-			expect((await send("two-factor/enable", { password: other.credentials.password }, other.jar)).status).toBe(200);
-			const mixed = new Map([...pending.jar, ...other.jar]);
-			expect((await send("two-factor/verify-totp", { code: await totp(other.id) }, mixed)).status).toBe(200);
-			expect(await resumeOwner("foreign-guest")).toBe(pending.guest.id);
-
-			// Concurrent verifications of one challenge: one succeeds and moves the work once.
-			const moves: string[] = [];
-			setAccountLinkHook(async ({ fromUserId }) => {
-				moves.push(fromUserId);
-			});
-			try {
-				const code = await totp(owner.id);
-				const responses = await Promise.all([
-					send("two-factor/verify-totp", { code }, new Map(pending.jar)),
-					send("two-factor/verify-totp", { code }, new Map(pending.jar)),
-				]);
-				expect(responses.map((response) => response.status).sort()).toEqual([200, 401]);
-			} finally {
-				setAccountLinkHook();
-			}
-			expect(moves).toEqual([pending.guest.id]);
-			expect(await resumeOwner("foreign-guest")).toBe(owner.id);
-			await pool.query("DELETE FROM session");
 		});
 	}, 30_000);
 
@@ -426,6 +490,13 @@ describe.skipIf(!process.env.OAUTH_TEST_DATABASE_URL)("account wrapper ownership
 			const { reviewedAnswers: answers } = await import("../career/answers");
 			const { applicationProfileDataSchema } = await import("@reactive-resume/schema/application-profile");
 			const owner = await signUpWithTwoFactor("private-link-owner");
+			// CAREEROS (P1-T06): the shared test setup puts every service call in the test organization, so the account's
+			// oldest organization (where guest work lands) is that one.
+			await ensureTestOrganization(pool);
+			await pool.query(
+				`INSERT INTO member (id,organization_id,user_id,role,created_at) VALUES ($1,$2,$3,'owner','2000-01-01')`,
+				[`member-test-${owner.id}`, TEST_ORGANIZATION_ID, owner.id],
+			);
 			const pending = await startGuest("private-link-guest", owner.credentials);
 			const guestProfile = await profiles.save(pending.guest.id, {
 				data: applicationProfileDataSchema.parse({
@@ -439,8 +510,20 @@ describe.skipIf(!process.env.OAUTH_TEST_DATABASE_URL)("account wrapper ownership
 				expectedRevision: null,
 			});
 			await db.insert(schema.application).values([
-				{ id: "private-guest-app", userId: pending.guest.id, company: "Harbor", role: "Engineer" },
-				{ id: "private-owner-app", userId: owner.id, company: "Nova", role: "Engineer" },
+				{
+					id: "private-guest-app",
+					organizationId: TEST_ORGANIZATION_ID,
+					userId: pending.guest.id,
+					company: "Harbor",
+					role: "Engineer",
+				},
+				{
+					id: "private-owner-app",
+					organizationId: TEST_ORGANIZATION_ID,
+					userId: owner.id,
+					company: "Nova",
+					role: "Engineer",
+				},
 			]);
 			const input = {
 				question: "Describe your project",

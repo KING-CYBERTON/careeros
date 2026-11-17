@@ -1,13 +1,12 @@
-import { randomUUID } from "node:crypto";
-import { existsSync } from "node:fs";
-import { readdir, readFile } from "node:fs/promises";
 import { afterAll, beforeAll, beforeEach, describe, expect, it, vi } from "vite-plus/test";
+import { createIsolatedTestDatabase, type IsolatedTestDatabase } from "@careeros/testing";
 import { eq } from "drizzle-orm";
 import { drizzle } from "drizzle-orm/node-postgres";
 import { Pool } from "pg";
 import * as tables from "@reactive-resume/db/schema";
 import { copyCoverLetterStyle } from "@reactive-resume/resume/cover-letter";
 import { defaultResumeData } from "@reactive-resume/schema/resume/default";
+import { ensureTestOrganization, prepareGuestLink, TEST_ORGANIZATION_ID } from "../../test-organization";
 import { createPublicResumePdf } from "../resume/public-pdf";
 import { runStorageCleanup } from "../storage/cleanup";
 
@@ -80,44 +79,39 @@ function getDb() {
 	return fixture.db;
 }
 
-const databaseUrl = process.env.INTEGRATIONS_TEST_DATABASE_URL ?? process.env.COVER_LETTER_TEST_DATABASE_URL;
+const configured = Boolean(process.env.CAREEROS_TEST_DATABASE_URL && process.env.CAREEROS_TEST_APP_DATABASE_URL);
 
-// Real PostgreSQL, opt-in only. Every table and FK comes from shipped migrations in a unique schema, so this can run
-// beside the other database suites without seeing their rows.
-describe.skipIf(!databaseUrl)("Trash batch operations", () => {
+// Real PostgreSQL, opt-in only (the CAREEROS_TEST_* variables). Every table and FK comes from the shipped migrations in
+// a database of its own, so this can run beside the other database suites without seeing their rows.
+describe.skipIf(!configured)("Trash batch operations", () => {
 	let service: typeof import("./service").documentsService;
 	let admin: Pool;
 	let pool: Pool;
-	const schemaName = `documents_test_${randomUUID().replaceAll("-", "")}`;
+	// CAREEROS (P1-Q08): its own database, migrated like production. It used to replay the migrations into a schema of
+	// the shared database, which rewrote `public` functions other files were using and reached `public` tables through
+	// the definer functions.
+	let database: IsolatedTestDatabase;
 
 	beforeAll(async () => {
-		admin = new Pool({ connectionString: databaseUrl });
-		await admin.query(`CREATE SCHEMA ${schemaName}`);
+		database = await createIsolatedTestDatabase("documents_svc");
+		admin = new Pool({ connectionString: database.ownerUrl });
 		pool = new Pool({
-			connectionString: databaseUrl,
+			connectionString: database.ownerUrl,
 			max: 4,
-			application_name: schemaName,
+			application_name: database.name,
 			connectionTimeoutMillis: 2000,
-			options: `-c search_path=${schemaName}`,
+			// CAREEROS (P1-T09): the mocked tenancy scope does not set the session setting; this stands in for it, so
+			// the account-delete trigger files its cleanup job under the test organization.
+			options: `-c app.current_org_id=${TEST_ORGANIZATION_ID}`,
 		});
 		fixture.db = drizzle({ client: pool });
-		const migrations = new URL("../../../../../migrations/", import.meta.url);
-		const directories = (await readdir(migrations, { withFileTypes: true }))
-			.filter((entry) => entry.isDirectory() && /^\d+_/.test(entry.name))
-			.map((entry) => entry.name)
-			.sort();
-		for (const directory of directories) {
-			const file = new URL(`${directory}/migration.sql`, migrations);
-			if (!existsSync(file)) continue;
-			await pool.query((await readFile(file, "utf8")).replaceAll('"public".', ""));
-		}
 		service = (await import("./service")).documentsService;
-	}, 30_000);
+	}, 60_000);
 
 	afterAll(async () => {
 		await pool?.end();
-		await admin?.query(`DROP SCHEMA IF EXISTS ${schemaName} CASCADE`);
 		await admin?.end();
+		await database?.drop();
 	});
 
 	const trashedAt = () => new Date(Date.now() - 60_000);
@@ -132,6 +126,7 @@ describe.skipIf(!databaseUrl)("Trash batch operations", () => {
 
 	async function seed() {
 		await pool.query('TRUNCATE released_username, storage_cleanup_job, "user" CASCADE');
+		await ensureTestOrganization(pool);
 		await getDb()
 			.insert(tables.user)
 			.values(
@@ -147,6 +142,7 @@ describe.skipIf(!databaseUrl)("Trash batch operations", () => {
 			.insert(tables.resume)
 			.values([
 				{
+					organizationId: TEST_ORGANIZATION_ID,
 					id: "alice-active",
 					userId: "alice",
 					name: "Active",
@@ -154,6 +150,7 @@ describe.skipIf(!databaseUrl)("Trash batch operations", () => {
 					data: structuredClone(defaultResumeData),
 				},
 				{
+					organizationId: TEST_ORGANIZATION_ID,
 					id: "alice-trashed-1",
 					userId: "alice",
 					name: "Trashed one",
@@ -162,6 +159,7 @@ describe.skipIf(!databaseUrl)("Trash batch operations", () => {
 					data: structuredClone(defaultResumeData),
 				},
 				{
+					organizationId: TEST_ORGANIZATION_ID,
 					id: "alice-trashed-2",
 					userId: "alice",
 					name: "Trashed two",
@@ -170,6 +168,7 @@ describe.skipIf(!databaseUrl)("Trash batch operations", () => {
 					data: structuredClone(defaultResumeData),
 				},
 				{
+					organizationId: TEST_ORGANIZATION_ID,
 					id: "bob-trashed",
 					userId: "bob",
 					name: "Bob trash",
@@ -182,6 +181,7 @@ describe.skipIf(!databaseUrl)("Trash batch operations", () => {
 			.insert(tables.coverLetter)
 			.values([
 				{
+					organizationId: TEST_ORGANIZATION_ID,
 					id: "alice-letter",
 					userId: "alice",
 					name: "Letter",
@@ -189,6 +189,7 @@ describe.skipIf(!databaseUrl)("Trash batch operations", () => {
 					trashedAt: trashedAt(),
 				},
 				{
+					organizationId: TEST_ORGANIZATION_ID,
 					id: "bob-letter",
 					userId: "bob",
 					name: "Bob letter",
@@ -241,6 +242,7 @@ describe.skipIf(!databaseUrl)("Trash batch operations", () => {
 		await getDb()
 			.insert(tables.resumeVersion)
 			.values({
+				organizationId: TEST_ORGANIZATION_ID,
 				id: "sent-version",
 				resumeId: "alice-trashed-1",
 				userId: "alice",
@@ -249,6 +251,7 @@ describe.skipIf(!databaseUrl)("Trash batch operations", () => {
 			});
 		await getDb().insert(tables.application).values({
 			id: "submitted",
+			organizationId: TEST_ORGANIZATION_ID,
 			userId: "alice",
 			company: "Orbital",
 			role: "Engineer",
@@ -259,6 +262,7 @@ describe.skipIf(!databaseUrl)("Trash batch operations", () => {
 		});
 		await getDb().insert(tables.application).values({
 			id: "active-job",
+			organizationId: TEST_ORGANIZATION_ID,
 			userId: "alice",
 			company: "Lumen",
 			role: "Designer",
@@ -392,6 +396,7 @@ describe.skipIf(!databaseUrl)("Trash batch operations", () => {
 			.insert(tables.storageCleanupJob)
 			.values({
 				id: "stale-job",
+				organizationId: TEST_ORGANIZATION_ID,
 				ownerId: "alice",
 				storageKey,
 				attempts: 6,
@@ -474,7 +479,7 @@ describe.skipIf(!databaseUrl)("Trash batch operations", () => {
 				async () => {
 					const { rows } = await admin.query(
 						"SELECT count(*)::int AS count FROM pg_stat_activity WHERE application_name = $1 AND wait_event_type = 'Lock'",
-						[schemaName],
+						[database.name],
 					);
 					expect(rows[0]?.count).toBeGreaterThan(0);
 				},
@@ -496,6 +501,7 @@ describe.skipIf(!databaseUrl)("Trash batch operations", () => {
 
 	it("does not copy pending or abandoned erasure prefixes when guest work changes owners", async () => {
 		const { migrateUserStorage } = await import("../storage/service");
+		await prepareGuestLink(pool, "alice", "bob");
 		const { linkAnonymousAccount, setAccountLinkHook } =
 			await vi.importActual<typeof import("@reactive-resume/auth/config")>("@reactive-resume/auth/config");
 		putResumeFiles("alice", "alice-trashed-1");
@@ -605,6 +611,7 @@ describe.skipIf(!databaseUrl)("Trash batch operations", () => {
 			.insert(tables.resume)
 			.values(
 				Array.from({ length: 12 }, (_, index) => ({
+					organizationId: TEST_ORGANIZATION_ID,
 					id: `alice-bulk-${index}`,
 					userId: "alice",
 					name: `Bulk ${index}`,
@@ -633,6 +640,7 @@ describe.skipIf(!databaseUrl)("Trash batch operations", () => {
 			.insert(tables.resume)
 			.values(
 				Array.from({ length: 150 }, (_, index) => ({
+					organizationId: TEST_ORGANIZATION_ID,
 					id: `alice-scale-${index}`,
 					userId: "alice",
 					name: `Scale ${index}`,

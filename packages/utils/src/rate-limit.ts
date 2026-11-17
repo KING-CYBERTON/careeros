@@ -23,6 +23,9 @@ export const rateLimitConfig = {
 				"/two-factor/verify-totp": { window: 600, max: 5 },
 				"/two-factor/verify-backup-code": { window: 600, max: 5 },
 				"/is-username-available": { window: 60, max: 20 },
+				// CAREEROS (P5-T02): the clipper device flow, per client address; the token endpoint also has a per-device-code limit.
+				"/device/code": { window: 60, max: 10 },
+				"/device/clipper/token": { window: 60, max: 60 },
 			},
 		},
 		oauthProvider: {
@@ -38,6 +41,13 @@ export const rateLimitConfig = {
 			timeWindow: 60 * 60 * 1000,
 			maxRequests: 1000,
 		},
+	},
+	// CAREEROS (P2-T05): the sign-in handoff between a platform host and an organization host, per client address.
+	// `issue` follows the auth limits above (the global Better Auth budget).
+	handoff: {
+		begin: { maxRequests: 10, window: 60 * 1000 },
+		redeem: { maxRequests: 20, window: 60 * 1000 },
+		issue: { maxRequests: 60, window: 60 * 1000 },
 	},
 	orpc: {
 		resumePassword: { maxRequests: 5, window: 10 * 60 * 1000 },

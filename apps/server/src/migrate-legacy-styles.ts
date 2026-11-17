@@ -7,7 +7,7 @@ import { migrateLegacyStyles, restoreLegacyStyles } from "@reactive-resume/api/f
 import { env } from "@reactive-resume/env/server";
 
 const usage = `Converts resumes and letters still styled by the old style editor (legacy style rules) to Semantic CSS.
-Uses DATABASE_URL. Run it once after deploying the version without the legacy renderer.
+Uses DATABASE_MIGRATION_URL when set (the table owner, needed once tables have row-level security), else DATABASE_URL. Run it once after deploying the version without the legacy renderer.
 
   node apps/server/dist/migrate-legacy-styles.mjs
       Dry run: converts every row that needs it in memory and reports the counts. Writes nothing.
@@ -37,7 +37,13 @@ if (values.help || (values.apply && !values.backup) || (values.restore && (value
 // Opened before connecting, so an unwritable path fails before anything changes.
 const backup = values.backup ? openSync(values.backup, "a") : undefined;
 
-const pool = new Pool({ connectionString: env.DATABASE_URL, max: 1, connectionTimeoutMillis: 10_000 });
+// CAREEROS (P1-T04): this maintenance script spans every organization, which row-level security hides from the runtime
+// role (`DATABASE_URL`). It connects as the table owner (`DATABASE_MIGRATION_URL`) when one is configured.
+const pool = new Pool({
+	connectionString: env.DATABASE_MIGRATION_URL || env.DATABASE_URL,
+	max: 1,
+	connectionTimeoutMillis: 10_000,
+});
 const client = await pool.connect();
 const log = (message: string) => console.info(`[${new Date().toISOString()}] ${message}`);
 

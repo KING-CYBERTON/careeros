@@ -18,6 +18,8 @@ export default function CareerLayout() {
 		{ value: "today", label: t`Today` },
 		{ value: "coach", label: t`Coach` },
 		{ value: "knowledge", label: t`Knowledge` },
+		// CAREEROS (P4-T02): the discovery review queue
+		{ value: "jobs", label: t`Jobs` },
 		{ value: "offers", label: t`Offers` },
 	] as const;
 	return (

@@ -1,7 +1,10 @@
 import type { careerScheduleInputSchema } from "@reactive-resume/schema/career";
 import type z from "zod";
+// CAREEROS: tenant column, and the scheduler runs each job and each organization's upkeep in its own organization (P1-T07)
+import { requireOrgId, withOrgContext } from "@careeros/tenancy";
 import { ORPCError } from "@orpc/client";
-import { and, asc, desc, eq, inArray, isNull, lte, notInArray, or, sql } from "drizzle-orm";
+import { and, asc, desc, eq, inArray, isNull, lte, or, sql } from "drizzle-orm";
+import { buildEmailContext } from "@reactive-resume/auth/email-brand";
 import { db } from "@reactive-resume/db/client";
 import * as tables from "@reactive-resume/db/schema";
 import { sendCareerNotification } from "@reactive-resume/email/transport";
@@ -26,6 +29,41 @@ import {
 	prepareRunAt,
 } from "./scheduling";
 import { careerService, requireCareerApplication } from "./service";
+
+/**
+ * CAREEROS (P1-T07, D9): the scheduler has no organization and row-level security hides every career row from it. Three
+ * definer functions answer with ids only (never row data): the organizations with due schedules, the organizations with
+ * upkeep to do, and the claimable jobs with their organization. Everything else is read and written inside
+ * `withOrgContext`, one organization or job at a time; a failure in one is logged and does not stop the others.
+ */
+async function organizationIds(query: ReturnType<typeof sql>): Promise<string[]> {
+	const { rows } = await db.execute<{ organization_id: string }>(query);
+	return rows.map((row) => row.organization_id);
+}
+const orgsWithDueSchedules = (now: Date) =>
+	organizationIds(
+		sql`select careeros_orgs_with_due_career_schedules(${now.toISOString()}::timestamptz) as organization_id`,
+	);
+const orgsWithUpkeep = (now: Date) =>
+	organizationIds(sql`select careeros_orgs_with_career_upkeep(${now.toISOString()}::timestamptz) as organization_id`);
+async function dueJobs(now: Date, limit: number) {
+	const { rows } = await db.execute<{ id: string; organization_id: string }>(
+		sql`select id, organization_id from careeros_due_career_jobs(${now.toISOString()}::timestamptz, ${limit}::int)`,
+	);
+	return rows;
+}
+/** Runs `work` in each organization; one organization failing is logged and the rest still run. */
+async function forEachOrganization(orgIds: Iterable<string>, step: string, work: (orgId: string) => Promise<void>) {
+	for (const orgId of new Set(orgIds)) {
+		try {
+			await withOrgContext(orgId, () => work(orgId));
+		} catch (error) {
+			console.error(`[career] ${step} failed for organization ${orgId}`, error);
+		}
+	}
+}
+/** A schedule's application, when it has one, must still be open (RLS limits the lookup to the current organization). */
+const applicationIsOpen = sql`(${tables.careerSchedule.applicationId} is null or exists (select 1 from ${tables.application} where ${tables.application.id} = ${tables.careerSchedule.applicationId} and ${tables.application.status} <> 'closed'))`;
 
 const CAREER_URL = "/dashboard/career";
 const workspaceUrl = (applicationId: string | null, tab?: string) =>
@@ -77,9 +115,12 @@ export const careerJobs = {
 		if (input.kind === "prepare" && input.enabled) {
 			if (!input.aiProviderId)
 				throw new ORPCError("BAD_REQUEST", { message: "Choose a tested AI provider for scheduled preparation." });
-			await aiProvidersService.getRunnableById({ userId, id: input.aiProviderId });
+			// CAREEROS (P3-T03): the feature lets the platform provider be named
+			await aiProvidersService.getRunnableById({ userId, id: input.aiProviderId, feature: "career.generate" });
 		} else if (input.aiProviderId) {
-			// Any other schedule may name a connection too; it still has to be one of the account's own.
+			// Any other schedule may name a connection too; it still has to be one of the account's own, in this organization
+			// (CAREEROS P1-T08: row-level security limits the lookup to the active organization, and the database refuses a
+			// provider of another organization through career_schedule_org_ai_provider_fkey).
 			const [provider] = await db
 				.select({ id: tables.aiProvider.id })
 				.from(tables.aiProvider)
@@ -141,7 +182,8 @@ export const careerJobs = {
 						.returning()
 				: await tx
 						.insert(tables.careerSchedule)
-						.values({ userId, ...values })
+						// CAREEROS: tenant column (P1-T07)
+						.values({ organizationId: requireOrgId(), userId, ...values })
 						.returning();
 			if (!row) throw new ORPCError("NOT_FOUND");
 			return row;
@@ -218,7 +260,11 @@ async function discover(userId: string, query: string) {
 				})
 				.from(tables.careerOpportunity)
 				.where(
-					and(eq(tables.careerOpportunity.userId, userId), inArray(tables.careerOpportunity.url, [...found.keys()])),
+					and(
+						eq(tables.careerOpportunity.organizationId, requireOrgId()),
+						eq(tables.careerOpportunity.userId, userId),
+						inArray(tables.careerOpportunity.url, [...found.keys()]),
+					),
 				)
 		: [];
 	const seen = new Map(known.map((row) => [row.url, row]));
@@ -240,6 +286,7 @@ async function discover(userId: string, query: string) {
 	);
 }
 
+/** Materialises the organization's due schedules into jobs. Runs inside `withOrgContext`. */
 async function enqueue() {
 	const now = new Date();
 	await db.transaction(async (tx) => {
@@ -249,7 +296,7 @@ async function enqueue() {
 			.where(
 				and(
 					eq(tables.careerSchedule.enabled, true),
-					sql`(${tables.careerSchedule.applicationId} is null or exists (select 1 from application a where a.id = ${tables.careerSchedule.applicationId} and a.user_id = ${tables.careerSchedule.userId} and a.status <> 'closed'))`,
+					applicationIsOpen,
 					lte(tables.careerSchedule.nextRunAt, now),
 					or(
 						isNull(tables.careerSchedule.lastQueuedAt),
@@ -273,7 +320,12 @@ async function enqueue() {
 				);
 			await tx
 				.insert(tables.careerJob)
-				.values({ userId: schedule.userId, scheduleId: schedule.id, dueAt: schedule.nextRunAt })
+				.values({
+					organizationId: schedule.organizationId,
+					userId: schedule.userId,
+					scheduleId: schedule.id,
+					dueAt: schedule.nextRunAt,
+				})
 				.onConflictDoNothing();
 			// Coalesce missed ticks into one job, rather than charging for an outage's backlog, keeping the wall time.
 			const nextRunAt = schedule.intervalDays
@@ -288,17 +340,19 @@ async function enqueue() {
 }
 
 /**
- * Claims the oldest due job whose owner has no other job running and hasn't been served this tick, so one account's
- * backlog can't hold up everyone else's schedules. Jobs of banned accounts are canceled.
+ * Claims one due job named by `careeros_due_career_jobs`, if it is still claimable and its owner has not been served
+ * this tick, so one account's backlog can't hold up everyone else's schedules. Jobs of banned accounts are canceled.
+ * Runs inside the job's `withOrgContext`.
  */
-function claim(servedUsers: ReadonlySet<string>) {
+function claim(jobId: string, servedUsers: ReadonlySet<string>) {
 	return db.transaction(async (tx) => {
 		const now = new Date();
-		const candidates = await tx
+		const [job] = await tx
 			.select()
 			.from(tables.careerJob)
 			.where(
 				and(
+					eq(tables.careerJob.id, jobId),
 					lte(tables.careerJob.dueAt, now),
 					sql`${tables.careerJob.attempts} < 3`,
 					or(
@@ -308,59 +362,54 @@ function claim(servedUsers: ReadonlySet<string>) {
 						),
 						and(eq(tables.careerJob.status, "running"), lte(tables.careerJob.leaseUntil, now)),
 					),
-					servedUsers.size ? notInArray(tables.careerJob.userId, [...servedUsers]) : undefined,
 					sql`not exists (select 1 from career_job as running_job where running_job.user_id = ${tables.careerJob.userId} and running_job.status = 'running' and running_job.id <> ${tables.careerJob.id} and running_job.lease_until > ${now})`,
 				),
 			)
-			.orderBy(asc(tables.careerJob.dueAt))
-			.limit(CLAIM_CANDIDATES)
 			.for("update", { skipLocked: true });
-		for (const job of candidates) {
-			// Publication takes the user mutex before its job lock; never wait for that mutex in reverse order.
-			const [owner] = await tx
-				.select({ id: tables.user.id, banned: tables.user.banned, banExpires: tables.user.banExpires })
-				.from(tables.user)
-				.where(eq(tables.user.id, job.userId))
-				.for("no key update", { skipLocked: true });
-			if (!owner) continue;
-			if (owner.banned && (!owner.banExpires || owner.banExpires > now)) {
-				await tx
-					.update(tables.careerJob)
-					.set({ status: "canceled", lease: null, leaseUntil: null })
-					.where(eq(tables.careerJob.id, job.id));
-				continue;
-			}
-			// Checked again under the owner's lock: another worker may have claimed this owner's job since the select.
-			const [running] = await tx
-				.select({ id: tables.careerJob.id })
-				.from(tables.careerJob)
-				.where(
-					and(
-						eq(tables.careerJob.userId, job.userId),
-						eq(tables.careerJob.status, "running"),
-						sql`${tables.careerJob.id} <> ${job.id}`,
-						sql`${tables.careerJob.leaseUntil} > ${now}`,
-					),
-				)
-				.limit(1);
-			if (running) continue;
-			const [claimed] = await tx
+		if (!job || servedUsers.has(job.userId)) return null;
+		// Publication takes the user mutex before its job lock; never wait for that mutex in reverse order.
+		const [owner] = await tx
+			.select({ id: tables.user.id, banned: tables.user.banned, banExpires: tables.user.banExpires })
+			.from(tables.user)
+			.where(eq(tables.user.id, job.userId))
+			.for("no key update", { skipLocked: true });
+		if (!owner) return null;
+		if (owner.banned && (!owner.banExpires || owner.banExpires > now)) {
+			await tx
 				.update(tables.careerJob)
-				.set({
-					status: "running",
-					attempts: job.attempts + 1,
-					lease: generateId(),
-					leaseUntil: new Date(Date.now() + STALE_AGENT_RUN_TTL_MS + 60_000),
-				})
-				.where(eq(tables.careerJob.id, job.id))
-				.returning();
-			if (claimed) return claimed;
+				.set({ status: "canceled", lease: null, leaseUntil: null })
+				.where(eq(tables.careerJob.id, job.id));
+			return null;
 		}
-		return null;
+		// Checked again under the owner's lock: another worker may have claimed this owner's job since the select.
+		const [running] = await tx
+			.select({ id: tables.careerJob.id })
+			.from(tables.careerJob)
+			.where(
+				and(
+					eq(tables.careerJob.userId, job.userId),
+					eq(tables.careerJob.status, "running"),
+					sql`${tables.careerJob.id} <> ${job.id}`,
+					sql`${tables.careerJob.leaseUntil} > ${now}`,
+				),
+			)
+			.limit(1);
+		if (running) return null;
+		const [claimed] = await tx
+			.update(tables.careerJob)
+			.set({
+				status: "running",
+				attempts: job.attempts + 1,
+				lease: generateId(),
+				leaseUntil: new Date(Date.now() + STALE_AGENT_RUN_TTL_MS + 60_000),
+			})
+			.where(eq(tables.careerJob.id, job.id))
+			.returning();
+		return claimed ?? null;
 	});
 }
 
-async function execute(job: typeof tables.careerJob.$inferSelect) {
+async function executeJob(job: typeof tables.careerJob.$inferSelect) {
 	const [schedule] = await db
 		.select()
 		.from(tables.careerSchedule)
@@ -457,7 +506,13 @@ async function execute(job: typeof tables.careerJob.$inferSelect) {
 				await tx
 					.update(tables.careerOpportunity)
 					.set({ lastSeenAt: new Date(), updatedAt: sql`${tables.careerOpportunity.updatedAt}` })
-					.where(and(eq(tables.careerOpportunity.userId, job.userId), eq(tables.careerOpportunity.url, url)));
+					.where(
+						and(
+							eq(tables.careerOpportunity.organizationId, job.organizationId),
+							eq(tables.careerOpportunity.userId, job.userId),
+							eq(tables.careerOpportunity.url, url),
+						),
+					);
 				continue;
 			}
 			// Titles keep their separators ("Role - Company | Board") for parsing; only markup goes.
@@ -468,6 +523,7 @@ async function execute(job: typeof tables.careerJob.$inferSelect) {
 					.trim(),
 			);
 			const values = {
+				organizationId: job.organizationId,
 				userId: job.userId,
 				url,
 				role: (posting?.page?.role || title.role).slice(0, 200),
@@ -483,7 +539,11 @@ async function execute(job: typeof tables.careerJob.$inferSelect) {
 				.insert(tables.careerOpportunity)
 				.values(values)
 				.onConflictDoUpdate({
-					target: [tables.careerOpportunity.userId, tables.careerOpportunity.url],
+					target: [
+						tables.careerOpportunity.organizationId,
+						tables.careerOpportunity.userId,
+						tables.careerOpportunity.url,
+					],
 					set: {
 						role: values.role,
 						company: values.company,
@@ -515,6 +575,7 @@ async function execute(job: typeof tables.careerJob.$inferSelect) {
 			await tx
 				.insert(tables.careerNotification)
 				.values({
+					organizationId: job.organizationId,
 					userId: job.userId,
 					applicationId: schedule.applicationId,
 					key: job.id,
@@ -536,6 +597,7 @@ async function execute(job: typeof tables.careerJob.$inferSelect) {
 	});
 }
 
+/** Sends the organization's pending notification emails. Runs inside `withOrgContext`. */
 async function sendPendingEmail() {
 	// Claim independently of job completion so a crash before SMTP can recover on the next tick.
 	for (let i = 0; i < 2; i++) {
@@ -549,7 +611,7 @@ async function sendPendingEmail() {
 					and(
 						eq(tables.careerJob.status, "completed"),
 						eq(tables.careerSchedule.email, true),
-						sql`(${tables.careerNotification.applicationId} is null or exists (select 1 from application a where a.id = ${tables.careerNotification.applicationId} and a.user_id = ${tables.careerNotification.userId} and a.status <> 'closed'))`,
+						sql`(${tables.careerNotification.applicationId} is null or exists (select 1 from ${tables.application} where ${tables.application.id} = ${tables.careerNotification.applicationId} and ${tables.application.status} <> 'closed'))`,
 						eq(tables.careerSchedule.enabled, true),
 						isNull(tables.careerNotification.emailedAt),
 						or(
@@ -603,12 +665,17 @@ async function sendPendingEmail() {
 		// The short claim/check transactions are committed before external I/O. Closing an application must
 		// never wait for SMTP; a delivery already handed to the mail transport cannot be recalled.
 		try {
+			// CAREEROS (P2-T04): the row's own organization decides the brand, sender name and reply-to. The link stays on
+			// APP_URL (a job has no request host to start from).
+			const mail = await buildEmailContext({ source: "organization", organizationId: notification.organizationId });
 			const sent = await sendCareerNotification({
 				to: owner.email,
 				subject: noticeText(notification.notice).title,
-				text: "You have a career update in Reactive Resume.",
+				text: `You have a career update in ${mail.brand.appName}.`,
 				url: new URL(notification.url ?? CAREER_URL, env.APP_URL).toString(),
 				key: notification.key,
+				fromName: mail.fromName,
+				replyTo: mail.replyTo,
 			});
 			if (!sent) throw new Error("SMTP unavailable");
 			await db
@@ -619,6 +686,7 @@ async function sendPendingEmail() {
 			await db
 				.insert(tables.careerNotification)
 				.values({
+					organizationId: notification.organizationId,
 					userId: notification.userId,
 					key: `email-failed:${notification.key}`,
 					notice: { type: "email-failed" },
@@ -629,8 +697,8 @@ async function sendPendingEmail() {
 	}
 }
 
-/** One bounded scheduler tick. No work continues after this promise resolves. */
-export async function runCareerJobs() {
+/** Fails the organization's running jobs that stopped repeatedly, and tells their owners. Inside `withOrgContext`. */
+async function failExhaustedJobs() {
 	const exhausted = await db
 		.update(tables.careerJob)
 		.set({
@@ -651,52 +719,88 @@ export async function runCareerJobs() {
 		await db
 			.insert(tables.careerNotification)
 			.values({
+				organizationId: job.organizationId,
 				userId: job.userId,
 				key: `failed:${job.id}`,
 				notice: { type: "schedule-failed", reason: "stopped" },
 				url: `${CAREER_URL}?schedule=${encodeURIComponent(job.scheduleId)}`,
 			})
 			.onConflictDoNothing();
-	await enqueue();
+}
+
+/** Runs one claimed job, or nothing when it is no longer claimable. Inside the job's `withOrgContext`. */
+async function runJob(jobId: string, servedUsers: Set<string>): Promise<boolean> {
+	const job = await claim(jobId, servedUsers);
+	if (!job) return false;
+	servedUsers.add(job.userId);
+	try {
+		await executeJob(job);
+	} catch {
+		const [failed] = await db
+			.update(tables.careerJob)
+			.set({
+				status: job.attempts >= 3 ? "failed" : "queued",
+				lease: null,
+				leaseUntil: new Date(Date.now() + 300_000),
+				error: "This schedule failed. Check the selected provider and application, then review the schedule.",
+			})
+			.where(
+				and(
+					eq(tables.careerJob.id, job.id),
+					eq(tables.careerJob.lease, job.lease ?? ""),
+					eq(tables.careerJob.status, "running"),
+				),
+			)
+			.returning();
+		if (failed?.status === "failed")
+			await db
+				.insert(tables.careerNotification)
+				.values({
+					organizationId: job.organizationId,
+					userId: job.userId,
+					key: `failed:${job.id}`,
+					notice: { type: "schedule-failed", reason: "failed" },
+					url: `${CAREER_URL}?schedule=${encodeURIComponent(job.scheduleId)}`,
+				})
+				.onConflictDoNothing();
+	}
+	return true;
+}
+
+/**
+ * One bounded scheduler tick. No work continues after this promise resolves.
+ *
+ * CAREEROS (P1-T07, D9): the tick has no organization of its own. It asks the database for organization ids and claimable
+ * job ids, and does all other reading and writing inside `withOrgContext`. A failing organization or job is logged and
+ * the others still run.
+ */
+export async function runCareerJobs() {
+	const now = new Date();
+	await forEachOrganization(
+		[...(await orgsWithDueSchedules(now)), ...(await orgsWithUpkeep(now))],
+		"schedule upkeep",
+		async () => {
+			await failExhaustedJobs();
+			await enqueue();
+		},
+	);
 	let processed = 0;
 	const servedUsers = new Set<string>();
-	for (let i = 0; i < 2; i++) {
-		const job = await claim(servedUsers);
-		if (!job) break;
-		servedUsers.add(job.userId);
+	for (const candidate of await dueJobs(new Date(), CLAIM_CANDIDATES)) {
+		if (processed >= 2) break;
 		try {
-			await execute(job);
-		} catch {
-			const [failed] = await db
-				.update(tables.careerJob)
-				.set({
-					status: job.attempts >= 3 ? "failed" : "queued",
-					lease: null,
-					leaseUntil: new Date(Date.now() + 300_000),
-					error: "This schedule failed. Check the selected provider and application, then review the schedule.",
-				})
-				.where(
-					and(
-						eq(tables.careerJob.id, job.id),
-						eq(tables.careerJob.lease, job.lease ?? ""),
-						eq(tables.careerJob.status, "running"),
-					),
-				)
-				.returning();
-			if (failed?.status === "failed")
-				await db
-					.insert(tables.careerNotification)
-					.values({
-						userId: job.userId,
-						key: `failed:${job.id}`,
-						notice: { type: "schedule-failed", reason: "failed" },
-						url: `${CAREER_URL}?schedule=${encodeURIComponent(job.scheduleId)}`,
-					})
-					.onConflictDoNothing();
+			if (await withOrgContext(candidate.organization_id, () => runJob(candidate.id, servedUsers))) processed++;
+		} catch (error) {
+			console.error(`[career] Job ${candidate.id} failed for organization ${candidate.organization_id}`, error);
 		}
-		processed++;
 	}
-	await sendPendingEmail();
+	await forEachOrganization(await orgsWithUpkeep(new Date()), "notification upkeep", async () => {
+		await sendPendingEmail();
+		// Read notifications go after 90 days, so the list every dashboard page loads stops growing. Unread ones stay.
+		await db
+			.delete(tables.careerNotification)
+			.where(lte(tables.careerNotification.readAt, new Date(Date.now() - READ_NOTIFICATION_TTL_MS)));
+	});
 	// The scheduler tick is the one periodic job every platform runs; Trash expiry rides on it.
 	await documentsService
 		.purgeExpiredTrash()
@@ -706,10 +810,5 @@ export async function runCareerJobs() {
 		.delete(tables.releasedUsername)
 		.where(lte(tables.releasedUsername.releasedAt, new Date(Date.now() - 30 * 24 * 60 * 60 * 1000)))
 		.catch((error: unknown) => console.error("[auth] Released username cleanup failed", error));
-	// Read notifications go after 90 days, so the list every dashboard page loads stops growing. Unread ones stay.
-	await db
-		.delete(tables.careerNotification)
-		.where(lte(tables.careerNotification.readAt, new Date(Date.now() - READ_NOTIFICATION_TTL_MS)))
-		.catch((error: unknown) => console.error("[career] Read notification cleanup failed", error));
 	return { processed };
 }

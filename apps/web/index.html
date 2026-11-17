@@ -24,30 +24,27 @@
 		<script>
 			globalThis.__zod_globalConfig = { jitless: true };
 		</script>
-		<meta name="application-name" content="Reactive Resume" />
+		<!-- CAREEROS: the product name below is the platform default; the server shell replaces it per organization (P2-T02). -->
+		<meta name="application-name" content="CareerOS" />
 		<meta name="mobile-web-app-capable" content="yes" />
 		<meta name="apple-mobile-web-app-capable" content="yes" />
-		<meta name="apple-mobile-web-app-title" content="Reactive Resume" />
+		<meta name="apple-mobile-web-app-title" content="CareerOS" />
 		<meta name="apple-mobile-web-app-status-bar-style" content="default" />
-		<!-- Keep the homepage description between 120 and 160 characters. -->
-		<meta
-			name="description"
-			content="Free, open-source resume builder. Create, update, and share your resume, with PDF and Word downloads, no ads and no paywall."
-		/>
+		<meta name="description" content="Your career workspace. Sign in or create an account." />
 
 		<link rel="icon" href="/favicon.ico" type="image/x-icon" sizes="128x128" />
 		<link rel="icon" href="/favicon.svg" type="image/svg+xml" sizes="256x256 any" />
 		<link rel="apple-touch-icon" href="/apple-touch-icon-180x180.png" type="image/png" sizes="180x180 any" />
 		<link rel="manifest" href="/manifest.webmanifest" crossorigin="use-credentials" />
 
-		<title>Free resume builder with PDF &amp; Word downloads | Reactive Resume</title>
+		<title>Your career workspace | CareerOS</title>
 	</head>
 	<body>
 		<!-- Empty here; the server prerenders the homepage into it (apps/server/src/static/web.ts). -->
 		<div id="app"></div>
 		<!-- Branded first paint; hidden once React populates #app (higher-specificity rule below). -->
 		<div id="initial-loader">
-			<img class="initial-loader__logo-light" src="/icon/light.svg" width="48" height="48" alt="Reactive Resume" />
+			<img class="initial-loader__logo-light" src="/icon/light.svg" width="48" height="48" alt="CareerOS" />
 			<img class="initial-loader__logo-dark" src="/icon/dark.svg" width="48" height="48" alt="" />
 			<div class="initial-loader__spinner"></div>
 			<span class="initial-loader__sr-only">Loading</span>

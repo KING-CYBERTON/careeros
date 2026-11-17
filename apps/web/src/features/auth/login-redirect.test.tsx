@@ -19,6 +19,8 @@ const mocks = vi.hoisted(() => ({
 	signup: vi.fn(),
 	continueOAuth: vi.fn(),
 	queryClient: { invalidateQueries: vi.fn(async () => {}) },
+	// CAREEROS (P2-T05): the feature flags of the route context; no platform address means "not an organization host".
+	flags: {} as { appUrl?: string },
 }));
 
 vi.mock("@tanstack/react-query", () => ({
@@ -28,7 +30,10 @@ vi.mock("@tanstack/react-query", () => ({
 	useQueryClient: () => mocks.queryClient,
 	useMutation: () => ({ mutate: vi.fn(), isPending: false }),
 }));
-vi.mock("@tanstack/react-router", () => ({
+// CAREEROS (P2-T05): built on the real module so exports added later (useRouteContext) cannot go missing.
+vi.mock("@tanstack/react-router", async (importOriginal) => ({
+	...(await importOriginal<typeof import("@tanstack/react-router")>()),
+	useRouteContext: () => ({ flags: mocks.flags }),
 	useSearch: () => ({ callbackURL: mocks.callbackURL }),
 	useRouter: () => ({ navigate: mocks.navigate, invalidate: mocks.invalidate }),
 	useNavigate: () => mocks.navigate,
@@ -136,6 +141,41 @@ describe("OAuth callback after sign-in", () => {
 				oauth_query: mocks.callbackURL.split("?")[1],
 			}),
 		);
+	});
+
+	// CAREEROS (P2-T05): on an organization host the provider buttons start the server-side handoff instead.
+	describe("on an organization host", () => {
+		const begin = vi.fn();
+		const originalFetch = globalThis.fetch;
+
+		beforeEach(() => {
+			mocks.flags = { appUrl: "https://app.example.test" };
+			begin.mockReset().mockResolvedValue(Response.json({ url: "https://app.example.test/auth/handoff?request=r" }));
+			globalThis.fetch = begin as unknown as typeof fetch;
+		});
+		afterEach(() => {
+			mocks.flags = {};
+			globalThis.fetch = originalFetch;
+		});
+
+		it("begins a handoff for the provider and does not call Better Auth's social sign-in", async () => {
+			mocks.callbackURL = "/resumes?x=1";
+			renderLogin();
+			fireEvent.click(screen.getByRole("button", { name: "Google" }));
+			await waitFor(() => expect(begin).toHaveBeenCalledTimes(1));
+			const [url, init] = begin.mock.calls[0] as [string, RequestInit];
+			expect(url).toBe("/api/careeros/handoff/begin");
+			expect(JSON.parse(String(init.body))).toEqual({ provider: "google", returnTo: "/resumes?x=1" });
+			expect(mocks.social).not.toHaveBeenCalled();
+		});
+
+		it("falls back to Better Auth's sign-in when the server says this is not an organization host", async () => {
+			begin.mockResolvedValue(Response.json({ code: "handoff_unavailable" }, { status: 404 }));
+			renderLogin();
+			fireEvent.click(screen.getByRole("button", { name: "GitHub" }));
+			await waitFor(() => expect(mocks.social).toHaveBeenCalledTimes(1));
+			expect(mocks.social).toHaveBeenCalledWith(expect.objectContaining({ provider: "github" }));
+		});
 	});
 
 	it("resumes the callback after passkey sign-in", async () => {

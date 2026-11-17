@@ -3,6 +3,8 @@ import { aiProviderSchema } from "@reactive-resume/ai/types";
 
 export const aiProviderResponseSchema = z.object({
 	managed: z.boolean(),
+	/** CAREEROS (P3-T03): the read-only "Included with your plan" entry; it has no key and cannot be edited. */
+	platform: z.boolean(),
 	id: z.string(),
 	label: z.string(),
 	provider: aiProviderSchema,

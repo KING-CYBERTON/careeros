@@ -1,0 +1,1 @@
+ALTER TABLE "apikey" ADD COLUMN "organization_id" text;

@@ -19,6 +19,7 @@ import {
 	getExportFormats,
 } from "@/features/resume/share/download-tab";
 import { HistoryTimeline } from "@/features/resume/share/history-tab";
+import { getBrand } from "@/libs/brand";
 import { getOrpcErrorMessage, getReadableErrorMessage } from "@/libs/error-message";
 import { client, orpc } from "@/libs/orpc/client";
 
@@ -46,6 +47,7 @@ const PAUSE_BETWEEN_FILES_MS = 400;
  * match: First-Last-Resume.pdf and First-Last-Cover-Letter.pdf.
  */
 function LetterDownloadTab() {
+	const { appName } = getBrand();
 	const letter = useLetterEditorStore((state) => state.letter);
 	const { data: resumes } = useQuery(orpc.resume.list.queryOptions({ input: {} }));
 	const [format, setFormat] = useState<LetterFormat>("pdf");
@@ -71,7 +73,7 @@ function LetterDownloadTab() {
 			: []),
 		...others.map((option) =>
 			option.id === "json"
-				? { ...option, description: t`A backup of this letter. Imports back into Reactive Resume as a letter.` }
+				? { ...option, description: t`A backup of this letter. Imports back into ${appName} as a letter.` }
 				: option,
 		),
 	];

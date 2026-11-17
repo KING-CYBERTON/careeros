@@ -3,12 +3,14 @@ import { beforeEach, describe, expect, it, vi } from "vite-plus/test";
 const mocks = vi.hoisted(() => ({
 	run: vi.fn<() => Promise<{ processed: number }>>(),
 	cleanup: vi.fn<() => Promise<unknown>>(),
+	discovery: vi.fn<(options: unknown) => Promise<unknown>>(),
 	env: {
 		CRON_SECRET: "synthetic-career-runner-secret-32-characters" as string | undefined,
 	},
 }));
 vi.mock("@reactive-resume/env/server", () => ({ env: mocks.env }));
 vi.mock("@reactive-resume/api/features/career/jobs", () => ({ runCareerJobs: mocks.run }));
+vi.mock("@reactive-resume/api/features/discovery/scheduler", () => ({ runDiscoveryJobs: mocks.discovery }));
 vi.mock("@reactive-resume/api/features/storage/cleanup", () => ({
 	runStorageCleanup: mocks.cleanup,
 	reportStorageCleanupSummary: vi.fn(),
@@ -17,6 +19,7 @@ vi.mock("@reactive-resume/api/features/storage/cleanup", () => ({
 beforeEach(() => {
 	mocks.run.mockReset().mockResolvedValue({ processed: 2 });
 	mocks.cleanup.mockReset().mockResolvedValue({ completed: 0, missing: 0, failed: 0, partial: 0, abandoned: 0 });
+	mocks.discovery.mockReset().mockResolvedValue({ ran: 0 });
 	mocks.env.CRON_SECRET = "synthetic-career-runner-secret-32-characters";
 });
 
@@ -61,6 +64,22 @@ describe("career scheduler authentication", () => {
 		await expect(response.json()).resolves.toEqual({ processed: 2 });
 		expect(log).toHaveBeenCalledOnce();
 		expect(JSON.stringify(log.mock.calls)).not.toContain("private storage key");
+	});
+
+	it("keeps the career tick result when discovery fails, and bounds the discovery work", async () => {
+		const log = vi.spyOn(console, "error").mockImplementation(() => {});
+		mocks.discovery.mockRejectedValueOnce(new Error("private board url"));
+		const { handleCareerJobs } = await import("./career-jobs");
+		const response = await handleCareerJobs(
+			new Request("http://localhost:3000/api/career/run", {
+				method: "POST",
+				headers: { authorization: `Bearer ${mocks.env.CRON_SECRET}` },
+			}),
+		);
+		expect(response.status).toBe(200);
+		await expect(response.json()).resolves.toEqual({ processed: 2 });
+		expect(mocks.discovery).toHaveBeenCalledWith({ maxSources: 3, budgetMs: 150_000 });
+		expect(JSON.stringify(log.mock.calls)).not.toContain("private board url");
 	});
 
 	it.each(["GET", "POST"])("runs one bounded %s tick for CRON_SECRET", async (method) => {

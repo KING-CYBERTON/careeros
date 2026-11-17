@@ -1,12 +1,12 @@
-import { randomUUID } from "node:crypto";
-import { existsSync } from "node:fs";
-import { readdir, readFile } from "node:fs/promises";
 import { afterAll, afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vite-plus/test";
+import { createIsolatedTestDatabase, type IsolatedTestDatabase } from "@careeros/testing";
 import { eq } from "drizzle-orm";
 import { drizzle } from "drizzle-orm/node-postgres";
 import { Pool } from "pg";
 import * as tables from "@reactive-resume/db/schema";
 import { careerScheduleInputSchema } from "@reactive-resume/schema/career";
+import { ensureTestOrganization, TEST_ORGANIZATION_ID } from "../../test-organization";
+import { bustPublicBranding } from "../branding/cache";
 
 const fixture = vi.hoisted(() => ({
 	db: undefined as ReturnType<typeof drizzle> | undefined,
@@ -57,7 +57,7 @@ function getDb() {
 	return fixture.db;
 }
 
-const databaseUrl = process.env.INTEGRATIONS_TEST_DATABASE_URL ?? process.env.COVER_LETTER_TEST_DATABASE_URL;
+const configured = Boolean(process.env.CAREEROS_TEST_DATABASE_URL && process.env.CAREEROS_TEST_APP_DATABASE_URL);
 const results = [
 	{
 		title: "Reliability engineer",
@@ -82,37 +82,25 @@ const posting = {
 	company: "",
 };
 
-describe.skipIf(!databaseUrl)("durable career scheduling", () => {
+describe.skipIf(!configured)("durable career scheduling", () => {
 	let jobs: typeof import("./jobs").careerJobs;
 	let run: typeof import("./jobs").runCareerJobs;
-	let admin: Pool;
 	let pool: Pool;
-	const schemaName = `career_jobs_test_${randomUUID().replaceAll("-", "")}`;
+	// CAREEROS (P1-Q08): its own database, migrated like production. It used to replay the migrations into a schema of
+	// the shared database, which rewrote `public` functions other files were using.
+	let database: IsolatedTestDatabase;
 
 	beforeAll(async () => {
-		admin = new Pool({ connectionString: databaseUrl });
-		await admin.query(`CREATE SCHEMA ${schemaName}`);
-		pool = new Pool({
-			connectionString: databaseUrl,
-			options: `-c search_path=${schemaName} -c statement_timeout=10000`,
-		});
+		database = await createIsolatedTestDatabase("career_jobs");
+		pool = new Pool({ connectionString: database.ownerUrl, options: "-c statement_timeout=10000" });
 		fixture.db = drizzle({ client: pool });
-		const migrations = new URL("../../../../../migrations/", import.meta.url);
-		const directories = (await readdir(migrations, { withFileTypes: true }))
-			.filter((entry) => entry.isDirectory() && /^\d+_/.test(entry.name))
-			.map((entry) => entry.name)
-			.sort();
-		for (const directory of directories) {
-			const file = new URL(`${directory}/migration.sql`, migrations);
-			if (existsSync(file)) await pool.query((await readFile(file, "utf8")).replaceAll('"public".', ""));
-		}
+		await ensureTestOrganization(pool);
 		({ careerJobs: jobs, runCareerJobs: run } = await import("./jobs"));
-	}, 30_000);
+	}, 60_000);
 
 	afterAll(async () => {
 		await pool?.end();
-		await admin?.query(`DROP SCHEMA IF EXISTS ${schemaName} CASCADE`);
-		await admin?.end();
+		await database?.drop();
 	});
 
 	beforeEach(async () => {
@@ -168,6 +156,7 @@ describe.skipIf(!databaseUrl)("durable career scheduling", () => {
 			.insert(tables.application)
 			.values({
 				id: "alice-app",
+				organizationId: TEST_ORGANIZATION_ID,
 				userId: "alice",
 				company: "ACME",
 				role: "Engineer",
@@ -175,6 +164,7 @@ describe.skipIf(!databaseUrl)("durable career scheduling", () => {
 			});
 		await getDb().insert(tables.aiProvider).values({
 			id: "preparation-provider",
+			organizationId: TEST_ORGANIZATION_ID,
 			userId: "alice",
 			label: "Synthetic provider",
 			provider: "openai",
@@ -260,9 +250,13 @@ describe.skipIf(!databaseUrl)("durable career scheduling", () => {
 	it.each(["pause", "delete schedule", "delete application"] as const)(
 		"discards an in-flight search after %s",
 		async (action) => {
-			await getDb()
-				.insert(tables.application)
-				.values({ id: "alice-app", userId: "alice", company: "ACME", role: "Engineer" });
+			await getDb().insert(tables.application).values({
+				id: "alice-app",
+				organizationId: TEST_ORGANIZATION_ID,
+				userId: "alice",
+				company: "ACME",
+				role: "Engineer",
+			});
 			const saved = await schedule("alice-app");
 			const started = Promise.withResolvers<void>();
 			const release = Promise.withResolvers<void>();
@@ -333,6 +327,7 @@ describe.skipIf(!databaseUrl)("durable career scheduling", () => {
 			await interviewApplication(new Date("2030-10-08T10:00:00Z"));
 			const unrelated = await schedule("alice-app");
 			await getDb().insert(tables.careerSchedule).values({
+				organizationId: TEST_ORGANIZATION_ID,
 				id: "interview-preparation",
 				userId: "alice",
 				applicationId: "alice-app",
@@ -348,12 +343,14 @@ describe.skipIf(!databaseUrl)("durable career scheduling", () => {
 				.insert(tables.careerJob)
 				.values([
 					{
+						organizationId: TEST_ORGANIZATION_ID,
 						userId: "alice",
 						scheduleId: "interview-preparation",
 						dueAt: expired(),
 						status: "queued",
 					},
 					{
+						organizationId: TEST_ORGANIZATION_ID,
 						userId: "alice",
 						scheduleId: "interview-preparation",
 						dueAt: due(),
@@ -464,6 +461,7 @@ describe.skipIf(!databaseUrl)("durable career scheduling", () => {
 			.insert(tables.careerJob)
 			.values([
 				{
+					organizationId: TEST_ORGANIZATION_ID,
 					id: "recoverable-job",
 					userId: "alice",
 					scheduleId: recoveredSchedule.id,
@@ -474,6 +472,7 @@ describe.skipIf(!databaseUrl)("durable career scheduling", () => {
 					leaseUntil: expired(),
 				},
 				{
+					organizationId: TEST_ORGANIZATION_ID,
 					id: "exhausted-job",
 					userId: "alice",
 					scheduleId: exhaustedSchedule.id,
@@ -567,7 +566,13 @@ describe.skipIf(!databaseUrl)("durable career scheduling", () => {
 		await expect(jobs.dismissOpportunity("bob", role.id)).rejects.toMatchObject({ code: "NOT_FOUND" });
 		const [second] = await getDb()
 			.insert(tables.careerOpportunity)
-			.values({ userId: "alice", url: "https://example.test/jobs/43", role: "Engineer", snippet: "" })
+			.values({
+				organizationId: TEST_ORGANIZATION_ID,
+				userId: "alice",
+				url: "https://example.test/jobs/43",
+				role: "Engineer",
+				snippet: "",
+			})
 			.returning();
 		if (!second) throw new Error("Expected role");
 		const results = await Promise.allSettled([
@@ -578,7 +583,13 @@ describe.skipIf(!databaseUrl)("durable career scheduling", () => {
 		await expect(careers.trackOpportunity("alice", second.id)).rejects.toMatchObject({ code: "CONFLICT" });
 		const [third] = await getDb()
 			.insert(tables.careerOpportunity)
-			.values({ userId: "alice", url: "https://example.test/jobs/44", role: "Engineer", snippet: "" })
+			.values({
+				organizationId: TEST_ORGANIZATION_ID,
+				userId: "alice",
+				url: "https://example.test/jobs/44",
+				role: "Engineer",
+				snippet: "",
+			})
 			.returning();
 		if (!third) throw new Error("Expected role");
 		await Promise.allSettled([jobs.dismissOpportunity("alice", third.id), careers.trackOpportunity("alice", third.id)]);
@@ -623,6 +634,7 @@ describe.skipIf(!databaseUrl)("durable career scheduling", () => {
 		await getDb()
 			.insert(tables.careerProfile)
 			.values({
+				organizationId: TEST_ORGANIZATION_ID,
 				userId: "alice",
 				data: (await import("@reactive-resume/schema/career")).careerProfileDataSchema.parse({
 					targetRoles: ["Reliability engineer"],
@@ -663,20 +675,60 @@ describe.skipIf(!databaseUrl)("durable career scheduling", () => {
 		expect(fixture.email).toHaveBeenCalledOnce();
 	});
 
+	// P2-T04: the notification's own organization decides the brand, sender name and reply-to.
+	it("sends the career notification in the brand of the row's organization", async () => {
+		await pool.query(
+			// The test setup truncates "user" with CASCADE, which also empties organization_branding: upsert.
+			`INSERT INTO organization_branding (organization_id, app_name, email_from_name, email_reply_to)
+			 VALUES ($1, 'Acme Careers', 'Acme Team', 'help@acme.example')
+			 ON CONFLICT (organization_id) DO UPDATE SET app_name = excluded.app_name,
+			   email_from_name = excluded.email_from_name, email_reply_to = excluded.email_reply_to`,
+			[TEST_ORGANIZATION_ID],
+		);
+		// A direct SQL change does not go through branding.update, which busts the 60 s cache.
+		bustPublicBranding(TEST_ORGANIZATION_ID);
+		const saved = await schedule();
+		await getDb().update(tables.careerSchedule).set({ email: true }).where(eq(tables.careerSchedule.id, saved.id));
+		await run();
+		expect(fixture.email).toHaveBeenCalledOnce();
+		expect(fixture.email.mock.calls[0]?.[0]).toMatchObject({
+			text: "You have a career update in Acme Careers.",
+			fromName: "Acme Team",
+			replyTo: "help@acme.example",
+		});
+		// The link stays on this application, whatever the brand.
+		expect(new URL(fixture.email.mock.calls[0]?.[0].url ?? "").origin).toBe(new URL(process.env.APP_URL ?? "").origin);
+		await pool.query(`DELETE FROM organization_branding WHERE organization_id = $1`, [TEST_ORGANIZATION_ID]);
+		bustPublicBranding(TEST_ORGANIZATION_ID);
+	});
+
 	it("deletes notifications read more than 90 days ago and keeps unread and recently read ones", async () => {
 		const day = 24 * 60 * 60 * 1000;
 		const old = new Date(Date.now() - 91 * day);
 		await getDb()
 			.insert(tables.careerNotification)
 			.values([
-				{ userId: "alice", key: "read-old", notice: { type: "schedule-failed", reason: "failed" }, readAt: old },
 				{
+					organizationId: TEST_ORGANIZATION_ID,
+					userId: "alice",
+					key: "read-old",
+					notice: { type: "schedule-failed", reason: "failed" },
+					readAt: old,
+				},
+				{
+					organizationId: TEST_ORGANIZATION_ID,
 					userId: "alice",
 					key: "read-recent",
 					notice: { type: "schedule-failed", reason: "failed" },
 					readAt: new Date(Date.now() - 89 * day),
 				},
-				{ userId: "alice", key: "unread-old", notice: { type: "schedule-failed", reason: "failed" }, createdAt: old },
+				{
+					organizationId: TEST_ORGANIZATION_ID,
+					userId: "alice",
+					key: "unread-old",
+					notice: { type: "schedule-failed", reason: "failed" },
+					createdAt: old,
+				},
 			]);
 		await run();
 		const keys = (await getDb().select({ key: tables.careerNotification.key }).from(tables.careerNotification)).map(

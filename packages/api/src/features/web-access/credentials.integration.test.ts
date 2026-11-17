@@ -18,12 +18,21 @@ const env = vi.hoisted(() => ({
 	AI_BASE_URL: "",
 }));
 vi.mock("@reactive-resume/env/server", () => ({ env }));
+// CAREEROS (P3-T03): server-managed AI is checked against the organization quota. This fixture schema has no
+// organization or usage tables, and the quota itself is covered by the ai-metering database suite.
+vi.mock("@careeros/ai-metering", async (original) => ({
+	...(await original<typeof import("@careeros/ai-metering")>()),
+	assertWithinQuota: async () => ({}),
+}));
 vi.mock("@reactive-resume/db/client", () => ({
 	get db() {
 		return fixture.db;
 	},
 }));
 
+// CAREEROS (P1-Q09): stays on a schema of the shared database on purpose. It runs only table DDL (CREATE TABLE, ALTER TABLE,
+// CREATE INDEX) with the schema first on the search_path, never function DDL, so it cannot rewrite the `public` definer
+// functions or their grants, and its mocked db never reaches a global worker.
 // Opt in with a disposable PostgreSQL database. Each run owns and removes a separate schema.
 describe.skipIf(!process.env.INTEGRATIONS_TEST_DATABASE_URL)("integration credentials and server precedence", () => {
 	let web: typeof import("./credentials").webAccessService;
@@ -59,6 +68,17 @@ describe.skipIf(!process.env.INTEGRATIONS_TEST_DATABASE_URL)("integration creden
 				.filter((statement) => !owned || owned.test(statement.trim()));
 			await pool.query(statements.join("\n").replaceAll('"public".', ""));
 		}
+		// CAREEROS (P1-T08): the AI tables carry the tenant column; this fixture's rows all belong to the mocked organization.
+		await pool.query(
+			"ALTER TABLE ai_providers ADD COLUMN organization_id text NOT NULL DEFAULT 'org_test'; ALTER TABLE agent_threads ADD COLUMN organization_id text NOT NULL DEFAULT 'org_test'",
+		);
+		// CAREEROS (P1-T09): the credentials table is keyed by organization; the fixture's organization is the one the
+		// shared tenancy test mock puts every call in. No foreign key: this schema has no organization table.
+		await pool.query(
+			`ALTER TABLE web_access_credentials ADD COLUMN organization_id text NOT NULL DEFAULT 'org_test';
+			 ALTER TABLE web_access_credentials DROP CONSTRAINT web_access_credentials_pkey;
+			 ALTER TABLE web_access_credentials ADD PRIMARY KEY (organization_id, user_id)`,
+		);
 		web = (await import("./credentials")).webAccessService;
 		ai = (await import("../ai-providers/service")).aiProvidersService;
 	});
@@ -151,20 +171,20 @@ describe.skipIf(!process.env.INTEGRATIONS_TEST_DATABASE_URL)("integration creden
 		await pool.query("UPDATE ai_providers SET enabled=true, test_status='success' WHERE id=$1", [personal.id]);
 		Object.assign(env, {
 			AI_PROVIDER: "openai",
-			AI_MODEL: "server-model",
+			AI_MODEL: "claude-sonnet-5-5",
 			AI_API_KEY: "server-secret",
 			AI_BASE_URL: "https://ai.example.com/v1",
 			ENCRYPTION_SECRET: "",
 		});
-		const global = await ai.getRunnableById({ userId: "alice", id: personal.id });
+		const global = await ai.getRunnableById({ userId: "alice", id: personal.id, feature: "resume.improve" });
 		expect(global).toMatchObject({
 			managed: true,
 			provider: "openai",
-			model: "server-model",
+			model: "claude-sonnet-5-5",
 			apiKey: "server-secret",
 			baseURL: "https://ai.example.com/v1",
 		});
-		expect((await ai.getDefaultRunnable({ userId: "alice" }))?.id).toBe(global.id);
+		expect((await ai.getDefaultRunnable({ userId: "alice", feature: "resume.improve" }))?.id).toBe(global.id);
 		const listed = await ai.list({ userId: "alice" });
 		expect(listed).toHaveLength(1);
 		expect(listed[0]).toMatchObject({ managed: true, enabled: true });

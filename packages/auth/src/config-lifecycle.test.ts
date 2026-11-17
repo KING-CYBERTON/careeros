@@ -1,4 +1,4 @@
-import { beforeEach, describe, expect, it, vi } from "vite-plus/test";
+import { beforeAll, beforeEach, describe, expect, it, vi } from "vite-plus/test";
 
 const mocks = vi.hoisted(() => ({
 	betterAuth: vi.fn(),
@@ -30,6 +30,12 @@ function createInstance(context = Promise.resolve({})) {
 		handler: vi.fn().mockResolvedValue(new Response("ok")),
 	};
 }
+
+// CAREEROS: warm the large better-auth module graph once with a generous hook timeout. The first test otherwise pays
+// the cold import and can exceed the default 5s testTimeout when CI runs packages concurrently.
+beforeAll(async () => {
+	await import("./config");
+}, 30_000);
 
 beforeEach(() => {
 	vi.resetModules();

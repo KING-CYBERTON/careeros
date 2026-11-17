@@ -18,6 +18,20 @@ if (workspaceRoot) {
 	}
 }
 
+/** CAREEROS (P2-T03): `{slug}` appears once and the pattern is a host name once a slug is put in its place. */
+function isValidOrgHostPattern(pattern: string): boolean {
+	if (pattern.split("{slug}").length !== 2) return false;
+	const sample = pattern.replace("{slug}", "a");
+	return /^(?=.{1,253}$)[a-z0-9]([a-z0-9-]{0,61}[a-z0-9])?(\.[a-z0-9]([a-z0-9-]{0,61}[a-z0-9])?)*$/.test(sample);
+}
+
+/** CAREEROS (P2-T03): whether `hostname` is the pattern with a slug `[a-z0-9-]{1,63}` in place of `{slug}`. */
+function matchesOrgHostPattern(pattern: string, hostname: string): boolean {
+	const [prefix = "", suffix = ""] = pattern.split("{slug}");
+	const slug = hostname.slice(prefix.length, hostname.length - suffix.length);
+	return hostname.startsWith(prefix) && hostname.endsWith(suffix) && /^[a-z0-9-]{1,63}$/.test(slug);
+}
+
 // ioredis authenticates as `AUTH <username> <password>`; a bare "redis://value@host" (userinfo with no colon) puts
 // that value in the username slot and Redis rejects the resulting auth. Password-only servers (redis-server
 // --requirepass) need an empty username — "redis://:<pass>@<host>" — or the built-in ACL user,
@@ -93,6 +107,35 @@ export const env = createEnv({
 			.regex(
 				/^(?=.{1,253}$)([a-z0-9]([a-z0-9-]{0,61}[a-z0-9])?\.)+[a-z]{2,63}$/,
 				"Use a host name such as domains.example.com",
+			)
+			.optional(),
+		// CAREEROS (P2-T03): organization hosts. A host pattern with exactly one {slug} placeholder, e.g.
+		// {slug}-careeros.ayopa.co.ke (staging) or {slug}.example.com. Unset turns organization hosts off.
+		ORG_HOST_PATTERN: z
+			.string()
+			.trim()
+			.toLowerCase()
+			.refine(isValidOrgHostPattern, "Use a host name with exactly one {slug}, such as {slug}.example.com")
+			.optional(),
+		// CAREEROS (P2-T03): read the organization host from X-Forwarded-Host instead of Host. Off by default: the
+		// staging tunnel sets Host correctly. Only turn it on behind a proxy that overwrites X-Forwarded-Host.
+		TRUST_FORWARDED_HOST: z.stringbool().default(false),
+		// CAREEROS (P2-T06): Cloudflare for SaaS, for organization custom domains. All three are needed; with any of
+		// them unset the feature reports "not configured" and nothing calls Cloudflare. The token is never logged.
+		CF_SAAS_API_TOKEN: z.string().trim().min(1).optional(),
+		CF_ZONE_ID: z
+			.string()
+			.trim()
+			.regex(/^[a-f0-9]{32}$/i, "Use the 32-character Cloudflare zone id")
+			.optional(),
+		// The Cloudflare for SaaS fallback target, as a host name. Organizations point their CNAME at it.
+		CF_SAAS_CNAME_TARGET: z
+			.string()
+			.trim()
+			.toLowerCase()
+			.regex(
+				/^(?=.{1,253}$)([a-z0-9]([a-z0-9-]{0,61}[a-z0-9])?\.)+[a-z]{2,63}$/,
+				"Use a host name such as customers.example.com",
 			)
 			.optional(),
 		// Sent by Traefik's HTTP provider to read the custom domains' routers; at least 32 characters.
@@ -171,6 +214,19 @@ export const env = createEnv({
 		SMTP_PASS: z.string().min(1).optional(),
 		SMTP_FROM: z.string().min(1).optional(),
 		SMTP_SECURE: z.stringbool().default(false),
+		// CAREEROS (P6-T02): how email leaves the platform. Unset: smtp when the SMTP_* variables are complete (upstream
+		// behaviour), else log. `plunk` sends through Plunk's HTTP API (hosted Plunk has no SMTP relay) and needs the
+		// variables below. The keys are server only: never returned by an API, never logged.
+		EMAIL_PROVIDER: z.enum(["plunk", "smtp", "log"]).optional(),
+		PLUNK_SECRET_KEY: z.string().trim().min(1).optional(),
+		PLUNK_API_URL: z
+			.url({ protocol: /^https?$/ })
+			.transform((value) => value.replace(/\/+$/, ""))
+			.default("https://next-api.useplunk.com"),
+		// The verified sending address, for example no-reply@ayopa.co.ke. Only the display name changes per organization.
+		EMAIL_FROM_ADDRESS: z.email().optional(),
+		// Shared secret of the Plunk workflow's Webhook step (header x-careeros-webhook-secret). Plunk does not sign events.
+		PLUNK_WEBHOOK_SECRET: z.string().min(1).optional(),
 
 		// Storage (Optional)
 		STORAGE_BACKEND: z.enum(["local", "s3", "blob", "r2"]),
@@ -194,6 +250,20 @@ export const env = createEnv({
 		ENCRYPTION_SECRET: z.string().min(32, "ENCRYPTION_SECRET must be at least 32 characters").optional(),
 		CRON_SECRET: z.string().min(16, "CRON_SECRET must be at least 16 characters").optional(),
 
+		// CAREEROS (P3-T04, phase plan D1, D9): the payment provider. `none` turns billing off: every organization behaves
+		// as its plan says and no payment is taken. `fake` is for tests and staging only and is refused in production.
+		// `paystack` is the P3-T05 adapter; `stripe` is accepted but has no adapter yet.
+		BILLING_PROVIDER: z.enum(["fake", "paystack", "stripe", "none"]).default("none"),
+		// CAREEROS (P3-T04): the HMAC secret the fake provider signs its events with. Required while BILLING_PROVIDER=fake.
+		BILLING_FAKE_SECRET: z.string().min(16, "BILLING_FAKE_SECRET must be at least 16 characters").optional(),
+
+		// CAREEROS (P3-T05): Paystack keys (dashboard > Settings > API Keys). Required while BILLING_PROVIDER=paystack. The
+		// secret key also signs the webhook, so it is server only: never returned by an API, never logged.
+		PAYSTACK_SECRET_KEY: z.string().trim().min(1).optional(),
+		PAYSTACK_PUBLIC_KEY: z.string().trim().min(1).optional(),
+		// CAREEROS (P3-T05): lets a production build run on an `sk_test_` key, for staging only.
+		PAYSTACK_ALLOW_TEST_KEY: z.stringbool().default(false),
+
 		// Optional search and enhanced reading; custom URLs are operator-controlled Firecrawl services.
 		WEB_ACCESS_PROVIDER: z.enum(["firecrawl", "tavily", "exa"]).optional(),
 		WEB_ACCESS_API_KEY: z.string().trim().min(1).optional(),
@@ -204,6 +274,12 @@ export const env = createEnv({
 		AI_MODEL: z.string().trim().min(1).optional(),
 		AI_API_KEY: z.string().trim().min(1).optional(),
 		AI_BASE_URL: z.url({ protocol: /^https?$/ }).optional(),
+		// CAREEROS (P3-T03): the platform's Claude key. Organizations on a plan with platform AI use it when a member has no
+		// provider of their own. Server only: never returned by an API, never logged, never stored in the database.
+		ANTHROPIC_API_KEY: z.string().trim().min(1).optional(),
+		// CAREEROS (P3-T03): the models the platform key uses. Each must have a price in @careeros/ai-metering.
+		CAREEROS_AI_MODEL_GENERATION: z.string().trim().min(1).default("claude-sonnet-5-5"),
+		CAREEROS_AI_MODEL_FAST: z.string().trim().min(1).default("claude-haiku-5-5"),
 
 		// Feature Flags
 		FLAG_DISABLE_SIGNUPS: z.stringbool().default(false),
@@ -211,13 +287,70 @@ export const env = createEnv({
 		FLAG_ENABLE_GUEST_LOGIN: z.stringbool().default(false),
 		FLAG_DISABLE_IMAGE_PROCESSING: z.stringbool().default(false),
 		FLAG_DISABLE_API_RATE_LIMIT: z.stringbool().default(false),
+		// CAREEROS (P4-T02): stops scheduled job discovery runs on this server. Manual "Run now" still works.
+		FLAG_DISABLE_DISCOVERY_SCHEDULER: z.stringbool().default(false),
 		FLAG_ALLOW_UNSAFE_AI_BASE_URL: z.stringbool().default(false),
+		// CAREEROS (P3-T06): lets BILLING_PROVIDER=fake start under NODE_ENV=production, for the e2e job's built server only.
+		// The fake provider approves any payment for anyone who can reach its test page: never set this on a public deployment.
+		FLAG_ALLOW_FAKE_BILLING: z.stringbool().default(false),
 		FLAG_ALLOW_UNSAFE_OAUTH_REDIRECT_URI: z.stringbool().default(false),
 		FLAG_OLACV_SUGGESTION: z.stringbool().default(false),
 	},
 	runtimeEnv: deploymentEnvironment(process.env),
 	emptyStringAsUndefined: true,
 });
+
+// CAREEROS (P2-T03): the platform's own hosts are never organization hosts.
+if (env.ORG_HOST_PATTERN) {
+	const platformHosts = [env.APP_URL, env.APP_ALIAS_URL].flatMap((url) => (url ? [new URL(url).hostname] : []));
+	if (platformHosts.some((hostname) => matchesOrgHostPattern(env.ORG_HOST_PATTERN as string, hostname)))
+		throw new Error("ORG_HOST_PATTERN must not match the host of APP_URL or APP_ALIAS_URL.");
+}
+
+// CAREEROS (P3-T04): the fake billing provider approves payments for anyone who can reach its test page, so it must
+// never run in production, and it cannot sign events without its secret.
+// CAREEROS (P3-T06): FLAG_ALLOW_FAKE_BILLING=true relaxes the production refusal for the e2e job, which runs the built
+// server (NODE_ENV=production) against the fake provider. It is loud on purpose.
+if (env.BILLING_PROVIDER === "fake") {
+	if (process.env.NODE_ENV === "production") {
+		if (!env.FLAG_ALLOW_FAKE_BILLING)
+			throw new Error("BILLING_PROVIDER=fake is for tests and staging only and is refused when NODE_ENV=production.");
+		console.warn(
+			"WARNING: BILLING_PROVIDER=fake is running under NODE_ENV=production because FLAG_ALLOW_FAKE_BILLING=true. " +
+				"The fake provider approves any payment for anyone who can reach its test page. " +
+				"NEVER set FLAG_ALLOW_FAKE_BILLING on a public deployment.",
+		);
+	}
+	if (!env.BILLING_FAKE_SECRET) throw new Error("BILLING_PROVIDER=fake requires BILLING_FAKE_SECRET.");
+}
+
+// CAREEROS (P3-T05): Paystack needs both keys, and a production build refuses a test key unless staging says so.
+if (env.BILLING_PROVIDER === "paystack") {
+	if (!env.PAYSTACK_SECRET_KEY || !env.PAYSTACK_PUBLIC_KEY)
+		throw new Error("BILLING_PROVIDER=paystack requires PAYSTACK_SECRET_KEY and PAYSTACK_PUBLIC_KEY.");
+	if (!/^sk_(test|live)_/.test(env.PAYSTACK_SECRET_KEY))
+		throw new Error("PAYSTACK_SECRET_KEY must be a Paystack secret key (sk_test_... or sk_live_...).");
+	if (!/^pk_(test|live)_/.test(env.PAYSTACK_PUBLIC_KEY))
+		throw new Error("PAYSTACK_PUBLIC_KEY must be a Paystack public key (pk_test_... or pk_live_...).");
+	if (
+		process.env.NODE_ENV === "production" &&
+		env.PAYSTACK_SECRET_KEY.startsWith("sk_test_") &&
+		!env.PAYSTACK_ALLOW_TEST_KEY
+	)
+		throw new Error(
+			"PAYSTACK_SECRET_KEY is a test key and is refused when NODE_ENV=production. Set PAYSTACK_ALLOW_TEST_KEY=true on staging.",
+		);
+}
+
+// CAREEROS (P6-T02): the plunk provider needs its key, a verified sender address and the webhook secret.
+if (env.EMAIL_PROVIDER === "plunk") {
+	if (!env.PLUNK_SECRET_KEY || !env.EMAIL_FROM_ADDRESS || !env.PLUNK_WEBHOOK_SECRET)
+		throw new Error("EMAIL_PROVIDER=plunk requires PLUNK_SECRET_KEY, EMAIL_FROM_ADDRESS and PLUNK_WEBHOOK_SECRET.");
+	if (!env.PLUNK_SECRET_KEY.startsWith("sk_"))
+		throw new Error("PLUNK_SECRET_KEY must be a Plunk secret key (it starts with sk_).");
+	if (env.PLUNK_WEBHOOK_SECRET.length < 32)
+		throw new Error("PLUNK_WEBHOOK_SECRET must be at least 32 characters (openssl rand -hex 32).");
+}
 
 if (
 	(env.WEB_ACCESS_PROVIDER || env.WEB_ACCESS_API_KEY || env.WEB_ACCESS_API_URL) &&

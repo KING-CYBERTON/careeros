@@ -1,4 +1,6 @@
 import type { DocumentFilters, DocumentSummary } from "../../dto/documents";
+// CAREEROS: the scheduled purge runs once per organization (P1-T05 review 1 H1)
+import { withOrgContext } from "@careeros/tenancy";
 import { ORPCError } from "@orpc/client";
 import { and, asc, count, eq, gte, inArray, isNotNull, isNull, lt, sql } from "drizzle-orm";
 import { db } from "@reactive-resume/db/client";
@@ -154,9 +156,26 @@ async function purgeExpired(userId: string) {
 /**
  * Trash keeps documents for 30 days, as the app promises, even for accounts that never come back: each scheduler tick
  * deletes a batch of expired documents across all accounts.
+ *
+ * CAREEROS (P1-T05 review 1 H1): the scheduler has no organization and row-level security hides every row from it, so
+ * it asks `careeros_orgs_with_expired_trash` (organization ids only) and purges each organization inside its own
+ * `withOrgContext`. One organization failing is logged and does not stop the others.
  */
 async function purgeExpiredTrash(limit = 50) {
 	const cutoff = new Date(Date.now() - TRASH_RETENTION_MS);
+	const { rows } = await db.execute<{ careeros_orgs_with_expired_trash: string }>(
+		sql`select careeros_orgs_with_expired_trash(${cutoff}::timestamptz)`,
+	);
+	for (const { careeros_orgs_with_expired_trash: orgId } of rows) {
+		try {
+			await withOrgContext(orgId, () => purgeExpiredTrashInOrg(cutoff, limit));
+		} catch (error) {
+			console.error(`[documents] Expired Trash purge failed for organization ${orgId}`, error);
+		}
+	}
+}
+
+async function purgeExpiredTrashInOrg(cutoff: Date, limit: number) {
 	const [resumes, letters] = await Promise.all([
 		db
 			.select({ id: schema.resume.id, userId: schema.resume.userId })
@@ -172,6 +191,7 @@ async function purgeExpiredTrash(limit = 50) {
 			.limit(limit),
 	]);
 
+	// Awaited inside the scope: a scope that ends first would fail these deletes.
 	await Promise.allSettled([
 		...resumes.map(({ id, userId }) => deleteForGood({ userId, type: "resume", id }, cutoff)),
 		...letters.map(({ id, userId }) => deleteForGood({ userId, type: "letter", id }, cutoff)),

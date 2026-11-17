@@ -1,3 +1,5 @@
+// CAREEROS: the stream outlives the request scope; its database read opens a scope of its own (P1-T04)
+import { captureOrgScope } from "@careeros/tenancy";
 import { eventIterator } from "@orpc/server";
 import z from "zod";
 import { protectedProcedure } from "../../context";
@@ -31,21 +33,26 @@ export const updatesRouter = {
 		)
 		.use(resumeUpdatesUserRateLimit)
 		.use(resumeUpdatesRateLimit)
-		.handler(async function* ({ context, input, signal }) {
-			const resume = await resumeService.getById({ id: input.id, userId: context.user.id });
+		// CAREEROS: a generator body runs when the caller iterates it, after the request's organization scope has closed.
+		// The handler itself runs inside the scope, so it captures the organization there and returns the generator.
+		.handler(({ context, input, signal }) => {
+			const inScope = captureOrgScope();
+			return (async function* () {
+				const resume = await inScope(() => resumeService.getById({ id: input.id, userId: context.user.id }));
 
-			yield {
-				type: "resume.updated" as const,
-				resumeId: input.id,
-				userId: context.user.id,
-				updatedAt: resume.updatedAt.toISOString(),
-				mutation: "sync" as const,
-			};
+				yield {
+					type: "resume.updated" as const,
+					resumeId: input.id,
+					userId: context.user.id,
+					updatedAt: resume.updatedAt.toISOString(),
+					mutation: "sync" as const,
+				};
 
-			yield* subscribeResumeUpdated({
-				resumeId: input.id,
-				userId: context.user.id,
-				...(signal ? { signal } : {}),
-			});
+				yield* subscribeResumeUpdated({
+					resumeId: input.id,
+					userId: context.user.id,
+					...(signal ? { signal } : {}),
+				});
+			})();
 		}),
 };

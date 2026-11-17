@@ -1,4 +1,6 @@
 import type { WebAccessConnection, WebAccessProvider } from "./contracts";
+// CAREEROS: web connections belong to an organization (P1-T09)
+import { requireOrgId } from "@careeros/tenancy";
 import { ORPCError } from "@orpc/client";
 import { eq } from "drizzle-orm";
 import { db } from "@reactive-resume/db/client";
@@ -80,8 +82,12 @@ export const webAccessService = {
 		const { encryptedApiKey } = encryptCredential(apiKey.trim());
 		await db
 			.insert(webAccessCredential)
-			.values({ userId, provider, encryptedApiKey })
-			.onConflictDoUpdate({ target: webAccessCredential.userId, set: { provider, encryptedApiKey } });
+			// CAREEROS: tenant column from the request's organization; the key is (organization_id, user_id) (P1-T09)
+			.values({ organizationId: requireOrgId(), userId, provider, encryptedApiKey })
+			.onConflictDoUpdate({
+				target: [webAccessCredential.organizationId, webAccessCredential.userId],
+				set: { provider, encryptedApiKey },
+			});
 	},
 	delete: async (userId: string) => {
 		assertPersonalKeysAllowed();

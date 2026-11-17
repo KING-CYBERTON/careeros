@@ -8,6 +8,7 @@ import { useQuery } from "@tanstack/react-query";
 import { useNetworkState } from "expo-network";
 import { useMemo, useRef, useState } from "react";
 import { View } from "react-native";
+import { getBrand } from "@reactive-resume/utils/brand";
 import { letterPageData, useLetterWords } from "./compose";
 import { LetterPages } from "./page";
 import { useResumes } from "./queries";
@@ -87,6 +88,7 @@ export function LetterShareSheet({ id, open, onClose, version }: LetterShareShee
  */
 function LetterDownload({ letter, offline }: { letter: LetterDocument; offline: boolean }) {
 	const { t } = useLingui();
+	const { appName } = getBrand();
 	const { space } = useTheme();
 	const resumes = useResumes();
 	const resumeId = letter.sourceResumeId;
@@ -139,7 +141,7 @@ function LetterDownload({ letter, offline }: { letter: LetterDocument; offline: 
 			id: "json",
 			label: t`JSON`,
 			extension: ".json",
-			description: t`A backup of this letter. Imports back into Reactive Resume as a letter.`,
+			description: t`A backup of this letter. Imports back into ${appName} as a letter.`,
 		},
 	];
 	const selected = formats.find((item) => item.id === format) ?? formats[0];

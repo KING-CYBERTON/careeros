@@ -2,7 +2,10 @@ import type { ColorScheme } from "./tokens";
 import Storage from "expo-sqlite/kv-store";
 import { useSyncExternalStore } from "react";
 import { Appearance, Platform, useColorScheme } from "react-native";
+// CAREEROS (P2-T02): the organization's primary colour replaces the accent tokens
+import { accentTokens, isHexColor } from "@reactive-resume/utils/brand";
 import { colors, fonts, motion, radius, shadows, size, space, type } from "./tokens";
+import { useBrand } from "@/branding/store";
 
 /** Settings → Preferences → Appearance. System is the default. */
 export type ThemePreference = "system" | "light" | "dark";
@@ -52,9 +55,26 @@ const themes = {
 
 export type Theme = (typeof themes)[ColorScheme];
 
-/** The token set for the effective colour scheme. */
+// CAREEROS (P2-T02): themes with an organization's accent, one per scheme and colour, so the object stays the same
+// between renders.
+const brandedThemes = new Map<string, Theme>();
+
+function withPrimary(scheme: ColorScheme, primary: string): Theme {
+	const key = `${scheme}:${primary}`;
+	let branded = brandedThemes.get(key);
+	if (!branded) {
+		const theme = themes[scheme];
+		branded = { ...theme, colors: { ...theme.colors, ...accentTokens(primary)[scheme] } };
+		brandedThemes.set(key, branded);
+	}
+	return branded;
+}
+
+/** The token set for the effective colour scheme, with the organization's accent when it has one. */
 export function useTheme(): Theme {
 	const preference = useThemePreference();
 	const system = useColorScheme();
-	return themes[(preference === "system" ? system : preference) === "dark" ? "dark" : "light"];
+	const { primaryColor } = useBrand();
+	const scheme = (preference === "system" ? system : preference) === "dark" ? "dark" : "light";
+	return isHexColor(primaryColor) ? withPrimary(scheme, primaryColor) : themes[scheme];
 }

@@ -1,4 +1,5 @@
 import type { RequestAuthentication } from "../../context";
+import { resolveOrgForAuthentication } from "@careeros/tenancy";
 import { ORPCError } from "@orpc/server";
 import z from "zod";
 import { protectedProcedure, publicProcedure } from "../../context";
@@ -9,8 +10,14 @@ import { webPagePreviewUrl } from "./web-page";
 
 /** Only a credential that may read the owner's resumes sees the owner's view: private, unredacted, no password. */
 export function ownerViewer(context: { user?: { id: string } | null; authentication?: RequestAuthentication | null }) {
-	return context.user?.id && context.authentication?.permissions.includes("read")
-		? { currentUserId: context.user.id }
+	const authentication = context.authentication;
+	return context.user?.id && authentication?.permissions.includes("read")
+		? {
+				currentUserId: context.user.id,
+				// CAREEROS (P1-T04): the viewer's organization (membership checked), used only to reach their own
+				// unpublished resume, never to widen what a public lookup finds.
+				fallbackOrganizationId: () => resolveOrgForAuthentication(authentication),
+			}
 		: {};
 }
 

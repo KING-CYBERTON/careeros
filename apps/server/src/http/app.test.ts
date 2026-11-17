@@ -1,6 +1,8 @@
 import { gunzipSync } from "node:zlib";
 import { beforeEach, describe, expect, it, vi } from "vite-plus/test";
 
+// CAREEROS (P2-T03): the host the shared tenancy mock (vitest.org.setup.ts) resolves.
+const PLATFORM_HOST = { kind: "platform" };
 const mocks = vi.hoisted(() => ({
 	trustedProxies: [] as string[],
 	handleAuth: vi.fn(),
@@ -26,6 +28,8 @@ const mocks = vi.hoisted(() => ({
 	handleLlms: vi.fn(),
 	serveWebDistStatic: vi.fn(),
 	handleWebApp: vi.fn(),
+	// CAREEROS (P6-M02): the marketing pages; null means "no page here", so the app answers.
+	handleLandingPage: vi.fn(),
 }));
 
 vi.mock("@reactive-resume/env/server", async (original) => {
@@ -79,6 +83,12 @@ vi.mock("../static/web", () => ({
 	isProfilePath: () => false,
 }));
 
+vi.mock("../static/landing", () => ({
+	handleLandingPage: mocks.handleLandingPage,
+	landingRedirect: (pathname: string) =>
+		({ "/site": "/", "/site/index.html": "/", "/landing/organisations.html": "/organisations" })[pathname] ?? null,
+}));
+
 vi.mock("../mcp/handler", () => ({
 	handleMcp: mocks.handleMcp,
 }));
@@ -99,6 +109,7 @@ const transportEnv = (remoteAddress: string) =>
 beforeEach(() => {
 	vi.clearAllMocks();
 	mocks.trustedProxies.length = 0;
+	mocks.handleLandingPage.mockResolvedValue(null);
 	mocks.handleAuth.mockResolvedValue(new Response("auth"));
 	mocks.handleOAuth.mockResolvedValue(new Response("oauth"));
 	mocks.handleRpc.mockResolvedValue(new Response("rpc"));
@@ -206,10 +217,10 @@ describe("createApp", () => {
 		await app.fetch(trustedOpenApiRequest, transportEnv("203.0.113.9"));
 		await app.fetch(unknownOpenApiRequest);
 
-		expect(mocks.handleRpc).toHaveBeenNthCalledWith(1, trustedRpcRequest, "203.0.113.9");
-		expect(mocks.handleRpc).toHaveBeenNthCalledWith(2, unknownRpcRequest, "unknown");
-		expect(mocks.handleOpenApi).toHaveBeenNthCalledWith(1, trustedOpenApiRequest, "203.0.113.9");
-		expect(mocks.handleOpenApi).toHaveBeenNthCalledWith(2, unknownOpenApiRequest, "unknown");
+		expect(mocks.handleRpc).toHaveBeenNthCalledWith(1, trustedRpcRequest, "203.0.113.9", PLATFORM_HOST);
+		expect(mocks.handleRpc).toHaveBeenNthCalledWith(2, unknownRpcRequest, "unknown", PLATFORM_HOST);
+		expect(mocks.handleOpenApi).toHaveBeenNthCalledWith(1, trustedOpenApiRequest, "203.0.113.9", PLATFORM_HOST);
+		expect(mocks.handleOpenApi).toHaveBeenNthCalledWith(2, unknownOpenApiRequest, "unknown", PLATFORM_HOST);
 	});
 
 	it.each([
@@ -228,6 +239,19 @@ describe("createApp", () => {
 		expect(mocks.handleWellKnownFallback).not.toHaveBeenCalled();
 	});
 
+	// CAREEROS: the upstream agent-skills plugin is no longer served (P2-T08).
+	it.each(["/.well-known/agent-skills/index.json", "/.well-known/agent-skills/resume-writer.tar.gz"])(
+		"does not serve %s; it falls through to the well-known fallback",
+		async (path) => {
+			const { createApp } = await import("./app");
+
+			const response = await createApp().fetch(new Request(`http://localhost:3001${path}`));
+
+			expect(await response.text()).toBe("well-known");
+			expect(mocks.handleWellKnownFallback).toHaveBeenCalled();
+		},
+	);
+
 	it("routes GET / to the web app before static files", async () => {
 		const { createApp } = await import("./app");
 		const app = createApp();
@@ -238,6 +262,44 @@ describe("createApp", () => {
 		expect(response.status).toBe(200);
 		expect(await response.text()).toBe("web");
 		expect(mocks.serveWebDistStatic).not.toHaveBeenCalled();
+	});
+
+	// CAREEROS (P6-M02)
+	it("shows the marketing page at / and /organisations when there is one, and the app otherwise", async () => {
+		const { createApp } = await import("./app");
+		const app = createApp();
+		mocks.handleLandingPage.mockImplementation(async (pathname: string) => new Response(`marketing ${pathname}`));
+
+		expect(await (await app.fetch(new Request("http://localhost:3001/"))).text()).toBe("marketing /");
+		expect(await (await app.fetch(new Request("http://localhost:3001/index.html"))).text()).toBe("marketing /");
+		expect(await (await app.fetch(new Request("http://localhost:3001/organisations"))).text()).toBe(
+			"marketing /organisations",
+		);
+		expect(mocks.handleLandingPage).toHaveBeenCalledWith("/", PLATFORM_HOST, undefined);
+		expect(mocks.handleWebApp).not.toHaveBeenCalled();
+
+		mocks.handleLandingPage.mockResolvedValue(null);
+		mocks.serveWebDistStatic.mockImplementation((_context: unknown, next: () => Promise<void>) => next());
+		expect(await (await app.fetch(new Request("http://localhost:3001/organisations"))).text()).toBe("web");
+	});
+
+	it("redirects a marketing page's file name to its address and leaves the folder's other files to static", async () => {
+		const { createApp } = await import("./app");
+		const app = createApp();
+
+		const page = await app.fetch(new Request("http://localhost:3001/site/index.html"));
+		const retired = await app.fetch(new Request("http://localhost:3001/landing/organisations.html"));
+		const folder = await app.fetch(new Request("http://localhost:3001/site"));
+
+		expect([page.status, page.headers.get("location")]).toEqual([301, "/"]);
+		expect([retired.status, retired.headers.get("location")]).toEqual([301, "/organisations"]);
+		expect([folder.status, folder.headers.get("location")]).toEqual([301, "/"]);
+		expect(mocks.serveWebDistStatic).not.toHaveBeenCalled();
+
+		mocks.serveWebDistStatic.mockImplementation((_context: unknown, next: () => Promise<void>) => next());
+		const asset = await app.fetch(new Request("http://localhost:3001/site/tiles.js"));
+		expect(asset.status).not.toBe(301);
+		expect(mocks.serveWebDistStatic).toHaveBeenCalled();
 	});
 
 	it("compresses the web app's HTML but never API streams or the Vercel app", async () => {
@@ -296,4 +358,59 @@ it.each([
 	expect(await response.json()).toMatchObject({ code: "PAYLOAD_TOO_LARGE", status: 413 });
 	expect(response.headers.get("cache-control")).toBe("no-store");
 	expect(handler).not.toHaveBeenCalled();
+});
+
+// CAREEROS (P5-T01): the extension reads the host-branding route cross-origin, and only that route.
+describe("extension CORS", () => {
+	const extension = "chrome-extension://abcdefghijklmnopabcdefghijklmnop";
+
+	it("allows an extension page to read /api/openapi/branding/host", async () => {
+		const { createApp } = await import("./app");
+		const response = await createApp().request("http://localhost:3000/api/openapi/branding/host", {
+			headers: { origin: extension },
+		});
+		expect(await response.text()).toBe("openapi");
+		expect(response.headers.get("access-control-allow-origin")).toBe(extension);
+		expect(response.headers.get("access-control-allow-credentials")).toBeNull();
+		expect(mocks.handleOpenApi).toHaveBeenCalledOnce();
+	});
+
+	it("adds no CORS headers to other API routes", async () => {
+		const { createApp } = await import("./app");
+		const response = await createApp().request("http://localhost:3000/api/openapi/branding", {
+			headers: { origin: extension },
+		});
+		expect(response.headers.get("access-control-allow-origin")).toBeNull();
+	});
+
+	// P5-T03: clipping a job reaches the server from the popup with a bearer token and no cookie.
+	it("answers the preflight of the clipping routes for an extension page, with no credentials header", async () => {
+		const { createApp } = await import("./app");
+		for (const [path, method] of [
+			["/api/openapi/clipper/find-by-url", "GET"],
+			["/api/openapi/clipper/cleanup", "POST"],
+			["/api/openapi/applications", "POST"],
+		] as const) {
+			const response = await createApp().request(`http://localhost:3000${path}`, {
+				method: "OPTIONS",
+				headers: {
+					origin: extension,
+					"access-control-request-method": method,
+					"access-control-request-headers": "authorization,content-type",
+				},
+			});
+			expect(response.status, path).toBe(204);
+			expect(response.headers.get("access-control-allow-origin"), path).toBe(extension);
+			expect(response.headers.get("access-control-allow-credentials"), path).toBeNull();
+		}
+	});
+
+	it("gives a web page of another origin no CORS headers on the clipping routes", async () => {
+		const { createApp } = await import("./app");
+		const response = await createApp().request("http://localhost:3000/api/openapi/applications", {
+			method: "OPTIONS",
+			headers: { origin: "https://evil.example", "access-control-request-method": "POST" },
+		});
+		expect(response.headers.get("access-control-allow-origin")).toBeNull();
+	});
 });

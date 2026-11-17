@@ -67,6 +67,8 @@ export const session = pg.pgTable(
 		ipAddress: pg.text("ip_address"),
 		userAgent: pg.text("user_agent"),
 		impersonatedBy: pg.text("impersonated_by"),
+		// CAREEROS: active organization set by the Better Auth organization plugin (P1-T01)
+		activeOrganizationId: pg.text("active_organization_id"),
 		userId: pg
 			.text("user_id")
 			.notNull()
@@ -79,7 +81,12 @@ export const session = pg.pgTable(
 			.defaultNow()
 			.$onUpdate(() => /* @__PURE__ */ new Date()),
 	},
-	(t) => [pg.index().on(t.token, t.userId), pg.index().on(t.expiresAt)],
+	(t) => [
+		pg.index().on(t.token, t.userId),
+		pg.index().on(t.expiresAt),
+		// CAREEROS (P3-T08): the Org Admin analytics read the sessions of one organization (active members, last active).
+		pg.index("session_active_org_user_idx").on(t.activeOrganizationId, t.userId, t.updatedAt),
+	],
 );
 
 export const account = pg.pgTable(
@@ -253,6 +260,9 @@ export const apikey = pg.pgTable(
 			.$onUpdate(() => /* @__PURE__ */ new Date()),
 		permissions: pg.text("permissions"),
 		metadata: pg.jsonb("metadata"),
+		// CAREEROS: organization the key acts in (P1-T02, phase plan D8). Nullable, global table, not RLS-scoped; no
+		// foreign key because organization.ts imports this file. Use is gated by a membership check.
+		organizationId: pg.text("organization_id"),
 	},
 	(t) => [
 		pg.index().on(t.referenceId),

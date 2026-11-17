@@ -32,14 +32,7 @@ export function McpSection() {
 					<Swap swapped={copied} from={<Trans>Copy</Trans>} to={<Trans>Copied</Trans>} />
 				</Button>
 			</div>
-			<a
-				href="https://docs.rxresu.me/guides/using-the-mcp-server"
-				target="_blank"
-				rel="noopener noreferrer"
-				className="w-fit text-sm text-ink-2 underline underline-offset-2"
-			>
-				<Trans>Setup guide</Trans>
-			</a>
+			{/* CAREEROS: the upstream MCP setup guide link was removed. */}
 		</SettingsSection>
 	);
 }

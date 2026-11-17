@@ -4,6 +4,7 @@ import { tmpdir } from "node:os";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { describe, expect, it } from "vite-plus/test";
+import { guardTestPool } from "@careeros/testing";
 import { is } from "drizzle-orm";
 import { drizzle } from "drizzle-orm/node-postgres";
 import { migrate } from "drizzle-orm/node-postgres/migrator";
@@ -31,6 +32,7 @@ describe.skipIf(!process.env.COVER_LETTER_TEST_DATABASE_URL)("database migration
 				const url = new URL(databaseUrl);
 				url.pathname = `/${databaseName}`;
 				const pool = new Pool({ connectionString: url.toString(), max: 1 });
+				const guarded = guardTestPool(pool);
 				const db = drizzle({ client: pool });
 				const data = {
 					basics: { name: "Migration fixture" },
@@ -161,7 +163,8 @@ describe.skipIf(!process.env.COVER_LETTER_TEST_DATABASE_URL)("database migration
 						await pool.query(await readFile(path.join(migrationsFolder, v6Migration, "rollback.sql"), "utf8"));
 						expect((await pool.query("SELECT id,lane_id FROM application ORDER BY id")).rows).toEqual(laneReferences);
 						await pool.query(
-							`INSERT INTO application (id,user_id,company,role,status) VALUES ('v5-writer','owner','Fixture','Role','rejected')`,
+							// CAREEROS (P1-T06): applications need an organization now; the owner's was backfilled by the tenant migrations.
+							`INSERT INTO application (id,organization_id,user_id,company,role,status) VALUES ('v5-writer',(SELECT organization_id FROM member WHERE user_id='owner' LIMIT 1),'owner','Fixture','Role','rejected')`,
 						);
 						expect((await pool.query("SELECT status FROM application WHERE id='rejected'")).rows[0].status).toBe(
 							"rejected",
@@ -181,7 +184,7 @@ describe.skipIf(!process.env.COVER_LETTER_TEST_DATABASE_URL)("database migration
 						);
 					}
 				} finally {
-					await pool.end();
+					await guarded.close();
 					await admin.query(`DROP DATABASE "${databaseName}"`);
 				}
 			}

@@ -14,7 +14,6 @@ import { Icon } from "@reactive-resume/ui/components/icon";
 import { Spinner } from "@reactive-resume/ui/components/spinner";
 import { toast } from "@reactive-resume/ui/components/toast";
 import { downloadWithAnchor } from "@reactive-resume/utils/file";
-import { cn } from "@reactive-resume/utils/style";
 import { applicationsListQueryOptions } from "@/features/applications/queries";
 import { createLetterFile, letterFileName } from "@/features/letters/export";
 import { useCurrentResume } from "@/features/resume/builder/draft";
@@ -25,8 +24,8 @@ import {
 	preloadDocumentExport,
 	sanitizeFileName,
 } from "@/features/resume/export/use-resume-export";
+import { getBrand } from "@/libs/brand";
 import { getReadableErrorMessage } from "@/libs/error-message";
-import { ENTER_CLASS } from "@/libs/motion";
 import { client } from "@/libs/orpc/client";
 
 export type DownloadFormat<Id extends string = ExportFormat> = {
@@ -39,43 +38,46 @@ export type DownloadFormat<Id extends string = ExportFormat> = {
 	disabled?: boolean;
 };
 
-export const getExportFormats = (): DownloadFormat[] => [
-	{
-		id: "pdf",
-		label: "PDF",
-		extension: ".pdf",
-		icon: "file-pdf",
-		description: t`Looks exactly like the page. Use it for applications and email.`,
-	},
-	{
-		id: "docx",
-		label: "Word",
-		extension: ".docx",
-		icon: "file-text",
-		description: t`For portals or recruiters who ask for Word. Layout is simplified.`,
-	},
-	{
-		id: "odt",
-		label: "OpenDocument",
-		extension: ".odt",
-		icon: "file-doc",
-		description: t`For LibreOffice and other open-source editors. Layout is simplified.`,
-	},
-	{
-		id: "md",
-		label: "Markdown",
-		extension: ".md",
-		icon: "text-align-left",
-		description: t`Plain text with headings. Paste into application forms and notes.`,
-	},
-	{
-		id: "json",
-		label: "JSON",
-		extension: ".json",
-		icon: "brackets-curly",
-		description: t`Complete data backup. Imports back into Reactive Resume or JSON Resume tools.`,
-	},
-];
+export const getExportFormats = (): DownloadFormat[] => {
+	const { appName } = getBrand();
+	return [
+		{
+			id: "pdf",
+			label: "PDF",
+			extension: ".pdf",
+			icon: "file-pdf",
+			description: t`Looks exactly like the page. Use it for applications and email.`,
+		},
+		{
+			id: "docx",
+			label: "Word",
+			extension: ".docx",
+			icon: "file-text",
+			description: t`For portals or recruiters who ask for Word. Layout is simplified.`,
+		},
+		{
+			id: "odt",
+			label: "OpenDocument",
+			extension: ".odt",
+			icon: "file-doc",
+			description: t`For LibreOffice and other open-source editors. Layout is simplified.`,
+		},
+		{
+			id: "md",
+			label: "Markdown",
+			extension: ".md",
+			icon: "text-align-left",
+			description: t`Plain text with headings. Paste into application forms and notes.`,
+		},
+		{
+			id: "json",
+			label: "JSON",
+			extension: ".json",
+			icon: "brackets-curly",
+			description: t`Complete data backup. Imports back into ${appName} or JSON Resume tools.`,
+		},
+	];
+};
 
 type FormatRadioGroupProps<Id extends string> = {
 	formats: DownloadFormat<Id>[];
@@ -169,8 +171,7 @@ type DownloadActionsProps = {
 };
 
 /**
- * The failure alert (with PDF as the fallback) and the 44px button that shows its progress. After a download, a
- * one-line thank-you asks for a donation: the moment someone has what they came for is the one time it's fair to ask.
+ * The failure alert (with PDF as the fallback) and the 44px button that shows its progress.
  */
 export function DownloadActions({ state, label, onDownload, onDownloadPdf }: DownloadActionsProps) {
 	return (
@@ -215,23 +216,6 @@ export function DownloadActions({ state, label, onDownload, onDownloadPdf }: Dow
 					</>
 				)}
 			</Button>
-
-			{state === "done" && (
-				<p className={cn(ENTER_CLASS, "flex items-start gap-2 text-[13px] leading-[19px] text-ink-2")}>
-					<Icon name="hand-heart" size={18} className="shrink-0 text-ink-3" />
-					<span>
-						<Trans>Good luck out there. Reactive Resume stays free because people chip in.</Trans>{" "}
-						<a
-							href="https://opencollective.com/reactive-resume/donate"
-							target="_blank"
-							rel="noopener noreferrer"
-							className="font-medium text-accent-text underline underline-offset-2 hover:text-accent-hover"
-						>
-							<Trans>Donate</Trans>
-						</a>
-					</span>
-				</p>
-			)}
 		</>
 	);
 }
@@ -344,22 +328,7 @@ export function DownloadTab({ onReview }: DownloadTabProps) {
 				onDownload={() => void download(format)}
 				onDownloadPdf={format === "pdf" ? undefined : () => void download("pdf")}
 			/>
-			{state === "done" && (
-				<div className="grid gap-1.5 rounded-lg border border-line p-3 text-[13px] leading-[19px]">
-					<a
-						href="https://discord.gg/9kAqrGcwn5"
-						target="_blank"
-						rel="noopener noreferrer"
-						className="flex items-center gap-2 font-medium text-accent-text underline underline-offset-2 hover:text-accent-hover"
-					>
-						<Icon name="chat-text" size={18} />
-						<Trans>Get resume feedback on Discord</Trans>
-					</a>
-					<p className="text-ink-2">
-						<Trans>Ask the community. Remove personal details before posting.</Trans>
-					</p>
-				</div>
-			)}
+			{/* CAREEROS: the upstream donation prompt and community feedback link were removed. */}
 		</div>
 	);
 }

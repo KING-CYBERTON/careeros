@@ -7,6 +7,8 @@ import type {
 	CoverLetterStyle,
 } from "@reactive-resume/schema/cover-letter/data";
 import type { Template } from "@reactive-resume/schema/templates";
+// CAREEROS: tenant column for letter inserts (P1-T05)
+import { requireOrgId } from "@careeros/tenancy";
 import { ORPCError } from "@orpc/client";
 import { and, asc, count, desc, eq, ilike, inArray, isNull, sql } from "drizzle-orm";
 import { db } from "@reactive-resume/db/client";
@@ -157,6 +159,18 @@ async function linkLetterApplication(
 	}
 }
 
+// CAREEROS (P1-T05): a letter may only point at a resume of its own organization. The read goes through the scoped
+// `resumeService.getById`, so row-level security answers NOT_FOUND for a resume of any other organization.
+async function assertSourceResume(userId: string, resumeId: string | null | undefined): Promise<void> {
+	if (resumeId) await resumeService.getById({ userId, id: resumeId });
+}
+
+// CAREEROS (P1-T06): a letter may only point at an application of its own organization. The read goes through the
+// scoped application query, so row-level security answers NOT_FOUND for an application of any other organization.
+async function assertSourceApplication(userId: string, applicationId: string | null | undefined): Promise<void> {
+	if (applicationId) await getOwnedApplication(userId, applicationId);
+}
+
 async function insert(
 	input: {
 		userId: string;
@@ -183,10 +197,14 @@ async function insert(
 			return insert(input, tx);
 		});
 	const content = coverLetterContentSchema.parse(input);
+	await assertSourceResume(input.userId, input.sourceResumeId);
+	await assertSourceApplication(input.userId, input.sourceApplicationId);
 	const [row] = await client
 		.insert(schema.coverLetter)
 		.values({
 			...content,
+			// CAREEROS: tenant column (P1-T05)
+			organizationId: requireOrgId(),
 			userId: input.userId,
 			recipient: sanitizeCoverLetterHtml(content.recipient),
 			content: sanitizeCoverLetterHtml(content.content),
@@ -212,6 +230,8 @@ async function updateRevision(
 			await lockUser(tx, input.userId);
 			return updateRevision(input, changes, tx);
 		});
+	await assertSourceResume(input.userId, changes.sourceResumeId);
+	await assertSourceApplication(input.userId, changes.sourceApplicationId);
 	const [row] = await client
 		.update(schema.coverLetter)
 		.set({ ...changes, revision: sql`${schema.coverLetter.revision} + 1` })

@@ -3,6 +3,7 @@ import { eq, isNull } from "drizzle-orm";
 import * as schema from "@reactive-resume/db/schema";
 import { verifiedDomainColumn } from "../custom-domain/service";
 import { publicResumeData } from "./access-policy";
+import { withPublicResumeScope } from "./public-scope";
 import { findResume } from "./slugs";
 
 export type PublicResumeCardInput = { username: string; slug: string };
@@ -17,16 +18,19 @@ export type PublicResumeCardInput = { username: string; slug: string };
 export async function getPublicResumeCardData(
 	input: PublicResumeCardInput,
 ): Promise<{ data: ResumeData; isPrimary: boolean; customDomain: string | null } | null> {
-	const resume = await findResume(
-		{ username: input.username, slug: input.slug },
-		{
-			data: schema.resume.data,
-			hideContactDetails: schema.resume.hideContactDetails,
-			isPrimary: schema.resume.isPrimary,
-			customDomain: verifiedDomainColumn(),
-		},
-		eq(schema.resume.isPublic, true),
-		isNull(schema.resume.password),
+	// CAREEROS: a crawler has no organization; the public resume's own organization scopes the lookup (P1-T04).
+	const resume = await withPublicResumeScope({ username: input.username, slug: input.slug }, () =>
+		findResume(
+			{ username: input.username, slug: input.slug },
+			{
+				data: schema.resume.data,
+				hideContactDetails: schema.resume.hideContactDetails,
+				isPrimary: schema.resume.isPrimary,
+				customDomain: verifiedDomainColumn(),
+			},
+			eq(schema.resume.isPublic, true),
+			isNull(schema.resume.password),
+		),
 	);
 	if (!resume) return null;
 	return {

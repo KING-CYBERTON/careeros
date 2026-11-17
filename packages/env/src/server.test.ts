@@ -17,6 +17,23 @@ beforeEach(() => {
 		"REDIS_URL",
 		"WEB_FONT_BASE_URL",
 		"STORAGE_HEALTHCHECK_TIMEOUT_MS",
+		"ORG_HOST_PATTERN",
+		"TRUST_FORWARDED_HOST",
+		"APP_ALIAS_URL",
+		"CF_SAAS_API_TOKEN",
+		"CF_ZONE_ID",
+		"CF_SAAS_CNAME_TARGET",
+		"BILLING_PROVIDER",
+		"BILLING_FAKE_SECRET",
+		"PAYSTACK_SECRET_KEY",
+		"PAYSTACK_PUBLIC_KEY",
+		"PAYSTACK_ALLOW_TEST_KEY",
+		"FLAG_ALLOW_FAKE_BILLING",
+		"EMAIL_PROVIDER",
+		"PLUNK_SECRET_KEY",
+		"PLUNK_API_URL",
+		"PLUNK_WEBHOOK_SECRET",
+		"EMAIL_FROM_ADDRESS",
 	])
 		vi.stubEnv(name, undefined);
 });
@@ -182,5 +199,272 @@ describe("redis url userinfo", () => {
 			expect.any(String),
 			expect.arrayContaining([expect.objectContaining({ code: "invalid_format", format: "url" })]),
 		);
+	});
+});
+
+// CAREEROS (P2-T03)
+describe("organization host configuration", () => {
+	it("is off by default and does not trust X-Forwarded-Host", async () => {
+		const { env } = await import("./server");
+		expect(env.ORG_HOST_PATTERN).toBeUndefined();
+		expect(env.TRUST_FORWARDED_HOST).toBe(false);
+	});
+
+	it.each(["{slug}-careeros.ayopa.co.ke", "{SLUG}.Example.com"])("accepts %s", async (value) => {
+		vi.stubEnv("ORG_HOST_PATTERN", value);
+		vi.stubEnv("TRUST_FORWARDED_HOST", "true");
+		const { env } = await import("./server");
+		expect(env.ORG_HOST_PATTERN).toBe(value.toLowerCase());
+		expect(env.TRUST_FORWARDED_HOST).toBe(true);
+	});
+
+	it.each(["example.com", "{slug}.{slug}.example.com", "{slug}.example.com:3000", "{slug}/x.example.com"])(
+		"rejects %s",
+		async (value) => {
+			vi.stubEnv("ORG_HOST_PATTERN", value);
+			vi.spyOn(console, "error").mockImplementation(() => {});
+			await expect(import("./server")).rejects.toThrow(/Invalid environment variables|Use a host name/);
+		},
+	);
+
+	it("rejects a pattern the platform host matches", async () => {
+		vi.stubEnv("APP_URL", "https://app.example.com");
+		vi.stubEnv("ORG_HOST_PATTERN", "{slug}.example.com");
+		await expect(import("./server")).rejects.toThrow("must not match the host of APP_URL");
+	});
+
+	it("rejects a pattern the alias host matches", async () => {
+		vi.stubEnv("APP_URL", "https://careeros.test");
+		vi.stubEnv("APP_ALIAS_URL", "https://app.example.com");
+		vi.stubEnv("ORG_HOST_PATTERN", "{slug}.example.com");
+		await expect(import("./server")).rejects.toThrow("must not match the host of APP_URL");
+	});
+
+	it("accepts a pattern the platform host does not match", async () => {
+		vi.stubEnv("APP_URL", "https://careeros.example.com");
+		vi.stubEnv("ORG_HOST_PATTERN", "{slug}-careeros.example.com");
+		expect((await import("./server")).env.ORG_HOST_PATTERN).toBe("{slug}-careeros.example.com");
+	});
+});
+
+// CAREEROS (P2-T06)
+describe("Cloudflare for SaaS configuration", () => {
+	it("is off by default", async () => {
+		const { env } = await import("./server");
+		expect([env.CF_SAAS_API_TOKEN, env.CF_ZONE_ID, env.CF_SAAS_CNAME_TARGET]).toEqual([
+			undefined,
+			undefined,
+			undefined,
+		]);
+	});
+
+	it("treats empty values as unset and accepts a zone id and a target host", async () => {
+		vi.stubEnv("CF_SAAS_API_TOKEN", "");
+		vi.stubEnv("CF_ZONE_ID", "");
+		expect((await import("./server")).env.CF_ZONE_ID).toBeUndefined();
+		vi.resetModules();
+		vi.stubEnv("CF_SAAS_API_TOKEN", "token-value");
+		vi.stubEnv("CF_ZONE_ID", "0123456789ABCDEF0123456789abcdef");
+		vi.stubEnv("CF_SAAS_CNAME_TARGET", "Customers.Example.com");
+		const { env } = await import("./server");
+		expect(env).toMatchObject({
+			CF_SAAS_API_TOKEN: "token-value",
+			CF_ZONE_ID: "0123456789ABCDEF0123456789abcdef",
+			CF_SAAS_CNAME_TARGET: "customers.example.com",
+		});
+	});
+
+	it.each([
+		["CF_ZONE_ID", "not-a-zone"],
+		["CF_SAAS_CNAME_TARGET", "https://customers.example.com"],
+	])("rejects an invalid %s", async (name, value) => {
+		vi.stubEnv(name, value);
+		vi.spyOn(console, "error").mockImplementation(() => {});
+		await expect(import("./server")).rejects.toThrow("Invalid environment variables");
+	});
+});
+
+// CAREEROS (P3-T04): the billing provider setting.
+describe("billing provider configuration", () => {
+	const secret = "a-fake-secret-of-16+chars";
+
+	it("defaults to none, which turns billing off", async () => {
+		expect((await import("./server")).env.BILLING_PROVIDER).toBe("none");
+	});
+
+	it("accepts fake with its secret outside production", async () => {
+		vi.stubEnv("NODE_ENV", "test");
+		vi.stubEnv("BILLING_PROVIDER", "fake");
+		vi.stubEnv("BILLING_FAKE_SECRET", secret);
+		expect((await import("./server")).env.BILLING_PROVIDER).toBe("fake");
+	});
+
+	it("refuses fake when NODE_ENV is production", async () => {
+		vi.stubEnv("NODE_ENV", "production");
+		// Production has its own requirements; satisfy them so only the fake provider is wrong.
+		vi.stubEnv("AUTH_SECRET", "a".repeat(40));
+		vi.stubEnv("BILLING_PROVIDER", "fake");
+		vi.stubEnv("BILLING_FAKE_SECRET", secret);
+		await expect(import("./server")).rejects.toThrow("refused when NODE_ENV=production");
+	});
+
+	it("still refuses fake in production when the flag is off or false", async () => {
+		for (const flag of [undefined, "false"]) {
+			vi.resetModules();
+			vi.stubEnv("NODE_ENV", "production");
+			vi.stubEnv("AUTH_SECRET", "a".repeat(40));
+			vi.stubEnv("BILLING_PROVIDER", "fake");
+			vi.stubEnv("BILLING_FAKE_SECRET", secret);
+			vi.stubEnv("FLAG_ALLOW_FAKE_BILLING", flag);
+			await expect(import("./server")).rejects.toThrow("refused when NODE_ENV=production");
+		}
+	});
+
+	it("starts fake in production only with FLAG_ALLOW_FAKE_BILLING=true, and warns loudly", async () => {
+		const warn = vi.spyOn(console, "warn").mockImplementation(() => {});
+		vi.stubEnv("NODE_ENV", "production");
+		vi.stubEnv("AUTH_SECRET", "a".repeat(40));
+		vi.stubEnv("BILLING_PROVIDER", "fake");
+		vi.stubEnv("BILLING_FAKE_SECRET", secret);
+		vi.stubEnv("FLAG_ALLOW_FAKE_BILLING", "true");
+		expect((await import("./server")).env.BILLING_PROVIDER).toBe("fake");
+		expect(warn.mock.calls.flat().join(" ")).toMatch(/NEVER set FLAG_ALLOW_FAKE_BILLING on a public deployment/);
+	});
+
+	it("still requires the secret in production when the flag is on", async () => {
+		vi.stubEnv("NODE_ENV", "production");
+		vi.stubEnv("AUTH_SECRET", "a".repeat(40));
+		vi.stubEnv("BILLING_PROVIDER", "fake");
+		vi.stubEnv("FLAG_ALLOW_FAKE_BILLING", "true");
+		vi.spyOn(console, "warn").mockImplementation(() => {});
+		await expect(import("./server")).rejects.toThrow("requires BILLING_FAKE_SECRET");
+	});
+
+	it("refuses fake without its secret", async () => {
+		vi.stubEnv("NODE_ENV", "test");
+		vi.stubEnv("BILLING_PROVIDER", "fake");
+		await expect(import("./server")).rejects.toThrow("requires BILLING_FAKE_SECRET");
+	});
+
+	it("rejects an unknown provider", async () => {
+		vi.stubEnv("BILLING_PROVIDER", "paypal");
+		vi.spyOn(console, "error").mockImplementation(() => {});
+		await expect(import("./server")).rejects.toThrow("Invalid environment variables");
+	});
+});
+
+// CAREEROS (P3-T05): the Paystack keys.
+describe("paystack configuration", () => {
+	const test = { secret: "sk_test_placeholder", pub: "pk_test_placeholder" };
+	const configure = (secret?: string, pub?: string) => {
+		vi.stubEnv("BILLING_PROVIDER", "paystack");
+		if (secret) vi.stubEnv("PAYSTACK_SECRET_KEY", secret);
+		if (pub) vi.stubEnv("PAYSTACK_PUBLIC_KEY", pub);
+	};
+
+	it("accepts test keys outside production", async () => {
+		vi.stubEnv("NODE_ENV", "test");
+		configure(test.secret, test.pub);
+		expect((await import("./server")).env.BILLING_PROVIDER).toBe("paystack");
+	});
+
+	it("requires both keys", async () => {
+		vi.stubEnv("NODE_ENV", "test");
+		configure(test.secret);
+		await expect(import("./server")).rejects.toThrow("requires PAYSTACK_SECRET_KEY and PAYSTACK_PUBLIC_KEY");
+	});
+
+	it("refuses a key of the wrong shape", async () => {
+		vi.stubEnv("NODE_ENV", "test");
+		configure("not-a-secret-key", test.pub);
+		await expect(import("./server")).rejects.toThrow("must be a Paystack secret key");
+	});
+
+	it("refuses a test secret key in production", async () => {
+		vi.stubEnv("NODE_ENV", "production");
+		vi.stubEnv("AUTH_SECRET", "a".repeat(40));
+		configure(test.secret, test.pub);
+		await expect(import("./server")).rejects.toThrow("is a test key and is refused when NODE_ENV=production");
+	});
+
+	it("allows a test secret key in production when staging says so", async () => {
+		vi.stubEnv("NODE_ENV", "production");
+		vi.stubEnv("AUTH_SECRET", "a".repeat(40));
+		vi.stubEnv("PAYSTACK_ALLOW_TEST_KEY", "true");
+		configure(test.secret, test.pub);
+		expect((await import("./server")).env.PAYSTACK_ALLOW_TEST_KEY).toBe(true);
+	});
+
+	it("accepts a live key in production", async () => {
+		vi.stubEnv("NODE_ENV", "production");
+		vi.stubEnv("AUTH_SECRET", "a".repeat(40));
+		configure("sk_live_placeholder", "pk_live_placeholder");
+		expect((await import("./server")).env.BILLING_PROVIDER).toBe("paystack");
+	});
+});
+
+// CAREEROS (P6-T02): email delivery through Plunk.
+describe("email provider configuration", () => {
+	const configure = (overrides: Record<string, string | undefined> = {}) => {
+		vi.stubEnv("NODE_ENV", "test");
+		const values: Record<string, string | undefined> = {
+			EMAIL_PROVIDER: "plunk",
+			PLUNK_SECRET_KEY: "sk_placeholder_key",
+			EMAIL_FROM_ADDRESS: "no-reply@example.test",
+			PLUNK_WEBHOOK_SECRET: "w".repeat(32),
+			...overrides,
+		};
+		for (const [name, value] of Object.entries(values)) vi.stubEnv(name, value);
+	};
+
+	it("leaves the provider unset by default and needs nothing", async () => {
+		const { env } = await import("./server");
+		expect(env.EMAIL_PROVIDER).toBeUndefined();
+		expect(env.PLUNK_API_URL).toBe("https://next-api.useplunk.com");
+	});
+
+	it("accepts a complete plunk configuration", async () => {
+		configure();
+		const { env } = await import("./server");
+		expect(env.EMAIL_PROVIDER).toBe("plunk");
+		expect(env.EMAIL_FROM_ADDRESS).toBe("no-reply@example.test");
+	});
+
+	it.each(["PLUNK_SECRET_KEY", "EMAIL_FROM_ADDRESS", "PLUNK_WEBHOOK_SECRET"])("requires %s for plunk", async (name) => {
+		configure({ [name]: undefined });
+		await expect(import("./server")).rejects.toThrow(
+			"EMAIL_PROVIDER=plunk requires PLUNK_SECRET_KEY, EMAIL_FROM_ADDRESS and PLUNK_WEBHOOK_SECRET",
+		);
+	});
+
+	it("refuses a key that does not start with sk_", async () => {
+		configure({ PLUNK_SECRET_KEY: "pk_public_key" });
+		await expect(import("./server")).rejects.toThrow("must be a Plunk secret key");
+	});
+
+	it("refuses a webhook secret shorter than 32 characters", async () => {
+		configure({ PLUNK_WEBHOOK_SECRET: "short" });
+		await expect(import("./server")).rejects.toThrow("at least 32 characters");
+	});
+
+	it("does not ask for Plunk settings when another provider is chosen", async () => {
+		vi.stubEnv("NODE_ENV", "test");
+		vi.stubEnv("EMAIL_PROVIDER", "smtp");
+		expect((await import("./server")).env.EMAIL_PROVIDER).toBe("smtp");
+	});
+
+	it("refuses an unknown provider and a sender address that is not an address", async () => {
+		vi.spyOn(console, "error").mockImplementation(() => {});
+		vi.stubEnv("EMAIL_PROVIDER", "sendgrid");
+		await expect(import("./server")).rejects.toThrow("Invalid environment variables");
+		vi.resetModules();
+		vi.stubEnv("EMAIL_PROVIDER", "log");
+		vi.stubEnv("EMAIL_FROM_ADDRESS", "not an address");
+		await expect(import("./server")).rejects.toThrow("Invalid environment variables");
+	});
+
+	it("takes a custom API address and drops a trailing slash", async () => {
+		configure({ PLUNK_API_URL: "https://plunk.example.test/" });
+		expect((await import("./server")).env.PLUNK_API_URL).toBe("https://plunk.example.test");
 	});
 });

@@ -1,0 +1,91 @@
+# CAREEROS: P5-C01. Builds the Job Clipper store zip and its SHA-256 checksum. Run it by hand, or push a tag named
+# clipper-v<version> (for example clipper-v0.2.0). It needs no store credentials and uploads to no store: a person
+# downloads the artifact and submits it (docs/runbooks/job-clipper-release.md).
+name: careeros-extension-release
+
+on:
+  workflow_dispatch:
+  push:
+    tags: ["clipper-v*"]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: false
+
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
+jobs:
+  release-zip:
+    name: release-zip
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Check out source
+        uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v6
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v7
+        with:
+          node-version-file: ".nvmrc"
+          cache: "pnpm"
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Read the version
+        id: version
+        env:
+          REF_TYPE: ${{ github.ref_type }}
+          REF_NAME: ${{ github.ref_name }}
+        run: |
+          set -euo pipefail
+          version="$(node -p "require('./apps/extension/package.json').version")"
+          echo "version=$version" >> "$GITHUB_OUTPUT"
+          echo "Clipper version in package.json: $version"
+          # A tag must name the version it builds, so a tag cannot ship a different zip than it says.
+          if [ "$REF_TYPE" = "tag" ] && [ "$REF_NAME" != "clipper-v$version" ]; then
+            echo "tag $REF_NAME does not match apps/extension/package.json version $version (expected clipper-v$version)" >&2
+            exit 1
+          fi
+
+      # `run pack`, not `pack`: bare `pnpm pack` is pnpm's own command. The pack script runs the pack checks and
+      # deletes the zip if any fails.
+      - name: Build and pack the clipper
+        run: pnpm --filter extension run pack
+
+      - name: Write the SHA-256 checksum
+        working-directory: apps/extension
+        env:
+          VERSION: ${{ steps.version.outputs.version }}
+        run: |
+          set -euo pipefail
+          test -f "job-clipper-$VERSION.zip"
+          # The checksum names the bare file, so `sha256sum -c` works next to the downloaded zip.
+          sha256sum "job-clipper-$VERSION.zip" > "job-clipper-$VERSION.zip.sha256"
+          sha256sum -c "job-clipper-$VERSION.zip.sha256"
+          {
+            echo "### Job Clipper $VERSION"
+            echo
+            echo '```'
+            cat "job-clipper-$VERSION.zip.sha256"
+            echo '```'
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Upload the zip and checksum
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: job-clipper-${{ steps.version.outputs.version }}
+          path: |
+            apps/extension/job-clipper-${{ steps.version.outputs.version }}.zip
+            apps/extension/job-clipper-${{ steps.version.outputs.version }}.zip.sha256
+          if-no-files-found: error
+          retention-days: 90

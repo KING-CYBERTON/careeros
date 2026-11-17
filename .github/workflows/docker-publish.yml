@@ -27,8 +27,12 @@ env:
   FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
 
 jobs:
+  # CAREEROS: P2-C04. This is the upstream project's publisher (Docker Hub, SSH redeploy, Cloudflare purge). It must
+  # never run in CareerOS, where `careeros-image.yml` publishes images. Every job below carries the same guard
+  # (`tooling/careeros/release-guard.test.mjs` fails if one loses it). The file stays so upstream merges stay easy.
   plan:
     name: Determine publish mode
+    if: github.repository == 'amruthpillai/reactive-resume'
     runs-on: ${{ vars.USE_BLACKSMITH == 'true' && 'blacksmith-2vcpu-ubuntu-2404' || 'ubuntu-latest' }}
 
     outputs:
@@ -63,7 +67,8 @@ jobs:
   build:
     name: Build image (${{ matrix.platform }})
     needs: plan
-    if: ${{ needs.plan.outputs.release != 'true' }}
+    # CAREEROS: P2-C04. Upstream-only guard.
+    if: ${{ github.repository == 'amruthpillai/reactive-resume' && needs.plan.outputs.release != 'true' }}
 
     strategy:
       fail-fast: false
@@ -192,7 +197,8 @@ jobs:
   publish:
     name: Publish images and deploy
     # Release runs skip build; failed builds must never publish partial indexes.
-    if: ${{ !cancelled() && needs.plan.result == 'success' && (needs.build.result == 'success' || needs.build.result == 'skipped') }}
+    # CAREEROS: P2-C04. Upstream-only guard.
+    if: ${{ github.repository == 'amruthpillai/reactive-resume' && !cancelled() && needs.plan.result == 'success' && (needs.build.result == 'success' || needs.build.result == 'skipped') }}
     needs:
       - plan
       - build
@@ -502,7 +508,8 @@ jobs:
   mobile-ota-update:
     name: Mobile OTA update
     needs: publish
-    if: ${{ !cancelled() && needs.publish.result == 'success' && needs.publish.outputs.mobile_ota == 'true' }}
+    # CAREEROS: P2-C04. Upstream-only guard.
+    if: ${{ github.repository == 'amruthpillai/reactive-resume' && !cancelled() && needs.publish.result == 'success' && needs.publish.outputs.mobile_ota == 'true' }}
     permissions:
       contents: read
     uses: ./.github/workflows/mobile-ota-update.yml

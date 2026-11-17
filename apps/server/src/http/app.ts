@@ -23,23 +23,46 @@ import {
 	handleWellKnownFallback,
 } from "../openapi/metadata";
 import { handleRpc } from "../rpc/handler";
-import { handleAgentSkillArchive, handleAgentSkillsIndex } from "../static/agent-skills";
+// CAREEROS: organization logo and favicon (P2-T01)
+import { handleBrandingAssetRequest } from "../static/branding";
+// CAREEROS (P2-T02): handleWebManifest serves the per-host manifest
+import { handleLandingPage, landingRedirect } from "../static/landing";
 import { handleResumeCard } from "../static/resume-card";
 import { serveResumePage } from "../static/resume-page";
 import { handleSchemaJson } from "../static/schema";
 import { handleLlms, handlePagesSitemap, handleResumesSitemap, handleRobots, handleSitemap } from "../static/seo";
 import { handleUpload } from "../static/uploads";
-import { handleWebApp, isProfilePath, isPublicResumePath, serveWebDistStatic } from "../static/web";
+import { handleWebApp, handleWebManifest, isProfilePath, isPublicResumePath, serveWebDistStatic } from "../static/web";
 import { handleAlias } from "./alias";
 import { handleAppleAppSiteAssociation, handleAndroidAssetLinks } from "./app-links";
 import { handleAuth, handleOAuth } from "./auth";
+// CAREEROS: payment provider webhook and the fake provider's test page (P3-T04)
+import { handleFakeCheckoutDecision, handleFakeCheckoutPage } from "./billing-fake";
+import { BILLING_WEBHOOK_MAX_BYTES, handleBillingWebhook } from "./billing-webhook";
 import { handleCareerJobs } from "./career-jobs";
 import { handleCustomDomain, handleTraefikProvider } from "./custom-domain";
+// CAREEROS (P6-T02): the Plunk email event webhook
+import { EMAIL_WEBHOOK_MAX_BYTES, handleEmailWebhook } from "./email-webhook";
+// CAREEROS (P5-T01): CORS for the extension's read of the host-branding route
+import {
+	EXTENSION_CLIPPER_CORS_ROUTES,
+	EXTENSION_CORS_PATH,
+	extensionBrandingCors,
+	extensionClipperCors,
+} from "./extension-cors";
+// CAREEROS: social and OIDC sign-in on organization hosts through a one-time handoff (P2-T05)
+import { handleHandoffBegin, handleHandoffIssue, handleHandoffRedeem, handleHandoffRequest } from "./handoff";
 import { handleHealth } from "./health";
+// CAREEROS: the request host decides the organization (P2-T03)
+import { hostMiddleware, type HostVariables } from "./host";
+// CAREEROS: social and OIDC sign-in on organization hosts through a one-time handoff (P2-T05)
+// CAREEROS (P3-T07): the member-host half of a support (impersonation) session
+import { handleImpersonationRedeem } from "./impersonation";
 import { handlePublicResumePdf } from "./public-resume-pdf";
 import { handleResumePdfDownload } from "./resume-pdf";
 
-type ServerEnvironment = { Bindings: HttpBindings | Http2Bindings };
+// CAREEROS: the resolved request host (P2-T03)
+type ServerEnvironment = { Bindings: HttpBindings | Http2Bindings; Variables: HostVariables };
 
 const getTrustedClient = (context: Context<ServerEnvironment>, proxies: BlockList): string => {
 	try {
@@ -81,6 +104,8 @@ export function createApp(options: AppOptions = {}) {
 	}
 	const client = (c: Context<ServerEnvironment>) => options.trustedClient?.(c.req.raw) ?? getTrustedClient(c, proxies);
 
+	// CAREEROS (P2-T03): resolved first, once per request; an unknown organization host answers 404 here.
+	app.use("*", hostMiddleware(options.readWebFile));
 	// The alias domain serves the same public pages; only the signed-in app's sections move to APP_URL.
 	app.use("*", async (c, next) => handleAlias(c.req.raw) ?? (await next()));
 	// A verified custom domain shows its primary resume; other hosts fall through.
@@ -113,15 +138,45 @@ export function createApp(options: AppOptions = {}) {
 				);
 			},
 		});
+	// CAREEROS (P5-T01): the browser extension reads this one public route cross-origin; no other route gets CORS.
+	app.use(EXTENSION_CORS_PATH, extensionBrandingCors);
+	// CAREEROS (P5-T02): and the Job Clipper's sign-in routes, each by exact path (see extension-cors.ts).
+	for (const path of Object.keys(EXTENSION_CLIPPER_CORS_ROUTES)) app.use(path, extensionClipperCors);
 	app.use("/api/openapi/*", limitBody(40 * 1024 * 1024));
 	// Hono's `/x/*` also matches `/x`, so each wildcard below covers its base path too.
 	app.use("/api/rpc/*", limitBody(160 * 1024 * 1024));
 	app.use("/api/auth/*", limitBody(1024 * 1024));
 	app.use("/api/storage/stage", limitBody(64 * 1024));
+	// CAREEROS (P2-T05): the handoff bodies are two short strings
+	app.use("/api/careeros/handoff/*", limitBody(8 * 1024));
+	// CAREEROS (P3-T07): the support-session redeem body is an id and a token
+	app.use("/api/careeros/impersonation/*", limitBody(8 * 1024));
+	// CAREEROS (P3-T04): a provider event is a small JSON document; the fake test page posts two short strings
+	app.use("/api/billing/webhook/*", limitBody(BILLING_WEBHOOK_MAX_BYTES));
+	app.use("/api/billing/fake/*", limitBody(8 * 1024));
+	// CAREEROS (P6-T02): a Plunk event is a small JSON document
+	app.use("/api/email/webhook/*", limitBody(EMAIL_WEBHOOK_MAX_BYTES));
 
 	app.post("/api/storage/stage", (c) => prepareStagedBody(c.req.raw));
-	app.all("/api/rpc/*", (c) => withStagedBody(c.req.raw, (request) => handleRpc(request, client(c))));
-	app.all("/api/openapi/*", (c) => handleOpenApi(c.req.raw, client(c)));
+	app.all("/api/rpc/*", (c) => withStagedBody(c.req.raw, (request) => handleRpc(request, client(c), c.get("host"))));
+	app.all("/api/openapi/*", (c) => handleOpenApi(c.req.raw, client(c), c.get("host")));
+	// CAREEROS (P2-T05): `begin` and `redeem` run on an organization host, `request` and `issue` on the platform host
+	app.post("/api/careeros/handoff/begin", (c) => handleHandoffBegin(c.req.raw, c.get("host"), client(c)));
+	app.get("/api/careeros/handoff/request/:id", (c) =>
+		handleHandoffRequest(c.get("host"), c.req.param("id"), client(c)),
+	);
+	app.get("/api/careeros/handoff/issue", (c) => handleHandoffIssue(c.req.raw, c.get("host"), client(c)));
+	app.post("/api/careeros/handoff/redeem", (c) => handleHandoffRedeem(c.req.raw, c.get("host"), client(c)));
+	// CAREEROS (P3-T07): organization host only; the database checks the token, its expiry, the origin and the organization
+	app.post("/api/careeros/impersonation/redeem", (c) => handleImpersonationRedeem(c.req.raw, c.get("host"), client(c)));
+	// CAREEROS (P3-T04, D9): platform host only, signature first; the fake provider's test page exists only for BILLING_PROVIDER=fake
+	app.post("/api/billing/webhook/:provider", (c) =>
+		handleBillingWebhook(c.req.raw, c.get("host"), c.req.param("provider"), client(c)),
+	);
+	// CAREEROS (P6-T02): platform host only, shared secret header first
+	app.post("/api/email/webhook/plunk", (c) => handleEmailWebhook(c.req.raw, c.get("host"), client(c)));
+	app.get("/api/billing/fake/checkout", (c) => handleFakeCheckoutPage(c.req.raw, c.get("host"), client(c)));
+	app.post("/api/billing/fake/decision", (c) => handleFakeCheckoutDecision(c.req.raw, c.get("host"), client(c)));
 	app.get("/api/auth/oauth", (c) => handleOAuth(c.req.raw));
 	app.all("/api/auth/*", (c) => handleAuth(c.req.raw, client(c)));
 	app.get("/api/health", () => handleHealth());
@@ -135,19 +190,22 @@ export function createApp(options: AppOptions = {}) {
 	app.get("/cards/:username/:file{.+\\.png}", (c) =>
 		handleResumeCard(c.req.raw, c.req.param("username"), c.req.param("file").slice(0, -".png".length)),
 	);
+	// CAREEROS: organization logo and favicon (P2-T01)
+	app.get("/api/branding-assets/:organizationId/:filename", (c) =>
+		handleBrandingAssetRequest(c.req.raw, c.req.param("organizationId"), c.req.param("filename")),
+	);
 	app.get("/api/uploads/*", (c) => handleUpload(c.req.raw));
 	app.get("/uploads/*", (c) => handleUpload(c.req.raw));
 	app.get("/schema.json", () => handleSchemaJson());
 	app.get("/openapi.json", () => handleOpenApiDocument());
-	app.all("/mcp/*", (c) => handleMcp(c.req.raw, client(c)));
+	app.all("/mcp/*", (c) => handleMcp(c.req.raw, client(c), c.get("host")));
 
 	app.get("/.well-known/apple-app-site-association", () => handleAppleAppSiteAssociation());
 	app.get("/.well-known/assetlinks.json", () => handleAndroidAssetLinks());
 	app.get("/.well-known/integrations.json", () => handleIntegrations());
 	// Hono answers HEAD by running the GET route and dropping the body, headers kept.
 	app.get("/.well-known/api-catalog", () => handleApiCatalog());
-	app.get("/.well-known/agent-skills/index.json", () => handleAgentSkillsIndex());
-	app.get("/.well-known/agent-skills/:filename", (c) => handleAgentSkillArchive(c.req.param("filename")));
+	// CAREEROS: the upstream agent-skills plugin is no longer served; /.well-known/agent-skills/* falls through to the 404 (P2-T08).
 	app.get("/.well-known/mcp/server-card.json", () => handleMcpServerCard());
 	app.on("GET", ["/.well-known/ard.json", "/.well-known/ai-catalog.json"], () => handleAgentCatalog());
 	app.get("/.well-known/oauth-authorization-server/*", (c) => handleOAuthAuthorizationServer(c.req.raw));
@@ -155,6 +213,9 @@ export function createApp(options: AppOptions = {}) {
 	app.get("/.well-known/oauth-protected-resource/*", () => handleOAuthProtectedResource());
 	app.get("/.well-known/openai-apps-challenge", () => handleOpenAiAppsChallenge());
 	app.all("/.well-known/*", () => handleWellKnownFallback());
+
+	// CAREEROS (P2-T02): the manifest carries the host's brand, so it is built per request, ahead of the static file.
+	app.get("/manifest.webmanifest", (c) => handleWebManifest(c.get("host"), options.readWebFile));
 
 	app.get("/robots.txt", () => handleRobots());
 	app.get("/sitemap.xml", () => handleSitemap());
@@ -173,27 +234,45 @@ export function createApp(options: AppOptions = {}) {
 	// return it verbatim, skipping the OpenGraph/Twitter/canonical/JSON-LD injection in handleWebApp.
 	// An instance can show one resume at its root instead of the marketing home; the configuration alone picks it.
 	const rootResumeId = env.ROOT_RESUME_ID;
-	app.on("GET", ["/", "/index.html"], (c) =>
+	// CAREEROS (P6-M02): on the platform host the home page is the marketing page; an organization's address keeps its
+	// own branded home, and so does a build without the marketing files.
+	app.on("GET", ["/", "/index.html"], async (c) =>
 		rootResumeId
-			? serveResumePage(c.req.raw, { id: rootResumeId }, client(c))
-			: handleWebApp(c.req.raw, options.readWebFile),
+			? serveResumePage(c.req.raw, { id: rootResumeId }, client(c), { host: c.get("host") })
+			: ((await handleLandingPage("/", c.get("host"), options.readWebFile)) ??
+				handleWebApp(c.req.raw, options.readWebFile, c.get("host"))),
 	);
 	if (rootResumeId)
 		app.post("/", limitBody(16 * 1024), (c) => serveResumePage(c.req.raw, { id: rootResumeId }, client(c)));
+	// CAREEROS (P6-M02): the organisations page at its clean address, on the platform host only. Anything else (an
+	// organization's address, a build without the pages) carries on to the app below. A request for a page's file,
+	// or for the retired /landing folder, moves to the page's address so no file name shows.
+	app.get("/organisations", async (c, next) => {
+		const page = await handleLandingPage(c.req.path, c.get("host"), options.readWebFile);
+		return page ?? next();
+	});
+	app.on("GET", ["/site", "/site/*", "/landing", "/landing/*"], (c, next) => {
+		const target = landingRedirect(c.req.path);
+		return target ? c.redirect(target, 301) : next();
+	});
 	if (options.serveStatic !== false && serveWebDistStatic) app.use("/*", serveWebDistStatic);
 	// A resume's web page, rendered here, and its password form; files with the same shape of address were served
 	// just above. `/<username>` is the account's primary resume, on every domain the app answers.
 	app.on(["GET", "POST"], "/:username/:slug", limitBody(16 * 1024), (c, next) =>
 		isPublicResumePath(c.req.path)
-			? serveResumePage(c.req.raw, { username: c.req.param("username"), slug: c.req.param("slug") }, client(c))
+			? serveResumePage(c.req.raw, { username: c.req.param("username"), slug: c.req.param("slug") }, client(c), {
+					host: c.get("host"),
+				})
 			: next(),
 	);
 	app.on(["GET", "POST"], "/:username", limitBody(16 * 1024), (c, next) =>
 		isProfilePath(c.req.path)
-			? serveResumePage(c.req.raw, { username: c.req.param("username"), primary: true }, client(c))
+			? serveResumePage(c.req.raw, { username: c.req.param("username"), primary: true }, client(c), {
+					host: c.get("host"),
+				})
 			: next(),
 	);
-	app.get("/*", (c) => handleWebApp(c.req.raw, options.readWebFile));
+	app.get("/*", (c) => handleWebApp(c.req.raw, options.readWebFile, c.get("host")));
 
 	return app;
 }

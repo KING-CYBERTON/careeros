@@ -118,9 +118,12 @@ export async function generateCareer(input: GenerateInput) {
 
 	// A schedule's own connection while it's usable; once it's switched off or removed, the default.
 	const chosen = input.providerId
-		? await aiProvidersService.getRunnableById({ userId: input.userId, id: input.providerId }).catch(() => null)
+		? await aiProvidersService
+				.getRunnableById({ userId: input.userId, id: input.providerId, feature: "career.generate" })
+				.catch(() => null)
 		: null;
-	const provider = chosen ?? (await aiProvidersService.getDefaultRunnable({ userId: input.userId }));
+	const provider =
+		chosen ?? (await aiProvidersService.getDefaultRunnable({ userId: input.userId, feature: "career.generate" }));
 	if (!provider)
 		throw new ORPCError("PRECONDITION_FAILED", { message: "Connect an AI provider in Settings to use the coach." });
 	const model = getModel({
@@ -128,6 +131,8 @@ export async function generateCareer(input: GenerateInput) {
 		model: provider.model,
 		apiKey: provider.apiKey,
 		...(provider.baseURL ? { baseURL: provider.baseURL } : {}),
+		// CAREEROS (P3-T03)
+		metering: provider.metering,
 	});
 
 	const { task: _name, ...taskInput } = task;

@@ -1,0 +1,84 @@
+---
+title: "Managing your organization's billing"
+description: "See your plan, seats and AI credits, upgrade, change seats, pay by card or M-Pesa, read receipts and cancel, from the Billing page."
+---
+
+**Billing** is where the owner of an organization pays for a plan. Owners and admins can see the plan, seats, status, AI credits and payments. Only the owner can upgrade, change seats, update the card or cancel. The screenshots use a fictional organization and test payments.
+
+Open it from **Settings → Billing**, or go to `/dashboard/organization/billing`.
+
+<Frame caption="The Billing page after a payment: the plan, its status, seats, period and AI credits, then the plans, the manage actions and the invoices">
+  <img
+    src="/images/guides/billing/billing-overview.png"
+    alt="The Billing page showing the Starter plan as Active with one seat, the current period, AI credits used and left, three plan cards with prices, seat and cancel controls, and one invoice with a Receipt link"
+  />
+</Frame>
+
+## Read your plan
+
+**Your plan** shows:
+
+- The plan name and its status: **Trial** (with the days left), **Active**, **Ends at period end** (canceled, still working until the paid period ends), **Past due** (a payment failed, with the date by which to pay) or **Suspended** (members can view and export but not change data).
+- **Seats**: the people in the organization against the seats you pay for.
+- **Current period** and **Payment method**, when the payment provider has told us.
+- **AI credits**: used and left this period. The credits are pooled across everyone in the organization.
+
+The **Plans** list shows each plan with its monthly and annual price in Kenyan shillings and US dollars, exactly as the platform has set them. A plan marked **Contact us** is bought by arrangement.
+
+## Upgrade or change plan
+
+1. In **Plans**, choose **Choose** on a plan. The current plan offers **Change seats or interval**.
+2. Pick **Monthly** or **Annual**.
+3. Enter the number of **Seats**. It cannot be lower than the people already in the organization, and the page tells you so: remove members first. A plan can also have a seat limit.
+4. Where the payment method is offered, choose **Card** (renews automatically) or **M-Pesa** (pays one period at a time, so you pay again when the period ends).
+5. Choose **Continue to payment**. You go to the payment provider.
+
+<Frame caption="Choosing a plan, interval and seats before going to the payment provider">
+  <img
+    src="/images/guides/billing/choose-plan.png"
+    alt="The Billing page with the Starter plan selected and a Pay for Starter form with a Monthly and Annual switch, a Seats field, the listed price and a Continue to payment button"
+  />
+</Frame>
+
+When you come back, the page says **Payment received, updating your plan** and checks every few seconds, for up to a minute, until the plan changes. If it takes longer, it tells you that confirmation may take a few minutes. You can leave the page: the plan updates as soon as the provider confirms. A payment that was declined changes nothing.
+
+<Frame caption="The page you return to after paying, once the plan has changed">
+  <img
+    src="/images/guides/billing/payment-return.png"
+    alt="The payment page showing that the plan is updated, with a Back to billing button"
+  />
+</Frame>
+
+## Change seats, update your card or cancel
+
+Once the organization pays, **Manage** appears for the owner:
+
+- **Update seats** asks the provider to change the seat count. It cannot go below the number of members.
+- **Update card or cancel** opens the payment provider's own page, when it has one.
+- **Cancel subscription** asks you to confirm. The organization keeps working until the end of the period you already paid for, and nothing is charged after that.
+
+Changes show once the provider confirms them.
+
+## Invoices and receipts
+
+**Invoices** lists each payment: date, amount, method, reference and the period it paid for. Choose **Receipt** for a page you can print. A receipt holds no card data.
+
+<Frame caption="A printable receipt">
+  <img
+    src="/images/guides/billing/receipt.png"
+    alt="A receipt showing the date, amount, method, reference, plan, seats and period of one payment, with a Print receipt button"
+  />
+</Frame>
+
+## Notices
+
+- The owner sees a notice across the app when the trial ends in three days or fewer, when a payment is past due (with the date by which to pay) and when the organization is suspended, each with a link to Billing.
+- Members see a short notice to contact the owner when a payment is overdue.
+
+## When billing is off
+
+On a server where billing is switched off, the page shows the plan read-only and says that billing is managed by the platform. There is nothing to pay.
+
+## On the phone
+
+The mobile app has **Settings → Plan**, a read-only view of the plan, status, seats and AI quota for every member. It shows no prices and has no way to buy, upgrade or cancel, because app store rules restrict selling subscriptions outside in-app purchase. The owner manages billing on the web.

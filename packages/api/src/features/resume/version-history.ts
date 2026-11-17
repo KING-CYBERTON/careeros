@@ -1,6 +1,8 @@
 import type { DbOrTx } from "@reactive-resume/db/client";
 import type { ResumeVersionKind } from "@reactive-resume/db/schema";
 import type { ResumeData } from "@reactive-resume/schema/resume/data";
+// CAREEROS: tenant column for version inserts (P1-T04)
+import { requireOrgId } from "@careeros/tenancy";
 import * as schema from "@reactive-resume/db/schema";
 import { createVersionHistory } from "../documents/version-history";
 import { parseStoredResumeData, parseWritableResumeData } from "./resume-data-validation";
@@ -13,6 +15,7 @@ const history = createVersionHistory<ResumeVersionKind, ResumeData>({
 	expiringKinds: ["auto", "ai", "restored"],
 	toStored: parseWritableResumeData,
 	label: "resume",
+	insertValues: () => ({ organizationId: requireOrgId() }),
 });
 
 type Owned = { resumeId: string; userId: string };

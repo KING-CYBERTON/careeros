@@ -50,14 +50,18 @@ export function ProviderList() {
 					message={t`Word import, Improve, the assistant, letter drafts, Career coaching and generation, and voice practice need one. Editing, Design, the readability checks and downloads work without one.`}
 				/>
 			)}
-			{state.providers.map((provider) => (
-				<ProviderRow
-					key={provider.id}
-					provider={provider}
-					isDefault={state.defaultProvider?.id === provider.id}
-					onEdit={() => setEditingId(provider.id)}
-				/>
-			))}
+			{state.providers.map((provider) =>
+				provider.platform ? (
+					<PlatformRow key={provider.id} />
+				) : (
+					<ProviderRow
+						key={provider.id}
+						provider={provider}
+						isDefault={state.defaultProvider?.id === provider.id}
+						onEdit={() => setEditingId(provider.id)}
+					/>
+				),
+			)}
 			{!managed && (
 				<Button label={t`Add AI provider`} icon="plus" variant="secondary" onPress={() => setAdding(true)} />
 			)}
@@ -66,6 +70,21 @@ export function ProviderList() {
 				<ProviderEditorSheet open provider={editing} onClose={() => setEditingId(null)} />
 			)}
 		</>
+	);
+}
+
+// CAREEROS (P3-T03): the AI included with the plan. Read-only, like the web entry.
+function PlatformRow() {
+	const { t } = useLingui();
+	const { space } = useTheme();
+	return (
+		<Card style={{ gap: space.s2 }}>
+			<Text variant="title">{t`Included with your plan`}</Text>
+			<Text color="accentText">{t`Ready`}</Text>
+			<Text color="ink3">
+				{t`Used when you haven't added a provider of your own. Counts toward your organization's AI allowance.`}
+			</Text>
+		</Card>
 	);
 }
 

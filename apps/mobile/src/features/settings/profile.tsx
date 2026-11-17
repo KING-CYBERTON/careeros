@@ -1,6 +1,6 @@
 import type { RouterOutput } from "@/api/client";
 import { useLingui } from "@lingui/react/macro";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { File } from "expo-file-system";
 import * as ImagePicker from "expo-image-picker";
 import { useState } from "react";
@@ -68,6 +68,19 @@ function ProfileField({ field, value, server }: ProfileFieldProps) {
 	);
 }
 
+/** CAREEROS (P3-T08): the member's own cohort, the same line the web profile shows. Nothing when they have none. */
+function useMyCohortName() {
+	const { server, status } = useSession();
+	const query = useQuery({
+		...orpc.organization.myCohort.queryOptions(),
+		queryKey: [...orpc.organization.myCohort.key(), server],
+		enabled: status === "signed-in",
+		retry: false,
+		staleTime: 60_000,
+	});
+	return query.data?.cohortName ?? null;
+}
+
 type ProfileEditorProps = { profile: Profile };
 export function ProfileEditor({ profile }: ProfileEditorProps) {
 	const { t } = useLingui();
@@ -75,6 +88,7 @@ export function ProfileEditor({ profile }: ProfileEditorProps) {
 	const { server } = useSession();
 	const queryClient = useQueryClient();
 	const [choosePhoto, setChoosePhoto] = useState(false);
+	const cohortName = useMyCohortName();
 	const photo = useMutation({
 		mutationKey: ["settings", "photo"],
 		mutationFn: async (source: "library" | "camera" | "remove") => {
@@ -133,6 +147,7 @@ export function ProfileEditor({ profile }: ProfileEditorProps) {
 				</View>
 				<ProfileField field="name" value={profile.name} server={server} />
 				<ProfileField field="username" value={profile.username} server={server} />
+				{cohortName ? <ListRow title={t`Your cohort`} value={cohortName} leading="graduation-cap" /> : null}
 			</View>
 			<Sheet open={choosePhoto} onClose={() => setChoosePhoto(false)} title={t`Profile photo`}>
 				<ListRow

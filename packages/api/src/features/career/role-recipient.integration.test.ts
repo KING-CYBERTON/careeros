@@ -1,9 +1,8 @@
 import type { AddressInfo } from "node:net";
 import assert from "node:assert/strict";
-import { randomUUID } from "node:crypto";
-import { readdir, readFile } from "node:fs/promises";
 import { createServer } from "node:http";
 import { afterAll, beforeAll, beforeEach, describe, expect, it, vi } from "vite-plus/test";
+import { createIsolatedTestDatabase, type IsolatedTestDatabase } from "@careeros/testing";
 import { createRouterClient } from "@orpc/server";
 import { Pool } from "pg";
 import z from "zod";
@@ -11,6 +10,7 @@ import { db, withDatabasePool } from "@reactive-resume/db/client";
 import * as tables from "@reactive-resume/db/schema";
 import { env } from "@reactive-resume/env/server";
 import { sampleResumeData } from "@reactive-resume/schema/resume/sample";
+import { ensureTestOrganization, TEST_ORGANIZATION_ID } from "../../test-organization";
 import { aiProvidersRouter } from "../ai-providers/router";
 import { aiProvidersService } from "../ai-providers/service";
 import { getModel } from "../ai/service";
@@ -97,7 +97,7 @@ async function localProvider() {
 	};
 }
 
-const databaseUrl = process.env.INTEGRATIONS_TEST_DATABASE_URL;
+const configured = Boolean(process.env.CAREEROS_TEST_DATABASE_URL && process.env.CAREEROS_TEST_APP_DATABASE_URL);
 it("recipient test provider rejects unrelated probes without recording or throwing", async () => {
 	const provider = await localProvider();
 	try {
@@ -109,10 +109,11 @@ it("recipient test provider rejects unrelated probes without recording or throwi
 		await provider.close();
 	}
 });
-describe.skipIf(!databaseUrl)("role recipient approval through router, PostgreSQL and HTTP", () => {
-	const schemaName = `rx76_recipient_${randomUUID().replaceAll("-", "")}`;
-	const admin = new Pool({ connectionString: databaseUrl });
+describe.skipIf(!configured)("role recipient approval through router, PostgreSQL and HTTP", () => {
 	let pool: Pool;
+	let admin: Pool;
+	// CAREEROS (P1-Q08): its own database instead of a schema whose migration replay rewrites `public` objects.
+	let database: IsolatedTestDatabase;
 	let a: Awaited<ReturnType<typeof localProvider>>;
 	let b: Awaited<ReturnType<typeof localProvider>>;
 	let user: typeof tables.user.$inferSelect;
@@ -145,22 +146,16 @@ describe.skipIf(!databaseUrl)("role recipient approval through router, PostgreSQ
 	};
 	const run = (operation: () => Promise<void>) => withDatabasePool(pool, operation);
 	beforeAll(async () => {
-		await admin.query(`CREATE SCHEMA ${schemaName}`);
-		pool = new Pool({
-			connectionString: databaseUrl,
-			options: `-c search_path=${schemaName} -c statement_timeout=10000`,
-		});
-		const migrations = new URL("../../../../../migrations/", import.meta.url);
-		for (const directory of (await readdir(migrations)).filter((name) => /^\d+_/.test(name)).sort())
-			await pool.query(
-				(await readFile(new URL(`${directory}/migration.sql`, migrations), "utf8")).replaceAll('"public".', ""),
-			);
+		database = await createIsolatedTestDatabase("role_recipient");
+		pool = new Pool({ connectionString: database.ownerUrl, options: "-c statement_timeout=10000" });
+		admin = new Pool({ connectionString: database.ownerUrl });
 		a = await localProvider();
 		b = await localProvider();
-	}, 30000);
+	}, 60_000);
 	beforeEach(async () => {
 		Object.assign(env, { AI_PROVIDER: undefined, AI_MODEL: undefined, AI_API_KEY: undefined, AI_BASE_URL: undefined });
 		await pool.query('TRUNCATE "user" CASCADE');
+		await ensureTestOrganization(pool);
 		await withDatabasePool(pool, async () => {
 			const users = await db
 				.insert(tables.user)
@@ -179,6 +174,7 @@ describe.skipIf(!databaseUrl)("role recipient approval through router, PostgreSQ
 			assert(alice);
 			user = alice;
 			await db.insert(tables.careerFact).values({
+				organizationId: TEST_ORGANIZATION_ID,
 				id: "shared",
 				userId: user.id,
 				text: "Synthetic reliable systems",
@@ -192,8 +188,8 @@ describe.skipIf(!databaseUrl)("role recipient approval through router, PostgreSQ
 		await a?.close();
 		await b?.close();
 		await pool?.end();
-		await admin.query(`DROP SCHEMA IF EXISTS ${schemaName} CASCADE`);
-		await admin.end();
+		await admin?.end();
+		await database?.drop();
 	});
 
 	it.each(["excluded", "forgotten"] as const)(
@@ -284,6 +280,7 @@ describe.skipIf(!databaseUrl)("role recipient approval through router, PostgreSQ
 			assert(bob);
 			user = bob;
 			await db.insert(tables.careerFact).values({
+				organizationId: TEST_ORGANIZATION_ID,
 				userId: user.id,
 				text: "Bob fact",
 				category: "skill",
@@ -338,21 +335,21 @@ describe.skipIf(!databaseUrl)("role recipient approval through router, PostgreSQ
 		run(async () => {
 			Object.assign(env, {
 				AI_PROVIDER: "openai-compatible",
-				AI_MODEL: "managed-a",
+				AI_MODEL: "claude-sonnet-5-5",
 				AI_BASE_URL: a.baseURL,
-				AI_API_KEY: "synthetic-managed-a",
+				AI_API_KEY: "synthetic-claude-sonnet-5-5",
 			});
 			let disclosed = (await client().providers.list({}))[0];
 			assert(disclosed);
-			expect(disclosed.id).toBe("server-ai:alice");
+			expect(disclosed.id).toBe("server-ai:org_test:alice");
 			expect((await client().providers.list({}))[0]?.recipientVersion).toBe(disclosed.recipientVersion);
 			await expect(client().career.suggestTargetRoles(input(disclosed))).resolves.toMatchObject({
 				suggestions: [{ role: "Engineer" }],
 			});
 			for (const change of [
 				{ AI_BASE_URL: b.baseURL },
-				{ AI_MODEL: "managed-b" },
-				{ AI_API_KEY: "synthetic-managed-b" },
+				{ AI_MODEL: "claude-haiku-5-5" },
+				{ AI_API_KEY: "synthetic-claude-haiku-5-5" },
 			]) {
 				Object.assign(env, change);
 				const counts = [a.requests.length, b.requests.length];
@@ -365,8 +362,8 @@ describe.skipIf(!databaseUrl)("role recipient approval through router, PostgreSQ
 				suggestions: [{ role: "Engineer" }],
 			});
 			expect(b.requests.at(-1)).toMatchObject({
-				body: { model: "managed-b" },
-				authorization: "Bearer synthetic-managed-b",
+				body: { model: "claude-haiku-5-5" },
+				authorization: "Bearer synthetic-claude-haiku-5-5",
 				roles: true,
 			});
 		}));
@@ -375,9 +372,9 @@ describe.skipIf(!databaseUrl)("role recipient approval through router, PostgreSQ
 		run(async () => {
 			Object.assign(env, {
 				AI_PROVIDER: "openai-compatible",
-				AI_MODEL: "managed-a",
+				AI_MODEL: "claude-sonnet-5-5",
 				AI_BASE_URL: a.baseURL,
-				AI_API_KEY: "synthetic-managed-a",
+				AI_API_KEY: "synthetic-claude-sonnet-5-5",
 			});
 			const disclosed = (await client().providers.list({}))[0];
 			assert(disclosed);
@@ -393,12 +390,16 @@ describe.skipIf(!databaseUrl)("role recipient approval through router, PostgreSQ
 					);
 					expect(blocked.rows[0]?.count).toBeGreaterThan(0);
 				});
-				Object.assign(env, { AI_MODEL: "managed-b", AI_BASE_URL: b.baseURL, AI_API_KEY: "synthetic-managed-b" });
+				Object.assign(env, {
+					AI_MODEL: "claude-haiku-5-5",
+					AI_BASE_URL: b.baseURL,
+					AI_API_KEY: "synthetic-claude-haiku-5-5",
+				});
 				await lock.query("COMMIT");
 				await expect(pending).resolves.toMatchObject({ suggestions: [{ role: "Engineer" }] });
 				expect(a.requests.at(-1)).toMatchObject({
-					body: { model: "managed-a" },
-					authorization: "Bearer synthetic-managed-a",
+					body: { model: "claude-sonnet-5-5" },
+					authorization: "Bearer synthetic-claude-sonnet-5-5",
 					roles: true,
 				});
 			} finally {
@@ -412,9 +413,9 @@ describe.skipIf(!databaseUrl)("role recipient approval through router, PostgreSQ
 			run(async () => {
 				Object.assign(env, {
 					AI_PROVIDER: "openai-compatible",
-					AI_MODEL: "managed-a",
+					AI_MODEL: "claude-sonnet-5-5",
 					AI_BASE_URL: a.baseURL,
-					AI_API_KEY: "synthetic-managed-a",
+					AI_API_KEY: "synthetic-claude-sonnet-5-5",
 				});
 				const disclosed = (await client().providers.list({}))[0];
 				assert(disclosed);
@@ -456,9 +457,14 @@ describe.skipIf(!databaseUrl)("role recipient approval through router, PostgreSQ
 		(change) =>
 			run(async () => {
 				const disclosed = await create();
-				await db
-					.insert(tables.resume)
-					.values({ id: "selected", userId: user.id, name: "Synthetic", slug: "selected", data: sampleResumeData });
+				await db.insert(tables.resume).values({
+					organizationId: TEST_ORGANIZATION_ID,
+					id: "selected",
+					userId: user.id,
+					name: "Synthetic",
+					slug: "selected",
+					data: sampleResumeData,
+				});
 				const lock = await pool.connect();
 				await lock.query("BEGIN");
 				await lock.query("LOCK TABLE resume IN ACCESS EXCLUSIVE MODE");
@@ -509,9 +515,14 @@ describe.skipIf(!databaseUrl)("role recipient approval through router, PostgreSQ
 				const disclosed = await create();
 				const data = structuredClone(sampleResumeData);
 				data.basics.headline = "Synthetic ".repeat(1500) + "original tail";
-				await db
-					.insert(tables.resume)
-					.values({ id: "selected", userId: user.id, name: "Synthetic", slug: "selected", data });
+				await db.insert(tables.resume).values({
+					organizationId: TEST_ORGANIZATION_ID,
+					id: "selected",
+					userId: user.id,
+					name: "Synthetic",
+					slug: "selected",
+					data,
+				});
 				const lock = await pool.connect();
 				await lock.query("BEGIN");
 				await lock.query("SELECT id FROM resume WHERE id='selected' FOR UPDATE");
@@ -553,9 +564,14 @@ describe.skipIf(!databaseUrl)("role recipient approval through router, PostgreSQ
 		(status) =>
 			run(async () => {
 				const disclosed = await create();
-				await db
-					.insert(tables.resume)
-					.values({ id: "selected", userId: user.id, name: "Synthetic", slug: "selected", data: sampleResumeData });
+				await db.insert(tables.resume).values({
+					organizationId: TEST_ORGANIZATION_ID,
+					id: "selected",
+					userId: user.id,
+					name: "Synthetic",
+					slug: "selected",
+					data: sampleResumeData,
+				});
 				let arrived!: () => void;
 				let release!: () => void;
 				const entered = new Promise<void>((resolve) => {
@@ -613,15 +629,20 @@ describe.skipIf(!databaseUrl)("role recipient approval through router, PostgreSQ
 			if (change === "managed-off")
 				Object.assign(env, {
 					AI_PROVIDER: "openai-compatible",
-					AI_MODEL: "managed-a",
+					AI_MODEL: "claude-sonnet-5-5",
 					AI_BASE_URL: a.baseURL,
-					AI_API_KEY: "synthetic-managed-a",
+					AI_API_KEY: "synthetic-claude-sonnet-5-5",
 				});
 			const disclosed = change === "managed-off" ? (await client().providers.list({}))[0] : await create();
 			assert(disclosed);
-			await db
-				.insert(tables.resume)
-				.values({ id: "selected", userId: user.id, name: "Synthetic", slug: "selected", data: sampleResumeData });
+			await db.insert(tables.resume).values({
+				organizationId: TEST_ORGANIZATION_ID,
+				id: "selected",
+				userId: user.id,
+				name: "Synthetic",
+				slug: "selected",
+				data: sampleResumeData,
+			});
 			const lock = await pool.connect();
 			await lock.query("BEGIN");
 			await lock.query(
@@ -735,9 +756,14 @@ describe.skipIf(!databaseUrl)("role recipient approval through router, PostgreSQ
 	it("keeps the captured approved recipient when configuration changes during context preparation", () =>
 		run(async () => {
 			const disclosed = await create();
-			await db
-				.insert(tables.resume)
-				.values({ id: "selected", userId: user.id, name: "Synthetic", slug: "selected", data: sampleResumeData });
+			await db.insert(tables.resume).values({
+				organizationId: TEST_ORGANIZATION_ID,
+				id: "selected",
+				userId: user.id,
+				name: "Synthetic",
+				slug: "selected",
+				data: sampleResumeData,
+			});
 			const lock = await pool.connect();
 			await lock.query("BEGIN");
 			await lock.query("LOCK TABLE resume IN ACCESS EXCLUSIVE MODE");

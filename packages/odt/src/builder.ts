@@ -2,6 +2,7 @@ import type { InlineStyle, OdtBlock, OdtInline, OdtListItem, OdtRenderOptions, S
 import type { ResumeData } from "@reactive-resume/schema/resume/data";
 import { isCoverLetterOnlyDocument } from "@reactive-resume/resume/export-sections";
 import { assertResumeRenderBudget } from "@reactive-resume/schema/resume/limits";
+import { PLATFORM_DEFAULT_APP_NAME } from "@reactive-resume/utils/brand";
 import { toSafeLink } from "@reactive-resume/utils/link";
 import { isRTL } from "@reactive-resume/utils/locale";
 import { toHex } from "./html-to-odt";
@@ -275,12 +276,13 @@ function buildContentXml(body: string, automaticStyles: string, config: StyleCon
 	].join("");
 }
 
+// CAREEROS: generator metadata names the platform default instead of the upstream product.
 /** Builds `meta.xml` with the document title and generator metadata. */
-function buildMetaXml(title: string): string {
+function buildMetaXml(title: string, generator: string = PLATFORM_DEFAULT_APP_NAME): string {
 	return [
 		XML_DECLARATION,
 		`<office:document-meta xmlns:office="${OFFICE_NS}" xmlns:meta="${META_NS}" xmlns:dc="${DC_NS}" office:version="1.3">`,
-		`<office:meta><dc:title>${escapeXml(title)}</dc:title><meta:generator>Reactive Resume</meta:generator></office:meta>`,
+		`<office:meta><dc:title>${escapeXml(title)}</dc:title><meta:generator>${escapeXml(generator)}</meta:generator></office:meta>`,
 		"</office:document-meta>",
 	].join("");
 }
